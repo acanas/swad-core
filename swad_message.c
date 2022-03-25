@@ -2987,8 +2987,7 @@ void Msg_ListBannedUsrs (void)
 void Msg_GetAndShowMsgsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_messages;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -3026,23 +3025,28 @@ void Msg_GetAndShowMsgsStats (void)
       /***** Write number of messages *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_MSGS_Sent);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentNotDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Hyphen ();
 	 HTM_TD_End ();
 
@@ -3050,23 +3054,28 @@ void Msg_GetAndShowMsgsStats (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_MSGS_Received);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedAndNotified);
 	 HTM_TD_End ();
 

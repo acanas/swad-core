@@ -86,7 +86,7 @@ void HieCfg_Title (bool PutLink,
 void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
 
    /***** Full name *****/
@@ -98,7 +98,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		       Label);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Form to change full name */
@@ -124,7 +124,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
@@ -137,7 +137,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		       Txt_Short_name);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Form to change short name */

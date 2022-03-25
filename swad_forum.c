@@ -3444,7 +3444,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
 static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Total;
    double NumThrsPerForum;
    double NumPostsPerThread;
@@ -3464,39 +3464,47 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s LINE_TOP\" style=\"width:20px;\"",
-                    The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP\" style=\"width:20px;\"",
+                    The_Colors[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt_Total);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP RM\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP RM\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 

@@ -315,7 +315,7 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 
 static void DegTyp_ListDegreeTypesForSeeing (void)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumDegTyp;
    const char *BgColor;
 
@@ -332,20 +332,20 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
       HTM_TR_Begin (NULL);
 
 	 /* Number of degree type in this list */
-	 HTM_TD_Begin ("class=\"RM %s %s\"",
-	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
-	 HTM_TD_Begin ("class=\"LM %s %s\"",
-	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
-	 HTM_TD_Begin ("class=\"RM %s %s\"",
-	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 

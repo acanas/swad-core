@@ -1008,7 +1008,7 @@ static void Hie_GetAndShowHierarchyWithInss (void)
 
    /***** Write number of elements with institutions *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_institutions,
-			 The_ClassDat[Gbl.Prefs.Theme],
+			 "DAT",
                          (int) NumCtysWithInss,
                          -1,		// < 0 ==> do not show number
                          -1,		// < 0 ==> do not show number
@@ -1050,7 +1050,7 @@ static void Hie_GetAndShowHierarchyWithCtrs (void)
 
    /***** Write number of elements with centers *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_centers,
-			 The_ClassDat[Gbl.Prefs.Theme],
+			 "DAT",
                          (int) NumCtysWithCtrs,
                          (int) NumInssWithCtrs,
                          -1,		// < 0 ==> do not show number
@@ -1097,7 +1097,7 @@ static void Hie_GetAndShowHierarchyWithDegs (void)
 
    /***** Write number of elements with degrees *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_degrees,
-			 The_ClassDat[Gbl.Prefs.Theme],
+			 "DAT",
                          (int) NumCtysWithDegs,
                          (int) NumInssWithDegs,
                          (int) NumCtrsWithDegs,
@@ -1147,7 +1147,7 @@ static void Hie_GetAndShowHierarchyWithCrss (void)
 
    /***** Write number of elements with courses *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_courses,
-			 The_ClassDat[Gbl.Prefs.Theme],
+			 "DAT",
                          (int) NumCtysWithCrss,
                          (int) NumInssWithCrss,
                          (int) NumCtrsWithCrss,
@@ -1179,7 +1179,7 @@ static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 
    /***** Write number of elements with students *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
-			 The_ClassDat[Gbl.Prefs.Theme],
+			 "DAT",
                          (int) NumCtysWithUsrs,
                          (int) NumInssWithUsrs,
                          (int) NumCtrsWithUsrs,
@@ -1193,9 +1193,7 @@ static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 
 static void Hie_GetAndShowHierarchyTotal (void)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Total;
-   char *ClassTxt;
    unsigned NumCtysTotal = 1;
    unsigned NumInssTotal = 1;
    unsigned NumCtrsTotal = 1;
@@ -1238,15 +1236,13 @@ static void Hie_GetAndShowHierarchyTotal (void)
      }
 
    /***** Write total number of elements *****/
-   if (asprintf (&ClassTxt,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-      Err_NotEnoughMemoryExit ();
-   Hie_ShowHierarchyRow ("",Txt_Total,ClassTxt,
+   Hie_ShowHierarchyRow ("",Txt_Total,
+                         "LINE_TOP DAT_STRONG",
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
                          (int) NumDegsTotal,
 			 (int) NumCrssTotal);
-   free (ClassTxt);
   }
 
 /*****************************************************************************/
@@ -1261,11 +1257,13 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumDegs,	// < 0 ==> do not show number
 				  int NumCrss)	// < 0 ==> do not show number
   {
+   extern const char *The_Colors[The_NUM_THEMES];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Write text *****/
-      HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Text1);
 	 HTM_Txt (Text2);
       HTM_TD_End ();
