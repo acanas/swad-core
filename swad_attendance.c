@@ -2830,7 +2830,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 	                                 unsigned NumUsrsInList,
                                          long *LstSelectedUsrCods)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Number_of_users;
    struct UsrData UsrDat;
    unsigned NumUsr;
@@ -2873,10 +2873,10 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 	   {
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"%s LINE_TOP RM\"",
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"RM DAT_STRONG_%s LINE_TOP\"",
 			     Gbl.Usrs.Listing.WithPhotos ? 4 :
 							   3,
-			     The_ClassDatStrong[Gbl.Prefs.Theme]);
+			     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Number_of_users);
 	       HTM_TD_End ();
 
@@ -2885,16 +2885,16 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 		    NumAttEvent++)
 		  if (Events->Lst[NumAttEvent].Selected)
 		    {
-		     HTM_TD_Begin ("class=\"%s LINE_TOP RM\"",
-		                   The_ClassDatStrong[Gbl.Prefs.Theme]);
+		     HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+		                   The_Colors[Gbl.Prefs.Theme]);
 			HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
 		     HTM_TD_End ();
 
 		     Total += Events->Lst[NumAttEvent].NumStdsFromList;
 		    }
 
-	       HTM_TD_Begin ("class=\"%s LINE_TOP RM\"",
-	                     The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Total);
 	       HTM_TD_End ();
 
@@ -2961,8 +2961,6 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2978,9 +2976,10 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    /***** Write number of user in the list *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RM %s\"",
-		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
-				       The_ClassDat[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_STRONG" :
+				       "DAT",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
@@ -3037,9 +3036,8 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 	   }
 
       /***** Last column with the number of times this user is present *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",
-                    The_ClassDatStrong[Gbl.Prefs.Theme],
-                    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 	 HTM_Unsigned (NumTimesPresent);
       HTM_TD_End ();
 
@@ -3130,8 +3128,6 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
 static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
                                       unsigned NumUsr,struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
@@ -3155,9 +3151,10 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
    NumUsr++;
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RM %s\"",
-		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
-				       The_ClassDat[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_STRONG" :
+				       "DAT",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 HTM_TxtF ("%u:",NumUsr);
       HTM_TD_End ();
@@ -3234,8 +3231,8 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s LT %s\"",
-	                  The_ClassDat[Gbl.Prefs.Theme],
+	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                  The_Colors[Gbl.Prefs.Theme],
 	                  The_GetColorRows ());
 	       if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
@@ -3261,9 +3258,8 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 
 		  HTM_DL_Begin ();
 		     if (ShowCommentStd)

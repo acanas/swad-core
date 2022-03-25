@@ -403,8 +403,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
 static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    const char *BgColor;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
@@ -413,45 +412,52 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
    HTM_TR_Begin (NULL);
 
       /***** Number of country in this list *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumCty);
       HTM_TD_End ();
 
       /***** Country map (and link to WWW if exists) *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-                    The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (Cty));
       HTM_TD_End ();
 
       /***** Number of institutions *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+                    The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |

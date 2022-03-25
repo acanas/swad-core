@@ -7865,7 +7865,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
 void Brw_ShowFileMetadata (void)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
@@ -8034,7 +8034,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_Filename);
 
-	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	       HTM_TD_End ();
 
@@ -8045,7 +8046,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
 
-	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  if (FileHasPublisher)
 		    {
 		     /* Show photo */
@@ -8074,7 +8076,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_File_size);
 
-	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (FileSizeStr);
 	       HTM_TD_End ();
 
@@ -8085,8 +8088,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
 
-	       HTM_TD_Begin ("id=\"filedate\" class=\"LB %s\"",
-	                     The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						true,true,true,0x7);
@@ -8103,7 +8106,8 @@ void Brw_ShowFileMetadata (void)
 			        Txt_Availability);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"LT %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  if (ICanChangePublic)	// I can change file to public
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8132,7 +8136,8 @@ void Brw_ShowFileMetadata (void)
 			        Txt_License);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"LT %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  if (ICanEdit)	// I can edit file properties
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8161,7 +8166,8 @@ void Brw_ShowFileMetadata (void)
 
 	          Frm_LabelColumn ("RT",NULL,Txt_My_views);
 
-		  HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (FileMetadata.NumMyViews);
 		  HTM_TD_End ();
 
@@ -8173,7 +8179,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
 
-	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 		  HTM_TxtF ("(%u %s)",
 			    FileMetadata.NumLoggedUsrs,
@@ -8188,7 +8195,8 @@ void Brw_ShowFileMetadata (void)
 
 	       Frm_LabelColumn ("RT",NULL,Txt_Public_views);
 
-	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (FileMetadata.NumPublicViews);
 	       HTM_TD_End ();
 
@@ -8585,7 +8593,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct FileMetadata *FileMetadata,
                                               const char *FileNameToShow)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Check_marks_in_the_file;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -8617,8 +8625,9 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
    else
      {
       /* Put anchor and filename */
-      HTM_A_Begin ("href=\"%s\" class=\"%s\" title=\"%s\" target=\"_blank\"",
-	           URL,The_ClassDatStrong[Gbl.Prefs.Theme],FileNameToShow);
+      HTM_A_Begin ("href=\"%s\" class=\"DAT_STRONG_%s\""
+	           " title=\"%s\" target=\"_blank\"",
+	           URL,The_Colors[Gbl.Prefs.Theme],FileNameToShow);
 	 HTM_Txt (FileNameToShow);
       HTM_A_End ();
      }
@@ -9911,8 +9920,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
    extern const char *Txt_Shared_files_area;
@@ -9984,13 +9992,14 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TR_Begin (NULL);
 
 	 /***** Write number of document in this search *****/
-	 HTM_TD_Begin ("class=\"RT %s %s\"",
-	               The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (++(*NumDocsNotHidden));
 	 HTM_TD_End ();
 
 	 /***** Write institution logo, institution short name *****/
-	 HTM_TD_Begin ("class=\"%s LT %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    if (InsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
@@ -10006,7 +10015,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 HTM_TD_End ();
 
 	 /***** Write center logo, center short name *****/
-	 HTM_TD_Begin ("class=\"%s LT %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    if (CtrCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
@@ -10022,7 +10032,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 HTM_TD_End ();
 
 	 /***** Write degree logo, degree short name *****/
-	 HTM_TD_Begin ("class=\"%s LT %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    if (DegCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
@@ -10038,7 +10049,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 HTM_TD_End ();
 
 	 /***** Write course short name *****/
-	 HTM_TD_Begin ("class=\"%s LT %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    if (CrsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
@@ -10097,8 +10109,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       break;
 	   }
 
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
-	               The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 	    HTM_Txt (Title);
 	 HTM_TD_End ();
 
@@ -10108,8 +10120,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 				FileNameToShow);
 
 	 /***** Write file name using path (row[1]) *****/
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
-	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],BgColor);
 
 	    /* Begin form */
 	    Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
@@ -10723,23 +10735,13 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Brw_SizeOfFileZones *SizeOfFileZones)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Cl;
-   const char *Class;
-
-   if (FileZone == Brw_UNKNOWN)
-     {
-      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Class = Cl;
-     }
-   else
-      Class = The_ClassDat[Gbl.Prefs.Theme];
+   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
+	                                           "DAT";
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
 
@@ -10763,64 +10765,51 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s LM\"",Class);
+      HTM_TD_Begin ("class=\"LM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (NameOfFileZones);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumCrss);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumGrps);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumUsrs);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (SizeOfFileZones->MaxLevels);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_UnsignedLong (SizeOfFileZones->NumFolders);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_UnsignedLong (SizeOfFileZones->NumFiles);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (FileSizeStr);
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   if (FileZone == Brw_UNKNOWN)
-      free (Cl);
   }
 
 static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Brw_SizeOfFileZones *SizeOfFileZones)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Cl;
-   const char *Class;
-
-   if (FileZone == Brw_UNKNOWN)
-     {
-      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Class = Cl;
-     }
-   else
-      Class = The_ClassDat[Gbl.Prefs.Theme];
+   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
+						   "DAT";
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
      {
@@ -10846,48 +10835,35 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s LM\"",Class);
+      HTM_TD_Begin ("class=\"LM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (NameOfFileZones);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumFoldersPerCrs);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumFilesPerCrs);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (FileSizePerCrsStr);
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   if (FileZone == Brw_UNKNOWN)
-      free (Cl);
   }
 
 static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Brw_SizeOfFileZones *SizeOfFileZones)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Cl;
-   const char *Class;
-
-   if (FileZone == Brw_UNKNOWN)
-     {
-      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Class = Cl;
-     }
-   else
-      Class = The_ClassDat[Gbl.Prefs.Theme];
+   const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
+						   "DAT";
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
      {
@@ -10913,26 +10889,23 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s LM\"",Class);
+      HTM_TD_Begin ("class=\"LM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (NameOfFileZones);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumFoldersPerUsr);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (StrNumFilesPerUsr);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",Class);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (FileSizePerUsrStr);
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   if (FileZone == Brw_UNKNOWN)
-      free (Cl);
   }
 
 /*****************************************************************************/

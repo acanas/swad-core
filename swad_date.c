@@ -123,8 +123,7 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
@@ -144,11 +143,11 @@ void Dat_PutBoxToSelectDateFormat (void)
 		 Format++)
 	      {
 	       if (Format == Gbl.Prefs.DateFormat)
-		  HTM_LI_Begin ("class=\"%s BG_HIGHLIGHT\"",
-		                The_ClassDatStrong[Gbl.Prefs.Theme]);
+		  HTM_LI_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 	       else
-		  HTM_LI_Begin ("class=\"%s\"",
-		                The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_LI_Begin ("class=\"DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("DateFormat",true,
 				   " value=\"%u\"%s",
@@ -1752,8 +1751,7 @@ void Dat_PutHiddenParamOrder (Dat_StartEndTime_t SelectedOrder)
 void Dat_GetAndShowNumUsrsPerDateFormat (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_dates;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_Number_of_users;
@@ -1798,16 +1796,19 @@ void Dat_GetAndShowNumUsrsPerDateFormat (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_STRONG_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       Dat_PutSpanDateFormat (Format);
 	       Dat_PutScriptDateFormat (Format);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Format]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

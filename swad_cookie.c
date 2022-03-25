@@ -60,8 +60,7 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 void Coo_EditMyPrefsOnCookies (void)
   {
    extern const char *Hlp_PROFILE_Settings_cookies;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
 
@@ -79,11 +78,11 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	    /* Begin container */
 	    if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
-	       HTM_DIV_Begin ("class=\"%s BG_HIGHLIGHT\"",
-	                      The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 	    else
-	       HTM_DIV_Begin ("class=\"%s\"",
-	                      The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"DAT_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);

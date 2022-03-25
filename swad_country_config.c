@@ -398,7 +398,7 @@ static void CtyCfg_Platform (bool PrintView)
 
 static void CtyCfg_Name (bool PutLink)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Country;
 
    /***** Country name *****/
@@ -408,11 +408,11 @@ static void CtyCfg_Name (bool PutLink)
       Frm_LabelColumn ("RT",NULL,Txt_Country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
 			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-			 The_ClassDatStrong[Gbl.Prefs.Theme]);
+			 The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 if (PutLink)
 	    HTM_A_End ();

@@ -2399,8 +2399,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -2439,8 +2438,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumNETs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_NET);
    NumTchs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_TCH);
    NumUsrs = NumStds + NumNETs + NumTchs;
-   ClassTxt = NumUsrs ? The_ClassDatStrong[Gbl.Prefs.Theme] :
-	                The_ClassDat[Gbl.Prefs.Theme];
+   ClassTxt = NumUsrs ? "DAT_STRONG" :
+	                "DAT";
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "BG_HIGHLIGHT" :
                                                     The_GetColorRows ();
 
@@ -2461,13 +2460,15 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	}
 
       /***** Write number of course in this search *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumCrs);
       HTM_TD_End ();
 
       /***** Write degree logo, degree short name (row[2])
 	     and center short name (row[6]) *****/
-      HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
 	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (row[2]),
@@ -2480,12 +2481,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_End ();
 
       /***** Write year (row[4]) *****/
-      HTM_TD_Begin ("class=\"%s CT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"CT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Txt (Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
       HTM_TD_End ();
 
       /***** Write course full name (row[5]) *****/
-      HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
 	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (row[5]),
@@ -2497,17 +2500,20 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_End ();
 
       /***** Write number of teachers in course *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumTchs);
       HTM_TD_End ();
 
       /***** Write number of non-editing teachers in course *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumNETs);
       HTM_TD_End ();
 
       /***** Write number of students in course *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",ClassTxt,BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumStds);
       HTM_TD_End ();
 
