@@ -270,16 +270,17 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
 static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Date;
 
-   HTM_DIV_Begin ("class=\"TITLE_REPORT %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"TITLE_REPORT DAT_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /***** User *****/
       HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
-      HTM_SPAN_Begin ("class=\"%s BOLD\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",
+                      The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
       HTM_SPAN_End ();
 
@@ -288,7 +289,8 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 	{
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Date);
-	 HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s\"",
+	                 The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
 				  CurrentTimeUTC->StrTime);
 	 HTM_SPAN_End ();

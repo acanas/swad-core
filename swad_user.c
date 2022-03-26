@@ -2044,8 +2044,7 @@ void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
@@ -2068,11 +2067,12 @@ void Usr_ShowFormsLogoutAndRole (void)
       /***** Put a form to change my role *****/
       if (Rol_GetNumAvailableRoles () == 1)
 	{
-	 HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Role);
 	 HTM_SPAN_End ();
 
-	 HTM_SPAN_Begin ("class=\"%s BOLD\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",
+	                 The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	 HTM_SPAN_End ();
 	}
@@ -6600,54 +6600,49 @@ void Usr_GetAndShowUsersStats (void)
 
 static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
-   char *Class;
+   const char *Class;
    unsigned Roles;
 
    /***** Initializations depending on role *****/
    if (Role == Rol_UNK)
      {
-      if (asprintf (&Class,"RB %s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
+      Class = "RB LINE_TOP DAT_STRONG";
       Roles = (1 << Rol_STD) |
 	      (1 << Rol_NET) |
 	      (1 << Rol_TCH);
      }
    else
      {
-      if (asprintf (&Class,"RB %s",The_ClassDat[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
+      Class = "RB DAT";
       Roles = (1 << Role);
      }
 
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s\"",Class);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
 				      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       /* Number of users in courses */
-      HTM_TD_Begin ("class=\"%s\"",Class);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s\"",Class);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s\"",Class);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   free (Class);
   }
 
 /*****************************************************************************/

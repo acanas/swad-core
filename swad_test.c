@@ -303,7 +303,6 @@ void Tst_ReceiveTestDraft (void)
 void Tst_AssessTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
@@ -374,7 +373,8 @@ void Tst_AssessTest (void)
 	 /***** Write total score and grade *****/
 	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	   {
-	    HTM_DIV_Begin ("class=\"CM %s BOLD\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"CM DAT_STRONG_%s BOLD\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_Double2Decimals (Print.Score);
 	       HTM_BR ();
@@ -748,8 +748,7 @@ static unsigned Tst_GetParamNumQsts (void)
 void Tst_GetAndShowTestsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_tests;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -793,15 +792,15 @@ void Tst_GetAndShowTestsStats (void)
 	 /***** Write stats *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Stats.NumCoursesWithQuestions);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%u (%.1lf%%)",
 			 Stats.NumCoursesWithPluggableQuestions,
 			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -809,27 +808,27 @@ void Tst_GetAndShowTestsStats (void)
 							 0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Stats.NumQsts);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgQstsPerCourse);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (Stats.NumHits);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgHitsPerCourse);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgScorePerQuestion);
 	    HTM_TD_End ();
 
@@ -842,15 +841,18 @@ void Tst_GetAndShowTestsStats (void)
       /***** Write stats *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%u (%.1f%%)",
 		      Stats.NumCoursesWithPluggableQuestions,
 		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -858,27 +860,33 @@ void Tst_GetAndShowTestsStats (void)
 						      0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumQsts);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_UnsignedLong (Stats.NumHits);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
 	 HTM_TD_End ();
 

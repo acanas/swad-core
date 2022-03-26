@@ -545,8 +545,7 @@ void Tml_WriteDateTime (time_t TimeUTC)
 void Tml_GetAndShowTimelineActivityStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_Number_of_posts;
@@ -611,25 +610,25 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	 /***** Write number of timeline notes and number of users *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumNotes);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
 			                      (double) NumUsrs :
 				              0.0);
@@ -666,25 +665,30 @@ void Tml_GetAndShowTimelineActivityStats (void)
       /* Write totals */
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotes);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 				 0.0);
 	 HTM_TD_End ();

@@ -172,7 +172,7 @@ void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
    char *Class;
@@ -181,8 +181,8 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
    HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Author name *****/
-      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                    The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK DAT_STRONG_%s BOLD",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       TmlNot_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,Class);
       free (Class);

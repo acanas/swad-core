@@ -316,15 +316,15 @@ void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
                                               const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char *Class;
 
    /***** Begin top container *****/
    HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Write author's full name *****/
-      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                    The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK DAT_STRONG_%s BOLD",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       TmlNot_WriteAuthorName (UsrDat,Class);
       free (Class);
@@ -344,7 +344,7 @@ static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
 /*****************************************************************************/
 
 void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
-                              const char *Class)
+                             const char *Class)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;

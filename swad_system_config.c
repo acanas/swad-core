@@ -258,7 +258,7 @@ static void SysCfg_Map (void)
 
 static void SysCfg_Platform (void)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Platform;
 
    /***** Institution *****/
@@ -268,7 +268,7 @@ static void SysCfg_Platform (void)
    Frm_LabelColumn ("RT",NULL,Txt_Platform);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_Colors[Gbl.Prefs.Theme]);
    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
    HTM_TD_End ();
 
