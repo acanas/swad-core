@@ -844,8 +844,7 @@ static long Not_GetParamNotCod (void)
 void Not_GetAndShowNoticesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notices;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -889,23 +888,28 @@ void Not_GetAndShowNoticesStats (void)
       /***** Write number of notices *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNoticesDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned ( NumTotalNotices);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumTotalNotifications);
 	 HTM_TD_End ();
 

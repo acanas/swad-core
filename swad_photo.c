@@ -1061,7 +1061,6 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 			    char **CaptionStr)
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
@@ -1092,11 +1091,11 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutZoomCode)
      {
       /* First name and surnames */
-      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE %s BOLD\">"	// Limited width
+      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_STRONG_%s BOLD\">"	// Limited width
 				     "%s<br />"
 				     "%s%s%s"
 				  "</div>",
-		    The_ClassDatStrong[Gbl.Prefs.Theme],
+		    The_Colors[Gbl.Prefs.Theme],
 		    UsrDat->FrstName,
 		    UsrDat->Surname1,
 		    UsrDat->Surname2[0] ? "&nbsp;" :
@@ -2368,7 +2367,6 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
@@ -2434,8 +2432,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 				    0);
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
-	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE %s\"",
-	                      The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_STRONG_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (PhotoCaption);
 	       HTM_DIV_End ();
 	    HTM_DIV_End ();

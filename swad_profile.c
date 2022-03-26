@@ -375,7 +375,7 @@ void Prf_ChangeExtendedProfileVis (void)
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    bool UsrIsBannedFromRanking;
    struct Prf_UsrFigures UsrFigures;
    Rol_Role_t Role;
@@ -386,14 +386,14 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Left list *****/
    /* Begin left list */
    HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONT\"");
-      HTM_UL_Begin ("class=\"PRF_FIG_UL %s NOWRAP\"",
-                    The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 
 	 /* Time since first click */
 	 Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
 
 	 /* Number of courses in which the user has a role */
-	 for (Role = Rol_TCH;
+	 for (Role  = Rol_TCH;
 	      Role >= Rol_STD;
 	      Role--)
 	    Prf_ShowNumCrssWithRole (UsrDat,Role);
@@ -412,8 +412,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       if (!UsrIsBannedFromRanking)
 	{
 	 /* Begin right list */
-	 HTM_UL_Begin ("class=\"PRF_FIG_UL %s NOWRAP\"",
-	               The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 
 	    /* Number of clicks */
 	    Prf_ShowNumClicks (UsrDat,&UsrFigures);

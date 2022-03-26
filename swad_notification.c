@@ -1681,8 +1681,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notifications;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -1781,25 +1780,30 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumEvents[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumMails[NotifyEvent]);
 	    HTM_TD_End ();
 
@@ -1809,25 +1813,30 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
       /***** Write total number of users who want to be notified by email on some event *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumEventsTotal);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMailsTotal);
 	 HTM_TD_End ();
 
