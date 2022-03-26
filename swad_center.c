@@ -107,7 +107,7 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
 void Ctr_SeeCtrWithPendingDegs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Centers_with_pending_degrees;
    extern const char *Txt_Center;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -154,13 +154,14 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s NOWRAP LM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	       HTM_TD_Begin ("class=\"LM %s NOWRAP %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
-	       HTM_TD_Begin ("class=\"%s RM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -755,7 +756,7 @@ void Ctr_WriteSelectorOfCenter (void)
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
@@ -808,7 +809,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center code */
-	    HTM_TD_Begin ("class=\"%s CODE\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Long (Ctr->CtrCod);
 	    HTM_TD_End ();
 
@@ -818,7 +819,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place */
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
@@ -847,7 +848,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center short name */
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
@@ -863,7 +864,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center full name */
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
@@ -879,7 +880,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center WWW */
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
@@ -895,9 +896,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-				  " class=\"%s\" title=\"%s\"",
+				  " class=\"DAT_%s\" title=\"%s\"",
 				  Ctr->WWW,
-				  The_ClassDat[Gbl.Prefs.Theme],
+				  The_Colors[Gbl.Prefs.Theme],
 				  Ctr->WWW);
 			HTM_Txt (WWW);
 		     HTM_A_End ();
@@ -906,17 +907,17 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this center */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsCtr);
 	    HTM_TD_End ();
 
 	    /* Number of degrees */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumDegs);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this center */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsInCrssOfCtr);
 	    HTM_TD_End ();
 
@@ -925,8 +926,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
-	                  The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	    HTM_TD_End ();
 
@@ -1303,7 +1304,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_center;
    extern const char *Txt_Another_place;
@@ -1382,28 +1383,28 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Center requester *****/
-      HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
-                    The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
+                    The_Colors[Gbl.Prefs.Theme]);
 	 Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
       HTM_TD_End ();
 
       /***** Center status *****/
-      HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();

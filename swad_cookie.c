@@ -140,7 +140,7 @@ void Coo_ChangeMyPrefsCookies (void)
 void Coo_GetAndShowNumUsrsPerCookies (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_cookies;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Cookies;
    extern const char *Txt_Number_of_users;
@@ -201,11 +201,11 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
                             Accepted[i].Title,"ICOx16");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[i]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

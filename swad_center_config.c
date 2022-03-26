@@ -551,7 +551,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
@@ -565,7 +565,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		       Txt_Institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of institutions of the current country */
@@ -643,7 +643,7 @@ static void CtrCfg_ShrtName (bool PutForm)
 
 static void CtrCfg_Place (bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
@@ -667,7 +667,7 @@ static void CtrCfg_Place (bool PutForm)
 		       Txt_Place);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of places of the current institution */
@@ -734,7 +734,7 @@ static void CtrCfg_QR (void)
 
 static void CtrCfg_NumUsrs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_center;
 
    /***** Number of users *****/
@@ -744,7 +744,7 @@ static void CtrCfg_NumUsrs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
       HTM_TD_End ();
 
@@ -757,7 +757,7 @@ static void CtrCfg_NumUsrs (void)
 
 static void CtrCfg_NumDegs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
    char *Title;
@@ -769,7 +769,7 @@ static void CtrCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
@@ -790,7 +790,7 @@ static void CtrCfg_NumDegs (void)
 
 static void CtrCfg_NumCrss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -800,7 +800,7 @@ static void CtrCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_TD_End ();
 

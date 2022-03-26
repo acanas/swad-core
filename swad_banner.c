@@ -168,7 +168,7 @@ void Ban_ShowAllBanners (void)
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumBan;
 
    /***** List start *****/
@@ -181,10 +181,10 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
 	{
 	 /* Write data of this banner */
 	 HTM_LI_Begin (NULL);
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT_%s\" target=\"_blank\"",
 			 Banners->Lst[NumBan].WWW,
 			 Banners->Lst[NumBan].FullName,
-			 The_ClassDat[Gbl.Prefs.Theme]);
+			 The_Colors[Gbl.Prefs.Theme]);
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
 			"class=\"BANNER\"");
 	    HTM_A_End ();

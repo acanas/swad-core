@@ -92,7 +92,7 @@ void Bld_ResetBuildings (struct Bld_Buildings *Buildings)
 void Bld_SeeBuildings (void)
   {
    extern const char *Hlp_CENTER_Buildings;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Buildings;
    extern const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS];
    extern const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS];
@@ -149,21 +149,20 @@ void Bld_SeeBuildings (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Short name */
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].FullName);
 	       HTM_TD_End ();
 
 	       /* Location */
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].Location);
 	       HTM_TD_End ();
 
@@ -409,7 +408,7 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumBld;
    struct Bld_Building *Building;
@@ -440,7 +439,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_End ();
 
 	    /* Building code */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Building->BldCod);
 	       HTM_ARTICLE_End ();

@@ -3949,7 +3949,7 @@ static void Brw_InitHiddenLevels (void)
 
 static void Brw_ShowAndStoreSizeOfFileTree (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_level;
    extern const char *Txt_levels;
    extern const char *Txt_folder;
@@ -3959,7 +3959,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
-   HTM_DIV_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
 	{
@@ -10915,7 +10915,7 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 void Brw_GetAndShowOERsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_Number_of_private_files;
@@ -10944,15 +10944,15 @@ void Brw_GetAndShowOERsStats (void)
 
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_LICENSES[License]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (NumFiles[0]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (NumFiles[1]);
 	    HTM_TD_End ();
 

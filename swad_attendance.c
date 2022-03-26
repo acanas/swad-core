@@ -1138,7 +1138,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1163,8 +1163,8 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
-		                The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
@@ -1694,7 +1694,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
                                           struct Att_Event *Event)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2668,7 +2667,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
                                     Att_TypeOfView_t TypeOfView)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -2730,8 +2729,8 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	    /* Write a row for this event */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s CT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"%s",
@@ -2740,16 +2739,16 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 									  "");
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s RT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
 		     HTM_TxtF ("%u:",NumAttEvent + 1);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 		     Err_NotEnoughMemoryExit ();
@@ -2763,14 +2762,14 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 		  free (Id);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Txt (Events->Lst[NumAttEvent].Title);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s RT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsTotal);
 	       HTM_TD_End ();
