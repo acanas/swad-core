@@ -95,7 +95,7 @@ void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
@@ -146,7 +146,7 @@ void Ind_ReqIndicatorsCourses (void)
 	       Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
 		  HTM_Txt (" (");
 		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);

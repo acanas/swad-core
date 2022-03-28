@@ -1590,7 +1590,7 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 void Exa_GetAndShowExamsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_exams;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_exams;
    extern const char *Txt_Number_of_BR_courses_with_BR_exams;
@@ -1619,15 +1619,15 @@ void Exa_GetAndShowExamsStats (void)
       /***** Write number of exams *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumExamsPerCourse);
 	 HTM_TD_End ();
 

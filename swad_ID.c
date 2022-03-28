@@ -502,7 +502,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
@@ -605,8 +605,8 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	 /***** Write help text *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("colspan=\"2\" class=\"%s CM\"",
-	                  The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
 	    HTM_TD_End ();
 
@@ -621,8 +621,8 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 					       Txt_ID);		// The first user's ID
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",
-	                  The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       if (ItsMe)
 		  Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
 	       else

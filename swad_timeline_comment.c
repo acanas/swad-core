@@ -620,7 +620,7 @@ static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
 
 static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
    char *Class;
@@ -631,8 +631,8 @@ static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      if (asprintf (&Class,"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK %s BOLD",
-                    The_ClassDat[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&Class,"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							      Txt_Another_user_s_profile,

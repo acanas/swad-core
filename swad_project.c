@@ -3298,7 +3298,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
@@ -3490,7 +3490,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    Frm_LabelColumn ("RT","WWW",Txt_URL);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"TITLE_DESCRIPTION_WIDTH %s\"",
 			      The_ClassInput[Gbl.Prefs.Theme]);
@@ -4221,7 +4221,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 void Prj_GetAndShowProjectsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_projects;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_projects;
    extern const char *Txt_Number_of_BR_courses_with_BR_projects;
@@ -4251,15 +4251,15 @@ void Prj_GetAndShowProjectsStats (void)
       /***** Write number of projects *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumProjectsPerCourse);
 	 HTM_TD_End ();
 

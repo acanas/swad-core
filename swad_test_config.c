@@ -143,7 +143,7 @@ static void TstCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
@@ -186,7 +186,8 @@ static void TstCfg_ShowFormConfig (void)
 		       Pluggable <= TstCfg_PLUGGABLE_YES;
 		       Pluggable++)
 		    {
-		     HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
+		                      The_Colors[Gbl.Prefs.Theme]);
 			HTM_INPUT_RADIO ("Pluggable",false,
 					 "value=\"%u\"%s",
 					 (unsigned) Pluggable,
@@ -276,15 +277,15 @@ static void TstCfg_ShowFormConfig (void)
 static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-	 HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-	                  Field,The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT_%s\"",
+	                  Field,The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Label);
 	 HTM_LABEL_End ();
       HTM_TD_End ();

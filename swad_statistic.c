@@ -2796,7 +2796,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Banner;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
@@ -2841,10 +2841,11 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 	    Err_WrongBannerExit ();
 	 Ban_GetDataOfBannerByCod (&Ban);
 	 HTM_TD_Begin ("class=\"LOG LT\"");
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
+		         " class=\"DAT_%s\"",
 			 Ban.WWW,
 			 Ban.FullName,
-			 The_ClassDat[Gbl.Prefs.Theme]);
+			 The_Colors[Gbl.Prefs.Theme]);
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
 			"style=\"margin:0 10px 5px 0;\"");
 	    HTM_A_End ();

@@ -609,7 +609,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
                                                 const struct ExaSes_Session *Session)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static void (*Function[Rol_NUM_ROLES]) (struct Exa_Exams *Exams,
 	                                   const struct ExaSes_Session *Session) =
      {
@@ -619,8 +619,8 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ExaSes_ListOneOrMoreSessionsResultTch,
      };
 
-   HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);
@@ -1064,7 +1064,7 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1089,8 +1089,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
-		                The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"

@@ -155,7 +155,7 @@ Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
 
 void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
 
@@ -168,7 +168,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
 	      WhichSyl++)
 	   {
-	    HTM_LI_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_LI_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("WhichSyllabus",true,
 				   "value=\"%u\"%s",

@@ -85,7 +85,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden)
 
 void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY];
    static const char *Icons[TstVis_NUM_ITEMS_VISIBILITY] =
      {
@@ -104,7 +104,7 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
 	Visibility++)
      {
       /* Begin label */
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
          /* Checkbox with icon and text */
          ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;

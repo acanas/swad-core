@@ -380,7 +380,7 @@ void Lnk_FreeListLinks (void)
 
 static void Lnk_ListLinksForEdition (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
@@ -407,7 +407,7 @@ static void Lnk_ListLinksForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Link code */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Long (Lnk->LnkCod);
 	    HTM_TD_End ();
 

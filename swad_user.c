@@ -6651,11 +6651,11 @@ static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *Class;
 
-   if (asprintf (&Class,"%s RB",The_ClassDat[Gbl.Prefs.Theme]) < 0)
+   if (asprintf (&Class,"RB DAT_%s",The_Colors[Gbl.Prefs.Theme]) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Write the total number of users not belonging to any course *****/
@@ -6689,7 +6689,7 @@ static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 void Usr_GetAndShowUsersRanking (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_ranking;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -6718,31 +6718,31 @@ void Usr_GetAndShowUsersRanking (void)
       /***** Rankings *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s LT\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingClicks ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingClicksPerDay ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingTimelinePubs ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Fol_GetAndShowRankingFollowers ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingFileViews ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingForPsts ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingMsgsSnt ();
 	 HTM_TD_End ();
 

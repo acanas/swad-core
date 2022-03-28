@@ -716,11 +716,11 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 
 void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Number of players who have answered any question in the match ******/
-   HTM_TD_Begin ("class=\"%s RT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+   HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
@@ -731,17 +731,17 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
 
 static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned NumQsts)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Match->Status.Showing != Mch_END)	// Match not over
 	{
 	 /* Current question index / total of questions */
-	 HTM_DIV_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
 	 HTM_DIV_End ();
 	}
@@ -766,7 +766,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static void (*Function[Rol_NUM_ROLES]) (struct Gam_Games *Games,
                                            const struct Mch_Match *Match) =
      {
@@ -776,8 +776,8 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
       [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
      };
 
-   HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
+   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);
@@ -1337,7 +1337,7 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1363,8 +1363,8 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
-		                The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
@@ -2688,11 +2688,12 @@ static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
 
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_results;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS DAT_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /***** Begin form *****/
       Frm_BeginForm (ActChgVisResMchQst);

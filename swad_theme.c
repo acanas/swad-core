@@ -188,17 +188,6 @@ const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "FORM_OUT_DARK BOLD",
   };
 
-const char *The_ClassDat[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "DAT_WHITE",
-   [The_THEME_GREY  ] = "DAT_GREY",
-   [The_THEME_PURPLE] = "DAT_PURPLE",
-   [The_THEME_BLUE  ] = "DAT_BLUE",
-   [The_THEME_YELLOW] = "DAT_YELLOW",
-   [The_THEME_PINK  ] = "DAT_PINK",
-   [The_THEME_DARK  ] = "DAT_DARK",
-  };
-
 const char *The_ClassInput[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "INPUT_WHITE",
@@ -379,7 +368,6 @@ void The_GetAndShowNumUsrsPerTheme (void)
    extern const char *Hlp_ANALYTICS_Figures_theme;
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Theme_SKIN;
    extern const char *Txt_Number_of_users;
@@ -434,11 +422,11 @@ void The_GetAndShowNumUsrsPerTheme (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Theme]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

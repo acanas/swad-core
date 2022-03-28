@@ -2323,7 +2323,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 void Gam_GetAndShowGamesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_games;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_games;
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
@@ -2352,15 +2352,15 @@ void Gam_GetAndShowGamesStats (void)
       /***** Write number of games *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumGamesPerCourse);
 	 HTM_TD_End ();
 

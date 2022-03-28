@@ -3364,7 +3364,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *Icon,struct For_FiguresForum *FiguresForum,
                                          const char *ForumName1,const char *ForumName2)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumForums;
    unsigned NumThreads;
    unsigned NumPosts;
@@ -3404,36 +3404,36 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
 	 free (ForumName);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (ForumName1);
 	 HTM_Txt (ForumName2);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_Unsigned (NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 

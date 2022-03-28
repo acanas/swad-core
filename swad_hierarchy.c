@@ -768,12 +768,12 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT])
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
    unsigned StatusUnsigned;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
       if (ICanEdit && StatusTxt == Hie_STATUS_PENDING)
 	{
 	 /* Begin form */
@@ -984,7 +984,6 @@ static void Hie_WriteHeadHierarchy (void)
 
 static void Hie_GetAndShowHierarchyWithInss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_institutions;
    unsigned NumCtysWithInss = 1;
@@ -1022,7 +1021,6 @@ static void Hie_GetAndShowHierarchyWithInss (void)
 
 static void Hie_GetAndShowHierarchyWithCtrs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_centers;
    unsigned NumCtysWithCtrs = 1;
@@ -1064,7 +1062,6 @@ static void Hie_GetAndShowHierarchyWithCtrs (void)
 
 static void Hie_GetAndShowHierarchyWithDegs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_degrees;
    unsigned NumCtysWithDegs = 1;
@@ -1111,7 +1108,6 @@ static void Hie_GetAndShowHierarchyWithDegs (void)
 
 static void Hie_GetAndShowHierarchyWithCrss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_courses;
    unsigned NumCtysWithCrss = 1;
@@ -1161,7 +1157,6 @@ static void Hie_GetAndShowHierarchyWithCrss (void)
 
 static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumCtysWithUsrs;

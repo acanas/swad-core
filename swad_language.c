@@ -249,7 +249,7 @@ Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
 void Lan_GetAndShowNumUsrsPerLanguage (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_language;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Language;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -296,15 +296,15 @@ void Lan_GetAndShowNumUsrsPerLanguage (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_STR_LANG_NAME[Lan]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Lan]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0);

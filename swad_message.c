@@ -2908,7 +2908,7 @@ static void Msg_UnbanSender (void)
 
 void Msg_ListBannedUsrs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
@@ -2967,7 +2967,8 @@ void Msg_ListBannedUsrs (void)
 		  HTM_TD_End ();
 
 		  /* Write user's full name */
-		  HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_Txt (UsrDat.FullName);
 		  HTM_TD_End ();
 

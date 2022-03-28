@@ -416,7 +416,7 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Menu;
    extern const char *Txt_Number_of_users;
@@ -467,11 +467,11 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
 	                    Txt_MENU_NAMES[Menu],"ICOx20");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Menu]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

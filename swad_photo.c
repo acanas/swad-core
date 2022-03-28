@@ -886,7 +886,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
 
 static void Pho_UpdatePhoto2 (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;
    char *Img;
@@ -901,8 +901,8 @@ static void Pho_UpdatePhoto2 (void)
 	      NumPhoto < 3;
 	      NumPhoto++)
 	   {
-	    HTM_TD_Begin ("class=\"%s CT\" style=\"width:33%%;\"",
-	                  The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CT DAT_%s\" style=\"width:33%%;\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
@@ -2202,7 +2202,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
@@ -2254,15 +2253,15 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	    HTM_TR_Begin (NULL);
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"%s RM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
@@ -2340,11 +2339,10 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_photos;
 
-   HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_SPAN_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 

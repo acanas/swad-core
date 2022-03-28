@@ -145,7 +145,7 @@ void Roo_ResetRooms (struct Roo_Rooms *Rooms)
 void Roo_SeeRooms (void)
   {
    extern const char *Hlp_CENTER_Rooms;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
@@ -219,44 +219,44 @@ void Roo_SeeRooms (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Building short name */
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
 	       HTM_TD_End ();
 
 	       /* Floor */
-	       HTM_TD_Begin ("class=\"%s RT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Int (Rooms.Lst[NumRoom].Floor);
 	       HTM_TD_End ();
 
 	       /* Type */
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
 		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
 	       HTM_TD_End ();
 
 	       /* Short name */
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
-	       HTM_TD_Begin ("class=\"%s LT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
 	       HTM_TD_End ();
 
 	       /* Capacity */
-	       HTM_TD_Begin ("class=\"%s RT %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                     The_Colors[Gbl.Prefs.Theme],
 	                     The_GetColorRows ());
 		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
 		  HTM_Txt (StrCapacity);
@@ -268,8 +268,8 @@ void Roo_SeeRooms (void)
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     HTM_TD_Begin ("class=\"%s LT %s\"",
-		                   The_ClassDat[Gbl.Prefs.Theme],
+		     HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+		                   The_Colors[Gbl.Prefs.Theme],
 		                   The_GetColorRows ());
 			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
 		     HTM_TD_End ();
@@ -663,7 +663,7 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumRoom;
    struct Roo_Room *Room;
@@ -694,7 +694,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_End ();
 
 	    /* Room code */
-	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Room->RooCod);
 	       HTM_ARTICLE_End ();

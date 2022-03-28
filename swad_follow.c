@@ -605,7 +605,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -632,8 +632,8 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 /* Put form to go to public profile */
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME %s LT\"",	// Limited width
-	                   The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"LT FOLLOW_USR_NAME DAT_%s\"",	// Limited width
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,
 	                                  "BT_LINK LT",NULL);
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -1201,7 +1201,7 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
 void Fol_GetAndShowFollowStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_Number_of_users;
@@ -1239,16 +1239,16 @@ void Fol_GetAndShowFollowStats (void)
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Fol == 0 ? Txt_Followed :
 				   Txt_Followers);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -1267,11 +1267,11 @@ void Fol_GetAndShowFollowStats (void)
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_FollowPerFollow[Fol]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Average);
 	    HTM_TD_End ();
 

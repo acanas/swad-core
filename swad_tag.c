@@ -293,7 +293,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           bool ShowOnlyEnabledTags)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -373,7 +373,8 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		 }
 
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_LABEL_Begin ("class=\"DAT_%s\"",
+		                   The_Colors[Gbl.Prefs.Theme]);
 		     HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 					 row[1],

@@ -84,7 +84,7 @@ static void Plg_EditingPluginDestructor (void);
 
 void Plg_ListPlugins (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Option_under_development;
    extern const char *Txt_Plugins;
    extern const char *Txt_Plugin;
@@ -128,10 +128,11 @@ void Plg_ListPlugins (void)
 	 // TODO: Change plugin icons to 32x32
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s LM\" style=\"width:45px;\"",
-			  The_ClassDat[Gbl.Prefs.Theme]);
-	       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
-			    URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\" style=\"width:45px;\"",
+			  The_Colors[Gbl.Prefs.Theme]);
+	       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
+			    " class=\"DAT_%s\"",
+			    URL,Plg->Name,The_Colors[Gbl.Prefs.Theme]);
 		  if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
@@ -140,9 +141,10 @@ void Plg_ListPlugins (void)
 	       HTM_A_End ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
-	       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
-			    URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
+			    " class=\"DAT_%s\"",
+			    URL,Plg->Name,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Plg->Name);
 	       HTM_A_End ();
 	    HTM_TD_End ();
@@ -326,7 +328,7 @@ void Plg_FreeListPlugins (void)
 
 static void Plg_ListPluginsForEdition (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumPlg;
    struct Plugin *Plg;
@@ -355,7 +357,7 @@ static void Plg_ListPluginsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Plugin code */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Long (Plg->PlgCod);
 	    HTM_TD_End ();
 

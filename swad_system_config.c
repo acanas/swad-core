@@ -299,7 +299,7 @@ static void SysCfg_QR (void)
 
 static void SysCfg_NumCtys (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Countries;
 
    /***** Number of countries ******/
@@ -309,7 +309,7 @@ static void SysCfg_NumCtys (void)
       Frm_LabelColumn ("RT",NULL,Txt_Countries);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeCty);
 	    HTM_BUTTON_OnSubmit_Begin (Txt_Countries,"BT_LINK",NULL);
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
@@ -326,7 +326,7 @@ static void SysCfg_NumCtys (void)
 
 static void SysCfg_NumInss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institutions;
 
    /***** Number of institutions ******/
@@ -336,7 +336,7 @@ static void SysCfg_NumInss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Ins_GetCachedNumInssInSys ());
       HTM_TD_End ();
 
@@ -349,7 +349,7 @@ static void SysCfg_NumInss (void)
 
 static void SysCfg_NumDegs (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
@@ -359,7 +359,7 @@ static void SysCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
       HTM_TD_End ();
 
@@ -372,7 +372,7 @@ static void SysCfg_NumDegs (void)
 
 static void SysCfg_NumCrss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -382,7 +382,7 @@ static void SysCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
       HTM_TD_End ();
 

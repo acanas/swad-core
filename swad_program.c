@@ -1972,7 +1972,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_program_items;
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
@@ -2002,15 +2002,15 @@ void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assig
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumItemsPerCourse);
 	 HTM_TD_End ();
 

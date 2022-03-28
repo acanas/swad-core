@@ -887,7 +887,7 @@ void Inf_SetInfoSrc (void)
 void Inf_FormsToSelSendInfo (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -948,8 +948,8 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Select info source */
-	    HTM_TD_Begin ("class=\"LT %s%s\"",
-			  The_ClassDat[Gbl.Prefs.Theme],
+	    HTM_TD_Begin ("class=\"LT DAT_%s%s\"",
+			  The_Colors[Gbl.Prefs.Theme],
 			  InfoSrc == FromDB.Src ? " BG_HIGHLIGHT" :
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
@@ -975,7 +975,8 @@ void Inf_FormsToSelSendInfo (void)
 	       HTM_LABEL_End ();
 	       if (Txt_INFO_SRC_HELP[InfoSrc])
 		 {
-		  HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_SPAN_Begin ("class=\"DAT_%s\"",
+		                  The_Colors[Gbl.Prefs.Theme]);
 		     HTM_BR ();
 		     HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
 		  HTM_SPAN_End ();
@@ -1461,7 +1462,7 @@ static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType)
 
 static bool Inf_CheckAndShowPlainTxt (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -1498,7 +1499,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      HTM_DIV_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Convert to respectful HTML and insert links *****/
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

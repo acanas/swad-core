@@ -1561,7 +1561,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 void Lay_AdvertisementMobile (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Stay_connected_with_SWADroid;
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
@@ -1575,9 +1575,9 @@ void Lay_AdvertisementMobile (void)
 
 	 /***** Show advertisement *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			    " class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+			    " class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
 		  HTM_BR ();
 		  HTM_BR ();
@@ -1687,7 +1687,7 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title)
 void Lay_GetAndShowNumUsrsPerSideColumns (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_columns;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_Number_of_users;
@@ -1743,11 +1743,11 @@ void Lay_GetAndShowNumUsrsPerSideColumns (void)
 	       free (Icon);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[SideCols]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

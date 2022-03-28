@@ -195,7 +195,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
@@ -248,7 +248,8 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 		    }
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_LABEL_Begin ("class=\"DAT_%s\"",
+		                   The_Colors[Gbl.Prefs.Theme]);
 		     HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType,

@@ -94,7 +94,7 @@ void Plc_ResetPlaces (struct Plc_Places *Places)
 void Plc_SeePlaces (void)
   {
    extern const char *Hlp_INSTITUTION_Places;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Places;
    extern const char *Txt_PLACES_HELP_ORDER[2];
    extern const char *Txt_PLACES_ORDER[2];
@@ -154,11 +154,13 @@ void Plc_SeePlaces (void)
 	       /* Write data of this place */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_Txt (Places.Lst[NumPlc].FullName);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
 		  HTM_TD_End ();
 
@@ -168,8 +170,8 @@ void Plc_SeePlaces (void)
 
 	    /***** Separation row *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("colspan=\"2\" class=\"DAT_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_NBSP ();
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -178,11 +180,13 @@ void Plc_SeePlaces (void)
 	    NumCtrsInOtherPlcs = Ctr_DB_GetNumCtrsInPlc (0);
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_Other_places);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (NumCtrsInOtherPlcs);
 	       HTM_TD_End ();
 
@@ -192,11 +196,11 @@ void Plc_SeePlaces (void)
 	    /***** Write centers (of the current institution) with no place *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_Place_unspecified);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 				NumCtrsWithPlc);
 	       HTM_TD_End ();
@@ -458,7 +462,7 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumPlc;
    struct Plc_Place *Plc;
@@ -488,7 +492,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place code */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Long (Plc->PlcCod);
 	    HTM_TD_End ();
 
@@ -515,7 +519,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Plc->NumCtrs);
 	    HTM_TD_End ();
 
@@ -706,7 +710,7 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_place;
    extern const char *Txt_Create_place;
@@ -751,7 +755,7 @@ static void Plc_PutFormToCreatePlace (void)
 	    HTM_TD_End ();
 
 	    /***** Number of centers *****/
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 
