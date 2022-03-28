@@ -114,7 +114,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor);
-void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground);
+void Msg_WriteMsgDate (time_t TimeUTC,const char *Class);
 void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                           bool InsertLinks,bool ChangeBRToRet);
 

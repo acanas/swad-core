@@ -863,6 +863,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_New;
    extern const char *Txt_MSG_Open;
    extern const char *Txt_no_subject;
@@ -901,9 +902,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    HTM_TR_Begin (NULL);
 
       /***** Put an icon with post status *****/
-      HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
+      HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
 		    NewPst ? "MSG_TIT_BG_NEW" :
-			     "MSG_TIT_BG");
+			     "MSG_TIT_BG",
+		    The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon (NewPst ? "envelope.svg" :
 			       "envelope-open-text.svg",
 		      Ico_BLACK,
@@ -920,8 +922,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					      "MSG_TIT_BG");
 
       /***** Write subject *****/
-      HTM_TD_Begin ("class=\"%s LT\"",NewPst ? "MSG_TIT_BG_NEW" :
-						     "MSG_TIT_BG");
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",NewPst ? "MSG_TIT_BG_NEW" :
+					           "MSG_TIT_BG");
 	 if (Enabled)
 	   {
 	    if (Subject[0])

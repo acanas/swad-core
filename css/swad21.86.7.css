@@ -4252,10 +4252,37 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	font-size:13pt;
  	line-height:1.4;
 	}
-.MSG_TIT	{color:#4d88a1; font-size:13pt;}
-.MSG_TIT_NEW	{color:#4d88a1; font-size:13pt; font-weight:bold;}
-.MSG_TIT_REM	{color:#afc4cc; font-size:13pt;}
-.MSG_TIT_BG
+
+.MSG_TIT_WHITE,
+.MSG_TIT_GREY,
+.MSG_TIT_PURPLE,
+.MSG_TIT_BLUE,
+.MSG_TIT_YELLOW,
+.MSG_TIT_PINK		{font-size:13pt; color:#4d88a1;}
+.MSG_TIT_DARK		{font-size:13pt; color:#afc4cc;}
+
+.MSG_TIT_NEW_WHITE,
+.MSG_TIT_NEW_GREY,
+.MSG_TIT_NEW_PURPLE,
+.MSG_TIT_NEW_BLUE,
+.MSG_TIT_NEW_YELLOW,
+.MSG_TIT_NEW_PINK	{font-size:13pt; font-weight:bold; color:#4d88a1;}
+.MSG_TIT_NEW_DARK	{font-size:13pt; font-weight:bold; color:#afc4cc;}
+
+.MSG_TIT_REM_WHITE,
+.MSG_TIT_REM_GREY,
+.MSG_TIT_REM_PURPLE,
+.MSG_TIT_REM_BLUE,
+.MSG_TIT_REM_YELLOW,
+.MSG_TIT_REM_PINK	{font-size:13pt; color:#afc4cc;}
+.MSG_TIT_REM_DARK	{font-size:13pt; color:#4d88a1;}
+
+.MSG_TIT_BG_WHITE,
+.MSG_TIT_BG_GREY,
+.MSG_TIT_BG_PURPLE,
+.MSG_TIT_BG_BLUE,
+.MSG_TIT_BG_YELLOW,
+.MSG_TIT_BG_PINK
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
@@ -4263,7 +4290,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	color:#4d88a1;
 	font-size:13pt;
 	}
-.MSG_TIT_BG_NEW
+.MSG_TIT_BG_DARK
+	{
+	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
+	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
+	background-repeat:no-repeat;
+	color:#afc4cc;
+	font-size:13pt;
+	}
+
+.MSG_TIT_BG_NEW_WHITE,
+.MSG_TIT_BG_NEW_GREY,
+.MSG_TIT_BG_NEW_PURPLE,
+.MSG_TIT_BG_NEW_BLUE,
+.MSG_TIT_BG_NEW_YELLOW,
+.MSG_TIT_BG_NEW_PINK
 	{
 	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
@@ -4272,7 +4313,22 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	font-size:13pt;
 	font-weight:bold;
 	}
-.MSG_TIT_BG_REM
+.MSG_TIT_BG_NEW_DARK
+	{
+	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
+	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
+	background-repeat:no-repeat;
+	color:#afc4cc;
+	font-size:13pt;
+	font-weight:bold;
+	}
+
+.MSG_TIT_BG_REM_WHITE,
+.MSG_TIT_BG_REM_GREY,
+.MSG_TIT_BG_REM_PURPLE,
+.MSG_TIT_BG_REM_BLUE,
+.MSG_TIT_BG_REM_YELLOW,
+.MSG_TIT_BG_REM_PINK
 	{
 	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
@@ -4280,6 +4336,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	color:#afc4cc;
 	font-size:13pt;
 	}
+.MSG_TIT_BG_REM_DARK
+	{
+	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
+	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
+	background-repeat:no-repeat;
+	color:#4d88a1;
+	font-size:13pt;
+	}
+
 .MSG_AUT_BG
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */

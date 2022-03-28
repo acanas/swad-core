@@ -2023,6 +2023,7 @@ static void Msg_GetMsgContent (long MsgCod,
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_Replied;
    extern const char *Txt_MSG_Not_replied;
    extern const char *Txt_MSG_Unopened;
@@ -2149,7 +2150,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 HTM_TD_End ();
 
 	 /***** Write "From:" *****/
-	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_MSG_From);
 	 HTM_TD_End ();
 
@@ -2162,7 +2163,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       /***** Write "To:" *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_MSG_To);
 	 HTM_TD_End ();
 
@@ -2181,7 +2182,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 Msg_GetMsgContent (MsgCod,Content,&Media);
 
 	 /***** Write "Content:" *****/
-	 HTM_TD_Begin ("class=\"RT MSG_TIT\"");
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_MSG_Content);
 	 HTM_TD_End ();
 
@@ -2252,9 +2253,12 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   HTM_TD_Begin ("class=\"%s CT\" style=\"width:45px;\"",
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_TD_Begin ("class=\"CT %s_%s\" style=\"width:45px;\"",
 		 NewMsg ? "MSG_TIT_BG_NEW" :
-			  "MSG_TIT_BG");
+			  "MSG_TIT_BG",
+		 The_Colors[Gbl.Prefs.Theme]);
       HTM_TxtF ("%lu:",MsgNum);
    HTM_TD_End ();
   }
@@ -2267,13 +2271,16 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
                                                bool Open,bool Expanded)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Hide_message;
    extern const char *Txt_See_message;
    extern const char *Txt_no_subject;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT MSG_TIT_BG" :
-        	                          "MSG_TIT_NEW MSG_TIT_BG_NEW");
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+                 Open ? "MSG_TIT_BG" :
+        	        "MSG_TIT_BG_NEW",
+        	 The_Colors[Gbl.Prefs.Theme]);
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
@@ -2714,8 +2721,9 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
+void Msg_WriteMsgDate (time_t TimeUTC,const char *Class)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -2724,8 +2732,8 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
       Err_NotEnoughMemoryExit ();
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("id=\"%s\" class=\"%s RT\" style=\"width:106px;\"",
-                 Id,ClassBackground);
+   HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s\" style=\"width:106px;\"",
+                 Id,Class,The_Colors[Gbl.Prefs.Theme]);
 
       /***** Write date and time *****/
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,

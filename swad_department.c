@@ -99,7 +99,7 @@ static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
 void Dpt_SeeDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Departments_of_INSTITUTION_X;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
@@ -173,14 +173,14 @@ void Dpt_SeeDepts (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_%s\"",
 			    Departments.Lst[NumDpt].WWW,
-			    The_ClassDat[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Departments.Lst[NumDpt].FullName);
 	       HTM_A_End ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
 	    HTM_TD_End ();
 
@@ -189,8 +189,8 @@ void Dpt_SeeDepts (void)
 
       /***** Separation row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"3\" class=\"%s\"",
-	               The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("colspan=\"3\" class=\"DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -200,11 +200,11 @@ void Dpt_SeeDepts (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Other_departments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumTchsInsInOtherDpts);
 	 HTM_TD_End ();
 
@@ -215,11 +215,11 @@ void Dpt_SeeDepts (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Department_unspecified);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumTchsInsWithNoDpt);
 	 HTM_TD_End ();
 
@@ -445,7 +445,7 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
@@ -482,7 +482,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Department code */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
 	    HTM_TD_End ();
 
@@ -540,7 +540,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Number of teachers */
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Dpt->NumTchs);
 	    HTM_TD_End ();
 

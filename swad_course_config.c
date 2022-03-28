@@ -207,7 +207,7 @@ static void CrsCfg_Title (bool PutLink)
 
 static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Degree;
    unsigned NumDeg;
@@ -221,7 +221,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       Txt_Degree);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of degrees of the current center */
@@ -297,7 +297,7 @@ static void CrsCfg_ShrtName (bool PutForm)
 
 static void CrsCfg_Year (bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -313,7 +313,7 @@ static void CrsCfg_Year (bool PutForm)
 		       Txt_Year_OF_A_DEGREE);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgCrsYeaCfg);
@@ -344,7 +344,7 @@ static void CrsCfg_Year (bool PutForm)
 
 static void CrsCfg_InstitutionalCode (bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institutional_code;
 
@@ -357,7 +357,7 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 		       Txt_Institutional_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgInsCrsCodCfg);
@@ -383,7 +383,7 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 
 static void CrsCfg_InternalCode (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Internal_code;
 
    /***** Internal course code *****/
@@ -393,7 +393,7 @@ static void CrsCfg_InternalCode (void)
       Frm_LabelColumn ("RT",NULL,Txt_Internal_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
       HTM_TD_End ();
 
@@ -424,7 +424,7 @@ static void CrsCfg_QR (void)
 
 static void CrsCfg_Indicators (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs IndicatorsCrs;
@@ -442,7 +442,7 @@ static void CrsCfg_Indicators (void)
       Frm_LabelColumn ("RT",NULL,Txt_Indicators);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 Frm_BeginForm (ActReqStaCrs);
 	    if (asprintf (&Title,"%u %s %u",
 			  IndicatorsCrs.NumIndicators,

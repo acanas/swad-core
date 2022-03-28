@@ -312,7 +312,7 @@ static void Ntf_GetParamsNotifyEvents (void);
 void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_START_Notifications;
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
@@ -347,7 +347,7 @@ void Ntf_ShowMyNotifications (void)
    Ntf_StatusTxt_t StatusTxt;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
-   const char *ClassBackground;
+   const char *Class;
    const char *ClassText;
    const char *ClassLink;
    const char *ClassAuthorBg;
@@ -454,7 +454,7 @@ void Ntf_ShowMyNotifications (void)
 
 	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
 		 {
-		  ClassBackground   = "MSG_TIT_BG_REM";
+		  Class             = "MSG_TIT_BG_REM";
 		  ClassText         = "MSG_TIT_REM";
 		  ClassLink         = "BT_LINK MSG_TIT_REM";
 		  ClassAuthorBg     = "MSG_AUT_BG_REM";
@@ -462,7 +462,7 @@ void Ntf_ShowMyNotifications (void)
 		 }
 	       else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
 		 {
-		  ClassBackground   = "MSG_TIT_BG";
+		  Class             = "MSG_TIT_BG";
 		  ClassText         = "MSG_TIT";
 		  ClassLink         = "BT_LINK LT MSG_TIT";
 		  ClassAuthorBg     = "MSG_AUT_BG";
@@ -470,7 +470,7 @@ void Ntf_ShowMyNotifications (void)
 		 }
 	       else					// I have not seen the source of the notification
 		 {
-		  ClassBackground   = "MSG_TIT_BG_NEW";
+		  Class             = "MSG_TIT_BG_NEW";
 		  ClassText         = "MSG_TIT_NEW";
 		  ClassLink         = "BT_LINK LT MSG_TIT_NEW";
 		  ClassAuthorBg     = "MSG_AUT_BG_NEW";
@@ -481,7 +481,8 @@ void Ntf_ShowMyNotifications (void)
 	       /* Write event icon */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
+		  HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
+		                Class,The_Colors[Gbl.Prefs.Theme]);
 		     if (PutLink)
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
@@ -497,7 +498,8 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_End ();
 
 		  /* Write event type */
-		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class,The_Colors[Gbl.Prefs.Theme]);
 		     if (PutLink)
 		       {
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
@@ -521,7 +523,8 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_End ();
 
 		  /* Write location */
-		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class,The_Colors[Gbl.Prefs.Theme]);
 		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 		       {
@@ -575,10 +578,11 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_End ();
 
 		  /* Write date and time */
-		  Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
+		  Msg_WriteMsgDate (DateTimeUTC,Class);
 
 		  /* Write status (sent by email / pending to be sent by email) */
-		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class,The_Colors[Gbl.Prefs.Theme]);
 		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
 		  HTM_TD_End ();
 
@@ -597,9 +601,9 @@ void Ntf_ShowMyNotifications (void)
 		     HTM_TD_Begin ("colspan=\"2\"");
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("colspan=\"4\" class=\"%s LT\""
+		     HTM_TD_Begin ("colspan=\"4\" class=\"LT DAT_%s\""
 			           " style=\"padding-bottom:12px;\"",
-			           The_ClassDat[Gbl.Prefs.Theme]);
+			           The_Colors[Gbl.Prefs.Theme]);
 			HTM_Txt (SummaryStr);
 		     HTM_TD_End ();
 

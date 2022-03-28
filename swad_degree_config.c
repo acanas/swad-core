@@ -201,7 +201,7 @@ static void DegCfg_Title (bool PutLink)
 
 static void DegCfg_Center (bool PrintView,bool PutForm)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Center;
    unsigned NumCtr;
@@ -215,7 +215,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		       Txt_Center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of centers of the current institution */
@@ -318,7 +318,7 @@ static void DegCfg_QR (void)
 
 static void DegCfg_NumCrss (void)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    char *Title;
@@ -331,7 +331,7 @@ static void DegCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
