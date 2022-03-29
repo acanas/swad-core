@@ -202,7 +202,6 @@ static void DegCfg_Title (bool PutLink)
 static void DegCfg_Center (bool PrintView,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Center;
    unsigned NumCtr;
 
@@ -225,8 +224,8 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	    Frm_BeginForm (ActChgDegCtrCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthCtrCod\" name=\"OthCtrCod\""
-				 " class=\"INPUT_SHORT_NAME %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (NumCtr = 0;
 		       NumCtr < Gbl.Hierarchy.Ctrs.Num;
 		       NumCtr++)

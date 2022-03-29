@@ -347,15 +347,15 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\" class=\"%s\"",
-		   The_ClassInput[Gbl.Prefs.Theme]);
+		   "size=\"11\" class=\"INPUT_%s\"",
+		   The_Colors[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
@@ -366,15 +366,15 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\" class=\"%s\"",
-		   The_ClassInput[Gbl.Prefs.Theme]);
+		   "size=\"11\" class=\"INPUT_%s\"",
+		   The_Colors[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
@@ -385,7 +385,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TF_QST[2];
 
    /***** Write selector for the answer *****/
@@ -393,8 +393,8 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Ans%010u\" class=\"%s\"",
-		     QstInd,The_ClassInput[Gbl.Prefs.Theme]);
+		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
+		     QstInd,The_Colors[Gbl.Prefs.Theme]);
       HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
       HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
@@ -494,15 +494,15 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
                    HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"40\" class=\"%s\"",
-		   The_ClassInput[Gbl.Prefs.Theme]);
+		   "size=\"40\" class=\"INPUT_%s\"",
+		   The_Colors[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/

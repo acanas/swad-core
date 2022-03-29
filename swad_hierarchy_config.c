@@ -87,7 +87,6 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
 
    /***** Full name *****/
    HTM_TR_Begin (NULL);
@@ -105,9 +104,10 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"FullName\" class=\"INPUT_FULL_NAME %s\""
+			       "id=\"FullName\""
+			       " class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit full name
@@ -125,7 +125,6 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    /***** Short name *****/
@@ -144,9 +143,10 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"ShortName\" class=\"INPUT_SHORT_NAME %s\""
+			       "id=\"ShortName\""
+			       " class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit short name
@@ -164,7 +164,6 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Web;
 
    /***** Web *****/
@@ -182,9 +181,9 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 	    /* Form to change web */
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
-			      "id=\"WWW\" class=\"INPUT_WWW_WIDE %s\""
+			      "id=\"WWW\" class=\"INPUT_WWW_WIDE INPUT_%s\""
 			      " required=\"required\"",
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not change web

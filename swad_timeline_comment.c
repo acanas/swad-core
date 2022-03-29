@@ -213,7 +213,7 @@ static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat)
 static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	                                  long NotCod)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_comment;
    char *ClassTextArea;
 
@@ -225,8 +225,8 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	 TmlNot_PutHiddenParamNotCod (NotCod);
 
 	 /***** Textarea and button *****/
-	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH %s",
-	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH INPUT_%s",
+	               The_Colors[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 TmlPst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
 	 free (ClassTextArea);

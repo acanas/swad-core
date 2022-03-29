@@ -649,7 +649,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
                                 bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_image_video;
    extern const char *Txt_Current_image_video;
    extern const char *Txt_Change_image_video;
@@ -697,7 +697,8 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
 	    HTM_TxtColonNBSP (Txt_Change_image_video);
 	 HTM_LABEL_End ();
-	 if (asprintf (&ClassInput,"Tst_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
+	               The_Colors[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (NumMedia,ClassInput);
 	 free (ClassInput);
@@ -708,7 +709,8 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
    else	// No current image
      {
       /***** Attached media *****/
-      if (asprintf (&ClassInput,"Tst_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (NumMedia,ClassInput);
       free (ClassInput);
@@ -1867,7 +1869,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
    extern const char *Txt_Tags;
@@ -1954,10 +1956,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			HTM_TD_Begin ("class=\"LM\"");
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 					     "id=\"SelTag%u\" name=\"SelTag%u\""
-					     " class=\"TAG_SEL %s\""
+					     " class=\"TAG_SEL INPUT_%s\""
 					     " onchange=\"changeTxtTag('%u')\"",
 					     IndTag,IndTag,
-					     The_ClassInput[Gbl.Prefs.Theme],
+					     The_Colors[Gbl.Prefs.Theme],
 					     IndTag);
 			      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
 			      mysql_data_seek (mysql_res,0);
@@ -1999,10 +2001,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			   snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
 			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
 					   HTM_DONT_SUBMIT_ON_CHANGE,
-					   "id=\"%s\" class=\"TAG_TXT %s\""
+					   "id=\"%s\" class=\"TAG_TXT INPUT_%s\""
 					   " onchange=\"changeSelTag('%u')\"",
 					   StrTagTxt,
-					   The_ClassInput[Gbl.Prefs.Theme],
+					   The_Colors[Gbl.Prefs.Theme],
 					   IndTag);
 			HTM_TD_End ();
 
@@ -2026,9 +2028,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" rows=\"5\""
-			           " class=\"STEM_TEXTAREA %s\""
+			           " class=\"STEM_TEXTAREA INPUT_%s\""
 				   " required=\"required\"",
-				   The_ClassInput[Gbl.Prefs.Theme]);
+				   The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Stem);
 	       HTM_TEXTAREA_End ();
 	       HTM_BR ();
@@ -2040,8 +2042,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
 		  HTM_TEXTAREA_Begin ("name=\"Feedback\" rows=\"2\""
-			              " class=\"STEM_TEXTAREA %s\"",
-			              The_ClassInput[Gbl.Prefs.Theme]);
+			              " class=\"STEM_TEXTAREA INPUT_%s\"",
+			              The_Colors[Gbl.Prefs.Theme]);
 		     if (Question->Feedback[0])
 			HTM_Txt (Question->Feedback);
 		  HTM_TEXTAREA_End ();
@@ -2090,9 +2092,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
 		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"11\" class=\"%s\""
+				  "size=\"11\" class=\"INPUT_%s\""
 				  " required=\"required\"%s",
-				  The_ClassInput[Gbl.Prefs.Theme],
+				  The_Colors[Gbl.Prefs.Theme],
 				  Question->Answer.Type == Qst_ANS_INT ? "" :
 									 " disabled=\"disabled\"");
 	       HTM_LABEL_End ();
@@ -2233,9 +2235,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 			   /* Answer text */
 			   HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" rows=\"5\""
-				               " class=\"ANSWER_TEXTAREA %s\"%s",
+				               " class=\"ANSWER_TEXTAREA INPUT_%s\"%s",
 					       NumOpt,
-					       The_ClassInput[Gbl.Prefs.Theme],
+					       The_Colors[Gbl.Prefs.Theme],
 					       OptionsDisabled ? " disabled=\"disabled\"" :
 								 "");
 			      if (AnswerHasContent)
@@ -2252,9 +2254,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
 			      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" rows=\"2\""
-				                  " class=\"ANSWER_TEXTAREA %s\"%s",
+				                  " class=\"ANSWER_TEXTAREA INPUT_%s\"%s",
 						  NumOpt,
-						  The_ClassInput[Gbl.Prefs.Theme],
+						  The_Colors[Gbl.Prefs.Theme],
 						  OptionsDisabled ? " disabled=\"disabled\"" :
 								    "");
 				 if (Question->Answer.Options[NumOpt].Feedback)
@@ -2298,7 +2300,7 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
                              unsigned Index)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char StrDouble[32];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -2307,8 +2309,8 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
 		Question->Answer.FloatingPoint[Index]);
       HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
 		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "size=\"11\" class=\"%s\" required=\"required\"%s",
-		      The_ClassInput[Gbl.Prefs.Theme],
+		      "size=\"11\" class=\"INPUT_%s\" required=\"required\"%s",
+		      The_Colors[Gbl.Prefs.Theme],
 		      Question->Answer.Type == Qst_ANS_FLOAT ? "" :
 							       " disabled=\"disabled\"");
    HTM_LABEL_End ();

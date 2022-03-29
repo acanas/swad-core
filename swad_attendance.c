@@ -972,7 +972,7 @@ void Att_RequestCreatOrEditAttEvent (void)
   {
    extern const char *Hlp_USERS_Attendance_new_event;
    extern const char *Hlp_USERS_Attendance_edit_event;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Teachers_comment;
@@ -1063,9 +1063,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1085,8 +1085,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"ComTchVisible\" name=\"ComTchVisible\""
-			      " class=\"%s\"",
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      " class=\"INPUT_%s\"",
+			      The_Colors[Gbl.Prefs.Theme]);
 	       HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
 			   "%s",Txt_Hidden_MALE_PLURAL);
 	       HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,
@@ -1105,8 +1105,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				The_ClassInput[Gbl.Prefs.Theme]);
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 	       if (!ItsANewAttEvent)
 		  HTM_Txt (Description);
 	    HTM_TEXTAREA_End ();
@@ -1694,7 +1694,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
                                           struct Att_Event *Event)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1810,9 +1809,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (ICanEditStdComment)	// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
-				" class=\"%s\"",
+				" class=\"INPUT_%s\"",
 				UsrDat->EnUsrCod,
-				The_ClassInput[Gbl.Prefs.Theme]);
+				The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (CommentStd);
 	    HTM_TEXTAREA_End ();
 	   }
@@ -1833,9 +1832,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (ICanEditTchComment)		// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
-				" class=\"%s\"",
+				" class=\"INPUT_%s\"",
 				UsrDat->EnUsrCod,
-				The_ClassInput[Gbl.Prefs.Theme]);
+				The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (CommentTch);
 	    HTM_TEXTAREA_End ();
 	   }

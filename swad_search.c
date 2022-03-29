@@ -100,7 +100,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
   {
    extern const char *Hlp_START_Search;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
    extern const char *Txt_all;
@@ -170,8 +170,9 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "name=\"WhatToSearch\""
+				 " class=\"WHAT_TO_SEARCH INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
 		       WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
 		       WhatToSearch++)
@@ -252,15 +253,16 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
 void Sch_PutInputStringToSearch (const char *IdInputText)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Search;
 
    /***** String to find *****/
    // Input field not required, because it can be hidden (display:none)
    HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Gbl.Search.Str,
-	             "id=\"%s\" size=\"18\" class=\"%s\" placeholder=\"%s&hellip;\"",
+	             "id=\"%s\" size=\"18\" class=\"INPUT_%s\""
+	             " placeholder=\"%s&hellip;\"",
 		     IdInputText,
-		     The_ClassInput[Gbl.Prefs.Theme],
+		     The_Colors[Gbl.Prefs.Theme],
 		     Txt_Search);
   }
 

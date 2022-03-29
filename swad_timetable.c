@@ -1496,7 +1496,6 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
                                        unsigned DurationNumIntervals,const char *Info)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
@@ -1531,8 +1530,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 
       /***** Class type *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"TTTyp\" class=\"Tmt_TYP %s\"",
-			The_ClassInput[Gbl.Prefs.Theme]);
+			"name=\"TTTyp\" class=\"Tmt_TYP INPUT_%s\"",
+			The_Colors[Gbl.Prefs.Theme]);
 	 for (CT  = (Tmt_ClassType_t) 0;
 	      CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	      CT++)
@@ -1566,8 +1565,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	{
 	 /***** Class duration *****/
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"TTDur\" class=\"Tmt_DUR %s\"",
-			   The_ClassInput[Gbl.Prefs.Theme]);
+			   "name=\"TTDur\" class=\"Tmt_DUR INPUT_%s\"",
+			   The_Colors[Gbl.Prefs.Theme]);
 	    for (i = WhichCell->Interval +
 		     Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals;
 		 i < Timetable->Config.IntervalsPerDay;
@@ -1609,9 +1608,9 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_LABEL_End ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"TTGrp%s\" name=\"TTGrp\""
-			      " class=\"Tmt_GRP %s\"",
+			      " class=\"Tmt_GRP INPUT_%s\"",
 			      CellStr,
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      The_Colors[Gbl.Prefs.Theme]);
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
@@ -1653,8 +1652,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 							     "",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"1\""
-			    " class=\"Tmt_INF %s\"",
-			    CellStr,The_ClassInput[Gbl.Prefs.Theme]);
+			    " class=\"Tmt_INF INPUT_%s\"",
+			    CellStr,The_Colors[Gbl.Prefs.Theme]);
 	   }
 	 else // TimeTableView == Tmt_TUT_EDIT
 	   {
@@ -1668,8 +1667,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"12\""
-			    " class=\"Tmt_INF %s\"",
-			    CellStr,The_ClassInput[Gbl.Prefs.Theme]);
+			    " class=\"Tmt_INF INPUT_%s\"",
+			    CellStr,The_Colors[Gbl.Prefs.Theme]);
 	   }
 
 	 /***** Free allocated unique string for this cell used in labels *****/

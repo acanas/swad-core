@@ -1333,7 +1333,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_exam;
    extern const char *Txt_Edit_exam;
    extern const char *Txt_Title;
@@ -1372,9 +1372,9 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1388,8 +1388,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
-			     " class=\"%s\" required=\"required\"",
-			     The_ClassInput[Gbl.Prefs.Theme]);
+			     " class=\"INPUT_%s\" required=\"required\"",
+			     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1416,8 +1416,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-			     " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-			     The_ClassInput[Gbl.Prefs.Theme]);
+			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			     The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();

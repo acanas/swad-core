@@ -147,7 +147,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_Check;
@@ -167,8 +167,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
 	                    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"18\" class=\"%s\" required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    "size=\"18\" class=\"INPUT_%s\" required=\"required\"",
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
 	 Btn_PutCreateButtonInline (Txt_Check);
       Frm_EndForm ();
@@ -366,7 +366,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
@@ -399,9 +399,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
 	       HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 			       NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
-			       " class=\"%s\" required=\"required\"",
+			       " class=\"INPUT_%s\" required=\"required\"",
 			       Txt_HELP_nickname,
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 /* End table row */
@@ -418,9 +418,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
 				"id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
-				" class=\"%s\" required=\"required\"",
+				" class=\"INPUT_%s\" required=\"required\"",
 				Txt_HELP_email,
-			        The_ClassInput[Gbl.Prefs.Theme]);
+			        The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 /* End table row */

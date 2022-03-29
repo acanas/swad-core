@@ -2690,7 +2690,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
@@ -2738,9 +2738,9 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 			       IsReply ? Subject :
 					 "",
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Subject\" class=\"MSG_SUBJECT %s\""
+			       "id=\"Subject\" class=\"MSG_SUBJECT INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2754,8 +2754,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
-			           " class=\"MSG_CONTENT %s\" rows=\"10\"",
-			           The_ClassInput[Gbl.Prefs.Theme]);
+			           " class=\"MSG_CONTENT INPUT_%s\" rows=\"10\"",
+			           The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -2767,7 +2767,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      if (asprintf (&ClassInput,"FOR_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (-1,ClassInput);
       free (ClassInput);

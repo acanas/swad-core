@@ -1648,7 +1648,6 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1758,9 +1757,9 @@ void Svy_RequestCreatOrEditSvy (void)
 	    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1779,8 +1778,8 @@ void Svy_RequestCreatOrEditSvy (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				The_ClassInput[Gbl.Prefs.Theme]);
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 	       if (!ItsANewSurvey)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
@@ -2305,7 +2304,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
    extern const char *Txt_Wording;
@@ -2395,8 +2394,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\""
 			           " cols=\"60\" rows=\"4\""
-			           " class=\"%s\"",
-			           The_ClassInput[Gbl.Prefs.Theme]);
+			           " class=\"INPUT_%s\"",
+			           The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Stem);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();

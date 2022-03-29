@@ -1081,7 +1081,6 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1175,9 +1174,9 @@ void Asg_RequestCreatOrEditAsg (void)
 	    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1200,8 +1199,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	       HTM_TxtColon (Txt_Folder);
 	       HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Folder\" size=\"30\" class=\"%s\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "id=\"Folder\" size=\"30\" class=\"INPUT_%s\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -1216,8 +1215,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				The_ClassInput[Gbl.Prefs.Theme]);
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 	       if (!ItsANewAssignment)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();

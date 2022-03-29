@@ -144,7 +144,6 @@ static void TstCfg_ShowFormConfig (void)
    extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
    extern const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE];
@@ -235,9 +234,9 @@ static void TstCfg_ShowFormConfig (void)
 		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"MinTimeNxtTstPerQst\" size=\"7\""
-				  " class=\"%s\""
+				  " class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -278,7 +277,6 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
@@ -294,9 +292,9 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
 	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
 	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"%s\" size=\"3\" class=\"%s\""
+			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\""
 			 " required=\"required\"",
-			 Field,The_ClassInput[Gbl.Prefs.Theme]);
+			 Field,The_Colors[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();

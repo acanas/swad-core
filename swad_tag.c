@@ -400,7 +400,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 void Tag_ShowFormEditTags (void)
   {
    extern const char *Hlp_ASSESSMENT_Questions_editing_tags;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -445,9 +445,9 @@ void Tag_ShowFormEditTags (void)
 		     Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
 				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"36\" class=\"%s\""
+				     "size=\"36\" class=\"INPUT_%s\""
 				     " required=\"required\"",
-				     The_ClassInput[Gbl.Prefs.Theme]);
+				     The_Colors[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

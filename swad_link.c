@@ -381,7 +381,6 @@ void Lnk_FreeListLinks (void)
 static void Lnk_ListLinksForEdition (void)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
 
@@ -417,9 +416,9 @@ static void Lnk_ListLinksForEdition (void)
 		  Lnk_PutParamLnkCod (&Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME %s\""
+				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -429,9 +428,9 @@ static void Lnk_ListLinksForEdition (void)
 		  Lnk_PutParamLnkCod (&Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME %s\""
+				  "class=\"INPUT_FULL_NAME INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -440,9 +439,9 @@ static void Lnk_ListLinksForEdition (void)
 	       Frm_BeginForm (ActChgLnkWWW);
 	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
 		  HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW %s\""
+				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -667,7 +666,7 @@ void Lnk_ContEditAfterChgLnk (void)
 static void Lnk_PutFormToCreateLink (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_link;
    extern const char *Txt_Create_link;
 
@@ -694,26 +693,26 @@ static void Lnk_PutFormToCreateLink (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME %s\""
+			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Link full name *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME %s\""
+			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Link WWW *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW %s\""
+			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			      " required=\"required\"",
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

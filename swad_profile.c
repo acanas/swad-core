@@ -176,7 +176,7 @@ void Prf_RequestUserProfile (void)
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
@@ -208,8 +208,9 @@ void Prf_RequestUserProfile (void)
 		      Gbl.Usrs.Me.UsrDat.Nickname);
 	    HTM_INPUT_TEXT ("usr",sizeof (NickWithArr) - 1,NickWithArr,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"18\" class=\"%s\" required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    "size=\"18\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/

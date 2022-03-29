@@ -1310,7 +1310,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
@@ -1349,9 +1349,9 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1365,8 +1365,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
-			     " class=\"%s\" required=\"required\"",
-			     The_ClassInput[Gbl.Prefs.Theme]);
+			     " class=\"INPUT_%s\" required=\"required\"",
+			     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1393,8 +1393,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				The_ClassInput[Gbl.Prefs.Theme]);
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();

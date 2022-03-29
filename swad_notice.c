@@ -100,7 +100,7 @@ static long Not_GetParamNotCod (void);
 void Not_ShowFormNotice (void)
   {
    extern const char *Hlp_COMMUNICATION_Notices;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
    extern const char *Txt_Create_notice;
@@ -119,9 +119,9 @@ void Not_ShowFormNotice (void)
 
 	 /***** Message body *****/
 	 HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
-			     " class=\"%s\""
+			     " class=\"INPUT_%s\""
 			     " autofocus=\"autofocus\" required=\"required\"",
-			     The_ClassInput[Gbl.Prefs.Theme]);
+			     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TEXTAREA_End ();
 
       /***** Send button and end box *****/

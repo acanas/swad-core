@@ -96,7 +96,6 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Hlp_ANALYTICS_Indicators;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -163,8 +162,8 @@ void Ind_ReqIndicatorsCourses (void)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
-		  if (asprintf (&SelectClass,"INDICATORS_INPUT %s",
-		                The_ClassInput[Gbl.Prefs.Theme]) < 0)
+		  if (asprintf (&SelectClass,"INDICATORS_INPUT INPUT_%s",
+		                The_Colors[Gbl.Prefs.Theme]) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department

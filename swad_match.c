@@ -1221,7 +1221,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 				      const char *Anchor)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Title;
    extern const char *Txt_Save_changes;
 
@@ -1244,9 +1244,9 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 	       HTM_TD_Begin ("class=\"LT\"");
 		  HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\" size=\"45\" class=\"%s\""
+				  "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -1274,7 +1274,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_match;
    extern const char *Txt_Title;
    extern const char *Txt_Play;
@@ -1302,9 +1302,9 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 	       HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Game->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" size=\"45\" class=\"%s\""
+			       "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

@@ -554,7 +554,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   Dat_SetHMS SetHMS,
                                                   bool SubmitFormOnChange)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;
    unsigned Month;
@@ -585,24 +585,24 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Id);
 	    for (Year  = FirstYear;
 		 Year <= LastYear;
@@ -617,24 +617,24 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Id);
 	    for (Month = 1;
 		 Month <= 12;
@@ -649,19 +649,19 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sDay\" name=\"%sDay\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sDay\" name=\"%sDay\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id);
 	    for (Day  = 1;
 		 Day <= 31;
@@ -676,19 +676,19 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sHour\" name=\"%sHour\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sHour\" name=\"%sHour\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id);
 	    for (Hour  = 0;
 		 Hour <= 23;
@@ -703,19 +703,19 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMinute\" name=\"%sMinute\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMinute\" name=\"%sMinute\""
-				 " class=\"%s\""
+				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Id);
 	    for (Minute = 0;
 		 Minute < 60;
@@ -732,19 +732,19 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	       if (SubmitFormOnChange)
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"%sSecond\" name=\"%sSecond\""
-				    " class=\"%s\""
+				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				    "document.getElementById('%s').submit();return false;\"",
 				    Id,ParamName,
-				    The_ClassInput[Gbl.Prefs.Theme],
+				    The_Colors[Gbl.Prefs.Theme],
 				    Id,Gbl.Form.Id);
 	       else
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"%sSecond\" name=\"%sSecond\""
-				    " class=\"%s\""
+				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				    Id,ParamName,
-				    The_ClassInput[Gbl.Prefs.Theme],
+				    The_Colors[Gbl.Prefs.Theme],
 				    Id);
 	       for (Second  = 0;
 		    Second <= 59;
@@ -891,7 +891,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		        struct Dat_Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Year;
    unsigned Month;
@@ -907,23 +907,23 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
-	                         " class=\"%s\""
+	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
-	                         " class=\"%s\""
+	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
@@ -942,23 +942,23 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""
-	                         " class=\"%s\""
+	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""
-	                         " class=\"%s\""
+	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
-				 The_ClassInput[Gbl.Prefs.Theme],
+				 The_Colors[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
@@ -976,10 +976,10 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_SELECT_Begin (SubmitFormOnChange,
 			      "id=\"%sDay\" name=\"%sDay\""
-	                      " class=\"%s\""
+	                      " class=\"INPUT_%s\""
 	                      "%s",
 			      Id,Id,
-			      The_ClassInput[Gbl.Prefs.Theme],
+			      The_Colors[Gbl.Prefs.Theme],
 			      Disabled ? " disabled=\"disabled\"" : "");
 	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
 			   "-");

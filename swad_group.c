@@ -1227,7 +1227,6 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 static void Grp_ListGroupTypesForEdition (void)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -1264,8 +1263,8 @@ static void Grp_ListGroupTypesForEdition (void)
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"12\" class=\"%s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"12\" class=\"INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -1275,8 +1274,8 @@ static void Grp_ListGroupTypesForEdition (void)
 		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
-		                    " class=\"%s\" style=\"width:150px;\"",
-		                    The_ClassInput[Gbl.Prefs.Theme]);
+		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
+		                    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
 				 "%s",Txt_It_is_optional_to_choose_a_group);
@@ -1293,8 +1292,8 @@ static void Grp_ListGroupTypesForEdition (void)
 		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
-				    " class=\"%s\" style=\"width:150px;\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"INPUT_%s\" style=\"width:150px;\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
@@ -1417,7 +1416,6 @@ static void Grp_WriteHeadingGroupTypes (void)
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
@@ -1506,8 +1504,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\""
-				       " class=\"%s\" style=\"width:100px;\"",
-				       The_ClassInput[Gbl.Prefs.Theme]);
+				       " class=\"INPUT_%s\" style=\"width:100px;\"",
+				       The_Colors[Gbl.Prefs.Theme]);
 
 			/* Options for group types */
 			for (NumTipGrpAux = 0;
@@ -1531,8 +1529,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"20\" class=\"%s\"",
-				     The_ClassInput[Gbl.Prefs.Theme]);
+				     "size=\"20\" class=\"INPUT_%s\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1543,8 +1541,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\""
-				       " class=\"%s\" style=\"width:100px;\"",
-				       The_ClassInput[Gbl.Prefs.Theme]);
+				       " class=\"INPUT_%s\" style=\"width:100px;\"",
+				       The_Colors[Gbl.Prefs.Theme]);
 
 			/* Option for no assigned room */
 			HTM_OPTION (HTM_Type_STRING,"-1",
@@ -1586,8 +1584,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"3\" class=\"%s\"",
-				     The_ClassInput[Gbl.Prefs.Theme]);
+				     "size=\"3\" class=\"INPUT_%s\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -2427,7 +2425,6 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 static void Grp_PutFormToCreateGroupType (void)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2461,17 +2458,17 @@ static void Grp_PutFormToCreateGroupType (void)
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"12\" class=\"%s\""
+				  "size=\"12\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	       /***** Is it mandatory to register in any groups of this type? *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
-				    " class=\"%s\" style=\"width:150px;\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"INPUT_%s\" style=\"width:150px;\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
 				 "%s",Txt_It_is_optional_to_choose_a_group);
@@ -2485,8 +2482,8 @@ static void Grp_PutFormToCreateGroupType (void)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
-				    " class=\"%s\" style=\"width:150px;\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"INPUT_%s\" style=\"width:150px;\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
@@ -2550,7 +2547,6 @@ static void Grp_PutFormToCreateGroupType (void)
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
@@ -2597,8 +2593,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"GrpTypCod\""
-				    " class=\"%s\" style=\"width:100px;\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"INPUT_%s\" style=\"width:100px;\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 
 		     /* Options for group types */
 		     for (NumGrpTyp = 0;
@@ -2617,9 +2613,9 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"%s\""
+				  "size=\"20\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	       /***** Room *****/
@@ -2627,8 +2623,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"RooCod\""
-				    " class=\"%s\" style=\"width:100px;\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"INPUT_%s\" style=\"width:100px;\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 
 		     /* Option for no assigned room */
 		     HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.RooCod < 0,false,
@@ -2666,8 +2662,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		  Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
 		  HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"3\" class=\"%s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"3\" class=\"INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

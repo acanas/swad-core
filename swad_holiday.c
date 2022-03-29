@@ -508,7 +508,6 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Holidays;
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
@@ -551,8 +550,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	       Frm_BeginForm (ActChgHldPlc);
 		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"PlcCod\" class=\"PLC_SEL %s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
 				 "%s",Txt_All_places);
 		     for (NumPlc = 0;
@@ -570,9 +569,9 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	       Frm_BeginForm (ActChgHldTyp);
 		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"HldTyp\" class=\"%s\""
+				    "name=\"HldTyp\" class=\"INPUT_%s\""
 				    " style=\"width:62px;\"",	// TODO: Use a CSS class
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    The_Colors[Gbl.Prefs.Theme]);
 		     for (HolidayType  = (Hld_HolidayType_t) 0;
 			  HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
 			  HolidayType++)
@@ -616,8 +615,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"%s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"20\" class=\"INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -901,7 +900,7 @@ void Hld_ContEditAfterChgHld (void)
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_All_places;
    extern const char *Txt_New_holiday;
    extern const char *Txt_Place;
@@ -936,8 +935,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	    /***** Holiday place *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"PlcCod\" class=\"PLC_SEL %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
 			      "%s",Txt_All_places);
 		  for (NumPlc = 0;
@@ -952,9 +951,9 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	    /***** Holiday type *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"HldTyp\" class=\"%s\""
+				 "name=\"HldTyp\" class=\"INPUT_%s\""
 				 " style=\"width:62px;\"",	// TODO: Use a CSS class
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (HolidayType  = (Hld_HolidayType_t) 0;
 		       HolidayType <= (Hld_HolidayType_t) (Hld_NUM_TYPES_HOLIDAY - 1);
 		       HolidayType++)
@@ -989,8 +988,9 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"20\" class=\"%s\" required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"20\" class=\"INPUT_%s\""
+			       " required=\"required\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (1);

@@ -208,7 +208,6 @@ static void CrsCfg_Title (bool PutLink)
 static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
@@ -231,8 +230,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    Frm_BeginForm (ActChgCrsDegCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthDegCod\" name=\"OthDegCod\""
-				 " class=\"INPUT_SHORT_NAME %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (NumDeg = 0;
 		       NumDeg < Gbl.Hierarchy.Degs.Num;
 		       NumDeg++)
@@ -298,7 +297,6 @@ static void CrsCfg_ShrtName (bool PutForm)
 static void CrsCfg_Year (bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Not_applicable;
@@ -319,9 +317,9 @@ static void CrsCfg_Year (bool PutForm)
 	    Frm_BeginForm (ActChgCrsYeaCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthCrsYear\" name=\"OthCrsYear\""
-				 " class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
-		  for (Year = 0;
+				 " class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
+		  for (Year  = 0;
 		       Year <= Deg_MAX_YEARS_PER_DEGREE;
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
@@ -345,7 +343,6 @@ static void CrsCfg_Year (bool PutForm)
 static void CrsCfg_InstitutionalCode (bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institutional_code;
 
    /***** Institutional course code *****/
@@ -365,9 +362,9 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 			       Gbl.Hierarchy.Crs.InstitutionalCrsCod,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"InsCrsCod\" size=\"%u\""
-			       " class=\"INPUT_INS_CODE %s\"",
+			       " class=\"INPUT_INS_CODE INPUT_%s\"",
 			       Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else

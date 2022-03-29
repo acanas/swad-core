@@ -406,7 +406,6 @@ static void Mai_ListMailDomainsForEdition (void)
   {
    extern const char *Hlp_START_Domains_edit;
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
@@ -445,8 +444,8 @@ static void Mai_ListMailDomainsForEdition (void)
 		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"%s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"15\" class=\"INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -456,8 +455,8 @@ static void Mai_ListMailDomainsForEdition (void)
 		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"40\" class=\"%s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"40\" class=\"INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -646,7 +645,7 @@ void Mai_ContEditAfterChgMai (void)
 static void Mai_PutFormToCreateMailDomain (void)
   {
    extern const char *Hlp_START_Domains_edit;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
@@ -672,16 +671,18 @@ static void Mai_PutFormToCreateMailDomain (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"15\" class=\"%s\" required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"15\" class=\"INPUT_%s\""
+			       " required=\"required\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /* Mail domain info */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"40\" class=\"%s\" required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"40\" class=\"INPUT_%s\""
+			       " required=\"required\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (1);
@@ -1060,7 +1061,6 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 				        bool IShouldConfirmEmail)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
@@ -1211,8 +1211,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
-			     "id=\"NewEmail\" class=\"%s\" size=\"18\"",
-			     The_ClassInput[Gbl.Prefs.Theme]);
+			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"18\"",
+			     The_Colors[Gbl.Prefs.Theme]);
 	    HTM_BR ();
 	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
 						   Txt_Save_changes);		// User has no email address yet

@@ -1402,7 +1402,7 @@ void Agd_RequestCreatOrEditEvent (void)
   {
    extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Location;
@@ -1484,9 +1484,9 @@ void Agd_RequestCreatOrEditEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       /* End table row */
@@ -1503,9 +1503,9 @@ void Agd_RequestCreatOrEditEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       /* End table row */
@@ -1526,8 +1526,8 @@ void Agd_RequestCreatOrEditEvent (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				The_ClassInput[Gbl.Prefs.Theme]);
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 	       if (!ItsANewEvent)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();

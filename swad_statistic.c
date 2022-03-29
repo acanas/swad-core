@@ -222,7 +222,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
    extern const char *Txt_Show;
@@ -372,8 +372,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
-						" class=\%s\"",
-						The_ClassInput[Gbl.Prefs.Theme]);
+						" class=\"INPUT_%s\"",
+						The_Colors[Gbl.Prefs.Theme]);
 				 for (ClicksGroupedBy  = Sta_CLICKS_CRS_PER_USR;
 				      ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
 				      ClicksGroupedBy++)
@@ -473,7 +473,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
@@ -519,8 +519,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"Role\" name=\"Role\""
-				 " class=\"STAT_SEL %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 " class=\"STAT_SEL INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (RoleStat  = (Sta_Role_t) 0;
 		       RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
 		       RoleStat++)
@@ -578,8 +578,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		     Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "name=\"GroupedBy\" class=\"%s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    "name=\"GroupedBy\" class=\"INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     for (ClicksGroupedBy  = Sta_CLICKS_GBL_PER_DAY;
 			  ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
 			  ClicksGroupedBy++)
@@ -652,15 +652,15 @@ void Sta_PutLinkToGlobalHits (void)
 
 static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    Sta_CountType_t StatCountType;
    unsigned StatCountTypeUnsigned;
 
    /**** Count type *****/
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "id=\"CountType\" name=\"CountType\" class=\"%s\"",
-		     The_ClassInput[Gbl.Prefs.Theme]);
+		     "id=\"CountType\" name=\"CountType\" class=\"INPUT_%s\"",
+		     The_Colors[Gbl.Prefs.Theme]);
       for (StatCountType  = (Sta_CountType_t) 0;
 	   StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
 	   StatCountType++)
@@ -680,7 +680,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_Any_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -697,8 +697,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"StatAct\" name=\"StatAct\""
-			   " class=\"STAT_SEL %s\"",
-			   The_ClassInput[Gbl.Prefs.Theme]);
+			   " class=\"STAT_SEL INPUT_%s\"",
+			   The_Colors[Gbl.Prefs.Theme]);
 	    HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;

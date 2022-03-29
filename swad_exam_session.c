@@ -991,7 +991,7 @@ long ExaSes_GetParamSesCod (void)
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_session;
    extern const char *Txt_Title;
    extern const char *Txt_Create_session;
@@ -1029,9 +1029,9 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 	       HTM_TD_Begin ("class=\"LT\"");
 		  HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\" size=\"45\" class=\"%s\""
+				  "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

@@ -744,7 +744,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
    char *SelectClass;
@@ -763,8 +763,8 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 			-1L);
 
 	 /***** Write selector with departments *****/
-	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH %s",
-	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
+	               The_Colors[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 				      Projects->Filter.DptCod,	// Selected department
@@ -3299,7 +3299,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -3377,9 +3376,9 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3392,8 +3391,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH %s",
-	                     The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	       if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
+	                     The_Colors[Gbl.Prefs.Theme]) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Prj->DptCod,		// Selected department
@@ -3415,8 +3414,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Assigned\" class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "name=\"Assigned\" class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
 			      "%s",Txt_Yes);
 		  HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
@@ -3436,8 +3435,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
 			       HTM_DONT_SUBMIT_ON_CHANGE,false,
-			       "class=\"%s\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "class=\"INPUT_%s\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3452,8 +3451,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"Proposal\""
-				 " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (Proposal  = (Prj_Proposal_t) 0;
 		       Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 		       Proposal++)
@@ -3492,8 +3491,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"TITLE_DESCRIPTION_WIDTH %s\"",
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      "class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+			      The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3520,7 +3519,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        unsigned NumRows,bool Required)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Description *****/
    HTM_TR_Begin (NULL);
@@ -3531,9 +3530,9 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
-			     " class=\"TITLE_DESCRIPTION_WIDTH %s\"%s",
+			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"%s",
 			     Id,Id,NumRows,
-			     The_ClassInput[Gbl.Prefs.Theme],
+			     The_Colors[Gbl.Prefs.Theme],
 			     Required ? " required=\"required\"" :
 					"");
 	    HTM_Txt (TxtField);

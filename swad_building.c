@@ -409,7 +409,6 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumBld;
    struct Bld_Building *Building;
    char *Anchor = NULL;
@@ -451,8 +450,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\" class=\"INPUT_SHORT_NAME %s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -462,8 +461,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"INPUT_FULL_NAME %s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -473,8 +472,8 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"INPUT_FULL_NAME %s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -704,7 +703,7 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_building;
    extern const char *Txt_Create_building;
 
@@ -733,26 +732,26 @@ static void Bld_PutFormToCreateBuilding (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"INPUT_SHORT_NAME %s\""
+			       "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Building full name *****/
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"20\" class=\"INPUT_FULL_NAME %s\""
+			       "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Building location *****/
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"15\" class=\"INPUT_FULL_NAME %s\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

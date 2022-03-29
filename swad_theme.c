@@ -188,17 +188,6 @@ const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "FORM_OUT_DARK BOLD",
   };
 
-const char *The_ClassInput[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "INPUT_WHITE",
-   [The_THEME_GREY  ] = "INPUT_GREY",
-   [The_THEME_PURPLE] = "INPUT_PURPLE",
-   [The_THEME_BLUE  ] = "INPUT_BLUE",
-   [The_THEME_YELLOW] = "INPUT_YELLOW",
-   [The_THEME_PINK  ] = "INPUT_PINK",
-   [The_THEME_DARK  ] = "INPUT_DARK",
-  };
-
 const char *The_Colors[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "WHITE",

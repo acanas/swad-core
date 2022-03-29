@@ -1238,11 +1238,11 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
-   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"%s\"%s />",
+   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"INPUT_%s\"%s />",
 	     Name,Value,
-	     The_ClassInput[Gbl.Prefs.Theme],
+	     The_Colors[Gbl.Prefs.Theme],
 	     Attr);
   }
 

@@ -1133,7 +1133,7 @@ void Usr_PutLinkToLogin (void)
 void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Hlp_PROFILE_LogIn;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
@@ -1168,10 +1168,10 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
-			       " class=\"%s\" autofocus=\"autofocus\""
+			       " class=\"INPUT_%s\" autofocus=\"autofocus\""
 			       " required=\"required\"",
 			       Txt_nick_email_or_ID,
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_DIV_End ();
 
 	    /***** User's password *****/
@@ -1181,8 +1181,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 		               Txt_Password,"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
-				   "id=\"UsrPwd\" class=\"%s\"",
-				   The_ClassInput[Gbl.Prefs.Theme]);
+				   "id=\"UsrPwd\" class=\"INPUT_%s\"",
+				   The_Colors[Gbl.Prefs.Theme]);
 	    HTM_DIV_End ();
 
 	 /***** End table, send button and end box *****/
@@ -1348,7 +1348,6 @@ void Usr_PutFormLogIn (void)
 void Usr_WriteLoggedUsrHead (void)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -1376,7 +1375,8 @@ void Usr_WriteLoggedUsrHead (void)
 	}
       else
 	{
-	 if (asprintf (&ClassSelect,"SEL_ROLE %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&ClassSelect,"SEL_ROLE INPUT_%s",
+	               The_Colors[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Rol_PutFormToChangeMyRole (ClassSelect);
 	 free (ClassSelect);
@@ -2045,13 +2045,13 @@ void Usr_ShowFormsLogoutAndRole (void)
    extern const char *Hlp_PROFILE_Session_role;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *ClassSelect;
 
    /***** Write message with my new logged role *****/
    if (Gbl.Usrs.Me.Role.HasChanged)
@@ -2080,7 +2080,11 @@ void Usr_ShowFormsLogoutAndRole (void)
 	{
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Role);
-	    Rol_PutFormToChangeMyRole (The_ClassInput[Gbl.Prefs.Theme]);
+	    if (asprintf (&ClassSelect,"INPUT_%s",
+			  The_Colors[Gbl.Prefs.Theme]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Rol_PutFormToChangeMyRole (ClassSelect);
+	    free (ClassSelect);
 	 HTM_LABEL_End ();
 	}
 
@@ -6247,7 +6251,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
@@ -6256,8 +6260,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
       /***** Begin selector *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"ColsClassPhoto\" class=\"%s\"",
-			The_ClassInput[Gbl.Prefs.Theme]);
+			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
+			The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Put a row in selector for every number of columns *****/
 	 for (Cols  = 1;

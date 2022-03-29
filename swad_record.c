@@ -253,7 +253,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
 void Rec_ListFieldsRecordsForEdition (void)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
@@ -283,8 +283,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"REC_FIELDNAME %s\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "class=\"REC_FIELDNAME INPUT_%s\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -296,8 +296,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"2\" class=\"%s\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"2\" class=\"INPUT_%s\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -306,8 +306,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 	    Frm_BeginForm (ActChgVisFie);
 	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "name=\"Visibility\" class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "name=\"Visibility\" class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)
@@ -332,7 +332,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
@@ -362,8 +362,9 @@ void Rec_ShowFormCreateRecordField (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"REC_FIELDNAME %s\" required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "class=\"REC_FIELDNAME INPUT_%s\""
+			       " required=\"required\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Number of lines in form ******/
@@ -372,15 +373,16 @@ void Rec_ShowFormCreateRecordField (void)
 			 Gbl.Crs.Records.Field.NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"2\" class=\"%s\" required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       "size=\"2\" class=\"INPUT_%s\""
+			       " required=\"required\"",
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Visibility to students *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Visibility\" class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "name=\"Visibility\" class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)
@@ -1576,7 +1578,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
   {
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
@@ -1753,10 +1754,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (ICanEditThisField)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
-					 " class=\"REC_C2_BOT_INPUT %s\"",
+					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
 					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
-					 The_ClassInput[Gbl.Prefs.Theme]);
+					 The_Colors[Gbl.Prefs.Theme]);
 			if (ThisFieldHasText)
 			   HTM_Txt (row[0]);
 		     HTM_TEXTAREA_End ();
@@ -2790,7 +2791,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -2833,8 +2833,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		  /***** Selector of role *****/
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"Role\" name=\"Role\" class=\"%s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    "id=\"Role\" name=\"Role\""
+				    " class=\"INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     for (Role  = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
@@ -2896,8 +2897,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\" class=\"%s\"",
-				       The_ClassInput[Gbl.Prefs.Theme]);
+				       "id=\"Role\" name=\"Role\""
+				       " class=\"INPUT_%s\"",
+				       The_Colors[Gbl.Prefs.Theme]);
 			switch (Gbl.Usrs.Me.Role.Logged)
 			  {
 			   case Rol_GST:
@@ -2938,8 +2940,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\" class=\"%s\"",
-				       The_ClassInput[Gbl.Prefs.Theme]);
+				       "id=\"Role\" name=\"Role\""
+				       " class=\"INPUT_%s\"",
+				       The_Colors[Gbl.Prefs.Theme]);
 			RoleUnsigned = (unsigned) DefaultRoleInForm;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
 				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
@@ -2974,8 +2977,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 			   /***** Selector of role *****/
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-					     "id=\"Role\" name=\"Role\" class=\"%s\"",
-				             The_ClassInput[Gbl.Prefs.Theme]);
+					     "id=\"Role\" name=\"Role\""
+					     " class=\"INPUT_%s\"",
+				             The_Colors[Gbl.Prefs.Theme]);
 			      for (Role  = Rol_STD;
 				   Role <= Rol_TCH;
 				   Role++)
@@ -2996,8 +3000,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			case Rol_SYS_ADM:
 			   /***** Selector of role *****/
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-					     "id=\"Role\" name=\"Role\"  class=\"%s\"",
-				             The_ClassInput[Gbl.Prefs.Theme]);
+					     "id=\"Role\" name=\"Role\""
+					     " class=\"INPUT_%s\"",
+				             The_Colors[Gbl.Prefs.Theme]);
 			      RoleUnsigned = (unsigned) Rol_GST;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 					  true,false,
@@ -3062,7 +3067,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Surname_1;
    char *Label;
 
@@ -3085,9 +3089,9 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT %s\""
+			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 else if (UsrDat->Surname1[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3106,7 +3110,6 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
@@ -3123,8 +3126,9 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->Surname2,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname2\" class=\"REC_C2_BOT_INPUT %s\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    "id=\"Surname2\""
+			    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			    The_Colors[Gbl.Prefs.Theme]);
 	 else if (UsrDat->Surname2[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3143,7 +3147,6 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_First_name;
    char *Label;
 
@@ -3167,9 +3170,10 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->FrstName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"FirstName\" class=\"REC_C2_BOT_INPUT %s\""
+			    "id=\"FirstName\""
+			    " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			    " required=\"required\"",
-			    The_ClassInput[Gbl.Prefs.Theme]);
+			    The_Colors[Gbl.Prefs.Theme]);
 	 else if (UsrDat->FrstName[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3187,7 +3191,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    char *Label;
@@ -3214,9 +3218,9 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"OthCtyCod\" name=\"OthCtyCod\""
-			   " class=\"REC_C2_BOT_INPUT %s\""
+			   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			   " required=\"required\"",
-			   The_ClassInput[Gbl.Prefs.Theme]);
+			   The_Colors[Gbl.Prefs.Theme]);
 	    HTM_OPTION (HTM_Type_STRING,"",false,false,
 			"%s",Txt_Country);
 	    HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
@@ -3280,7 +3284,6 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Phone;
    char *Name;
    char *Label;
@@ -3309,9 +3312,9 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 	    if (PutForm)
 	       HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
 			      HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"%s\" class=\"REC_C2_BOT_INPUT %s\"",
+			      "id=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      Name,
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      The_Colors[Gbl.Prefs.Theme]);
 	    else if (UsrDat->Phone[NumPhone][0])
 	      {
 	       HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
@@ -3338,7 +3341,6 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_USER_comments;
 
    /***** Comments *****/
@@ -3357,8 +3359,9 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 	    if (PutForm)
 	      {
 	       HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
-				   " rows=\"4\" class=\"REC_C2_BOT_INPUT %s\"",
-				   The_ClassInput[Gbl.Prefs.Theme]);
+				   " rows=\"4\""
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				   The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (UsrDat->Comments);
 	       HTM_TEXTAREA_End ();
 	      }
@@ -3798,7 +3801,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3845,8 +3848,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
-				    " class=\"REC_C2_BOT_INPUT %s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
 				 NULL);
@@ -3884,8 +3887,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
-				    " class=\"REC_C2_BOT_INPUT %s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
 				 NULL);
@@ -3927,8 +3930,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
-				       " class=\"REC_C2_BOT_INPUT %s\"",
-				       The_ClassInput[Gbl.Prefs.Theme]);
+				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				       The_Colors[Gbl.Prefs.Theme]);
 			HTM_OPTION (HTM_Type_STRING,"-1",
 				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
 				    NULL);
@@ -3959,8 +3962,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
-		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT %s",
-		                   The_ClassInput[Gbl.Prefs.Theme]) < 0)
+		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
+		                   The_Colors[Gbl.Prefs.Theme]) < 0)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
@@ -3985,8 +3988,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "id=\"Office\" class=\"REC_C2_BOT_INPUT %s\"",
-				     The_ClassInput[Gbl.Prefs.Theme]);
+				     "id=\"Office\""
+				     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -4003,8 +4007,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 				    HTM_SUBMIT_ON_CHANGE,
-				    "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT %s\"",
-				    The_ClassInput[Gbl.Prefs.Theme]);
+				    "id=\"OfficePhone\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_Colors[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

@@ -463,7 +463,6 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumPlc;
    struct Plc_Place *Plc;
 
@@ -502,8 +501,8 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 		  Plc_PutParamPlcCod (&Plc->PlcCod);
 		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME %s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -513,8 +512,8 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 		  Plc_PutParamPlcCod (&Plc->PlcCod);
 		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME %s\"",
-				  The_ClassInput[Gbl.Prefs.Theme]);
+				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
+				  The_Colors[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -711,7 +710,6 @@ void Plc_ContEditAfterChgPlc (void)
 static void Plc_PutFormToCreatePlace (void)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_place;
    extern const char *Txt_Create_place;
 
@@ -740,18 +738,18 @@ static void Plc_PutFormToCreatePlace (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME %s\""
+			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Place full name *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME %s\""
+			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_ClassInput[Gbl.Prefs.Theme]);
+			       The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Number of centers *****/

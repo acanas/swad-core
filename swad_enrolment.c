@@ -331,7 +331,7 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
@@ -350,9 +350,9 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
 		      HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\""
-		      " class=\"%s\""
+		      " class=\"INPUT_%s\""
 		      " required=\"required\"",
-		      The_ClassInput[Gbl.Prefs.Theme]);
+		      The_Colors[Gbl.Prefs.Theme]);
 
       /***** Send button*****/
       Btn_PutConfirmButton (Txt_Continue);
@@ -657,7 +657,7 @@ void Enr_PutLinkToRemOldUsrs (void)
 void Enr_AskRemoveOldUsrs (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2;
@@ -676,8 +676,8 @@ void Enr_AskRemoveOldUsrs (void)
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "name=\"Months\" class=\"%s\"",
-			      The_ClassInput[Gbl.Prefs.Theme]);
+			      "name=\"Months\" class=\"INPUT_%s\"",
+			      The_Colors[Gbl.Prefs.Theme]);
 	       for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months++)
@@ -772,7 +772,7 @@ void Enr_RemoveOldUsrs (void)
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
@@ -786,8 +786,8 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\""
 		                " cols=\"60\" rows=\"10\""
-		                " class=\"%s\"",
-		                The_ClassInput[Gbl.Prefs.Theme]);
+		                " class=\"INPUT_%s\"",
+		                The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();
 

@@ -219,7 +219,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
@@ -372,8 +372,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 Lay_HelpPlainEditor ();
 
 	 /***** Attached image (optional) *****/
-	 if (asprintf (&ClassInput,"MSG_MED_INPUT %s",
-	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&ClassInput,"MSG_MED_INPUT INPUT_%s",
+	               The_Colors[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (-1,ClassInput);
 	 free (ClassInput);
@@ -525,7 +525,7 @@ static void Msg_ShowOneUniqueRecipient (void)
 
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
@@ -555,9 +555,9 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
 	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
-			     " class=\"MSG_RECIPIENTS %s\" rows=\"2\""
+			     " class=\"MSG_RECIPIENTS INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
-			     The_ClassInput[Gbl.Prefs.Theme],
+			     The_Colors[Gbl.Prefs.Theme],
 			     Txt_nicks_emails_or_IDs_separated_by_commas);
 	    if (Gbl.Usrs.ListOtherRecipients[0])
 	       HTM_Txt (Gbl.Usrs.ListOtherRecipients);
@@ -582,7 +582,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
                                                      char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Original_message;
@@ -603,8 +603,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
-			  " class=\"MSG_SUBJECT %s\" rows=\"2\"",
-			  The_ClassInput[Gbl.Prefs.Theme]);
+			  " class=\"MSG_SUBJECT INPUT_%s\" rows=\"2\"",
+			  The_Colors[Gbl.Prefs.Theme]);
 
       /* If message is a reply ==> get original message */
       if (MsgCod > 0)	// It's a reply
@@ -643,8 +643,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"MSG_CONTENT %s\" rows=\"20\"",
-				   The_ClassInput[Gbl.Prefs.Theme]);
+				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
+				   The_Colors[Gbl.Prefs.Theme]);
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -678,8 +678,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"MSG_CONTENT %s\" rows=\"20\"",
-				   The_ClassInput[Gbl.Prefs.Theme]);
+				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
+				   The_Colors[Gbl.Prefs.Theme]);
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -1812,7 +1812,7 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
@@ -1842,8 +1842,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"FilterCrsCod\" class=\"%s\"",
-			The_ClassInput[Gbl.Prefs.Theme]);
+			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
+			The_Colors[Gbl.Prefs.Theme]);
 
          /* Write a first option to select any course */
 	 HTM_OPTION (HTM_Type_STRING,"",
@@ -1878,7 +1878,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
@@ -1900,8 +1900,8 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 	       HTM_TxtColonNBSP (*TxtFromTo[Messages->TypeOfMessages]);
 	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 				 Messages->FilterFromTo,
-				 "size=\"20\" class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "size=\"20\" class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -1911,8 +1911,8 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 	       HTM_TxtColonNBSP (Txt_MSG_Content);
 	       HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 				 Messages->FilterContent,
-				 "size=\"20\" class=\"%s\"",
-				 The_ClassInput[Gbl.Prefs.Theme]);
+				 "size=\"20\" class=\"INPUT_%s\"",
+				 The_Colors[Gbl.Prefs.Theme]);
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 

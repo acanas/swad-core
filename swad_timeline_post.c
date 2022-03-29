@@ -173,7 +173,6 @@ void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
    char *Class;
 
@@ -193,8 +192,8 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
          /* Form with textarea */
 	 TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_POST);
-	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_RIGHT_WIDTH %s",
-	                  The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_RIGHT_WIDTH INPUT_%s",
+	                  The_Colors[Gbl.Prefs.Theme]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    TmlPst_PutTextarea (Txt_New_TIMELINE_post,Class);
 	    free (Class);
@@ -213,7 +212,7 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
-   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
    char *ClassInput;
@@ -237,7 +236,8 @@ void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      if (asprintf (&ClassInput,"Tml_MED_INPUT_WIDTH %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&ClassInput,"Tml_MED_INPUT_WIDTH INPUT_%s",
+                    The_Colors[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (-1,ClassInput);
       free (ClassInput);
