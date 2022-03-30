@@ -521,7 +521,6 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ZIP_file;
    extern const char *Txt_Download;
@@ -551,7 +550,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       /***** Filename *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_Filename);
 	 HTM_TD_End ();
 
@@ -569,7 +568,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_File_size);
 	 HTM_TD_End ();
 

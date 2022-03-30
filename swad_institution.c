@@ -2274,7 +2274,6 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
@@ -2305,7 +2304,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
 
 	       /***** Write link to institution *****/
-	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"CM FORM_IN_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  Ins_DrawInstitutionLogoWithLink (&Ins,40);
 		  HTM_BR ();
 		  HTM_Unsigned (NumberThisRow);
@@ -2347,8 +2347,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  HTM_TD_End ();
 
 		  /***** Write link to institution *****/
-		  HTM_TD_Begin ("class=\"%s LM\"",
-				The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"LM FORM_IN_%s\"",
+				The_Colors[Gbl.Prefs.Theme]);
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
 			Ins_PutParamInsCod (Ins.InsCod);

@@ -1666,12 +1666,12 @@ static void Prj_PutWarningIcon (void)
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Link to toggle on/off some fields of project *****/
-   HTM_A_Begin ("href=\"\" title=\"%s\" class=\"%s\""
+   HTM_A_Begin ("href=\"\" title=\"%s\" class=\"FORM_IN_%s\""
                 " onclick=\"toggleProject('%u');return false;\"",
-               Text,The_ClassFormInBox[Gbl.Prefs.Theme],
+               Text,The_Colors[Gbl.Prefs.Theme],
                UniqueId);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_A_End ();
@@ -3297,7 +3297,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
   {
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
@@ -3408,7 +3407,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Assigned? */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColon (Txt_Assigned_QUESTION);
 	    HTM_TD_End ();
 
@@ -3428,7 +3427,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Number of students */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColon (Txt_Number_of_students);
 	    HTM_TD_End ();
 
@@ -3444,7 +3443,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Proposal */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColon (Txt_Proposal);
 	    HTM_TD_End ();
 
@@ -3518,7 +3517,6 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows,bool Required)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Description *****/
@@ -3751,7 +3749,6 @@ static bool Prj_CheckIfICanConfigAllProjects (void)
 void Prj_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Configure_projects;
    extern const char *Txt_Editable;
    extern const char *Txt_Editable_by_non_editing_teachers;

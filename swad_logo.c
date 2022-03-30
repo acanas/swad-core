@@ -247,7 +247,7 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
 
 void Lgo_RequestLogo (HieLvl_Level_t Scope)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
@@ -304,7 +304,7 @@ void Lgo_RequestLogo (HieLvl_Level_t Scope)
 			64,64);
 
 	 /***** Upload logo *****/
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_File_with_the_logo);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",
 			    HTM_SUBMIT_ON_CHANGE,

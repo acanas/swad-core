@@ -99,7 +99,6 @@ void Sch_ReqSysSearch (void)
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,HieLvl_Level_t DefaultScope)
   {
    extern const char *Hlp_START_Search;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
@@ -149,7 +148,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    /***** Scope (whole platform, current country, current institution,
 			  current center, current degree or current course) *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
-	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Gbl.Scope.Allowed = 1 << HieLvl_SYS |
 				      1 << HieLvl_CTY |
@@ -167,7 +166,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    Sch_PutInputStringToSearch ("");
 
 	    /***** What to search? *****/
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"WhatToSearch\""

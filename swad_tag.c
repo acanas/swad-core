@@ -292,7 +292,6 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           bool ShowOnlyEnabledTags)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
@@ -312,7 +311,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
@@ -327,7 +326,8 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 	       HTM_TD_Empty (1);
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+	                        The_Colors[Gbl.Prefs.Theme]);
 		  HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
 				      Tags->All ? " checked=\"checked\"" :

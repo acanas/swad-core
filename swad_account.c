@@ -146,7 +146,6 @@ void Acc_ShowFormMyAccount (void)
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
@@ -163,7 +162,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
       /***** Form to request user's ID for possible account already created *****/
       Frm_BeginForm (ActChkUsrAcc);
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
 	                    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -365,7 +364,6 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;

@@ -142,7 +142,6 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
 static void TstCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
@@ -176,7 +175,8 @@ static void TstCfg_ShowFormConfig (void)
 	 HTM_TABLE_BeginCenterPadding (2);
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Plugins);
 	       HTM_TD_End ();
 
@@ -203,7 +203,8 @@ static void TstCfg_ShowFormConfig (void)
 	    /***** Number of questions *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Number_of_questions);
 	       HTM_TD_End ();
 
@@ -244,7 +245,8 @@ static void TstCfg_ShowFormConfig (void)
 	    /***** Visibility of test prints *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Result_visibility);
 	       HTM_TD_End ();
 

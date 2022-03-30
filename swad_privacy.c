@@ -161,7 +161,6 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
@@ -169,7 +168,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    HTM_TR_Begin (NULL);
 
       /***** Select visibility *****/
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (TxtLabel);
       HTM_TD_End ();
 

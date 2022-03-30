@@ -1401,7 +1401,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
@@ -1412,7 +1412,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
    HTM_BUTTON_End ();
 
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt ("(");
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"RecsPerPag\"");
@@ -1577,7 +1577,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
@@ -1718,9 +1717,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    /* Name of the field */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"REC_C1_BOT %s RT %s\"",
-			     ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
-						 "REC_DAT_SMALL",
+	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
+			     ICanEditThisField ? "FORM_IN" :
+						 "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			     The_Colors[Gbl.Prefs.Theme],
 			     The_GetColorRows ());
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
@@ -3800,7 +3800,6 @@ void Rec_ShowMySharedRecordAndMore (void)
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;

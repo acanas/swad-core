@@ -294,7 +294,6 @@ void Frm_FreeAnchorStr (char *Anchor)
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Column/cell begin *****/
@@ -307,11 +306,11 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
    if (Id)
      {
       if (Id[0])
-	 HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-			  Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
+			  Id,The_Colors[Gbl.Prefs.Theme]);
       else
-	 HTM_LABEL_Begin ("class=\"%s\"",
-			  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+			  The_Colors[Gbl.Prefs.Theme]);
      }
    else
       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);

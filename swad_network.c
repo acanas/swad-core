@@ -192,7 +192,6 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
    extern const char *Hlp_PROFILE_Webs;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
@@ -229,8 +228,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-			HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
-					 StrName,The_ClassFormInBox[Gbl.Prefs.Theme]);
+			HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
+					 StrName,The_Colors[Gbl.Prefs.Theme]);
 			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 			                Net_WebsAndSocialNetworksTitle[NumURL],
 			                "CONTEXT_OPT CONTEXT_ICO16x16");

@@ -1063,7 +1063,6 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
@@ -1077,7 +1076,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_Groups);
 	 HTM_TD_End ();
 

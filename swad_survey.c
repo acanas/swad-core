@@ -1646,7 +1646,6 @@ void Svy_RequestCreatOrEditSvy (void)
   {
    extern const char *Hlp_ASSESSMENT_Surveys_new_survey;
    extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
@@ -1790,7 +1789,7 @@ void Svy_RequestCreatOrEditSvy (void)
       /***** Users' roles who can answer the survey *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_Users);
 	 HTM_TD_End ();
 
@@ -1909,7 +1908,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
@@ -1923,7 +1921,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_Groups);
 	 HTM_TD_End ();
 
@@ -2303,7 +2301,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                                     char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
@@ -2405,11 +2402,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	 /***** Type of answer *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColon (Txt_Type);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       for (AnsType  = (Svy_AnswerType_t) 0;
 		    AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
 		    AnsType++)
@@ -2443,8 +2440,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 			/* Label with the number of the answer */
 			HTM_TD_Begin ("class=\"RT\"");
-			   HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
-					    NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"FORM_IN_%s\"",
+					    NumAns,The_Colors[Gbl.Prefs.Theme]);
 			      HTM_TxtF ("%u)",NumAns + 1);
 			   HTM_LABEL_End ();
 			HTM_TD_End ();

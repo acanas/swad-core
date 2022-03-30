@@ -2160,7 +2160,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
@@ -2270,8 +2270,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 				   Forums,Thr.ThrCod,
 				   Thr.Enabled[Dat_STR_TIME],
 				   Thr.Subject,
-				   Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
-							The_ClassFormInBox[Gbl.Prefs.Theme],
+				   Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :	// !!!!!!!!!!!!!!!!!!!!!!
+							"FORM_IN",
 				   true);
 	 HTM_TD_End ();
 
@@ -2689,7 +2689,6 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
   {
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;

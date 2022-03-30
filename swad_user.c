@@ -2043,7 +2043,6 @@ static void Usr_SetMyPrefsAndRoles (void)
 void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
@@ -2078,7 +2077,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	}
       else
 	{
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Role);
 	    if (asprintf (&ClassSelect,"INPUT_%s",
 			  The_Colors[Gbl.Prefs.Theme]) < 0)
@@ -3700,7 +3699,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
                                        const char *TxtButton,
 				       bool PutFormDateRange)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Select_users;
    extern const char *Txt_Users;
    unsigned NumTotalUsrs;
@@ -3774,11 +3773,13 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 			/* Put list of users to select some of them */
 			HTM_TR_Begin (NULL);
 
-			   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+			                 The_Colors[Gbl.Prefs.Theme]);
 			      HTM_TxtColon (Txt_Users);
 			   HTM_TD_End ();
 
-			   HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
+			                 The_Colors[Gbl.Prefs.Theme]);
 			      HTM_TABLE_BeginCenterPadding (2);
 				 Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
 				 Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
@@ -3987,13 +3988,13 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
 static void Usr_PutCheckboxListWithPhotos (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Display_photos;
 
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_INPUT_CHECKBOX ("WithPhotos",HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" :
@@ -4856,7 +4857,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 void Usr_ListDataAdms (void)
   {
    extern const char *Hlp_USERS_Administrators;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_No_INDEX;
@@ -4931,7 +4932,7 @@ void Usr_ListDataAdms (void)
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
 	    Set_PutParamListWithPhotos ();
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	    HTM_LABEL_End ();
@@ -5036,7 +5037,7 @@ static void Usr_PutLinkToSeeGuests (void)
 void Usr_SeeGuests (void)
   {
    extern const char *Hlp_USERS_Guests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
@@ -5073,7 +5074,8 @@ void Usr_SeeGuests (void)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActLstGst);
 	       Set_PutParamsPrefsAboutUsrList ();
-	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+	                        The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	       HTM_LABEL_End ();
@@ -5159,7 +5161,7 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *Hlp_USERS_Students;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
@@ -5220,7 +5222,8 @@ void Usr_SeeStudents (void)
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActLstStd);
 		  Set_PutParamsPrefsAboutUsrList ();
-		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+		                   The_Colors[Gbl.Prefs.Theme]);
 		     HTM_TxtColonNBSP (Txt_Scope);
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 		  HTM_LABEL_End ();
@@ -5325,7 +5328,7 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *Hlp_USERS_Teachers;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    unsigned NumUsrs;
@@ -5401,7 +5404,8 @@ void Usr_SeeTeachers (void)
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstTch);
 	    Set_PutParamsPrefsAboutUsrList ();
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	    HTM_LABEL_End ();
@@ -5586,7 +5590,7 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 
 static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_records;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_attendance;
@@ -5613,7 +5617,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 
    /***** Write list of options *****/
    /* Begin list of options */
-   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       /* Show option items */
       for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
@@ -6250,13 +6254,12 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
    /***** Begin label *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       /***** Begin selector *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,

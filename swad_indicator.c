@@ -94,7 +94,6 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
@@ -190,7 +189,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    /* Selection of the number of indicators */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT %s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Number_of_indicators);
 	       HTM_TD_End ();
 

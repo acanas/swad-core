@@ -218,7 +218,6 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
@@ -337,7 +336,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	    /***** "To:" section (recipients) *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_MSG_To);
 	       HTM_TD_End ();
 
@@ -581,7 +580,6 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
                                                      char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
@@ -1811,7 +1809,6 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
 
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
@@ -1839,7 +1836,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
       NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages] (&mysql_res);
 
    /***** Course selection *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
@@ -1877,7 +1874,6 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
@@ -1896,7 +1892,7 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 	 /***** Filter authors/recipients *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (*TxtFromTo[Messages->TypeOfMessages]);
 	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 				 Messages->FilterFromTo,
@@ -1907,7 +1903,7 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 	 /***** Filter message content *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_MSG_Content);
 	       HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 				 Messages->FilterContent,
@@ -1928,11 +1924,11 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  Messages->ShowOnlyUnreadMsgs ? " checked=\"checked\"" :

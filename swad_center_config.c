@@ -842,7 +842,7 @@ void CtrCfg_RemoveLogo (void)
 
 void CtrCfg_RequestPhoto (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_Recommended_aspect_ratio;
    extern const char *Txt_Recommended_resolution;
@@ -868,7 +868,7 @@ void CtrCfg_RequestPhoto (void)
 			Txt_XxY_pixels_or_higher);
 
 	 /***** Upload photo *****/
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
 			    HTM_SUBMIT_ON_CHANGE,

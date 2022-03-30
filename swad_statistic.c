@@ -221,7 +221,6 @@ void Sta_AskShowCrsHits (void)
 static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
@@ -315,11 +314,13 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+			              The_Colors[Gbl.Prefs.Theme]);
 			   HTM_TxtColon (Txt_Users);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
+			              The_Colors[Gbl.Prefs.Theme]);
 			   HTM_TABLE_Begin (NULL);
 			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
@@ -348,7 +349,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     /***** Option a) Listing of clicks distributed by some metric *****/
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
+			              The_Colors[Gbl.Prefs.Theme]);
 			   HTM_TxtColon (Txt_Show);
 			HTM_TD_End ();
 
@@ -368,7 +370,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /* Selection of count type (number of pages generated, accesses per user, etc.) */
 			   Sta_WriteSelectorCountType (Stats);
 
-			   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+			                    The_Colors[Gbl.Prefs.Theme]);
 			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
@@ -472,7 +475,6 @@ void Sta_AskShowGblHits (void)
 static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
@@ -570,7 +572,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	       Sta_WriteSelectorCountType (Stats);
 
 	       /***** Type of statistic *****/
-	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+	                        The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
 		  if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
@@ -679,7 +682,6 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_Any_action;
@@ -1559,7 +1561,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
                                                 unsigned NumHits,
                                                 MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
@@ -1606,7 +1608,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	       Sta_PutHiddenParamScopeSta ();
 	      }
 
-	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"ColorType\"");

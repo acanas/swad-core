@@ -136,7 +136,7 @@ void QstImp_PutIconToImportQuestions (void)
 void QstImp_ShowFormImpQstsFromXML (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Import_questions;
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_XML_file;
@@ -151,7 +151,7 @@ void QstImp_ShowFormImpQstsFromXML (void)
 
       /***** Write a form to import questions *****/
       Frm_BeginForm (ActImpTstQst);
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_XML_file);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",
 			    HTM_SUBMIT_ON_CHANGE,

@@ -1503,7 +1503,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *Hlp_PROFILE_Settings_notifications;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
@@ -1543,7 +1543,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		 {
 		  HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		     HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
+		                   The_Colors[Gbl.Prefs.Theme]);
 			HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 		     HTM_TD_End ();
 

@@ -143,7 +143,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,
-				true,NULL,"PAG_TXT",false);
+				true,NULL,"PAG_TXT",false);	// !!!!!!!!!!!!!!!!!!!!!!!!!!
       HTM_DIV_End ();
      }
   }
@@ -159,6 +159,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Page_X_of_Y;
    extern const char *Txt_FORUM_Post_banned;
    Grp_WhichGroups_t WhichGroups;
@@ -266,7 +267,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       default:
 		  break;
 	      }
-	    if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
+	    if (asprintf (&ClassLink,"BT_LINK LT %s_%s",
+	                  ClassTxt,The_Colors[Gbl.Prefs.Theme]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();

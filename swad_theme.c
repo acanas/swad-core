@@ -89,17 +89,6 @@ const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "BT_LINK FORM_IN_DARK",
   };
 
-const char *The_ClassFormInBox[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "FORM_IN_WHITE",
-   [The_THEME_GREY  ] = "FORM_IN_GREY",
-   [The_THEME_PURPLE] = "FORM_IN_PURPLE",
-   [The_THEME_BLUE  ] = "FORM_IN_BLUE",
-   [The_THEME_YELLOW] = "FORM_IN_YELLOW",
-   [The_THEME_PINK  ] = "FORM_IN_PINK",
-   [The_THEME_DARK  ] = "FORM_IN_DARK",
-  };
-
 const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "BT_LINK FORM_IN_WHITE BOLD",

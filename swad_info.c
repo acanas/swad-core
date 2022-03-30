@@ -886,7 +886,6 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
@@ -969,8 +968,8 @@ void Inf_FormsToSelSendInfo (void)
 	    HTM_TD_Begin ("class=\"LT%s\"",
 			  InfoSrc == FromDB.Src ? " BG_HIGHLIGHT" :
 						  "");
-	       HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",
-				(unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
+				(unsigned) InfoSrc,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
 	       HTM_LABEL_End ();
 	       if (Txt_INFO_SRC_HELP[InfoSrc])
@@ -1078,7 +1077,7 @@ void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
 
 void Inf_FormToSendPage (Inf_Src_t InfoSrc)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
@@ -1087,7 +1086,7 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
 
       /***** File *****/
       HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_File);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
 			    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1108,7 +1107,6 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
 
 void Inf_FormToSendURL (Inf_Src_t InfoSrc)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
@@ -1133,7 +1131,7 @@ void Inf_FormToSendURL (Inf_Src_t InfoSrc)
 	 Gbl.Crs.Info.URL[0] = '\0';
 
       HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_URL);
 	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "size=\"50\" class=\"INPUT_%s\"",

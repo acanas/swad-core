@@ -175,7 +175,6 @@ void Prf_RequestUserProfile (void)
   {
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
@@ -201,7 +200,7 @@ void Prf_RequestUserProfile (void)
 	 /***** Form to request user's @nickname *****/
 	 /* By default, the nickname is filled with my nickname
 	    If no user logged ==> the nickname is empty */
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Nickname);
 
 	    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",

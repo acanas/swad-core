@@ -330,7 +330,6 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
@@ -341,8 +340,8 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
 	 FuncParams ();
 
       /***** Label *****/
-      HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
-		       The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"RM FORM_IN_%s\"",
+		       The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtColonNBSP (Txt_nick_email_or_ID);
       HTM_LABEL_End ();
 
@@ -656,7 +655,6 @@ void Enr_PutLinkToRemOldUsrs (void)
 
 void Enr_AskRemoveOldUsrs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
@@ -673,7 +671,7 @@ void Enr_AskRemoveOldUsrs (void)
 		    NULL,Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months without clicks *****/
-	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"Months\" class=\"INPUT_%s\"",
@@ -771,7 +769,6 @@ void Enr_RemoveOldUsrs (void)
 
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
@@ -801,7 +798,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Register_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
@@ -809,7 +806,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Begin list of options *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       /***** Register / remove users listed or not listed *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
@@ -1313,7 +1310,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    bool OptionsShown = false;
    bool UsrBelongsToCrs = false;
    bool UsrIsDegAdmin = false;
@@ -1348,8 +1345,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Begin list of options *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",
-                 The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       /***** Register user in course / Modify user's data *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
@@ -2071,7 +2067,6 @@ void Enr_UpdateEnrolmentRequests (void)
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
