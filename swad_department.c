@@ -150,8 +150,8 @@ void Dpt_SeeDepts (void)
 
 	       Frm_BeginForm (ActSeeDpt);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],
-		                             "BT_LINK",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],NULL,
+		                             "class=\"BT_LINK\"");
 		     if (Order == Departments.SelectedOrder)
 			HTM_U_Begin ();
 		     HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);

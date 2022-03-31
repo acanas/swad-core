@@ -783,8 +783,8 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
 
       /***** Put button to refresh *****/
       HTM_BUTTON_OnSubmit_Begin (Txt_Calculate,
-				 The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
-				 NULL);
+				 NULL,
+				 "class=\"%s\"",The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme]);
 	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate);
       HTM_BUTTON_End ();
 
@@ -852,7 +852,7 @@ void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
 
 static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
   {
-   extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char *Title;
 
@@ -863,8 +863,9 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_BUTTON_OnSubmit_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],
-                                 NULL);
+      HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+                                 "class=\"BT_LINK FORM_OUT_%s\"",
+                                 The_Colors[Gbl.Prefs.Theme]);
       free (Title);
 	 HTM_TxtF ("#%u",Rank);
       HTM_BUTTON_End ();
@@ -1349,8 +1350,8 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,
-				       "BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,NULL,
+				       "class=\"BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

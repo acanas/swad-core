@@ -210,7 +210,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
       Frm_BeginFormGoTo (ActMnu);
 	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_System,"BT_LINK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_System,NULL,"class=\"BT_LINK\"");
 	    HTM_Txt (Txt_System);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -227,8 +227,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
-	                               "BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],NULL,
+	                               "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -244,7 +244,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select countries *****/
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Country,"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Country,NULL,"class=\"BT_LINK\"");
 	       HTM_Txt (Txt_Country);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -262,8 +262,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
 	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ins.FullName,
-	                               "BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ins.FullName,NULL,
+	                               "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -279,7 +279,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select institutions *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Institution,"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Institution,NULL,"class=\"BT_LINK\"");
 	       HTM_Txt (Txt_Institution);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -309,8 +309,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ctr.FullName,
-	                               "BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ctr.FullName,NULL,
+	                               "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -326,7 +326,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select centers *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Center,"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Center,NULL,"class=\"BT_LINK\"");
 	       HTM_Txt (Txt_Center);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -356,8 +356,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Deg.FullName,
-	                               "BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Deg.FullName,NULL,
+	                               "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -373,7 +373,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select degrees *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Degree,"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Degree,NULL,"class=\"BT_LINK\"");
 	       HTM_Txt (Txt_Degree);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

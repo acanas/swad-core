@@ -132,8 +132,8 @@ void Plc_SeePlaces (void)
 
 		  Frm_BeginForm (ActSeePlc);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		     HTM_BUTTON_OnSubmit_Begin (Txt_PLACES_HELP_ORDER[Order],
-		                                "BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_PLACES_HELP_ORDER[Order],NULL,
+		                                "class=\"BT_LINK\"");
 			if (Order == Places.SelectedOrder)
 			   HTM_U_Begin ();
 			HTM_Txt (Txt_PLACES_ORDER[Order]);

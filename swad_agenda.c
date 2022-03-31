@@ -663,8 +663,8 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 				   Agenda->CurrentPage,
 				   -1L);
 
-	       HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
-	                                  "BT_LINK",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
+	                                  "class=\"BT_LINK\"");
 		  if (Order == Agenda->SelectedOrder)
 		     HTM_U_Begin ();
 

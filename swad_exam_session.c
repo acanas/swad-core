@@ -528,7 +528,8 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	       ExaSes_PutParamSesCod (Session->SesCod);
 	       HTM_BUTTON_OnSubmit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									       Txt_Resume,
-					  "BT_LINK",NULL);
+					  NULL,
+					  "class=\"BT_LINK\"");
 		  HTM_Txt (Session->Title);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();

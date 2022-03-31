@@ -656,9 +656,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
 	    /***** Put link to refresh *****/
 	    HTM_DIV_Begin ("class=\"UPD\"");
-	       HTM_BUTTON_OnSubmit_Begin (Txt_Update_results,
-					  The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-					  NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_Update_results,NULL,
+					  "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_results);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();

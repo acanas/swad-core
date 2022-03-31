@@ -243,7 +243,8 @@ void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       free (ClassInput);
 
       /***** Submit button *****/
-      HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
+      HTM_BUTTON_OnSubmit_Begin (NULL,NULL,
+                                 "class=\"BT_SUBMIT_INLINE BT_CREATE\"");
 	 HTM_Txt (Txt_Post);
       HTM_BUTTON_End ();
 

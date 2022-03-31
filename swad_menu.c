@@ -268,7 +268,7 @@ void Mnu_WriteMenuThisTab (void)
 		  Frm_BeginForm (NumAct);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Title,NULL,"class=\"BT_LINK\"");
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");

@@ -190,7 +190,8 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
       Ctr_PutParamCtrCod (Ctr->CtrCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ctr->FullName),"BT_LINK",NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ctr->FullName),NULL,
+                                 "class=\"BT_LINK\"");
       Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/
@@ -1450,8 +1451,8 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_CENTERS_HELP_ORDER[Order],
-					     "BT_LINK",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_CENTERS_HELP_ORDER[Order],NULL,
+					     "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
 			HTM_U_Begin ();
 	      }

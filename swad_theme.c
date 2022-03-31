@@ -133,17 +133,6 @@ const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "FORM_IN_DARK NOWRAP",
   };
 
-const char *The_ClassFormLinkOutBox[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BT_LINK FORM_OUT_WHITE",
-   [The_THEME_GREY  ] = "BT_LINK FORM_OUT_GREY",
-   [The_THEME_PURPLE] = "BT_LINK FORM_OUT_PURPLE",
-   [The_THEME_BLUE  ] = "BT_LINK FORM_OUT_BLUE",
-   [The_THEME_YELLOW] = "BT_LINK FORM_OUT_YELLOW",
-   [The_THEME_PINK  ] = "BT_LINK FORM_OUT_PINK",
-   [The_THEME_DARK  ] = "BT_LINK FORM_OUT_DARK",
-  };
-
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "FORM_OUT_WHITE",

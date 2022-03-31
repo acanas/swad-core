@@ -283,8 +283,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 			Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
 			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
-			HTM_BUTTON_OnSubmit_Begin (Txt_GAMES_ORDER_HELP[Order],
-			                           "BT_LINK",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_GAMES_ORDER_HELP[Order],NULL,
+			                           "class=\"BT_LINK\"");
 			   if (Order == Games->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_GAMES_ORDER[Order]);
@@ -605,7 +605,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_View_game,"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_game,NULL,"class=\"BT_LINK\"");
 	       HTM_Txt (Game->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -638,7 +638,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Matches,"BT_LINK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Matches,NULL,"class=\"BT_LINK\"");
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
 	    HTM_Unsigned (Game->NumMchs);

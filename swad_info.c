@@ -516,7 +516,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 
 void Inf_WriteMsgYouMustReadInfo (void)
   {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
    Inf_Type_t InfoType;
@@ -539,8 +539,9 @@ void Inf_WriteMsgYouMustReadInfo (void)
 		 {
 		  HTM_LI_Begin (NULL);
 		     Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
-			HTM_BUTTON_OnSubmit_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
-						   The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+			HTM_BUTTON_OnSubmit_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),NULL,
+						   "class=\"BT_LINK FORM_IN_%s\"",
+						   The_Colors[Gbl.Prefs.Theme]);
 			   HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();

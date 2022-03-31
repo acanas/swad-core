@@ -1526,8 +1526,8 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	    /***** Put button to refresh *****/
 	    HTM_DIV_Begin ("class=\"UPD\"");
 	       HTM_BUTTON_OnSubmit_Begin (Txt_Update_messages,
-					  The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-					  NULL);
+					  NULL,
+					  "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_messages);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -2288,7 +2288,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
 	 HTM_BUTTON_OnSubmit_Begin (Expanded ? Txt_Hide_message :
 					       Txt_See_message,
-				    "BT_LINK",NULL);
+				    NULL,
+				    "class=\"BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])
@@ -2412,8 +2413,8 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 	       Crs_PutParamCrsCod (Crs.CrsCod);
 	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
 		  HTM_Txt ("(");
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs.FullName),
-					     "BT_LINK",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs.FullName),NULL,
+					     "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();
@@ -2690,8 +2691,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
 		     Msg_PutHiddenParamsOneMsg (Messages);
 		     Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-			HTM_BUTTON_OnSubmit_Begin (Txt_View_all_recipients,
-			                           "BT_LINK",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_View_all_recipients,NULL,
+			                           "class=\"BT_LINK\"");
 			   HTM_TxtF (Txt_and_X_other_recipients,
 				     NumRecipients.Known - NumRecipients.ToShow);
 			HTM_BUTTON_End ();

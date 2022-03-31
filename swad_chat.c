@@ -303,7 +303,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Begin list item *****/
    HTM_LI_Begin (NULL);
@@ -316,8 +316,9 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 	 Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
 	 /* Begin button */
-	 HTM_BUTTON_OnSubmit_Begin (RoomFullName,
-	                            The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+	 HTM_BUTTON_OnSubmit_Begin (RoomFullName,NULL,
+	                            "class=\"BT_LINK FORM_IN_%s\"",
+	                            The_Colors[Gbl.Prefs.Theme]);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

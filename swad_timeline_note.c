@@ -357,7 +357,8 @@ void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
       /* Author's name */
       HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							      Txt_Another_user_s_profile,
-			         Class,NULL);
+				 NULL,
+			         "class=\"%s\"",Class);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 
@@ -598,7 +599,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
       /* Analytics tab */
       /* Profile tab */
      };
-   char *Class;
 
    if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
        Gbl.Form.Inside)		// Inside another form
@@ -689,11 +689,9 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    if (asprintf (&Class,"BT_LINK %s ICO_HIGHLIGHT",
-	                  The_ClassFormInBoxBold[Gbl.Prefs.Theme]) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],Class,NULL);
-	    free (Class);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],NULL,
+	                               "class=\"BT_LINK %s ICO_HIGHLIGHT\"",
+	                               The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,

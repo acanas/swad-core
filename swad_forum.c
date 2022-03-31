@@ -1694,19 +1694,15 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
-   const char *Class;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_DB_GetNumThrsInForum (Forum);
    NumThrsWithNewPosts = For_GetNumThrsWithNewPstsInForum (Forum,NumThrs);
-   Class = (NumThrsWithNewPosts ? The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme] :
-	                          The_ClassFormLinkInBox[Gbl.Prefs.Theme]);
 
    /***** Begin row *****/
    HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
@@ -1749,8 +1745,10 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 				      -1L,
 				      -1L);
 
-	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
-				    Class,NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),NULL,
+				    NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
+	                                                  "class=\"BT_LINK FORM_IN_%s\"",
+	                            The_Colors[Gbl.Prefs.Theme]);
 
 	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
 	    switch (Forum->Type)
@@ -2082,8 +2080,8 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 							Forums->Forum.Location,
 							-1L,
 							-1L);
-			   HTM_BUTTON_OnSubmit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
-			                              "BT_LINK",NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],NULL,
+			                              "BT_LINK");
 			      if (Order == Forums->ThreadsOrder)
 				 HTM_U_Begin ();
 			      HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);

@@ -639,7 +639,8 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 
 	    HTM_BUTTON_OnSubmit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									    Txt_Resume,
-				       "BT_LINK LT ASG_TITLE",NULL);
+				       NULL,
+				       "class=\"BT_LINK LT ASG_TITLE\"");
 	       HTM_Txt (Match->Title);
 	    HTM_BUTTON_End ();
 
@@ -2386,9 +2387,9 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 
 	 HTM_BUTTON_OnSubmit_Begin (PutForm ? Txt_Countdown :
 					      NULL,
-				    PutForm ? "BT_LINK MCH_BUTTON_ON" :
-					      "BT_LINK_OFF MCH_BUTTON_HIDDEN",
-				    NULL);
+				    NULL,
+				    PutForm ? "class=\"BT_LINK MCH_BUTTON_ON\"" :
+					      "class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN\"");
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
@@ -2699,8 +2700,8 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_OnSubmit_Begin (Txt_View_results,
-	                            "BT_LINK ICO_HIGHLIGHT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_View_results,NULL,
+	                            "class=\"BT_LINK ICO_HIGHLIGHT\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 						     "fas fa-toggle-off");
@@ -3308,7 +3309,8 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	 HTM_BUTTON_OnSubmit_Begin (Txt,"BT_LINK MCH_BUTTON_ON ICO_BLACK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt,NULL,
+	                            "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();

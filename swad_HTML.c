@@ -1484,15 +1484,35 @@ void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class)
    HTM_BUTTON_NestingLevel++;
   }
 
-void HTM_BUTTON_OnSubmit_Begin (const char *Title,const char *Class,const char *OnSubmit)
+void HTM_BUTTON_OnSubmit_Begin (const char *Title,const char *OnSubmit,
+		                const char *fmt,...)
   {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
    HTM_Txt ("<button type=\"submit\"");
    if (Title)
       if (Title[0])
          HTM_TxtF (" title=\"%s\"",Title);
-   if (Class)
-      if (Class[0])
-         HTM_TxtF (" class=\"%s\"",Class);
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
+
+	 free (Attr);
+	}
+     }
+
    if (OnSubmit)	// JavaScript function to be called before submitting the form
       if (OnSubmit[0])
          HTM_TxtF (" onsubmit=\"%s;\"",OnSubmit);

@@ -1019,7 +1019,7 @@ static void Lay_WritePageTopHeading (void)
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",
 	                      The_Colors[Gbl.Prefs.Theme]);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,"BT_LINK",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,NULL,"class=\"BT_LINK\"");
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();	// head_row_1_tagline
@@ -1230,9 +1230,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon and text with link *****/
-      HTM_BUTTON_OnSubmit_Begin (Text,
-                                 The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
-                                 OnSubmit);
+      HTM_BUTTON_OnSubmit_Begin (Text,OnSubmit,
+                                 "class=\"%s\"",The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme]);
 	 Ico_PutIconTextLink (Icon,Color,Text);
       HTM_BUTTON_End ();
 

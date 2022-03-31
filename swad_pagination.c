@@ -164,7 +164,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    extern const char *Txt_FORUM_Post_banned;
    Grp_WhichGroups_t WhichGroups;
    unsigned NumPage;
-   char *ClassLink;
    char *Title;
 
    /***** Link to page 1, including a text *****/
@@ -267,14 +266,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       default:
 		  break;
 	      }
-	    if (asprintf (&ClassLink,"BT_LINK LT %s_%s",
-	                  ClassTxt,The_Colors[Gbl.Prefs.Theme]) < 0)
-	       Err_NotEnoughMemoryExit ();
 	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                               "class=\"LT BT_LINK %s_%s\"",
+	                               ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 	    free (Title);
-	    free (ClassLink);
 	   }
 	 else
 	    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
@@ -295,9 +292,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
      {
-      if (asprintf (&ClassLink,"BT_LINK PAG %s",ClassTxt) < 0)
-	 Err_NotEnoughMemoryExit ();
-
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
         {
@@ -397,7 +391,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            }
 	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                               "class=\"BT_LINK PAG %s\"",ClassTxt);
 	       HTM_Unsigned (1);
 	    HTM_BUTTON_End ();
 	    free (Title);
@@ -511,7 +506,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->LeftPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                               "class=\"BT_LINK PAG %s\"",ClassTxt);
 	       HTM_Unsigned (Pagination->LeftPage);
 	    HTM_BUTTON_End ();
 	    free (Title);
@@ -633,7 +629,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       default:
 		  break;
               }
-	       HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                                  "class=\"BT_LINK PAG %s\"",ClassTxt);
 		  HTM_Unsigned (NumPage);
 	       HTM_BUTTON_End ();
             Frm_EndForm ();
@@ -748,7 +745,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->RightPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                               "class=\"BT_LINK PAG %s\"",ClassTxt);
 	       HTM_Unsigned (Pagination->RightPage);
 	    HTM_BUTTON_End ();
 	    free (Title);
@@ -861,14 +859,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,
 			  Pagination->NumPags,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,
+	                               "class=\"BT_LINK PAG %s\"",ClassTxt);
 	       HTM_Unsigned (Pagination->NumPags);
 	    HTM_BUTTON_End ();
 	    free (Title);
          Frm_EndForm ();
         }
-
-      free (ClassLink);
      }
   }
 

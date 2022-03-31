@@ -410,9 +410,9 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
       /***** Submit button *****/
       HTM_DIV_Begin ("class=\"UPD\"");
 	 HTM_BUTTON_OnSubmit_Begin (Txt_Update_users,
-				    The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
 				    Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-								     NULL);
+								     NULL,
+				    "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 	    Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_users);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();

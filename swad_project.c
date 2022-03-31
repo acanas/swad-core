@@ -1009,8 +1009,8 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 				    Order,
 				    Projects->CurrentPage,
 				    -1L);
-		     HTM_BUTTON_OnSubmit_Begin (Txt_PROJECT_ORDER_HELP[Order],
-		                                "BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_PROJECT_ORDER_HELP[Order],NULL,
+		                                "class=\"BT_LINK\"");
 			if (Order == Projects->SelectedOrder)
 			   HTM_U_Begin ();
 			HTM_Txt (Txt_PROJECT_ORDER[Order]);
@@ -1383,8 +1383,8 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		 {
 		  Frm_BeginForm (ActAdmDocPrj);
 		     Prj_PutCurrentParams (Projects);
-		     HTM_BUTTON_OnSubmit_Begin (Txt_Project_files,
-		                                "BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_Project_files,NULL,
+		                                "class=\"BT_LINK\"");
 			HTM_Txt (Prj->Title);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
