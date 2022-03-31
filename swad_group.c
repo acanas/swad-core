@@ -357,7 +357,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
@@ -409,10 +409,11 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 
       /***** Submit button *****/
       HTM_DIV_Begin ("class=\"UPD\"");
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Update_users,
-				    Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-								     NULL,
-				    "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+	 HTM_BUTTON_Submit_Begin (Txt_Update_users,
+				  "class=\"BT_LINK FORM_IN_%s BOLD\"%s",
+				  The_Colors[Gbl.Prefs.Theme],
+				  Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
+								   "");
 	    Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_users);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();

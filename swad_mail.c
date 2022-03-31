@@ -136,8 +136,8 @@ void Mai_SeeMailDomains (void)
 
 	    Frm_BeginForm (ActSeeMai);
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],NULL,
-	                                  "class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],
+	                                "class=\"BT_LINK\"");
 		  if (Order == Gbl.Mails.SelectedOrder)
 		     HTM_U_Begin ();
 		  HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
@@ -804,7 +804,6 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_COMMUNICATION_Email;
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Email_addresses;
    extern const char *Txt_X_users_who_have_email;
    extern const char *Txt_X_users_who_have_accepted_and_who_have_email;
@@ -893,13 +892,13 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 
 	 /* Open the client email program */
 	 HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
-		      " title=\"%s\" class=\"%s\"",
+		      " title=\"%s\" class=\"FORM_OUT_%s BOLD\"",
 		      Gbl.Usrs.Me.UsrDat.Email,
 		      Gbl.Hierarchy.Crs.FullName,
 		      Gbl.Usrs.Me.UsrDat.Email,
 		      StrAddresses,
 		      Txt_Create_email_message,
-		      The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+		      The_Colors[Gbl.Prefs.Theme]);
 	    Ico_PutIconTextLink ("marker.svg",Ico_BLACK,
 				 Txt_Create_email_message);
 	 HTM_A_End ();

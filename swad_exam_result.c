@@ -579,7 +579,6 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
@@ -656,8 +655,9 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
 	    /***** Put link to refresh *****/
 	    HTM_DIV_Begin ("class=\"UPD\"");
-	       HTM_BUTTON_OnSubmit_Begin (Txt_Update_results,NULL,
-					  "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+	       HTM_BUTTON_Submit_Begin (Txt_Update_results,
+					"class=\"BT_LINK FORM_IN_%s BOLD\"",
+					The_Colors[Gbl.Prefs.Theme]);
 		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_results);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();

@@ -181,7 +181,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -219,9 +219,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  /* Icon and text */
 		  HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		     Frm_BeginForm (Action);
-			HTM_BUTTON_OnSubmit_Begin (TabMenuStr,
-			                           NULL,
-			                           "class=\"%s\"",The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme]);
+			HTM_BUTTON_Submit_Begin (TabMenuStr,
+			                         "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
+			                         The_Colors[Gbl.Prefs.Theme]);
 			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				    "class=\"%s\"",
 				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
@@ -265,8 +265,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
                   The_Colors[Gbl.Prefs.Theme]);
 
       Frm_BeginForm (ActMFUAct);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_My_frequent_actions,NULL,
-	                            "class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Txt_My_frequent_actions,"class=\"BT_LINK\"");
 	    HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -291,8 +290,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       /* Icon and text */
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
-		     HTM_BUTTON_OnSubmit_Begin (TabMenuStr,NULL,
-		                                "class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (TabMenuStr,"class=\"BT_LINK\"");
 			HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				 "class=\"%s\"",
 				 Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);

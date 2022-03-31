@@ -161,7 +161,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
                      The_Colors[Gbl.Prefs.Theme]);
 
 	 Frm_BeginForm (ActSeeLnk);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Links,NULL,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_Links,"class=\"BT_LINK\"");
 	       HTM_TxtF ("%s",Txt_Links);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

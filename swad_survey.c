@@ -257,8 +257,8 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 			Grp_PutParamWhichGroups (&WhichGroups);
 			Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 			Dat_PutHiddenParamOrder (Order);
-			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
-			                           NULL,"class=\"BT_LINK\"");
+			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
+			                         "class=\"BT_LINK\"");
 			   if (Order == Surveys->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_START_END_TIME[Order]);
@@ -538,8 +538,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    WhichGroups = Grp_GetParamWhichGroups ();
 	    Grp_PutParamWhichGroups (&WhichGroups);
 	    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_View_survey,NULL,
-	                               "class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"BT_LINK\"");
 	       HTM_Txt (Svy.Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

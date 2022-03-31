@@ -194,8 +194,8 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
       Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Deg->FullName),NULL,
-                                 "class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
+                               "class=\"BT_LINK\"");
       Str_FreeGoToTitle ();
 
 	 /***** Degree logo and name *****/

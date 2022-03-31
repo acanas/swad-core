@@ -355,10 +355,9 @@ void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							      Txt_Another_user_s_profile,
-				 NULL,
-			         "class=\"%s\"",Class);
+      HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+							    Txt_Another_user_s_profile,
+			       "class=\"%s\"",Class);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 
@@ -543,7 +542,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
                                       const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char *Anchor = NULL;
@@ -689,9 +688,9 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],NULL,
-	                               "class=\"BT_LINK %s ICO_HIGHLIGHT\"",
-	                               The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+	    HTM_BUTTON_Submit_Begin (Txt_TIMELINE_NOTE[Not->Type],
+	                             "class=\"BT_LINK FORM_IN_WHITE %s ICO_HIGHLIGHT\"",
+	                             The_Colors[Gbl.Prefs.Theme]);
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,

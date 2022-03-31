@@ -1400,14 +1400,14 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   HTM_BUTTON_OnSubmit_Begin (Txt_Print,NULL,
-                              "class=\"%s\"",The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme]);
+   HTM_BUTTON_Submit_Begin (Txt_Print,
+                            "class=\"BT_LINK FORM_OUT_%s BOLD\"",
+                            The_Colors[Gbl.Prefs.Theme]);
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
    HTM_BUTTON_End ();
 
@@ -1415,7 +1415,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
       HTM_Txt ("(");
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"RecsPerPag\"");
-	 for (i = Rec_MIN_RECORDS_PER_PAGE;
+	 for (i  = Rec_MIN_RECORDS_PER_PAGE;
 	      i <= Rec_MAX_RECORDS_PER_PAGE;
 	      i++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&i,
@@ -2577,8 +2577,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins->InsCod);
-	       HTM_BUTTON_OnSubmit_Begin (Ins->FullName,NULL,
-	                                  "class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
 		       Rec_INSTITUTION_LOGO_SIZE,NULL,true);
@@ -2599,8 +2598,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins->InsCod);
-	       HTM_BUTTON_OnSubmit_Begin (Ins->FullName,NULL,
-	                                  "class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
 	 if (PutFormLinks)
@@ -2678,10 +2676,9 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	       Frm_BeginForm (ActSeeOthPubPrf);
 		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-		  HTM_BUTTON_OnSubmit_Begin (ItsMe ? Txt_My_public_profile :
-						     Txt_Another_user_s_profile,
-					     NULL,
-					     "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (ItsMe ? Txt_My_public_profile :
+						   Txt_Another_user_s_profile,
+					   "class=\"BT_LINK\"");
 	      }
 	    HTM_TxtF ("@%s",UsrDat->Nickname);
 	    if (PutFormLinks)

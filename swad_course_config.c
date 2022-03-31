@@ -250,8 +250,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),NULL,
-					     "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),
+					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
@@ -445,7 +445,7 @@ static void CrsCfg_Indicators (void)
 			  IndicatorsCrs.NumIndicators,
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	       HTM_TxtF ("%s&nbsp;",Title);
 	       if (IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS)
 		  Ico_PutIcon ("check-circle.svg",Ico_GREEN,

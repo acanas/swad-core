@@ -1019,7 +1019,7 @@ static void Lay_WritePageTopHeading (void)
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",
 	                      The_Colors[Gbl.Prefs.Theme]);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,NULL,"class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Txt_TAGLINE,"class=\"BT_LINK\"");
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();	// head_row_1_tagline
@@ -1218,7 +1218,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,Ico_Color_t Color,
 				    const char *Text,const char *OnSubmit)
   {
-   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Separator *****/
    HTM_Txt (" ");	// This space is necessary to enable
@@ -1230,8 +1230,14 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon and text with link *****/
-      HTM_BUTTON_OnSubmit_Begin (Text,OnSubmit,
-                                 "class=\"%s\"",The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme]);
+	 if (OnSubmit)
+	    HTM_BUTTON_Submit_Begin (Text,
+				     "class=\"BT_LINK FORM_OUT_%s BOLD\" onsubmit=\"%s;\"",
+				     The_Colors[Gbl.Prefs.Theme],OnSubmit);
+	 else
+	    HTM_BUTTON_Submit_Begin (Text,
+				     "class=\"BT_LINK FORM_OUT_%s BOLD\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIconTextLink (Icon,Color,Text);
       HTM_BUTTON_End ();
 
@@ -1253,7 +1259,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Separator *****/
    if (Text)
@@ -1266,10 +1272,10 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	 FuncParams ();
 
       /***** Begin container *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
+      HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",
 		     Checked ? "CHECKBOX_CHECKED" :
 			       "CHECKBOX_UNCHECKED",
-		     The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
+		     The_Colors[Gbl.Prefs.Theme],
 		     Title);
 
 	 /***** Begin label *****/

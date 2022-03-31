@@ -3278,8 +3278,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	    /***** Show user's name *****/
 	    HTM_BR ();
 
-	    HTM_BUTTON_OnSubmit_Begin (Txt_View_record_for_this_course,NULL,
-	                               "class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
+	                             "class=\"BT_LINK\"");
 	       HTM_Txt (UsrDat->Surname1);
 	       if (UsrDat->Surname2[0])
 		  HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
@@ -5315,10 +5315,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	       /* Link to the form and to the file */
-	       HTM_BUTTON_OnSubmit_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-					   Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
-										       Txt_Download,
-					  NULL,"class=\"BT_LINK FILENAME\"");
+	       HTM_BUTTON_Submit_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+					 Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
+										     Txt_Download,
+					"class=\"BT_LINK FILENAME\"");
 		  HTM_Txt (FileNameToShow);
 	       HTM_BUTTON_End ();
 
@@ -8545,8 +8545,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Check_marks_in_the_file,NULL,
-	                            "class=\"%s\"",ClassFilename[Gbl.Prefs.Theme]);
+	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
+	                          "class=\"%s\"",ClassFilename[Gbl.Prefs.Theme]);
 
 	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
@@ -8610,8 +8610,8 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Check_marks_in_the_file,NULL,
-	                            "class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
+	                          "class=\"BT_LINK\"");
 
 	    /* Name of the file of marks */
 	    HTM_Txt (FileNameToShow);
@@ -10004,8 +10004,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Deg_PutParamDegCod (InsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (InsShortName),NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (InsShortName),
+		                           "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 		     HTM_TxtF ("&nbsp;%s",InsShortName);
@@ -10021,8 +10021,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Deg_PutParamDegCod (CtrCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (CtrShortName),NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (CtrShortName),
+		                           "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",CtrShortName);
@@ -10038,8 +10038,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (DegCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (DegShortName),NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (DegShortName),
+		                           "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",DegShortName);
@@ -10055,8 +10055,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (CrsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (CrsShortName),NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (CrsShortName),
+		                           "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (CrsShortName);
 		  HTM_BUTTON_End ();
@@ -10161,7 +10161,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 					 FileMetadata.FilCod);
 
 	    /* File or folder icon */
-	    HTM_BUTTON_OnSubmit_Begin (FileNameToShow,NULL,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (FileNameToShow,"class=\"BT_LINK\"");
 	       switch (FileMetadata.FilFolLnk.Type)
 	         {
 		  case Brw_IS_FILE:

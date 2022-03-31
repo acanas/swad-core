@@ -637,10 +637,9 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 							     ActResMch);
 	    Mch_PutParamMchCod (Match->MchCod);
 
-	    HTM_BUTTON_OnSubmit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-									    Txt_Resume,
-				       NULL,
-				       "class=\"BT_LINK LT ASG_TITLE\"");
+	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+									  Txt_Resume,
+				     "class=\"BT_LINK LT ASG_TITLE\"");
 	       HTM_Txt (Match->Title);
 	    HTM_BUTTON_End ();
 
@@ -2324,7 +2323,7 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
    /***** Write countdown and put hourglass icon *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	 HTM_BUTTON_OnClick_Begin (Txt_Countdown,Class,NULL);
+	 HTM_BUTTON_Begin (Txt_Countdown,"class=\"%s\"",Class);
 
 	    /* Countdown */
 	    if (Match->Status.Countdown > 0)
@@ -2385,11 +2384,10 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       /***** Put icon *****/
       HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT %s\"",Color);
 
-	 HTM_BUTTON_OnSubmit_Begin (PutForm ? Txt_Countdown :
-					      NULL,
-				    NULL,
-				    PutForm ? "class=\"BT_LINK MCH_BUTTON_ON\"" :
-					      "class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN\"");
+	 HTM_BUTTON_Submit_Begin (PutForm ? Txt_Countdown :
+					    NULL,
+				  PutForm ? "class=\"BT_LINK MCH_BUTTON_ON\"" :
+					    "class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN\"");
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
@@ -2700,8 +2698,8 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_OnSubmit_Begin (Txt_View_results,NULL,
-	                            "class=\"BT_LINK ICO_HIGHLIGHT\"");
+	 HTM_BUTTON_Submit_Begin (Txt_View_results,
+	                          "class=\"BT_LINK ICO_HIGHLIGHT\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 						     "fas fa-toggle-off");
@@ -2725,7 +2723,6 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
    extern const char *Txt_View_my_answer;
    extern const char *Txt_MATCH_QUESTION_Answered;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
-   char *Class;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
@@ -2739,11 +2736,11 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-	    if (asprintf (&Class,"BT_LINK DAT_SMALL_GREEN_%s",
-	                  The_Colors[Gbl.Prefs.Theme]) < 0)	// Background
-	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,Class);
-	    free (Class);
+	    HTM_BUTTON_Submit_Begin (Txt_View_my_answer,
+	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
+	                             " onmousedown=\"document.getElementById('%s').submit();return false;\"",
+	                             The_Colors[Gbl.Prefs.Theme],
+	                             Gbl.Form.Id);
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
 	       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
 	    HTM_BUTTON_End ();
@@ -2788,8 +2785,10 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
 	 /***** Put icon with link *****/
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	    HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,
-	                                  "BT_LINK MCH_BUTTON_ON ICO_DARKRED");
+	    HTM_BUTTON_Submit_Begin (Txt_Delete_my_answer,
+	                             "BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
+	                             " onmousedown=\"document.getElementById('%s').submit();return false;\"",
+	                             Gbl.Form.Id);
 	       HTM_Txt ("<i class=\"fas fa-trash\"></i>");
 	    HTM_BUTTON_End ();
 	 HTM_DIV_End ();
@@ -3015,7 +3014,6 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
   {
    unsigned NumOptions;
    unsigned NumOpt;
-   char *Class;
 
    /***** Get number of options in this question *****/
    NumOptions = Qst_DB_GetNumAnswersQst (Match->Status.QstCod);
@@ -3043,16 +3041,16 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 		  Mch_PutParamNumOpt (NumOpt);		// Number of button
 
-		  if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
-				UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
-				Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
-									 "",
-				'A' + (char) NumOpt) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
+		  HTM_BUTTON_Submit_Begin (NULL,
+					   "class=\"MCH_STD_BUTTON%s BT_%c\""
+					   " onmousedown=\"document.getElementById('%s').submit();return false;\"",
+				           UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
+					   Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
+										    "",
+					   'A' + (char) NumOpt,
+					   Gbl.Form.Id);
 		     HTM_TxtF ("%c",'a' + (char) NumOpt);
 		  HTM_BUTTON_End ();
-		  free (Class);
 
 	       Frm_EndForm ();
 
@@ -3309,8 +3307,8 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-	 HTM_BUTTON_OnSubmit_Begin (Txt,NULL,
-	                            "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK\"");
+	 HTM_BUTTON_Submit_Begin (Txt,
+	                          "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();
@@ -3327,8 +3325,7 @@ static void Mch_PutBigButtonHidden (const char *Icon)
   {
    /***** Put inactive icon *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-      HTM_BUTTON_OnClick_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK",
-                               NULL);
+      HTM_BUTTON_Begin (NULL,"class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK\"");
 	 HTM_TxtF ("<i class=\"%s\"></i>",Icon);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -3343,9 +3340,9 @@ static void Mch_PutBigButtonClose (void)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-      HTM_BUTTON_OnClick_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_DARKRED",
-                               "window.close();"
-                               "return false;");
+      HTM_BUTTON_Begin (Txt_Close,
+                        "class=\"BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
+                        " onclick=\"window.close();return false;\"");
 	 HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
       HTM_BUTTON_End ();
    HTM_DIV_End ();

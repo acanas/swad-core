@@ -169,7 +169,7 @@ void QstImp_ShowFormImpQstsFromXML (void)
 
 void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
    char PathPubFile[PATH_MAX + 1];
@@ -223,11 +223,12 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    mysql_data_seek (mysql_res,0);
 
    /***** Write the link to XML file *****/
-   HTM_A_Begin ("href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\"",
+   HTM_A_Begin ("href=\"%s/%s/%s/test.xml\" target=\"_blank\""
+	        " class=\"FORM_OUT_%s BOLD\"",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir.L,
 	        Gbl.FileBrowser.TmpPubDir.R,
-	        The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+	        The_Colors[Gbl.Prefs.Theme]);
       Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
    HTM_A_End ();
   }

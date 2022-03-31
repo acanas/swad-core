@@ -509,20 +509,15 @@ static void TmlCom_LinkToShowComms (TmlCom_ContractExpand_t ConExp,
 static void TmlCom_PutIconToToggleComms (const char *UniqueId,
                                          const char *Icon,const char *Text)
   {
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   char *OnClick;
-
-   /***** Build onclick text *****/
-   if (asprintf (&OnClick,"toggleComments('%s');return false;",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Link to toggle on/off some divs *****/
-   HTM_BUTTON_OnClick_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
+   HTM_BUTTON_Begin (Text,
+                     "class=\"BT_LINK FORM_IN_%s\""
+                     " onclick=\"toggleComments('%s');return false;\"",
+                     The_Colors[Gbl.Prefs.Theme],UniqueId);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_BUTTON_End ();
-
-   /***** Free onclick text *****/
-   free (OnClick);
   }
 
 /*****************************************************************************/
@@ -630,11 +625,10 @@ static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							      Txt_Another_user_s_profile,
-				 NULL,
-			         "class=\"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD\"",
-                                 The_Colors[Gbl.Prefs.Theme]);
+      HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+							    Txt_Another_user_s_profile,
+			       "class=\"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD\"",
+                               The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

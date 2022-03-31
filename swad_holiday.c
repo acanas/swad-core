@@ -137,8 +137,8 @@ void Hld_SeeHolidays (void)
                      HTM_TH_Begin (HTM_HEAD_LEFT);
 			Frm_BeginForm (ActSeeHld);
 			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-			   HTM_BUTTON_OnSubmit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],NULL,
-			                              "class=\"BT_LINK\"");
+			   HTM_BUTTON_Submit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
+			                            "class=\"BT_LINK\"");
 			      if (Order == Holidays.SelectedOrder)
 				 HTM_U_Begin ();
 			      HTM_Txt (Txt_HOLIDAYS_ORDER[Order]);

@@ -345,9 +345,9 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 	 free (OnSubmit);
 
 	    /* Put icon and text with link to show the first hidden comments */
-	    HTM_BUTTON_OnSubmit_Begin (NULL,NULL,
-	                               "class=\"BT_LINK FORM_IN_%s\"",
-	                               The_Colors[Gbl.Prefs.Theme]);
+	    HTM_BUTTON_Submit_Begin (NULL,
+	                             "class=\"BT_LINK FORM_IN_%s\"",
+	                             The_Colors[Gbl.Prefs.Theme]);
 	       if (asprintf (&Text,Txt_See_the_previous_X_COMMENTS,NumInitialComms) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,Text);

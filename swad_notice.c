@@ -612,8 +612,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
 	       Not_PutHiddenParamNotCod (NotCod);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,NULL,
-	                                  "class=\"RT BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
+	                                "class=\"RT BT_LINK\"");
 	   }
 	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();

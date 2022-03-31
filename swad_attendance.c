@@ -269,8 +269,8 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Dat_PutHiddenParamOrder (Order);
 
-			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
-			                           "class=\"BT_LINK\"");
+			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
+			                         "class=\"BT_LINK\"");
 
 			   if (Order == Events->SelectedOrder)
 			      HTM_U_Begin ();
@@ -1864,7 +1864,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
       Att_PutParamsCodGrps (AttEvent->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_OnSubmit_Begin (Title,NULL,"class=\"BT_LINK\"");
+      HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
 
@@ -2664,7 +2664,6 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 static void Att_ListEventsToSelect (const struct Att_Events *Events,
                                     Att_TypeOfView_t TypeOfView)
   {
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
@@ -2782,8 +2781,9 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
       if (NormalView)
 	{
 	 HTM_DIV_Begin ("class=\"UPD\"");
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Update_attendance,NULL,
-				       "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+	    HTM_BUTTON_Submit_Begin (Txt_Update_attendance,
+				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_attendance);
 	    HTM_BUTTON_End ();
 	 HTM_DIV_End ();

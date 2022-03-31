@@ -244,8 +244,8 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),NULL,
-					     "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),
+					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
@@ -335,7 +335,7 @@ static void DegCfg_NumCrss (void)
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_OnSubmit_Begin (Title,NULL,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
 	    HTM_BUTTON_End ();

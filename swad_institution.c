@@ -213,7 +213,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
      {
       Frm_BeginForm (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_OnSubmit_Begin (Ins->FullName,NULL,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
@@ -236,8 +236,8 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
       Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ins->FullName),NULL,
-                                 "class=\"BT_LINK LT\"");
+      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ins->FullName),
+                               "class=\"BT_LINK LT\"");
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
@@ -484,8 +484,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
+		                           "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
 			HTM_U_Begin ();
 	      }
@@ -2352,7 +2352,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
 			Ins_PutParamInsCod (Ins.InsCod);
-			HTM_BUTTON_OnSubmit_Begin (Ins.ShrtName,NULL,"class=\"BT_LINK\"");
+			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
+			                         "class=\"BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
 			      Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,

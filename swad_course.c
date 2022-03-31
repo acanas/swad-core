@@ -147,8 +147,7 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    struct Hie_Hierarchy Hie;
@@ -170,12 +169,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumDegs;
    unsigned NumCrs;
    unsigned NumCrss;
-   const char *ClassNormal;
+   char ClassNormal[64];
    char ClassHighlight[64];
 
-   ClassNormal = The_ClassFormLinkInBox[Gbl.Prefs.Theme];
-   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s BG_HIGHLIGHT",
-	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+   snprintf (ClassNormal,sizeof (ClassNormal),"BT_LINK FORM_IN_%s",
+	     The_Colors[Gbl.Prefs.Theme]);
+   snprintf (ClassHighlight,sizeof (ClassHighlight),"BT_LINK FORM_IN_%s BOLD BG_HIGHLIGHT",
+	     The_Colors[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
@@ -191,7 +191,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						  ClassNormal);
 	    Frm_BeginForm (ActMyCrs);
 	       Cty_PutParamCtyCod (-1L);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_System,NULL,"class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Txt_System,"class=\"BT_LINK\"");
 		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_System,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Txt_System);
 	       HTM_BUTTON_End ();
@@ -221,8 +221,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
 		  Cty_PutParamCtyCod (Hie.Cty.CtyCod);
-		  HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),NULL,
-					     "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
+					   "class=\"BT_LINK\"");
 		     Cty_DrawCountryMap (&Hie.Cty,"ICO16x16");
 		     HTM_TxtF ("&nbsp;%s",Hie.Cty.Name[Gbl.Prefs.Language]);
 		  HTM_BUTTON_End ();
@@ -254,8 +254,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
 		     Ins_PutParamInsCod (Hie.Ins.InsCod);
-		     HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeInsInf),NULL,
-					        "class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
+					      "class=\"BT_LINK\"");
 			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL,true);
 			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
 		     HTM_BUTTON_End ();
@@ -287,8 +287,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
 			Ctr_PutParamCtrCod (Hie.Ctr.CtrCod);
-			HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtrInf),NULL,
-						   "class=\"BT_LINK\"");
+			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
+						 "class=\"BT_LINK\"");
 			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL,true);
 			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
 			HTM_BUTTON_End ();
@@ -320,8 +320,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
 			   Deg_PutParamDegCod (Hie.Deg.DegCod);
-			   HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeDegInf),NULL,
-						      "class=\"BT_LINK\"");
+			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
+						    "class=\"BT_LINK\"");
 			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL,true);
 			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
 			   HTM_BUTTON_End ();
@@ -353,8 +353,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
 			      Crs_PutParamCrsCod (Hie.Crs.CrsCod);
-			      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),NULL,
-						         "class=\"BT_LINK\"");
+			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),
+						       "class=\"BT_LINK\"");
 			      Str_FreeGoToTitle ();
 				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie.Crs.FullName,"ICO16x16");
 				 HTM_TxtF ("&nbsp;%s",Hie.Crs.ShrtName);
@@ -994,8 +994,8 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	                  TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs->CrsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs->FullName),NULL,
-					     "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
+					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs->FullName);
 		  HTM_BUTTON_End ();
@@ -2470,8 +2470,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                     ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (row[2]),NULL,
-	                               "class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
+	                             "class=\"BT_LINK\"");
             Str_FreeGoToTitle ();
 	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
@@ -2490,8 +2490,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                     ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (row[5]),NULL,
-	                               "class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
+	                             "class=\"BT_LINK\"");
             Str_FreeGoToTitle ();
 	       HTM_Txt (row[5]);
 	    HTM_BUTTON_End ();

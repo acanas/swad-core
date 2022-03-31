@@ -536,7 +536,6 @@ static void MchRes_ShowResultsEnd (void)
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
@@ -612,8 +611,9 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 
 	 /***** Put button to refresh *****/
 	 HTM_DIV_Begin ("class=\"UPD\"");
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Update_results,NULL,
-				       "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+	    HTM_BUTTON_Submit_Begin (Txt_Update_results,
+				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_results);
 	    HTM_BUTTON_End ();
 	 HTM_DIV_End ();

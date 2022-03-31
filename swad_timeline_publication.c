@@ -458,7 +458,7 @@ Tml_TopMessage_t TmlPub_GetTopMessage (TmlPub_Type_t PubType)
 
 void TmlPub_PutLinkToViewNewPubs (void)
   {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
 
    /***** Link to view (show hidden) new publications *****/
@@ -469,9 +469,9 @@ void TmlPub_PutLinkToViewNewPubs (void)
 		  " style=\"display:none;\"");
 
       /* Begin anchor */
-      HTM_A_Begin ("href=\"\" class=\"%s\""
+      HTM_A_Begin ("href=\"\" class=\"FORM_IN_%s BOLD\""
 		   " onclick=\"moveNewTimelineToTimeline();return false;\"",
-		   The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+		   The_Colors[Gbl.Prefs.Theme]);
 
          /* Text */
 	 HTM_TxtF ("%s (",Txt_See_new_activity);
@@ -493,7 +493,7 @@ void TmlPub_PutLinkToViewNewPubs (void)
 
 void TmlPub_PutLinkToViewOldPubs (void)
   {
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_See_more;
 
    /***** Begin container *****/
@@ -502,10 +502,10 @@ void TmlPub_PutLinkToViewOldPubs (void)
 
 
       /***** Put button to refresh *****/
-      HTM_BUTTON_OnClick_Begin (Txt_See_more,
-				The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-				"refreshOldTimeline();"
-				"return false;");
+      HTM_BUTTON_Begin (Txt_See_more,
+			"class=\"BT_LINK FORM_IN_%s BOLD\""
+			" onclick=\"refreshOldTimeline();return false;\"",
+			The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_See_more);
       HTM_BUTTON_End ();
 

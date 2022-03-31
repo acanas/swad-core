@@ -539,9 +539,9 @@ void Inf_WriteMsgYouMustReadInfo (void)
 		 {
 		  HTM_LI_Begin (NULL);
 		     Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
-			HTM_BUTTON_OnSubmit_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),NULL,
-						   "class=\"BT_LINK FORM_IN_%s\"",
-						   The_Colors[Gbl.Prefs.Theme]);
+			HTM_BUTTON_Submit_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
+						 "class=\"BT_LINK FORM_IN_%s\"",
+						 The_Colors[Gbl.Prefs.Theme]);
 			   HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -821,7 +821,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
 
 static void Inf_ShowPage (const char *URL)
   {
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -849,8 +849,8 @@ static void Inf_ShowPage (const char *URL)
 		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
    /***** Link to view in a new window *****/
-   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-	        URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
+	        URL,The_Colors[Gbl.Prefs.Theme]);
       Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
 			   Txt_View_in_a_new_window);
    HTM_A_End ();

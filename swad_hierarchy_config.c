@@ -273,7 +273,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 	                     Gbl.Hierarchy.Ins.ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_BUTTON_OnSubmit_Begin (Title,NULL,"class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	       free (Title);
 	   }
 	 HTM_Unsigned (NumCtrs);

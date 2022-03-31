@@ -944,8 +944,8 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	       Frm_BeginForm (ActLstTstQst);
 		  Qst_PutParamsEditQst (Questions);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_OnSubmit_Begin (Txt_TST_STR_ORDER_FULL[Order],NULL,
-		                             "class=\"BT_LINK\"");
+		  HTM_BUTTON_Submit_Begin (Txt_TST_STR_ORDER_FULL[Order],
+		                           "class=\"BT_LINK\"");
 		     if (Order == Questions->SelectedOrder)
 			HTM_U_Begin ();
 	      }

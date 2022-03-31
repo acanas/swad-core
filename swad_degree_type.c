@@ -550,8 +550,8 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
 	       /* Link with the head of this column */
-	       HTM_BUTTON_OnSubmit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],NULL,
-	                                  "class=\"BT_LINK\"");
+	       HTM_BUTTON_Submit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],
+	                                "class=\"BT_LINK\"");
 		  if (Order == SelectedOrder)
 		     HTM_U_Begin ();
 		  HTM_Txt (Txt_DEGREE_TYPES_ORDER[Order]);

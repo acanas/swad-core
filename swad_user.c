@@ -1366,7 +1366,7 @@ void Usr_WriteLoggedUsrHead (void)
       if (NumAvailableRoles == 1)
 	{
 	 Frm_BeginForm (ActFrmRolSes);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Role,NULL,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_Role,"class=\"BT_LINK\"");
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -3661,7 +3661,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType)
   {
-   extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
@@ -3674,10 +3674,11 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 	 FuncParams (Args);
 
       /***** Link and image *****/
-      HTM_BUTTON_OnSubmit_Begin (Txt_USR_LIST_TYPES[ListType],
-			         Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-								  NULL,
-			         "class=\"%s\"",The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme]);
+      HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
+			       "class=\"BT_LINK FORM_IN_%s NOWRAP\"%s",
+			       The_Colors[Gbl.Prefs.Theme],
+			       Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
+							        "");
 	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
 	              Txt_USR_LIST_TYPES[ListType],"ICO20x20");
 	 HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
@@ -6462,8 +6463,8 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_OnSubmit_Begin (UsrDat->FullName,NULL,
-	                            "class=\"BT_LINK AUTHOR_TXT\"");
+	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,
+	                          "class=\"BT_LINK AUTHOR_TXT\"");
      }
 
    /* User's ID */

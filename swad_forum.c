@@ -1745,10 +1745,10 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 				      -1L,
 				      -1L);
 
-	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),NULL,
-				    NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
-	                                                  "class=\"BT_LINK FORM_IN_%s\"",
-	                            The_Colors[Gbl.Prefs.Theme]);
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
+				  NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
+	                                                "class=\"BT_LINK FORM_IN_%s\"",
+	                          The_Colors[Gbl.Prefs.Theme]);
 
 	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
 	    switch (Forum->Type)
@@ -2080,8 +2080,8 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 							Forums->Forum.Location,
 							-1L,
 							-1L);
-			   HTM_BUTTON_OnSubmit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],NULL,
-			                              "BT_LINK");
+			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
+			                            "BT_LINK");
 			      if (Order == Forums->ThreadsOrder)
 				 HTM_U_Begin ();
 			      HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
@@ -2159,7 +2159,6 @@ static void For_ListForumThrs (struct For_Forums *Forums,
                                struct Pagination *PaginationThrs)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
@@ -2268,7 +2267,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 				   Forums,Thr.ThrCod,
 				   Thr.Enabled[Dat_STR_TIME],
 				   Thr.Subject,
-				   Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :	// !!!!!!!!!!!!!!!!!!!!!!
+				   Thr.NumUnreadPosts ? "BOLD FORM_IN" :
 							"FORM_IN",
 				   true);
 	 HTM_TD_End ();

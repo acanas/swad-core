@@ -1291,7 +1291,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       else
 	 Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_OnSubmit_Begin (NULL,NULL,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_LINK\"");
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -1998,7 +1998,6 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
@@ -2030,9 +2029,9 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    Set_PutParamsPrefsAboutUsrList ();
 
 	    /***** Put button to refresh *****/
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
-				       NULL,
-				       "class=\"%s\"",The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
+				     The_Colors[Gbl.Prefs.Theme]);
 	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 	    HTM_BUTTON_End ();
 
@@ -2391,8 +2390,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
 	 Deg_PutParamDegCod (Deg->DegCod);
-	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Deg->FullName),NULL,
-	                            "class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
+	                          "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();
      }
 
