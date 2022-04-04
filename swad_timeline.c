@@ -519,7 +519,6 @@ static void Tml_PutHiddenList (const char *Id)
 
 void Tml_WriteDateTime (time_t TimeUTC)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    char IdDateTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Create unique Id *****/
@@ -527,7 +526,7 @@ void Tml_WriteDateTime (time_t TimeUTC)
 
    /***** Container where the date-time is written *****/
    HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_TIME DAT_LIGHT_%s\"",
-                  IdDateTime,The_Colors[Gbl.Prefs.Theme]);
+                  IdDateTime,The_GetSuffix ());
    HTM_DIV_End ();
 
    /***** Script to write date and time in browser local time *****/
@@ -545,7 +544,6 @@ void Tml_WriteDateTime (time_t TimeUTC)
 void Tml_GetAndShowTimelineActivityStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_Number_of_posts;
@@ -610,25 +608,25 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	 /***** Write number of timeline notes and number of users *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumNotes);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
 			                      (double) NumUsrs :
 				              0.0);
@@ -666,29 +664,29 @@ void Tml_GetAndShowTimelineActivityStats (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumNotes);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 				 0.0);
 	 HTM_TD_End ();

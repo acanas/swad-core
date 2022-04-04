@@ -155,7 +155,6 @@ Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
 
 void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
 
@@ -168,7 +167,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
 	      WhichSyl++)
 	   {
-	    HTM_LI_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LI_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("WhichSyllabus",true,
 				   "value=\"%u\"%s",
@@ -834,7 +833,6 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
                                      bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enter_a_new_item_here;
 
    if (Level < 1)
@@ -881,7 +879,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
 			 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"%s",
-			 The_Colors[Gbl.Prefs.Theme],
+			 The_GetSuffix (),
 			 Txt_Enter_a_new_item_here,
 			 NewItem ? " autofocus=\"autofocus\"" :
 				   "");

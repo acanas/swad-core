@@ -196,7 +196,6 @@ void Hie_WriteMenuHierarchy (void)
 
 void Hie_WriteHierarchyInBreadcrumb (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
@@ -204,7 +203,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    extern const char *Txt_Degree;
 
    /***** Form to go to the system *****/
-   HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
       HTM_NBSP ();
 
@@ -219,7 +218,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)		// Country selected...
      {
-      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -237,7 +236,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -254,7 +253,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected...
      {
-      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -272,7 +271,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -288,7 +287,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -301,7 +300,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected...
      {
-      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -319,7 +318,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -335,7 +334,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -348,7 +347,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected...
      {
-      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -366,7 +365,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -382,7 +381,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_GetSuffix ());
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -397,7 +396,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 		   (Gbl.Hierarchy.Level == HieLvl_CRS) ? "" :
 		  ((Gbl.Hierarchy.Deg.DegCod > 0) ? " BC_SEMIOFF" :
 						    " BC_OFF"),
-		  The_Colors[Gbl.Prefs.Theme]);
+		  The_GetSuffix ());
 
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -411,11 +410,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 void Hie_WriteBigNameCtyInsCtrDegCrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
 
    HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
-	     The_Colors[Gbl.Prefs.Theme]);
+	     The_GetSuffix ());
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
@@ -661,7 +659,6 @@ void Hie_ResetHierarchy (void)
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_all_degrees;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -689,7 +686,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 /***** Write institution, center, degree *****/
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT DAT_SMALL_NOBR_%s %s\"",
 		       ColSpan - 1,
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       The_GetColorRows ());
 
 	    /* Get next institution, center, degree */
@@ -754,11 +751,10 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,
 			  const char *Txt[Hie_NUM_STATUS_TXT])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
 
    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                 Class,The_Colors[Gbl.Prefs.Theme],BgColor);
+                 Class,The_GetSuffix (),BgColor);
       if (StatusTxt != Hie_STATUS_ACTIVE) // If active ==> do not show anything
 	 HTM_Txt (Txt[StatusTxt]);
    HTM_TD_End ();
@@ -768,12 +764,11 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
    unsigned StatusUnsigned;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
       if (ICanEdit && StatusTxt == Hie_STATUS_PENDING)
 	{
 	 /* Begin form */
@@ -1252,13 +1247,11 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumDegs,	// < 0 ==> do not show number
 				  int NumCrss)	// < 0 ==> do not show number
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Write text *****/
-      HTM_TD_Begin ("class=\"RM %s_%s\"",ClassTxt,The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Txt (Text1);
 	 HTM_Txt (Text2);
       HTM_TD_End ();

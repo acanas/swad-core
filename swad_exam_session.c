@@ -609,7 +609,6 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
                                                 const struct ExaSes_Session *Session)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static void (*Function[Rol_NUM_ROLES]) (struct Exa_Exams *Exams,
 	                                   const struct ExaSes_Session *Session) =
      {
@@ -620,7 +619,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
      };
 
    HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);
@@ -991,7 +990,6 @@ long ExaSes_GetParamSesCod (void)
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_session;
    extern const char *Txt_Title;
    extern const char *Txt_Create_session;
@@ -1031,7 +1029,7 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -1063,7 +1061,6 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1076,7 +1073,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Groups);
 	 HTM_TD_End ();
 
@@ -1089,7 +1086,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"

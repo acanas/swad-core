@@ -84,7 +84,6 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
 void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct Mrk_Properties Marks;
@@ -99,7 +98,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
 						  ActChgNumRowHeaCrs);	// Course zone
@@ -117,7 +116,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 						  ActChgNumRowFooCrs);	// Course zone

@@ -153,7 +153,6 @@ static void Con_PutParamScope (__attribute__((unused)) void *Args)
 
 void Con_ShowGlobalConnectedUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
@@ -174,7 +173,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    /***** Container start *****/
    HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       /***** Number of sessions *****/
       /* Link to view more details about connected users */
@@ -272,13 +271,12 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 
 static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_from;
    struct ConnectedUsrs Usrs;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       /***** Number of connected users who belong to scope *****/
       Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
@@ -316,7 +314,6 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
    char CourseName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
@@ -328,7 +325,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       /***** Number of connected users who belong to course *****/
       /* Link to view more details about connected users */

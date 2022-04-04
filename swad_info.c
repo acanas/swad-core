@@ -516,7 +516,6 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 
 void Inf_WriteMsgYouMustReadInfo (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
    Inf_Type_t InfoType;
@@ -541,7 +540,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 		     Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
 			HTM_BUTTON_Submit_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
 						 "class=\"BT_LINK FORM_IN_%s\"",
-						 The_Colors[Gbl.Prefs.Theme]);
+						 The_GetSuffix ());
 			   HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -821,7 +820,6 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
 
 static void Inf_ShowPage (const char *URL)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -850,7 +848,7 @@ static void Inf_ShowPage (const char *URL)
 
    /***** Link to view in a new window *****/
    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
-	        URL,The_Colors[Gbl.Prefs.Theme]);
+	        URL,The_GetSuffix ());
       Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
 			   Txt_View_in_a_new_window);
    HTM_A_End ();
@@ -887,7 +885,6 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -949,7 +946,7 @@ void Inf_FormsToSelSendInfo (void)
 
 	    /* Select info source */
 	    HTM_TD_Begin ("class=\"LT DAT_%s%s\"",
-			  The_Colors[Gbl.Prefs.Theme],
+			  The_GetSuffix (),
 			  InfoSrc == FromDB.Src ? " BG_HIGHLIGHT" :
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
@@ -970,13 +967,13 @@ void Inf_FormsToSelSendInfo (void)
 			  InfoSrc == FromDB.Src ? " BG_HIGHLIGHT" :
 						  "");
 	       HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
-				(unsigned) InfoSrc,The_Colors[Gbl.Prefs.Theme]);
+				(unsigned) InfoSrc,The_GetSuffix ());
 		  HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
 	       HTM_LABEL_End ();
 	       if (Txt_INFO_SRC_HELP[InfoSrc])
 		 {
 		  HTM_SPAN_Begin ("class=\"DAT_%s\"",
-		                  The_Colors[Gbl.Prefs.Theme]);
+		                  The_GetSuffix ());
 		     HTM_BR ();
 		     HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
 		  HTM_SPAN_End ();
@@ -1078,7 +1075,6 @@ void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
 
 void Inf_FormToSendPage (Inf_Src_t InfoSrc)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
@@ -1087,7 +1083,7 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
 
       /***** File *****/
       HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_File);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
 			    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1108,7 +1104,6 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
 
 void Inf_FormToSendURL (Inf_Src_t InfoSrc)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
    char PathFile[PATH_MAX + 1];
@@ -1132,11 +1127,11 @@ void Inf_FormToSendURL (Inf_Src_t InfoSrc)
 	 Gbl.Crs.Info.URL[0] = '\0';
 
       HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_URL);
 	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "size=\"50\" class=\"INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	 HTM_LABEL_End ();
       HTM_DIV_End ();
 
@@ -1461,7 +1456,6 @@ static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType)
 
 static bool Inf_CheckAndShowPlainTxt (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -1498,7 +1492,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
 	 /***** Convert to respectful HTML and insert links *****/
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1674,7 +1668,6 @@ static bool Inf_CheckAndShowRichTxt (void)
 
 void Inf_EditPlainTxtInfo (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
@@ -1716,7 +1709,7 @@ void Inf_EditPlainTxtInfo (void)
 	    Lay_HelpPlainEditor ();
 	    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\""
 		                " class=\"INPUT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 	       HTM_Txt (TxtHTML);
 	    HTM_TEXTAREA_End ();
 	 HTM_DIV_End ();
@@ -1732,7 +1725,6 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
@@ -1774,7 +1766,7 @@ void Inf_EditRichTxtInfo (void)
 	 Lay_HelpRichEditor ();
 	 HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\""
 		             " class=\"INPUT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 	    HTM_Txt (TxtHTML);
 	 HTM_TEXTAREA_End ();
       HTM_DIV_End ();

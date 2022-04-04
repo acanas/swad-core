@@ -268,12 +268,10 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Btn_Button_t Button,
                                                  const char *TxtButton)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    HTM_TR_Begin (NULL);
 
       /***** Description *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_TxtColon (Description);
       HTM_TD_End ();
 

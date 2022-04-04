@@ -184,7 +184,6 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
 void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
@@ -200,7 +199,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
      {
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
 	 /***** Title with link to suggest more users to follow *****/
 	 Frm_BeginForm (ActSeeSocPrf);
@@ -317,7 +316,6 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
@@ -333,7 +331,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 
 	    /* User follows me? */
 	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT_%s\"",
-	                   The_Colors[Gbl.Prefs.Theme]);
+	                   The_GetSuffix ());
 	       if (UsrFollowsMe)
 		  HTM_Txt (Txt_FOLLOWS_YOU);
 	    HTM_DIV_End ();
@@ -391,8 +389,6 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   Act_Action_t Action,
                                                   const char *Title)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FOLLOW_BOX %s\"",
                   (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
@@ -415,7 +411,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
       /***** Text *****/
       HTM_DIV_Begin ("class=\"FORM_OUT_%s%s\"",
-                     The_Colors[Gbl.Prefs.Theme],
+                     The_GetSuffix (),
 		     (Gbl.Action.Act == Action) ? " BOLD" :
 						  "");
 	 if (NumUsrs)
@@ -605,7 +601,6 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -633,7 +628,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"LT FOLLOW_USR_NAME DAT_%s\"",	// Limited width
-	                   The_Colors[Gbl.Prefs.Theme]);
+	                   The_GetSuffix ());
 	       HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
 	                                "class=\"BT_LINK LT\"");
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -1201,7 +1196,6 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
 void Fol_GetAndShowFollowStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_Number_of_users;
@@ -1239,16 +1233,16 @@ void Fol_GetAndShowFollowStats (void)
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Fol == 0 ? Txt_Followed :
 				   Txt_Followers);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -1267,11 +1261,11 @@ void Fol_GetAndShowFollowStats (void)
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_FollowPerFollow[Fol]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Double2Decimals (Average);
 	    HTM_TD_End ();
 

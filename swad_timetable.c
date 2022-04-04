@@ -222,12 +222,11 @@ static void Tmt_FreeTimeTable (void)
 
 static void Tmt_ShowTimeTableGrpsSelected (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
    HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       switch (Gbl.Crs.Grps.WhichGrps)
 	{
@@ -1176,7 +1175,6 @@ static void Tmt_TimeTableDrawAdjustRow (void)
 
 static void Tmt_TimeTableDrawDaysCells (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DAYS_CAPS[7];
    unsigned DayColumn;
    unsigned Weekday;
@@ -1190,7 +1188,7 @@ static void Tmt_TimeTableDrawDaysCells (void)
 		    Tmt_NUM_MINICOLUMNS_PER_DAY,
 		    Weekday == 6 ? "Tmt_SUNDAY_" :	// Sunday drawn in red
 				   "Tmt_DAY_",		// Monday to Saturday
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    Tmt_PERCENT_WIDTH_OF_A_DAY);
 	 HTM_Txt (Txt_DAYS_CAPS[Weekday]);
       HTM_TD_End ();
@@ -1203,12 +1201,10 @@ static void Tmt_TimeTableDrawDaysCells (void)
 
 static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR %s_%s %s\"",
 		 Min ? "Tmt_HOURXX" :
 		       "Tmt_HOUR00",
-		 The_Colors[Gbl.Prefs.Theme],
+		 The_GetSuffix (),
 		 Align);
       HTM_TxtF ("%02u:%02u",Hour,Min);
    HTM_TD_End ();
@@ -1313,7 +1309,6 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_All_groups;
    static const char *TimeTableClasses[Tmt_NUM_CLASS_TYPES] =
      {
@@ -1383,7 +1378,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
       case Tmt_FREE:
 	 if (asprintf (&ClassStr,"Tmt_CELL Tmt_FREE%u_%s",
 		       WhichCell->Interval % 4,
-		       The_Colors[Gbl.Prefs.Theme]) < 0)
+		       The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
          break;
       default:
@@ -1495,7 +1490,6 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
@@ -1531,7 +1525,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
       /***** Class type *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"TTTyp\" class=\"Tmt_TYP INPUT_%s\"",
-			The_Colors[Gbl.Prefs.Theme]);
+			The_GetSuffix ());
 	 for (CT  = (Tmt_ClassType_t) 0;
 	      CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	      CT++)
@@ -1566,7 +1560,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	 /***** Class duration *****/
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"TTDur\" class=\"Tmt_DUR INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	    for (i = WhichCell->Interval +
 		     Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals;
 		 i < Timetable->Config.IntervalsPerDay;
@@ -1610,7 +1604,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			      "id=\"TTGrp%s\" name=\"TTGrp\""
 			      " class=\"Tmt_GRP INPUT_%s\"",
 			      CellStr,
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
@@ -1653,7 +1647,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"1\""
 			    " class=\"Tmt_INF INPUT_%s\"",
-			    CellStr,The_Colors[Gbl.Prefs.Theme]);
+			    CellStr,The_GetSuffix ());
 	   }
 	 else // TimeTableView == Tmt_TUT_EDIT
 	   {
@@ -1661,14 +1655,14 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_BR ();
 	    HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL_%s\"",
 			     CellStr,
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	       HTM_Txt (Txt_Info);
 	    HTM_LABEL_End ();
 	    HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"12\""
 			    " class=\"Tmt_INF INPUT_%s\"",
-			    CellStr,The_Colors[Gbl.Prefs.Theme]);
+			    CellStr,The_GetSuffix ());
 	   }
 
 	 /***** Free allocated unique string for this cell used in labels *****/

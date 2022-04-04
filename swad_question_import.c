@@ -136,7 +136,6 @@ void QstImp_PutIconToImportQuestions (void)
 void QstImp_ShowFormImpQstsFromXML (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Import_questions;
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_XML_file;
@@ -151,7 +150,7 @@ void QstImp_ShowFormImpQstsFromXML (void)
 
       /***** Write a form to import questions *****/
       Frm_BeginForm (ActImpTstQst);
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_XML_file);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".xml",
 			    HTM_SUBMIT_ON_CHANGE,
@@ -169,7 +168,6 @@ void QstImp_ShowFormImpQstsFromXML (void)
 
 void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
    char PathPubFile[PATH_MAX + 1];
@@ -228,7 +226,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir.L,
 	        Gbl.FileBrowser.TmpPubDir.R,
-	        The_Colors[Gbl.Prefs.Theme]);
+	        The_GetSuffix ());
       Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
    HTM_A_End ();
   }
@@ -855,7 +853,6 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         const struct Qst_Question *Question,
                                         bool QuestionExists)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
    extern const char *Txt_no_tags;
@@ -894,7 +891,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Write number of question *****/
       HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-                    ClassData,The_Colors[Gbl.Prefs.Theme],
+                    ClassData,The_GetSuffix (),
                     The_GetColorRows ());
 	 if (!QuestionExists)
 	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
@@ -1035,14 +1032,14 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			HTM_TD_Begin ("class=\"LT\"");
 
 			   HTM_DIV_Begin ("class=\"%s_%s\"",
-			                  ClassStem,The_Colors[Gbl.Prefs.Theme]);
+			                  ClassStem,The_GetSuffix ());
 			      HTM_Txt (AnswerText);
 			   HTM_DIV_End ();
 
 			   if (AnswerFeedbackLength)
 			     {
 			      HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT_%s\"",
-			                     The_Colors[Gbl.Prefs.Theme]);
+			                     The_GetSuffix ());
 				 HTM_Txt (AnswerFeedback);
 			      HTM_DIV_End ();
 			     }

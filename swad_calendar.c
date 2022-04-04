@@ -116,7 +116,6 @@ static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
                                       void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
@@ -131,7 +130,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	   {
 	    if (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek)
 	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                      The_Colors[Gbl.Prefs.Theme]);
+	                      The_GetSuffix ());
 	    else
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (Action);
@@ -342,7 +341,6 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Hlp_ANALYTICS_Figures_calendar;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week_X;
@@ -405,11 +403,11 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  free (Icon);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
 						 (double) NumUsrsTotal :
 						  0.0);

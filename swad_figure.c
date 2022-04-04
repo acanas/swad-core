@@ -75,7 +75,6 @@ void Fig_ReqShowFigures (void)
 static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
   {
    extern const char *Hlp_ANALYTICS_Figures;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Figures;
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
@@ -93,7 +92,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		    Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
 	 /***** Compute stats for anywhere, degree or course? *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Scope);
 	    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
 				1 << HieLvl_CTY |
@@ -109,11 +108,11 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	 HTM_BR ();
 
 	 /***** Type of statistic *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Statistic);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"FigureType\" class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (FigType  = (Fig_FigureType_t) 0;
 		    FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
 		    FigType++)

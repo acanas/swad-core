@@ -629,7 +629,6 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 
 static void ExaPrn_GetAndWriteDescription (long ExaCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get description from database *****/
@@ -640,7 +639,7 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
 
    /***** Write description *****/
    HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -846,7 +845,6 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
@@ -890,7 +888,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
-	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
+	                        QstInd,NumOpt,The_GetSuffix ());
 		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -898,7 +896,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	    /***** Write the option text *****/
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
-	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
+	                        QstInd,NumOpt,The_GetSuffix ());
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,

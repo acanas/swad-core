@@ -117,7 +117,6 @@ static unsigned Ins_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res);
 void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_Institution;
    extern const char *Txt_Centers_ABBREVIATION;
@@ -174,7 +173,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    Ins_GetDataOfInstitByCod (&Ins);
 
 	    /* Institution logo and name */
-	    HTM_TR_Begin ("DAT_%s",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TR_Begin ("DAT_%s",The_GetSuffix ());
 
 	       HTM_TD_Begin ("class=\"NOWRAP LM %s\"",BgColor);
 		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM");
@@ -182,7 +181,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	       /* Number of pending centers (row[1]) */
 	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],BgColor);
+	                     The_GetSuffix (),BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -371,7 +370,6 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -394,50 +392,50 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
       /***** Number of institution in this list *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumIns);
       HTM_TD_End ();
 
       /***** Institution logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassStrong,The_GetSuffix (),BgColor);
 	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
       /* Number of centers in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of departments in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -867,7 +865,6 @@ void Ins_FreeListInstitutions (void)
 
 void Ins_WriteSelectorOfInstitution (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -882,12 +879,12 @@ void Ins_WriteSelectorOfInstitution (void)
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ins.InsCod < 0,true,
@@ -934,7 +931,6 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Ins_Instit *Ins;
@@ -985,7 +981,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
 	       HTM_Long (Ins->InsCod);
 	    HTM_TD_End ();
 
@@ -995,7 +991,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenInsSho);
@@ -1003,7 +999,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1011,7 +1007,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
@@ -1019,7 +1015,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	      }
 	    else
@@ -1027,7 +1023,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
@@ -1035,7 +1031,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1045,7 +1041,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 			          " class=\"DAT_%s\"",
 				  Ins->WWW,
-				  The_Colors[Gbl.Prefs.Theme],
+				  The_GetSuffix (),
 				  Ins->WWW);
 			HTM_Txt (WWW);
 		     HTM_A_End ();
@@ -1054,23 +1050,23 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this institution */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrsIns);
 	    HTM_TD_End ();
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumCtrs);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this institution */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrsInCrssOfIns);
 	    HTM_TD_End ();
 
 	    /* Institution requester */
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       UsrDat.UsrCod = Ins->RequesterUsrCod;
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
@@ -1450,7 +1446,6 @@ static void Ins_PutParamGoToIns (void *InsCod)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
 
@@ -1491,7 +1486,7 @@ static void Ins_PutFormToCreateInstitution (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Institution full name *****/
@@ -1500,7 +1495,7 @@ static void Ins_PutFormToCreateInstitution (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Institution WWW *****/
@@ -1508,32 +1503,32 @@ static void Ins_PutFormToCreateInstitution (void)
 	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			   " required=\"required\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of centers *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of users in courses of this institution ****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Institution requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
 	 HTM_TD_End ();
 
 	 /***** Institution status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2274,7 +2269,6 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
    unsigned NumOrder;
@@ -2305,7 +2299,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write link to institution *****/
 	       HTM_TD_Begin ("class=\"CM FORM_IN_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  Ins_DrawInstitutionLogoWithLink (&Ins,40);
 		  HTM_BR ();
 		  HTM_Unsigned (NumberThisRow);
@@ -2342,13 +2336,13 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  if (NumberThisRow != NumberLastRow)
 		     NumOrder = NumIns;
 		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Unsigned (NumOrder);
 		  HTM_TD_End ();
 
 		  /***** Write link to institution *****/
 		  HTM_TD_Begin ("class=\"LM FORM_IN_%s\"",
-				The_Colors[Gbl.Prefs.Theme]);
+				The_GetSuffix ());
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
 			Ins_PutParamInsCod (Ins.InsCod);
@@ -2367,7 +2361,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 		  /***** Write statistic *****/
 		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Unsigned (NumberThisRow);
 		  HTM_TD_End ();
 

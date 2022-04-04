@@ -150,7 +150,6 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
@@ -237,7 +236,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 
 			/* Data */
 			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 		    }
 
 		  /* Form to remove old nickname */
@@ -295,7 +294,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  if (ItsMe)
 		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 		  else
@@ -309,7 +308,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"NewNick\" class=\"INPUT_%s\""
 				     " size=\"18\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		     HTM_BR ();
 		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
 							   Txt_Save_changes);	// I have no nickname yet);

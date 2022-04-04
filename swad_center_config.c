@@ -353,7 +353,6 @@ static void CtrCfg_Map (void)
 
 static void CtrCfg_Latitude (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Latitude;
 
    /***** Latitude *****/
@@ -372,7 +371,7 @@ static void CtrCfg_Latitude (void)
 			     Gbl.Hierarchy.Ctr.Coord.Latitude,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -381,7 +380,6 @@ static void CtrCfg_Latitude (void)
 
 static void CtrCfg_Longitude (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Longitude;
 
    /***** Longitude *****/
@@ -400,7 +398,7 @@ static void CtrCfg_Longitude (void)
 			     Gbl.Hierarchy.Ctr.Coord.Longitude,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -409,7 +407,6 @@ static void CtrCfg_Longitude (void)
 
 static void CtrCfg_Altitude (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Altitude;
 
    /***** Altitude *****/
@@ -428,7 +425,7 @@ static void CtrCfg_Altitude (void)
 			     Gbl.Hierarchy.Ctr.Coord.Altitude,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -554,7 +551,6 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
 
@@ -567,7 +563,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		       Txt_Institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 if (PutForm)
 	   {
 	    /* Get list of institutions of the current country */
@@ -578,7 +574,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthInsCod\" name=\"OthInsCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (NumIns = 0;
 		       NumIns < Gbl.Hierarchy.Inss.Num;
 		       NumIns++)
@@ -645,7 +641,6 @@ static void CtrCfg_ShrtName (bool PutForm)
 
 static void CtrCfg_Place (bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
    struct Plc_Places Places;
@@ -668,7 +663,7 @@ static void CtrCfg_Place (bool PutForm)
 		       Txt_Place);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 if (PutForm)
 	   {
 	    /* Get list of places of the current institution */
@@ -680,7 +675,7 @@ static void CtrCfg_Place (bool PutForm)
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"PlcCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
 			      Gbl.Hierarchy.Ctr.PlcCod == 0,false,
 			      "%s",Txt_Another_place);
@@ -736,7 +731,6 @@ static void CtrCfg_QR (void)
 
 static void CtrCfg_NumUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_center;
 
    /***** Number of users *****/
@@ -746,7 +740,7 @@ static void CtrCfg_NumUsrs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
       HTM_TD_End ();
 
@@ -759,7 +753,6 @@ static void CtrCfg_NumUsrs (void)
 
 static void CtrCfg_NumDegs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
    char *Title;
@@ -771,7 +764,7 @@ static void CtrCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
@@ -792,7 +785,6 @@ static void CtrCfg_NumDegs (void)
 
 static void CtrCfg_NumCrss (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -802,7 +794,7 @@ static void CtrCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_TD_End ();
 
@@ -842,7 +834,6 @@ void CtrCfg_RemoveLogo (void)
 
 void CtrCfg_RequestPhoto (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_Recommended_aspect_ratio;
    extern const char *Txt_Recommended_resolution;
@@ -868,7 +859,7 @@ void CtrCfg_RequestPhoto (void)
 			Txt_XxY_pixels_or_higher);
 
 	 /***** Upload photo *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
 			    HTM_SUBMIT_ON_CHANGE,

@@ -100,7 +100,6 @@ static long Not_GetParamNotCod (void);
 void Not_ShowFormNotice (void)
   {
    extern const char *Hlp_COMMUNICATION_Notices;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
    extern const char *Txt_Create_notice;
@@ -121,7 +120,7 @@ void Not_ShowFormNotice (void)
 	 HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
 			     " class=\"INPUT_%s\""
 			     " autofocus=\"autofocus\" required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 HTM_TEXTAREA_End ();
 
       /***** Send button and end box *****/
@@ -546,7 +545,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t Status)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_See_full_notice;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
@@ -606,7 +604,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /* Write the date */
       UniqueId++;
       HTM_DIV_Begin ("class=\"NOTICE_DATE NOTICE_DATE_%s RT\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	   {
 	    /* Form to view full notice */
@@ -634,7 +632,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	{
 	 HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF NOTICE_TEXT_%s\"",
-                        The_Colors[Gbl.Prefs.Theme]);
+                        The_GetSuffix ());
 	    HTM_Txt (Content);
 	 HTM_DIV_End ();
 
@@ -649,14 +647,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       else
 	{
          HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
-                        The_Colors[Gbl.Prefs.Theme]);
+                        The_GetSuffix ());
             HTM_Txt (Content);
 	 HTM_DIV_End ();
 	}
 
       /***** Write the author *****/
       HTM_DIV_Begin ("class=\"NOTICE_AUTHOR NOTICE_AUTHOR_%s\"",	// Limited width
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 Usr_UsrDataConstructor (&UsrDat);
 	 UsrDat.UsrCod = UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
@@ -845,7 +843,6 @@ static long Not_GetParamNotCod (void)
 void Not_GetAndShowNoticesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notices;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -890,27 +887,27 @@ void Not_GetAndShowNoticesStats (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumNoticesDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned ( NumTotalNotices);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumTotalNotifications);
 	 HTM_TD_End ();
 

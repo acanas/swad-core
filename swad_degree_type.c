@@ -98,7 +98,6 @@ static void DegTyp_EditingDegreeTypeDestructor (void);
 
 void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
 
@@ -110,7 +109,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
 		     " class=\"INPUT_%s\"",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  SelectedDegTypCod == -1L,false,
 		  "%s",Txt_Any_type_of_degree);
@@ -316,7 +315,6 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 
 static void DegTyp_ListDegreeTypesForSeeing (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumDegTyp;
    const char *BgColor;
 
@@ -334,19 +332,19 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
 
 	 /* Number of degree type in this list */
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
-	               The_Colors[Gbl.Prefs.Theme],BgColor);
+	               The_GetSuffix (),BgColor);
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
 	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
-	               The_Colors[Gbl.Prefs.Theme],BgColor);
+	               The_GetSuffix (),BgColor);
 	    HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
-	               The_Colors[Gbl.Prefs.Theme],BgColor);
+	               The_GetSuffix (),BgColor);
 	    HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 
@@ -389,7 +387,6 @@ static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
 
 static void DegTyp_ListDegreeTypesForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumDegTyp;
 
    /***** Begin table *****/
@@ -416,7 +413,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree type code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
 	       HTM_Long (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
@@ -429,12 +426,12 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"25\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Number of degrees of this type */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	    HTM_TD_End ();
 
@@ -461,7 +458,6 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
@@ -493,11 +489,11 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"25\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Number of degrees of this degree type ****/
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 

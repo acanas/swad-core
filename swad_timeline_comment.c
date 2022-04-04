@@ -213,7 +213,6 @@ static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat)
 static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	                                  long NotCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_comment;
    char *ClassTextArea;
 
@@ -226,7 +225,7 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
 	 /***** Textarea and button *****/
 	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH INPUT_%s",
-	               The_Colors[Gbl.Prefs.Theme]) < 0)
+	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 TmlPst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
 	 free (ClassTextArea);
@@ -509,13 +508,11 @@ static void TmlCom_LinkToShowComms (TmlCom_ContractExpand_t ConExp,
 static void TmlCom_PutIconToToggleComms (const char *UniqueId,
                                          const char *Icon,const char *Text)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Link to toggle on/off some divs *****/
    HTM_BUTTON_Begin (Text,
                      "class=\"BT_LINK FORM_IN_%s\""
                      " onclick=\"toggleComments('%s');return false;\"",
-                     The_Colors[Gbl.Prefs.Theme],UniqueId);
+                     The_GetSuffix (),UniqueId);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_BUTTON_End ();
   }
@@ -615,7 +612,6 @@ static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
 
 static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
 
@@ -628,7 +624,7 @@ static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
 			       "class=\"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD\"",
-                               The_Colors[Gbl.Prefs.Theme]);
+                               The_GetSuffix ());
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 
@@ -642,13 +638,11 @@ static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
 
 static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Write content of the comment *****/
    if (Com->Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
       HTM_DIV_End ();
      }

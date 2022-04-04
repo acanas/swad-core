@@ -221,7 +221,6 @@ void Sta_AskShowCrsHits (void)
 static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
    extern const char *Txt_Show;
@@ -315,12 +314,12 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 			   HTM_TxtColon (Txt_Users);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 			   HTM_TABLE_Begin (NULL);
 			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
@@ -350,7 +349,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 			   HTM_TxtColon (Txt_Show);
 			HTM_TD_End ();
 
@@ -371,12 +370,12 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   Sta_WriteSelectorCountType (Stats);
 
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-			                    The_Colors[Gbl.Prefs.Theme]);
+			                    The_GetSuffix ());
 			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
 						" class=\"INPUT_%s\"",
-						The_Colors[Gbl.Prefs.Theme]);
+						The_GetSuffix ());
 				 for (ClicksGroupedBy  = Sta_CLICKS_CRS_PER_USR;
 				      ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
 				      ClicksGroupedBy++)
@@ -475,7 +474,6 @@ void Sta_AskShowGblHits (void)
 static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
@@ -522,7 +520,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"Role\" name=\"Role\""
 				 " class=\"STAT_SEL INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (RoleStat  = (Sta_Role_t) 0;
 		       RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
 		       RoleStat++)
@@ -573,7 +571,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 	       /***** Type of statistic *****/
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_Colors[Gbl.Prefs.Theme]);
+	                        The_GetSuffix ());
 		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
 		  if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
@@ -582,7 +580,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"GroupedBy\" class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (ClicksGroupedBy  = Sta_CLICKS_GBL_PER_DAY;
 			  ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
 			  ClicksGroupedBy++)
@@ -655,7 +653,6 @@ void Sta_PutLinkToGlobalHits (void)
 
 static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES];
    Sta_CountType_t StatCountType;
    unsigned StatCountTypeUnsigned;
@@ -663,7 +660,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    /**** Count type *****/
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"CountType\" name=\"CountType\" class=\"INPUT_%s\"",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
       for (StatCountType  = (Sta_CountType_t) 0;
 	   StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
 	   StatCountType++)
@@ -682,7 +679,6 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_Any_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -700,7 +696,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"StatAct\" name=\"StatAct\""
 			   " class=\"STAT_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
@@ -753,7 +749,6 @@ void Sta_SeeCrsAccesses (void)
 
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
@@ -1047,7 +1042,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
 	 HTM_TxtF ("<p class=\"CM DAT_SMALL_%s\">%s: %s</p>",
-	           The_Colors[Gbl.Prefs.Theme],
+	           The_GetSuffix (),
 		   Txt_Time_zone_used_in_the_calculation_of_these_statistics,
 		   BrowserTimeZone);
 	 break;
@@ -1561,7 +1556,6 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
                                                 unsigned NumHits,
                                                 MYSQL_RES *mysql_res)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
@@ -1608,7 +1602,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	       Sta_PutHiddenParamScopeSta ();
 	      }
 
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"ColorType\"");
@@ -2372,11 +2366,10 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 
 static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned BarHeight;
 
    HTM_TD_Begin ("class=\"CB DAT_SMALL_%s\" style=\"width:%upx;\"",
-                 The_Colors[Gbl.Prefs.Theme],
+                 The_GetSuffix (),
                  ColumnWidth);
 
       /* Draw bar with a height porportional to the number of clicks */
@@ -2798,7 +2791,6 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Banner;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
@@ -2847,7 +2839,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 		         " class=\"DAT_%s\"",
 			 Ban.WWW,
 			 Ban.FullName,
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
 			"style=\"margin:0 10px 5px 0;\"");
 	    HTM_A_End ();

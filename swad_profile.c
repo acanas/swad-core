@@ -175,7 +175,6 @@ void Prf_RequestUserProfile (void)
   {
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
@@ -200,7 +199,7 @@ void Prf_RequestUserProfile (void)
 	 /***** Form to request user's @nickname *****/
 	 /* By default, the nickname is filled with my nickname
 	    If no user logged ==> the nickname is empty */
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Nickname);
 
 	    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
@@ -209,7 +208,7 @@ void Prf_RequestUserProfile (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"18\" class=\"INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
@@ -375,7 +374,6 @@ void Prf_ChangeExtendedProfileVis (void)
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    bool UsrIsBannedFromRanking;
    struct Prf_UsrFigures UsrFigures;
    Rol_Role_t Role;
@@ -387,7 +385,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /* Begin left list */
    HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONT\"");
       HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 
 	 /* Time since first click */
 	 Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
@@ -413,7 +411,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	{
 	 /* Begin right list */
 	 HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 
 	    /* Number of clicks */
 	    Prf_ShowNumClicks (UsrDat,&UsrFigures);
@@ -775,7 +773,6 @@ static void Prf_EndListItem (void)
 
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
    Frm_BeginForm (ActCalFig);
@@ -784,7 +781,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
       /***** Put button to refresh *****/
       HTM_BUTTON_Submit_Begin (Txt_Calculate,
 			       "class=\"BT_LINK FORM_OUT_%s BOLD\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate);
       HTM_BUTTON_End ();
 
@@ -852,7 +849,6 @@ void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
 
 static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char *Title;
 
@@ -865,7 +861,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
 	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_Submit_Begin (Title,
                                "class=\"BT_LINK FORM_OUT_%s\"",
-                               The_Colors[Gbl.Prefs.Theme]);
+                               The_GetSuffix ());
       free (Title);
 	 HTM_TxtF ("#%u",Rank);
       HTM_BUTTON_End ();
@@ -1173,7 +1169,6 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 
 void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned Rank;
@@ -1219,7 +1214,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 			     ItsMe ? "DAT_SMALL_STRONG" :
 				     "DAT_SMALL",
-		             The_Colors[Gbl.Prefs.Theme],
+		             The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_Long (Figure);
 	       HTM_TD_End ();
@@ -1242,7 +1237,6 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
@@ -1289,7 +1283,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 			     ItsMe ? "DAT_SMALL_STRONG" :
 				     "DAT_SMALL",
-			     The_Colors[Gbl.Prefs.Theme],
+			     The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_DoubleFewDigits (NumClicksPerDay);
 	       HTM_TD_End ();
@@ -1312,7 +1306,6 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1326,7 +1319,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 ItsMe ? "DAT_SMALL_STRONG" :
 		         "DAT_SMALL",
-		 The_Colors[Gbl.Prefs.Theme],
+		 The_GetSuffix (),
                  The_GetColorRows ());
       HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
@@ -1344,7 +1337,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"RANK_USR %s_%s %s\"",	// Limited width
                  ItsMe ? "DAT_SMALL_STRONG" :
 			 "DAT_SMALL",
-	         The_Colors[Gbl.Prefs.Theme],
+	         The_GetSuffix (),
                  The_GetColorRows ());
       if (Visible)
 	{

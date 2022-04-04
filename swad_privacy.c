@@ -161,14 +161,13 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
    HTM_TR_Begin (NULL);
 
       /***** Select visibility *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColon (TxtLabel);
       HTM_TD_End ();
 
@@ -185,10 +184,10 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		 {
 		  if (Visibility == CurrentVisibilityInDB)
 		     HTM_LI_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 		  else
 		     HTM_LI_Begin ("class=\"DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (ParamName,Action != ActUnk,
 				      "value=\"%u\"%s%s",
@@ -325,7 +324,6 @@ static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
                                                         unsigned MaskAllowedVisibility)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
@@ -366,15 +364,15 @@ static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Visibility]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

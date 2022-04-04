@@ -80,15 +80,13 @@ static void MAC_PutParams (void *Args)
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
                                          void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Form to enter a new MAC address *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
       FuncParams (Args);
       HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MACstr,
 		      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"8\" class=\"INPUT_%s\"",
-		      The_Colors[Gbl.Prefs.Theme]);
+		      The_GetSuffix ());
    Frm_EndForm ();
   }
 

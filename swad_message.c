@@ -218,7 +218,6 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
@@ -336,7 +335,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	    /***** "To:" section (recipients) *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColon (Txt_MSG_To);
 	       HTM_TD_End ();
 
@@ -372,7 +371,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 
 	 /***** Attached image (optional) *****/
 	 if (asprintf (&ClassInput,"MSG_MED_INPUT INPUT_%s",
-	               The_Colors[Gbl.Prefs.Theme]) < 0)
+	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (-1,ClassInput);
 	 free (ClassInput);
@@ -484,7 +483,6 @@ static void Msg_PutHiddenParamsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -502,7 +500,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
 		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_STRONG" :
 			                           "DAT_SMALL_NOBR",
-		  The_Colors[Gbl.Prefs.Theme]);
+		  The_GetSuffix ());
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
@@ -510,7 +508,7 @@ static void Msg_ShowOneUniqueRecipient (void)
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
 		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_STRONG" :
 			                           "DAT_SMALL_NOBR",
-		  The_Colors[Gbl.Prefs.Theme]);
+		  The_GetSuffix ());
       HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
@@ -524,7 +522,6 @@ static void Msg_ShowOneUniqueRecipient (void)
 
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
@@ -556,7 +553,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
 			     " class=\"MSG_RECIPIENTS INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
-			     The_Colors[Gbl.Prefs.Theme],
+			     The_GetSuffix (),
 			     Txt_nicks_emails_or_IDs_separated_by_commas);
 	    if (Gbl.Usrs.ListOtherRecipients[0])
 	       HTM_Txt (Gbl.Usrs.ListOtherRecipients);
@@ -580,7 +577,6 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
                                                      char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Original_message;
@@ -602,7 +598,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
       HTM_TD_Begin ("class=\"LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
 			  " class=\"MSG_SUBJECT INPUT_%s\" rows=\"2\"",
-			  The_Colors[Gbl.Prefs.Theme]);
+			  The_GetSuffix ());
 
       /* If message is a reply ==> get original message */
       if (MsgCod > 0)	// It's a reply
@@ -642,7 +638,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
 				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
-				   The_Colors[Gbl.Prefs.Theme]);
+				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -677,7 +673,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
 				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
-				   The_Colors[Gbl.Prefs.Theme]);
+				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -1435,7 +1431,6 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    extern const char *Hlp_COMMUNICATION_Messages_received_filter;
    extern const char *Hlp_COMMUNICATION_Messages_sent;
    extern const char *Hlp_COMMUNICATION_Messages_sent_filter;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1];
@@ -1527,7 +1522,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	    HTM_DIV_Begin ("class=\"UPD\"");
 	       HTM_BUTTON_Submit_Begin (Txt_Update_messages,
 					  "class=\"BT_LINK FORM_IN_%s BOLD\"",
-					  The_Colors[Gbl.Prefs.Theme]);
+					  The_GetSuffix ());
 		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_messages);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -1809,7 +1804,6 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
 
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
@@ -1836,11 +1830,11 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
       NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages] (&mysql_res);
 
    /***** Course selection *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
-			The_Colors[Gbl.Prefs.Theme]);
+			The_GetSuffix ());
 
          /* Write a first option to select any course */
 	 HTM_OPTION (HTM_Type_STRING,"",
@@ -1874,7 +1868,6 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
@@ -1892,23 +1885,23 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 	 /***** Filter authors/recipients *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (*TxtFromTo[Messages->TypeOfMessages]);
 	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 				 Messages->FilterFromTo,
 				 "size=\"20\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 /***** Filter message content *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_MSG_Content);
 	       HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
 				 Messages->FilterContent,
 				 "size=\"20\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -1924,11 +1917,10 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  Messages->ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
@@ -2019,7 +2011,6 @@ static void Msg_GetMsgContent (long MsgCod,
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_Replied;
    extern const char *Txt_MSG_Not_replied;
    extern const char *Txt_MSG_Unopened;
@@ -2146,7 +2137,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 HTM_TD_End ();
 
 	 /***** Write "From:" *****/
-	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_MSG_From);
 	 HTM_TD_End ();
 
@@ -2159,7 +2150,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       /***** Write "To:" *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_MSG_To);
 	 HTM_TD_End ();
 
@@ -2178,7 +2169,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 Msg_GetMsgContent (MsgCod,Content,&Media);
 
 	 /***** Write "Content:" *****/
-	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_MSG_Content);
 	 HTM_TD_End ();
 
@@ -2249,12 +2240,10 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    HTM_TD_Begin ("class=\"CT %s_%s\" style=\"width:45px;\"",
 		 NewMsg ? "MSG_TIT_BG_NEW" :
 			  "MSG_TIT_BG",
-		 The_Colors[Gbl.Prefs.Theme]);
+		 The_GetSuffix ());
       HTM_TxtF ("%lu:",MsgNum);
    HTM_TD_End ();
   }
@@ -2267,7 +2256,6 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
                                                bool Open,bool Expanded)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Hide_message;
    extern const char *Txt_See_message;
    extern const char *Txt_no_subject;
@@ -2276,7 +2264,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    HTM_TD_Begin ("class=\"LT %s_%s\"",
                  Open ? "MSG_TIT_BG" :
         	        "MSG_TIT_BG_NEW",
-        	 The_Colors[Gbl.Prefs.Theme]);
+        	 The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
@@ -2719,7 +2707,6 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 void Msg_WriteMsgDate (time_t TimeUTC,const char *Class)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -2729,7 +2716,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *Class)
 
    /***** Begin cell *****/
    HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s\" style=\"width:106px;\"",
-                 Id,Class,The_Colors[Gbl.Prefs.Theme]);
+                 Id,Class,The_GetSuffix ());
 
       /***** Write date and time *****/
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
@@ -2904,7 +2891,6 @@ static void Msg_UnbanSender (void)
 
 void Msg_ListBannedUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
@@ -2964,7 +2950,7 @@ void Msg_ListBannedUsrs (void)
 
 		  /* Write user's full name */
 		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Txt (UsrDat.FullName);
 		  HTM_TD_End ();
 
@@ -2992,7 +2978,6 @@ void Msg_ListBannedUsrs (void)
 void Msg_GetAndShowMsgsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_messages;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -3031,27 +3016,27 @@ void Msg_GetAndShowMsgsStats (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Txt (Txt_MSGS_Sent);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsSentNotDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Hyphen ();
 	 HTM_TD_End ();
 
@@ -3060,27 +3045,27 @@ void Msg_GetAndShowMsgsStats (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Txt (Txt_MSGS_Received);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMsgsReceivedAndNotified);
 	 HTM_TD_End ();
 

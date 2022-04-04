@@ -125,13 +125,11 @@ static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content)
 
 static void TmlPst_ShowPostContent (struct TmlPst_Content *Content)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Write content text *****/
    if (Content->Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 Msg_WriteMsgContent (Content->Txt,true,false);
       HTM_DIV_End ();
      }
@@ -172,7 +170,6 @@ void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
    char *Class;
 
@@ -181,7 +178,7 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
       /***** Author name *****/
       if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK DAT_STRONG_%s BOLD",
-                    The_Colors[Gbl.Prefs.Theme]) < 0)
+                    The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
       TmlNot_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,Class);
       free (Class);
@@ -193,7 +190,7 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
          /* Form with textarea */
 	 TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_POST);
 	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_RIGHT_WIDTH INPUT_%s",
-	                  The_Colors[Gbl.Prefs.Theme]) < 0)
+	                  The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    TmlPst_PutTextarea (Txt_New_TIMELINE_post,Class);
 	    free (Class);
@@ -212,7 +209,6 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
    char *ClassInput;
@@ -237,7 +233,7 @@ void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 
       /***** Attached image (optional) *****/
       if (asprintf (&ClassInput,"Tml_MED_INPUT_WIDTH INPUT_%s",
-                    The_Colors[Gbl.Prefs.Theme]) < 0)
+                    The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (-1,ClassInput);
       free (ClassInput);

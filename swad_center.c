@@ -107,7 +107,6 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
 void Ctr_SeeCtrWithPendingDegs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Centers_with_pending_degrees;
    extern const char *Txt_Center;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -155,13 +154,13 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM %s NOWRAP %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],BgColor);
+	                     The_GetSuffix (),BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
 	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],BgColor);
+	                     The_GetSuffix (),BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -331,7 +330,6 @@ static void Ctr_PutIconToEditCenters (void)
 
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
    const char *TxtClassNormal;
@@ -359,43 +357,43 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
       /***** Number of center in this list *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCtr);
       HTM_TD_End ();
 
       /***** Center logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassStrong,The_GetSuffix (),BgColor);
 	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Ctr->CtrCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Ctr->CtrCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -693,7 +691,6 @@ void Ctr_FreeListCenters (void)
 
 void Ctr_WriteSelectorOfCenter (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Center;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -708,12 +705,12 @@ void Ctr_WriteSelectorOfCenter (void)
       if (Gbl.Hierarchy.Ins.InsCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ctr.CtrCod < 0,true,
 		  "[%s]",Txt_Center);
@@ -757,7 +754,6 @@ void Ctr_WriteSelectorOfCenter (void)
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCtr;
@@ -809,7 +805,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
 	       HTM_Long (Ctr->CtrCod);
 	    HTM_TD_End ();
 
@@ -819,7 +815,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
@@ -827,7 +823,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"PlcCod\""
 				       " class=\"PLC_SEL INPUT_%s\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"0",
 				    Ctr->PlcCod == 0,false,
 				    "%s",Txt_Another_place);
@@ -849,7 +845,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
@@ -857,7 +853,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -865,7 +861,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
@@ -873,7 +869,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -881,7 +877,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
@@ -889,7 +885,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -899,7 +895,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 				  " class=\"DAT_%s\" title=\"%s\"",
 				  Ctr->WWW,
-				  The_Colors[Gbl.Prefs.Theme],
+				  The_GetSuffix (),
 				  Ctr->WWW);
 			HTM_Txt (WWW);
 		     HTM_A_End ();
@@ -908,17 +904,17 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this center */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrsCtr);
 	    HTM_TD_End ();
 
 	    /* Number of degrees */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumDegs);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this center */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrsInCrssOfCtr);
 	    HTM_TD_End ();
 
@@ -928,7 +924,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	    HTM_TD_End ();
 
@@ -1305,7 +1301,6 @@ static void Ctr_PutParamGoToCtr (void *CtrCod)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_center;
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_center;
@@ -1346,7 +1341,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
 			Ctr_EditingCtr->PlcCod == 0,false,
 			"%s",Txt_Another_place);
@@ -1365,7 +1360,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			 " required=\"required\"",
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
       HTM_TD_End ();
 
       /***** Center full name *****/
@@ -1374,7 +1369,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "class=\"INPUT_FULL_NAME INPUT_%s\""
 			 " required=\"required\"",
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
       HTM_TD_End ();
 
       /***** Center WWW *****/
@@ -1382,32 +1377,32 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			"class=\"INPUT_WWW_NARROW INPUT_%s\""
 			" required=\"required\"",
-			The_Colors[Gbl.Prefs.Theme]);
+			The_GetSuffix ());
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (0);
       HTM_TD_End ();
 
       /***** Center requester *****/
       HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
       HTM_TD_End ();
 
       /***** Center status *****/
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();

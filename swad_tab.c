@@ -51,7 +51,6 @@ static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
 void Tab_DrawTabs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
@@ -110,7 +109,7 @@ void Tab_DrawTabs (void)
 	       HTM_LI_Begin ("class=\"%s%s\"",
 			     NumTab == Gbl.Action.Tab ? "TAB_ON TAB_ON_" :
 							"TAB_OFF TAB_OFF_",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 
 		  if (NumTab == Gbl.Action.Tab)
 		     HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
@@ -126,7 +125,7 @@ void Tab_DrawTabs (void)
 			HTM_DIV_Begin ("class=\"TAB_TXT TAB_%s_TXT_%s\"",
 				       NumTab == Gbl.Action.Tab ? "ON" :
 								  "OFF",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			   HTM_Txt (Txt_TABS_TXT[NumTab]);
 			HTM_DIV_End ();
 		     HTM_BUTTON_End ();

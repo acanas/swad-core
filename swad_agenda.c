@@ -207,7 +207,6 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 
 static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
    Agd_Past__FutureEvents_t PstFut;
    static const char *Icon[2] =
@@ -223,7 +222,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
      {
       if ((Agenda->Past__FutureEvents & (1 << PstFut)))
 	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);
@@ -247,7 +246,6 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
    static const struct
@@ -267,7 +265,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
      {
       if ((Agenda->PrivatPublicEvents & (1 << PrvPub)))
 	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);
@@ -291,7 +289,6 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
    Agd_HiddenVisiblEvents_t HidVis;
    static const struct
@@ -311,7 +308,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
      {
       if ((Agenda->HiddenVisiblEvents & (1 << HidVis)))
 	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);
@@ -627,7 +624,6 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
                                        Agd_AgendaType_t AgendaType)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME_HELP[2];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
@@ -796,7 +792,6 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
   {
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
-   extern const char *The_Colors[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -886,7 +881,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
 	                AgdEvent.Hidden ? "DAT_LIGHT" :
 	                	          "DAT",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
@@ -1402,7 +1397,6 @@ void Agd_RequestCreatOrEditEvent (void)
   {
    extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Location;
@@ -1486,7 +1480,7 @@ void Agd_RequestCreatOrEditEvent (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       /* End table row */
@@ -1505,7 +1499,7 @@ void Agd_RequestCreatOrEditEvent (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       /* End table row */
@@ -1527,7 +1521,7 @@ void Agd_RequestCreatOrEditEvent (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_Colors[Gbl.Prefs.Theme]);
+				The_GetSuffix ());
 	       if (!ItsANewEvent)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
@@ -1668,7 +1662,6 @@ void Agd_PrintAgdQRCode (void)
 void Agd_GetAndShowAgendasStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_agendas;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_events;
    extern const char *Txt_Number_of_users;
@@ -1703,21 +1696,21 @@ void Agd_GetAndShowAgendasStats (void)
       /***** Write number of users who have chosen each language *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumEvents);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
 					   (double) NumUsrs :
 					   0);

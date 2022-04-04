@@ -142,7 +142,6 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
 static void TstCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
    extern const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE];
@@ -176,7 +175,7 @@ static void TstCfg_ShowFormConfig (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_TxtColon (Txt_Plugins);
 	       HTM_TD_End ();
 
@@ -186,7 +185,7 @@ static void TstCfg_ShowFormConfig (void)
 		       Pluggable++)
 		    {
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
-		                      The_Colors[Gbl.Prefs.Theme]);
+		                      The_GetSuffix ());
 			HTM_INPUT_RADIO ("Pluggable",false,
 					 "value=\"%u\"%s",
 					 (unsigned) Pluggable,
@@ -204,7 +203,7 @@ static void TstCfg_ShowFormConfig (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_TxtColon (Txt_Number_of_questions);
 	       HTM_TD_End ();
 
@@ -237,7 +236,7 @@ static void TstCfg_ShowFormConfig (void)
 				  "id=\"MinTimeNxtTstPerQst\" size=\"7\""
 				  " class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -246,7 +245,7 @@ static void TstCfg_ShowFormConfig (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_TxtColon (Txt_Result_visibility);
 	       HTM_TD_End ();
 
@@ -278,14 +277,13 @@ static void TstCfg_ShowFormConfig (void)
 static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
 	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT_%s\"",
-	                  Field,The_Colors[Gbl.Prefs.Theme]);
+	                  Field,The_GetSuffix ());
 	    HTM_Txt (Label);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
@@ -296,7 +294,7 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\""
 			 " required=\"required\"",
-			 Field,The_Colors[Gbl.Prefs.Theme]);
+			 Field,The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();

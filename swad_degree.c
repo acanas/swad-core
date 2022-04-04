@@ -111,7 +111,6 @@ static void Deg_EditingDegreeDestructor (void);
 void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -158,13 +157,13 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	       /* Degree logo and full name */
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],BgColor);
+	                     The_GetSuffix (),BgColor);
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
 	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],BgColor);
+	                     The_GetSuffix (),BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -215,7 +214,6 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
 
 void Deg_WriteSelectorOfDegree (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degree;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -230,12 +228,12 @@ void Deg_WriteSelectorOfDegree (void)
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Deg.DegCod < 0,true,
 		  "[%s]",Txt_Degree);
@@ -306,7 +304,6 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
@@ -355,7 +352,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
 	       HTM_Long (Deg->DegCod);
 	    HTM_TD_End ();
 
@@ -365,7 +362,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
@@ -373,7 +370,7 @@ static void Deg_ListDegreesForEdition (void)
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -381,7 +378,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
@@ -389,7 +386,7 @@ static void Deg_ListDegreesForEdition (void)
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -397,7 +394,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree type */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
@@ -405,7 +402,7 @@ static void Deg_ListDegreesForEdition (void)
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			for (NumDegTyp = 0;
 			     NumDegTyp < Gbl.DegTypes.Num;
 			     NumDegTyp++)
@@ -428,7 +425,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
@@ -436,7 +433,7 @@ static void Deg_ListDegreesForEdition (void)
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -447,7 +444,7 @@ static void Deg_ListDegreesForEdition (void)
 			          " class=\"DAT_%s\"",
 				  Deg->WWW,
 				  Deg->WWW,
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 			HTM_Txt (WWW);
 		     HTM_A_End ();
 		  HTM_DIV_End ();
@@ -455,12 +452,12 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of courses in this degree */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumCrss);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this degree */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrsInCrssOfDeg);
 	    HTM_TD_End ();
 
@@ -470,7 +467,7 @@ static void Deg_ListDegreesForEdition (void)
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	    HTM_TD_End ();
 
@@ -506,7 +503,6 @@ static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
 
 static void Deg_PutFormToCreateDegree (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
    struct DegreeType *DegTyp;
@@ -549,7 +545,7 @@ static void Deg_PutFormToCreateDegree (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Degree full name *****/
@@ -558,7 +554,7 @@ static void Deg_PutFormToCreateDegree (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Degree type *****/
@@ -566,7 +562,7 @@ static void Deg_PutFormToCreateDegree (void)
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"OthDegTypCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (NumDegTyp = 0;
 		    NumDegTyp < Gbl.DegTypes.Num;
 		    NumDegTyp++)
@@ -584,27 +580,27 @@ static void Deg_PutFormToCreateDegree (void)
 	    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			   " required=\"required\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of courses in this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of users in courses of this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Degree requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -793,7 +789,6 @@ static void Deg_PutIconToEditDegrees (void)
 
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
@@ -826,7 +821,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
       /***** Put tip if degree has courses *****/
       HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
-		    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor,
+		    TxtClassNormal,The_GetSuffix (),BgColor,
 		    NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
 	 HTM_Txt (NumCrss ? "&check;" :
@@ -835,31 +830,31 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
       /***** Number of degree in this list *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumDeg);
       HTM_TD_End ();
 
       /***** Degree logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassStrong,The_GetSuffix (),BgColor);
 	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM");
       HTM_TD_End ();
 
       /***** Type of degree *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Txt (DegTyp.DegTypName);
       HTM_TD_End ();
 
       /***** Current number of courses in this degree *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCrss);
       HTM_TD_End ();
 
       /***** Number of users in courses of this degree *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |

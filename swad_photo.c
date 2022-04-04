@@ -293,7 +293,6 @@ static void Pho_ReqOtherUsrPhoto (void)
 static void Pho_ReqPhoto (const struct UsrData *UsrDat)
   {
    extern const char *Hlp_PROFILE_Photo;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
@@ -332,7 +331,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	 Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
 	 /***** Form to upload photo *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
 			    HTM_SUBMIT_ON_CHANGE,NULL);
@@ -886,7 +885,6 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
 
 static void Pho_UpdatePhoto2 (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;
    char *Img;
@@ -902,7 +900,7 @@ static void Pho_UpdatePhoto2 (void)
 	      NumPhoto++)
 	   {
 	    HTM_TD_Begin ("class=\"CT DAT_%s\" style=\"width:33%%;\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
@@ -1061,7 +1059,6 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 			    char **CaptionStr)
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
    unsigned NumFollowing;
@@ -1095,7 +1092,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 				     "%s<br />"
 				     "%s%s%s"
 				  "</div>",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    UsrDat->FrstName,
 		    UsrDat->Surname1,
 		    UsrDat->Surname2[0] ? "&nbsp;" :
@@ -1110,7 +1107,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_STRONG_%s\">"
 					"@%s"
 				     "</div>",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       UsrDat->Nickname) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1128,7 +1125,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_%s\">"
 					  "%s&nbsp;(%s)"
 				       "</div>",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       Ins.ShrtName,CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1141,7 +1138,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_%s\">"
 					  "%s"
 				       "</div>",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1158,7 +1155,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 					       "%s"
 					    "</div>"
 					 "</div>",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
 		       MainDegreeShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -1184,13 +1181,13 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 					      "&nbsp;%s"
 					   "</span>"
 					"</div>",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       NumFollowing,
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       Txt_Following,
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       NumFollowers,
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       Txt_Followers) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1783,7 +1780,6 @@ static void Pho_PutParamsDegPhoto (void *DegPhotos)
 
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
@@ -1804,7 +1800,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"AvgType\" name=\"AvgType\""
 			      " class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
 		    TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
 		    TypeOfAvg++)
@@ -1849,7 +1845,6 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 
 static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
@@ -1870,7 +1865,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
 			      " class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
 		    PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
 		    PhoSi++)
@@ -1915,7 +1910,6 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 
 static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
@@ -1935,7 +1929,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"Order\" name=\"Order\" class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (Order  = (Pho_HowOrderDegrees_t) 0;
 		    Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
 		    Order++)
@@ -1998,7 +1992,6 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -2031,14 +2024,14 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    /***** Put button to refresh *****/
 	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"OthDegCod\" class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (NumDeg = 0;
 		    NumDeg < Degs.Num;
 		    NumDeg++)
@@ -2122,7 +2115,6 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    unsigned long NumDeg;
    unsigned long NumDegs;
@@ -2166,7 +2158,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	       /***** Show average photo of students belonging to this degree *****/
 	       HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CM\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						 SeeOrPrint,
 						 Usr_SEX_ALL,
@@ -2200,7 +2192,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2252,14 +2243,14 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
@@ -2277,7 +2268,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
-		                The_Colors[Gbl.Prefs.Theme],
+		                The_GetSuffix (),
 		                The_GetColorRows ());
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
@@ -2337,14 +2328,13 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_photos;
 
-   HTM_SPAN_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
       HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 
-   HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
 		NumStdsWithPhoto,Txt_photos,
 		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
@@ -2363,7 +2353,6 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2429,7 +2418,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
 	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_STRONG_%s\"",
-	                      The_Colors[Gbl.Prefs.Theme]);
+	                      The_GetSuffix ());
 		  HTM_Txt (PhotoCaption);
 	       HTM_DIV_End ();
 	    HTM_DIV_End ();
@@ -2459,7 +2448,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
       HTM_Txt (Deg->ShrtName);
       HTM_BR ();
       HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);

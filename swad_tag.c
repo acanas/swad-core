@@ -292,7 +292,6 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           bool ShowOnlyEnabledTags)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -311,7 +310,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
@@ -327,7 +326,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_Colors[Gbl.Prefs.Theme]);
+	                        The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
 				      Tags->All ? " checked=\"checked\"" :
@@ -374,7 +373,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_LABEL_Begin ("class=\"DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 		     HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 					 row[1],
@@ -400,7 +399,6 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 void Tag_ShowFormEditTags (void)
   {
    extern const char *Hlp_ASSESSMENT_Questions_editing_tags;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -447,7 +445,7 @@ void Tag_ShowFormEditTags (void)
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"36\" class=\"INPUT_%s\""
 				     " required=\"required\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -510,7 +508,6 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
 
 void Tag_GetAndWriteTagsQst (long QstCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_no_tags;
    unsigned NumTags;
    unsigned NumTag;
@@ -521,7 +518,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
      {
       /***** Write the tags *****/
       HTM_UL_Begin ("class=\"Tst_TAG_LIST DAT_SMALL_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 for (NumTag = 0;
 	      NumTag < NumTags;
 	      NumTag++)
@@ -536,7 +533,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
    else
      {
       HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",
-                      The_Colors[Gbl.Prefs.Theme]);
+                      The_GetSuffix ());
 	 HTM_TxtF ("(%s)",Txt_no_tags);
       HTM_SPAN_End ();
      }

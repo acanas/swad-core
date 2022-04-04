@@ -123,7 +123,6 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
@@ -144,10 +143,10 @@ void Dat_PutBoxToSelectDateFormat (void)
 	      {
 	       if (Format == Gbl.Prefs.DateFormat)
 		  HTM_LI_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 	       else
 		  HTM_LI_Begin ("class=\"DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("DateFormat",true,
 				   " value=\"%u\"%s",
@@ -554,7 +553,6 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   Dat_SetHMS SetHMS,
                                                   bool SubmitFormOnChange)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Day;
    unsigned Month;
@@ -591,7 +589,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Id,
 				 Gbl.Form.Id);
 	    else
@@ -602,7 +600,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Id);
 	    for (Year  = FirstYear;
 		 Year <= LastYear;
@@ -623,7 +621,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Id,
 				 Gbl.Form.Id);
 	    else
@@ -634,7 +632,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Id);
 	    for (Month = 1;
 		 Month <= 12;
@@ -653,7 +651,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -661,7 +659,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id);
 	    for (Day  = 1;
 		 Day <= 31;
@@ -680,7 +678,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -688,7 +686,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id);
 	    for (Hour  = 0;
 		 Hour <= 23;
@@ -707,7 +705,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id,Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -715,7 +713,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				 Id,ParamName,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Id);
 	    for (Minute = 0;
 		 Minute < 60;
@@ -736,7 +734,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				    "document.getElementById('%s').submit();return false;\"",
 				    Id,ParamName,
-				    The_Colors[Gbl.Prefs.Theme],
+				    The_GetSuffix (),
 				    Id,Gbl.Form.Id);
 	       else
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -744,7 +742,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
 				    Id,ParamName,
-				    The_Colors[Gbl.Prefs.Theme],
+				    The_GetSuffix (),
 				    Id);
 	       for (Second  = 0;
 		    Second <= 59;
@@ -891,7 +889,6 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		        struct Dat_Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Year;
    unsigned Month;
@@ -912,7 +909,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
@@ -923,7 +920,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
@@ -947,7 +944,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
@@ -958,7 +955,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
-				 The_Colors[Gbl.Prefs.Theme],
+				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
@@ -979,7 +976,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                      " class=\"INPUT_%s\""
 	                      "%s",
 			      Id,Id,
-			      The_Colors[Gbl.Prefs.Theme],
+			      The_GetSuffix (),
 			      Disabled ? " disabled=\"disabled\"" : "");
 	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
 			   "-");
@@ -1630,7 +1627,6 @@ void Dat_AssignDate (struct Dat_Date *DateDst,struct Dat_Date *DateSrc)
 
 void Dat_WriteScriptMonths (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    unsigned NumMonth;
@@ -1668,7 +1664,7 @@ void Dat_WriteScriptMonths (void)
      {
       if (Theme)
 	 HTM_Comma ();
-      HTM_TxtF ("'%s'",The_Colors[Theme]);
+      HTM_TxtF ("'%s'",The_GetSuffixForTheme (Theme));
      }
    HTM_Txt ("];\n");
   }
@@ -1751,7 +1747,6 @@ void Dat_PutHiddenParamOrder (Dat_StartEndTime_t SelectedOrder)
 void Dat_GetAndShowNumUsrsPerDateFormat (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_dates;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_Number_of_users;
@@ -1797,18 +1792,18 @@ void Dat_GetAndShowNumUsrsPerDateFormat (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       Dat_PutSpanDateFormat (Format);
 	       Dat_PutScriptDateFormat (Format);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Format]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

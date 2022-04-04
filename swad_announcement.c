@@ -225,7 +225,6 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Do_not_show_again;
@@ -262,13 +261,13 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 
       /***** Write the subject of the announcement *****/
       HTM_DIV_Begin ("class=\"NOTICE_SUBJECT NOTICE_SUBJECT_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 HTM_Txt (Subject);
       HTM_DIV_End ();
 
       /***** Write the content of the announcement *****/
       HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 	 HTM_Txt (Content);
       HTM_DIV_End ();
 
@@ -336,7 +335,6 @@ static long Ann_GetParamAnnCod (void)
 void Ann_ShowFormAnnouncement (void)
   {
    extern const char *Hlp_COMMUNICATION_Announcements;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
@@ -358,11 +356,11 @@ void Ann_ShowFormAnnouncement (void)
 	 /***** Users' roles who can view the announcement *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Users);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       Rol_WriteSelectorRoles (1 << Rol_UNK |
 				       1 << Rol_GST |
 				       1 << Rol_STD |
@@ -392,8 +390,6 @@ void Ann_ShowFormAnnouncement (void)
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Subject or content *****/
    HTM_TR_Begin (NULL);
 
@@ -405,7 +401,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\""
 		             " class=\"INPUT_%s\"",
 			     Field,Field,Rows,
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();
 

@@ -192,7 +192,6 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
    extern const char *Hlp_PROFILE_Webs;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -229,7 +228,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
 		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
 			HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
-					 StrName,The_Colors[Gbl.Prefs.Theme]);
+					 StrName,The_GetSuffix ());
 			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 			                Net_WebsAndSocialNetworksTitle[NumURL],
 			                "CONTEXT_OPT CONTEXT_ICO16x16");
@@ -242,7 +241,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 				       "id=\"%s\""
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       StrName,
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 		     HTM_TD_End ();
 
 		  HTM_TR_End ();
@@ -323,7 +322,6 @@ void Net_ShowWebAndSocialNetworksStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
    extern const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_Number_of_users;
@@ -379,19 +377,19 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 	          Ico_PutIcon (Net_WebsAndSocialNetworksIcons[Web],Ico_BLACK,
 	                       Net_WebsAndSocialNetworksTitle[Web],"ICOx16");
 	          HTM_TxtF ("&nbsp;%s",Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Unsigned (NumUsrs);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Percentage (NumUsrsTotal ? 100.0 * (double) NumUsrs /
 						 (double) NumUsrsTotal :
 						 0.0);

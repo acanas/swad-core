@@ -312,7 +312,6 @@ static void Ntf_GetParamsNotifyEvents (void);
 void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_START_Notifications;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
@@ -482,7 +481,7 @@ void Ntf_ShowMyNotifications (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
-		                Class,The_Colors[Gbl.Prefs.Theme]);
+		                Class,The_GetSuffix ());
 		     if (PutLink)
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
@@ -499,7 +498,7 @@ void Ntf_ShowMyNotifications (void)
 
 		  /* Write event type */
 		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_Colors[Gbl.Prefs.Theme]);
+		                Class,The_GetSuffix ());
 		     if (PutLink)
 		       {
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
@@ -524,7 +523,7 @@ void Ntf_ShowMyNotifications (void)
 
 		  /* Write location */
 		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_Colors[Gbl.Prefs.Theme]);
+		                Class,The_GetSuffix ());
 		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 		       {
@@ -582,7 +581,7 @@ void Ntf_ShowMyNotifications (void)
 
 		  /* Write status (sent by email / pending to be sent by email) */
 		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_Colors[Gbl.Prefs.Theme]);
+		                Class,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
 		  HTM_TD_End ();
 
@@ -603,7 +602,7 @@ void Ntf_ShowMyNotifications (void)
 
 		     HTM_TD_Begin ("colspan=\"4\" class=\"LT DAT_%s\""
 			           " style=\"padding-bottom:12px;\"",
-			           The_Colors[Gbl.Prefs.Theme]);
+			           The_GetSuffix ());
 			HTM_Txt (SummaryStr);
 		     HTM_TD_End ();
 
@@ -1503,7 +1502,6 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *Hlp_PROFILE_Settings_notifications;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
@@ -1544,7 +1542,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 		     HTM_TD_End ();
 
@@ -1686,7 +1684,6 @@ void Ntf_WriteNumberOfNewNtfs (void)
 void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notifications;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -1786,29 +1783,29 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[NotifyEvent]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Unsigned (NumEvents[NotifyEvent]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_Unsigned (NumMails[NotifyEvent]);
 	    HTM_TD_End ();
 
@@ -1819,29 +1816,29 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumEventsTotal);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Unsigned (NumMailsTotal);
 	 HTM_TD_End ();
 

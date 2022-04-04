@@ -521,7 +521,6 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ZIP_file;
    extern const char *Txt_Download;
    extern const char *Txt_Filename;
@@ -550,14 +549,14 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       /***** Filename *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Filename);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 		         " class=\"DAT_%s\"",
-			 URL,FileName,The_Colors[Gbl.Prefs.Theme]);
+			 URL,FileName,The_GetSuffix ());
 	       HTM_Txt (FileName);
 	    HTM_A_End ();
 	 HTM_TD_End ();
@@ -568,11 +567,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_File_size);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (FileSizeStr);
 	    if (UncompressedSize)
 	      {

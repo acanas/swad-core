@@ -229,7 +229,6 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
   {
    extern const char *Hlp_ANALYTICS_Report;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
@@ -255,7 +254,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	 HTM_A_End ();
       HTM_DIV_End ();
 
-      HTM_DIV_Begin ("class=\"DAT_LIGHT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
 	 HTM_Txt (Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
       HTM_DIV_End ();
 
@@ -270,17 +269,16 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
 static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Date;
 
    HTM_DIV_Begin ("class=\"TITLE_REPORT DAT_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       /***** User *****/
       HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
       HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",
-                      The_Colors[Gbl.Prefs.Theme]);
+                      The_GetSuffix ());
 	 HTM_Txt (Gbl.Usrs.Me.UsrDat.FullName);
       HTM_SPAN_End ();
 
@@ -290,7 +288,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Date);
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s\"",
-	                 The_Colors[Gbl.Prefs.Theme]);
+	                 The_GetSuffix ());
 	    HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
 				  CurrentTimeUTC->StrTime);
 	 HTM_SPAN_End ();

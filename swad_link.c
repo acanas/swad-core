@@ -148,7 +148,6 @@ static void Lnk_PutIconToEditLinks (void)
 
 void Lnk_WriteMenuWithInstitutionalLinks (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Links;
 
    /***** Get list of links *****/
@@ -158,7 +157,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    if (Gbl.Links.Num)
      {
       HTM_DIV_Begin ("id=\"institutional_links\" class=\"INS_LNK_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
 
 	 Frm_BeginForm (ActSeeLnk);
 	    HTM_BUTTON_Submit_Begin (Txt_Links,"class=\"BT_LINK\"");
@@ -181,7 +180,6 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 
 static void Lnk_WriteListOfLinks (const char *Class)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumLnk;
 
    /***** List start *****/
@@ -198,7 +196,7 @@ static void Lnk_WriteListOfLinks (const char *Class)
 		         " class=\"INS_LNK_%s\" target=\"_blank\"",
 			 Gbl.Links.Lst[NumLnk].WWW,
 			 Gbl.Links.Lst[NumLnk].FullName,
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
 	       HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
 	    HTM_A_End ();
 	 HTM_LI_End ();
@@ -380,7 +378,6 @@ void Lnk_FreeListLinks (void)
 
 static void Lnk_ListLinksForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
 
@@ -406,7 +403,7 @@ static void Lnk_ListLinksForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Link code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Lnk->LnkCod);
 	    HTM_TD_End ();
 
@@ -418,7 +415,7 @@ static void Lnk_ListLinksForEdition (void)
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -430,7 +427,7 @@ static void Lnk_ListLinksForEdition (void)
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -441,7 +438,7 @@ static void Lnk_ListLinksForEdition (void)
 		  HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -666,7 +663,6 @@ void Lnk_ContEditAfterChgLnk (void)
 static void Lnk_PutFormToCreateLink (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_link;
    extern const char *Txt_Create_link;
 
@@ -695,7 +691,7 @@ static void Lnk_PutFormToCreateLink (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Link full name *****/
@@ -704,7 +700,7 @@ static void Lnk_PutFormToCreateLink (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Link WWW *****/
@@ -712,7 +708,7 @@ static void Lnk_PutFormToCreateLink (void)
 	       HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			      " required=\"required\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

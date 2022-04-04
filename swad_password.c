@@ -251,7 +251,6 @@ static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin)
 void Pwd_ShowFormSendNewPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Forgotten_password;
    extern const char *Txt_nick_email_or_ID;
@@ -269,12 +268,12 @@ void Pwd_ShowFormSendNewPwd (void)
 	 Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
 
 	 /***** User's ID/nickname *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_nick_email_or_ID);
 	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"8\" class=\"INPUT_%s\" required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
@@ -580,7 +579,6 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
 void Pwd_ShowFormChgMyPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Your_password_is_not_secure_enough;
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
@@ -630,7 +628,7 @@ void Pwd_ShowFormChgMyPwd (void)
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
 					 "id=\"UsrPwd\" class=\"INPUT_%s\"",
-					 The_Colors[Gbl.Prefs.Theme]);
+					 The_GetSuffix ());
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -665,7 +663,6 @@ void Pwd_ShowFormChgMyPwd (void)
 
 void Pwd_PutFormToGetNewPasswordOnce (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
@@ -679,7 +676,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
 			     "id=\"Paswd\" class=\"INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -691,7 +688,6 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
 void Pwd_PutFormToGetNewPasswordTwice (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_password;
    extern const char *Txt_Retype_new_password;
    extern const char *Txt_HELP_password;
@@ -706,7 +702,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
 			     "id=\"Paswd1\" class=\"INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -721,7 +717,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
 			     "id=\"Paswd2\" class=\"INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -788,14 +784,13 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
 void Pwd_AskForConfirmationOnDangerousAction (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:12px;\"");
 
       /***** Checkbox *****/
-      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("Consent",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"");
 	 HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);
@@ -804,11 +799,11 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       HTM_BR ();
 
       /***** Password *****/
-      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
 	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
 			     "class=\"INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
       HTM_LABEL_End ();
 
    HTM_DIV_End ();

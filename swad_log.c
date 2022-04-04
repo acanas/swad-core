@@ -159,7 +159,6 @@ void Log_ShowLastClicks (void)
 
 void Log_GetAndShowLastClicks (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -238,42 +237,42 @@ void Log_GetAndShowLastClicks (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LC_CLK %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (row[0]);					// Click
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_TIM %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);	// Elapsed time
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_ROL %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);	// Role
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_CTY %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);		// Country
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_INS %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Hie.Ins.ShrtName);				// Institution
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_CTR %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Hie.Ctr.ShrtName);				// Center
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_DEG %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Hie.Deg.ShrtName);				// Degree
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",
-	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	                  ClassRow,The_GetSuffix ());
 	       HTM_Txt (Act_GetActionText (Action));			// Action
 	    HTM_TD_End ();
 

@@ -515,7 +515,6 @@ void Gam_ShowOnlyOneGameEnd (void)
 static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -675,7 +674,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Game->Hidden ? "DAT_LIGHT" :
 				    "DAT",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -1309,7 +1308,6 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
   {
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
@@ -1350,7 +1348,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 			    "id=\"Title\""
 			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1358,14 +1356,14 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
       /***** Maximum grade *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Maximum_grade);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
 			     " class=\"INPUT_%s\" required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1373,7 +1371,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
       /***** Visibility of results *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Result_visibility);
 	 HTM_TD_End ();
 
@@ -1393,7 +1391,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_Colors[Gbl.Prefs.Theme]);
+				The_GetSuffix ());
 	       HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();
@@ -2322,7 +2320,6 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 void Gam_GetAndShowGamesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_games;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_games;
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
@@ -2351,15 +2348,15 @@ void Gam_GetAndShowGamesStats (void)
       /***** Write number of games *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumCoursesWithGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumGamesPerCourse);
 	 HTM_TD_End ();
 

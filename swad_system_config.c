@@ -258,7 +258,6 @@ static void SysCfg_Map (void)
 
 static void SysCfg_Platform (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Platform;
 
    /***** Institution *****/
@@ -268,7 +267,7 @@ static void SysCfg_Platform (void)
    Frm_LabelColumn ("RT",NULL,Txt_Platform);
 
    /* Data */
-   HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
    HTM_TD_End ();
 
@@ -299,7 +298,6 @@ static void SysCfg_QR (void)
 
 static void SysCfg_NumCtys (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Countries;
 
    /***** Number of countries ******/
@@ -309,7 +307,7 @@ static void SysCfg_NumCtys (void)
       Frm_LabelColumn ("RT",NULL,Txt_Countries);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
 	    HTM_BUTTON_Submit_Begin (Txt_Countries,"class=\"BT_LINK\"");
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
@@ -326,7 +324,6 @@ static void SysCfg_NumCtys (void)
 
 static void SysCfg_NumInss (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institutions;
 
    /***** Number of institutions ******/
@@ -336,7 +333,7 @@ static void SysCfg_NumInss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Ins_GetCachedNumInssInSys ());
       HTM_TD_End ();
 
@@ -349,7 +346,6 @@ static void SysCfg_NumInss (void)
 
 static void SysCfg_NumDegs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
@@ -359,7 +355,7 @@ static void SysCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
       HTM_TD_End ();
 
@@ -372,7 +368,6 @@ static void SysCfg_NumDegs (void)
 
 static void SysCfg_NumCrss (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -382,7 +377,7 @@ static void SysCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
       HTM_TD_End ();
 

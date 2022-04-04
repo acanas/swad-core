@@ -1393,7 +1393,6 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                              char **HTMLBuffer)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    char FileNameHTMLTmp[PATH_MAX + 1];
@@ -1423,7 +1422,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
       fprintf (FileHTMLTmp,"<body>\n"
                            "<div class=\"LM DAT_%s\">\n",
-               The_Colors[Gbl.Prefs.Theme]);
+               The_GetSuffix ());
 
       /***** Write plain text into text buffer *****/
       /* Convert to respectful HTML and insert links */

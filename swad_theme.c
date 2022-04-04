@@ -78,17 +78,6 @@ const char *The_ThemeNames[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "Dark",
   };
 
-const char *The_Colors[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "WHITE",
-   [The_THEME_GREY  ] = "GREY",
-   [The_THEME_PURPLE] = "PURPLE",
-   [The_THEME_BLUE  ] = "BLUE",
-   [The_THEME_YELLOW] = "YELLOW",
-   [The_THEME_PINK  ] = "PINK",
-   [The_THEME_DARK  ] = "DARK",
-  };
-
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -117,7 +106,7 @@ void The_PutIconsToSelectTheme (void)
 	      {
 	       if (Theme == Gbl.Prefs.Theme)
 		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_Colors[Gbl.Prefs.Theme]);
+		                 The_GetSuffix ());
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgThe);
@@ -201,6 +190,31 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
 	 return Theme;
 
    return The_THEME_DEFAULT;
+  }
+
+/*****************************************************************************/
+/******************* Get theme name for CSS class suffix *********************/
+/*****************************************************************************/
+
+static const char *The_CSS_Suffix[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "WHITE",
+   [The_THEME_GREY  ] = "GREY",
+   [The_THEME_PURPLE] = "PURPLE",
+   [The_THEME_BLUE  ] = "BLUE",
+   [The_THEME_YELLOW] = "YELLOW",
+   [The_THEME_PINK  ] = "PINK",
+   [The_THEME_DARK  ] = "DARK",
+  };
+
+const char *The_GetSuffixForTheme (The_Theme_t Theme)
+  {
+   return The_CSS_Suffix[Theme];
+  }
+
+const char *The_GetSuffix (void)
+  {
+   return The_CSS_Suffix[Gbl.Prefs.Theme];
   }
 
 /*****************************************************************************/
@@ -301,11 +315,11 @@ void The_GetAndShowNumUsrsPerTheme (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Theme]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

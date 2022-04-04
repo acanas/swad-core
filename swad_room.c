@@ -145,7 +145,6 @@ void Roo_ResetRooms (struct Roo_Rooms *Rooms)
 void Roo_SeeRooms (void)
   {
    extern const char *Hlp_CENTER_Rooms;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
@@ -220,21 +219,21 @@ void Roo_SeeRooms (void)
 
 	       /* Building short name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
 	       HTM_TD_End ();
 
 	       /* Floor */
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_Int (Rooms.Lst[NumRoom].Floor);
 	       HTM_TD_End ();
 
 	       /* Type */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
 		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
@@ -242,21 +241,21 @@ void Roo_SeeRooms (void)
 
 	       /* Short name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
 	       HTM_TD_End ();
 
 	       /* Capacity */
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
 		  HTM_Txt (StrCapacity);
@@ -269,7 +268,7 @@ void Roo_SeeRooms (void)
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
 		     HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                   The_Colors[Gbl.Prefs.Theme],
+		                   The_GetSuffix (),
 		                   The_GetColorRows ());
 			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
 		     HTM_TD_End ();
@@ -663,7 +662,6 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumRoom;
    struct Roo_Room *Room;
    char *Anchor = NULL;
@@ -693,7 +691,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_End ();
 
 	    /* Room code */
-	    HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Room->RooCod);
 	       HTM_ARTICLE_End ();
@@ -715,7 +713,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
 				  HTM_SUBMIT_ON_CHANGE,false,
 				  "class=\"INPUT_LONG INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -736,7 +734,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\""
 				  " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -748,7 +746,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\""
 				  " class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -760,7 +758,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"3\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -784,7 +782,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
                                      HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
+
    extern const char *Txt_No_assigned_building;
    extern const char *Txt_Another_building;
    unsigned NumBld;
@@ -792,7 +790,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
    /***** Begin selector *****/
    HTM_SELECT_Begin (SubmitOnChange,
 		     "name=\"BldCod\" class=\"BLD_SEL INPUT_%s\"",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 
       /***** Option for no assigned building *****/
       HTM_OPTION (HTM_Type_STRING,"-1",
@@ -823,14 +821,13 @@ static void Roo_PutSelectorBuilding (long BldCod,
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
                                  HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    Roo_RoomType_t Type;
 
    /***** Begin selector *****/
    HTM_SELECT_Begin (SubmitOnChange,
 		     "name=\"Type\" class=\"ROOM_TYPE_SEL INPUT_%s\"",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 
       /***** Options for types *****/
       for (Type  = (Roo_RoomType_t) 0;
@@ -1257,7 +1254,6 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_room;
    extern const char *Txt_Create_room;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1295,7 +1291,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
 			       HTM_DONT_SUBMIT_ON_CHANGE,false,
 			       "class=\"INPUT_LONG INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Room type *****/
@@ -1310,7 +1306,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Room full name *****/
@@ -1319,7 +1315,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Seating capacity *****/
@@ -1328,7 +1324,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	       HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"3\" class=\"INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** MAC address *****/
@@ -1337,7 +1333,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	       HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"8\" class=\"INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

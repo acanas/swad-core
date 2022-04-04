@@ -886,7 +886,6 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
   {
    extern const char *Hlp_ASSESSMENT_Calls_for_exam_new_call;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_CALL_FOR_EXAM;
    extern const char *Txt_CALL_FOR_EXAM_Course;
@@ -1022,7 +1021,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 /***** Title *****/
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       HTM_NBSP ();
 	       HTM_BR ();
 	       HTM_STRONG_Begin ();
@@ -1044,12 +1043,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		  HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"CrsName\" size=\"30\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       else
 		 {
 		  HTM_STRONG_Begin ();
@@ -1071,12 +1070,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"Year\" name=\"Year\" class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (Year  = 0;
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
@@ -1102,12 +1101,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		  HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"ExamSession\" size=\"30\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       else
 		  HTM_Txt (CallsForExams->CallForExam.Session);
 	    HTM_TD_End ();
@@ -1139,7 +1138,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,
 				      StrExamDate);
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Txt (StrExamDate);
 	       HTM_TD_End ();
 	      }
@@ -1156,13 +1155,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"ExamHour\" name=\"ExamHour\""
 				    " class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 				 CallsForExams->CallForExam.StartTime.Hour == 0,false,
 				 "-");
@@ -1176,7 +1175,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"ExamMinute\" class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (Minute  = 0;
 			  Minute <= 59;
 			  Minute++)
@@ -1203,13 +1202,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"DurationHour\" name=\"DurationHour\""
 				    " class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (Hour  = 0;
 			  Hour <= 8;
 			  Hour++)
@@ -1221,7 +1220,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"DurationMinute\""
 				    " class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (Minute  = 0;
 			  Minute <= 59;
 			  Minute++)
@@ -1266,13 +1265,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\""
 			              " cols=\"30\" rows=\"4\""
 			              " class=\"INPUT_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.Place);
 		  HTM_TEXTAREA_End ();
 		 }
@@ -1298,12 +1297,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
 	      {
 	       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\""
 			           " cols=\"30\" rows=\"2\" class=\"INPUT_%s\"",
-			           The_Colors[Gbl.Prefs.Theme]);
+			           The_GetSuffix ());
 		  HTM_Txt (CallsForExams->CallForExam.Mode);
 	       HTM_TEXTAREA_End ();
 	      }
@@ -1329,13 +1328,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\""
 				      " cols=\"30\" rows=\"8\""
 				      " class=\"INPUT_%s\"",
-				      The_Colors[Gbl.Prefs.Theme]);
+				      The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.Structure);
 		  HTM_TEXTAREA_End ();
 		 }
@@ -1361,13 +1360,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\""
 			              " cols=\"30\" rows=\"2\""
 			              " class=\"INPUT_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.DocRequired);
 		  HTM_TEXTAREA_End ();
 		 }
@@ -1393,13 +1392,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\""
 				      " cols=\"30\" rows=\"4\""
 				      " class=\"INPUT_%s\"",
-				      The_Colors[Gbl.Prefs.Theme]);
+				      The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.MatRequired);
 		  HTM_TEXTAREA_End ();
 		 }
@@ -1425,13 +1424,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\""
 			              " cols=\"30\" rows=\"4\""
 			              " class=\"INPUT_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.MatAllowed);
 		  HTM_TEXTAREA_End ();
 		 }
@@ -1457,13 +1456,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\""
 			              " cols=\"30\" rows=\"5\""
 			              " class=\"INPUT_%s\"",
-			              The_Colors[Gbl.Prefs.Theme]);
+			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.OtherInfo);
 		  HTM_TEXTAREA_End ();
 		 }

@@ -103,7 +103,6 @@ void Cht_ShowChatRooms (void)
 
 void Cht_ShowListOfAvailableChatRooms (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Chat_rooms;
    extern const char *Txt_General;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -136,7 +135,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Title of top level *****/
-	 HTM_LI_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 	    Ico_PutIcon ("comments.svg",Ico_BLACK,Txt_Chat_rooms,"ICO16x16");
 	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
 	 HTM_LI_End ();
@@ -243,7 +242,6 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 void Cht_ShowListOfChatRoomsWithUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
    extern const char *Txt_Number_of_users;
@@ -277,11 +275,11 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[0]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -303,8 +301,6 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Begin list item *****/
    HTM_LI_Begin (NULL);
 
@@ -318,7 +314,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
 	 /* Begin button */
 	 HTM_BUTTON_Submit_Begin (RoomFullName,
 	                          "class=\"BT_LINK FORM_IN_%s\"",
-	                          The_Colors[Gbl.Prefs.Theme]);
+	                          The_GetSuffix ());
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

@@ -214,7 +214,6 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    static const char *ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
      {
@@ -278,7 +277,7 @@ void Mnu_WriteMenuThisTab (void)
 					  Act_GetIcon (NumAct));
 			   HTM_DIV_End ();
 			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
-			                  The_Colors[Gbl.Prefs.Theme]);
+			                  The_GetSuffix ());
 			      HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 			   HTM_DIV_End ();
 			HTM_DIV_End ();
@@ -308,7 +307,6 @@ void Mnu_WriteMenuThisTab (void)
 void Mnu_PutIconsToSelectMenu (void)
   {
    extern const char *Hlp_PROFILE_Settings_menu;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Menu;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
@@ -324,7 +322,7 @@ void Mnu_PutIconsToSelectMenu (void)
 	      {
 	       if (Menu == Gbl.Prefs.Menu)
 		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_Colors[Gbl.Prefs.Theme]);
+		                 The_GetSuffix ());
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgMnu);
@@ -416,7 +414,6 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Menu;
    extern const char *Txt_Number_of_users;
@@ -467,11 +464,11 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
 	                    Txt_MENU_NAMES[Menu],"ICOx20");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Menu]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

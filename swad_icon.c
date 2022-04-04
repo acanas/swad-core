@@ -158,7 +158,6 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
 
 void Ico_PutIconsToSelectIconSet (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Hlp_PROFILE_Settings_icons;
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
@@ -175,7 +174,7 @@ void Ico_PutIconsToSelectIconSet (void)
 	      {
 	       if (IconSet == Gbl.Prefs.IconSet)
 		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_Colors[Gbl.Prefs.Theme]);
+		                 The_GetSuffix ());
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgIco);
@@ -560,7 +559,6 @@ void Ico_PutIconNotVisible (void)
 void Ico_GetAndShowNumUsrsPerIconSet (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_icons;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Icons;
    extern const char *Txt_Number_of_users;
@@ -633,11 +631,11 @@ void Ico_GetAndShowNumUsrsPerIconSet (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[IconSet]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

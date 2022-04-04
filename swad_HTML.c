@@ -340,7 +340,6 @@ void HTM_TH_Span (const char *Title,HTM_HeadAlign HeadAlign,
                   unsigned RowSpan,unsigned ColSpan,
                   const char *ClassFmt,...)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    va_list ap;
    int NumBytesPrinted;
    char *Attr = NULL;
@@ -360,42 +359,42 @@ void HTM_TH_Span (const char *Title,HTM_HeadAlign HeadAlign,
       if (Attr)
 	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   RowSpan,ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   RowSpan,ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else if (RowSpan > 1)
      {
       if (Attr)
 	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   RowSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   RowSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else if (ColSpan > 1)
      {
       if (Attr)
 	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else
      {
       if (Attr)
 	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s %s\">",
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s\">",
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
 
    if (ClassFmt)
@@ -410,7 +409,6 @@ void HTM_TH_Span_Begin (HTM_HeadAlign HeadAlign,
                         unsigned RowSpan,unsigned ColSpan,
                         const char *ClassFmt,...)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    va_list ap;
    int NumBytesPrinted;
    char *Attr = NULL;
@@ -430,42 +428,42 @@ void HTM_TH_Span_Begin (HTM_HeadAlign HeadAlign,
       if (Attr)
 	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   RowSpan,ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   RowSpan,ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else if (RowSpan > 1)
      {
       if (Attr)
 	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   RowSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   RowSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else if (ColSpan > 1)
      {
       if (Attr)
 	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
 		   ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
 		   ColSpan,
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
    else
      {
       if (Attr)
 	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s %s\">",
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
+		   The_GetSuffix (),ClassAlign[HeadAlign],Attr);
       else
 	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s\">",
-		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+		   The_GetSuffix (),ClassAlign[HeadAlign]);
      }
 
    if (ClassFmt)
@@ -1238,11 +1236,9 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"INPUT_%s\"%s />",
 	     Name,Value,
-	     The_Colors[Gbl.Prefs.Theme],
+	     The_GetSuffix (),
 	     Attr);
   }
 

@@ -302,7 +302,6 @@ static void InsCfg_Map (void)
 
 static void InsCfg_Country (bool PrintView,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Country;
    unsigned NumCty;
 
@@ -318,7 +317,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		       Txt_Country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 if (PutForm)
 	   {
 	    /* Put form to select country */
@@ -326,7 +325,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthCtyCod\" name=\"OthCtyCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (NumCty = 0;
 		       NumCty < Gbl.Hierarchy.Ctys.Num;
 		       NumCty++)
@@ -416,7 +415,6 @@ static void InsCfg_QR (void)
 
 static void InsCfg_NumUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_institution;
 
    /***** Number of users *****/
@@ -426,7 +424,7 @@ static void InsCfg_NumUsrs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
       HTM_TD_End ();
 
@@ -439,7 +437,6 @@ static void InsCfg_NumUsrs (void)
 
 static void InsCfg_NumDegs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
@@ -449,7 +446,7 @@ static void InsCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
@@ -462,7 +459,6 @@ static void InsCfg_NumDegs (void)
 
 static void InsCfg_NumCrss (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -472,7 +468,7 @@ static void InsCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
@@ -485,7 +481,6 @@ static void InsCfg_NumCrss (void)
 
 static void InsCfg_NumDpts (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Departments;
 
    /***** Number of departments *****/
@@ -495,7 +490,7 @@ static void InsCfg_NumDpts (void)
       Frm_LabelColumn ("RT",NULL,Txt_Departments);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 

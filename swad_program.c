@@ -1750,7 +1750,6 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 		              const char *Txt)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Title;
    extern const char *Txt_Description;
 
@@ -1767,7 +1766,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			 "id=\"Title\""
 			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			 " required=\"required\"",
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1787,7 +1786,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"25\""
 			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	    if (Txt)
 	       if (Txt[0])
 		  HTM_Txt (Txt);
@@ -1972,7 +1971,6 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_program_items;
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
@@ -2002,15 +2000,15 @@ void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assig
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumCoursesWithItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumItemsPerCourse);
 	 HTM_TD_End ();
 

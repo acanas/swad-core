@@ -389,7 +389,6 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -428,7 +427,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
       /***** Put link *****/
       HTM_BUTTON_Submit_Begin (Txt_Confirm_ID,
                                "class=\"BT_LINK FORM_OUT_%s BOLD\"",
-                               The_Colors[Gbl.Prefs.Theme]);
+                               The_GetSuffix ());
 	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm_ID);
       HTM_BUTTON_End ();
 
@@ -503,7 +502,6 @@ void ID_ShowFormChangeOtherUsrID (void)
 static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
@@ -606,7 +604,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
 	    HTM_TD_End ();
 
@@ -622,7 +620,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       if (ItsMe)
 		  Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
 	       else
@@ -635,7 +633,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 						    "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"NewID\" class=\"INPUT_%s\" size=\"18\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 		  HTM_BR ();
 		  Btn_PutCreateButtonInline (Txt_Add_this_ID);
 	       Frm_EndForm ();

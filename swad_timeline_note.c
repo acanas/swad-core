@@ -316,7 +316,6 @@ void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
                                               const struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    char *Class;
 
    /***** Begin top container *****/
@@ -324,7 +323,7 @@ static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
 
       /***** Write author's full name *****/
       if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK DAT_STRONG_%s BOLD",
-                    The_Colors[Gbl.Prefs.Theme]) < 0)
+                    The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
       TmlNot_WriteAuthorName (UsrDat,Class);
       free (Class);
@@ -383,7 +382,6 @@ static void TmlNot_WriteContent (const struct TmlNot_Note *Not)
 
 static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -408,7 +406,7 @@ static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
    TmlNot_GetNoteSummary (Not,SummaryStr);
 
    /* Write note summary */
-   HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_GetSuffix ());
       HTM_Txt (SummaryStr);
    HTM_DIV_End ();
   }
@@ -542,7 +540,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
                                       const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char *Anchor = NULL;
@@ -690,7 +687,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    /* Begin button */
 	    HTM_BUTTON_Submit_Begin (Txt_TIMELINE_NOTE[Not->Type],
 	                             "class=\"BT_LINK FORM_IN_WHITE %s ICO_HIGHLIGHT\"",
-	                             The_Colors[Gbl.Prefs.Theme]);
+	                             The_GetSuffix ());
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,

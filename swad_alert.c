@@ -359,7 +359,6 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
 
 static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Close;
    char IdAlert[Frm_MAX_BYTES_ID + 1];
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
@@ -398,7 +397,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       HTM_DIV_Begin ("class=\"CM\"");
 
    /***** Begin box *****/
-   HTM_DIV_Begin ("class=\"ALERT ALERT_BG_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"ALERT ALERT_BG_%s\"",The_GetSuffix ());
 
       /***** Icon to close the alert *****/
       if (AlertClosable[AlertType])
@@ -414,11 +413,11 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       /***** Write message *****/
       if (AlertType == Ale_NONE)
 	 HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\""
 		        " style=\"background-image:url('%s/%s');\"",
-	                The_Colors[Gbl.Prefs.Theme],
+	                The_GetSuffix (),
 			Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
       HTM_Txt (Txt);
       HTM_DIV_End ();

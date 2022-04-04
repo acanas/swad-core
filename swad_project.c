@@ -566,7 +566,6 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
 static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    struct Prj_Filter Filter;
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME   |
@@ -581,7 +580,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	{
 	 if (Who == Projects->Filter.Who)
 	    HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                   The_Colors[Gbl.Prefs.Theme]);
+	                   The_GetSuffix ());
 	 else
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	 Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
@@ -608,7 +607,6 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG];
    struct Prj_Filter Filter;
    Prj_AssignedNonassig_t Assign;
@@ -620,7 +618,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
      {
       if ((Projects->Filter.Assign & (1 << Assign)))
 	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);
@@ -647,7 +645,6 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
    struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
@@ -667,7 +664,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	HidVis++)
      {
       if ((Projects->Filter.Hidden & (1 << HidVis)))
-	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);
@@ -695,7 +692,6 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
    struct Prj_Filter Filter;
    Prj_Faultiness_t Faultiness;
@@ -716,7 +712,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
      {
       if ((Projects->Filter.Faulti & (1 << Faultiness)))
 	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);
@@ -744,7 +740,6 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
    char *SelectClass;
@@ -764,7 +759,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 
 	 /***** Write selector with departments *****/
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
-	               The_Colors[Gbl.Prefs.Theme]) < 0)
+	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 				      Projects->Filter.DptCod,	// Selected department
@@ -964,7 +959,6 @@ static Usr_Who_t Prj_GetParamWho (void)
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
                                   Prj_ProjectView_t ProjectView)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS];
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
@@ -1241,7 +1235,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
                                 struct Prj_Project *Prj,
                                 Prj_ProjectView_t ProjectView)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Project_files;
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
@@ -1290,7 +1283,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("rowspan=\"3\" class=\"RT BIG_INDEX_%s %s\"",
-	                  The_Colors[Gbl.Prefs.Theme],
+	                  The_GetSuffix (),
 			  The_GetColorRows ());
 	       HTM_Unsigned (NumIndex);
 	       if (PrjIsFaulty)
@@ -1421,12 +1414,12 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme],
+			  ClassData,The_GetSuffix (),
 			  The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme]);
+			  ClassData,The_GetSuffix ());
 	    break;
 	}
 	 HTM_TxtF ("%s&nbsp;",Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
@@ -1666,12 +1659,10 @@ static void Prj_PutWarningIcon (void)
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Link to toggle on/off some fields of project *****/
    HTM_A_Begin ("href=\"\" title=\"%s\" class=\"FORM_IN_%s\""
                 " onclick=\"toggleProject('%u');return false;\"",
-               Text,The_Colors[Gbl.Prefs.Theme],
+               Text,The_GetSuffix (),
                UniqueId);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_A_End ();
@@ -1683,7 +1674,6 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
 
 static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
@@ -1731,7 +1721,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
       /***** Project title *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+		    ClassData,The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (Prj->Title);
       HTM_TD_End ();
 
@@ -1740,14 +1730,14 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
       /***** Assigned? *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                    ClassData,The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt ((Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
 						    Txt_No);
       HTM_TD_End ();
 
       /***** Number of students *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                    ClassData,The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (Prj->NumStds);
       HTM_TD_End ();
 
@@ -1759,7 +1749,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
       /***** Proposal *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                    ClassData,The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
       HTM_TD_End ();
 
@@ -1789,7 +1779,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
                                           Prj_ProjectView_t ProjectView)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    bool PutLink;
    const char *ClassData;
@@ -1811,16 +1800,16 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	               ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+	               ClassData,The_GetSuffix (),The_GetColorRows ());
 	 break;
       default:
 	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               ClassData,The_Colors[Gbl.Prefs.Theme]);
+	               ClassData,The_GetSuffix ());
 	 break;
      }
 	 if (PutLink)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
-			 Dpt.WWW,ClassData,The_Colors[Gbl.Prefs.Theme]);
+			 Dpt.WWW,ClassData,The_GetSuffix ());
 	 HTM_Txt (Dpt.FullName);
 	 if (PutLink)
 	    HTM_A_End ();
@@ -1830,7 +1819,6 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    const char *ClassData;
 
@@ -1844,7 +1832,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
 
    /***** Show department *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                 ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                 ClassData,The_GetSuffix (),The_GetColorRows ());
       HTM_Txt (Dpt.FullName);
    HTM_TD_End ();
   }
@@ -1859,7 +1847,6 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
                                         const char *Label,char *TxtField,
 					bool Warning)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    const char *ClassLabel;
    const char *ClassData;
 
@@ -1910,12 +1897,12 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme],
+			  ClassData,The_GetSuffix (),
 			  The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme]);
+			  ClassData,The_GetSuffix ());
 	    break;
 	}
 	 HTM_Txt (TxtField);
@@ -1929,7 +1916,6 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
@@ -1942,7 +1928,7 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
 
    /***** Write text *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                 ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                 ClassData,The_GetSuffix (),The_GetColorRows ());
       HTM_Txt (TxtField);
    HTM_TD_End ();
   }
@@ -1955,7 +1941,6 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
                                    Prj_ProjectView_t ProjectView,
                                    const char *id,unsigned UniqueId)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_URL;
    const char *ClassLabel;
    const char *ClassData;
@@ -1996,12 +1981,12 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme],
+			  ClassData,The_GetSuffix (),
 			  The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_Colors[Gbl.Prefs.Theme]);
+			  ClassData,The_GetSuffix ());
 	    break;
 	}
 	 if (PutLink)
@@ -2016,7 +2001,6 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
@@ -2025,7 +2009,7 @@ static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
 
    /***** Show URL *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                 ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                 ClassData,The_GetSuffix (),The_GetColorRows ());
       HTM_Txt (Prj->URL);
    HTM_TD_End ();
   }
@@ -2058,7 +2042,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
                                                 Prj_RoleInProject_t RoleInPrj)
   {
    ;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove;
@@ -2141,17 +2124,17 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 	   {
 	    case Prj_LIST_PROJECTS:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			     ClassData,The_Colors[Gbl.Prefs.Theme],
+			     ClassData,The_GetSuffix (),
 			     The_GetColorRows ());
 	       break;
 	    case Prj_FILE_BROWSER_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			     ClassData,The_Colors[Gbl.Prefs.Theme]);
+			     ClassData,The_GetSuffix ());
 	       break;
 	    case Prj_EDIT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 	       break;
 	   }
 
@@ -2245,7 +2228,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
                                                       Prj_RoleInProject_t RoleInPrj)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -2261,7 +2243,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 
    /***** Begin column with list of all members with this role *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                 ClassData,The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
+                 ClassData,The_GetSuffix (),The_GetColorRows ());
 
       if (NumUsrs)
 	{
@@ -3297,7 +3279,6 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
   {
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -3377,7 +3358,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			       "id=\"Title\""
 			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3391,7 +3372,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
-	                     The_Colors[Gbl.Prefs.Theme]) < 0)
+	                     The_GetSuffix ()) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Prj->DptCod,		// Selected department
@@ -3407,14 +3388,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Assigned? */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Assigned_QUESTION);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"Assigned\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
 			      "%s",Txt_Yes);
 		  HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
@@ -3427,7 +3408,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Number of students */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Number_of_students);
 	    HTM_TD_End ();
 
@@ -3435,7 +3416,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
 			       HTM_DONT_SUBMIT_ON_CHANGE,false,
 			       "class=\"INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3443,7 +3424,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 /* Proposal */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Proposal);
 	    HTM_TD_End ();
 
@@ -3451,7 +3432,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"Proposal\""
 				 " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (Proposal  = (Prj_Proposal_t) 0;
 		       Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 		       Proposal++)
@@ -3488,10 +3469,10 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    Frm_LabelColumn ("RT","WWW",Txt_URL);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3517,8 +3498,6 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows,bool Required)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Description *****/
    HTM_TR_Begin (NULL);
 
@@ -3530,7 +3509,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
 			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"%s",
 			     Id,Id,NumRows,
-			     The_Colors[Gbl.Prefs.Theme],
+			     The_GetSuffix (),
 			     Required ? " required=\"required\"" :
 					"");
 	    HTM_Txt (TxtField);
@@ -4217,7 +4196,6 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 void Prj_GetAndShowProjectsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_projects;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_projects;
    extern const char *Txt_Number_of_BR_courses_with_BR_projects;
@@ -4247,15 +4225,15 @@ void Prj_GetAndShowProjectsStats (void)
       /***** Write number of projects *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumCoursesWithProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumProjectsPerCourse);
 	 HTM_TD_End ();
 

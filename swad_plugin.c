@@ -84,7 +84,6 @@ static void Plg_EditingPluginDestructor (void);
 
 void Plg_ListPlugins (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Option_under_development;
    extern const char *Txt_Plugins;
    extern const char *Txt_Plugin;
@@ -129,10 +128,10 @@ void Plg_ListPlugins (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM DAT_%s\" style=\"width:45px;\"",
-			  The_Colors[Gbl.Prefs.Theme]);
+			  The_GetSuffix ());
 	       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 			    " class=\"DAT_%s\"",
-			    URL,Plg->Name,The_Colors[Gbl.Prefs.Theme]);
+			    URL,Plg->Name,The_GetSuffix ());
 		  if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
@@ -141,10 +140,10 @@ void Plg_ListPlugins (void)
 	       HTM_A_End ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 			    " class=\"DAT_%s\"",
-			    URL,Plg->Name,The_Colors[Gbl.Prefs.Theme]);
+			    URL,Plg->Name,The_GetSuffix ());
 		  HTM_Txt (Plg->Name);
 	       HTM_A_End ();
 	    HTM_TD_End ();
@@ -328,7 +327,6 @@ void Plg_FreeListPlugins (void)
 
 static void Plg_ListPluginsForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumPlg;
    struct Plugin *Plg;
    char *Icon;
@@ -356,7 +354,7 @@ static void Plg_ListPluginsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Plugin code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Plg->PlgCod);
 	    HTM_TD_End ();
 
@@ -377,7 +375,7 @@ static void Plg_ListPluginsForEdition (void)
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -388,7 +386,7 @@ static void Plg_ListPluginsForEdition (void)
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"30\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -399,7 +397,7 @@ static void Plg_ListPluginsForEdition (void)
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"4\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -410,7 +408,7 @@ static void Plg_ListPluginsForEdition (void)
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"16\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -420,7 +418,7 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
 				 "size=\"15\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -430,7 +428,7 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -777,7 +775,6 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_plugin;
    extern const char *Txt_Name;
    extern const char *Txt_Description;
@@ -814,7 +811,7 @@ static void Plg_PutFormToCreatePlugin (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"10\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Plugin description *****/
@@ -824,7 +821,7 @@ static void Plg_PutFormToCreatePlugin (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"30\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Plugin logo *****/
@@ -833,7 +830,7 @@ static void Plg_PutFormToCreatePlugin (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"4\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Plugin application key *****/
@@ -842,7 +839,7 @@ static void Plg_PutFormToCreatePlugin (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"16\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Plugin URL *****/
@@ -850,7 +847,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	       HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "size=\"15\" class=\"INPUT_%s\""
 			      " required=\"required\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Plugin IP address *****/
@@ -859,7 +856,7 @@ static void Plg_PutFormToCreatePlugin (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"10\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 /***** Row end *****/

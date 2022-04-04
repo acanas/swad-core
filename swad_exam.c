@@ -474,7 +474,6 @@ void Exa_ShowOnlyOneExamEnd (void)
 static void Exa_ShowOneExam (struct Exa_Exams *Exams,
                              struct Exa_Exam *Exam,bool ShowOnlyThisExam)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_exam;
    extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -624,7 +623,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Exam->Hidden ? "DAT_LIGHT" :
 				    "DAT",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -1332,7 +1331,6 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_exam;
    extern const char *Txt_Edit_exam;
    extern const char *Txt_Title;
@@ -1373,7 +1371,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 			    "id=\"Title\""
 			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1381,14 +1379,14 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       /***** Maximum grade *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Maximum_grade);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
 			     " class=\"INPUT_%s\" required=\"required\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1396,7 +1394,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       /***** Visibility of results *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT %s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Result_visibility);
 	 HTM_TD_End ();
 
@@ -1416,7 +1414,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			     The_Colors[Gbl.Prefs.Theme]);
+			     The_GetSuffix ());
 	    HTM_Txt (Txt);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();
@@ -1589,7 +1587,6 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 void Exa_GetAndShowExamsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_exams;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_exams;
    extern const char *Txt_Number_of_BR_courses_with_BR_exams;
@@ -1618,15 +1615,15 @@ void Exa_GetAndShowExamsStats (void)
       /***** Write number of exams *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumCoursesWithExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumExamsPerCourse);
 	 HTM_TD_End ();
 

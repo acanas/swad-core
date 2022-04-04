@@ -94,7 +94,6 @@ void Plc_ResetPlaces (struct Plc_Places *Places)
 void Plc_SeePlaces (void)
   {
    extern const char *Hlp_INSTITUTION_Places;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Places;
    extern const char *Txt_PLACES_HELP_ORDER[2];
    extern const char *Txt_PLACES_ORDER[2];
@@ -155,12 +154,12 @@ void Plc_SeePlaces (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Txt (Places.Lst[NumPlc].FullName);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
 		  HTM_TD_End ();
 
@@ -171,7 +170,7 @@ void Plc_SeePlaces (void)
 	    /***** Separation row *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TD_Begin ("colspan=\"2\" class=\"DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_NBSP ();
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -181,12 +180,12 @@ void Plc_SeePlaces (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Txt (Txt_Other_places);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Unsigned (NumCtrsInOtherPlcs);
 	       HTM_TD_End ();
 
@@ -196,11 +195,11 @@ void Plc_SeePlaces (void)
 	    /***** Write centers (of the current institution) with no place *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Txt_Place_unspecified);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 				NumCtrsWithPlc);
 	       HTM_TD_End ();
@@ -462,7 +461,6 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumPlc;
    struct Plc_Place *Plc;
 
@@ -491,7 +489,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Plc->PlcCod);
 	    HTM_TD_End ();
 
@@ -502,7 +500,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -513,12 +511,12 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Plc->NumCtrs);
 	    HTM_TD_End ();
 
@@ -709,7 +707,6 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_place;
    extern const char *Txt_Create_place;
 
@@ -740,7 +737,7 @@ static void Plc_PutFormToCreatePlace (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Place full name *****/
@@ -749,11 +746,11 @@ static void Plc_PutFormToCreatePlace (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Number of centers *****/
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 

@@ -181,7 +181,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -221,7 +220,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		     Frm_BeginForm (Action);
 			HTM_BUTTON_Submit_Begin (TabMenuStr,
 			                         "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
-			                         The_Colors[Gbl.Prefs.Theme]);
+			                         The_GetSuffix ());
 			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				    "class=\"%s\"",
 				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
@@ -249,7 +248,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -262,7 +260,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** Begin div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
-                  The_Colors[Gbl.Prefs.Theme]);
+                  The_GetSuffix ());
 
       Frm_BeginForm (ActMFUAct);
 	 HTM_BUTTON_Submit_Begin (Txt_My_frequent_actions,"class=\"BT_LINK\"");

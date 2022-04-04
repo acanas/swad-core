@@ -147,7 +147,6 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    struct Hie_Hierarchy Hie;
@@ -173,9 +172,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    snprintf (ClassNormal,sizeof (ClassNormal),"BT_LINK FORM_IN_%s",
-	     The_Colors[Gbl.Prefs.Theme]);
+	     The_GetSuffix ());
    snprintf (ClassHighlight,sizeof (ClassHighlight),"BT_LINK FORM_IN_%s BOLD BG_HIGHLIGHT",
-	     The_Colors[Gbl.Prefs.Theme]);
+	     The_GetSuffix ());
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
@@ -614,7 +613,6 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
 
 void Crs_WriteSelectorOfCourse (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -629,12 +627,12 @@ void Crs_WriteSelectorOfCourse (void)
       if (Gbl.Hierarchy.Deg.DegCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 
       /***** Initial disabled option *****/
       HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Crs.CrsCod < 0,true,
@@ -755,7 +753,6 @@ void Crs_FreeListCoursesInCurrentDegree (void)
 
 void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Course;
    unsigned NumMyCrs;
    long CrsCod;
@@ -775,7 +772,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
       /***** Begin selector of courses *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"my_courses\" name=\"crs\" class=\"INPUT_%s\"",
-			The_Colors[Gbl.Prefs.Theme]);
+			The_GetSuffix ());
 
 	 /***** Write an option when no course selected *****/
 	 if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
@@ -921,7 +918,6 @@ static void Crs_PutIconToEditCourses (void)
 
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -970,7 +966,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	    /* Put green tip if course has users */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
-			  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor,
+			  TxtClassNormal,The_GetSuffix (),BgColor,
 			  NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					     Txt_COURSE_Without_users);
 	       HTM_Txt (NumUsrs[Rol_UNK] ? "&check;" :
@@ -979,19 +975,19 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	    /* Institutional code of the course */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
-	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Txt (Crs->InstitutionalCrsCod);
 	    HTM_TD_End ();
 
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
-	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
 	    HTM_TD_End ();
 
 	    /* Course full name */
 	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-	                  TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
+	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs->CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
@@ -1004,14 +1000,14 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	    /* Number of teachers in this course */
 	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
 	    HTM_TD_End ();
 
 	    /* Number of students in this course */
 	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
+	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_STD]);
 	    HTM_TD_End ();
 
@@ -1138,7 +1134,6 @@ static void Crs_ListCoursesForEdition (void)
 
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
    struct Crs_Course *Crs;
@@ -1182,12 +1177,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
 	       HTM_Long (Crs->CrsCod);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
@@ -1195,7 +1190,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1203,7 +1198,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course year */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
@@ -1211,7 +1206,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthCrsYear\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (YearAux  = 0;
 			  YearAux <= Deg_MAX_YEARS_PER_DEGREE;
 			  YearAux++)	// All the years are permitted
@@ -1228,7 +1223,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
@@ -1236,7 +1231,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1244,7 +1239,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
@@ -1252,7 +1247,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1260,13 +1255,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Current number of teachers in this course */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
 	    HTM_TD_End ();
 
 	    /* Current number of students in this course */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Rol_STD]);
 	    HTM_TD_End ();
 
@@ -1276,7 +1271,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	    HTM_TD_End ();
 
@@ -1310,7 +1305,6 @@ static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_course;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Create_course;
@@ -1348,7 +1342,7 @@ static void Crs_PutFormToCreateCourse (void)
 			    Crs_EditingCrs->InstitutionalCrsCod,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Year *****/
@@ -1356,7 +1350,7 @@ static void Crs_PutFormToCreateCourse (void)
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"OthCrsYear\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (Year = 0;
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
@@ -1372,7 +1366,7 @@ static void Crs_PutFormToCreateCourse (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Course full name *****/
@@ -1381,27 +1375,27 @@ static void Crs_PutFormToCreateCourse (void)
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Current number of teachers in this course *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Current number of students in this course *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Course requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
 	 HTM_TD_End ();
 
 	 /***** Course status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2398,7 +2392,6 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -2460,14 +2453,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
       /***** Write number of course in this search *****/
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCrs);
       HTM_TD_End ();
 
       /***** Write degree logo, degree short name (row[2])
 	     and center short name (row[6]) *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
@@ -2481,13 +2474,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
       /***** Write year (row[4]) *****/
       HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Txt (Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
       HTM_TD_End ();
 
       /***** Write course full name (row[5]) *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
@@ -2500,19 +2493,19 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
       /***** Write number of teachers in course *****/
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumTchs);
       HTM_TD_End ();
 
       /***** Write number of non-editing teachers in course *****/
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumNETs);
       HTM_TD_End ();
 
       /***** Write number of students in course *****/
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    ClassTxt,The_Colors[Gbl.Prefs.Theme],BgColor);
+                    ClassTxt,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumStds);
       HTM_TD_End ();
 
@@ -2555,7 +2548,6 @@ void Crs_PutLinkToRemoveOldCrss (void)
 void Crs_AskRemoveOldCrss (void)
   {
    extern const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
@@ -2572,11 +2564,11 @@ void Crs_AskRemoveOldCrss (void)
 		    Hlp_SYSTEM_Maintenance_eliminate_old_courses,Box_NOT_CLOSABLE);
 
       /***** Form to request number of months without clicks *****/
-      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "name=\"Months\" class=\"INPUT_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i++)

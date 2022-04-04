@@ -99,7 +99,6 @@ static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
 void Dpt_SeeDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Departments_of_INSTITUTION_X;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
@@ -175,12 +174,12 @@ void Dpt_SeeDepts (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_%s\"",
 			    Departments.Lst[NumDpt].WWW,
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 		  HTM_Txt (Departments.Lst[NumDpt].FullName);
 	       HTM_A_End ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
 	    HTM_TD_End ();
 
@@ -190,7 +189,7 @@ void Dpt_SeeDepts (void)
       /***** Separation row *****/
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"3\" class=\"DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -200,11 +199,11 @@ void Dpt_SeeDepts (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Other_departments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumTchsInsInOtherDpts);
 	 HTM_TD_End ();
 
@@ -215,11 +214,11 @@ void Dpt_SeeDepts (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Department_unspecified);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumTchsInsWithNoDpt);
 	 HTM_TD_End ();
 
@@ -445,7 +444,6 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Dpt_Department *Dpt;
@@ -481,7 +479,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Department code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
 	    HTM_TD_End ();
 
@@ -492,7 +490,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
@@ -512,7 +510,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -523,7 +521,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -534,12 +532,12 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Number of teachers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Dpt->NumTchs);
 	    HTM_TD_End ();
 
@@ -803,7 +801,6 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
@@ -836,7 +833,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"OthInsCod\""
 				 " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
 			      "%s",Txt_Another_institution);
 		  for (NumIns = 0;
@@ -854,7 +851,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Department full name *****/
@@ -863,7 +860,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Department WWW *****/
@@ -871,7 +868,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	       HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			      " required=\"required\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

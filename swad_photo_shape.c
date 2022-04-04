@@ -59,7 +59,6 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
   {
    extern const char *Hlp_PROFILE_Settings_user_photos;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User_photos;
    extern const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -82,7 +81,7 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	   {
 	    if (Shape == Gbl.Prefs.PhotoShape)
 	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                      The_Colors[Gbl.Prefs.Theme]);
+	                      The_GetSuffix ());
 	    else
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (ActChgUsrPho);
@@ -162,7 +161,6 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_user_photos;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
@@ -222,11 +220,11 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
 			Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Shape]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Shape] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

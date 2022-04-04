@@ -330,7 +330,6 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
@@ -341,7 +340,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
 
       /***** Label *****/
       HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"RM FORM_IN_%s\"",
-		       The_Colors[Gbl.Prefs.Theme]);
+		       The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_nick_email_or_ID);
       HTM_LABEL_End ();
 
@@ -351,7 +350,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
 		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\""
 		      " class=\"INPUT_%s\""
 		      " required=\"required\"",
-		      The_Colors[Gbl.Prefs.Theme]);
+		      The_GetSuffix ());
 
       /***** Send button*****/
       Btn_PutConfirmButton (Txt_Continue);
@@ -525,7 +524,6 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_multiple_users;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Administer_multiple_students;
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
@@ -591,7 +589,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 		    Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
 	 /***** Step 1: List of students to be enroled / removed *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
 	 HTM_DIV_End ();
 
@@ -599,13 +597,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	 Enr_PutAreaToEnterUsrsIDs ();
 
 	 /***** Step 2: Put different actions to register/remove users to/from current course *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_2_Select_the_desired_action);
 	 HTM_DIV_End ();
 	 Enr_PutActionsRegRemSeveralUsrs ();
 
 	 /***** Step 3: Select groups in which register / remove users *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_3_Optionally_select_groups);
 	 HTM_DIV_End ();
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
@@ -622,7 +620,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	   }
 
 	 /***** Step 4: Confirm register / remove students *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
 	 HTM_DIV_End ();
 	 Pwd_AskForConfirmationOnDangerousAction ();
@@ -655,7 +653,6 @@ void Enr_PutLinkToRemOldUsrs (void)
 
 void Enr_AskRemoveOldUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2;
@@ -671,11 +668,11 @@ void Enr_AskRemoveOldUsrs (void)
 		    NULL,Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months without clicks *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"Months\" class=\"INPUT_%s\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	       for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months++)
@@ -769,7 +766,6 @@ void Enr_RemoveOldUsrs (void)
 
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
@@ -784,7 +780,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 	    HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\""
 		                " cols=\"60\" rows=\"10\""
 		                " class=\"INPUT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();
 
@@ -798,7 +794,6 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Register_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
@@ -806,7 +801,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Begin list of options *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Register / remove users listed or not listed *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
@@ -1310,7 +1305,6 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    bool OptionsShown = false;
    bool UsrBelongsToCrs = false;
    bool UsrIsDegAdmin = false;
@@ -1345,7 +1339,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Begin list of options *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Register user in course / Modify user's data *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
@@ -2067,7 +2061,6 @@ void Enr_UpdateEnrolmentRequests (void)
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
@@ -2146,7 +2139,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 	       Frm_LabelColumn ("RT","Role",Txt_Users);
 
-	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  Rol_WriteSelectorRoles (1 << Rol_STD |
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
@@ -2219,12 +2212,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Number *****/
 		     HTM_TD_Begin ("class=\"RT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			HTM_Unsigned (NumReqs - NumReq);
 		     HTM_TD_End ();
 
 		     /***** Link to course *****/
-		     HTM_TD_Begin ("LT DAT_%s",The_Colors[Gbl.Prefs.Theme]);
+		     HTM_TD_Begin ("LT DAT_%s",The_GetSuffix ());
 
 			Crs_GetDataOfCourseByCod (&Crs);
 			Deg.DegCod = Crs.DegCod;
@@ -2243,14 +2236,14 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Number of teachers in the course *****/
 		     HTM_TD_Begin ("class=\"RT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			HTM_Unsigned (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
 							    1 << Rol_TCH));
 		     HTM_TD_End ();
 
 		     /***** User photo *****/
 		     HTM_TD_Begin ("class=\"CT DAT_%s\" style=\"width:22px;\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 			                           ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 			                           false);
@@ -2258,7 +2251,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** User name *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
 			   Usr_WriteFirstNameBRSurnames (&UsrDat);
 			HTM_DIV_End ();
@@ -2266,7 +2259,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Requested role (row[3]) *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
 		     HTM_TD_End ();
 
@@ -2275,7 +2268,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Button to confirm the request *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
@@ -2287,7 +2280,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Button to reject the request *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 			Frm_BeginForm (ActReqRejSignUp);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
 			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);

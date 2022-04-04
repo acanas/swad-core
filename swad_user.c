@@ -1133,7 +1133,6 @@ void Usr_PutLinkToLogin (void)
 void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Hlp_PROFILE_LogIn;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
@@ -1171,7 +1170,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 			       " class=\"INPUT_%s\" autofocus=\"autofocus\""
 			       " required=\"required\"",
 			       Txt_nick_email_or_ID,
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_DIV_End ();
 
 	    /***** User's password *****/
@@ -1182,7 +1181,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
 				   "id=\"UsrPwd\" class=\"INPUT_%s\"",
-				   The_Colors[Gbl.Prefs.Theme]);
+				   The_GetSuffix ());
 	    HTM_DIV_End ();
 
 	 /***** End table, send button and end box *****/
@@ -1347,7 +1346,6 @@ void Usr_PutFormLogIn (void)
 
 void Usr_WriteLoggedUsrHead (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -1360,7 +1358,7 @@ void Usr_WriteLoggedUsrHead (void)
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
    char *ClassSelect;
 
-   HTM_DIV_Begin ("class=\"HEAD_USR USR_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"HEAD_USR USR_%s\"",The_GetSuffix ());
 
       /***** User's role *****/
       if (NumAvailableRoles == 1)
@@ -1376,7 +1374,7 @@ void Usr_WriteLoggedUsrHead (void)
       else
 	{
 	 if (asprintf (&ClassSelect,"SEL_ROLE INPUT_%s",
-	               The_Colors[Gbl.Prefs.Theme]) < 0)
+	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Rol_PutFormToChangeMyRole (ClassSelect);
 	 free (ClassSelect);
@@ -2043,7 +2041,6 @@ static void Usr_SetMyPrefsAndRoles (void)
 void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
@@ -2066,21 +2063,21 @@ void Usr_ShowFormsLogoutAndRole (void)
       /***** Put a form to change my role *****/
       if (Rol_GetNumAvailableRoles () == 1)
 	{
-	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Role);
 	 HTM_SPAN_End ();
 
 	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",
-	                 The_Colors[Gbl.Prefs.Theme]);
+	                 The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	 HTM_SPAN_End ();
 	}
       else
 	{
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Role);
 	    if (asprintf (&ClassSelect,"INPUT_%s",
-			  The_Colors[Gbl.Prefs.Theme]) < 0)
+			  The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Rol_PutFormToChangeMyRole (ClassSelect);
 	    free (ClassSelect);
@@ -2156,7 +2153,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2194,14 +2190,14 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 	 HTM_TD_Begin ("class=\"BM_SEL %s_%s\" title=\"%s\"",
 		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
 					  "USR_LIST_NUM",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
 					  Txt_Enrolment_not_confirmed);
       else
 	 HTM_TD_Begin ("class=\"BM %s_%s %s\" title=\"%s\"",
 		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
 					  "USR_LIST_NUM",
-		       The_Colors[Gbl.Prefs.Theme],
+		       The_GetSuffix (),
 		       BgColor,
 		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
 					  Txt_Enrolment_not_confirmed);
@@ -2213,7 +2209,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"%s_%s RM %s\"",
 		    UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				       "USR_LIST_NUM",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    BgColor);
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
@@ -2232,7 +2228,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    BgColor);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
@@ -2256,7 +2252,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2283,7 +2278,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
       /****** Write user's ID ******/
       HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
-                    The_Colors[Gbl.Prefs.Theme],
+                    The_GetSuffix (),
                     The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2348,7 +2343,6 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2381,7 +2375,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2461,7 +2455,6 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2492,7 +2485,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2544,7 +2537,6 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2559,7 +2551,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
       /***** Write number of user *****/
       HTM_TD_Begin ("class=\"CM USR_LIST_NUM_N_%s %s\"",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
                     The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
@@ -2578,7 +2570,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2656,15 +2648,13 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Begin table cell *****/
    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_STRONG" :
 				        "DAT_SMALL_STRONG") :
 			    (NonBreak ? "DAT_SMALL_NOBR" :
 				        "DAT_SMALL"),
-		 The_Colors[Gbl.Prefs.Theme],
+		 The_GetSuffix (),
 		 BgColor);
 
       /***** Container to limit length *****/
@@ -2675,7 +2665,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 	    HTM_A_Begin ("href=\"%s\" class=\"%s_%s\" target=\"_blank\"",
 			 Link,Accepted ? "DAT_SMALL_NOBR_STRONG" :
 					 "DAT_SMALL_NOBR",
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
 
 	 /***** Write data *****/
 	 HTM_Txt (Data);
@@ -3604,15 +3594,13 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
 
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-                     The_Colors[Gbl.Prefs.Theme]);
+                     The_GetSuffix ());
    else
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
    Set_FormToSelectUsrListType (FuncParams,Args,
@@ -3632,7 +3620,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 
    /***** Select Usr_LIST_AS_LISTING *****/
    if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING)
-      HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_GetSuffix ());
    else
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
    Set_FormToSelectUsrListType (FuncParams,Args,
@@ -3661,7 +3649,6 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
@@ -3676,7 +3663,7 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
       /***** Link and image *****/
       HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
 			       "class=\"BT_LINK FORM_IN_%s NOWRAP\"%s",
-			       The_Colors[Gbl.Prefs.Theme],
+			       The_GetSuffix (),
 			       Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
 							        "");
 	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
@@ -3700,7 +3687,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
                                        const char *TxtButton,
 				       bool PutFormDateRange)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Select_users;
    extern const char *Txt_Users;
    unsigned NumTotalUsrs;
@@ -3775,12 +3761,12 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 			HTM_TR_Begin (NULL);
 
 			   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-			                 The_Colors[Gbl.Prefs.Theme]);
+			                 The_GetSuffix ());
 			      HTM_TxtColon (Txt_Users);
 			   HTM_TD_End ();
 
 			   HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
-			                 The_Colors[Gbl.Prefs.Theme]);
+			                 The_GetSuffix ());
 			      HTM_TABLE_BeginCenterPadding (2);
 				 Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
 				 Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
@@ -3989,13 +3975,12 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
 static void Usr_PutCheckboxListWithPhotos (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Display_photos;
 
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX ("WithPhotos",HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"%s",
 			  Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" :
@@ -4858,7 +4843,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 void Usr_ListDataAdms (void)
   {
    extern const char *Hlp_USERS_Administrators;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_No_INDEX;
@@ -4933,7 +4917,7 @@ void Usr_ListDataAdms (void)
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
 	    Set_PutParamListWithPhotos ();
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	    HTM_LABEL_End ();
@@ -5038,7 +5022,6 @@ static void Usr_PutLinkToSeeGuests (void)
 void Usr_SeeGuests (void)
   {
    extern const char *Hlp_USERS_Guests;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
@@ -5076,7 +5059,7 @@ void Usr_SeeGuests (void)
 	    Frm_BeginForm (ActLstGst);
 	       Set_PutParamsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_Colors[Gbl.Prefs.Theme]);
+	                        The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	       HTM_LABEL_End ();
@@ -5162,7 +5145,6 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *Hlp_USERS_Students;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
@@ -5224,7 +5206,7 @@ void Usr_SeeStudents (void)
 	       Frm_BeginForm (ActLstStd);
 		  Set_PutParamsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-		                   The_Colors[Gbl.Prefs.Theme]);
+		                   The_GetSuffix ());
 		     HTM_TxtColonNBSP (Txt_Scope);
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 		  HTM_LABEL_End ();
@@ -5329,7 +5311,6 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *Hlp_USERS_Teachers;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    unsigned NumUsrs;
@@ -5406,7 +5387,7 @@ void Usr_SeeTeachers (void)
 	 Frm_BeginForm (ActLstTch);
 	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	    HTM_LABEL_End ();
@@ -5591,7 +5572,6 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 
 static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_records;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_attendance;
@@ -5618,7 +5598,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 
    /***** Write list of options *****/
    /* Begin list of options */
-   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
       /* Show option items */
       for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
@@ -6139,7 +6119,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
      {
       [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -6191,13 +6170,13 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	   {
 	    UsrIsTheMsgSender = true;
 	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB LIGHT_GREEN\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	   }
 	 else
 	   {
 	    UsrIsTheMsgSender = false;
 	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB\"",
-	                  The_Colors[Gbl.Prefs.Theme]);
+	                  The_GetSuffix ());
 	   }
 
 	 /***** Checkbox to select this user *****/
@@ -6212,7 +6191,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
 
 	    /* Name */
 	    if (UsrDat.FrstName[0])
@@ -6255,17 +6234,16 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
    /***** Begin label *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Begin selector *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
-			The_Colors[Gbl.Prefs.Theme]);
+			The_GetSuffix ());
 
 	 /***** Put a row in selector for every number of columns *****/
 	 for (Cols  = 1;
@@ -6609,7 +6587,6 @@ void Usr_GetAndShowUsersStats (void)
 
 static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
@@ -6633,21 +6610,21 @@ static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
 	 HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
 				      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
       HTM_TD_End ();
 
       /* Number of users in courses */
-      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
 	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
 	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
@@ -6660,11 +6637,10 @@ static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
 static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *Class;
 
-   if (asprintf (&Class,"RB DAT_%s",The_Colors[Gbl.Prefs.Theme]) < 0)
+   if (asprintf (&Class,"RB DAT_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Write the total number of users not belonging to any course *****/
@@ -6698,7 +6674,6 @@ static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 void Usr_GetAndShowUsersRanking (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_ranking;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -6727,31 +6702,31 @@ void Usr_GetAndShowUsersRanking (void)
       /***** Rankings *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s LT\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingClicks ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingClicksPerDay ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingTimelinePubs ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Fol_GetAndShowRankingFollowers ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingFileViews ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingForPsts ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    Prf_GetAndShowRankingMsgsSnt ();
 	 HTM_TD_End ();
 

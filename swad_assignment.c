@@ -394,7 +394,6 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -472,10 +471,10 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       /* Assignment folder */
       if (PrintView)
 	 HTM_TD_Begin ("class=\"LT DAT_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
       else
 	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_Colors[Gbl.Prefs.Theme],
+	               The_GetSuffix (),
 	               The_GetColorRows ());
       if (Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Asg,PrintView);
@@ -510,7 +509,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Asg.Hidden ? "DAT_LIGHT" :
 				  "DAT",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
 
@@ -1080,7 +1079,6 @@ void Asg_RequestCreatOrEditAsg (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1176,7 +1174,7 @@ void Asg_RequestCreatOrEditAsg (void)
 			    "id=\"Title\""
 			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1195,12 +1193,12 @@ void Asg_RequestCreatOrEditAsg (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Folder);
 	       HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Folder\" size=\"30\" class=\"INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -1216,7 +1214,7 @@ void Asg_RequestCreatOrEditAsg (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
 				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_Colors[Gbl.Prefs.Theme]);
+				The_GetSuffix ());
 	       if (!ItsANewAssignment)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
@@ -1247,7 +1245,6 @@ void Asg_RequestCreatOrEditAsg (void)
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1260,7 +1257,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_Groups);
 	 HTM_TD_End ();
 
@@ -1273,7 +1270,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
@@ -1645,7 +1642,6 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif)
 void Asg_GetAndShowAssignmentsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_assignments;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
@@ -1678,19 +1674,19 @@ void Asg_GetAndShowAssignmentsStats (void)
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumAssignments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumCoursesWithAssignments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Double2Decimals (NumAssignmentsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumNotif);
 	 HTM_TD_End ();
 

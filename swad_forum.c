@@ -863,7 +863,6 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MSG_New;
    extern const char *Txt_MSG_Open;
    extern const char *Txt_no_subject;
@@ -905,7 +904,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
 		    NewPst ? "MSG_TIT_BG_NEW" :
 			     "MSG_TIT_BG",
-		    The_Colors[Gbl.Prefs.Theme]);
+		    The_GetSuffix ());
 	 Ico_PutIcon (NewPst ? "envelope.svg" :
 			       "envelope-open-text.svg",
 		      Ico_BLACK,
@@ -1694,7 +1693,6 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
@@ -1748,7 +1746,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
 				  NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
 	                                                "class=\"BT_LINK FORM_IN_%s\"",
-	                          The_Colors[Gbl.Prefs.Theme]);
+	                          The_GetSuffix ());
 
 	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
 	    switch (Forum->Type)
@@ -2158,7 +2156,6 @@ static void For_ListForumThrs (struct For_Forums *Forums,
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
@@ -2686,7 +2683,6 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
   {
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
@@ -2736,7 +2732,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Subject\" class=\"MSG_SUBJECT INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2751,7 +2747,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
 			           " class=\"MSG_CONTENT INPUT_%s\" rows=\"10\"",
-			           The_Colors[Gbl.Prefs.Theme]);
+			           The_GetSuffix ());
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -2764,7 +2760,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
       /***** Attached image (optional) *****/
       if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",
-                    The_Colors[Gbl.Prefs.Theme]) < 0)
+                    The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (-1,ClassInput);
       free (ClassInput);
@@ -3361,7 +3357,6 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *Icon,struct For_FiguresForum *FiguresForum,
                                          const char *ForumName1,const char *ForumName2)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumForums;
    unsigned NumThreads;
    unsigned NumPosts;
@@ -3401,36 +3396,36 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
 	 free (ForumName);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 HTM_Txt (ForumName1);
 	 HTM_Txt (ForumName2);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
       HTM_Unsigned (NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 
@@ -3443,7 +3438,6 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
 static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Total;
    double NumThrsPerForum;
    double NumPostsPerThread;
@@ -3464,46 +3458,46 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP\" style=\"width:20px;\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Txt (Txt_Total);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Unsigned (FiguresForum->NumForums);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Unsigned (FiguresForum->NumThreads);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Unsigned (FiguresForum->NumPosts);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP RM\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 

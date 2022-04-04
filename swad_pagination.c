@@ -159,7 +159,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Page_X_of_Y;
    extern const char *Txt_FORUM_Post_banned;
    Grp_WhichGroups_t WhichGroups;
@@ -270,7 +269,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
 	                             "class=\"LT BT_LINK %s_%s\"",
-	                             ClassTxt,The_Colors[Gbl.Prefs.Theme]);
+	                             ClassTxt,The_GetSuffix ());
 	    free (Title);
 	   }
 	 else

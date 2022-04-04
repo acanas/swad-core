@@ -146,7 +146,6 @@ void Acc_ShowFormMyAccount (void)
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_Check;
@@ -162,12 +161,12 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
       /***** Form to request user's ID for possible account already created *****/
       Frm_BeginForm (ActChkUsrAcc);
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
 	                    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"18\" class=\"INPUT_%s\" required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 	 Btn_PutCreateButtonInline (Txt_Check);
       Frm_EndForm ();
@@ -276,7 +275,6 @@ void Acc_CheckIfEmptyAccountExists (void)
 
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_Name;
    extern const char *Txt_yet_unnamed;
@@ -287,14 +285,14 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
       /***** Write number of user in the list *****/
       HTM_TD_Begin ("rowspan=\"2\" class=\"RT USR_LIST_NUM_N_%s %s\"",
-		    The_Colors[Gbl.Prefs.Theme],
+		    The_GetSuffix (),
                     The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Write user's ID and name *****/
       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
-                    The_Colors[Gbl.Prefs.Theme],
+                    The_GetSuffix (),
                     The_GetColorRows ());
 	 HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
 	 HTM_BR ();
@@ -364,7 +362,6 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
@@ -399,7 +396,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
 			       "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
 			       " class=\"INPUT_%s\" required=\"required\"",
 			       Txt_HELP_nickname,
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 /* End table row */
@@ -418,7 +415,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
 				"id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
 				" class=\"INPUT_%s\" required=\"required\"",
 				Txt_HELP_email,
-			        The_Colors[Gbl.Prefs.Theme]);
+			        The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 /* End table row */

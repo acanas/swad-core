@@ -253,7 +253,6 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
 void Rec_ListFieldsRecordsForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
@@ -284,7 +283,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "class=\"REC_FIELDNAME INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -297,7 +296,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "size=\"2\" class=\"INPUT_%s\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -307,7 +306,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"Visibility\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)
@@ -332,7 +331,6 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
@@ -364,7 +362,7 @@ void Rec_ShowFormCreateRecordField (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"REC_FIELDNAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Number of lines in form ******/
@@ -375,14 +373,14 @@ void Rec_ShowFormCreateRecordField (void)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"2\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Visibility to students *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"Visibility\" class=\"INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)
@@ -1400,18 +1398,17 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
    HTM_BUTTON_Submit_Begin (Txt_Print,
                             "class=\"BT_LINK FORM_OUT_%s BOLD\"",
-                            The_Colors[Gbl.Prefs.Theme]);
+                            The_GetSuffix ());
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
    HTM_BUTTON_End ();
 
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_Txt ("(");
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"RecsPerPag\"");
@@ -1576,7 +1573,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
@@ -1719,14 +1715,14 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
 			     ICanEditThisField ? "FORM_IN" :
 						 "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			     The_Colors[Gbl.Prefs.Theme],
+			     The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		    {
 		     HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",
-		                     The_Colors[Gbl.Prefs.Theme]);
+		                     The_GetSuffix ());
 			HTM_NBSP ();
 			HTM_TxtF ("(%s)",
 			          Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
@@ -1748,7 +1744,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s %s\"",
-	                     The_Colors[Gbl.Prefs.Theme],
+	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  if (ICanEditThisField)	// Show with form
 		    {
@@ -1756,7 +1752,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
 					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
-					 The_Colors[Gbl.Prefs.Theme]);
+					 The_GetSuffix ());
 			if (ThisFieldHasText)
 			   HTM_Txt (row[0]);
 		     HTM_TEXTAREA_End ();
@@ -2697,10 +2693,10 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
+
 
    HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",
-                 The_Colors[Gbl.Prefs.Theme]);
+                 The_GetSuffix ());
       if (ShowData && UsrDat->CtyCod > 0)
 	 /* Link to see country information */
 	 Cty_WriteCountryName (UsrDat->CtyCod);	// Put link to country
@@ -2726,7 +2722,6 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
 
 static void Rec_ShowEmail (struct UsrData *UsrDat)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Email;
 
    /***** Email *****/
@@ -2737,14 +2732,14 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (UsrDat->Email[0])
 	   {
 	    HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
 	       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 		 {
 		  HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
-		               UsrDat->Email,The_Colors[Gbl.Prefs.Theme]);
+		               UsrDat->Email,The_GetSuffix ());
 		     HTM_Txt (UsrDat->Email);
 		  HTM_A_End ();
 		 }
@@ -2763,7 +2758,6 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
 
 static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_ID;
 
    /***** User's IDs *****/
@@ -2774,7 +2768,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,Anchor);
       HTM_TD_End ();
 
@@ -2789,7 +2783,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -2817,7 +2810,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    switch (TypeOfView)
 	      {
 	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:		// I want to apply for enrolment
@@ -2834,7 +2827,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"Role\" name=\"Role\""
 				    " class=\"INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     for (Role  = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
@@ -2898,7 +2891,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				       "id=\"Role\" name=\"Role\""
 				       " class=\"INPUT_%s\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			switch (Gbl.Usrs.Me.Role.Logged)
 			  {
 			   case Rol_GST:
@@ -2941,7 +2934,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				       "id=\"Role\" name=\"Role\""
 				       " class=\"INPUT_%s\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			RoleUnsigned = (unsigned) DefaultRoleInForm;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
 				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
@@ -2978,7 +2971,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 					     "id=\"Role\" name=\"Role\""
 					     " class=\"INPUT_%s\"",
-				             The_Colors[Gbl.Prefs.Theme]);
+				             The_GetSuffix ());
 			      for (Role  = Rol_STD;
 				   Role <= Rol_TCH;
 				   Role++)
@@ -3001,7 +2994,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 					     "id=\"Role\" name=\"Role\""
 					     " class=\"INPUT_%s\"",
-				             The_Colors[Gbl.Prefs.Theme]);
+				             The_GetSuffix ());
 			      RoleUnsigned = (unsigned) Rol_GST;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 					  true,false,
@@ -3033,7 +3026,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 Sex++)
 	      {
 	       HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",
-	                        The_Colors[Gbl.Prefs.Theme]);
+	                        The_GetSuffix ());
 		  HTM_INPUT_RADIO ("Sex",false,
 				   "value=\"%u\"%s  required=\"required\"",
 				   (unsigned) Sex,
@@ -3051,7 +3044,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
 	 HTM_TD_End ();
 	}
@@ -3065,7 +3058,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Surname_1;
    char *Label;
 
@@ -3084,13 +3076,13 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 else if (UsrDat->Surname1[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3108,7 +3100,6 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
@@ -3120,14 +3111,14 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->Surname2,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Surname2\""
 			    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 else if (UsrDat->Surname2[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3145,7 +3136,6 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_First_name;
    char *Label;
 
@@ -3164,7 +3154,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->FrstName,
@@ -3172,7 +3162,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 			    "id=\"FirstName\""
 			    " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			    " required=\"required\"",
-			    The_Colors[Gbl.Prefs.Theme]);
+			    The_GetSuffix ());
 	 else if (UsrDat->FrstName[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3190,7 +3180,6 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    char *Label;
@@ -3219,7 +3208,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 			   "id=\"OthCtyCod\" name=\"OthCtyCod\""
 			   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			   " required=\"required\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"",false,false,
 			"%s",Txt_Country);
 	    HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
@@ -3244,7 +3233,6 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Date_of_birth;
 
    /***** Date of birth *****/
@@ -3257,7 +3245,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3282,7 +3270,6 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Phone;
    char *Name;
    char *Label;
@@ -3305,7 +3292,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3313,11 +3300,11 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 			      HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      Name,
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    else if (UsrDat->Phone[NumPhone][0])
 	      {
 	       HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
-	                    UsrDat->Phone[NumPhone],The_Colors[Gbl.Prefs.Theme]);
+	                    UsrDat->Phone[NumPhone],The_GetSuffix ());
 		  HTM_Txt (UsrDat->Phone[NumPhone]);
 	       HTM_A_End ();
 	      }
@@ -3339,7 +3326,6 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_USER_comments;
 
    /***** Comments *****/
@@ -3352,7 +3338,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3360,7 +3346,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 	       HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
 				   " rows=\"4\""
 				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				   The_Colors[Gbl.Prefs.Theme]);
+				   The_GetSuffix ());
 		  HTM_Txt (UsrDat->Comments);
 	       HTM_TEXTAREA_End ();
 	      }
@@ -3405,7 +3391,6 @@ static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
 
 static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
 
    /***** Institution *****/
@@ -3416,14 +3401,14 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	    if (Ins->InsCod > 0)
 	      {
 	       if (Ins->WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
-			       Ins->WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Ins->WWW,The_GetSuffix ());
 	       HTM_Txt (Ins->FullName);
 	       if (Ins->WWW[0])
 		  HTM_A_End ();
@@ -3439,7 +3424,6 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
 
 static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Center;
    struct Ctr_Center Ctr;
 
@@ -3451,7 +3435,7 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.CtrCod > 0)
@@ -3461,7 +3445,7 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 	       if (Ctr.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
-			       Ctr.WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Ctr.WWW,The_GetSuffix ());
 	       HTM_Txt (Ctr.FullName);
 	       if (Ctr.WWW[0])
 		  HTM_A_End ();
@@ -3478,7 +3462,6 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Department;
    struct Dpt_Department Dpt;
 
@@ -3490,7 +3473,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.DptCod > 0)
@@ -3500,7 +3483,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 	       if (Dpt.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
-			       Dpt.WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Dpt.WWW,The_GetSuffix ());
 	       HTM_Txt (Dpt.FullName);
 	       if (Dpt.WWW[0])
 		  HTM_A_End ();
@@ -3517,7 +3500,6 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Office;
 
    /***** Office *****/
@@ -3528,7 +3510,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	    HTM_Txt (UsrDat->Tch.Office);
       HTM_TD_End ();
@@ -3542,7 +3524,6 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Phone;
 
    /***** Office phone *****/
@@ -3553,11 +3534,11 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_Colors[Gbl.Prefs.Theme]);
+                    The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
-			 UsrDat->Tch.OfficePhone,The_Colors[Gbl.Prefs.Theme]);
+			 UsrDat->Tch.OfficePhone,The_GetSuffix ());
 	       HTM_Txt (UsrDat->Tch.OfficePhone);
 	    HTM_A_End ();
 	   }
@@ -3799,7 +3780,6 @@ void Rec_ShowMySharedRecordAndMore (void)
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3847,7 +3827,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
 				 NULL);
@@ -3886,7 +3866,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
 				 NULL);
@@ -3929,7 +3909,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
 				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
 				    NULL);
@@ -3961,7 +3941,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
 		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
-		                   The_Colors[Gbl.Prefs.Theme]) < 0)
+		                   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
@@ -3988,7 +3968,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				     HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Office\""
 				     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -4007,7 +3987,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OfficePhone\""
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

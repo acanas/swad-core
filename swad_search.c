@@ -99,7 +99,6 @@ void Sch_ReqSysSearch (void)
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,HieLvl_Level_t DefaultScope)
   {
    extern const char *Hlp_START_Search;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
    extern const char *Txt_all;
@@ -148,7 +147,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    /***** Scope (whole platform, current country, current institution,
 			  current center, current degree or current course) *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Gbl.Scope.Allowed = 1 << HieLvl_SYS |
 				      1 << HieLvl_CTY |
@@ -166,12 +165,12 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    Sch_PutInputStringToSearch ("");
 
 	    /***** What to search? *****/
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"WhatToSearch\""
 				 " class=\"WHAT_TO_SEARCH INPUT_%s\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 		  for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
 		       WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
 		       WhatToSearch++)
@@ -252,7 +251,6 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
 void Sch_PutInputStringToSearch (const char *IdInputText)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Search;
 
    /***** String to find *****/
@@ -261,7 +259,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
 	             "id=\"%s\" size=\"18\" class=\"INPUT_%s\""
 	             " placeholder=\"%s&hellip;\"",
 		     IdInputText,
-		     The_Colors[Gbl.Prefs.Theme],
+		     The_GetSuffix (),
 		     Txt_Search);
   }
 

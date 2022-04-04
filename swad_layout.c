@@ -110,7 +110,6 @@ void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   extern const char *The_Colors[The_NUM_THEMES];
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       [Mnu_MENU_HORIZONTAL] = "main_horizontal",
@@ -262,7 +261,7 @@ void Lay_WriteStartOfPage (void)
      {
       case Act_BRW_1ST_TAB:
 	       HTM_TxtF ("<body class=\"BODY_BG_%s\" onload=\"init();\">\n",
-	                 The_Colors[Gbl.Prefs.Theme]);
+	                 The_GetSuffix ());
 	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
 			   "class=\"IMG_USR\" id=\"zoomImg\"");
@@ -350,7 +349,7 @@ void Lay_WriteStartOfPage (void)
 	       break;
 	   }
 	    HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"TAB_ON_%s\"",
-			   The_Colors[Gbl.Prefs.Theme]);
+			   The_GetSuffix ());
 
 	       /* Layout with horizontal or vertical menu */
 	       HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
@@ -967,7 +966,6 @@ static void Lay_WriteScriptCustomDropzone (void)
 
 static void Lay_WritePageTopHeading (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
    static const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -1018,7 +1016,7 @@ static void Lay_WritePageTopHeading (void)
 	       HTM_DIV_End ();	// head_row_1_logo_big
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",
-	                      The_Colors[Gbl.Prefs.Theme]);
+	                      The_GetSuffix ());
 		  HTM_BUTTON_Submit_Begin (Txt_TAGLINE,"class=\"BT_LINK\"");
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
@@ -1071,7 +1069,7 @@ static void Lay_WritePageTopHeading (void)
 
 	 /* 2nd. row, 3rd. column */
 	 HTM_DIV_Begin ("id=\"msg\" class=\"NOTIF_%s\"",	// Used for AJAX based refresh
-	                The_Colors[Gbl.Prefs.Theme]);
+	                The_GetSuffix ());
 	    if (Gbl.Usrs.Me.Logged)
 	       Ntf_WriteNumberOfNewNtfs ();
 	 HTM_DIV_End ();					// Used for AJAX based refresh
@@ -1218,8 +1216,6 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,Ico_Color_t Color,
 				    const char *Text,const char *OnSubmit)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Separator *****/
    HTM_Txt (" ");	// This space is necessary to enable
 			// jumping to the next line on narrow screens
@@ -1233,11 +1229,11 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 	 if (OnSubmit)
 	    HTM_BUTTON_Submit_Begin (Text,
 				     "class=\"BT_LINK FORM_OUT_%s BOLD\" onsubmit=\"%s;\"",
-				     The_Colors[Gbl.Prefs.Theme],OnSubmit);
+				     The_GetSuffix (),OnSubmit);
 	 else
 	    HTM_BUTTON_Submit_Begin (Text,
 				     "class=\"BT_LINK FORM_OUT_%s BOLD\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 	 Ico_PutIconTextLink (Icon,Color,Text);
       HTM_BUTTON_End ();
 
@@ -1259,8 +1255,6 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
    /***** Separator *****/
    if (Text)
       HTM_Txt (" ");	// This space is necessary to enable
@@ -1275,7 +1269,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
       HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",
 		     Checked ? "CHECKBOX_CHECKED" :
 			       "CHECKBOX_UNCHECKED",
-		     The_Colors[Gbl.Prefs.Theme],
+		     The_GetSuffix (),
 		     Title);
 
 	 /***** Begin label *****/
@@ -1469,7 +1463,6 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
 
    /***** Get data of institution *****/
@@ -1503,13 +1496,13 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 	 /***** Second column: class photo title *****/
 	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
-	               The_Colors[Gbl.Prefs.Theme]);
+	               The_GetSuffix ());
 	    if (InsCod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Ins.WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Hie.Ins.WWW,The_GetSuffix ());
 	       HTM_Txt (Hie.Ins.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1521,7 +1514,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Deg.WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Hie.Deg.WWW,The_GetSuffix ());
 	       HTM_Txt (Hie.Deg.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1545,7 +1538,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Deg.WWW,The_Colors[Gbl.Prefs.Theme]);
+			       Hie.Deg.WWW,The_GetSuffix ());
 	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1566,7 +1559,6 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 void Lay_AdvertisementMobile (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Stay_connected_with_SWADroid;
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
@@ -1580,9 +1572,9 @@ void Lay_AdvertisementMobile (void)
 
 	 /***** Show advertisement *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			    " class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+			    " class=\"DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
 		  HTM_BR ();
 		  HTM_BR ();
@@ -1692,7 +1684,6 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title)
 void Lay_GetAndShowNumUsrsPerSideColumns (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_columns;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_Number_of_users;
@@ -1748,11 +1739,11 @@ void Lay_GetAndShowNumUsrsPerSideColumns (void)
 	       free (Icon);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[SideCols]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

@@ -357,7 +357,6 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
@@ -411,7 +410,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
       HTM_DIV_Begin ("class=\"UPD\"");
 	 HTM_BUTTON_Submit_Begin (Txt_Update_users,
 				  "class=\"BT_LINK FORM_IN_%s BOLD\"%s",
-				  The_Colors[Gbl.Prefs.Theme],
+				  The_GetSuffix (),
 				  Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
 								   "");
 	    Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_users);
@@ -431,7 +430,6 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_All_groups;
    bool ICanSelUnselGroup;
 
@@ -454,7 +452,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
      }
 
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
-      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
 			     ICanSelUnselGroup ? (Gbl.Usrs.ClassPhoto.AllGroups ? " checked=\"checked\""
@@ -1227,7 +1225,6 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 
 static void Grp_ListGroupTypesForEdition (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -1265,7 +1262,7 @@ static void Grp_ListGroupTypesForEdition (void)
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -1276,7 +1273,7 @@ static void Grp_ListGroupTypesForEdition (void)
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
-		                    The_Colors[Gbl.Prefs.Theme]);
+		                    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
 				 "%s",Txt_It_is_optional_to_choose_a_group);
@@ -1294,7 +1291,7 @@ static void Grp_ListGroupTypesForEdition (void)
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
@@ -1341,7 +1338,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of groups of this type */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
 	    HTM_TD_End ();
 
@@ -1416,7 +1413,6 @@ static void Grp_WriteHeadingGroupTypes (void)
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
@@ -1506,7 +1502,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 
 			/* Options for group types */
 			for (NumTipGrpAux = 0;
@@ -1531,7 +1527,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"20\" class=\"INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1543,7 +1539,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
-				       The_Colors[Gbl.Prefs.Theme]);
+				       The_GetSuffix ());
 
 			/* Option for no assigned room */
 			HTM_OPTION (HTM_Type_STRING,"-1",
@@ -1573,7 +1569,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		    Role >= Rol_STD;
 		    Role--)
 		 {
-		  HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+		  HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 		     HTM_Int (Grp->NumUsrs[Role]);
 		  HTM_TD_End ();
 		 }
@@ -1586,7 +1582,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"3\" class=\"INPUT_%s\"",
-				     The_Colors[Gbl.Prefs.Theme]);
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -2132,7 +2128,6 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
                                               Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
    unsigned NumGrpSel;
@@ -2257,14 +2252,14 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
       HTM_TD_End ();
 
       /* Group name = students with no group */
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	 HTM_LABEL_Begin ("for=\"Grp%ld\"",-GrpTyp->GrpTypCod);
 	    HTM_Txt (Txt_users_with_no_group);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
 
       /* Room */
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
       HTM_TD_End ();
 
       /* Number of students who don't belong to any group of this type */
@@ -2272,7 +2267,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	   Role >= Rol_STD;
 	   Role--)
 	{
-	 HTM_TD_Begin ("class=\"CM DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (Grp_DB_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
 	 HTM_TD_End ();
 	}
@@ -2343,7 +2338,6 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Group_X_open;
    extern const char *Txt_Group_X_closed;
    char *Title;
@@ -2370,14 +2364,14 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    HTM_TD_Begin (Highlight ? "class=\"LM BG_HIGHLIGHT\"" :
 			     "class=\"LM\"");
       HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"DAT_%s\"",
-		       Grp->GrpCod,The_Colors[Gbl.Prefs.Theme]);
+		       Grp->GrpCod,The_GetSuffix ());
 	 HTM_Txt (Grp->GrpName);
       HTM_LABEL_End ();
    HTM_TD_End ();
 
    /***** Room *****/
    HTM_TD_Begin ("class=\"LM DAT_%s%s\"",
-                 The_Colors[Gbl.Prefs.Theme],
+                 The_GetSuffix (),
                  Highlight ? " BG_HIGHLIGHT" :
                              "");
       HTM_Txt (Grp->Room.ShrtName);
@@ -2389,7 +2383,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	Role--)
      {
       HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                    The_Colors[Gbl.Prefs.Theme],
+                    The_GetSuffix (),
 		    Highlight ? " BG_HIGHLIGHT" :
 				"");
 	 HTM_Int (Grp->NumUsrs[Role]);
@@ -2398,7 +2392,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
    /***** Max. number of students in this group *****/
    HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                 The_Colors[Gbl.Prefs.Theme],
+                 The_GetSuffix (),
 		 Highlight ? " BG_HIGHLIGHT" :
 		             "");
       Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
@@ -2407,7 +2401,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
    /***** Vacants in this group *****/
    HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                 The_Colors[Gbl.Prefs.Theme],
+                 The_GetSuffix (),
 		 Highlight ? " BG_HIGHLIGHT" :
 			     "");
       if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
@@ -2425,7 +2419,6 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2461,7 +2454,7 @@ static void Grp_PutFormToCreateGroupType (void)
 				  Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       HTM_TD_End ();
 
 	       /***** Is it mandatory to register in any groups of this type? *****/
@@ -2469,7 +2462,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
 				 "%s",Txt_It_is_optional_to_choose_a_group);
@@ -2484,7 +2477,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
@@ -2525,7 +2518,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 	       /***** Number of groups of this type *****/
 	       HTM_TD_Begin ("class=\"CM DAT_%s\"",
-	                     The_Colors[Gbl.Prefs.Theme]);
+	                     The_GetSuffix ());
 		  HTM_Unsigned (0);	// It's a new group type ==> 0 groups
 	       HTM_TD_End ();
 
@@ -2547,7 +2540,6 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
@@ -2595,7 +2587,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"GrpTypCod\""
 				    " class=\"INPUT_%s\" style=\"width:100px;\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 
 		     /* Options for group types */
 		     for (NumGrpTyp = 0;
@@ -2616,7 +2608,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_%s\""
 				  " required=\"required\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       HTM_TD_End ();
 
 	       /***** Room *****/
@@ -2625,7 +2617,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"RooCod\""
 				    " class=\"INPUT_%s\" style=\"width:100px;\"",
-				    The_Colors[Gbl.Prefs.Theme]);
+				    The_GetSuffix ());
 
 		     /* Option for no assigned room */
 		     HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.RooCod < 0,false,
@@ -2653,7 +2645,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		    Role--)
 		 {
 		  HTM_TD_Begin ("class=\"CM DAT_%s\"",
-		                The_Colors[Gbl.Prefs.Theme]);
+		                The_GetSuffix ());
 		     HTM_Unsigned (0);
 		  HTM_TD_End ();
 		 }
@@ -2664,7 +2656,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		  HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "size=\"3\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -4381,7 +4373,6 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
                                  void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
@@ -4395,7 +4386,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	{
 	 if (WhichGrps == Gbl.Crs.Grps.WhichGrps)
 	    HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                   The_Colors[Gbl.Prefs.Theme]);
+	                   The_GetSuffix ());
 	 else
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	 Frm_BeginForm (Action);

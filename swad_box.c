@@ -126,7 +126,6 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Help;
    extern const char *Txt_Close;
 
@@ -205,7 +204,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       HTM_DIV_Begin ("class=\"FRAME_TITLE %s FRAME_TITLE_%s\"",
 	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
 		                      "FRAME_TITLE_BIG",
-		     The_Colors[Gbl.Prefs.Theme]);
+		     The_GetSuffix ());
 	 HTM_Txt (Title);
       HTM_DIV_End ();
      }

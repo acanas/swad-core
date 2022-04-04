@@ -3728,9 +3728,7 @@ mysql> DESCRIBE usr_webs;
 
 static void DB_CreateTable (const char *Query)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
-   HTM_LI_Begin ("class=\"DAT_%s\"",The_Colors[Gbl.Prefs.Theme]);
+   HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
       HTM_Txt (Query);
    HTM_LI_End ();
 

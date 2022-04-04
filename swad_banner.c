@@ -168,7 +168,6 @@ void Ban_ShowAllBanners (void)
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumBan;
 
    /***** List start *****/
@@ -184,7 +183,7 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT_%s\" target=\"_blank\"",
 			 Banners->Lst[NumBan].WWW,
 			 Banners->Lst[NumBan].FullName,
-			 The_Colors[Gbl.Prefs.Theme]);
+			 The_GetSuffix ());
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
 			"class=\"BANNER\"");
 	    HTM_A_End ();
@@ -402,7 +401,6 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
@@ -450,7 +448,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_Begin ("class=\"RM %s_%s\"",
 			  Ban->Hidden ? "DAT_LIGHT" :
 					"DAT",
-			  The_Colors[Gbl.Prefs.Theme]);
+			  The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
 	       HTM_ARTICLE_End ();
@@ -463,7 +461,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -474,7 +472,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -485,7 +483,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
-				  The_Colors[Gbl.Prefs.Theme]);
+				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -496,7 +494,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
-				 The_Colors[Gbl.Prefs.Theme]);
+				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -853,7 +851,6 @@ void Ban_ContEditAfterChgBan (void)
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_New_banner;
    extern const char *Txt_Create_banner;
 
@@ -887,7 +884,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /* Banner full name */
@@ -896,7 +893,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "class=\"INPUT_FULL_NAME INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /* Banner image */
@@ -905,7 +902,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"12\" class=\"INPUT_%s\""
 			       " required=\"required\"",
-			       The_Colors[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /* Banner WWW */
@@ -913,7 +910,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	       HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			      " required=\"required\"",
-			      The_Colors[Gbl.Prefs.Theme]);
+			      The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 /* End table row */
