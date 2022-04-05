@@ -1420,7 +1420,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
           - only the forums of current institution/degree/course *****/
    Frm_BeginForm (ActSeeFor);
       Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
-      HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
+      HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 
 	    for (ForumSet  = (For_ForumSet_t) 0;
