@@ -68,19 +68,19 @@ extern struct Globals Gbl;
 
 #define Syl_WIDTH_NUM_SYLLABUS 20
 
-static const char *StyleSyllabus[1 + Syl_MAX_LEVELS_SYLLABUS] =
+static const char *ClassSyllabus[1 + Syl_MAX_LEVELS_SYLLABUS] =
   {
    [ 0] = "",
-   [ 1] = "T1",
-   [ 2] = "T2",
-   [ 3] = "T3",
-   [ 4] = "T3",
-   [ 5] = "T3",
-   [ 6] = "T3",
-   [ 7] = "T3",
-   [ 8] = "T3",
-   [ 9] = "T3",
-   [10] = "T3",
+   [ 1] = "SYL1",
+   [ 2] = "SYL2",
+   [ 3] = "SYL3",
+   [ 4] = "SYL3",
+   [ 5] = "SYL3",
+   [ 6] = "SYL3",
+   [ 7] = "SYL3",
+   [ 8] = "SYL3",
+   [ 9] = "SYL3",
+   [10] = "SYL3",
   };
 
 /*****************************************************************************/
@@ -104,6 +104,8 @@ struct LstItemsSyllabus Syl_LstItemsSyllabus;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected);
 
 static unsigned Syl_GetParamItemNumber (void);
 
@@ -153,7 +155,7 @@ Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
-void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
+static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
   {
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
@@ -742,8 +744,9 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	   }
 
 	 /***** Code of the item *****/
-	 HTM_TD_Begin ("class=\"%s RT %s\" style=\"width:%dpx;\"",
-		       StyleSyllabus[Level],The_GetColorRows (),
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\" style=\"width:%dpx;\"",
+		       ClassSyllabus[Level],The_GetSuffix (),
+		       The_GetColorRows (),
 		       Level * Syl_WIDTH_NUM_SYLLABUS);
 	    if (Level == 1)
 	       HTM_NBSP ();
@@ -751,9 +754,9 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	 HTM_TD_End ();
 
 	 /***** Text of the item *****/
-	 HTM_TD_Begin ("colspan=\"%d\" class=\"%s LT %s\"",
+	 HTM_TD_Begin ("colspan=\"%d\" class=\"LT %s_%s %s\"",
 		       Syl_LstItemsSyllabus.NumLevels - Level + 1,
-		       StyleSyllabus[Level],
+		       ClassSyllabus[Level],The_GetSuffix (),
 		       The_GetColorRows ());
 	    HTM_Txt (Text);
 	 HTM_TD_End ();
@@ -782,7 +785,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 
    /***** Set width of columns of the table *****/
    fprintf (FileHTMLTmp,"<colgroup>\n");
-   for (i = 1;
+   for (i  = 1;
 	i <= Syl_LstItemsSyllabus.NumLevels;
 	i++)
       fprintf (FileHTMLTmp,"<col width=\"%d\" />\n",
@@ -800,26 +803,26 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 
       /***** Indent depending on the level *****/
       if (Syl_LstItemsSyllabus.Lst[NumItem].Level > 1)
-	 fprintf (FileHTMLTmp,"<td colspan=\"%d\"></td>",
+	 fprintf (FileHTMLTmp,"<td colspan=\"%d\">"
+		              "</td>",
 		  Syl_LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td class=\"%s RT\" style=\"width:%dpx;\">",
-	       StyleSyllabus[Syl_LstItemsSyllabus.Lst[NumItem].Level],
+      fprintf (FileHTMLTmp,"<td class=\"RT\" style=\"width:%dpx;\">",
 	       Syl_LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Syl_LstItemsSyllabus.Lst[NumItem].Level == 1)
 	 fprintf (FileHTMLTmp,"&nbsp;");
       Syl_WriteNumItem (NULL,FileHTMLTmp,
 			Syl_LstItemsSyllabus.Lst[NumItem].Level,
 			Syl_LstItemsSyllabus.Lst[NumItem].CodItem);
-      fprintf (FileHTMLTmp,"&nbsp;</td>");
+      fprintf (FileHTMLTmp,"&nbsp;"
+	                   "</td>");
 
       /***** Text of the item *****/
-      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s LT\">"
+      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"LT\">"
 			   "%s"
 			   "</td>",
 	       Syl_LstItemsSyllabus.NumLevels - Syl_LstItemsSyllabus.Lst[NumItem].Level + 1,
-	       StyleSyllabus[Syl_LstItemsSyllabus.Lst[NumItem].Level],
 	       Syl_LstItemsSyllabus.Lst[NumItem].Text);
 
       /***** End of the row *****/
@@ -861,8 +864,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
      }
    else
      {
-      HTM_TD_Begin ("class=\"%s LM %s\" style=\"width:%dpx;\"",
-		    StyleSyllabus[Level],The_GetColorRows (),
+      HTM_TD_Begin ("class=\"LM %s_%s %s\" style=\"width:%dpx;\"",
+		    ClassSyllabus[Level],The_GetSuffix (),The_GetColorRows (),
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
 	 if (Level == 1)
 	    HTM_NBSP ();

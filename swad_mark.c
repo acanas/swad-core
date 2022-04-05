@@ -108,8 +108,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"1\" class=\"LST_EDIT_ROWS %s\"",
-			       The_GetColorRows ());
+			       "size=\"1\" class=\"LST_EDIT_ROWS LST_EDIT_%s %s\"",
+			       The_GetSuffix (),The_GetColorRows ());
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -126,8 +126,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"1\" class=\"LST_EDIT_ROWS %s\"",
-			       The_GetColorRows ());
+			       "size=\"1\" class=\"LST_EDIT_ROWS LST_EDIT_%s %s\"",
+			       The_GetSuffix (),The_GetColorRows ());
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();

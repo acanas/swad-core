@@ -188,7 +188,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    /* Selection of the number of indicators */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"RT %s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		  HTM_TxtColon (Txt_Number_of_indicators);
 	       HTM_TD_End ();
 
@@ -203,7 +203,7 @@ void Ind_ReqIndicatorsCourses (void)
       Frm_EndForm ();
 
       /***** Show the stats of courses *****/
-      for (Ind = 0, NumCrssToList = 0;
+      for (Ind  = 0, NumCrssToList = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	 if (Indicators.IndicatorsSelected[Ind])

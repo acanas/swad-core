@@ -82,7 +82,6 @@ struct Syl_Syllabus
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
 Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void);
-void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected);
 
 bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod);
 bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus);
