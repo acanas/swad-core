@@ -160,14 +160,14 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
    Frm_BeginForm (ActSeeSyl);
-      HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_UL_Begin ("class=\"LIST_LEFT\"");
+      HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
+	 HTM_UL_Begin (NULL);
 
 	 for (WhichSyl  = (Syl_WhichSyllabus_t) 0;
 	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
 	      WhichSyl++)
 	   {
-	    HTM_LI_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_LI_Begin (NULL);
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("WhichSyllabus",true,
 				   "value=\"%u\"%s",
@@ -526,54 +526,59 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    bool PutIconToEdit = ICanEdit && !Syllabus->EditionIsActive;
 
-   /***** Begin box and table *****/
+   /***** Begin box *****/
    if (PutIconToEdit)
-      Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
 			 Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
 			 Syllabus->EditionIsActive ? Hlp_COURSE_Syllabus_edit :
 						     Hlp_COURSE_Syllabus,
-			 Box_NOT_CLOSABLE,0);
+			 Box_NOT_CLOSABLE);
    else
-      Box_BoxTableBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
 			 NULL,NULL,
 			 Syllabus->EditionIsActive ? Hlp_COURSE_Syllabus_edit :
 						     Hlp_COURSE_Syllabus,
-			 Box_NOT_CLOSABLE,0);
+			 Box_NOT_CLOSABLE);
 
-   /***** Set width of columns of the table *****/
-   HTM_Txt ("<colgroup>");
-   for (i = 0;
-	i < NumButtons;
-	i++)
-      HTM_Txt ("<col width=\"12\" />");
-   for (i  = 1;
-	i <= Syl_LstItemsSyllabus.NumLevels;
-	i++)
-      HTM_TxtF ("<col width=\"%d\" />",i * Syl_WIDTH_NUM_SYLLABUS);
-   HTM_Txt ("<col width=\"*\" />");
-   HTM_Txt ("</colgroup>");
+   Syl_PutFormWhichSyllabus (Syllabus->WhichSyllabus);
 
-   if (Syl_LstItemsSyllabus.NumItems)
-      /***** Loop writing all items of the syllabus *****/
-      for (NumItem = 0;
-	   NumItem < Syl_LstItemsSyllabus.NumItems;
-	   NumItem++)
-	{
-	 Syl_ShowRowSyllabus (Syllabus,NumItem,
-			      Syl_LstItemsSyllabus.Lst[NumItem].Level,
-			      Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
-			      Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
-	 if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
-	    // Mostrar a new row where se puede insert a new item
-	    Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
-				 Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
-				 "",true);
-	}
-   else if (Syllabus->EditionIsActive)
-      /***** If the syllabus is empty ==>
-             show form to add a iten to the end *****/
-      Syl_ShowRowSyllabus (Syllabus,0,
-                           1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
+   /***** Begin table *****/
+   HTM_TABLE_BeginWide ();
+
+      /***** Set width of columns of the table *****/
+      HTM_Txt ("<colgroup>");
+      for (i = 0;
+	   i < NumButtons;
+	   i++)
+	 HTM_Txt ("<col width=\"12\" />");
+      for (i  = 1;
+	   i <= Syl_LstItemsSyllabus.NumLevels;
+	   i++)
+	 HTM_TxtF ("<col width=\"%d\" />",i * Syl_WIDTH_NUM_SYLLABUS);
+      HTM_Txt ("<col width=\"*\" />");
+      HTM_Txt ("</colgroup>");
+
+      if (Syl_LstItemsSyllabus.NumItems)
+	 /***** Loop writing all items of the syllabus *****/
+	 for (NumItem = 0;
+	      NumItem < Syl_LstItemsSyllabus.NumItems;
+	      NumItem++)
+	   {
+	    Syl_ShowRowSyllabus (Syllabus,NumItem,
+				 Syl_LstItemsSyllabus.Lst[NumItem].Level,
+				 Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
+				 Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
+	    if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
+	       // Mostrar a new row where se puede insert a new item
+	       Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
+				    Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
+				    "",true);
+	   }
+      else if (Syllabus->EditionIsActive)
+	 /***** If the syllabus is empty ==>
+		show form to add a iten to the end *****/
+	 Syl_ShowRowSyllabus (Syllabus,0,
+			      1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
 
    /***** End table *****/
    HTM_TABLE_End ();

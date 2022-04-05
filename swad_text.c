@@ -16824,44 +16824,44 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	,
 	[Inf_LECTURES] =
 #if   L==1	// ca
-	"Temari teoria"
+	"Temari"
 #elif L==2	// de
-	"Studienplan (Vorlesungen)"
+	"Studienplan"
 #elif L==3	// en
-	"Topics (lectures)"
+	"Topics"
 #elif L==4	// es
-	"Temario teor&iacute;a"
+	"Temario"
 #elif L==5	// fr
-	"Plan th&eacute;orie"
+	"Plan"
 #elif L==6	// gn
-	"Temario teor&iacute;a"	// Okoteve traducción
+	"Temario"	// Okoteve traducción
 #elif L==7	// it
-	"Temi teoria"
+	"Temi"
 #elif L==8	// pl
-	"Sylabus (wyklady)"
+	"Sylabus"
 #elif L==9	// pt
-	"Conte&uacute;do teoria"
+	"Conte&uacute;do"
 #endif
 	,
 	[Inf_PRACTICALS] =
 #if   L==1	// ca
-	"Temari pr&agrave;ctiques"
+	"Temari"
 #elif L==2	// de
-	"Studienplan (&Uuml;bungen)"
+	"Studienplan"
 #elif L==3	// en
-	"Topics (practicals)"
+	"Topics"
 #elif L==4	// es
-	"Temario pr&aacute;cticas"
+	"Temario"
 #elif L==5	// fr
-	"Temi pratique"
+	"Plan"
 #elif L==6	// gn
-	"Temario pr&aacute;cticas"	// Okoteve traducción
+	"Temario"	// Okoteve traducción
 #elif L==7	// it
-	"Programma pratica"
+	"Temi"
 #elif L==8	// pl
-	"Sylabus (practicals)"
+	"Sylabus"
 #elif L==9	// pt
-	"Conte&uacute;do pr&aacute;tica"
+	"Conte&uacute;do"
 #endif
 	,
 	[Inf_BIBLIOGRAPHY] =

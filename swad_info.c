@@ -311,16 +311,6 @@ void Inf_ShowInfo (void)
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
 
-   switch (Gbl.Crs.Info.Type)
-     {
-      case Inf_LECTURES:
-      case Inf_PRACTICALS:
-         Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
-         break;
-      default:
-	 break;
-     }
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
