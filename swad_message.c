@@ -2071,10 +2071,11 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
-		    Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "BG_MSG_BLUE" :
-								       "BG_MSG_GREEN") :
-							       "BG_MSG_BLUE");
+      HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
+		    Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "MSG_BG" :
+								       "MSG_BG_NEW") :
+							       "MSG_BG",
+		    The_GetSuffix ());
 	 Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? (Replied ? "reply.svg" :
 										    "envelope-open-text.svg") :
 									 "envelope.svg") :
@@ -2092,8 +2093,11 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       Msg_WriteMsgNumber (MsgNum,!Open);
 
       /***** Write message author *****/
-      HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
-					     "MSG_AUT_BG_NEW");
+      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+                    Open ? "MSG_AUT" :
+			   "MSG_AUT_NEW",The_GetSuffix (),
+                    Open ? "MSG_BG" :
+			   "MSG_BG_NEW",The_GetSuffix ());
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
@@ -2104,8 +2108,11 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
 
       /***** Write date-time *****/
-      Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
-					    "MSG_TIT_BG_NEW");
+      Msg_WriteMsgDate (CreatTimeUTC,
+                        Open ? "MSG_TIT" :
+			       "MSG_TIT_NEW",
+                        Open ? "MSG_BG" :
+			       "MSG_BG_NEW");
 
    HTM_TR_End ();
 
@@ -2174,16 +2181,17 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 HTM_TD_End ();
 
 	 /***** Show content and media *****/
-	 HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_TXT_%s\"",
+	               The_GetSuffix ());
 	    if (Content[0])
 	       Msg_WriteMsgContent (Content,true,false);
 	    Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
 	 HTM_TD_End ();
 
-      HTM_TR_End ();
+	 /***** Free media *****/
+	 Med_MediaDestructor (&Media);
 
-      /***** Free media *****/
-      Med_MediaDestructor (&Media);
+      HTM_TR_End ();
      }
 
    /***** Free memory used for user's data *****/
@@ -2240,10 +2248,11 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   HTM_TD_Begin ("class=\"CT %s_%s\" style=\"width:45px;\"",
-		 NewMsg ? "MSG_TIT_BG_NEW" :
-			  "MSG_TIT_BG",
-		 The_GetSuffix ());
+   HTM_TD_Begin ("class=\"CT %s_%s %s_%s\" style=\"width:45px;\"",
+		 NewMsg ? "MSG_TIT_NEW" :
+			  "MSG_TIT",The_GetSuffix (),
+		 NewMsg ? "MSG_BG_NEW" :
+			  "MSG_BG" ,The_GetSuffix ());
       HTM_TxtF ("%lu:",MsgNum);
    HTM_TD_End ();
   }
@@ -2261,10 +2270,11 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    extern const char *Txt_no_subject;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"LT %s_%s\"",
-                 Open ? "MSG_TIT_BG" :
-        	        "MSG_TIT_BG_NEW",
-        	 The_GetSuffix ());
+   HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+                 Open ? "MSG_TIT" :
+        	        "MSG_TIT_NEW",The_GetSuffix (),
+                 Open ? "MSG_BG" :
+        	        "MSG_BG_NEW" ,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
@@ -2389,7 +2399,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
            {
-            HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
+            HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_TxtF ("(%s)",Txt_from_this_course);
             HTM_DIV_End ();
            }
@@ -2398,7 +2408,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Frm_BeginFormGoTo (ActSeeCrsInf);
 	       Crs_PutParamCrsCod (Crs.CrsCod);
-	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
+	       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 		  HTM_Txt ("(");
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 					   "class=\"BT_LINK\"");
@@ -2413,7 +2423,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
-      HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
+      HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("(%s)",Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
@@ -2496,7 +2506,7 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 	 HTM_TD_End ();
 
 	 /***** Write user's name *****/
-	 HTM_TD_Begin ("class=\"AUTHOR_TXT LM\"");
+	 HTM_TD_Begin ("class=\"LM MSG_AUT_%s\"",The_GetSuffix ());
 	    if (UsrDat->UsrCod > 0)
 	      {
 	       HTM_Txt (UsrDat->FullName);
@@ -2640,8 +2650,10 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	       HTM_TD_End ();
 
 	       /* Write user's name */
-	       HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
-							   "AUTHOR_TXT_NEW");
+	       HTM_TD_Begin ("class=\"LM %s_%s\"",
+	                     OpenByDst ? "MSG_AUT" :
+				         "MSG_AUT_NEW",
+			     The_GetSuffix ());
 		  if (UsrValid)
 		     HTM_Txt (UsrDat.FullName);
 		  else
@@ -2657,7 +2669,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    /***** Begin form to show all users *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+	       HTM_TD_Begin ("colspan=\"3\" class=\"LM MSG_AUT_%s\"",
+	                     The_GetSuffix ());
 		  HTM_TxtF ("[%u %s]",
 			    NumRecipients.Unknown,
 			    (NumRecipients.Unknown == 1) ? Txt_unknown_recipient :
@@ -2673,7 +2686,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    /***** Begin form to show all users *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+	       HTM_TD_Begin ("colspan=\"3\" class=\"LM MSG_AUT_%s\"",
+	                     The_GetSuffix ());
 		  Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
 		     Msg_PutHiddenParamsOneMsg (Messages);
@@ -2705,7 +2719,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-void Msg_WriteMsgDate (time_t TimeUTC,const char *Class)
+void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg)
   {
    static unsigned UniqueId = 0;
    char *Id;
@@ -2715,8 +2729,10 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *Class)
       Err_NotEnoughMemoryExit ();
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s\" style=\"width:106px;\"",
-                 Id,Class,The_GetSuffix ());
+   HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s %s_%s\" style=\"width:106px;\"",
+                 Id,
+                 ClassTxt,The_GetSuffix (),
+                 ClassBg,The_GetSuffix ());
 
       /***** Write date and time *****/
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,

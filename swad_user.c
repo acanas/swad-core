@@ -6384,8 +6384,10 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 	             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,false);
 
    /***** Write name *****/
-   HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s\"",Hidden ? "AUTHOR_TXT_LIGHT" :
-        	                                        "AUTHOR_TXT");
+   HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s_%s\"",
+                  Hidden ? "MSG_AUT_REM" :
+        	           "MSG_AUT",
+        	  The_GetSuffix ());
       HTM_Txt (UsrDat.FullName);
    HTM_DIV_End ();
 
@@ -6435,14 +6437,15 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    /* Action to go to user's record depending on role in course */
    if (!NextAction[UsrDat->Roles.InCurrentCrs])
       /* Begin div */
-      HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
+      HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
    else
      {
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,
-	                          "class=\"BT_LINK AUTHOR_TXT\"");
+	                          "class=\"BT_LINK MSG_AUT_%s\"",
+	                          The_GetSuffix ());
      }
 
    /* User's ID */

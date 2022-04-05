@@ -2304,25 +2304,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 .NO_BR	{white-space:nowrap;}
 
-/********************************* Messages **********************************/
-.MSG_RECIPIENTS, .MSG_SUBJECT, .MSG_CONTENT
-	{
-	box-sizing:border-box;
-	width:640px;
-	}
-.BG_MSG_BLUE
-	{
-	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
-	background-repeat:no-repeat;
-	}
-.BG_MSG_GREEN
-	{
-	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
-	background-repeat:no-repeat;
-	}
-
 /************************** Listing of users *********************************/
 .USR_LIST_NUM_WHITE,
 .USR_LIST_NUM_GREY,
@@ -3811,9 +3792,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.AUTHOR_TXT		{color:#4d88a1; font-size:11pt;}
-.AUTHOR_TXT_LIGHT	{color:#afc4cc; font-size:11pt;}
-.AUTHOR_TXT_NEW		{color:#4d88a1; font-size:11pt; font-weight:bold;}
 
 /************************** Owner of assignments and works *******************/
 .OWNER_WORKS_PHOTO
@@ -4221,6 +4199,12 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /*********************************** Messages ********************************/
+.MSG_RECIPIENTS, .MSG_SUBJECT, .MSG_CONTENT
+	{
+	box-sizing:border-box;
+	width:640px;
+	}
+
 .MSG_TO_ONE_RCP
 	{
 	display:inline-block;
@@ -4246,12 +4230,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	margin:0 auto;
 	width:400px;
 	}
-.MSG_TXT
-	{
-	color:#202020;
-	font-size:13pt;
- 	line-height:1.4;
-	}
+
+.MSG_TXT_WHITE,
+.MSG_TXT_GREY,
+.MSG_TXT_PURPLE,
+.MSG_TXT_BLUE,
+.MSG_TXT_YELLOW,
+.MSG_TXT_PINK		{color:#202020;	font-size:13pt;	line-height:1.4;}
+.MSG_TXT_DARK		{color:#f0f0f0;	font-size:13pt;	line-height:1.4;}
 
 .MSG_TIT_WHITE,
 .MSG_TIT_GREY,
@@ -4277,99 +4263,84 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .MSG_TIT_REM_PINK	{font-size:13pt; color:#afc4cc;}
 .MSG_TIT_REM_DARK	{font-size:13pt; color:#4d88a1;}
 
-.MSG_TIT_BG_WHITE,
-.MSG_TIT_BG_GREY,
-.MSG_TIT_BG_PURPLE,
-.MSG_TIT_BG_BLUE,
-.MSG_TIT_BG_YELLOW,
-.MSG_TIT_BG_PINK
+.MSG_BG_WHITE,
+.MSG_BG_GREY,
+.MSG_BG_PURPLE,
+.MSG_BG_BLUE,
+.MSG_BG_YELLOW,
+.MSG_BG_PINK
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4d88a1;
-	font-size:13pt;
 	}
-.MSG_TIT_BG_DARK
+.MSG_BG_DARK
 	{
-	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
+	background-image:-webkit-linear-gradient(#414e52 0,#414e52 80%,#444444 100%);	/* Safari */
+	background-image:linear-gradient(#414e52 0,#414e52 80%,#444444 100%);
 	background-repeat:no-repeat;
-	color:#afc4cc;
-	font-size:13pt;
 	}
 
-.MSG_TIT_BG_NEW_WHITE,
-.MSG_TIT_BG_NEW_GREY,
-.MSG_TIT_BG_NEW_PURPLE,
-.MSG_TIT_BG_NEW_BLUE,
-.MSG_TIT_BG_NEW_YELLOW,
-.MSG_TIT_BG_NEW_PINK
+.MSG_BG_NEW_WHITE,
+.MSG_BG_NEW_GREY,
+.MSG_BG_NEW_PURPLE,
+.MSG_BG_NEW_BLUE,
+.MSG_BG_NEW_YELLOW,
+.MSG_BG_NEW_PINK
 	{
 	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4d88a1;
-	font-size:13pt;
-	font-weight:bold;
 	}
-.MSG_TIT_BG_NEW_DARK
+.MSG_BG_NEW_DARK
 	{
-	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
+	background-image:-webkit-linear-gradient(#5f6b3a 0,#5f6b3a 80%,#444444 100%);	/* Safari */
+	background-image:linear-gradient(#5f6b3a 0,#5f6b3a 80%,#444444 100%);
 	background-repeat:no-repeat;
-	color:#afc4cc;
-	font-size:13pt;
-	font-weight:bold;
 	}
 
-.MSG_TIT_BG_REM_WHITE,
-.MSG_TIT_BG_REM_GREY,
-.MSG_TIT_BG_REM_PURPLE,
-.MSG_TIT_BG_REM_BLUE,
-.MSG_TIT_BG_REM_YELLOW,
-.MSG_TIT_BG_REM_PINK
+.MSG_BG_REM_WHITE,
+.MSG_BG_REM_GREY,
+.MSG_BG_REM_PURPLE,
+.MSG_BG_REM_BLUE,
+.MSG_BG_REM_YELLOW,
+.MSG_BG_REM_PINK
 	{
 	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#afc4cc;
-	font-size:13pt;
 	}
-.MSG_TIT_BG_REM_DARK
+.MSG_BG_REM_DARK
 	{
 	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4d88a1;
-	font-size:13pt;
 	}
 
-.MSG_AUT_BG
-	{
-	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
-	background-repeat:no-repeat;
-	color:#4d88a1;
-	font-size:11pt;
-	}
-.MSG_AUT_BG_NEW
-	{
-	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
-	background-repeat:no-repeat;
-	color:#4d88a1;
-	font-size:11pt;
-	font-weight:bold;
-	}
-.MSG_AUT_BG_REM
-	{
-	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
-	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
-	background-repeat:no-repeat;
-	color:#afc4cc;
-	font-size:11pt;
-	}
+.MSG_AUT_WHITE,
+.MSG_AUT_GREY,
+.MSG_AUT_PURPLE,
+.MSG_AUT_BLUE,
+.MSG_AUT_YELLOW,
+.MSG_AUT_PINK		{color:#4d88a1; font-size:11pt;}
+.MSG_AUT_DARK		{color:#afc4cc; font-size:11pt;}
+
+.MSG_AUT_NEW_WHITE,
+.MSG_AUT_NEW_GREY,
+.MSG_AUT_NEW_PURPLE,
+.MSG_AUT_NEW_BLUE,
+.MSG_AUT_NEW_YELLOW,
+.MSG_AUT_NEW_PINK	{color:#4d88a1;	font-size:11pt;	font-weight:bold;}
+.MSG_AUT_NEW_DARK	{color:#afc4cc;	font-size:11pt;	font-weight:bold;}
+
+.MSG_AUT_REM_WHITE,
+.MSG_AUT_REM_GREY,
+.MSG_AUT_REM_PURPLE,
+.MSG_AUT_REM_BLUE,
+.MSG_AUT_REM_YELLOW,
+.MSG_AUT_REM_PINK	{color:#afc4cc; font-size:11pt;}
+.MSG_AUT_REM_DARK	{color:#4d88a1; font-size:11pt;}
+
 .MSG_DATE	{color:#4d88a1; font-size:11pt;}
 .MSG_DATE_NEW	{color:#4d88a1; font-size:11pt; font-weight:bold;}
 

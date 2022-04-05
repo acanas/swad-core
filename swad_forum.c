@@ -902,8 +902,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
       /***** Put an icon with post status *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-		    NewPst ? "MSG_TIT_BG_NEW" :
-			     "MSG_TIT_BG",
+		    NewPst ? "MSG_BG_NEW" :
+			     "MSG_BG",
 		    The_GetSuffix ());
 	 Ico_PutIcon (NewPst ? "envelope.svg" :
 			       "envelope-open-text.svg",
@@ -917,12 +917,16 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       Msg_WriteMsgNumber ((unsigned long) PstNum,NewPst);
 
       /***** Write date *****/
-      Msg_WriteMsgDate (CreatTimeUTC,NewPst ? "MSG_TIT_BG_NEW" :
-					      "MSG_TIT_BG");
-
+      Msg_WriteMsgDate (CreatTimeUTC,
+                        NewPst ? "MSG_TIT_NEW" :
+				 "MSG_TIT",
+                        NewPst ? "MSG_BG_NEW" :
+				 "MSG_BG");
       /***** Write subject *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",NewPst ? "MSG_TIT_BG_NEW" :
-					           "MSG_TIT_BG");
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+                    NewPst ? "MSG_BG_NEW" :
+	  	             "MSG_BG",
+	  	    The_GetSuffix ());
 	 if (Enabled)
 	   {
 	    if (Subject[0])
@@ -985,7 +989,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       HTM_TD_End ();
 
       /***** Write author *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"AUTHOR_TXT LT\" style=\"width:150px;\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_AUT_%s\" style=\"width:150px;\"",
+                    The_GetSuffix ());
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
@@ -996,7 +1001,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       HTM_TD_End ();
 
       /***** Write post content *****/
-      HTM_TD_Begin ("class=\"MSG_TXT LT\"");
+      HTM_TD_Begin ("class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
 	 if (Enabled)
 	   {
 	    Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
@@ -1110,7 +1115,7 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
    NumPsts = For_DB_GetNumPstsOfUsrInForum (&Forums->Forum,UsrCod);
 
    /***** Write number of posts *****/
-   HTM_DIV_Begin ("class=\"AUTHOR_TXT LT\"");
+   HTM_DIV_Begin ("class=\"LT MSG_AUT_%s\"",The_GetSuffix ());
       HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
 						 Txt_FORUM_posts);
    HTM_DIV_End ();
@@ -2175,7 +2180,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    Dat_StartEndTime_t Order;
    time_t TimeUTC;
    struct Pagination PaginationPsts;
-   const char *Style;
+   const char *Class;
    long ThreadInMyClipboard = -1L;
    unsigned Column;
    const char *BgColor;
@@ -2197,8 +2202,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThreadData (&Thr);
       Forums->Thread.Current = Thr.ThrCod;
-      Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
-	                            "AUTHOR_TXT");
+      Class = (Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
+	                            "MSG_AUT");
       BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
 	        ((Thr.ThrCod == ThrCodHighlighted)   ? "BG_HIGHLIGHT" :
                                                        The_GetColorRows ());
@@ -2281,7 +2286,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
 							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	       HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
+	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	                     Class,The_GetSuffix (),BgColor);
 		  Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
 	       HTM_TD_End ();
 
@@ -2290,7 +2296,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       UniqueId++;
 	       if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+	                     Id,Class,The_GetSuffix (),BgColor);
 		  Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						true,true,false,0x6);
@@ -2302,28 +2309,29 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 		    Column <= 2;
 		    Column++)
 		 {
-		  HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
+		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		                Class,The_GetSuffix (),BgColor);
 		  HTM_TD_End ();
 		 }
 	   }
 
 	 /***** Write number of posts in this thread *****/
-	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
 	    HTM_TxtF ("%u&nbsp;",Thr.NumPosts);
 	 HTM_TD_End ();
 
 	 /***** Write number of new posts in this thread *****/
-	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
 	    HTM_TxtF ("%u&nbsp;",Thr.NumUnreadPosts);
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have write posts in this thread *****/
-	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
 	    HTM_TxtF ("%u&nbsp;",Thr.NumWriters);
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have read this thread *****/
-	 HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
 	    HTM_TxtF ("%u&nbsp;",Thr.NumReaders);
 	 HTM_TD_End ();
 

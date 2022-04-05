@@ -3265,7 +3265,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Begin form to send a message to this user *****/
    HTM_TD_Begin ("class=\"LT\"");
 
-      HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
+      HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA MSG_AUT_%s\"",The_GetSuffix ());
 
 	 if (!NextAction[UsrDat->Roles.InCurrentCrs])
 	    Err_WrongRoleExit ();
@@ -3292,8 +3292,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	      {
 	       HTM_BR ();
 	       HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\""
-			    " class=\"AUTHOR_TXT\"",
-			    UsrDat->Email);
+			    " class=\"MSG_AUT_%s\"",
+			    UsrDat->Email,The_GetSuffix ());
 		  HTM_Txt (UsrDat->Email);
 	       HTM_A_End ();
 	      }

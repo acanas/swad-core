@@ -346,10 +346,10 @@ void Ntf_ShowMyNotifications (void)
    Ntf_StatusTxt_t StatusTxt;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
-   const char *Class;
-   const char *ClassText;
+   const char *ClassTxt;
    const char *ClassLink;
-   const char *ClassAuthorBg;
+   const char *ClassAuthor;
+   const char *ClassBg;
    bool PutLink;
 
    /***** Get my notifications from database *****/
@@ -453,26 +453,26 @@ void Ntf_ShowMyNotifications (void)
 
 	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
 		 {
-		  Class             = "MSG_TIT_BG_REM";
-		  ClassText         = "MSG_TIT_REM";
+		  ClassTxt         = "MSG_TIT_REM";
 		  ClassLink         = "BT_LINK MSG_TIT_REM";
-		  ClassAuthorBg     = "MSG_AUT_BG_REM";
+		  ClassAuthor       = "MSG_AUT_REM";
+		  ClassBg           = "MSG_BG_REM";
 		  PutLink = false;
 		 }
 	       else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
 		 {
-		  Class             = "MSG_TIT_BG";
-		  ClassText         = "MSG_TIT";
+		  ClassTxt         = "MSG_TIT";
 		  ClassLink         = "BT_LINK LT MSG_TIT";
-		  ClassAuthorBg     = "MSG_AUT_BG";
+		  ClassAuthor       = "MSG_AUT";
+		  ClassBg           = "MSG_BG";
 		  PutLink = true;
 		 }
 	       else					// I have not seen the source of the notification
 		 {
-		  Class             = "MSG_TIT_BG_NEW";
-		  ClassText         = "MSG_TIT_NEW";
+		  ClassTxt         = "MSG_TIT_NEW";
 		  ClassLink         = "BT_LINK LT MSG_TIT_NEW";
-		  ClassAuthorBg     = "MSG_AUT_BG_NEW";
+		  ClassAuthor       = "MSG_AUT_NEW";
+		  ClassBg           = "MSG_BG_NEW";
 		  PutLink = true;
 		 }
 
@@ -481,7 +481,7 @@ void Ntf_ShowMyNotifications (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
-		                Class,The_GetSuffix ());
+		                ClassBg,The_GetSuffix ());
 		     if (PutLink)
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
@@ -497,8 +497,7 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_End ();
 
 		  /* Write event type */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",ClassBg,The_GetSuffix ());
 		     if (PutLink)
 		       {
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
@@ -510,20 +509,22 @@ void Ntf_ShowMyNotifications (void)
 		       }
 		     else
 		       {
-			HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+			HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
 			   HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 			HTM_SPAN_End ();
 		       }
 		  HTM_TD_End ();
 
 		  /* Write user (from) */
-		  HTM_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
+		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+		                ClassAuthor,The_GetSuffix (),
+		                ClassBg,The_GetSuffix ());
 		     Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 		  HTM_TD_End ();
 
 		  /* Write location */
 		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_GetSuffix ());
+		                ClassBg,The_GetSuffix ());
 		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 		       {
@@ -534,7 +535,7 @@ void Ntf_ShowMyNotifications (void)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
 			                            "class=\"%s\"",ClassLink);
 			else
-			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+			   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
 			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 			if (PutLink)
 			  {
@@ -553,7 +554,7 @@ void Ntf_ShowMyNotifications (void)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
 			                            "class=\"%s\"",ClassLink);
 			else
-			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+			   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
 
 			if (Hie.Crs.CrsCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie.Crs.ShrtName);
@@ -577,11 +578,10 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_End ();
 
 		  /* Write date and time */
-		  Msg_WriteMsgDate (DateTimeUTC,Class);
+		  Msg_WriteMsgDate (DateTimeUTC,ClassTxt,ClassBg);
 
 		  /* Write status (sent by email / pending to be sent by email) */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                Class,The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",ClassBg,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
 		  HTM_TD_End ();
 
