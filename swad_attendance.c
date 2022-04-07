@@ -490,19 +490,21 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 	 if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (ShowOnlyThisAttEventComplete)
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
-			  Id,
-			  Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
-							 "DATE_RED_LIGHT") :
-					  (Event->Open ? "DATE_GREEN" :
-							 "DATE_RED"));
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
 			  Id,
 			  Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
 							 "DATE_RED_LIGHT") :
 					  (Event->Open ? "DATE_GREEN" :
 							 "DATE_RED"),
+			  The_GetSuffix ());
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
+			  Id,
+			  Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
+							 "DATE_RED_LIGHT") :
+					  (Event->Open ? "DATE_GREEN" :
+							 "DATE_RED"),
+			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -3207,9 +3209,10 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 
 	    HTM_TD_ColouredEmpty (1);
 
-	    HTM_TD_Begin ("class=\"%s RT %s\"",
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 			  Present ? "DAT_GREEN" :
 				    "DAT_RED",
+			  The_GetSuffix (),
 			  The_GetColorRows ());
 	       HTM_TxtF ("%u:",NumAttEvent + 1);
 	    HTM_TD_End ();

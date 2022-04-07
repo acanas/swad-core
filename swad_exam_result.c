@@ -894,7 +894,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Valid questions */
-	    HTM_TD_Begin ("class=\"DAT_GREEN RT %s\"",
+	    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s %s\"",
+			  The_GetSuffix (),
 	                  The_GetColorRows ());
 	       if (ICanView.Score)
 		 {
@@ -908,7 +909,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Invalid questions */
-	    HTM_TD_Begin ("class=\"DAT_RED RT %s\"",
+	    HTM_TD_Begin ("class=\"RT DAT_RED_%s %s\"",
+	                  The_GetSuffix (),
 	                  The_GetColorRows ());
 	       if (ICanView.Score)
 		 {
@@ -1138,7 +1140,8 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total number of valid questions *****/
-   HTM_TD_Begin ("class=\"RT DAT_GREEN LINE_TOP LINE_BOTTOM %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_TOP LINE_BOTTOM %s\"",
+                 The_GetSuffix (),
                  The_GetColorRows ());
       if (NumTotalQsts->Valid.Total)
 	 HTM_Unsigned (NumTotalQsts->Valid.Total);
@@ -1147,7 +1150,8 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total number of invalid questions *****/
-   HTM_TD_Begin ("class=\"DAT_RED RT LINE_TOP LINE_BOTTOM %s\"",
+   HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_TOP LINE_BOTTOM %s\"",
+                 The_GetSuffix (),
                  The_GetColorRows ());
       NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
       if (NumTotalQstsInvalid)
@@ -1642,7 +1646,7 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 	       HTM_Txt (" (");
 
 	       /* Valid questions */
-	       HTM_SPAN_Begin ("class=\"DAT_GREEN\"");
+	       HTM_SPAN_Begin ("class=\"DAT_GREEN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
 		  HTM_Unsigned (Print->NumQsts.Valid.Total);
 	       HTM_SPAN_End ();
@@ -1650,7 +1654,7 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 	       HTM_TxtF ("; ");
 
 	       /* Invalid questions */
-	       HTM_SPAN_Begin ("class=\"DAT_RED\"");
+	       HTM_SPAN_Begin ("class=\"DAT_RED_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
 		  HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
 	       HTM_SPAN_End ();

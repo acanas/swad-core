@@ -606,10 +606,11 @@ void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned Uniqu
      {
       if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		    Id,
 		    Match->Status.Showing == Mch_END ? "DATE_RED" :
 						       "DATE_GREEN",
+		    The_GetSuffix (),
 		    The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

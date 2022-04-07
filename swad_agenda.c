@@ -828,10 +828,11 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	{
 	 if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
 		       Id,
 		       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
 					 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
+		       The_GetSuffix (),
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

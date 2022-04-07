@@ -1488,64 +1488,65 @@ a:hover img.CENTER_PHOTO_SHOW
 .DAY_WRK_HEAD_PURPLE,
 .DAY_WRK_HEAD_BLUE,
 .DAY_WRK_HEAD_YELLOW,
-.DAY_WRK_HEAD_PINK	{color:#4d88a1;}
-.DAY_WRK_HEAD_DARK	{color:#8cbcce;}
+.DAY_WRK_HEAD_PINK		{color:#4d88a1;}
+.DAY_WRK_HEAD_DARK		{color:#8cbcce;}
 
 .DAY_NO_WRK_HEAD_WHITE,
 .DAY_NO_WRK_HEAD_GREY,
 .DAY_NO_WRK_HEAD_PURPLE,
 .DAY_NO_WRK_HEAD_BLUE,
 .DAY_NO_WRK_HEAD_YELLOW,
-.DAY_NO_WRK_HEAD_PINK	{color:red;}
-.DAY_NO_WRK_HEAD_DARK	{color:#ff8080;}
+.DAY_NO_WRK_HEAD_PINK		{color:red;}
+.DAY_NO_WRK_HEAD_DARK		{color:#ff8080;}
 
 .DAY_WRK_WHITE,
 .DAY_WRK_GREY,
 .DAY_WRK_PURPLE,
 .DAY_WRK_BLUE,
 .DAY_WRK_YELLOW,
-.DAY_WRK_PINK	{color:#202020;}
-.DAY_WRK_DARK	{color:white;}
-
-.DAY_NO_WORK_WHITE,
-.DAY_NO_WORK_GREY,
-.DAY_NO_WORK_PURPLE,
-.DAY_NO_WORK_BLUE,
-.DAY_NO_WORK_YELLOW,
-.DAY_NO_WORK_PINK	{color:#c04080;}
-.DAY_NO_WORK_DARK	{color:#e0a0c0;}
-
-.DAY_HLD_WHITE,
-.DAY_HLD_GREY,
-.DAY_HLD_PURPLE,
-.DAY_HLD_BLUE,
-.DAY_HLD_YELLOW,
-.DAY_HLD_PINK	{color:red;}
-.DAY_HLD_DARK	{color:#ff8080;}
+.DAY_WRK_PINK			{color:#202020;}
+.DAY_WRK_DARK			{color:white;}
 
 .DAY_WRK_LIGHT_WHITE,
 .DAY_WRK_LIGHT_GREY,
 .DAY_WRK_LIGHT_PURPLE,
 .DAY_WRK_LIGHT_BLUE,
 .DAY_WRK_LIGHT_YELLOW,
-.DAY_WRK_LIGHT_PINK	{color:#e0e0e0;}
-.DAY_WRK_LIGHT_DARK	{color:#606060;}
+.DAY_WRK_LIGHT_PINK		{color:rgba( 32, 32, 32,0.3);}
+.DAY_WRK_LIGHT_DARK		{color:rgba(255,255,255,0.3);}
+
+.DAY_NO_WORK_WHITE,
+.DAY_NO_WORK_GREY,
+.DAY_NO_WORK_PURPLE,
+.DAY_NO_WORK_BLUE,
+.DAY_NO_WORK_YELLOW,
+.DAY_NO_WORK_PINK		{color:#c04080;}
+.DAY_NO_WORK_DARK		{color:#e0a0c0;}
 
 .DAY_NO_WORK_LIGHT_WHITE,
 .DAY_NO_WORK_LIGHT_GREY,
 .DAY_NO_WORK_LIGHT_PURPLE,
 .DAY_NO_WORK_LIGHT_BLUE,
 .DAY_NO_WORK_LIGHT_YELLOW,
-.DAY_NO_WORK_LIGHT_PINK		{color:#ffe0ff;}
-.DAY_NO_WORK_LIGHT_DARK		{color:#807080;}
+.DAY_NO_WORK_LIGHT_PINK		{color:rgba(192, 64,128,0.3);}
+.DAY_NO_WORK_LIGHT_DARK		{color:rgba(224,160,192,0.3);}
+
+
+.DAY_HLD_WHITE,
+.DAY_HLD_GREY,
+.DAY_HLD_PURPLE,
+.DAY_HLD_BLUE,
+.DAY_HLD_YELLOW,
+.DAY_HLD_PINK			{color:red;}
+.DAY_HLD_DARK			{color:#ff8080;}
 
 .DAY_HLD_LIGHT_WHITE,
 .DAY_HLD_LIGHT_GREY,
 .DAY_HLD_LIGHT_PURPLE,
 .DAY_HLD_LIGHT_BLUE,
 .DAY_HLD_LIGHT_YELLOW,
-.DAY_HLD_LIGHT_PINK	{color:#ffe0e0;}
-.DAY_HLD_LIGHT_DARK	{color:#807070;}
+.DAY_HLD_LIGHT_PINK		{color:rgba(255,  0,  0,0.3);}
+.DAY_HLD_LIGHT_DARK		{color:rgba(255,128,128,0.3);}
 
 .DAY
 	{
@@ -2660,8 +2661,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_SMALL_NOBR_STRONG_PINK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_STRONG_DARK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt; white-space:nowrap;}
 
-.DAT_GREEN	{color:#246600; font-size:13pt;}
-.DAT_RED	{color:#660000; font-size:13pt;}
+.DAT_GREEN_WHITE,
+.DAT_GREEN_GREY,
+.DAT_GREEN_PURPLE,
+.DAT_GREEN_BLUE,
+.DAT_GREEN_YELLOW,
+.DAT_GREEN_PINK		{color:#246600; font-size:13pt;}
+.DAT_GREEN_DARK		{color:#80c040; font-size:13pt;}
+
+.DAT_RED_WHITE,
+.DAT_RED_GREY,
+.DAT_RED_PURPLE,
+.DAT_RED_BLUE,
+.DAT_RED_YELLOW,
+.DAT_RED_PINK		{color:#660000; font-size:13pt;}
+.DAT_RED_DARK		{color:#ff8080; font-size:13pt;}
 
 .NOWRAP	{white-space:nowrap;}
 .BOLD	{font-weight:bold;}
@@ -2897,18 +2911,60 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .ASG_GRP		{color:#4d88a1; font-size:12pt;}
 .ASG_GRP_LIGHT		{color:#afc4cc; font-size:12pt;}
 
-.DATE_RED		{color:#660000; font-size:13pt;}
-.DATE_RED_LIGHT		{color:#f98a8a; font-size:13pt;}
-.DATE_GREEN		{color:#246600; font-size:13pt;}
-.DATE_GREEN_LIGHT	{color:#89be87; font-size:13pt;}
-.DATE_BLUE		{color:#4d88a1; font-size:13pt;}
-.DATE_BLUE_LIGHT	{color:#afc4cc; font-size:13pt;}
+.DATE_RED_WHITE,
+.DATE_RED_GREY,
+.DATE_RED_PURPLE,
+.DATE_RED_BLUE,
+.DATE_RED_YELLOW,
+.DATE_RED_PINK			{color:#660000; font-size:13pt;}
+.DATE_RED_DARK			{color:#f98a8a; font-size:13pt;}
+
+.DATE_RED_LIGHT_WHITE,
+.DATE_RED_LIGHT_GREY,
+.DATE_RED_LIGHT_PURPLE,
+.DATE_RED_LIGHT_BLUE,
+.DATE_RED_LIGHT_YELLOW,
+.DATE_RED_LIGHT_PINK		{color:rgba(102,  0,  0,0.3); font-size:13pt;}
+.DATE_RED_LIGHT_DARK		{color:rgba(249,138,138,0.3); font-size:13pt;}
+
+.DATE_GREEN_WHITE,
+.DATE_GREEN_GREY,
+.DATE_GREEN_PURPLE,
+.DATE_GREEN_BLUE,
+.DATE_GREEN_YELLOW,
+.DATE_GREEN_PINK		{color:#246600; font-size:13pt;}
+.DATE_GREEN_DARK		{color:#80c040; font-size:13pt;}
+
+.DATE_GREEN_LIGHT_WHITE,
+.DATE_GREEN_LIGHT_GREY,
+.DATE_GREEN_LIGHT_PURPLE,
+.DATE_GREEN_LIGHT_BLUE,
+.DATE_GREEN_LIGHT_YELLOW,
+.DATE_GREEN_LIGHT_PINK		{color:rgba( 36,100,  0,0.3); font-size:13pt;}
+.DATE_GREEN_LIGHT_DARK		{color:rgba(128,196, 64,0.3); font-size:13pt;}
+
+.DATE_BLUE_WHITE,
+.DATE_BLUE_GREY,
+.DATE_BLUE_PURPLE,
+.DATE_BLUE_BLUE,
+.DATE_BLUE_YELLOW,
+.DATE_BLUE_PINK			{color:#4d88a1; font-size:13pt;}
+.DATE_BLUE_DARK			{color:#afc4cc; font-size:13pt;}
+
+.DATE_BLUE_LIGHT_WHITE,
+.DATE_BLUE_LIGHT_GREY,
+.DATE_BLUE_LIGHT_PURPLE,
+.DATE_BLUE_LIGHT_BLUE,
+.DATE_BLUE_LIGHT_YELLOW,
+.DATE_BLUE_LIGHT_PINK		{color:rgba( 77,136,161,0.3); font-size:13pt;}
+.DATE_BLUE_LIGHT_DARK		{color:rgba(175,196,204,0.3); font-size:13pt;}
 
 .ASG_LST_DATE_GREEN	{color:#246600; font-size:11pt; white-space:nowrap;}
 .ASG_LST_DATE_RED	{color:#660000; font-size:11pt; white-space:nowrap;}
 
 .STATUS_GREEN		{color:#246600; font-size:12pt;}
 .STATUS_GREEN_LIGHT	{color:#89be87; font-size:12pt;}
+
 .STATUS_RED		{color:#660000; font-size:12pt;}
 .STATUS_RED_LIGHT	{color:#f98a8a; font-size:12pt;}
 
@@ -3002,6 +3058,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Qst_TXT_PINK			{color:#202020; font-size:12pt;}
 .Qst_TXT_DARK			{color:#e0e0e0; font-size:12pt;}
 
+.Qst_TXT_LIGHT_WHITE,
+.Qst_TXT_LIGHT_GREY,
+.Qst_TXT_LIGHT_PURPLE,
+.Qst_TXT_LIGHT_BLUE,
+.Qst_TXT_LIGHT_YELLOW,
+.Qst_TXT_LIGHT_PINK		{color:rgba( 32, 32, 32,0.3); font-size:12pt;}
+.Qst_TXT_LIGHT_DARK		{color:rgba(224,224,224,0.3); font-size:12pt;}
+
 .Qst_TXT_RED_WHITE,
 .Qst_TXT_RED_GREY,
 .Qst_TXT_RED_PURPLE,
@@ -3010,21 +3074,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Qst_TXT_RED_PINK		{color:#660000; font-size:12pt;}
 .Qst_TXT_RED_DARK		{color:#ff8080; font-size:12pt;}
 
-.Qst_TXT_LIGHT_WHITE,
-.Qst_TXT_LIGHT_GREY,
-.Qst_TXT_LIGHT_PURPLE,
-.Qst_TXT_LIGHT_BLUE,
-.Qst_TXT_LIGHT_YELLOW,
-.Qst_TXT_LIGHT_PINK		{color:#a0a0a0; font-size:12pt;}
-.Qst_TXT_LIGHT_DARK		{color:#808080; font-size:12pt;}
-
 .Qst_TXT_LIGHT_RED_WHITE,
 .Qst_TXT_LIGHT_RED_GREY,
 .Qst_TXT_LIGHT_RED_PURPLE,
 .Qst_TXT_LIGHT_RED_BLUE,
 .Qst_TXT_LIGHT_RED_YELLOW,
-.Qst_TXT_LIGHT_RED_PINK		{color:#f98a8a; font-size:12pt;}
-.Qst_TXT_LIGHT_RED_DARK		{color:#f98a8a; font-size:12pt;}
+.Qst_TXT_LIGHT_RED_PINK		{color:rgba(102,  0,  0,0.3); font-size:12pt;}
+.Qst_TXT_LIGHT_RED_DARK		{color:rgba(255,128,128,0.3); font-size:12pt;}
 
 .Qst_ANS_0_WHITE,
 .Qst_ANS_0_GREY,

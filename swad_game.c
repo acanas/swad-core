@@ -575,11 +575,11 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 					   (Game->Hidden ? "DATE_RED_LIGHT":
 							   "DATE_RED");
 	 if (ShowOnlyThisGame)
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-			  Id,Color);
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			  Id,Color,The_GetSuffix ());
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			  Id,Color,The_GetColorRows ());
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			  Id,Color,The_GetSuffix (),The_GetColorRows ());
 	 if (Game->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

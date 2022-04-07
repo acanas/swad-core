@@ -432,19 +432,21 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (PrintView)
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
-			  Id,
-			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-						   "DATE_RED_LIGHT") :
-				       (Asg.Open ? "DATE_GREEN" :
-						   "DATE_RED"));
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
 			  Id,
 			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 						   "DATE_RED_LIGHT") :
 				       (Asg.Open ? "DATE_GREEN" :
 						   "DATE_RED"),
+			  The_GetSuffix ());
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
+			  Id,
+			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
+						   "DATE_RED_LIGHT") :
+				       (Asg.Open ? "DATE_GREEN" :
+						   "DATE_RED"),
+			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

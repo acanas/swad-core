@@ -460,19 +460,21 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	 if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (PrintView)
-	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE %s LT\"",
-			  Id,
-			  LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
-						     "DATE_RED_LIGHT") :
-				       (Item->Open ? "DATE_GREEN" :
-						     "DATE_RED"));
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE %s LT %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s\"",
 			  Id,
 			  LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
 						     "DATE_RED_LIGHT") :
 				       (Item->Open ? "DATE_GREEN" :
 						     "DATE_RED"),
+			  The_GetSuffix ());
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s %s\"",
+			  Id,
+			  LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
+						     "DATE_RED_LIGHT") :
+				       (Item->Open ? "DATE_GREEN" :
+						     "DATE_RED"),
+			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

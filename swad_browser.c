@@ -5393,9 +5393,10 @@ static void Brw_WriteDatesAssignment (void)
    char *Id;
 
    /***** Begin table cell *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"%s RM %s\"",
+   HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
 		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
 					    "ASG_LST_DATE_RED",
+		 The_GetSuffix (),
 		 The_GetColorRows ());
 
       if (Gbl.FileBrowser.Asg.AsgCod > 0)

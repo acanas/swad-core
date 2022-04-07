@@ -524,11 +524,11 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 				     (Exam->Hidden ? "DATE_RED_LIGHT":
 						     "DATE_RED");
 	 if (ShowOnlyThisExam)
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-			  Id,Color);
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			  Id,Color,The_GetSuffix ());
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			  Id,Color,The_GetColorRows ());
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			  Id,Color,The_GetSuffix (),The_GetColorRows ());
 	 if (Exam->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

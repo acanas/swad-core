@@ -479,19 +479,21 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,
-		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							       "DATE_RED") :
-					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							       "DATE_RED_LIGHT"));
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
 		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"),
+		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -503,19 +505,21 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,
-		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							       "DATE_RED") :
-					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							       "DATE_RED_LIGHT"));
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
 		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"),
+		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
