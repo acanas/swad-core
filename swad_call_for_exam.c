@@ -930,16 +930,6 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       [Cfe_FORM_VIEW  ][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
       [Cfe_FORM_VIEW  ][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
      };
-   static const char *ClassTitle[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "EXAM_TIT_WHITE",
-      [The_THEME_GREY  ] = "EXAM_TIT_GREY",
-      [The_THEME_PURPLE] = "EXAM_TIT_PURPLE",
-      [The_THEME_BLUE  ] = "EXAM_TIT_BLUE",
-      [The_THEME_YELLOW] = "EXAM_TIT_YELLOW",
-      [The_THEME_PINK  ] = "EXAM_TIT_PINK",
-      [The_THEME_DARK  ] = "EXAM_TIT_DARK",
-     };
 
    /***** Get data of institution of this degree *****/
    Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
@@ -991,11 +981,11 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Institution logo *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM %s\"",
-	                  ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-			       Ins.WWW,ClassTitle[Gbl.Prefs.Theme]);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
+			       Ins.WWW,The_GetSuffix ());
 	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
@@ -1006,12 +996,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Degree *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM %s\"",
-	                  ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",
+	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Gbl.Hierarchy.Deg.WWW,
-			       ClassTitle[Gbl.Prefs.Theme]);
+			       The_GetSuffix ());
 	       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();

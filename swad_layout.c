@@ -288,6 +288,7 @@ void Lay_WriteStartOfPage (void)
 	       break;
            }
 	 HTM_Txt (">\n");
+	 Gbl.Prefs.Theme = The_THEME_WHITE;	// In a new tab, use white background
          Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
 	 Gbl.Layout.DivsEndWritten   = true;
@@ -968,33 +969,14 @@ static void Lay_WritePageTopHeading (void)
   {
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
-   static const char *ClassHeadRow1[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "HEAD_ROW_1_WHITE",
-      [The_THEME_GREY  ] = "HEAD_ROW_1_GREY",
-      [The_THEME_PURPLE] = "HEAD_ROW_1_PURPLE",
-      [The_THEME_BLUE  ] = "HEAD_ROW_1_BLUE",
-      [The_THEME_YELLOW] = "HEAD_ROW_1_YELLOW",
-      [The_THEME_PINK  ] = "HEAD_ROW_1_PINK",
-      [The_THEME_DARK  ] = "HEAD_ROW_1_DARK",
-     };
-   static const char *ClassHeadRow2[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "HEAD_ROW_2_WHITE",
-      [The_THEME_GREY  ] = "HEAD_ROW_2_GREY",
-      [The_THEME_PURPLE] = "HEAD_ROW_2_PURPLE",
-      [The_THEME_BLUE  ] = "HEAD_ROW_2_BLUE",
-      [The_THEME_YELLOW] = "HEAD_ROW_2_YELLOW",
-      [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
-      [The_THEME_DARK  ] = "HEAD_ROW_2_DARK",
-      };
 
    /***** Begin header *****/
    HTM_Txt ("<header>");
 
       /***** 1st. row *****/
       /* Begin 1st. row */
-      HTM_DIV_Begin ("id=\"head_row_1\" class=\"%s\"",ClassHeadRow1[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("id=\"head_row_1\" class=\"HEAD_ROW_1_%s\"",
+                     The_GetSuffix ());
 
 	 /* 1st. row, 1st. column: logo, tagline and search */
 	 HTM_DIV_Begin ("id=\"head_row_1_left\"");
@@ -1052,8 +1034,8 @@ static void Lay_WritePageTopHeading (void)
 
       /***** 2nd. row *****/
       /* Begin second row */
-      HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",
-                     ClassHeadRow2[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("id=\"head_row_2\" class=\"HEAD_ROW_2_%s\"",
+                     The_GetSuffix ());
 
 	 /* 2nd. row, 1st. column
 	    Clock with hour:minute (server hour is shown) */

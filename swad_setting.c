@@ -158,26 +158,20 @@ void Set_GetSettingsFromIP (void)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get first day of week (row[0]) */
+	 /* Get first day of week (row[0]),
+	        date format (row[1]),
+	        theme (row[2]),
+	        icon set (row[3]),
+	        menu (row[4]),
+	        if user wants to show side columns (row[5]),
+	        user photo shape (row[6]) */
 	 Gbl.Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[0]);
-
-	 /* Get date format (row[1]) */
-	 Gbl.Prefs.DateFormat = Dat_GetDateFormatFromStr (row[1]);
-
-	 /* Get theme (row[2]) */
-	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
-
-	 /* Get icon set (row[3]) */
-	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
-
-	 /* Get menu (row[4]) */
-	 Gbl.Prefs.Menu = Mnu_GetMenuFromStr (row[4]);
-
-	 /* Get if user wants to show side columns (row[5]) */
-	 Gbl.Prefs.SideCols = Set_GetSideColsFromStr (row[5]);
-
-	 /* Get user photo shape (row[6]) */
-	 Gbl.Prefs.PhotoShape = PhoSha_GetShapeFromStr (row[6]);
+	 Gbl.Prefs.DateFormat     = Dat_GetDateFormatFromStr (row[1]);
+	 Gbl.Prefs.Theme          = The_GetThemeFromStr (row[2]);
+	 Gbl.Prefs.IconSet        = Ico_GetIconSetFromStr (row[3]);
+	 Gbl.Prefs.Menu           = Mnu_GetMenuFromStr (row[4]);
+	 Gbl.Prefs.SideCols       = Set_GetSideColsFromStr (row[5]);
+	 Gbl.Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[6]);
 	}
 
       /***** Free structure that stores the query result *****/

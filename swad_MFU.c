@@ -180,7 +180,7 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -189,6 +189,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
+   char URLIconSet[PATH_MAX + 1];
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_frequent_actions,
@@ -221,9 +222,11 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 			HTM_BUTTON_Submit_Begin (TabMenuStr,
 			                         "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
 			                         The_GetSuffix ());
-			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-				    "class=\"%s\"",
-				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+			   snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
+			             Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+			   HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
+				    "class=\"ICO_%s_%s\"",
+				    Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 			   HTM_TxtF ("&nbsp;%s",TabMenuStr);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -247,7 +250,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -257,6 +260,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
+   char URLIconSet[PATH_MAX + 1];
 
    /***** Begin div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
@@ -289,9 +293,11 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
 		     HTM_BUTTON_Submit_Begin (TabMenuStr,"class=\"BT_LINK\"");
-			HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-				 "class=\"%s\"",
-				 Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
+				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+			HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
+				 "class=\"ICO_%s_%s\"",
+				 Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 			HTM_TxtF ("&nbsp;%s",MenuStr);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

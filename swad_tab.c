@@ -51,41 +51,20 @@ static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
 void Tab_DrawTabs (void)
   {
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
    bool ICanViewTab;
-   static const char *ClassHeadRow3[The_NUM_THEMES] =
+   char URLIconSet[PATH_MAX + 1];
+   static const char *ClassIcoTab[Ico_NUM_ICON_SETS] =
      {
-      [The_THEME_WHITE ] = "HEAD_ROW_3_WHITE",
-      [The_THEME_GREY  ] = "HEAD_ROW_3_GREY",
-      [The_THEME_PURPLE] = "HEAD_ROW_3_PURPLE",
-      [The_THEME_BLUE  ] = "HEAD_ROW_3_BLUE",
-      [The_THEME_YELLOW] = "HEAD_ROW_3_YELLOW",
-      [The_THEME_PINK  ] = "HEAD_ROW_3_PINK",
-      [The_THEME_DARK  ] = "HEAD_ROW_3_DARK",
-      };
-   static const char *ClassIcoTab[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
-     {
-      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = " TAB_ICO_WHITE",
-      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = " TAB_ICO_GREY",
-      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = " TAB_ICO_PURPLE",
-      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = " TAB_ICO_BLUE",
-      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = " TAB_ICO_YELLOW",
-      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = " TAB_ICO_PINK",
-      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " TAB_ICO_DARK",
-
-      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
+      [Ico_ICON_SET_AWESOME] = "TAB_ICO",
+      [Ico_ICON_SET_NUVOLA ] = NULL,
      };
 
    /***** Begin tabs container *****/
-   HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"HEAD_ROW_3_%s\"",The_GetSuffix ());
       HTM_Txt ("<nav id=\"tabs\">");
       HTM_UL_Begin ("class=\"TAB_LIST\"");
 
@@ -120,8 +99,15 @@ void Tab_DrawTabs (void)
 		     Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
 		     HTM_BUTTON_Submit_Begin (Txt_TABS_TXT[NumTab],
 		                              "class=\"BT_LINK\"");
-			HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
-				 "class=\"TAB_ICO%s\"",ClassIcoTab[Gbl.Prefs.IconSet][Gbl.Prefs.Theme]);
+			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
+				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+		        if (ClassIcoTab[Gbl.Prefs.IconSet])
+			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+				    "class=\"TAB_ICO %s_%s\"",
+				    ClassIcoTab[Gbl.Prefs.IconSet],The_GetSuffix ());
+		        else
+			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+				    "class=\"TAB_ICO\"");
 			HTM_DIV_Begin ("class=\"TAB_TXT TAB_%s_TXT_%s\"",
 				       NumTab == Gbl.Action.Tab ? "ON" :
 								  "OFF",

@@ -68,8 +68,6 @@ struct Globals Gbl;	// All the global parameters and variables must be in this s
 
 void Gbl_InitializeGlobals (void)
   {
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
 
@@ -124,10 +122,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
    Gbl.Prefs.Theme          = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
-   snprintf (Gbl.Prefs.URLTheme,sizeof (Gbl.Prefs.URLTheme),"%s/%s",
-             Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
-	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    Gbl.Session.NumSessions = 0;
    Gbl.Session.IsOpen = false;

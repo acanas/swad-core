@@ -743,15 +743,14 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 
 static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Follow;
 
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,
-                       "class=\"FOLLOW_USR_ICO ICO16x16 %s ICO_HIGHLIGHT\"",
-                       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+                       "class=\"FOLLOW_USR_ICO ICO16x16 ICO_%s_%s ICO_HIGHLIGHT\"",
+                       Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
    Frm_EndForm ();
   }
 

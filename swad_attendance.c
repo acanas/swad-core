@@ -515,13 +515,15 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 
       /* Attendance event title */
       if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("class=\"%s LT\"",
-	               Event->Hidden ? "ASG_TITLE_LIGHT" :
-				       "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",
 	               Event->Hidden ? "ASG_TITLE_LIGHT" :
 				       "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	               Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE",
+		       The_GetSuffix (),
 	               The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 	 Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title);
@@ -530,13 +532,15 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 
       /* Number of students in this event */
       if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("class=\"%s RT\"",
-		       Event->Hidden ? "ASG_TITLE_LIGHT" :
-				       "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s RT %s\"",
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",
 		       Event->Hidden ? "ASG_TITLE_LIGHT" :
 				       "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+		       Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE",
+		       The_GetSuffix (),
 		       The_GetColorRows ());
       HTM_Unsigned (Event->NumStdsTotal);
       HTM_TD_End ();

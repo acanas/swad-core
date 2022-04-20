@@ -514,9 +514,10 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"%s LT %s\"",
+   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                  Session->Hidden ? "ASG_TITLE_LIGHT":
 				   "ASG_TITLE",
+		 The_GetSuffix (),
 		 The_GetColorRows ());
 
       /***** Session title *****/

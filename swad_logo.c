@@ -63,7 +63,6 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists)
   {
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    static const char *HieIcon[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_UNK] = "sitemap.svg",	// not applicable here
@@ -83,7 +82,6 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
    char *URL;
    char *Icon;
    bool ClassNotEmpty;
-   Ico_Color_t Color;
 
    /***** Path to logo *****/
    if (HieIcon[Scope])	// Scope is correct
@@ -146,6 +144,11 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	 if (LogoFound || PutIconIfNotExists)
 	   {
 	    /***** Draw logo *****/
+	    ClassNotEmpty = false;
+	    if (Class)
+	       if (Class[0])
+		  ClassNotEmpty = true;
+
 	    if (LogoFound)
 	      {
 	       if (asprintf (&URL,"%s/%s/%02u/%u/logo",
@@ -155,7 +158,16 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 		  Err_NotEnoughMemoryExit ();
 	       if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Color = Ico_UNCHANGED;
+
+	       HTM_IMG (URL,Icon,AltText,
+			"class=\"ICO%ux%u"
+			        "%s%s\"",
+			Size,Size,
+			ClassNotEmpty ? " " :
+					"",
+			ClassNotEmpty ? Class :
+					"");
+
 	      }
 	    else
 	      {
@@ -163,24 +175,18 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 		  Err_NotEnoughMemoryExit ();
 	       if (asprintf (&Icon,"%s",HieIcon[Scope]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Color = Ico_BLACK;
+
+	       HTM_IMG (URL,Icon,AltText,
+			"class=\"ICO%ux%u ICO_%s_%s"
+			        "%s%s\"",
+			Size,Size,
+			Ico_GetPreffix (Ico_BLACK),The_GetSuffix (),
+			ClassNotEmpty ? " " :
+					"",
+			ClassNotEmpty ? Class :
+					"");
 	      }
-	    ClassNotEmpty = false;
-	    if (Class)
-	       if (Class[0])
-		  ClassNotEmpty = true;
-	    HTM_IMG (URL,Icon,AltText,
-		     "class=\"ICO%ux%u"
-		             "%s%s"
-		             "%s%s\"",
-		     Size,Size,
-		     Ico_ClassColor[Color][Gbl.Prefs.Theme][0] ? " " :
-			                                         "",
-		     Ico_ClassColor[Color][Gbl.Prefs.Theme],
-		     ClassNotEmpty ? " " :
-			             "",
-		     ClassNotEmpty ? Class :
-			             "");
+
 	    free (Icon);
             free (URL);
 	   }

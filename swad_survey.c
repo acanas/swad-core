@@ -529,9 +529,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Survey title */
       if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("class=\"%s LT\"",
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",
 	               Svy.Status.Visible ? "ASG_TITLE" :
-					    "ASG_TITLE_LIGHT");
+					    "ASG_TITLE_LIGHT",
+		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);

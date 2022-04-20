@@ -590,13 +590,15 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Game title and main data *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"%s LT\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",
 	               Game->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+		       The_GetSuffix (),
 	               The_GetColorRows ());
 
       /* Game title */
@@ -625,13 +627,15 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Number of matches in game *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"%s RT\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s RT %s\"",
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",
 	               Game->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+		       The_GetSuffix (),
 	               The_GetColorRows ());
 
       Games->GamCod = Game->GamCod;

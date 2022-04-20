@@ -68,54 +68,29 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
    [Ico_ICON_SET_NUVOLA ] = "Nuvola",
   };
 
-const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES] =
-     {
-      [Ico_UNCHANGED][The_THEME_WHITE ] = "",
-      [Ico_UNCHANGED][The_THEME_GREY  ] = "",
-      [Ico_UNCHANGED][The_THEME_PURPLE] = "",
-      [Ico_UNCHANGED][The_THEME_BLUE  ] = "",
-      [Ico_UNCHANGED][The_THEME_YELLOW] = "",
-      [Ico_UNCHANGED][The_THEME_PINK  ] = "",
-      [Ico_UNCHANGED][The_THEME_DARK  ] = "",
-
-      [Ico_BLACK    ][The_THEME_WHITE ] = "BLACK_ICO_WHITE",
-      [Ico_BLACK    ][The_THEME_GREY  ] = "BLACK_ICO_GREY",
-      [Ico_BLACK    ][The_THEME_PURPLE] = "BLACK_ICO_PURPLE",
-      [Ico_BLACK    ][The_THEME_BLUE  ] = "BLACK_ICO_BLUE",
-      [Ico_BLACK    ][The_THEME_YELLOW] = "BLACK_ICO_YELLOW",
-      [Ico_BLACK    ][The_THEME_PINK  ] = "BLACK_ICO_PINK",
-      [Ico_BLACK    ][The_THEME_DARK  ] = "BLACK_ICO_DARK",
-
-      [Ico_GREEN    ][The_THEME_WHITE ] = "GREEN_ICO_WHITE",
-      [Ico_GREEN    ][The_THEME_GREY  ] = "GREEN_ICO_GREY",
-      [Ico_GREEN    ][The_THEME_PURPLE] = "GREEN_ICO_PURPLE",
-      [Ico_GREEN    ][The_THEME_BLUE  ] = "GREEN_ICO_BLUE",
-      [Ico_GREEN    ][The_THEME_YELLOW] = "GREEN_ICO_YELLOW",
-      [Ico_GREEN    ][The_THEME_PINK  ] = "GREEN_ICO_PINK",
-      [Ico_GREEN    ][The_THEME_DARK  ] = "GREEN_ICO_DARK",
-
-      [Ico_RED      ][The_THEME_WHITE ] = "RED_ICO_WHITE",
-      [Ico_RED      ][The_THEME_GREY  ] = "RED_ICO_GREY",
-      [Ico_RED      ][The_THEME_PURPLE] = "RED_ICO_PURPLE",
-      [Ico_RED      ][The_THEME_BLUE  ] = "RED_ICO_BLUE",
-      [Ico_RED      ][The_THEME_YELLOW] = "RED_ICO_YELLOW",
-      [Ico_RED      ][The_THEME_PINK  ] = "RED_ICO_PINK",
-      [Ico_RED      ][The_THEME_DARK  ] = "RED_ICO_DARK",
-
-      [Ico_WHITE    ][The_THEME_WHITE ] = "WHITE_ICO_WHITE",
-      [Ico_WHITE    ][The_THEME_GREY  ] = "WHITE_ICO_GREY",
-      [Ico_WHITE    ][The_THEME_PURPLE] = "WHITE_ICO_PURPLE",
-      [Ico_WHITE    ][The_THEME_BLUE  ] = "WHITE_ICO_BLUE",
-      [Ico_WHITE    ][The_THEME_YELLOW] = "WHITE_ICO_YELLOW",
-      [Ico_WHITE    ][The_THEME_PINK  ] = "WHITE_ICO_PINK",
-      [Ico_WHITE    ][The_THEME_DARK  ] = "WHITE_ICO_DARK",
-     };
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Ico_PutIconsIconSet (__attribute__((unused)) void *Args);
+
+/*****************************************************************************/
+/******************* Get color name for CSS class preffix ********************/
+/*****************************************************************************/
+
+const char *Ico_GetPreffix (Ico_Color_t Color)
+  {
+   static const char *Ico_CSS_Preffix[Ico_NUM_COLORS] =
+     {
+      [Ico_UNCHANGED] = NULL,
+      [Ico_BLACK    ] = "BLACK",
+      [Ico_GREEN    ] = "GREEN",
+      [Ico_RED      ] = "RED",
+      [Ico_WHITE    ] = "WHITE",
+     };
+
+   return Ico_CSS_Preffix[Color];
+  }
 
 /*****************************************************************************/
 /*********** Get icon with extension from icon without extension *************/
@@ -209,9 +184,6 @@ void Ico_ChangeIconSet (void)
   {
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
-   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
-             Cfg_URL_ICON_SETS_PUBLIC,
-             Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -438,11 +410,16 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,con
 
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
 
-      if (asprintf (&Class,"CONTEXT_ICO16x16 %s",
-                    Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Ico_PutIcon (Icon,Color,Title,Class);
-      free (Class);
+      if (Color == Ico_UNCHANGED)
+	 Ico_PutIcon (Icon,Color,Title,"CONTEXT_ICO16x16");
+      else
+	{
+	 if (asprintf (&Class,"CONTEXT_ICO16x16 ICO_%s_%s",
+	               Ico_GetPreffix (Color),The_GetSuffix ()) < 0)
+	    Err_NotEnoughMemoryExit ();
+         Ico_PutIcon (Icon,Color,Title,Class);
+         free (Class);
+	}
 
    HTM_DIV_End ();
   }
@@ -453,9 +430,13 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,con
 
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-                    "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s\"",
-                    Ico_ClassColor[Color][Gbl.Prefs.Theme]);
+   if (Color == Ico_UNCHANGED)
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16\"");
+   else
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
+		       Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -477,9 +458,13 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-                    "class=\"ICO_HIGHLIGHT ICOx20 %s\"",
-                    Ico_ClassColor[Color][Gbl.Prefs.Theme]);
+   if (Color == Ico_UNCHANGED)
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+		       "class=\"ICO_HIGHLIGHT ICOx20\"");
+   else
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+		       "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+		       Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -502,10 +487,14 @@ void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class)
   {
-   const char *CC = Ico_ClassColor[Color][Gbl.Prefs.Theme];
-
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	    "class=\"%s%s%s\"",Class,CC[0] ? " " : "",CC);
+   if (Color == Ico_UNCHANGED)
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+	       "class=\"%s\"",
+	       Class);
+   else
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+	       "class=\"%s ICO_%s_%s\"",
+	       Class,Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
 /*****************************************************************************/
@@ -563,23 +552,10 @@ void Ico_GetAndShowNumUsrsPerIconSet (void)
    extern const char *Txt_Icons;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   static const char *ClassIco[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+   static const Ico_Color_t Color[Ico_NUM_ICON_SETS] =
      {
-      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "ICO20x20 BLACK_ICO_WHITE",
-      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "ICO20x20 BLACK_ICO_GREY",
-      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "ICO20x20 BLACK_ICO_PURPLE",
-      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "ICO20x20 BLACK_ICO_BLUE",
-      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "ICO20x20 BLACK_ICO_YELLOW",
-      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "ICO20x20 BLACK_ICO_PINK",
-      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = "ICO20x20 BLACK_ICO_DARK",
-
-      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "ICO20x20",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "ICO20x20",
+      [Ico_ICON_SET_AWESOME] = Ico_BLACK,
+      [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,
      };
    Ico_IconSet_t IconSet;
    char *SubQuery;
@@ -626,8 +602,13 @@ void Ico_GetAndShowNumUsrsPerIconSet (void)
 	       if (asprintf (&URL,"%s/%s",
 			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
-			"class=\"%s\"",ClassIco[IconSet][Gbl.Prefs.Theme]);
+	       if (Color[IconSet] == Ico_UNCHANGED)
+		  HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+			   "class=\"ICO20x20\"");
+	       else
+		  HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+			   "class=\"ICO20x20 ICO_%s_%s\"",
+			   Ico_GetPreffix (Color[IconSet]),The_GetSuffix ());
 	       free (URL);
 	    HTM_TD_End ();
 

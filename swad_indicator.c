@@ -926,7 +926,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-										     "DAT_SMAL_RED",
+										     "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);

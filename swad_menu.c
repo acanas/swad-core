@@ -214,24 +214,12 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-   static const char *ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+   static const char *ClassIcoMenu[Ico_NUM_ICON_SETS] =
      {
-      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = " MENU_ICO_WHITE",
-      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = " MENU_ICO_GREY",
-      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = " MENU_ICO_PURPLE",
-      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = " MENU_ICO_BLUE",
-      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = " MENU_ICO_YELLOW",
-      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = " MENU_ICO_PINK",
-      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " MENU_ICO_DARK",
-
-      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
-      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
+      [Ico_ICON_SET_AWESOME] = "MENU_ICO",
+      [Ico_ICON_SET_NUVOLA ] = NULL,
      };
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
@@ -271,10 +259,17 @@ void Mnu_WriteMenuThisTab (void)
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");
-			   HTM_DIV_Begin ("class=\"MENU_ICO%s\" style=\"background-image:url('%s/%s');\"",
-					  ClassIcoMenu[Gbl.Prefs.IconSet][Gbl.Prefs.Theme],
-					  Gbl.Prefs.URLIconSet,
-					  Act_GetIcon (NumAct));
+			   if (ClassIcoMenu[Gbl.Prefs.IconSet])
+			      HTM_DIV_Begin ("class=\"MENU_ICO %s_%s\""
+					     " style=\"background-image:url('%s/%s/%s');\"",
+					     ClassIcoMenu[Gbl.Prefs.IconSet],The_GetSuffix (),
+					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
+					     Act_GetIcon (NumAct));
+			   else
+			      HTM_DIV_Begin ("class=\"MENU_ICO\""
+					     " style=\"background-image:url('%s/%s/%s');\"",
+					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
+					     Act_GetIcon (NumAct));
 			   HTM_DIV_End ();
 			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
 			                  The_GetSuffix ());

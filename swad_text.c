@@ -17192,7 +17192,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 	{
 	[Inf_NONE] =
 #if   L==1	// ca
-	"Ninguna informaci&oacute;n"	// Necessita traduccio
+	"Cap informaci&oacute;"
 #elif L==2	// de
 	"Keine Angaben"
 #elif L==3	// en
@@ -17213,7 +17213,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 	,
 	[Inf_EDITOR] =
 #if   L==1	// ca
-	"Editor interno"	// Necessita traduccio
+	"Editor intern"
 #elif L==2	// de
 	"Interner Editor"
 #elif L==3	// en
@@ -17269,14 +17269,14 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==7	// it
 	"Testo formattato"
 #elif L==8	// pl
-	"Rich text"		// Potrzebujesz tlumaczenie
+	"Tekst sformatowany"
 #elif L==9	// pt
 	"Texto enriquecido"
 #endif
 	,
 	[Inf_PAGE] =
 #if   L==1	// ca
-	"P&aacute;gina interna"	// Necessita traduccio
+	"P&agrave;gina interna"
 #elif L==2	// de
 	"Interne Webseite"
 #elif L==3	// en
@@ -17297,7 +17297,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 	,
 	[Inf_URL] =
 #if   L==1	// ca
-	"P&aacute;gina externa"	// Necessita traduccio
+	"P&agrave;gina externa"	// Necessita traduccio
 #elif L==2	// de
 	"Externe Webseite"
 #elif L==3	// en

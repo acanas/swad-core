@@ -640,7 +640,8 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 
 	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
-				     "class=\"BT_LINK LT ASG_TITLE\"");
+				     "class=\"BT_LINK LT ASG_TITLE_%s\"",
+				     The_GetSuffix ());
 	       HTM_Txt (Match->Title);
 	    HTM_BUTTON_End ();
 

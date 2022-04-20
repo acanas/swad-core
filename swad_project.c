@@ -1361,12 +1361,12 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("class=\"%s LT %s\"",
-	                  ClassTitle,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	                  ClassTitle,The_GetSuffix (),The_GetColorRows ());
 	    break;
 	 default:
-	    HTM_TD_Begin ("class=\"%s LT\"",
-	                  ClassTitle);
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",
+	                  ClassTitle,The_GetSuffix ());
 	    break;
 	}
 	 HTM_ARTICLE_Begin (Anchor);

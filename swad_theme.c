@@ -138,15 +138,8 @@ static void The_PutIconsTheme (__attribute__((unused)) void *Args)
 
 void The_ChangeTheme (void)
   {
-   char Path[PATH_MAX + 1 +
-             NAME_MAX + 1 +
-             NAME_MAX + 1];
-
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
-   snprintf (Path,sizeof (Path),"%s/%s",
-             Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.URLTheme,Path,sizeof (Gbl.Prefs.URLTheme) - 1);
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -206,11 +199,6 @@ static const char *The_CSS_Suffix[The_NUM_THEMES] =
    [The_THEME_PINK  ] = "PINK",
    [The_THEME_DARK  ] = "DARK",
   };
-
-const char *The_GetSuffixForTheme (The_Theme_t Theme)
-  {
-   return The_CSS_Suffix[Theme];
-  }
 
 const char *The_GetSuffix (void)
   {

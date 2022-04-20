@@ -2215,8 +2215,9 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       Frm_BeginForm (ActMyCrs);
 
 	 /***** Put icon with link *****/
-	 HTM_INPUT_IMAGE (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
-			  "class=\"BC_ICON ICO_HIGHLIGHT\"");
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"sitemap.svg",Txt_My_courses,
+			  "class=\"BC_ICO BC_ICO_%s ICO_HIGHLIGHT\"",
+			  The_GetSuffix ());
 
       /***** End form *****/
       Frm_EndForm ();

@@ -150,8 +150,6 @@ struct Globals
       The_Theme_t Theme;
       unsigned SideCols;
       PhoSha_Shape_t PhotoShape;
-      char URLTheme[PATH_MAX + 1];
-      char URLIconSet[PATH_MAX + 1];
      } Prefs;
 
    struct

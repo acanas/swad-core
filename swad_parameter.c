@@ -649,11 +649,8 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
 void Par_GetMainParams (void)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    long ActCod;
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   char URL[PATH_MAX + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Reset codes of country, institution, center, degree and course *****/
@@ -781,17 +778,6 @@ void Par_GetMainParams (void)
 
    /***** Try to get settings changed from current IP *****/
    Set_GetSettingsFromIP ();
-
-   if (!Gbl.Session.IsOpen)	// When no session open (no logged user)...
-     {
-      /***** Set path of theme and path of icon set *****/
-      snprintf (URL,sizeof (URL),"%s/%s",
-                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme  ]);
-      Str_Copy (Gbl.Prefs.URLTheme  ,URL,sizeof (Gbl.Prefs.URLTheme  ) - 1);
-      snprintf (URL,sizeof (URL),"%s/%s",
-                Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-      Str_Copy (Gbl.Prefs.URLIconSet,URL,sizeof (Gbl.Prefs.URLIconSet) - 1);
-     }
 
    /***** Get country if exists (from menu) *****/
    Par_GetParToText ("cty",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);

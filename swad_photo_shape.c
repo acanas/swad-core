@@ -58,7 +58,6 @@ static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args);
 void PhoSha_PutIconsToSelectPhotoShape (void)
   {
    extern const char *Hlp_PROFILE_Settings_user_photos;
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_User_photos;
    extern const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -88,9 +87,9 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	       Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
 	       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",
 	                        Txt_PHOTO_SHAPES[Shape],
-	                        "class=\"%s %s\"",
+	                        "class=\"%s ICO_%s_%s\"",
 	                        ClassPhoto[Shape],
-			        Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+			        Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }
@@ -160,7 +159,6 @@ PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str)
 void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_user_photos;
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
@@ -215,9 +213,9 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
 
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_PHOTO_SHAPES[Shape],
-			"class=\"%s %s\"",
+			"class=\"%s ICO_%s_%s\"",
 			ClassPhoto[Shape],
-			Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());

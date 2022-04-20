@@ -539,13 +539,15 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Exam title and main data *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"%s LT\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",
 	               Exam->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+		       The_GetSuffix (),
 	               The_GetColorRows ());
 
       /* Exam title */
@@ -574,13 +576,15 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Number of sessions in exam *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"%s RT\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE");
-      else
-	 HTM_TD_Begin ("class=\"%s RT %s\"",
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",
 	               Exam->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
+		       The_GetSuffix ());
+      else
+	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+		       The_GetSuffix (),
 	               The_GetColorRows ());
 
       Exams->ExaCod = Exam->ExaCod;

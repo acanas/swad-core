@@ -1199,12 +1199,14 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
 void Usr_WelcomeUsr (void)
   {
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_check_your_email_address;
    extern const char *Txt_Check;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   char URLIconSet[PATH_MAX + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -1232,7 +1234,9 @@ void Usr_WelcomeUsr (void)
 			                   Gbl.Usrs.Me.UsrDat.FrstName);
 
 		  /* Show cake icon */
-		  HTM_IMG (Gbl.Prefs.URLIconSet,"birthday-cake.svg",NULL,
+		  snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
+			    Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+		  HTM_IMG (URLIconSet,"birthday-cake.svg",NULL,
 			   "class=\"ICO160x160\"");
 
 		  /* End alert */
@@ -1944,7 +1948,6 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
 
 static void Usr_SetMyPrefsAndRoles (void)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    bool GetRoleAndActionFromLastData;
    Act_Action_t LastSuperAction;
@@ -1967,10 +1970,6 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.Theme          = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
    Gbl.Prefs.PhotoShape     = Gbl.Usrs.Me.UsrDat.Prefs.PhotoShape;
-   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
-	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-   snprintf (Gbl.Prefs.URLTheme,sizeof (Gbl.Prefs.URLTheme),"%s/%s",
-	     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
 
    /***** Construct the path to my directory *****/
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
@@ -6385,7 +6384,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s_%s\"",
-                  Hidden ? "MSG_AUT_REM" :
+                  Hidden ? "MSG_AUT_LIGHT" :
         	           "MSG_AUT",
         	  The_GetSuffix ());
       HTM_Txt (UsrDat.FullName);
@@ -6483,7 +6482,6 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
 void Usr_PutWhoIcon (Usr_Who_t Who)
   {
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_WHO[Usr_NUM_WHO];
    static const char *Icon[Usr_NUM_WHO] =
      {
@@ -6510,8 +6508,8 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
       case Usr_WHO_FOLLOWED:
       case Usr_WHO_ALL:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon[Who],Txt_WHO[Who],
-                          "class=\"ICO_HIGHLIGHT ICOx20 %s\"",
-                          Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+                          "class=\"ICO_HIGHLIGHT ICOx20 ICO_%s_%s\"",
+                          Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
          break;
       default:
 	 Err_WrongWhoExit ();

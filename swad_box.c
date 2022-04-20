@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stdlib.h>		// For malloc and free
+#include <stdio.h>		// For asprintf
 
 #include "swad_action.h"
 #include "swad_box.h"
@@ -82,42 +84,32 @@ void Box_BoxBegin (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
-   static const char *BgColor[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "FRAME FRAME_WHITE",
-      [The_THEME_GREY  ] = "FRAME FRAME_GREY",
-      [The_THEME_PURPLE] = "FRAME FRAME_PURPLE",
-      [The_THEME_BLUE  ] = "FRAME FRAME_BLUE",
-      [The_THEME_YELLOW] = "FRAME FRAME_YELLOW",
-      [The_THEME_PINK  ] = "FRAME FRAME_PINK",
-      [The_THEME_DARK  ] = "FRAME FRAME_DARK",
-     };
+   char *ClassFrame;
 
+   /***** Begin box *****/
+   if (asprintf (&ClassFrame,"FRAME FRAME_%s",The_GetSuffix ()) < 0)
+      Err_NotEnoughMemoryExit ();
    Box_BoxInternalBegin (Width,Title,
 			 FunctionToDrawContextualIcons,Args,
 			 HelpLink,Closable,
-			 BgColor[Gbl.Prefs.Theme]);
+			 ClassFrame);
+   free (ClassFrame);
   }
 
 void Box_BoxShadowBegin (const char *Width,const char *Title,
                          void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                          const char *HelpLink)
   {
-   static const char *BgColor[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "FRAME_SHADOW FRAME_SHADOW_WHITE",
-      [The_THEME_GREY  ] = "FRAME_SHADOW FRAME_SHADOW_GREY",
-      [The_THEME_PURPLE] = "FRAME_SHADOW FRAME_SHADOW_PURPLE",
-      [The_THEME_BLUE  ] = "FRAME_SHADOW FRAME_SHADOW_BLUE",
-      [The_THEME_YELLOW] = "FRAME_SHADOW FRAME_SHADOW_YELLOW",
-      [The_THEME_PINK  ] = "FRAME_SHADOW FRAME_SHADOW_PINK",
-      [The_THEME_DARK  ] = "FRAME_SHADOW FRAME_SHADOW_DARK",
-     };
+   char *ClassFrame;
 
+   /***** Begin box *****/
+   if (asprintf (&ClassFrame,"FRAME_SHADOW FRAME_SHADOW_%s",The_GetSuffix ()) < 0)
+      Err_NotEnoughMemoryExit ();
    Box_BoxInternalBegin (Width,Title,
                          FunctionToDrawContextualIcons,Args,
 			 HelpLink,Box_NOT_CLOSABLE,
-			 BgColor[Gbl.Prefs.Theme]);
+			 ClassFrame);
+   free (ClassFrame);
   }
 
 // Return pointer to box id string

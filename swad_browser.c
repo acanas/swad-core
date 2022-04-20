@@ -5141,7 +5141,6 @@ static void Brw_PutIconNewFileOrFolder (void)
 
 static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata)
   {
-   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Link;
 
    /***** Begin cell *****/
@@ -5161,8 +5160,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *Fi
 			     true);	// Put link to view metadata
 	 else
 	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,
-			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s\"",
-			     Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
+			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
+			     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 
       /***** End form *****/
       Frm_EndForm ();
@@ -8511,16 +8510,6 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
    extern const char *Txt_Link;
-   static const char *ClassFilename[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "FILENAME_BIG_WHITE",
-      [The_THEME_GREY  ] = "FILENAME_BIG_GREY",
-      [The_THEME_PURPLE] = "FILENAME_BIG_PURPLE",
-      [The_THEME_BLUE  ] = "FILENAME_BIG_BLUE",
-      [The_THEME_YELLOW] = "FILENAME_BIG_YELLOW",
-      [The_THEME_PINK  ] = "FILENAME_BIG_PINK",
-      [The_THEME_DARK  ] = "FILENAME_BIG_DARK",
-     };
    const char *Title;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -8540,7 +8529,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	 /* Begin link */
 	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
-	                          "class=\"%s\"",ClassFilename[Gbl.Prefs.Theme]);
+	                          "class=\"FILENAME_BIG_%s\"",The_GetSuffix ());
 
 	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
@@ -8564,8 +8553,9 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                                               Txt_Download;
 
       /* Put anchor and filename */
-      HTM_A_Begin ("href=\"%s\" class=\"%s\" title=\"%s\" target=\"_blank\"",
-	           URL,ClassFilename[Gbl.Prefs.Theme],Title);
+      HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
+	           " class=\"FILENAME_BIG_%s\"",
+	           URL,Title,The_GetSuffix ());
 	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
 			     "ICO40x40",

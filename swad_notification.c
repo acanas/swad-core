@@ -455,7 +455,7 @@ void Ntf_ShowMyNotifications (void)
 		 {
 		  ClassTxt         = "MSG_TIT_REM";
 		  ClassLink         = "BT_LINK MSG_TIT_REM";
-		  ClassAuthor       = "MSG_AUT_REM";
+		  ClassAuthor       = "MSG_AUT_LIGHT";
 		  ClassBg           = "MSG_BG_REM";
 		  PutLink = false;
 		 }
@@ -1661,8 +1661,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 	 if (NumNewNtfs)
 	   {
 	    HTM_BR ();
-	    HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
-		     "class=\"ICO16x16\"");
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"bell.svg",Txt_Notifications,
+		     "class=\"ICO16x16 NOTIF_ICO_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("&nbsp;%u",NumNewNtfs);
 	    HTM_SPAN_Begin ("id=\"notif_new\"");
 	       HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :

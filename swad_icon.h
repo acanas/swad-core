@@ -54,6 +54,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+const char *Ico_GetPreffix (Ico_Color_t Color);
+
 const char *Ico_GetIcon (const char *IconWithoutExtension);
 
 void Ico_PutIconsToSelectIconSet (void);
