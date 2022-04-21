@@ -453,26 +453,26 @@ void Ntf_ShowMyNotifications (void)
 
 	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
 		 {
-		  ClassTxt         = "MSG_TIT_REM";
-		  ClassLink         = "BT_LINK MSG_TIT_REM";
-		  ClassAuthor       = "MSG_AUT_LIGHT";
-		  ClassBg           = "MSG_BG_REM";
+		  ClassTxt    = "MSG_TIT_REM";
+		  ClassLink   = "BT_LINK MSG_TIT_REM";
+		  ClassAuthor = "MSG_AUT_LIGHT";
+		  ClassBg     = "MSG_BG_REM";
 		  PutLink = false;
 		 }
 	       else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
 		 {
-		  ClassTxt         = "MSG_TIT";
-		  ClassLink         = "BT_LINK LT MSG_TIT";
-		  ClassAuthor       = "MSG_AUT";
-		  ClassBg           = "MSG_BG";
+		  ClassTxt    = "MSG_TIT";
+		  ClassLink   = "LT BT_LINK MSG_TIT";
+		  ClassAuthor = "MSG_AUT";
+		  ClassBg     = "MSG_BG";
 		  PutLink = true;
 		 }
 	       else					// I have not seen the source of the notification
 		 {
-		  ClassTxt         = "MSG_TIT_NEW";
-		  ClassLink         = "BT_LINK LT MSG_TIT_NEW";
-		  ClassAuthor       = "MSG_AUT_NEW";
-		  ClassBg           = "MSG_BG_NEW";
+		  ClassTxt    = "MSG_TIT_NEW";
+		  ClassLink   = "LT BT_LINK MSG_TIT_NEW";
+		  ClassAuthor = "MSG_AUT_NEW";
+		  ClassBg     = "MSG_BG_NEW";
 		  PutLink = true;
 		 }
 
@@ -502,7 +502,8 @@ void Ntf_ShowMyNotifications (void)
 		       {
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s\"",ClassLink);
+			                            "class=\"%s_%s\"",
+			                            ClassLink,The_GetSuffix ());
 			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -533,9 +534,11 @@ void Ntf_ShowMyNotifications (void)
 
 			if (PutLink)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s\"",ClassLink);
+			                            "class=\"%s_%s\"",
+			                            ClassLink,The_GetSuffix ());
 			else
-			   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+			   HTM_SPAN_Begin ("class=\"%s_%s\"",
+			                   ClassTxt,The_GetSuffix ());
 			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 			if (PutLink)
 			  {
@@ -552,9 +555,11 @@ void Ntf_ShowMyNotifications (void)
 
 			if (PutLink)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s\"",ClassLink);
+			                            "class=\"%s_%s\"",
+			                            ClassLink,The_GetSuffix ());
 			else
-			   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+			   HTM_SPAN_Begin ("class=\"%s_%s\"",
+			                   ClassTxt,The_GetSuffix ());
 
 			if (Hie.Crs.CrsCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie.Crs.ShrtName);
@@ -581,7 +586,9 @@ void Ntf_ShowMyNotifications (void)
 		  Msg_WriteMsgDate (DateTimeUTC,ClassTxt,ClassBg);
 
 		  /* Write status (sent by email / pending to be sent by email) */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",ClassBg,The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+		                ClassTxt,The_GetSuffix (),
+		                ClassBg,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
 		  HTM_TD_End ();
 
