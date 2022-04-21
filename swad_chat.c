@@ -134,12 +134,6 @@ void Cht_ShowListOfAvailableChatRooms (void)
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
-	 /***** Title of top level *****/
-	 HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    Ico_PutIcon ("comments.svg",Ico_BLACK,Txt_Chat_rooms,"ICO16x16");
-	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
-	 HTM_LI_End ();
-
 	 /***** Link to chat available for all users *****/
 	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
 				 !Gbl.Usrs.Me.MyDegs.Num);

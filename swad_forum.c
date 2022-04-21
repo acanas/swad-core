@@ -262,7 +262,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 /*********************** Private constants and types *************************/
 /*****************************************************************************/
 
-#define For_FORUM_MAX_LEVELS 4
+#define For_FORUM_MAX_LEVELS 5
 
 static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
   {
@@ -1258,7 +1258,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 		  ICanSeeInsForum = false;
 
 	       /***** Links to forums about the platform *****/
-	       For_WriteLinksToPlatformForums (Forums,!ICanSeeInsForum,IsLastItemInLevel);
+	       For_WriteLinksToPlatformForums (Forums,true,IsLastItemInLevel);
 
 	       if (ICanSeeInsForum)
 		 {
@@ -1301,7 +1301,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 	       break;
 	    case For_ALL_MY_FORUMS:
 	       /***** Links to forums about the platform *****/
-	       For_WriteLinksToPlatformForums (Forums,(Gbl.Usrs.Me.MyInss.Num == 0),IsLastItemInLevel);
+	       For_WriteLinksToPlatformForums (Forums,true,IsLastItemInLevel);
 
 	       /***** Links to forums of users from my institutions, the degrees in each institution and the courses in each degree *****/
 	       for (NumMyIns = 0;
@@ -1466,7 +1466,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    Forum.Location = -1L;
    Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS);
    IsLastItemInLevel[1] = false;
-   For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
+   For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
    /***** Link to forum of teachers global *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
@@ -1476,7 +1476,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
       Forum.Location = -1L;
       Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS);
       IsLastItemInLevel[1] = false;
-      For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
      }
   }
 
@@ -1503,7 +1503,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    Forum.Location = -1L;
    Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
-   For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
+   For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
    /***** Link to forum of teachers about the platform *****/
    if (ICanSeeTeacherForum)
@@ -1512,7 +1512,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
       Forum.Location = -1L;
       Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS);
       IsLastItemInLevel[1] = IsLastForum;
-      For_WriteLinkToForum (Forums,&Forum,Highlight,0,IsLastItemInLevel);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
      }
   }
 
@@ -1542,8 +1542,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
       Forum.Location = InsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
 	           Forums->Forum.Location == InsCod);
-      IsLastItemInLevel[1] = (IsLastIns && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
+      IsLastItemInLevel[2] = (IsLastIns && !ICanSeeTeacherForum);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this institution *****/
       if (ICanSeeTeacherForum)
@@ -1552,8 +1552,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
 	 Forum.Location = InsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
 		      Forums->Forum.Location == InsCod);
-         IsLastItemInLevel[1] = IsLastIns;
-         For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
+         IsLastItemInLevel[2] = IsLastIns;
+         For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
         }
      }
    return InsCod;
@@ -1585,8 +1585,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
       Forum.Location = CtrCod;
       Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
 	           Forums->Forum.Location == CtrCod);
-      IsLastItemInLevel[2] = (IsLastCtr && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
+      IsLastItemInLevel[3] = (IsLastCtr && !ICanSeeTeacherForum);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this center *****/
       if (ICanSeeTeacherForum)
@@ -1595,8 +1595,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 	 Forum.Location = CtrCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
 		      Forums->Forum.Location == CtrCod);
-         IsLastItemInLevel[2] = IsLastCtr;
-         For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
+         IsLastItemInLevel[3] = IsLastCtr;
+         For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
         }
      }
    return CtrCod;
@@ -1628,8 +1628,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
       Forum.Location = DegCod;
       Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
 	           Forums->Forum.Location == DegCod);
-      IsLastItemInLevel[3] = (IsLastDeg && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
+      IsLastItemInLevel[4] = (IsLastDeg && !ICanSeeTeacherForum);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this degree *****/
       if (ICanSeeTeacherForum)
@@ -1638,8 +1638,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
 	 Forum.Location = DegCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
 		      Forums->Forum.Location == DegCod);
-	 IsLastItemInLevel[3] = IsLastDeg;
-         For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
+	 IsLastItemInLevel[4] = IsLastDeg;
+         For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
         }
      }
    return DegCod;
@@ -1671,8 +1671,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
       Forum.Location = CrsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_COURSE_USRS &&
 	           Forums->Forum.Location == CrsCod);
-      IsLastItemInLevel[4] = (IsLastCrs && !ICanSeeTeacherForum);
-      For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
+      IsLastItemInLevel[5] = (IsLastCrs && !ICanSeeTeacherForum);
+      For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this course *****/
       if (ICanSeeTeacherForum)
@@ -1681,8 +1681,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 	 Forum.Location = CrsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
 		      Forums->Forum.Location == CrsCod);
-         IsLastItemInLevel[4] = IsLastCrs;
-         For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
+         IsLastItemInLevel[5] = IsLastCrs;
+         For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
         }
      }
    return CrsCod;
