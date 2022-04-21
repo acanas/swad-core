@@ -262,7 +262,8 @@ void Lay_WriteStartOfPage (void)
       case Act_BRW_1ST_TAB:
 	       HTM_TxtF ("<body class=\"BODY_BG_%s\" onload=\"init();\">\n",
 	                 The_GetSuffix ());
-	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
+	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM ZOOM_%s\"",
+	                      The_GetSuffix ());
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
 			   "class=\"IMG_USR\" id=\"zoomImg\"");
 	       HTM_DIV_Begin ("id=\"zoomTxt\" class=\"CM\"");

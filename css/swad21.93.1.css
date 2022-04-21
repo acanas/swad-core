@@ -2293,14 +2293,29 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	left:-300px;
 	top:-400px;
 	padding:6px;
-	background-color:rgba(255,255,255,0.95);
 	border-width:1px;
 	border-style:solid;
-	border-color:#C0C0C0;
 	border-radius:4px;
+	}
+.ZOOM_WHITE,
+.ZOOM_GREY,
+.ZOOM_PURPLE,
+.ZOOM_BLUE,
+.ZOOM_YELLOW,
+.ZOOM_PINK
+	{
+	background-color:rgba(255,255,255,0.95);
+	border-color:#c0c0c0;
 	box-shadow:2px 5px 15px #888;
 	}
-.ZOOM_TXT_LINE
+.ZOOM_DARK
+	{
+	background-color:rgba(0,0,0,0.95);
+	border-color:#c0c0c0;
+	box-shadow:2px 5px 15px #888;
+	}
+
+.ZOOM_TXT
 	{
 	box-sizing:border-box;
 	display:block;
@@ -2310,15 +2325,24 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
+
 .ZOOM_DEG
 	{
 	display:inline-block;
 	margin:0 auto;
-    padding:0 0 0 20px;
+	/*padding:0 0 0 20px;*/
+	width:16px;
 	background-size:16px 16px;
 	background-repeat:no-repeat;
 	background-position:left center;
 	}
+.ZOOM_ICO_WHITE,
+.ZOOM_ICO_GREY,
+.ZOOM_ICO_PURPLE,
+.ZOOM_ICO_BLUE,
+.ZOOM_ICO_YELLOW,
+.ZOOM_ICO_PINK		{}
+.ZOOM_ICO_DARK		{filter:invert(1);}
 
 .NO_BR	{white-space:nowrap;}
 

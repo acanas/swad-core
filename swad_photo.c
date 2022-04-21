@@ -1088,7 +1088,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutZoomCode)
      {
       /* First name and surnames */
-      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_STRONG_%s BOLD\">"	// Limited width
+      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT DAT_STRONG_%s BOLD\">"	// Limited width
 				     "%s<br />"
 				     "%s%s%s"
 				  "</div>",
@@ -1104,7 +1104,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       /* Nickname */
       if (UsrDat->Nickname[0])
 	{
-	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_STRONG_%s\">"
+	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT DAT_SMALL_STRONG_%s\">"
 					"@%s"
 				     "</div>",
 		       The_GetSuffix (),
@@ -1122,7 +1122,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
 	 /* Write institution short name and country name */
-	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_%s\">"
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
 					  "%s&nbsp;(%s)"
 				       "</div>",
 		       The_GetSuffix (),
@@ -1135,7 +1135,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
 
 	 /* Write country name */
-	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_%s\">"
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
 					  "%s"
 				       "</div>",
 		       The_GetSuffix (),
@@ -1149,14 +1149,14 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
       if (MainDegreeShrtName[0])
 	{
-	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_%s\">"
-					    "<div class=\"ZOOM_DEG\""
-					        " style=\"background-image:url('%s/%s');\">"
-					       "%s"
-					    "</div>"
+	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
+					    "<img src=\"%s/%s\" alt=\"\""
+					    " class=\"ICO16x16 ICO_BLACK_%s\" />"
+					    " %s"
 					 "</div>",
 		       The_GetSuffix (),
 		       Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+		       The_GetSuffix (),
 		       MainDegreeShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1167,7 +1167,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
 	{
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	 if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT_LINE\">"
+	 if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT\">"
 					   "<span class=\"DAT_STRONG_%s BOLD\">"
 					      "%u"
 					   "</span>"
@@ -2417,7 +2417,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 				    0);
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
-	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_STRONG_%s\"",
+	       HTM_DIV_Begin ("class=\"ZOOM_TXT DAT_STRONG_%s\"",
 	                      The_GetSuffix ());
 		  HTM_Txt (PhotoCaption);
 	       HTM_DIV_End ();
