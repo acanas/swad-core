@@ -1378,7 +1378,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		  Frm_BeginForm (ActAdmDocPrj);
 		     Prj_PutCurrentParams (Projects);
 		     HTM_BUTTON_Submit_Begin (Txt_Project_files,
-		                              "class=\"BT_LINK %s_%s\"",
+		                              "class=\"LT BT_LINK %s_%s\"",
 		                              Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
 					                                  "ASG_TITLE",
 					      The_GetSuffix ());

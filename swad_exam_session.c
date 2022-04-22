@@ -525,7 +525,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	       ExaSes_PutParamSesCod (Session->SesCod);
 	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
-					"class=\"BT_LINK %s_%s\"",
+					"class=\"LT BT_LINK %s_%s\"",
 					Session->Hidden ? "ASG_TITLE_LIGHT" :
 							  "ASG_TITLE",
 					The_GetSuffix ());

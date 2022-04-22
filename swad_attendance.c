@@ -1859,7 +1859,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
       Att_PutParamsCodGrps (Event->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK %s_%s\"",
+      HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
 			       Event->Hidden ? "ASG_TITLE_LIGHT" :
 					       "ASG_TITLE",
 			       The_GetSuffix ());

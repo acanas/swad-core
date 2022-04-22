@@ -548,7 +548,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
 	    Exa_PutParams (Exams);
-	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
 				     Exam->Hidden ? "ASG_TITLE_LIGHT":
 						    "ASG_TITLE",
 				     The_GetSuffix ());
@@ -581,7 +581,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
 	 Exa_PutParams (Exams);
-	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"BT_LINK %s_%s\"",
+	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
 				  Exam->Hidden ? "ASG_TITLE_LIGHT":
 						 "ASG_TITLE",
 				  The_GetSuffix ());

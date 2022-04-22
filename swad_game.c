@@ -599,7 +599,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
-	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"BT_LINK %s_%s\"",
+	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
 				     Game->Hidden ? "ASG_TITLE_LIGHT":
 						    "ASG_TITLE",
 				     The_GetSuffix ());
@@ -632,7 +632,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
-	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"BT_LINK %s_%s\"",
+	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
 	                          Game->Hidden ? "ASG_TITLE_LIGHT":
 				                 "ASG_TITLE",
 				  The_GetSuffix ());
