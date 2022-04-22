@@ -1352,8 +1352,10 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
    NumGrps = Att_DB_GetGroupsAssociatedToEvent (&mysql_res,Event->AttCod);
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "ASG_GRP_LIGHT" :
-        	                                 "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s_%s\"",
+                  Event->Hidden ? "ASG_GRP_LIGHT" :
+        	                  "ASG_GRP",
+        	  The_GetSuffix ());
 
       /***** Write heading *****/
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :

@@ -609,8 +609,10 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_ARTICLE_End ();
 
       /* Number of questions, maximum grade, visibility of results */
-      HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
-						   "ASG_GRP");
+      HTM_DIV_Begin ("class=\"%s_%s\"",
+                     Game->Hidden ? "ASG_GRP_LIGHT" :
+				    "ASG_GRP",
+		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Game->NumQsts);
 	 HTM_BR ();

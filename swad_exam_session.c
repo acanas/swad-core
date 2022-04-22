@@ -570,8 +570,10 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    NumGrps = Exa_DB_GetGrpsAssociatedToSes (&mysql_res,Session->SesCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",Session->Hidden ? "ASG_GRP_LIGHT":
-					           "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s_%s\"",
+                  Session->Hidden ? "ASG_GRP_LIGHT":
+			            "ASG_GRP",
+		  The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);

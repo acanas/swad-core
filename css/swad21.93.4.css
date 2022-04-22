@@ -2962,10 +2962,37 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .ASG_TITLE_LIGHT_PINK	{color:rgba( 77,136,161,0.3); font-size:15pt; font-weight:bold;}
 .ASG_TITLE_LIGHT_DARK	{color:rgba(175,196,204,0.3); font-size:15pt; font-weight:bold;}
 
-.ASG_LABEL		{color:#4d88a1; font-size:13pt;}
-.ASG_LABEL_LIGHT	{color:#afc4cc; font-size:13pt;}
-.ASG_GRP		{color:#4d88a1; font-size:12pt;}
-.ASG_GRP_LIGHT		{color:#afc4cc; font-size:12pt;}
+.ASG_LABEL_WHITE,
+.ASG_LABEL_GREY,
+.ASG_LABEL_PURPLE,
+.ASG_LABEL_BLUE,
+.ASG_LABEL_YELLOW,
+.ASG_LABEL_PINK		{color:#4d88a1; font-size:13pt;}
+.ASG_LABEL_DARK		{color:#afc4cc; font-size:13pt;}
+
+.ASG_LABEL_LIGHT_WHITE,
+.ASG_LABEL_LIGHT_GREY,
+.ASG_LABEL_LIGHT_PURPLE,
+.ASG_LABEL_LIGHT_BLUE,
+.ASG_LABEL_LIGHT_YELLOW,
+.ASG_LABEL_LIGHT_PINK	{color:rgba( 77,136,161,0.3); font-size:13pt;}
+.ASG_LABEL_LIGHT_DARK	{color:rgba(175,196,204,0.3); font-size:13pt;}
+
+.ASG_GRP_WHITE,
+.ASG_GRP_GREY,
+.ASG_GRP_PURPLE,
+.ASG_GRP_BLUE,
+.ASG_GRP_YELLOW,
+.ASG_GRP_PINK		{color:#4d88a1; font-size:12pt;}
+.ASG_GRP_DARK		{color:#afc4cc; font-size:12pt;}
+
+.ASG_GRP_LIGHT_WHITE,
+.ASG_GRP_LIGHT_GREY,
+.ASG_GRP_LIGHT_PURPLE,
+.ASG_GRP_LIGHT_BLUE,
+.ASG_GRP_LIGHT_YELLOW,
+.ASG_GRP_LIGHT_PINK	{color:rgba( 77,136,161,0.3); font-size:12pt;}
+.ASG_GRP_LIGHT_DARK	{color:rgba(175,196,204,0.3); font-size:12pt;}
 
 .DATE_RED_WHITE,
 .DATE_RED_GREY,
@@ -3066,13 +3093,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:30px;
 	text-align:center;
 	vertical-align:middle;
-	}
-.PRJ_MEMBER_NAM
-	{
-	text-align:left;
-	vertical-align:middle;
-	color:#4d88a1;
-	font-size:11pt;
 	}
 
 /********************************** Tests ************************************/

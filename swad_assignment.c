@@ -1530,8 +1530,10 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    NumGrps = Asg_DB_GetGrps (&mysql_res,Asg->AsgCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
-        	                               "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s_%s\"",
+                  Asg->Hidden ? "ASG_GRP_LIGHT" :
+        	                "ASG_GRP",
+        	  The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);

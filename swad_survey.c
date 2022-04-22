@@ -550,9 +550,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_ARTICLE_End ();
 
       /* Number of questions and number of distinct users who have already answered this survey */
-      HTM_DIV_Begin ("class=\"%s\"",
+      HTM_DIV_Begin ("class=\"%s_%s\"",
 		     Svy.Status.Visible ? "ASG_GRP" :
-					  "ASG_GRP_LIGHT");
+					  "ASG_GRP_LIGHT",
+		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Svy.NumQsts);
 	 HTM_Txt ("; ");
@@ -628,8 +629,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Scope of the survey */
-      HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
-							 "ASG_GRP_LIGHT");
+      HTM_DIV_Begin ("class=\"%s_%s\"",
+                     Svy.Status.Visible ? "ASG_GRP" :
+					  "ASG_GRP_LIGHT",
+		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
 	 switch (Svy.Scope)
 	   {
@@ -658,8 +661,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_DIV_End ();
 
       /* Users' roles who can answer the survey */
-      HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
-							 "ASG_GRP_LIGHT");
+      HTM_DIV_Begin ("class=\"%s_%s\"",
+                     Svy.Status.Visible ? "ASG_GRP" :
+					  "ASG_GRP_LIGHT",
+		     The_GetSuffix ());
 	 HTM_TxtColon (Txt_Users);
 	 HTM_BR ();
 	 Rol_WriteSelectorRoles (1 << Rol_STD |
@@ -2195,8 +2200,10 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    NumGrps = Svy_DB_GetGrpNamesAssociatedToSvy (&mysql_res,Svy->SvyCod);
 
    /***** Write heading *****/
-   HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
-        	                                       "ASG_GRP_LIGHT");
+   HTM_DIV_Begin ("class=\"%s_%s\"",
+                  Svy->Status.Visible ? "ASG_GRP" :
+        	                        "ASG_GRP_LIGHT",
+        	  The_GetSuffix ());
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
 

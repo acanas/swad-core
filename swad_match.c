@@ -673,7 +673,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
    /***** Get groups associated to a match from database *****/
    NumGrps = Mch_DB_GetGrpNamesAssociatedToMatch (&mysql_res,Match->MchCod);
 
-   HTM_DIV_Begin ("class=\"ASG_GRP\"");
+   HTM_DIV_Begin ("class=\"ASG_GRP_%s\"",The_GetSuffix ());
 
       /***** Write heading *****/
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
