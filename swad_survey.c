@@ -529,12 +529,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Survey title */
       if (ShowOnlyThisSvyComplete)
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               Svy.Status.Visible ? "ASG_TITLE" :
-					    "ASG_TITLE_LIGHT",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
 	    Svy_PutParamSvyCod (SvyCod);
@@ -542,7 +540,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    WhichGroups = Grp_GetParamWhichGroups ();
 	    Grp_PutParamWhichGroups (&WhichGroups);
 	    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"BT_LINK %s_%s\"",
+				     Svy.Status.Visible ? "ASG_TITLE" :
+							  "ASG_TITLE_LIGHT",
+				     The_GetSuffix ());
 	       HTM_Txt (Svy.Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

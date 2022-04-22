@@ -539,23 +539,19 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Exam title and main data *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix (),
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Exam title */
       Exams->ExaCod = Exam->ExaCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
 	    Exa_PutParams (Exams);
-	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"BT_LINK %s_%s\"",
+				     Exam->Hidden ? "ASG_TITLE_LIGHT":
+						    "ASG_TITLE",
+				     The_GetSuffix ());
 	       HTM_Txt (Exam->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -576,21 +572,17 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Number of sessions in exam *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"RT %s_%s\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"RT\"");
       else
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	               Exam->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix (),
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
 	 Exa_PutParams (Exams);
-	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"BT_LINK %s_%s\"",
+				  Exam->Hidden ? "ASG_TITLE_LIGHT":
+						 "ASG_TITLE",
+				  The_GetSuffix ());
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
 	    HTM_Unsigned (Exam->NumSess);

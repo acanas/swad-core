@@ -842,24 +842,25 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	}
 
       /* Event */
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-				      "ASG_TITLE",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_ARTICLE_Begin (Anchor);
-	    HTM_Txt (AgdEvent.Event);
+	    HTM_SPAN_Begin ("class=\"%s_%s\"",
+			    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+					      "ASG_TITLE",
+			    The_GetSuffix ());
+	       HTM_Txt (AgdEvent.Event);
+	    HTM_SPAN_End ();
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Location */
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	 HTM_DIV_Begin ("class=\"%s_%s\"",
-	                AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-					  "ASG_TITLE",
-		        The_GetSuffix ());
+	 HTM_SPAN_Begin ("class=\"%s_%s\"",
+	                 AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+					   "ASG_TITLE",
+		         The_GetSuffix ());
 	    HTM_Txt (AgdEvent.Location);
-	 HTM_DIV_End ();
+	 HTM_SPAN_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();

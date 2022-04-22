@@ -1252,7 +1252,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    bool ICanViewProjectFiles = Brw_CheckIfICanViewProjectFiles (Prj->PrjCod);
    const char *ClassLabel;
    const char *ClassDate;
-   const char *ClassTitle;
    const char *ClassData;
    struct Prj_Faults Faults;
    bool PrjIsFaulty;
@@ -1264,8 +1263,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 					      "ASG_LABEL";
    ClassDate  = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
 					      "DATE_BLUE";
-   ClassTitle = (Prj->Hidden == Prj_HIDDEN) ? "ASG_TITLE_LIGHT" :
-					      "ASG_TITLE";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 					      "DAT";
 
@@ -1322,11 +1319,11 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s %s\"",
 			  Id,ClassDate,The_GetColorRows ());
 	    break;
 	 default:
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s\"",
 			  Id,ClassDate);
 	    break;
 	}
@@ -1361,12 +1358,10 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	                  ClassTitle,The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	    break;
 	 default:
-	    HTM_TD_Begin ("class=\"LT %s_%s\"",
-	                  ClassTitle,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT\"");
 	    break;
 	}
 	 HTM_ARTICLE_Begin (Anchor);
@@ -1377,7 +1372,10 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		  Frm_BeginForm (ActAdmDocPrj);
 		     Prj_PutCurrentParams (Projects);
 		     HTM_BUTTON_Submit_Begin (Txt_Project_files,
-		                              "class=\"BT_LINK\"");
+		                              "class=\"BT_LINK %s_%s\"",
+		                              Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+					                                  "ASG_TITLE",
+					      The_GetSuffix ());
 			HTM_Txt (Prj->Title);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

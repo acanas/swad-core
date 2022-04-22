@@ -590,23 +590,19 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Game title and main data *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix (),
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Game title */
       Games->GamCod = Game->GamCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
-	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"BT_LINK %s_%s\"",
+				     Game->Hidden ? "ASG_TITLE_LIGHT":
+						    "ASG_TITLE",
+				     The_GetSuffix ());
 	       HTM_Txt (Game->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -627,21 +623,17 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Number of matches in game *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"RT %s_%s\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"RT\"");
       else
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	               Game->Hidden ? "ASG_TITLE_LIGHT":
-				      "ASG_TITLE",
-		       The_GetSuffix (),
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
-	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"BT_LINK %s_%s\"",
+	                          Game->Hidden ? "ASG_TITLE_LIGHT":
+				                 "ASG_TITLE",
+				  The_GetSuffix ());
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
 	    HTM_Unsigned (Game->NumMchs);

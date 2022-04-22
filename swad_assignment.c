@@ -457,18 +457,16 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 
       /* Assignment title */
       if (PrintView)
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
-				    "ASG_TITLE",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
-				    "ASG_TITLE",
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
-      HTM_Txt (Asg.Title);
+         HTM_SPAN_Begin ("class=\"%s_%s\"",
+		          Asg.Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE",
+		          The_GetSuffix ());
+            HTM_Txt (Asg.Title);
+         HTM_SPAN_End ();
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
