@@ -149,19 +149,15 @@ void Ico_PutIconsToSelectIconSet (void)
 		 IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 		 IconSet++)
 	      {
-	       if (IconSet == Gbl.Prefs.IconSet)
-		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_GetSuffix ());
-	       else
-		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	       Frm_BeginForm (ActChgIco);
-		  Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
-		  snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
-			    Cfg_ICON_FOLDER_SETS,
-			    Ico_IconSetId[IconSet]);
-		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Ico_IconSetNames[IconSet]);
-	       Frm_EndForm ();
-	       HTM_DIV_End ();
+	       Set_BeginPref (IconSet == Gbl.Prefs.IconSet);
+		  Frm_BeginForm (ActChgIco);
+		     Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
+		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
+			       Cfg_ICON_FOLDER_SETS,
+			       Ico_IconSetId[IconSet]);
+		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Ico_IconSetNames[IconSet]);
+		  Frm_EndForm ();
+	       Set_EndPref ();
 	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();

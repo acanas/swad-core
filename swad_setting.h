@@ -70,5 +70,7 @@ void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);
 void Set_BeginOneSettingSelector (void);
 void Set_EndOneSettingSelector (void);
+void Set_BeginPref (bool Condition);
+void Set_EndPref (void);
 
 #endif

@@ -75,25 +75,12 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
 	      Who++)
 	    if (Mask & (1 << Who))
 	      {
-	       /* Begin container */
-	       if (Who == Timeline->Who)
-		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_GetSuffix ());
-	       else
-		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
-
-	       /* Begin form */
-	       Frm_BeginForm (ActSeeGblTL);
-		  Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
-
-		  /* Icon to select which users */
-		  Usr_PutWhoIcon (Who);
-
-	       /* End form */
-	       Frm_EndForm ();
-
-	       /* End container */
-	       HTM_DIV_End ();
+	       Set_BeginPref (Who == Timeline->Who);
+		  Frm_BeginForm (ActSeeGblTL);
+		     Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+		     Usr_PutWhoIcon (Who);
+		  Frm_EndForm ();
+	       Set_EndPref ();
 	      }
       Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();

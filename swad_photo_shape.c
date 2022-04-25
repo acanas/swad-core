@@ -79,20 +79,16 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	      Shape <= (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1);
 	      Shape++)
 	   {
-	    if (Shape == Gbl.Prefs.PhotoShape)
-	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                      The_GetSuffix ());
-	    else
-	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	    Frm_BeginForm (ActChgUsrPho);
-	       Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
-	       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",
-	                        Txt_PHOTO_SHAPES[Shape],
-	                        "class=\"%s ICO_%s_%s\"",
-	                        ClassPhoto[Shape],
-			        Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-	    Frm_EndForm ();
-	    HTM_DIV_End ();
+	    Set_BeginPref (Shape == Gbl.Prefs.PhotoShape);
+	       Frm_BeginForm (ActChgUsrPho);
+		  Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
+		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",
+				   Txt_PHOTO_SHAPES[Shape],
+				   "class=\"%s ICO_%s_%s\"",
+				   ClassPhoto[Shape],
+				   Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+	       Frm_EndForm ();
+	    Set_EndPref ();
 	   }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();

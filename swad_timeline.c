@@ -488,12 +488,14 @@ static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
 	 TmlNot_GetDataOfNoteByCod (&Not);
 
 	 /* Write list item (note) */
-	 HTM_LI_Begin ("class=\"%s\"",
-	               Not.NotCod == NotCodToHighlight ? "Tml_WIDTH Tml_SEP Tml_NEW_PUB" :
-							 "Tml_WIDTH Tml_SEP");
-	    TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-						 TmlPub_GetTopMessage (Pub->Type),
-						 Pub->PublisherCod);
+	 if (Not.NotCod == NotCodToHighlight)
+	    HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP Tml_NEW_PUB_%s\"",
+			  The_GetSuffix ());
+	 else
+	    HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP\"");
+	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+					      TmlPub_GetTopMessage (Pub->Type),
+					      Pub->PublisherCod);
 	 HTM_LI_End ();
 	}
 

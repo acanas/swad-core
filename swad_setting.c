@@ -214,18 +214,14 @@ static void Set_PutIconsToSelectSideCols (void)
 	      SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	      SideCols++)
 	   {
-	    if (SideCols == Gbl.Prefs.SideCols)
-	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                      The_GetSuffix ());
-	    else
-	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	    Frm_BeginForm (ActChgCol);
-	       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
-	       snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
-			 SideCols >> 1,SideCols & 1);
-	       Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-	    Frm_EndForm ();
-	    HTM_DIV_End ();
+	    Set_BeginPref (SideCols == Gbl.Prefs.SideCols);
+	       Frm_BeginForm (ActChgCol);
+		  Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
+		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
+			    SideCols >> 1,SideCols & 1);
+		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+	       Frm_EndForm ();
+	    Set_EndPref ();
 	   }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();
@@ -568,6 +564,18 @@ void Set_BeginOneSettingSelector (void)
   }
 
 void Set_EndOneSettingSelector (void)
+  {
+   HTM_DIV_End ();
+  }
+
+void Set_BeginPref (bool Condition)
+  {
+   HTM_DIV_Begin ("class=\"%s\"",
+                  Condition ? "PREF_ON" :
+                	      "PREF_OFF");
+  }
+
+void Set_EndPref (void)
   {
    HTM_DIV_End ();
   }

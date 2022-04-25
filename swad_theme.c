@@ -105,18 +105,14 @@ void The_PutIconsToSelectTheme (void)
 		 Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 		 Theme++)
 	      {
-	       if (Theme == Gbl.Prefs.Theme)
-		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_GetSuffix ());
-	       else
-		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	       Frm_BeginForm (ActChgThe);
-		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
-		  snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
-			    Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,The_ThemeNames[Theme]);
-	       Frm_EndForm ();
-	       HTM_DIV_End ();
+	       Set_BeginPref (Theme == Gbl.Prefs.Theme);
+		  Frm_BeginForm (ActChgThe);
+		     Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
+		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
+			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
+		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,The_ThemeNames[Theme]);
+		  Frm_EndForm ();
+	       Set_EndPref ();
 	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();

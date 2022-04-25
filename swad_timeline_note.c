@@ -154,7 +154,7 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 		 NULL,Box_CLOSABLE);
 
       /* Begin container */
-      HTM_DIV_Begin ("class=\"Tml_WIDTH Tml_NEW_PUB\"");
+      HTM_DIV_Begin ("class=\"Tml_WIDTH Tml_NEW_PUB_%s\"",The_GetSuffix ());
 
          /* Check and write note with top message */
 	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,Not,

@@ -2106,7 +2106,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .FRAME_SHADOW_PINK	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
 .FRAME_SHADOW_DARK	{background-color:#707070; animation:fadetodark 2s linear forwards;}
 @keyframes fadetowhite	{to {background-color:white;}}
-@keyframes fadetodark	{to {background-color:#444444;}}
+@keyframes fadetodark	{to {background-color:#383838;}}
 
 .FRAME_ICO
 	{
@@ -3921,14 +3921,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-align:center;
 	vertical-align:middle;
 	border:solid 1px;
+	border-color:rgba(77,136,161,0.5);	/* #4d88a1 */
+	background-color:rgba(192,218,228,0.5); /* #c0dae4 */
 	}
-.PREF_ON_WHITE,
-.PREF_ON_GREY,
-.PREF_ON_PURPLE,
-.PREF_ON_BLUE,
-.PREF_ON_YELLOW,
-.PREF_ON_PINK	{border-color:#c0dae4; background-color:#ddecf1;}
-.PREF_ON_DARK	{border-color:#808080; background-color:#707070;}
 
 /************************************* Log ***********************************/
 .LOG
@@ -4182,11 +4177,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.Tml_FAV_COM_WIDTH	{width:440px;}
 	}
 
-.Tml_NEW_PUB
-	{
-	background-color:#ddecf1;
-	animation:fadein 2s linear forwards;
-	}
+.Tml_NEW_PUB_WHITE,
+.Tml_NEW_PUB_GREY,
+.Tml_NEW_PUB_PURPLE,
+.Tml_NEW_PUB_BLUE,
+.Tml_NEW_PUB_YELLOW,
+.Tml_NEW_PUB_PINK	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.Tml_NEW_PUB_DARK	{background-color:#707070; animation:fadetodark 2s linear forwards;}
+
 @keyframes fadein
 	{
 	to {background-color:white;}
@@ -4368,8 +4366,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-align:center;
 	vertical-align:middle;
 	border:solid 1px;
-	border-color:#C0DAE4;
-	background-color:#DDECF1;
+	border-color:rgba(77,136,161,0.5);	/* #4d88a1 */
+	background-color:rgba(192,218,228,0.5); /* #c0dae4 */
 	}
 .Tml_FOOT	/* Container for favs, shares and remove */
 	{

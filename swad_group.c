@@ -4384,20 +4384,16 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	   WhichGrps <= Grp_ALL_GROUPS;
 	   WhichGrps++)
 	{
-	 if (WhichGrps == Gbl.Crs.Grps.WhichGrps)
-	    HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                   The_GetSuffix ());
-	 else
-	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	 Frm_BeginForm (Action);
-	    Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-	    if (FuncParams)	// Extra parameters depending on the action
-	       FuncParams (Args);
-	    Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-								 "sitemap.svg",
-				    Ico_BLACK,Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-	 Frm_EndForm ();
-	 HTM_DIV_End ();
+	 Set_BeginPref (WhichGrps == Gbl.Crs.Grps.WhichGrps);
+	    Frm_BeginForm (Action);
+	       Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	       if (FuncParams)	// Extra parameters depending on the action
+		  FuncParams (Args);
+	       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+								    "sitemap.svg",
+				       Ico_BLACK,Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	    Frm_EndForm ();
+	 Set_EndPref ();
 	}
 
    /***** End setting selector *****/

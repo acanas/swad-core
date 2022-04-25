@@ -316,17 +316,13 @@ void Mnu_PutIconsToSelectMenu (void)
 		 Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 		 Menu++)
 	      {
-	       if (Menu == Gbl.Prefs.Menu)
-		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-		                 The_GetSuffix ());
-	       else
-		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	       Frm_BeginForm (ActChgMnu);
-		  Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
-		  Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Ico_BLACK,
-		                          Txt_MENU_NAMES[Menu]);
-	       Frm_EndForm ();
-	       HTM_DIV_End ();
+	       Set_BeginPref (Menu == Gbl.Prefs.Menu);
+		  Frm_BeginForm (ActChgMnu);
+		     Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
+		     Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Ico_BLACK,
+					     Txt_MENU_NAMES[Menu]);
+		  Frm_EndForm ();
+	       Set_EndPref ();
 	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();

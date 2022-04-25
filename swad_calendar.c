@@ -129,23 +129,19 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	   FirstDayOfWeek++)
 	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	   {
-	    if (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek)
-	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
-	                      The_GetSuffix ());
-	    else
-	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
-	    Frm_BeginForm (Action);
-	       Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
-	       if (FuncParams)	// Extra parameters depending on the action
-		  FuncParams (Args);
-	       snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
-	       if (asprintf (&Title,Txt_First_day_of_the_week_X,
-	                     Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Ico_PutSettingIconLink (Icon,Ico_BLACK,Title);
-	       free (Title);
-	    Frm_EndForm ();
-	    HTM_DIV_End ();
+	    Set_BeginPref (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek);
+	       Frm_BeginForm (Action);
+		  Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
+		  if (FuncParams)	// Extra parameters depending on the action
+		     FuncParams (Args);
+		  snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
+		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
+				Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Ico_PutSettingIconLink (Icon,Ico_BLACK,Title);
+		  free (Title);
+	       Frm_EndForm ();
+	    Set_EndPref ();
 	   }
    Set_EndOneSettingSelector ();
   }
