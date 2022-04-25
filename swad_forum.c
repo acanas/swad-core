@@ -923,7 +923,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                         NewPst ? "MSG_BG_NEW" :
 				 "MSG_BG");
       /***** Write subject *****/
-      HTM_TD_Begin ("class=\"LT %s_%s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+		    NewPst ? "MSG_TIT_NEW" :
+			     "MSG_TIT",
+	  	    The_GetSuffix (),
                     NewPst ? "MSG_BG_NEW" :
 	  	             "MSG_BG",
 	  	    The_GetSuffix ());
@@ -994,7 +997,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-         Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
+         Msg_WriteMsgAuthor (&UsrDat,Enabled);
 	 if (Enabled)
 	    /* Write number of posts from this user */
 	    For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
@@ -2084,7 +2087,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 							-1L,
 							-1L);
 			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
-			                            "BT_LINK");
+			                            "class=\"BT_LINK\"");
 			      if (Order == Forums->ThreadsOrder)
 				 HTM_U_Begin ();
 			      HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
@@ -2269,8 +2272,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 				   Forums,Thr.ThrCod,
 				   Thr.Enabled[Dat_STR_TIME],
 				   Thr.Subject,
-				   Thr.NumUnreadPosts ? "BOLD FORM_IN" :
-							"FORM_IN",
+				   Thr.NumUnreadPosts ? "BOLD PAG_TXT" :
+							"PAG_TXT",
 				   true);
 	 HTM_TD_End ();
 
@@ -2288,7 +2291,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 	                     Class,The_GetSuffix (),BgColor);
-		  Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
+		  Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order]);
 	       HTM_TD_End ();
 
 	       /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */

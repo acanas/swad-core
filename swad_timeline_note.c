@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_alert.h"
 #include "swad_box.h"

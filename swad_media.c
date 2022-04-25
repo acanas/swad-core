@@ -1065,6 +1065,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
       FULL,	// www.youtube.com/watch?
       EMBED,	// www.youtube.com/embed/
      } YouTube = WRONG;
+
    bool CodeFound = false;
 
    /***** Set media status *****/
@@ -1107,6 +1108,11 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
 	      {
 	       YouTube = FULL;
 	       PtrPath = &PtrHost[16];
+	      }
+	    else if (!strncasecmp (PtrHost,"m.youtube.com/"  ,14))	// Host starts by m.youtube.com/
+	      {
+	       YouTube = FULL;
+	       PtrPath = &PtrHost[14];
 	      }
 	    else if (!strncasecmp (PtrHost,"youtube.com/"    ,12))	// Host starts by youtube.com/
 	      {

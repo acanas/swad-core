@@ -126,6 +126,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_error.h"
 #include "swad_figure.h"

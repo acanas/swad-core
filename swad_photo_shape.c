@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_action.h"
 #include "swad_config.h"

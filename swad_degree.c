@@ -468,7 +468,7 @@ static void Deg_ListDegreesForEdition (void)
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
-	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+	       Msg_WriteMsgAuthor (&UsrDat,true);
 	    HTM_TD_End ();
 
 	    /* Degree status */
@@ -596,7 +596,7 @@ static void Deg_PutFormToCreateDegree (void)
 	 /***** Degree requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	               The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/

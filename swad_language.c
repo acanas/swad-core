@@ -27,7 +27,8 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
-#include <string.h>	// For strcasecmp
+#include <stdlib.h>		// For free
+#include <string.h>		// For strcasecmp
 
 #include "swad_box.h"
 #include "swad_database.h"

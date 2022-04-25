@@ -29,6 +29,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_action.h"
 #include "swad_assignment_database.h"

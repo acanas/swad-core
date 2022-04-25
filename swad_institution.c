@@ -1071,7 +1071,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
 							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+	       Msg_WriteMsgAuthor (&UsrDat,true);
 	    HTM_TD_End ();
 
 	    /* Institution status */
@@ -1524,7 +1524,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	 /***** Institution requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	               The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
 	 HTM_TD_End ();
 
 	 /***** Institution status *****/

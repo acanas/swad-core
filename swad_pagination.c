@@ -273,7 +273,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    free (Title);
 	   }
 	 else
-	    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+	    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 	 if (FirstMsgEnabled)
 	    HTM_Txt (Subject);
 	 else
@@ -391,14 +391,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
-	                             "class=\"BT_LINK PAG %s\"",ClassTxt);
+	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
+	                             The_GetSuffix (),
+	                             ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (1);
 	    HTM_BUTTON_End ();
 	    free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+            HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -506,14 +508,16 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			  Pagination->LeftPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
-	                             "class=\"BT_LINK PAG %s\"",ClassTxt);
+	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
+	                             The_GetSuffix (),
+	                             ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (Pagination->LeftPage);
 	    HTM_BUTTON_End ();
 	    free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+            HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -528,7 +532,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    Err_NotEnoughMemoryExit ();
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
-            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Title,ClassTxt);
+            HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR PAG_CUR_%s %s_%s\"",
+                            Title,The_GetSuffix (),ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (NumPage);
             HTM_SPAN_End ();
            }
@@ -629,7 +634,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  break;
               }
 	       HTM_BUTTON_Submit_Begin (Title,
-	                                "class=\"BT_LINK PAG %s\"",ClassTxt);
+	                                "class=\"BT_LINK PAG PAG_%s %s_%s\"",
+	                                The_GetSuffix (),
+	                                ClassTxt,The_GetSuffix ());
 		  HTM_Unsigned (NumPage);
 	       HTM_BUTTON_End ();
             Frm_EndForm ();
@@ -643,7 +650,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          if (Pagination->RightPage > Pagination->EndPage + 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+            HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -745,7 +752,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			  Pagination->RightPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
-	                             "class=\"BT_LINK PAG %s\"",ClassTxt);
+	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
+	                             The_GetSuffix (),
+	                             ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (Pagination->RightPage);
 	    HTM_BUTTON_End ();
 	    free (Title);
@@ -757,7 +766,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         {
          if (Pagination->NumPags > Pagination->RightPage + 1)
            {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+            HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
@@ -859,7 +868,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			  Pagination->NumPags,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
-	                             "class=\"BT_LINK PAG %s\"",ClassTxt);
+	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
+	                             The_GetSuffix (),
+	                             ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (Pagination->NumPags);
 	    HTM_BUTTON_End ();
 	    free (Title);
