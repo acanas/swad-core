@@ -1570,7 +1570,8 @@ static bool Inf_CheckAndShowRichTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      HTM_DIV_Begin ("id=\"crs_info\" class=\"LM\"");
+      HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
+                     The_GetSuffix ());
 
 	 /***** Store text into a temporary .md file in HTML output directory *****/
 	 // TODO: change to another directory?

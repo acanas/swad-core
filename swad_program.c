@@ -441,8 +441,9 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR PRG_TXT%s\"",
-		     LightStyle ? "PRG_HIDDEN" :
+      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+                     The_GetSuffix (),
+		     LightStyle ? " PRG_HIDDEN" :
 				  "");
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -563,10 +564,11 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle)
   {
-   if (asprintf (TitleClass,"PRG_TIT_%u%s",
+   if (asprintf (TitleClass,"PRG_TIT_%u_%s%s",
 		 Level < 5 ? Level :
 			     5,
-		 LightStyle ? "PRG_HIDDEN" :
+		 The_GetSuffix (),
+		 LightStyle ? " PRG_HIDDEN" :
 			      "") < 0)
       Err_NotEnoughMemoryExit ();
   }

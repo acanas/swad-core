@@ -322,13 +322,14 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
       if (NumID)
 	 HTM_BR ();
 
-      HTM_SPAN_Begin ("class=\"%s\"",
+      HTM_SPAN_Begin ("class=\"%s_%s\"",
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-						          "USR_ID_NC");
-      if (ICanSeeUsrID)
-	 HTM_Txt (UsrDat->IDs.List[NumID].ID);
-      else
-	 HTM_Txt ("********");
+						          "USR_ID_NC",
+		      The_GetSuffix ());
+	 if (ICanSeeUsrID)
+	    HTM_Txt (UsrDat->IDs.List[NumID].ID);
+	 else
+	    HTM_Txt ("********");
       HTM_SPAN_End ();
 
       if (ICanConfirmUsrID &&

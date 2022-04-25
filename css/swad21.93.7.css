@@ -799,7 +799,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_BLUE	{background-color:#e8f3f6;}
 .TAB_ON_YELLOW	{background-color:#faf0da;}
 .TAB_ON_PINK	{background-color:#faf0e8;}
-.TAB_ON_DARK	{background-color:#585858;}
+.TAB_ON_DARK	{background-color:#505050;}
 
 .TAB_OFF_WHITE	{background-color:#d4d4d4;}
 .TAB_OFF_GREY	{background-color:#aea79f;}
@@ -807,7 +807,7 @@ a:hover						/* Default ==> underlined */
 .TAB_OFF_BLUE	{background-color:#cae1e8;}
 .TAB_OFF_YELLOW	{background-color:#f4dfb2;}
 .TAB_OFF_PINK	{background-color:#f3dcca;}
-.TAB_OFF_DARK	{background-color:#484848;}
+.TAB_OFF_DARK	{background-color:#404040;}
 
 .TAB_OFF_TXT_WHITE	{color:#707070;}
 .TAB_OFF_TXT_GREY	{color:#505050;}
@@ -1695,13 +1695,54 @@ a:hover img.CENTER_PHOTO_SHOW
 	vertical-align:top;
 	}
 
-.PRG_TIT_1	{color:#24292e; font-size:24pt; font-weight:bold;}
-.PRG_TIT_2	{color:#24292e; font-size:20pt; font-weight:bold;}
-.PRG_TIT_3	{color:#24292e; font-size:18pt; font-weight:bold;}
-.PRG_TIT_4	{color:#24292e; font-size:16pt; font-weight:bold;}
-.PRG_TIT_5	{color:#24292e; font-size:14pt; font-weight:bold;}
 
-.PRG_TXT	{color:#24292e; font-size:12pt; line-height:1.5;}
+.PRG_TIT_1_WHITE,
+.PRG_TIT_1_GREY,
+.PRG_TIT_1_PURPLE,
+.PRG_TIT_1_BLUE,
+.PRG_TIT_1_YELLOW,
+.PRG_TIT_1_PINK		{color:#202020; font-size:24pt; font-weight:bold;}
+.PRG_TIT_1_DARK		{color:#e0e0e0; font-size:24pt; font-weight:bold;}
+
+.PRG_TIT_2_WHITE,
+.PRG_TIT_2_GREY,
+.PRG_TIT_2_PURPLE,
+.PRG_TIT_2_BLUE,
+.PRG_TIT_2_YELLOW,
+.PRG_TIT_2_PINK		{color:#202020; font-size:20pt; font-weight:bold;}
+.PRG_TIT_2_DARK		{color:#e0e0e0; font-size:20pt; font-weight:bold;}
+
+.PRG_TIT_3_WHITE,
+.PRG_TIT_3_GREY,
+.PRG_TIT_3_PURPLE,
+.PRG_TIT_3_BLUE,
+.PRG_TIT_3_YELLOW,
+.PRG_TIT_3_PINK		{color:#202020; font-size:18pt; font-weight:bold;}
+.PRG_TIT_3_DARK		{color:#e0e0e0; font-size:18pt; font-weight:bold;}
+
+.PRG_TIT_4_WHITE,
+.PRG_TIT_4_GREY,
+.PRG_TIT_4_PURPLE,
+.PRG_TIT_4_BLUE,
+.PRG_TIT_4_YELLOW,
+.PRG_TIT_4_PINK		{color:#202020; font-size:16pt; font-weight:bold;}
+.PRG_TIT_4_DARK		{color:#e0e0e0; font-size:16pt; font-weight:bold;}
+
+.PRG_TIT_5_WHITE,
+.PRG_TIT_5_GREY,
+.PRG_TIT_5_PURPLE,
+.PRG_TIT_5_BLUE,
+.PRG_TIT_5_YELLOW,
+.PRG_TIT_5_PINK		{color:#202020; font-size:14pt; font-weight:bold;}
+.PRG_TIT_5_DARK		{color:#e0e0e0; font-size:14pt; font-weight:bold;}
+
+.PRG_TXT_WHITE,
+.PRG_TXT_GREY,
+.PRG_TXT_PURPLE,
+.PRG_TXT_BLUE,
+.PRG_TXT_YELLOW,
+.PRG_TXT_PINK	{color:#202020; font-size:12pt; line-height:1.5;}
+.PRG_TXT_DARK	{color:#e0e0e0; font-size:12pt; line-height:1.5;}
 
 .PRG_DATE
 	{
@@ -2041,7 +2082,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .FRAME_BLUE,
 .FRAME_YELLOW,
 .FRAME_PINK	{background-color:white;}
-.FRAME_DARK	{background-color:#444444;}
+.FRAME_DARK	{background-color:#383838;}
 
 .FRAME_SHADOW
 	{
@@ -2459,7 +2500,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	margin:0;
 	padding:0 12px;
-	color:inherit;
 	}
 #crs_info table
 	{
@@ -2476,6 +2516,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	border:1px solid grey;
 	padding:6px;
 	}
+
+.CRS_INFO_WHITE,
+.CRS_INFO_GREY,
+.CRS_INFO_PURPLE,
+.CRS_INFO_BLUE,
+.CRS_INFO_YELLOW,
+.CRS_INFO_PINK		{color:#202020;}
+.CRS_INFO_DARK		{color:#e0e0e0;}
 
 /************************ Help for the text editor ***************************/
 .HELP_EDIT
@@ -2793,8 +2841,22 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /******************************** User's IDs *********************************/
 .USR_ID		{font-size:18pt; font-weight:bold;}
-.USR_ID_C	{color:#408020}
-.USR_ID_NC	{color:#A02020}
+
+.USR_ID_C_WHITE,
+.USR_ID_C_GREY,
+.USR_ID_C_PURPLE,
+.USR_ID_C_BLUE,
+.USR_ID_C_YELLOW,
+.USR_ID_C_PINK		{color:#246600}
+.USR_ID_C_DARK		{color:#80c040}
+
+.USR_ID_NC_WHITE,
+.USR_ID_NC_GREY,
+.USR_ID_NC_PURPLE,
+.USR_ID_NC_BLUE,
+.USR_ID_NC_YELLOW,
+.USR_ID_NC_PINK		{color:#660000}
+.USR_ID_NC_DARK		{color:#f98a8a}
 
 /******************************* Record card *********************************/
 .REC_USR
@@ -3049,8 +3111,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DATE_BLUE_LIGHT_PINK		{color:rgba( 77,136,161,0.3); font-size:13pt;}
 .DATE_BLUE_LIGHT_DARK		{color:rgba(175,196,204,0.3); font-size:13pt;}
 
-.ASG_LST_DATE_GREEN	{color:#246600; font-size:11pt; white-space:nowrap;}
-.ASG_LST_DATE_RED	{color:#660000; font-size:11pt; white-space:nowrap;}
+.ASG_LST_DATE_GREEN_WHITE,
+.ASG_LST_DATE_GREEN_GREY,
+.ASG_LST_DATE_GREEN_PURPLE,
+.ASG_LST_DATE_GREEN_BLUE,
+.ASG_LST_DATE_GREEN_YELLOW,
+.ASG_LST_DATE_GREEN_PINK	{color:#246600; font-size:11pt; white-space:nowrap;}
+.ASG_LST_DATE_GREEN_DARK	{color:#80c040; font-size:11pt; white-space:nowrap;}
+
+.ASG_LST_DATE_RED_WHITE,
+.ASG_LST_DATE_RED_GREY,
+.ASG_LST_DATE_RED_PURPLE,
+.ASG_LST_DATE_RED_BLUE,
+.ASG_LST_DATE_RED_YELLOW,
+.ASG_LST_DATE_RED_PINK		{color:#660000; font-size:11pt; white-space:nowrap;}
+.ASG_LST_DATE_RED_DARK		{color:#ff8080; font-size:11pt; white-space:nowrap;}
 
 .STATUS_GREEN_WHITE,
 .STATUS_GREEN_GREY,
