@@ -87,6 +87,7 @@ const char *Ico_GetPreffix (Ico_Color_t Color)
       [Ico_GREEN    ] = "GREEN",
       [Ico_RED      ] = "RED",
       [Ico_WHITE    ] = "WHITE",
+      [Ico_YELLOW   ] = "YELLOW",
      };
 
    return Ico_CSS_Preffix[Color];

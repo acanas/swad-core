@@ -375,8 +375,8 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
      {
       [Ale_NONE     ] = NULL,
       [Ale_CLIPBOARD] = "clipboard.svg",
-      [Ale_INFO     ] = "info-circle.svg",
-      [Ale_SUCCESS  ] = "check-circle.svg",
+      [Ale_INFO     ] = "info-circle-blue.svg",
+      [Ale_SUCCESS  ] = "check-circle-green.svg",
       [Ale_QUESTION ] = "question64x64.gif",	// animated gif
       [Ale_WARNING  ] = "warning64x64.gif",	// animated gif
       [Ale_ERROR    ] = "error64x64.gif",	// animated gif

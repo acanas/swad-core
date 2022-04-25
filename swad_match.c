@@ -3301,7 +3301,8 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
 	 HTM_BUTTON_Submit_Begin (Txt,
-	                          "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK\"");
+	                          "class=\"BT_LINK MCH_BUTTON_ON ICO_BLACK_%s\"",
+	                          The_GetSuffix ());
 	    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();
@@ -3318,7 +3319,8 @@ static void Mch_PutBigButtonHidden (const char *Icon)
   {
    /***** Put inactive icon *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-      HTM_BUTTON_Begin (NULL,"class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK\"");
+      HTM_BUTTON_Begin (NULL,"class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK_%s\"",
+                        The_GetSuffix ());
 	 HTM_TxtF ("<i class=\"%s\"></i>",Icon);
       HTM_BUTTON_End ();
    HTM_DIV_End ();

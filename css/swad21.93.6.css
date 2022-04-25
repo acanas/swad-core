@@ -1934,7 +1934,6 @@ a:hover img.CENTER_PHOTO_SHOW
 .BANNER		{width:150px; height:50px;}
 .BANNER_SMALL	{width:75px; height:25px;}
 
-.ICO_BLACK	{color:#404040;}
 .ICO_DARKRED	{color:#660000;}
 
 /****** Contextual links with small icons and text to go to some action ******/
@@ -2001,6 +2000,14 @@ a:hover img.CENTER_PHOTO_SHOW
 .ICO_WHITE_YELLOW,
 .ICO_WHITE_PINK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
 .ICO_WHITE_DARK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+
+.ICO_YELLOW_WHITE,
+.ICO_YELLOW_GREY,
+.ICO_YELLOW_PURPLE,
+.ICO_YELLOW_BLUE,
+.ICO_YELLOW_YELLOW,
+.ICO_YELLOW_PINK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+.ICO_YELLOW_DARK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
 
 /********************************** Frame ************************************/
 .FRAME_INLINE

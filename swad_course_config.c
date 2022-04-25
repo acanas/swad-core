@@ -446,7 +446,7 @@ static void CrsCfg_Indicators (void)
 		  Ico_PutIcon ("check-circle.svg",Ico_GREEN,
 			       Title,"ICO16x16");
 	       else
-		  Ico_PutIcon ("exclamation-triangle.svg",Ico_RED,	// TODO: Change to Ico_YELLOW
+		  Ico_PutIcon ("exclamation-triangle.svg",Ico_YELLOW,
 			       Title,"ICO16x16");
 	    HTM_BUTTON_End ();
 	    free (Title);

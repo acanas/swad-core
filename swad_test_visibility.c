@@ -70,10 +70,11 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden)
 		    Txt_TST_STR_VISIBILITY[Visibility],
 		    Txt_TST_HIDDEN_VISIBLE[ItemVisible]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      if (ItemVisible && !Hidden)
-	 Ico_PutIconOn  (Icons[Visibility],Ico_GREEN                ,Title);
-      else
+      if (Hidden)
 	 Ico_PutIconOff (Icons[Visibility],ItemVisible ? Ico_GREEN :
+		                                         Ico_RED    ,Title);
+      else
+	 Ico_PutIconOn  (Icons[Visibility],ItemVisible ? Ico_GREEN :
 		                                         Ico_RED    ,Title);
       free (Title);
      }

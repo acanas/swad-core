@@ -471,7 +471,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		    Prj_PutIconsListProjects,Projects,
 		    Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-	 /***** Put forms to choice which projects to show *****/
+	 /***** Put filters to choice which projects to show *****/
 	 /* 1st. row */
 	 Set_BeginSettingsHead ();
 	 Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
@@ -701,7 +701,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
       Ico_Color_t Color;
      } FaultinessIcon[Prj_NUM_FAULTINESS] =
      {
-      [Prj_FAULTY   ] = {"exclamation-triangle.svg",Ico_RED  },
+      [Prj_FAULTY   ] = {"exclamation-triangle.svg",Ico_YELLOW},
       [Prj_FAULTLESS] = {"check-circle.svg"        ,Ico_GREEN},
      };
 
