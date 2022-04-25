@@ -4649,8 +4649,8 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 .PAG_TXT_PURPLE,
 .PAG_TXT_BLUE,
 .PAG_TXT_YELLOW,
-.PAG_TXT_PINK	{color:#4d88a1;	font-size:13pt;	font-weight:bold;}
-.PAG_TXT_DARK	{color:#afc4cc;	font-size:13pt;	font-weight:bold;}
+.PAG_TXT_PINK	{color:#4d88a1;	font-size:13pt;}
+.PAG_TXT_DARK	{color:#afc4cc;	font-size:13pt;}
 
 /***************************** Calls for exams *******************************/
 .EXAM_TIT_WHITE,

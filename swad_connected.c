@@ -416,14 +416,15 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
 	{
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
+	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
 	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-						      // the list of connected users
-						      // is dynamically updated via AJAX
+						// the list of connected users
+						// is dynamically updated via AJAX
 		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
-				   Txt_Connected_users,
-				   "class=\"ICO16x16\"");
+		                   Txt_Connected_users,
+				   "class=\"ICO16x16 ICO_HIGHLIGHT ICO_BLACK_%s\"",
+				   The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();
