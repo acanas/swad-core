@@ -97,7 +97,8 @@ void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
                                  void (*FuncParams) (void *Args),void *Args);
 
-void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutDivIcon (const char *DivClass,
+                     const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text);
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title);

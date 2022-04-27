@@ -52,17 +52,17 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
-                                               long Cod,long UsrCod,unsigned NumUsrs,
-				               TmlUsr_HowManyUsrs_t HowManyUsrs);
+                                              long Cod,long UsrCod,unsigned NumUsrs,
+				              TmlUsr_HowManyUsrs_t HowManyUsrs);
 static void TmlUsr_ShowNumSharersOrFavers (unsigned NumUsrs);
 static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
-			                 unsigned NumUsrs,unsigned NumFirstUsrs);
+			                unsigned NumUsrs,unsigned NumFirstUsrs);
 static unsigned TmlUsr_GetListFaversOrSharers (TmlUsr_FavSha_t FavSha,
-                                                long Cod,long UsrCod,unsigned MaxUsrs,
-                                                MYSQL_RES **mysql_res);
+                                               long Cod,long UsrCod,unsigned MaxUsrs,
+                                               MYSQL_RES **mysql_res);
 
 static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
-                                           unsigned NumUsrs);
+                                          unsigned NumUsrs);
 
 /*****************************************************************************/
 /*************** Remove all content of a user from database ******************/
@@ -303,7 +303,7 @@ void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
 /*****************************************************************************/
 
 static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
-                                           unsigned NumUsrs)
+                                          unsigned NumUsrs)
   {
    extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
    extern const char *Txt_TIMELINE_Not_favourited_by_anyone;

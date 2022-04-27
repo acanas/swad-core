@@ -687,7 +687,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
 	    HTM_BUTTON_Submit_Begin (Txt_TIMELINE_NOTE[Not->Type],
-	                             "class=\"BT_LINK FORM_IN_WHITE %s ICO_HIGHLIGHT\"",
+	                             "class=\"BT_LINK FORM_IN_%s ICO_HIGHLIGHT\"",
 	                             The_GetSuffix ());
 
 	       /* Icon and text */

@@ -402,23 +402,11 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/
 
-void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title)
+void Ico_PutDivIcon (const char *DivClass,
+                     const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   char *Class;
-
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-
-      if (Color == Ico_UNCHANGED)
-	 Ico_PutIcon (Icon,Color,Title,"CONTEXT_ICO16x16");
-      else
-	{
-	 if (asprintf (&Class,"CONTEXT_ICO16x16 ICO_%s_%s",
-	               Ico_GetPreffix (Color),The_GetSuffix ()) < 0)
-	    Err_NotEnoughMemoryExit ();
-         Ico_PutIcon (Icon,Color,Title,Class);
-         free (Class);
-	}
-
+      Ico_PutIcon (Icon,Color,Title,"CONTEXT_ICO16x16");
    HTM_DIV_End ();
   }
 

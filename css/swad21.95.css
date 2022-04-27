@@ -29,14 +29,14 @@ body
 	font-size:1em;
 	overflow-y:scroll;	/* force vertical scrollbar */
 	}
-.BODY_BG_WHITE,
-.BODY_BG_GREY,
-.BODY_BG_PURPLE,
-.BODY_BG_BLUE,
-.BODY_BG_YELLOW,
-.BODY_BG_PINK	{background-color:white;}
-.BODY_BG_DARK	{background-color:#383838;}
-
+.BODY_WHITE,
+.BODY_GREY,
+.BODY_PURPLE,
+.BODY_BLUE,
+.BODY_YELLOW,
+.BODY_PINK	{background-color:white;}
+.BODY_DARK	{background-color:#383838;}
+	
 input	
 	{
 	font-size:12pt;
@@ -93,9 +93,16 @@ address
 	}
 
 /*********************** Text decoration of links ****************************/
+.BODY_WHITE a,
+.BODY_GREY a,
+.BODY_PURPLE a,
+.BODY_BLUE a,
+.BODY_YELLOW a,
+.BODY_PINK a	{color:#4d88a1;}
+.BODY_DARK a	{color:#afc4cc;}
 a
 	{
-	color:#4d88a1;text-decoration:none;
+	text-decoration:none;
 	}
 a:link, a:visited, a:active
 	{
@@ -2352,13 +2359,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .ZOOM_YELLOW,
 .ZOOM_PINK
 	{
-	background-color:rgba(255,255,255,0.95);
+	background-color:rgba(255,255,255,0.9);
 	border-color:#c0c0c0;
 	box-shadow:2px 5px 15px #888;
 	}
 .ZOOM_DARK
 	{
-	background-color:rgba(0,0,0,0.95);
+	background-color:rgba(0,0,0,0.9);
 	border-color:#c0c0c0;
 	box-shadow:2px 5px 15px #888;
 	}
@@ -4411,7 +4418,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 .Tml_ICO_DISABLED
 	{
-	opacity:0.1;
+	opacity:0.2;
 	}
 .Tml_SHARER
 	{

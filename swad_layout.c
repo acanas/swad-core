@@ -260,7 +260,7 @@ void Lay_WriteStartOfPage (void)
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	       HTM_TxtF ("<body class=\"BODY_BG_%s\" onload=\"init();\">\n",
+	       HTM_TxtF ("<body class=\"BODY_%s\" onload=\"init();\">\n",
 	                 The_GetSuffix ());
 	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM ZOOM_%s\"",
 	                      The_GetSuffix ());

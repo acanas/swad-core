@@ -212,6 +212,7 @@ void TmlFrm_PutFormToSeeAllFaversSharers (TmlFrm_Action_t Action,
       .ParamFormat = ParamFormat,
       .ParamCod    = ParamCod,
       .Icon        = TmlFrm_ICON_ELLIPSIS,
+      .Color       = Ico_BLACK,
       .Title       = Txt_View_all_USERS,
      };
 
