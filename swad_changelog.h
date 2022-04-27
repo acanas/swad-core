@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.95 (2022-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 21.95.1 (2022-04-27)"
 #define CSS_FILE		"swad21.95.css"
 #define JS_FILE			"swad21.92.js"
 /*
+	Version 21.95.1:  Apr 27, 2022  Fixing design of dark theme. (323406 lines)
 	Version 21.95:    Apr 27, 2022  Fixing design of dark theme. (323404 lines)
 	Version 21.94.3:  Apr 25, 2022  Fixing design of dark theme. (323402 lines)
 	Version 21.94.2:  Apr 25, 2022  Fixed bug in pagination. Reported by Javier Fernández Baldomero. (323400 lines)

@@ -173,9 +173,10 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    Ins_GetDataOfInstitByCod (&Ins);
 
 	    /* Institution logo and name */
-	    HTM_TR_Begin ("DAT_%s",The_GetSuffix ());
+	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"NOWRAP LM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
+	                     The_GetSuffix (),BgColor);
 		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM");
 	       HTM_TD_End ();
 

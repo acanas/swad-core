@@ -153,7 +153,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM %s NOWRAP %s\"",
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
 	                     The_GetSuffix (),BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM");
 	       HTM_TD_End ();
