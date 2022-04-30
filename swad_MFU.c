@@ -59,6 +59,13 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void MFU_PutIconAndText (Act_Action_t Action,
+                                const char MenuStr[MFU_MAX_BYTES_MENU + 1]);
+
+/*****************************************************************************/
 /************** Allocate list of most frequently used actions ****************/
 /*****************************************************************************/
 
@@ -180,7 +187,6 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -189,7 +195,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
-   char URLIconSet[PATH_MAX + 1];
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_frequent_actions,
@@ -222,12 +227,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 			HTM_BUTTON_Submit_Begin (TabMenuStr,
 			                         "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
 			                         The_GetSuffix ());
-			   snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
-			             Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-			   HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
-				    "class=\"ICO_%s_%s\"",
-				    Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-			   HTM_TxtF ("&nbsp;%s",TabMenuStr);
+			   MFU_PutIconAndText (Action,MenuStr);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
 		  HTM_LI_End ();
@@ -250,7 +250,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -260,7 +259,6 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabStr[MFU_MAX_BYTES_TAB + 1];
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
-   char URLIconSet[PATH_MAX + 1];
 
    /***** Begin div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
@@ -293,12 +291,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
 		     HTM_BUTTON_Submit_Begin (TabMenuStr,"class=\"BT_LINK\"");
-			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
-				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-			HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
-				 "class=\"ICO_%s_%s\"",
-				 Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
-			HTM_TxtF ("&nbsp;%s",MenuStr);
+		        MFU_PutIconAndText (Action,MenuStr);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_LI_End ();
@@ -310,6 +303,34 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** End div *****/
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********************** Put action icon and text ****************************/
+/*****************************************************************************/
+
+static void MFU_PutIconAndText (Act_Action_t Action,
+                                const char MenuStr[MFU_MAX_BYTES_MENU + 1])
+  {
+   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   static const Ico_Color_t Color[Ico_NUM_ICON_SETS] =
+     {
+      [Ico_ICON_SET_AWESOME] = Ico_BLACK,
+      [Ico_ICON_SET_NUVOLA ] = Ico_UNCHANGED,
+     };
+   char URLIconSet[PATH_MAX + 1];
+
+   snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
+	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+   if (Color[Gbl.Prefs.IconSet] == Ico_UNCHANGED)
+      HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
+	       NULL);
+   else
+      HTM_IMG (URLIconSet,Act_GetIcon (Action),MenuStr,
+	       "class=\"ICO_%s_%s\"",
+	       Ico_GetPreffix (Color[Gbl.Prefs.IconSet]),
+	       The_GetSuffix ());
+   HTM_TxtF ("&nbsp;%s",MenuStr);
   }
 
 /*****************************************************************************/
