@@ -103,9 +103,11 @@ static void ALn_CopySubstring (const struct ALn_Substring *PtrSrc,char **PtrDst)
 #define ALn_URL_ANCHOR_0		"<a href=\""
 #define ALn_URL_ANCHOR_1		"\" target=\"_blank\">"
 #define ALn_URL_ANCHOR_2		"</a>"
+
 #define ALn_URL_ANCHOR_0_LENGTH		(sizeof (ALn_URL_ANCHOR_0) - 1)
 #define ALn_URL_ANCHOR_1_LENGTH		(sizeof (ALn_URL_ANCHOR_1) - 1)
 #define ALn_URL_ANCHOR_2_LENGTH		(sizeof (ALn_URL_ANCHOR_2) - 1)
+
 #define ALn_URL_ANCHOR_TOTAL_LENGTH	(ALn_URL_ANCHOR_0_LENGTH + ALn_URL_ANCHOR_1_LENGTH + ALn_URL_ANCHOR_2_LENGTH)
 
 static const struct ALn_Substring URLAnchor[3] =
@@ -202,11 +204,12 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	 /* Check if the next char is the start of a nickname */
 	 if ((Link->Type = ALn_CheckNickname (&PtrSrc,PrevCh,
 	                                      &Link,&LastLink)) == ALn_LINK_UNKNOWN)
-	   {
 	    /* The next char is not the start of a URL or a nickname */
-	    PrevCh = *PtrSrc;
-	    PtrSrc++;
-	   }
+	    if (*PtrSrc)	// If not end reached
+	      {
+	       PrevCh = *PtrSrc;
+	       PtrSrc++;
+	      }
 
    /**********************************************************************/
    /***** If there are one or more links (URLs or nicknames) in text *****/
@@ -216,7 +219,8 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
       /***** Insert links from end to start of text,
              only if there is enough space available in text *****/
       TxtLength = strlen (Txt);
-       if (TxtLength + LastLink->LengthAddedUpToHere  <= MaxLength)
+      if (TxtLength + LastLink->LengthAddedUpToHere <= MaxLength)
+	{
          for (Link = LastLink;
               Link;
               Link = Link->Prev)
@@ -241,9 +245,10 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             /***** Step 1: Move forward the text after the link (URL or nickname)
                            (it's mandatory to do the copy in reverse order
                             to avoid overwriting source) *****/
+
 	    PtrSrc = (Link == LastLink) ? Txt + TxtLength :
-					  Link->Next->URLorNick.Str - 1,
-	    PtrDst = PtrSrc + Link->LengthAddedUpToHere ,
+					  Link->Next->URLorNick.Str - 1;
+	    PtrDst = PtrSrc + Link->LengthAddedUpToHere;
 	    Length = PtrSrc - (Link->URLorNick.Str + Link->URLorNick.Len - 1);
             for (i = 0;
                  i < Length;
@@ -258,28 +263,28 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             switch (Link->Type)
               {
                case ALn_LINK_URL:
-        	  if (Link->URLorNick.Len <= MaxCharsURLOnScreen)
-		     ALn_CopySubstring (&Link->URLorNick,&PtrDst);
-        	  else
-        	    {
-		     /* Limit the length of URL */
-		     if ((Limited.Str = malloc (Link->URLorNick.Len + 1)) == NULL)
-			Err_NotEnoughMemoryExit ();
-		     strncpy (Limited.Str,Link->URLorNick.Str,Link->URLorNick.Len);
-		     Limited.Str[Link->URLorNick.Len] = '\0';
-		     Limited.Len = Str_LimitLengthHTMLStr (Limited.Str,MaxCharsURLOnScreen);
-		     ALn_CopySubstring (&Limited,&PtrDst);
-		     free (Limited.Str);
-        	    }
-		  break;
+            	  if (Link->URLorNick.Len <= MaxCharsURLOnScreen)
+	    	     ALn_CopySubstring (&Link->URLorNick,&PtrDst);
+            	  else
+              	    {
+	    	     /* Limit the length of URL */
+	    	     if ((Limited.Str = malloc (Link->URLorNick.Len + 1)) == NULL)
+	     		Err_NotEnoughMemoryExit ();
+	     	     strncpy (Limited.Str,Link->URLorNick.Str,Link->URLorNick.Len);
+	     	     Limited.Str[Link->URLorNick.Len] = '\0';
+	    	     Limited.Len = Str_LimitLengthHTMLStr (Limited.Str,MaxCharsURLOnScreen);
+	     	     ALn_CopySubstring (&Limited,&PtrDst);
+	    	     free (Limited.Str);
+            	    }
+	    	  break;
                case ALn_LINK_NICK:
                   ALn_CopySubstring (&Link->URLorNick,&PtrDst);
-		  break;
+	    	  break;
                default:
-        	  break;
+            	  break;
               }
 
-            /***** Step 4: Copy the second part of the anchor  *****/
+            /***** Step 4: Copy the second part of the anchor *****/
             ALn_CopySubstring (Anchor[1],&PtrDst);
 
             /***** Step 5: Copy the link into the anchor
@@ -290,6 +295,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             /***** Step 6: Copy the first part of the anchor *****/
             ALn_CopySubstring (Anchor[0],&PtrDst);
            }
+	}
      }
 
    /***********************************/
@@ -512,88 +518,90 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 
 	    if (NickSeemsValid)
 	      {
-	       /***** Get user's code using nickname *****/
+	       /***** Create data for a user *****/
 	       Usr_UsrDataConstructor (&UsrDat);
-	       strncpy (NickWithoutArr,(*Link)->URLorNick.Str + 1,Length);
-	       NickWithoutArr[Length] = '\0';
-	       if ((UsrDat.UsrCod = Nck_DB_GetUsrCodFromNickname (NickWithoutArr)) > 0)
-		 {
-		  Type = ALn_LINK_NICK;
-		  Usr_GetUsrDataFromUsrCod (&UsrDat,
-					    Usr_DONT_GET_PREFS,
-					    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-		 }
 
-	       if (Type == ALn_LINK_NICK)
-		 {
-		  /***** Reset anchors (checked on freeing) *****/
-		  (*Link)->NickAnchor[0].Str =
-		  (*Link)->NickAnchor[1].Str =
-		  (*Link)->NickAnchor[2].Str = NULL;
+	          /***** Get user's code using nickname *****/
+	          strncpy (NickWithoutArr,(*Link)->URLorNick.Str + 1,Length);
+		  NickWithoutArr[Length] = '\0';
+		  if ((UsrDat.UsrCod = Nck_DB_GetUsrCodFromNickname (NickWithoutArr)) > 0)
+		    {
+		     Type = ALn_LINK_NICK;
+		     Usr_GetUsrDataFromUsrCod (&UsrDat,
+					       Usr_DONT_GET_PREFS,
+					       Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+		    }
 
-		  /***** Create id for this form *****/
-		  Gbl.Form.Num++;
-		  if (Gbl.Usrs.Me.Logged)
-		     snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-			       "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-		  else
-		     snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-			       "form_%d",Gbl.Form.Num);
+		  if (Type == ALn_LINK_NICK)
+		    {
+		     /***** Reset anchors (checked on freeing) *****/
+		     (*Link)->NickAnchor[0].Str =
+		     (*Link)->NickAnchor[1].Str =
+		     (*Link)->NickAnchor[2].Str = NULL;
 
-		  /***** Store first part of anchor *****/
-		  Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-		  if (asprintf (&(*Link)->NickAnchor[0].Str,
-				"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
-				"%s"	// Parameters
-				"<input type=\"hidden\" name=\"usr\" value=\"",
-				Cfg_URL_SWAD_CGI,
-				Lan_STR_LANG_ID[Gbl.Prefs.Language],
-				Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-						     Gbl.Form.Id,
-				ParamsStr) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  (*Link)->NickAnchor[0].Len = strlen ((*Link)->NickAnchor[0].Str);
+		     /***** Create id for this form *****/
+		     Gbl.Form.Num++;
+		     if (Gbl.Usrs.Me.Logged)
+			snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
+				  "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+		     else
+			snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+				  "form_%d",Gbl.Form.Num);
 
-		  /***** Store second part of anchor *****/
-		  if (asprintf (&(*Link)->NickAnchor[1].Str,
-				"\">"
-				"<a href=\"\""
-				" onclick=\"document.getElementById('%s').submit();return false;\">",
-				Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-						     Gbl.Form.Id) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
+		     /***** Store first part of anchor *****/
+		     Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
+		     if (asprintf (&(*Link)->NickAnchor[0].Str,
+				   "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+				   "%s"	// Parameters
+				   "<input type=\"hidden\" name=\"usr\" value=\"",
+				   Cfg_URL_SWAD_CGI,
+				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+				   Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+							Gbl.Form.Id,
+				   ParamsStr) < 0)
+			Err_NotEnoughMemoryExit ();
+		     (*Link)->NickAnchor[0].Len = strlen ((*Link)->NickAnchor[0].Str);
 
-		  /***** Store third part of anchor *****/
-		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-		  Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-							     NULL,
-					 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-					 &CaptionStr,
-					 &ImgStr);
-		  if (asprintf (&(*Link)->NickAnchor[2].Str,
-				"</a></form>%s%s",
-				CaptionStr,
-				ImgStr) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  free (ImgStr);
-		  free (CaptionStr);
-		  (*Link)->NickAnchor[2].Len = strlen ((*Link)->NickAnchor[2].Str);
+		     /***** Store second part of anchor *****/
+		     if (asprintf (&(*Link)->NickAnchor[1].Str,
+				   "\">"
+				   "<a href=\"\""
+				   " onclick=\"document.getElementById('%s').submit();return false;\">",
+				   Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+							Gbl.Form.Id) < 0)
+			Err_NotEnoughMemoryExit ();
+		     (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
 
-		  /***** Free memory used for user's data *****/
-		  Usr_UsrDataDestructor (&UsrDat);
+		     /***** Store third part of anchor *****/
+		     ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+		     Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+								NULL,
+					    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
+					    &CaptionStr,
+					    &ImgStr);
+		     if (asprintf (&(*Link)->NickAnchor[2].Str,
+				   "</a></form>%s%s",
+				   CaptionStr,
+				   ImgStr) < 0)
+			Err_NotEnoughMemoryExit ();
+		     free (ImgStr);
+		     free (CaptionStr);
+		     (*Link)->NickAnchor[2].Len = strlen ((*Link)->NickAnchor[2].Str);
 
-		  /***** Compute number of bytes added until here *****/
-		  (*Link)->LengthAddedUpToHere  = (*Link)->Prev ? (*Link)->Prev->LengthAddedUpToHere  :
-								  0;
-		  (*Link)->LengthAddedUpToHere  += (*Link)->NickAnchor[0].Len +
-						   (*Link)->URLorNick.Len +
-						   (*Link)->NickAnchor[1].Len +
-						   (*Link)->NickAnchor[2].Len;
+		     /***** Compute number of bytes added until here *****/
+		     (*Link)->LengthAddedUpToHere  = (*Link)->Prev ? (*Link)->Prev->LengthAddedUpToHere  :
+								     0;
+		     (*Link)->LengthAddedUpToHere  += (*Link)->NickAnchor[0].Len +
+						      (*Link)->URLorNick.Len +
+						      (*Link)->NickAnchor[1].Len +
+						      (*Link)->NickAnchor[2].Len;
 
-		  /***** Create next link *****/
-		  ALn_CreateNextLink (Link,LastLink);
-		 }
+		     /***** Create next link *****/
+		     ALn_CreateNextLink (Link,LastLink);
+		    }
+
+	       /***** Free memory used for user's data *****/
+	       Usr_UsrDataDestructor (&UsrDat);
 	      }
 	   }
 

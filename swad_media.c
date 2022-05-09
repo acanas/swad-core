@@ -249,6 +249,13 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
    unsigned NumRows;
    size_t Length;
 
+   /***** Trivial check: media code should be > 0 *****/
+   if (Media->MedCod <= 0)
+     {
+      Med_ResetMedia (Media);
+      return;
+     }
+
    /***** Get data of a media from database *****/
    NumRows = Med_DB_GetMediaDataByCod (&mysql_res,Media->MedCod);
 

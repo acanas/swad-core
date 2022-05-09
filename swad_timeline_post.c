@@ -77,11 +77,11 @@ void TmlPst_GetAndWritePost (long PstCod)
    /***** Initialize media *****/
    Med_MediaConstructor (&Content.Media);
 
-   /***** Get post content from database *****/
-   TmlPst_GetPostContent (PstCod,&Content);
+      /***** Get post content from database *****/
+      TmlPst_GetPostContent (PstCod,&Content);
 
-   /***** Show post content *****/
-   TmlPst_ShowPostContent (&Content);
+      /***** Show post content *****/
+      TmlPst_ShowPostContent (&Content);
 
    /***** Free media *****/
    Med_MediaDestructor (&Content.Media);
@@ -114,7 +114,10 @@ static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content)
       Med_GetMediaDataByCod (&Content->Media);
      }
    else
+     {
       Content->Txt[0] = '\0';
+      Med_ResetMedia (&Content->Media);
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -126,11 +129,14 @@ static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content)
 
 static void TmlPst_ShowPostContent (struct TmlPst_Content *Content)
   {
+   /***** Trivial check *****/
+   if (Content == NULL)
+      Err_ShowErrorAndExit ("Wrong content.");
+
    /***** Write content text *****/
    if (Content->Txt[0])
      {
-      HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",
-                     The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_GetSuffix ());
 	 Msg_WriteMsgContent (Content->Txt,true,false);
       HTM_DIV_End ();
      }
