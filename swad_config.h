@@ -242,6 +242,10 @@
 /* Email */
 #define Cfg_AUTOMATIC_EMAIL_PASSWORD	DONT_PUBLISH_SMTP_PASSWORD	// Email user's password for automatic emails
 
+/* SWADroid */
+#define Cfg_SWADROID_URL		"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid"
+#define Cfg_SWADROID_ICO		"SWADroid300x650.png"
+
 /* About SWAD */
 #define Cfg_ABOUT_SWAD_URL		"https://github.com/acanas/swad-core/wiki/UserGuide.en"
 

@@ -110,7 +110,7 @@ a:link, a:visited, a:active
 	}
 a:hover						/* Default ==> underlined */
 	{
-	text-decoration:underline;
+	text-decoration:underline; opacity:1;
 	}
 
 /****************** Layout (the whole page with a background) ****************/
@@ -1673,7 +1673,6 @@ a:hover img.CENTER_PHOTO_SHOW
 .BT_LINK:hover
 	{
 	cursor:pointer;
-	/* text-decoration:underline; */
 	}
 
 /****************************** Course program *******************************/
@@ -3933,18 +3932,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /************************************* Log ***********************************/
-.LOG
-	{
-	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	font-size:11pt;
-	color:#404040;
-	}
-.LOG_R
-	{
-	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	font-size:11pt;
-	color:red;
-	}
+.LOG_WHITE,
+.LOG_GREY,
+.LOG_PURPLE,
+.LOG_BLUE,
+.LOG_YELLOW,
+.LOG_PINK	{color:#404040; font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size:11pt;}
+.LOG_DARK	{color:#d0d0d0; font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size:11pt;}
+
+.LOG_R_WHITE,
+.LOG_R_GREY,
+.LOG_R_PURPLE,
+.LOG_R_BLUE,
+.LOG_R_YELLOW,
+.LOG_R_PINK	{color:#660000; font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size:11pt;}
+.LOG_R_DARK	{color:#ff8080; font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; font-size:11pt;}
 
 /***************************** Exam announcement *****************************/
 /* Bottom space is used for signatures */

@@ -1159,10 +1159,10 @@ static void Lay_ShowRightColumn (void)
      {
       /***** SWADroid advertisement *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	 HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-		      " target=\"_blank\" title=\"%s\"",
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\"",
+		      Cfg_SWADROID_URL,
 		      Txt_If_you_have_an_Android_device_try_SWADroid);
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid300x650.png","SWADroid",
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,NULL,
 		     "class=\"SWADROID\"");
 	 HTM_A_End ();
       HTM_DIV_End ();

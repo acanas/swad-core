@@ -1326,13 +1326,13 @@ const char *Txt_all_degrees =
 #if   L==1	// ca
 	"Totes les titulacions";
 #elif L==2	// de
-	"all degrees";			// Need Übersetzung
+	"alle Abschl&uuml;sse";
 #elif L==3	// en
 	"all degrees";
 #elif L==4	// es
 	"todas las titulaciones";
 #elif L==5	// fr
-	"tous les degr&eacute;s";
+	"tous les &eacute;tudes";
 #elif L==6	// gn
 	"todas las titulaciones";	// Okoteve traducción
 #elif L==7	// it
@@ -5129,7 +5129,7 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" Vous serez alors en mesure de demander l'inscription &agrave; des mati&egrave;res."
 	" Si une mati&egrave;re ne existe pas,"
 	" vous pouvez le cr&eacute;er avant de demander l'inscription en elle"
-	" (la m&ecirc;me chose se applique aux institutions, centers et degr&eacute;s).";
+	" (la m&ecirc;me chose se applique aux institutions, centers et &eacute;tudes).";
 #elif L==6	// gn
 	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
 	" Ahora %s le solicitar&aacute; algunos datos para completar su perfil."
@@ -35572,7 +35572,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==4	// es
 	"administradores de titulaciones"
 #elif L==5	// fr
-	"administrateurs de degr&eacute;s"
+	"administrateurs d'&eacute;tudes"
 #elif L==6	// gn
 	"administradores de titulaciones"	// Okoteve traducción
 #elif L==7	// it
@@ -43749,13 +43749,13 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==4	// es
 	"igual para todas las titulaciones"
 #elif L==5	// fr
-	"same for all degrees"			// Besoin de traduction
+	"identique pour tous les &eacute;tudes"
 #elif L==6	// gn
 	"igual para todas las titulaciones"	// Okoteve traducción
 #elif L==7	// it
 	"uguale per tutte le lauree"
 #elif L==8	// pl
-	"same for all degrees"			// Potrzebujesz tlumaczenie
+	"to samo dla wszystkich stopni"
 #elif L==9	// pt
 	"mesmo para todos os graus"
 #endif
@@ -43807,42 +43807,42 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 	,
 	[Pho_PROPORTIONAL_TO_PERCENT] =
 #if   L==1	// ca
-	"porcentaje de estudiantes con fotograf&iacute;a"	// Necessita traduccio
+	"percentatge d'estudiants amb fotografia"
 #elif L==2	// de
-	"percentage of students with photo"			// Need Übersetzung
+	"Prozentsatz der Sch&uuml;ler mit Foto"
 #elif L==3	// en
 	"percentage of students with photo"
 #elif L==4	// es
 	"porcentaje de estudiantes con fotograf&iacute;a"
 #elif L==5	// fr
-	"percentage of students with photo"			// Besoin de traduction
+	"pourcentage d'&eacute;tudiants avec photo"
 #elif L==6	// gn
 	"porcentaje de estudiantes con fotograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	"percentuale di studenti con foto"
 #elif L==8	// pl
-	"percentage of students with photo"			// Potrzebujesz tlumaczenie
+	"odsetek uczni&oacute;w ze zdj&eogon;ciem"
 #elif L==9	// pt
 	"porcentagem de estudantes com foto"
 #endif
 	,
 	[Pho_UNIQUE_SIZE] =
 #if   L==1	// ca
-	"nombre de titulaci&oacute;n"	// Necessita traduccio
+	"nom de titulaci&oacute;"
 #elif L==2	// de
-	"degree name"			// Need Übersetzung
+	"Grad Name"
 #elif L==3	// en
 	"degree name"
 #elif L==4	// es
 	"nombre de titulaci&oacute;n"
 #elif L==5	// fr
-	"degree name"			// Besoin de traduction
+	"nom d'&eacute;tude"
 #elif L==6	// gn
 	"nombre de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	"nome laurea"
 #elif L==8	// pl
-	"degree name"			// Potrzebujesz tlumaczenie
+	"nazwa stopnia"
 #elif L==9	// pt
 	"nome do grau"
 #endif
@@ -43852,7 +43852,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 	{
 	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
-	"N.&ordm; total de clics"	// Necessita traduccio
+	"Nombre total de clics"
 #elif L==2	// de
 	"Gesamtzahl der Klicks"
 #elif L==3	// en
@@ -43866,14 +43866,14 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Numero totale di scatti"
 #elif L==8	// pl
-	"Total number of clicks"	// Potrzebujesz tlumaczenie
+	"Ca&lstrok;kowita liczba klikni&eogon;&cacute;"
 #elif L==9	// pt
 	"N&uacute;mero total de cliques"
 #endif
 	,
 	[Sta_DISTINCT_USRS] =
 #if   L==1	// ca
-	"N.&ordm; de usuarios distintos"		// Necessita traduccio
+	"Nombre d'usuaris diferents"
 #elif L==2	// de
 	"Anzahl der unterschiedlichen Benutzer"
 #elif L==3	// en
@@ -43887,14 +43887,14 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Numero di utenti distinti"
 #elif L==8	// pl
-	"Number of distinct users"		// Potrzebujesz tlumaczenie
+	"Liczba r&oacute;&zdot;nych u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
 	"N&uacute;mero de utilizadores diferentes"
 #endif
 	,
 	[Sta_CLICKS_PER_USR] =
 #if   L==1	// ca
-	"N.&ordm; de clics por usuario"		// Necessita traduccio
+	"Nombre de clics per usuari"
 #elif L==2	// de
 	"Anzahl der Klicks pro Benutzer"
 #elif L==3	// en
@@ -43908,14 +43908,14 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Numero di scatti per utente"
 #elif L==8	// pl
-	"Number of clicks per user"		// Potrzebujesz tlumaczenie
+	"Liczba klikni&eogon;&cacute; na u&zdot;ytkownika"
 #elif L==9	// pt
 	"N&uacute;mero de cliques por utilizador"
 #endif
 	,
 	[Sta_GENERATION_TIME] =
 #if   L==1	// ca
-	"Tiempo de generaci&oacute;n de p&aacute;gina"	// Necessita traduccio
+	"Temps de generaci&oacute; de p&agrave;gina"
 #elif L==2	// de
 	"Zeit zur Erzeugung der Seite"
 #elif L==3	// en
@@ -43929,14 +43929,14 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Tempo per generare pagina"
 #elif L==8	// pl
-	"Time to generate page"				// Potrzebujesz tlumaczenie
+	"Czas wygenerowa&cacute; stron&eogon;"
 #elif L==9	// pt
 	"Tempo para gerar p&aacute;gina"
 #endif
 	,
 	[Sta_SEND_TIME] =
 #if   L==1	// ca
-	"Tiempo de env&iacute;o de p&aacute;gina"	// Necessita traduccio
+	"Temps d'enviament de p&agrave;gina"
 #elif L==2	// de
 	"Zeit, um die Seite zu senden"
 #elif L==3	// en
@@ -43950,7 +43950,7 @@ const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"Tempo d'invio della pagina"
 #elif L==8	// pl
-	"Time to send page"				// Potrzebujesz tlumaczenie
+	"Czas wys&lstrok;a&cacute; stron&eogon;"
 #elif L==9	// pt
 	"Tempo para enviar a p&aacute;gina"
 #endif
@@ -43960,7 +43960,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 	{
 	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
-	"n&ordm; total de clics"	// Necessita traduccio
+	"nombre total de clics"
 #elif L==2	// de
 	"Gesamtzahl der Klicks"
 #elif L==3	// en
@@ -43974,14 +43974,14 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"numero totale di scatti"
 #elif L==8	// pl
-	"total number of clicks"	// Potrzebujesz tlumaczenie
+	"ca&lstrok;kowita liczba klikni&eogon;&cacute;"
 #elif L==9	// pt
 	"n&uacute;mero total de cliques"
 #endif
 	,
 	[Sta_DISTINCT_USRS] =
 #if   L==1	// ca
-	"n&ordm; de usuarios distintos"		// Necessita traduccio
+	"nombre d'usuaris diferents"
 #elif L==2	// de
 	"Anzahl der unterschiedliche Benutzer"
 #elif L==3	// en
@@ -43995,14 +43995,14 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"numero di utenti distinti"
 #elif L==8	// pl
-	"number of distinct users"		// Potrzebujesz tlumaczenie
+	"liczba r&oacute;&zdot;nych u&zdot;ytkownik&oacute;w"
 #elif L==9	// pt
 	"n&uacute;mero de utilizadores diferentes"
 #endif
 	,
  	[Sta_CLICKS_PER_USR] =
 #if   L==1	// ca
-	"n&ordm; de clics por usuario"		// Necessita traduccio
+	"nombre de clics per usuari"
 #elif L==2	// de
 	"Anzahl der Klicks pro Benutzer"
 #elif L==3	// en
@@ -44016,14 +44016,14 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"numero di scatti per utente"
 #elif L==8	// pl
-	"number of clicks per user"		// Potrzebujesz tlumaczenie
+	"liczba klikni&eogon;&cacute; na u&zdot;ytkownika"
 #elif L==9	// pt
 	"n&uacute;mero de cliques por utilizador"
 #endif
 	,
 	[Sta_GENERATION_TIME] =
 #if   L==1	// ca
-	"tiempo de generaci&oacute;n"		// Necessita traduccio
+	"temps de generaci&oacute;"
 #elif L==2	// de
 	"Zeit zur Erzeugung"
 #elif L==3	// en
@@ -44037,14 +44037,14 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"tempo per generare"
 #elif L==8	// pl
-	"time to generate"			// Potrzebujesz tlumaczenie
+	"czas na wygenerowanie"
 #elif L==9	// pt
 	"tempo para gerar"
 #endif
 	,
 	[Sta_SEND_TIME] =
 #if   L==1	// ca
-	"tiempo de env&iacute;o"	// Necessita traduccio
+	"temps d'enviament"
 #elif L==2	// de
 	"Zeit, um Seite"
 #elif L==3	// en
@@ -44058,7 +44058,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==7	// it
 	"tempo d'invio"
 #elif L==8	// pl
-	"time to send"			// Potrzebujesz tlumaczenie
+	"czas wys&lstrok;a&cacute;"
 #elif L==9	// pt
 	"Tempo para enviar"
 #endif
@@ -44187,7 +44187,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==7	// it
 	"Cartelle e file"
 #elif L==8	// pl
-	"Folders and files"		// Potrzebujesz tlumaczenie
+	"Foldery i pliki"
 #elif L==9	// pt
 	"Diret&oacute;rios e arquivos"
 #endif
@@ -51737,7 +51737,7 @@ const char *Txt_There_are_no_centers_with_requests_for_degrees_to_be_confirmed =
 	" pendientes de confirmar.";
 #elif L==5	// fr
 	"Il n'y a pas de centers"
-	" avec demandes de degr&eacute;s"
+	" avec demandes d'&eacute;tudes"
 	" &agrave; confirmer.";
 #elif L==6	// gn
 	"No hay centros"
@@ -51814,7 +51814,7 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 	" con solicitudes de asignaturas"
 	" pendientes de confirmar.";
 #elif L==5	// fr
-	"Il n'y a pas de degr&eacute;s"
+	"Il n'y a pas d'&eacute;tudes"
 	" avec demandes de cours"
 	" &agrave; confirmer.";
 #elif L==6	// gn

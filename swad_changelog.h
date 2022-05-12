@@ -606,12 +606,19 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.95.4 (2022-05-12)"
-#define CSS_FILE		"swad21.95.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.95.5 (2022-05-12)"
+#define CSS_FILE		"swad21.95.5.css"
 #define JS_FILE			"swad21.92.js"
 /*
-	Version 21.95.4:  May 12, 2022  SWADroid image updated. (323445 lines)
+	Version 21.95.5:  May 12, 2022  Some messages translated.
+				        Fixing design of dark theme. (? lines)
 Copy the following icons to icon public directory:
+sudo cp icon/y30x1.png /var/www/html/swad/icon/
+sudo cp icon/y30x30.png /var/www/html/swad/icon/
+sudo cp icon/y30x60.png /var/www/html/swad/icon/
+
+	Version 21.95.4:  May 12, 2022  SWADroid image updated. (323445 lines)
+Copy the following icon to icon public directory:
 sudo cp icon/SWADroid300x650.png /var/www/html/swad/icon/
 
 	Version 21.95.3:  May 09, 2022  Fixed bug inserting automatic links. Reported by Javier Fernández Baldomero and others. (323439 lines)
