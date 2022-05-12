@@ -616,7 +616,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_place_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -675,8 +675,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_place_X_has_not_changed,
-                          CurrentPlcName);
+                          Txt_The_name_X_has_not_changed,CurrentPlcName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -4070,7 +4070,7 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_You_can_not_leave_the_field_empty;
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_type_of_group_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
@@ -4116,8 +4116,7 @@ void Grp_RenameGroupType (void)
         {
 	 AlertType = Ale_INFO;
          snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_The_name_of_the_type_of_group_X_has_not_changed,
-                   NewNameGrpTyp);
+	           Txt_The_name_X_has_not_changed,NewNameGrpTyp);
         }
      }
    else
@@ -4143,7 +4142,7 @@ void Grp_RenameGroup (void)
    extern const char *Txt_You_can_not_leave_the_field_empty;
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_The_group_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_group_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    struct GroupData GrpDat;
    char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1];
    Ale_AlertType_t AlertType;
@@ -4197,7 +4196,7 @@ void Grp_RenameGroup (void)
         {
 	 AlertType = Ale_INFO;
          snprintf (AlertTxt,sizeof (AlertTxt),
-	           Txt_The_name_of_the_group_X_has_not_changed,NewNameGrp);
+	           Txt_The_name_X_has_not_changed,NewNameGrp);
         }
      }
 

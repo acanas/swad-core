@@ -1968,8 +1968,8 @@ void Crs_RenameCourseFull (void)
 void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_course_X_already_exists;
-   extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
-   extern const char *Txt_The_name_of_the_course_X_has_not_changed;
+   extern const char *Txt_The_course_X_has_been_renamed_as_Y;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -2021,7 +2021,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 
                /* Create alert to show the change made */
 	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-		                Txt_The_name_of_the_course_X_has_changed_to_Y,
+		                Txt_The_course_X_has_been_renamed_as_Y,
 				CurrentCrsName,NewCrsName);
 
                /* Change current course name in order to display it properly */
@@ -2030,8 +2030,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
            }
          else	// The same name
 	    Ale_CreateAlert (Ale_INFO,NULL,
-		             Txt_The_name_of_the_course_X_has_not_changed,
-                             CurrentCrsName);
+		             Txt_The_name_X_has_not_changed,CurrentCrsName);
         }
       else
          Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

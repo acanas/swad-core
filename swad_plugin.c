@@ -495,7 +495,7 @@ void Plg_RenamePlugin (void)
   {
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
 
    /***** Plugin constructor *****/
@@ -537,8 +537,7 @@ void Plg_RenamePlugin (void)
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_plugin_X_has_not_changed,
-                          Plg_EditingPlg->Name);
+                          Txt_The_name_X_has_not_changed,Plg_EditingPlg->Name);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

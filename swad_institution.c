@@ -1245,7 +1245,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_institution_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -1303,8 +1303,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_institution_X_has_not_changed,
-                          CurrentInsName);
+                          Txt_The_name_X_has_not_changed,CurrentInsName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

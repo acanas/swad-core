@@ -1271,7 +1271,7 @@ void Cty_RenameCountry (void)
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_The_name_of_the_country_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
    Lan_Language_t Language;
    char FieldName[4 + 1 + 2 + 1];	// Example: "Name_en"
@@ -1324,8 +1324,7 @@ void Cty_RenameCountry (void)
 	}
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_name_of_the_country_X_has_not_changed,
-		          Cty_EditingCty->Name[Language]);
+	                  Txt_The_name_X_has_not_changed,Cty_EditingCty->Name[Language]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -1356,8 +1356,8 @@ void Deg_RenameDegreeFull (void)
 void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_degree_X_already_exists;
-   extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
-   extern const char *Txt_The_name_of_the_degree_X_has_not_changed;
+   extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -1406,7 +1406,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_The_name_of_the_degree_X_has_changed_to_Y,
+        	             Txt_The_degree_X_has_been_renamed_as_Y,
                              CurrentDegName,NewDegName);
 
 	    /* Change current degree name in order to display it properly */
@@ -1415,8 +1415,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_degree_X_has_not_changed,
-                          CurrentDegName);
+                          Txt_The_name_X_has_not_changed,CurrentDegName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -1095,7 +1095,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_The_room_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_room_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -1156,8 +1156,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_room_X_has_not_changed,
-                          CurrentClaName);
+                          Txt_The_name_X_has_not_changed,CurrentClaName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

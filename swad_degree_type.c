@@ -813,7 +813,7 @@ void DegTyp_RenameDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    /***** Degree type constructor *****/
@@ -857,8 +857,7 @@ void DegTyp_RenameDegreeType (void)
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_type_of_degree_X_has_not_changed,
-                          NewNameDegTyp);
+                          Txt_The_name_X_has_not_changed,NewNameDegTyp);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

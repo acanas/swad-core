@@ -671,7 +671,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_department_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    size_t MaxBytes = 0;			// Initialized to avoid warning
@@ -729,8 +729,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_department_X_has_not_changed,
-                          CurrentDptName);
+                          Txt_The_name_X_has_not_changed,CurrentDptName);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

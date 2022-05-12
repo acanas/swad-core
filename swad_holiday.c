@@ -830,8 +830,8 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 
 void Hld_RenameHoliday (void)
   {
-   extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
-   extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
+   extern const char *Txt_The_holiday_X_has_been_renamed_as_Y;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
    /***** Holiday constructor *****/
@@ -863,13 +863,12 @@ void Hld_RenameHoliday (void)
 
 	 /***** Write message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_name_of_the_holiday_X_has_changed_to_Y,
+                          Txt_The_holiday_X_has_been_renamed_as_Y,
 		          Hld_EditingHld->Name,NewHldName);
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_of_the_holiday_X_has_not_changed,
-                          Hld_EditingHld->Name);
+                          Txt_The_name_X_has_not_changed,Hld_EditingHld->Name);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

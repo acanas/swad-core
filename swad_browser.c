@@ -7212,8 +7212,8 @@ void Brw_RecFolderFileBrowser (void)
 
 void Brw_RenFolderFileBrowser (void)
   {
-   extern const char *Txt_The_folder_name_X_has_changed_to_Y;
-   extern const char *Txt_The_folder_name_X_has_not_changed;
+   extern const char *Txt_The_folder_X_has_been_renamed_as_Y;
+   extern const char *Txt_The_name_X_has_not_changed;
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
    char OldPathInTree[PATH_MAX + 1 + NAME_MAX + 1];
@@ -7293,14 +7293,14 @@ void Brw_RenFolderFileBrowser (void)
         	                                     NewPathInTree);
 
                /* Write message of confirmation */
-               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_name_X_has_changed_to_Y,
+               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
                               Gbl.FileBrowser.FilFolLnk.Name,
                               Gbl.FileBrowser.NewFilFolLnkName);
               }
 
            }
          else	// Names are equal. This may happens if we have press INTRO without changing the name
-            Ale_ShowAlert (Ale_INFO,Txt_The_folder_name_X_has_not_changed,
+            Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
                            Gbl.FileBrowser.FilFolLnk.Name);
         }
       else	// Folder name not valid

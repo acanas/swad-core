@@ -11746,7 +11746,7 @@ const char *Txt_Enrolment_requests =
 
 const char *Txt_Enter_a_new_item_here =
 #if   L==1	// ca
-	"Escriba aqu&iacute; un nuevo apartado";	// Necessita traduccio
+	"Escriviu aqu&iacute; un nou apartat";
 #elif L==2	// de
 	"Neuen Eintrag hier eingeben";
 #elif L==3	// en
@@ -11809,15 +11809,15 @@ const char *Txt_Equation_centered =
 
 const char *Txt_Error_getting_data_from_a_recipient =
 #if   L==1	// ca
-	"Error obteniendo datos de un destinatario.";	// Necessita traduccio
+	"Error obtenint dades dun destinatari.";
 #elif L==2	// de
-	"Error getting data from a recipient.";		// Need Übersetzung
+	"Fehler beim Abrufen von Daten von einem Empf&auml;nger.";
 #elif L==3	// en
 	"Error getting data from a recipient.";
 #elif L==4	// es
 	"Error obteniendo datos de un destinatario.";
 #elif L==5	// fr
-	"Error getting data from a recipient.";		// Besoin de traduction
+	"Erreur lors de l'obtention des donn&eacute;es d'un destinataire.";
 #elif L==6	// gn
 	"Error obteniendo datos de un destinatario.";	// Okoteve traducción
 #elif L==7	// it
@@ -47218,6 +47218,27 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 	" para o grau <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2	// de
+	"The course <strong>%s</strong> has been renamed as <strong>%s</strong> .";		// Need Übersetzung
+#elif L==3	// en
+	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+#elif L==4	// es
+	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+#elif L==5	// fr
+	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+#elif L==6	// gn
+	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Il corso <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
+#elif L==8	// pl
+	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"A disciplina <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
+#endif
+
 const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La fecha de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
@@ -47330,6 +47351,27 @@ const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is 
 #elif L==9	// pt
 	"O grau <strong>%s</strong> foi movido"
 	" para o centro <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2	// de
+	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
+#elif L==3	// en
+	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+#elif L==4	// es
+	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+#elif L==5	// fr
+	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
+#elif L==6	// gn
+	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La laurea <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+#elif L==8	// pl
+	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"O grau <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -47881,46 +47923,25 @@ const char *Txt_The_folder_is_empty =
 	"O diret&oacute;rio est&aacute; vazio.";
 #endif
 
-const char *Txt_The_folder_name_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_The_folder_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"Se ha cambiado el nombre de la carpeta <strong>%s</strong> por <strong>%s</strong>.";	// Necessita traduccio
+	"La carpeta <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
 	"Das Verzeichnis <strong>%s</strong> wurde umbenannt in <strong>%s</strong>.";
 #elif L==3	// en
-	"The folder name <strong>%s</strong> has changed to <strong>%s</strong>.";
+	"The folder <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"Se ha cambiado el nombre de la carpeta <strong>%s</strong> por <strong>%s</strong>.";
+	"La carpeta <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The folder name <strong>%s</strong> has changed to <strong>%s</strong>.";		// Besoin de traduction
+	"The folder <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6	// gn
-	"Se ha cambiado el nombre de la carpeta <strong>%s</strong> por <strong>%s</strong>.";	// Okoteve traducción
+	"La carpeta <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";		// Okoteve traducción
 #elif L==7	// it
-	"Il nome della cartella <strong>%s</strong> &egrave; cambiato in <strong>%s</strong>.";
+	"La cartella <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The folder name <strong>%s</strong> has changed to <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"The folder <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"O nome da pasta <strong>%s</strong> foi alterado para <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_folder_name_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la carpeta <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"Der Name des Verzeichnisses <strong>%s</strong> wurde nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The folder name <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la carpeta <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The folder name <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la carpeta <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome della cartella <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The folder name <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome da pasta <strong>%s</strong> n&atilde;o foi alterado.";
+	"A pasta <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -48119,6 +48140,27 @@ const char *Txt_The_groups_will_not_automatically_open =
 	"The groups will not automatically open.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Os grupos n&atilde;o ser&atilde;o abertos automaticamente.";
+#endif
+
+const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1	// ca
+	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2	// de
+	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
+#elif L==3	// en
+	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+#elif L==4	// es
+	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+#elif L==5	// fr
+	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+#elif L==6	// gn
+	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La festivit&agrave; <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+#elif L==8	// pl
+	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"O feriado <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_HTML_file_has_been_received_successfully =
@@ -48862,424 +48904,25 @@ const char *Txt_The_message_has_been_sent_to_X_recipients =	// Warning: it is ve
 	"A mensagem foi enviada para %u destinat&aacute;rios.";
 #endif
 
-const char *Txt_The_name_of_the_banner_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_name_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nombre del banner <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
+	"El nom <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"The name of the banner <strong>%s</strong> has not changed.";	// Need Übersetzung
+	"Der Name <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
-	"The name of the banner <strong>%s</strong> has not changed.";
+	"The name <strong>%s</strong> has not changed.";
 #elif L==4	// es
-	"El nombre del banner <strong>%s</strong> no ha cambiado.";
+	"El nombre <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"The name of the banner <strong>%s</strong> has not changed.";	// Besoin de traduction
+	"Le nom <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
-	"El nombre del banner <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+	"El nombre <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome del banner <strong>%s</strong> non &egrave; cambiato.";
+	"Il nome <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8	// pl
-	"The name of the banner <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
+	"Nazwa <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
-	"O nome do banner <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_building_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nom de l'edifici <strong>%s</strong> no ha canviat.";
-#elif L==2	// de
-	"Der Name des Geb&auml;udes <strong>%s</strong> hat sich nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The name of the building <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del edificio <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"Le nom du b&acirc;timent <strong>%s</strong> n'a pas chang&eacute;.";
-#elif L==6	// gn
-	"El nombre del edificio <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome dell'edificio <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"Nazwa budynek <strong>%s</strong> nie uleg&lstrok;a zmianie.";
-#elif L==9	// pt
-	"O nome do edif&iacute;cio <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_center_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del centro <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the center <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the center <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del centro <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the center <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del centro <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del centro <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the center <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do centro <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_country_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del pa&iacute;s <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the country <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the country <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del pa&iacute;s <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the country <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del pa&iacute;s <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del paese <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the country <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do pa&iacute;s <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_course_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la asignatura <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the course <strong>%s</strong> has changed to <strong>%s</strong> .";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the course <strong>%s</strong> has changed to <strong>%s</strong>.";
-#elif L==4	// es
-	"El nombre de la asignatura <strong>%s</strong> ha cambiado a <strong>%s</strong>.";
-#elif L==5	// fr
-	"The name of the course <strong>%s</strong> has changed to <strong>%s</strong>.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la asignatura <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del corso <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
-#elif L==8	// pl
-	"The name of the course <strong>%s</strong> has changed to <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome da disciplina <strong>%s</strong> mudou para <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_name_of_the_course_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la asignatura <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the course <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the course <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la asignatura <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the course <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la asignatura <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del corso <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the course <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome da disciplina <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_degree_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the degree <strong>%s</strong> has changed to <strong>%s</strong>.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the degree <strong>%s</strong> has changed to <strong>%s</strong>.";
-#elif L==4	// es
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";
-#elif L==5	// fr
-	"The name of the degree <strong>%s</strong> has changed to <strong>%s</strong>.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome della laurea <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
-#elif L==8	// pl
-	"The name of the degree <strong>%s</strong> has changed to <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do grau <strong>%s</strong> mudou para <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_name_of_the_degree_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the degree <strong>%s</strong> has not changed.";			// Need Übersetzung
-#elif L==3	// en
-	"The name of the degree <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the degree <strong>%s</strong> has not changed.";			// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la titulaci&oacute;n <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome della laurea <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the degree <strong>%s</strong> has not changed.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do grau <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_department_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del departamento <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the department <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the department <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del departamento <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the department <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del departamento <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del dipartimento <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the department <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do departamento <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del campo <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the field <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the field <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del campo <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the field <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del campo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del campo <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the field <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do campo <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del grupo <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the group <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the group <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del grupo <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the group <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del grupo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del gruppo <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the group <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do grupo <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";
-#elif L==4	// es
-	"El nombre de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";
-#elif L==5	// fr
-	"The name of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome della festivit&agrave; <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
-#elif L==8	// pl
-	"The name of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do feriado <strong>%s</strong> foi alterado para <strong>%s</strong>.";
-#endif
-
-const char *Txt_The_name_of_the_holiday_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la festividad <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the holiday <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the holiday <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la festividad <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the holiday <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la festividad <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome della festivit&agrave; <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the holiday <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do feriado <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_institution_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre de la instituci&oacute;n <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the institution <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the institution <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la instituci&oacute;n <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the institution <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre de la instituci&oacute;n <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome dell'istituzione <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the institution <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome da institui&ccedil;&atilde;o <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_link_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del enlace <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the link <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the link <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del enlace <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the link <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del enlace <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del link <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the link <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do link <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_place_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nom del lloc <strong>%s</strong> no ha canviat.";
-#elif L==2	// de
-	"Der Name von Standort <strong>%s</strong> hat sich nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The name of the place <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del lugar <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"Le nom de l'emplacement <strong>%s</strong> n'a pas chang&eacute;.";
-#elif L==6	// gn
-	"El nombre del lugar <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del luogo <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"Nazwa miejsca <strong>%s</strong> nie uleg&lstrok;a zmianie.";
-#elif L==9	// pt
-	"O nome da localiza&ccedil;&atilde;o <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_plugin_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del complemento <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the plugin <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the plugin <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del complemento <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the plugin <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del complemento <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del plugin <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the plugin <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do plugin <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nom de la sala <strong>%s</strong> no ha canviat.";
-#elif L==2	// de
-	"Der Name des Raum <strong>%s</strong> hat sich nicht ge&auml;ndert.";
-#elif L==3	// en
-	"The name of the room <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre de la sala <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"Le nom de la salle <strong>%s</strong> n'a pas chang&eacute;.";
-#elif L==6	// gn
-	"El nombre de la sala <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome  della aula <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"Nazwa klasy <strong>%s</strong> nie uleg&lstrok;a zmianie.";
-#elif L==9	// pt
-	"O nome da sala <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del tipo de titulaci&oacute;n <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the type of degree <strong>%s</strong> has not changed.";		// Need Übersetzung
-#elif L==3	// en
-	"The name of the type of degree <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del tipo de titulaci&oacute;n <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the type of degree <strong>%s</strong> has not changed.";		// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del tipo de titulaci&oacute;n <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del tipo di laurea <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the type of degree <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do tipo de grau <strong>%s</strong> n&atilde;o foi alterado.";
-#endif
-
-const char *Txt_The_name_of_the_type_of_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El nombre del tipo de grupo <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
-#elif L==2	// de
-	"The name of the type of group <strong>%s</strong> has not changed.";	// Need Übersetzung
-#elif L==3	// en
-	"The name of the type of group <strong>%s</strong> has not changed.";
-#elif L==4	// es
-	"El nombre del tipo de grupo <strong>%s</strong> no ha cambiado.";
-#elif L==5	// fr
-	"The name of the type of group <strong>%s</strong> has not changed.";	// Besoin de traduction
-#elif L==6	// gn
-	"El nombre del tipo de grupo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il nome del tipo di gruppo <strong>%s</strong> non &egrave; cambiato.";
-#elif L==8	// pl
-	"The name of the type of group <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O nome do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
+	"O nome <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_new_application_key_is_X =	// Warning: it is very important to include %s in the following sentences

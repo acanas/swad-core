@@ -682,7 +682,7 @@ void Rec_RenameField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
    extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_name_of_the_field_X_has_not_changed;
+   extern const char *Txt_The_name_X_has_not_changed;
    char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1];
 
    /***** Get parameters of the form *****/
@@ -721,8 +721,7 @@ void Rec_RenameField (void)
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_field_X_has_not_changed,
-                        NewFieldName);
+         Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,NewFieldName);
      }
    else
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();
