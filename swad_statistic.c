@@ -392,7 +392,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_BR ();
 
 			   /***** Option b) Listing of detailed clicks to this course *****/
-			   HTM_LABEL_Begin (NULL);
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+			                    The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",false,
 					       "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_DETAILED,
@@ -406,7 +407,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 			   /* Number of rows per page */
 			   // To use getElementById in Firefox, it's necessary to have the id attribute
-			   HTM_LABEL_Begin (NULL);
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+			                    The_GetSuffix ());
 			      HTM_TxtF ("(%s: ",Txt_results_per_page);
 			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 						"id=\"RowsPage\" name=\"RowsPage\"%s",

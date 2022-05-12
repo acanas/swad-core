@@ -2217,7 +2217,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Link to course *****/
-		     HTM_TD_Begin ("LT DAT_%s",The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 
 			Crs_GetDataOfCourseByCod (&Crs);
 			Deg.DegCod = Crs.DegCod;
