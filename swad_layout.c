@@ -1162,8 +1162,8 @@ static void Lay_ShowRightColumn (void)
 	 HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 		      " target=\"_blank\" title=\"%s\"",
 		      Txt_If_you_have_an_Android_device_try_SWADroid);
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid120x200.png","SWADroid",
-		     "style=\"width:150px; height:250px;\"");
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid300x650.png","SWADroid",
+		     "class=\"SWADROID\"");
 	 HTM_A_End ();
       HTM_DIV_End ();
      }

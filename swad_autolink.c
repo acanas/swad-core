@@ -205,7 +205,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	 if ((Link->Type = ALn_CheckNickname (&PtrSrc,PrevCh,
 	                                      &Link,&LastLink)) == ALn_LINK_UNKNOWN)
 	    /* The next char is not the start of a URL or a nickname */
-	    if (*PtrSrc)	// If not end reached
+	    if (*PtrSrc)	// If the end has not been reached
 	      {
 	       PrevCh = *PtrSrc;
 	       PtrSrc++;
