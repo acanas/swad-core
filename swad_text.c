@@ -46503,7 +46503,7 @@ const char *Txt_The_banner_X_already_exists =	// Warning: it is very important t
 
 const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El banner <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El banner <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The Werbebanner <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
@@ -46545,7 +46545,7 @@ const char *Txt_The_building_X_already_exists =	// Warning: it is very important
 
 const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"L'edifici <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+	"L'edifici <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"Das Geb&auml;ude <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
@@ -46722,7 +46722,7 @@ const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: i
 
 const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El centre <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
@@ -47097,7 +47097,7 @@ const char *Txt_The_country_X_already_exists =	// Warning: it is very important 
 
 const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El pa&iacute;s <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El pa&iacute;s <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
@@ -47220,9 +47220,9 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 
 const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"L'assignatura <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The course <strong>%s</strong> has been renamed as <strong>%s</strong> .";		// Need Übersetzung
+	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
 	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
@@ -47355,7 +47355,7 @@ const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is 
 
 const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"La titulaci&oacute; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3	// en
@@ -47397,7 +47397,7 @@ const char *Txt_The_department_X_already_exists =	// Warning: it is very importa
 
 const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El departamento <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El departament <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
@@ -47580,7 +47580,7 @@ const char *Txt_The_email_domain_X_already_exists =
 
 const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El dominio de correo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El domini de correu <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3	// en
@@ -47925,7 +47925,7 @@ const char *Txt_The_folder_is_empty =
 
 const char *Txt_The_folder_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La carpeta <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"La carpeta <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"Das Verzeichnis <strong>%s</strong> wurde umbenannt in <strong>%s</strong>.";
 #elif L==3	// en
@@ -48018,7 +48018,7 @@ const char *Txt_The_group_X_already_exists =	// Warning: it is very important to
 
 const char *Txt_The_group_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El grupo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El grup <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
@@ -48144,7 +48144,7 @@ const char *Txt_The_groups_will_not_automatically_open =
 
 const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"La festivitat <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
@@ -48414,7 +48414,7 @@ const char *Txt_The_institution_X_already_exists =	// Warning: it is very import
 
 const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"La instituci&oacute; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3	// en
@@ -48600,7 +48600,7 @@ const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 
 const char *Txt_The_link_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El enlace <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"L'enlla&ccedil; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The link <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
@@ -49566,7 +49566,7 @@ const char *Txt_The_place_X_already_exists =	// Warning: it is very important to
 
 const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El lloc <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+	"El lloc <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"Der Standort <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
@@ -49650,7 +49650,7 @@ const char *Txt_The_plugin_X_already_exists =	// Warning: it is very important t
 
 const char *Txt_The_plugin_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El complemento <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El complement <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The plugin <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
@@ -49734,7 +49734,7 @@ const char *Txt_The_record_field_X_already_exists =	// Warning: it is very impor
 
 const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El campo de ficha <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El camp de fitxa <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The record field <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
@@ -49857,7 +49857,7 @@ const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it
 
 const char *Txt_The_room_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La sala <strong>%s</strong> ha passat a denominar-se <strong>%s</strong>.";
+	"La sala <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"Das Raum <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
@@ -50127,7 +50127,7 @@ const char *Txt_The_survey_has_been_modified =
 
 const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El descriptor <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El descriptor <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The tag <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3	// en
@@ -50295,7 +50295,7 @@ const char *Txt_The_type_of_degree_X_already_exists =	// Warning: it is very imp
 
 const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El tipo de titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El tipus de titulaci&oacute; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The type of degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3	// en
@@ -50358,7 +50358,7 @@ const char *Txt_The_type_of_group_X_already_exists =	// Warning: it is very impo
 
 const char *Txt_The_type_of_group_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El tipo de grupo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+	"El tipus de grup <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
 	"The type of group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
 #elif L==3	// en
