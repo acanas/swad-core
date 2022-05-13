@@ -3552,12 +3552,12 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_WriteLinkToDataProtectionClause (void)
   {
-   extern const char *Txt_DATA_PROTECTION_CLAUSE;
+   extern const char *Txt_DATA_PROTECTION_POLICY;
 
    HTM_DIV_Begin ("class=\"CM\"");
       HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
 		   Cfg_URL_DATA_PROTECTION_PUBLIC);
-	 HTM_Txt (Txt_DATA_PROTECTION_CLAUSE);
+	 HTM_Txt (Txt_DATA_PROTECTION_POLICY);
       HTM_A_End ();
    HTM_DIV_End ();
   }

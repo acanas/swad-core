@@ -99,7 +99,7 @@ const char *Txt_Country_NO_HTML =
 
 const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities like &egrave; here
 #if   L==1
-	"Confirmación de su dirección de correo";	// Necessita traduccio
+	"Confirmació de la vostra adreça de correu";
 #elif L==2
 	"Confirmation of your email";			// Need Übersetzung
 #elif L==3
@@ -235,14 +235,14 @@ const char *Txt_Go_to_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entitie
 
 const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML =	// Don't use HTML entities like &egrave; here
 #if   L==1
-	"Si usted acaba de solicitar desde %s"
-	" la confirmación de su correo %s,"
-	" pulse en el siguiente enlace"
-	" para confirmar dicha dirección:"
+	"Si vostè acaba de sol·licitar des de %s"
+	" la confirmació del seu correu %s,"
+	" premi al següent enllaç"
+	" per confirmar aquesta adreça:"
 	" %s/?act=%ld&key=%s\n\n"
-	"Si no ha sido usted, ¡no pulse en el enlace anterior!"
-	" En este caso, le recomendamos que compruebe en %s"
-	" si ha confirmado su dirección de correo.\n\n";	// Necessita traduccio
+	"Si no heu estat vostè, no feu clic a l'enllaç anterior!"
+	" En aquest cas, us recomanem que comproveu a %s"
+	" si heu confirmat la vostra adreça de correu.\n\n";
 #elif L==2
 	"If you just request from %s"
 	" the confirmation of your email %s,"
@@ -863,27 +863,6 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" que está no seu cartão de registro.\n\n";
 #endif
 
-const char *Txt_Unknown_or_without_photo =
-#if   L==1
-	"Desconocido/a o sin fotograf&iacute;a";	// Necessita traduccio
-#elif L==2
-	"Unknown or without photo";			// Need Übersetzung
-#elif L==3
-	"Unknown or without photo";
-#elif L==4
-	"Desconocido/a o sin fotograf&iacute;a";
-#elif L==5
-	"Unknown or without photo";			// Besoin de traduction
-#elif L==6
-	"Desconocido/a o sin fotograf&iacute;a";	// Okoteve traducción
-#elif L==7
-	"Sconosciuto/a o senza foto";
-#elif L==8
-	"Unknown or without photo";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"Desconhecido/a ou sem foto";
-#endif
-
 const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"%s: no s'ha pogut crear el fitxer.";
@@ -907,7 +886,7 @@ const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is ve
 
 const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 #if   L==1
-	"No puede crear archivos aquí.";	// Necessita traduccio
+	"No podeu crear fitxers aquí.";
 #elif L==2
 	"You can not create files here.";	// Need Übersetzung
 #elif L==3
@@ -928,7 +907,7 @@ const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 
 const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
 #if   L==1
-	"Debe especificar el archivo.";	// Necessita traduccio
+	"Heu d'especificar el fitxer.";
 #elif L==2
 	"Die Datei muss angegeben werden.";
 #elif L==3
@@ -949,7 +928,7 @@ const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
 
 const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: extensión no permitida.";		// Necessita traduccio
+	"%s: extensió no permesa.";
 #elif L==2
 	"%s: Endung nicht unterstützt.";
 #elif L==3
@@ -970,7 +949,7 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 
 const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: el archivo ya existe.";	// Necessita traduccio
+	"%s: l'arxiu ja existeix.";
 #elif L==2
 	"%s: file already exists.";	// Need Übersetzung
 #elif L==3
@@ -991,8 +970,8 @@ const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is ve
 
 const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
 #if   L==1
-	"Archivo demasiado grande (máximo %lu MiB) /"
-	" un altre problema d'enviament.";	// Necessita traduccio
+	"Arxiu massa gran (màxim %lu MB) /"
+	" altre problema d'enviament.";
 #elif L==2
 	"Datei zu groß (Maximum %lu MiB) /"
 	" ein weiteres Upload-Problem.";
@@ -1021,7 +1000,7 @@ const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: i
 
 const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"Nombre no válido.";	// Necessita traduccio
+	"Nom no vàlid.";
 #elif L==2
 	"Invalid name.";	// Need Übersetzung
 #elif L==3
@@ -1042,7 +1021,7 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 
 const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: nombre no válido.";	// Necessita traduccio
+	"%s: nom no vàlid.";
 #elif L==2
 	"%s: invalid name.";		// Need Übersetzung
 #elif L==3
@@ -1063,7 +1042,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very impo
 
 const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"%s: tipo MIME %s no permitido.";	// Necessita traduccio
+	"%s: tipus MIME %s no permès.";
 #elif L==2
 	"%s: MIME-Typ %s nicht unterstützt.";
 #elif L==3
@@ -1084,7 +1063,7 @@ const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it i
 
 const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: no HTML.";		// Necessita traduccio
+	"%s: no HTML.";
 #elif L==2
 	"%s: not HTML.";	// Need Übersetzung
 #elif L==3
@@ -1105,7 +1084,7 @@ const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very importan
 
 const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"%s: cuota excedida.";		// Necessita traduccio
+	"%s: quota excedida.";
 #elif L==2
 	"%s: Kontingent überschritten.";
 #elif L==3
@@ -1126,7 +1105,7 @@ const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very im
 
 const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
 #if   L==1
-	"Tiempo de subida demasiado largo (máximo %lu minutos).";	// Necessita traduccio
+	"Temps de pujada massa llarg (màxim %lu minuts).";
 #elif L==2
 	"Upload ist zu lang (Maximum %lu Minute).";
 #elif L==3

@@ -1258,7 +1258,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 			      NumUsrsEliminated);
 	       break;
 	   }
-      else                        // Only remove from course / groups
+      else                       	 // Only remove from course / groups
 	 switch (NumUsrsRemoved)
 	   {
 	    case 0:
