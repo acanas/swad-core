@@ -94,28 +94,28 @@ const char *Txt_Country_NO_HTML =
 #elif L==8
 	"Kraj";
 #elif L==9
-	"Pa&iacute;s";
+	"País";
 #endif
 
 const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities like &egrave; here
 #if   L==1
 	"Confirmació de la vostra adreça de correu";
 #elif L==2
-	"Confirmation of your email";			// Need Übersetzung
+	"Bestätigung Ihrer E-Mail";
 #elif L==3
 	"Confirmation of your email";
 #elif L==4
 	"Confirmación de su dirección de correo";
 #elif L==5
-	"Confirmation of your email";			// Besoin de traduction
+	"Confirmation de votre email";
 #elif L==6
 	"Confirmación de su dirección de correo";	// Okoteve traducción
 #elif L==7
-	"Confirmation of your email";			// Bisogno di traduzione
+	"Conferma della tua email";
 #elif L==8
-	"Confirmation of your email";			// Potrzebujesz tlumaczenie
+	"Potwierdzenie Twojego adresu e-mail";
 #elif L==9
-	"Confirmação do seu email.";
+	"Confirmação do seu email";
 #endif
 
 // The following variables are compilated together in all languages because they are used in emails...
@@ -888,19 +888,19 @@ const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 #if   L==1
 	"No podeu crear fitxers aquí.";
 #elif L==2
-	"You can not create files here.";	// Need Übersetzung
+	"Sie können hier keine Dateien erstellen.";
 #elif L==3
 	"You can not create files here.";
 #elif L==4
 	"No puede crear archivos aquí.";
 #elif L==5
-	"You can not create files here.";	// Besoin de traduction
+	"Vous ne pouvez pas créer de fichiers ici.";
 #elif L==6
 	"No puede crear archivos aquí.";	// Okoteve traducción
 #elif L==7
 	"Non puoi creare file qui.";
 #elif L==8
-	"You can not create files here.";	// Potrzebujesz tlumaczenie
+	"Nie mozesz tutaj tworzyc plików.";
 #elif L==9
 	"Você não pode criar arquivos aqui.";
 #endif
@@ -921,7 +921,7 @@ const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
 #elif L==7
 	"È necessario specificare il file.";
 #elif L==8
-	"You must specify the file.";	// Potrzebujesz tlumaczenie
+	"Musisz okreslic plik.";
 #elif L==9
 	"Você deve especificar o arquivo.";
 #endif
@@ -936,13 +936,13 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 #elif L==4
 	"%s: extensión no permitida.";
 #elif L==5
-	"%s: extension not allowed.";		// Besoin de traduction
+	"%s: extension non autorisée.";
 #elif L==6
 	"%s: extensión no permitida.";		// Okoteve traducción
 #elif L==7
 	"%s: estensione non permessa.";
 #elif L==8
-	"%s: extension not allowed.";		// Potrzebujesz tlumaczenie
+	"%s: rozszerzenie pliku jest niedozwolone.";
 #elif L==9
 	"%s: extensão não permitida.";
 #endif
@@ -951,19 +951,19 @@ const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is ve
 #if   L==1
 	"%s: l'arxiu ja existeix.";
 #elif L==2
-	"%s: file already exists.";	// Need Übersetzung
+	"%s: Die Datei existiert bereits.";
 #elif L==3
 	"%s: file already exists.";
 #elif L==4
 	"%s: el archivo ya existe.";
 #elif L==5
-	"%s: file already exists.";	// Besoin de traduction
+	"%s: le fichier existe déjà.";
 #elif L==6
 	"%s: el archivo ya existe.";	// Okoteve traducción
 #elif L==7
-	"%s: file already exists.";	// Bisogno di traduzione
+	"%s: il file esiste già.";
 #elif L==8
-	"%s: file already exists.";	// Potrzebujesz tlumaczenie
+	"%s: plik juz istnieje.";
 #elif L==9
 	"%s: o arquivo já existe.";
 #endif
@@ -1002,19 +1002,19 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 #if   L==1
 	"Nom no vàlid.";
 #elif L==2
-	"Invalid name.";	// Need Übersetzung
+	"Ungültiger Name.";
 #elif L==3
 	"Invalid name.";
 #elif L==4
 	"Nombre no válido.";
 #elif L==5
-	"Invalid name.";	// Besoin de traduction
+	"Nom incorrect.";
 #elif L==6
 	"Nombre no válido.";	// Okoteve traducción
 #elif L==7
 	"Nome non valido.";
 #elif L==8
-	"Invalid name.";	// Potrzebujesz tlumaczenie
+	"Bledna nazwa.";
 #elif L==9
 	"Nome inválido.";
 #endif
@@ -1023,19 +1023,19 @@ const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very impo
 #if   L==1
 	"%s: nom no vàlid.";
 #elif L==2
-	"%s: invalid name.";		// Need Übersetzung
+	"%s: ungültiger Name.";
 #elif L==3
 	"%s: invalid name.";
 #elif L==4
 	"%s: nombre no válido.";
 #elif L==5
-	"%s: invalid name.";		// Besoin de traduction
+	"%s: nom incorrect.";
 #elif L==6
 	"%s: nombre no válido.";	// Okoteve traducción
 #elif L==7
 	"%s: nome non valido.";
 #elif L==8
-	"%s: invalid name.";		// Potrzebujesz tlumaczenie
+	"%s: bledna nazwa.";
 #elif L==9
 	"%s: nome inválido.";
 #endif
@@ -1050,13 +1050,13 @@ const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it i
 #elif L==4
 	"%s: tipo MIME %s no permitido.";
 #elif L==5
-	"%s: MIME type %s not allowed.";	// Besoin de traduction
+	"%s: Type MIME %s non autorisé.";
 #elif L==6
 	"%s: tipo MIME %s no permitido.";	// Okoteve traducción
 #elif L==7
 	"%s: tipo MIME %s non consentito.";
 #elif L==8
-	"%s: MIME type %s not allowed.";	// Potrzebujesz tlumaczenie
+	"%s: Typ MIME %s jest niedozwolony.";
 #elif L==9
 	"%s: Tipo MIME %s não permitido.";
 #endif
@@ -1192,7 +1192,7 @@ const char *Txt_Users_NO_HTML =
 #elif L==5
 	"Utilisateurs";
 #elif L==6
-	"Puruh&aacute;ra";
+	"Puruhára";
 #elif L==7
 	"Utenti";
 #elif L==8

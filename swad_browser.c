@@ -7299,7 +7299,9 @@ void Brw_RenFolderFileBrowser (void)
               }
 
            }
-         else	// Names are equal. This may happens if we have press INTRO without changing the name
+         else	// Names are equal.
+	        // This may happens if we have press...
+		// ...INTRO without changing the name
             Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
                            Gbl.FileBrowser.FilFolLnk.Name);
         }
