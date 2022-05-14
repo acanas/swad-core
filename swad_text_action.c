@@ -39,128 +39,128 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	{
 	[ActAll] =
 #if   L==1	// ca
-	"Any action"			// Necessita traducció
+	"Qualsevol acci&oacute;"
 #elif L==2	// de
-	"Any action"			// Need Übersetzung
+	"Irgendeine Aktion"
 #elif L==3	// en
 	"Any action"
 #elif L==4	// es
 	"Cualquier acci&oacute;n"
 #elif L==5	// fr
-	"Any action"			// Besoin de traduction
+	"N'importe quelle action"
 #elif L==6	// gn
 	"Cualquier acci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Any action"			// Bisogno di traduzione
+	"Qualsiasi azione"
 #elif L==8	// pl
-	"Any action"			// Potrzebujesz tlumaczenie
+	"Wszelkie dzia&lstrok;ania"
 #elif L==9	// pt
-	"Any action"			// Precisa de tradução
+	"Qualquer a&ccedil;&atilde;o"
 #endif
 	,
 	[ActUnk] =
 #if   L==1	// ca
-	"Unknown action"		// Necessita traducció
+	"Acci&oacute; desconeguda"
 #elif L==2	// de
-	"Unknown action"		// Need Übersetzung
+	"Unbekannte Aktion"
 #elif L==3	// en
 	"Unknown action"
 #elif L==4	// es
 	"Acci&oacute;n desconocida"
 #elif L==5	// fr
-	"Unknown action"		// Besoin de traduction
+	"Action inconnue"
 #elif L==6	// gn
 	"Acci&oacute;n desconocida"	// Okoteve traducción
 #elif L==7	// it
-	"Unknown action"		// Bisogno di traduzione
+	"Azione sconosciuta"
 #elif L==8	// pl
-	"Unknown action"		// Potrzebujesz tlumaczenie
+	"Nieznane dzia&lstrok;anie"
 #elif L==9	// pt
-	"Unknown action"		// Precisa de tradução
+	"A&ccedil;&atilde;o desconhecida"
 #endif
 	,
 	[ActMnu] =
 #if   L==1	// ca
-	"Show menu"		// Necessita traducció
+	"Mostra men&uacute;"
 #elif L==2	// de
-	"Show menu"		// Need Übersetzung
+	"Zeige das Men&uuml;"
 #elif L==3	// en
 	"Show menu"
 #elif L==4	// es
 	"Mostrar men&uacute;"
 #elif L==5	// fr
-	"Show menu"		// Besoin de traduction
+	"Afficher le menu"
 #elif L==6	// gn
 	"Mostrar men&uacute;"	// Okoteve traducción
 #elif L==7	// it
-	"Show menu"		// Bisogno di traduzione
+	"Mostra menu"
 #elif L==8	// pl
-	"Show menu"		// Potrzebujesz tlumaczenie
+	"Poka&zdot; menu"
 #elif L==9	// pt
-	"Show menu"		// Precisa de tradução
+	"Mostrar menu"
 #endif
 	,
 	[ActRefCon] =
 #if   L==1	// ca
-	"Refresh notifications and connected"	// Necessita traducció
+	"Refrescar notificacions i connectats"
 #elif L==2	// de
-	"Refresh notifications and connected"	// Need Übersetzung
+	"Aktualisieren Benachrichtigungen und verbundenen"
 #elif L==3	// en
 	"Refresh notifications and connected"
 #elif L==4	// es
 	"Refrescar notificaciones y conectados"
 #elif L==5	// fr
-	"Refresh notifications and connected"	// Besoin de traduction
+	"Actualiser les notifications et connect&eacute;s"
 #elif L==6	// gn
 	"Refrescar notificaciones y conectados"	// Okoteve traducción
 #elif L==7	// it
-	"Refresh notifications and connected"	// Bisogno di traduzione
+	"Aggiornare le notifiche e gli connessi"
 #elif L==8	// pl
-	"Refresh notifications and connected"	// Potrzebujesz tlumaczenie
+	"Od&sacute;wie&zdot;y&cacute; powiadomienia i po&lstrok;&aogon;czy&cacute;"
 #elif L==9	// pt
-	"Refresh notifications and connected"	// Precisa de tradução
+	"Atualizar notifica&ccedil;&otilde;es e conectados"
 #endif
 	,
 	[ActWebSvc] =
 #if   L==1	// ca
-	"Web service (API function)"		// Necessita traducció
+	"Servei web (funci&oacute; API)"
 #elif L==2	// de
-	"Web service (API function)"		// Need Übersetzung
+	"Webservice (API-Funktion)"
 #elif L==3	// en
 	"Web service (API function)"
 #elif L==4	// es
 	"Servicio web (funci&oacute;n API)"
 #elif L==5	// fr
-	"Web service (API function)"		// Besoin de traduction
+	"Service Web (fonction API)"
 #elif L==6	// gn
 	"Servicio web (funci&oacute;n API)"	// Okoteve traducción
 #elif L==7	// it
-	"Web service (API function)"		// Bisogno di traduzione
+	"Servizio Web (funzione API)"
 #elif L==8	// pl
-	"Web service (API function)"		// Potrzebujesz tlumaczenie
+	"Serwis internetowy (funkcja API)"
 #elif L==9	// pt
-	"Web service (API function)"		// Precisa de tradução
+	"Servi&ccedil;o da Web (fun&ccedil;&atilde;o de API)"
 #endif
 	,
 	[ActFrmLogIn] =
 #if   L==1	// ca
-	"Landing page"			// Necessita traducció
+	"P&agrave;gina d'inici"
 #elif L==2	// de
-	"Landing page"			// Need Übersetzung
+	"Landingpage"
 #elif L==3	// en
 	"Landing page"
 #elif L==4	// es
 	"P&aacute;gina de inicio"
 #elif L==5	// fr
-	"Landing page"			// Besoin de traduction
+	"Page initiale"
 #elif L==6	// gn
 	"P&aacute;gina de inicio"	// Okoteve traducción
 #elif L==7	// it
-	"Landing page"			// Bisogno di traduzione
+	"Landing page"
 #elif L==8	// pl
-	"Landing page"			// Potrzebujesz tlumaczenie
+	"Landing page"
 #elif L==9	// pt
-	"Landing page"			// Precisa de tradução
+	"Landing page"
 #endif
 	,
 	[ActReqSch] =

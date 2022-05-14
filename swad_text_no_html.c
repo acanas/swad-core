@@ -233,7 +233,7 @@ const char *Txt_Go_to_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entitie
 	[Lan_LANGUAGE_PT     ] = "Ir para",
 	};
 
-const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML =	// Don't use HTML entities like &egrave; here
+const char *Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO_HTML =	// Don't use HTML entities like &egrave; here
 #if   L==1
 	"Si vostè acaba de sol·licitar des de %s"
 	" la confirmació del seu correu %s,"
@@ -244,16 +244,16 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" En aquest cas, us recomanem que comproveu a %s"
 	" si heu confirmat la vostra adreça de correu.\n\n";
 #elif L==2
-	"If you just request from %s"
-	" the confirmation of your email %s,"
-	" click on the following link"
-	" to confirm that direction:"
+	"Wenn Sie von %s die Bestätigung"
+	" Ihrer E-Mail %s angefordert haben,"
+	" klicken Sie auf den folgenden Link,"
+	" um diese Anweisung zu bestätigen:"
 	" %s/?act=%ld&key=%s\n\n"
-	"If it was not you, do not click on the link above!"
-	" In this case, we recommend that you check in %s"
-	" if you have confirmed your email address.\n\n";	// Need Übersetzung
+	"Wenn Sie es nicht waren, klicken Sie nicht auf den obigen Link!"
+	" In diesem Fall empfehlen wir Ihnen, in %s einzuchecken,"
+	" wenn Sie Ihre E-Mail-Adresse bestätigt haben.\n\n";
 #elif L==3
-	"If you just request from %s"
+	"If you have just requested from %s"
 	" the confirmation of your email %s,"
 	" click on the following link"
 	" to confirm that direction:"
@@ -271,14 +271,14 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" En este caso, le recomendamos que compruebe en %s"
 	" si ha confirmado su dirección de correo.\n\n";
 #elif L==5
-	"If you just request from %s"
-	" the confirmation of your email %s,"
-	" click on the following link"
-	" to confirm that direction:"
+	"Si vous avez demandé à %s"
+	" la confirmation de votre email %s,"
+	" cliquez sur le lien suivant"
+	" pour confirmer cette direction:"
 	" %s/?act=%ld&key=%s\n\n"
-	"If it was not you, do not click on the link above!"
-	" In this case, we recommend that you check in %s"
-	" if you have confirmed your email address.\n\n";	// Besoin de traduction
+	"Si ce n'était pas vous, ne cliquez pas sur le lien ci-dessus!"
+	" Dans ce cas, nous vous recommandons de vérifier dans %s"
+	" si vous avez confirmé votre adresse e-mail.\n\n";
 #elif L==6
 	"Si usted acaba de solicitar desde %s"
 	" la confirmación de su correo %s,"
@@ -289,23 +289,23 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" En este caso, le recomendamos que compruebe en %s"
 	" si ha confirmado su dirección de correo.\n\n";	// Okoteve traducción
 #elif L==7
-	"If you just request from %s"
-	" the confirmation of your email %s,"
-	" click on the following link"
-	" to confirm that direction:"
+	"Se hai appena richiesto a %s"
+	" la conferma della tua email %s,"
+	" clicca sul seguente link"
+	" per confermare quella direzione:"
 	" %s/?act=%ld&key=%s\n\n"
-	"If it was not you, do not click on the link above!"
-	" In this case, we recommend that you check in %s"
-	" if you have confirmed your email address.\n\n";	// Bisogno di traduzione
+	"Se non eri tu, non cliccare sul link qui sopra!"
+	" In questo caso, ti consigliamo di controllare in %s"
+	" se hai confermato il tuo indirizzo email.\n\n";
 #elif L==8
-	"If you just request from %s"
-	" the confirmation of your email %s,"
-	" click on the following link"
-	" to confirm that direction:"
+	"Jesli wlasnie zazadales od %s"
+	" potwierdzenia swojego e-maila %s,"
+	" kliknij ponizszy link,"
+	" aby potwierdzic ten kierunek:"
 	" %s/?act=%ld&key=%s\n\n"
-	"If it was not you, do not click on the link above!"
-	" In this case, we recommend that you check in %s"
-	" if you have confirmed your email address.\n\n";	// Potrzebujesz tlumaczenie
+	"Jesli to nie Ty, nie klikaj w powyzszy link!"
+	" W takim przypadku zalecamy sprawdzenie w %s,"
+	" jesli potwierdziles swój adres e-mail.\n\n";
 #elif L==9
 	"Se você acabou de solicitar de %s"
 	" a confirmação do seu email %s,"
@@ -1065,19 +1065,19 @@ const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very importan
 #if   L==1
 	"%s: no HTML.";
 #elif L==2
-	"%s: not HTML.";	// Need Übersetzung
+	"%s: nicht HTML.";
 #elif L==3
 	"%s: not HTML.";
 #elif L==4
-	"%s: no HTML.";		// Bisogno di traduzione
+	"%s: no HTML.";
 #elif L==5
-	"%s: not HTML.";	// Besoin de traduction
+	"%s: pas HTML.";
 #elif L==6
 	"%s: no HTML.";		// Okoteve traducción
 #elif L==7
-	"%s: not HTML.";
+	"%s: non HTML.";
 #elif L==8
-	"%s: not HTML.";	// Potrzebujesz tlumaczenie
+	"%s: nie HTML.";
 #elif L==9
 	"%s: não HTML.";
 #endif

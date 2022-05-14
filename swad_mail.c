@@ -1426,7 +1426,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
 
 bool Mai_SendMailMsgToConfirmEmail (void)
   {
-   extern const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML;
+   extern const char *Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
@@ -1450,7 +1450,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
 
    /* Message body */
    fprintf (FileMail,
-	    Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML,
+	    Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO_HTML,
 	    Cfg_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
             Cfg_URL_SWAD_CGI,Act_GetActCod (ActCnfMai),Gbl.UniqueNameEncrypted,
             Cfg_URL_SWAD_CGI);
