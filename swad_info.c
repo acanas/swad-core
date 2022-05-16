@@ -1915,8 +1915,7 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_The_ZIP_file_has_been_received_successfully;
    extern const char *Txt_The_ZIP_file_has_been_unzipped_successfully;
    extern const char *Txt_Found_an_index_html_file;
-   extern const char *Txt_Found_an_index_htm_file;
-   extern const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file;
+   extern const char *Txt_No_file_index_html_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
    struct Syl_Syllabus Syllabus;
    struct Param *Param;
@@ -2006,11 +2005,11 @@ void Inf_ReceivePagInfo (void)
 	          if (Fil_CheckIfPathExists (PathRelFileHTML))
                     {
                      Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-                     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_htm_file);
+                     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
                      FileIsOK = true;
                     }
 	          else
-                     Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_index_htm_found_within_the_ZIP_file);
+                     Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_found_within_the_ZIP_file);
 	         }
 	      }
             else
