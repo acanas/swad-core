@@ -1520,12 +1520,12 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	{
 	 /***** If name of course was in database... *****/
 	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-						  -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
+						     -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
 	                     Crs_EditingCrs->ShrtName);
 	 else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-	                                               -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
+	                                                  -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
 		             Crs_EditingCrs->FullName);
@@ -1878,13 +1878,13 @@ void Crs_ChangeCrsYear (void)
         {
          /***** If name of course was in database in the new year... *****/
          if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-                                                  -1L,Crs_EditingCrs->DegCod,NewYear))
+                                                     -1L,Crs_EditingCrs->DegCod,NewYear))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_course_X_already_exists_in_year_Y,
                              Crs_EditingCrs->ShrtName,
 			     Txt_YEAR_OF_DEGREE[NewYear]);
          else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-                                                       -1L,Crs_EditingCrs->DegCod,NewYear))
+                                                          -1L,Crs_EditingCrs->DegCod,NewYear))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_course_X_already_exists_in_year_Y,
                              Crs_EditingCrs->FullName,
@@ -2010,7 +2010,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
            {
             /***** If course was in database... *****/
             if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParamName,NewCrsName,Crs->CrsCod,
-                                                     Crs->DegCod,Crs->Year))
+                                                        Crs->DegCod,Crs->Year))
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 		                Txt_The_course_X_already_exists,
                                 NewCrsName);

@@ -165,128 +165,128 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqSch] =
 #if   L==1	// ca
-	"Request search"		// Necessita traducció
+	"Sol·licitar la recerca"
 #elif L==2	// de
-	"Request search"		// Need Übersetzung
+	"Suche anfordern"
 #elif L==3	// en
 	"Request search"
 #elif L==4	// es
 	"Solicitar b&uacute;squeda"
 #elif L==5	// fr
-	"Request search"		// Besoin de traduction
+	"Demander une recherche"
 #elif L==6	// gn
 	"Solicitar b&uacute;squeda"	// Okoteve traducción
 #elif L==7	// it
-	"Request search"		// Bisogno di traduzione
+	"Richiedere la ricerca"
 #elif L==8	// pl
-	"Request search"		// Potrzebujesz tlumaczenie
+	"Popro&sacute; o wyszukiwanie"
 #elif L==9	// pt
-	"Request search"		// Precisa de tradução
+	"Solicitar pesquisa"
 #endif
 	,
 	[ActSeeGblTL] =
 #if   L==1	// ca
-	"Show timeline global"		// Necessita traducció
+	"Mostrar timeline global"
 #elif L==2	// de
-	"Show timeline global"		// Need Übersetzung
+	"Globale Timeline anzeigen"
 #elif L==3	// en
-	"Show timeline global"
+	"Show global timeline"
 #elif L==4	// es
 	"Mostrar timeline global"
 #elif L==5	// fr
-	"Show timeline global"		// Besoin de traduction
+	"Afficher chronologie globale"
 #elif L==6	// gn
 	"Mostrar timeline global"	// Okoteve traducción
 #elif L==7	// it
-	"Show timeline global"		// Bisogno di traduzione
+	"Mostra timeline globale"
 #elif L==8	// pl
-	"Show timeline global"		// Potrzebujesz tlumaczenie
+	"Poka&zdot; globaln&aogon; timeline"
 #elif L==9	// pt
-	"Show timeline global"		// Precisa de tradução
+	"Mostrar timeline global"
 #endif
 	,
 	[ActSeeSocPrf] =
 #if   L==1	// ca
-	"Suggest list of users to follow"	// Necessita traducció
+	"Suggerir llista d'usuaris a seguir"
 #elif L==2	// de
-	"Suggest list of users to follow"	// Need Übersetzung
+	"Schlagen Sie eine Liste von Benutzern vor, denen Sie folgen m&ouml;chten"
 #elif L==3	// en
 	"Suggest list of users to follow"
 #elif L==4	// es
 	"Sugerir lista de usuarios a seguir"
 #elif L==5	// fr
-	"Suggest list of users to follow"	// Besoin de traduction
+	"Sugg&eacute;rer liste d'utilisateurs &agrave; suivre"
 #elif L==6	// gn
 	"Sugerir lista de usuarios a seguir"	// Okoteve traducción
 #elif L==7	// it
-	"Suggest list of users to follow"	// Bisogno di traduzione
+	"Suggerisci elenco di utenti da seguire"
 #elif L==8	// pl
-	"Suggest list of users to follow"	// Potrzebujesz tlumaczenie
+	"Zasugeruj list&eogon; u&zdot;ytkownik&oacute;w do obserwowania"
 #elif L==9	// pt
-	"Suggest list of users to follow"	// Precisa de tradução
+	"Sugerir lista de usu&aacute;rios a seguir"
 #endif
 	,
 	[ActSeeCal] =
 #if   L==1	// ca
-	"Show calendar"		// Necessita traducció
+	"Mostrar calendari"
 #elif L==2	// de
-	"Show calendar"		// Need Übersetzung
+	"Kalender zeigen"
 #elif L==3	// en
 	"Show calendar"
 #elif L==4	// es
 	"Mostrar calendario"
 #elif L==5	// fr
-	"Show calendar"		// Besoin de traduction
+	"Afficher le calendrier"
 #elif L==6	// gn
 	"Mostrar calendario"	// Okoteve traducción
 #elif L==7	// it
-	"Show calendar"		// Bisogno di traduzione
+	"Mostra il calendario"
 #elif L==8	// pl
-	"Show calendar"		// Potrzebujesz tlumaczenie
+	"Poka&zdot; kalendarz"
 #elif L==9	// pt
-	"Show calendar"		// Precisa de tradução
+	"Mostrar calend&aacute;rio"
 #endif
 	,
 	[ActSeeNtf] =
 #if   L==1	// ca
-	"Show notifications"		// Necessita traducció
+	"Mostrar notificacions"
 #elif L==2	// de
-	"Show notifications"		// Need Übersetzung
+	"Benachrichtigungen zeigen"
 #elif L==3	// en
 	"Show notifications"
 #elif L==4	// es
 	"Mostrar notificaciones"
 #elif L==5	// fr
-	"Show notifications"		// Besoin de traduction
+	"Afficher les notifications"
 #elif L==6	// gn
 	"Mostrar notificaciones"	// Okoteve traducción
 #elif L==7	// it
-	"Show notifications"		// Bisogno di traduzione
+	"Mostra notifiche"
 #elif L==8	// pl
-	"Show notifications"		// Potrzebujesz tlumaczenie
+	"Poka&zdot; powiadomienia"
 #elif L==9	// pt
-	"Show notifications"		// Precisa de tradução
+	"Mostrar notifica&ccedil;&otilde;es"
 #endif
 	,
 	[ActLogIn] =
 #if   L==1	// ca
-	"Authenticate user"	// Necessita traducció
+	"Autenticar usuari"
 #elif L==2	// de
-	"Authenticate user"	// Need Übersetzung
+	"Benutzer authentifizieren"
 #elif L==3	// en
 	"Authenticate user"
 #elif L==4	// es
 	"Autenticar usuario"
 #elif L==5	// fr
-	"Authenticate user"	// Besoin de traduction
+	"Authentifier l'utilisateur"
 #elif L==6	// gn
 	"Autenticar usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Authenticate user"	// Bisogno di traduzione
+	"Autenticare l'utente"
 #elif L==8	// pl
-	"Authenticate user"	// Potrzebujesz tlumaczenie
+	"Uwierzytelnij u&zdot;ytkownika"
 #elif L==9	// pt
-	"Authenticate user"	// Precisa de tradução
+	"Autenticar usu&aacute;rio"
 #endif
 	,
 	[ActLogInNew] =

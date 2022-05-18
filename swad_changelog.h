@@ -606,10 +606,13 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.96.3 (2022-05-16)"
+#define Log_PLATFORM_VERSION	"SWAD 21.96.6 (2022-05-18)"
 #define CSS_FILE		"swad21.95.5.css"
 #define JS_FILE			"swad21.92.js"
 /*
+	Version 21.96.6:  May 18, 2022  Some messages translated. (323156 lines)
+	Version 21.96.5:  May 17, 2022  Some messages translated. (323160 lines)
+	Version 21.96.4:  May 16, 2022  Some messages translated. (323159 lines)
 	Version 21.96.3:  May 16, 2022  Some messages translated. (323158 lines)
 	Version 21.96.2:  May 14, 2022  Some messages translated. (323169 lines)
 	Version 21.96.1:  May 14, 2022  Some messages translated. (323168 lines)
@@ -1842,7 +1845,7 @@ sudo cp icon/check-green.svg /var/www/html/swad/icon/
 	Version 19.248.1: May 30, 2020  Exam session results can not be marked as visible if end of time is not in the past. (302825 lines)
 	Version 19.248:   May 30, 2020  New API function getLastLocation. (302787 lines)
 	Version 19.247.1: May 29, 2020  Do not show exam results in hidden exams or hidden exam sessions. (302646 lines)
-	Version 19.247:   May 24, 2020  New API function sendMyCurrentLocation. (302622 lines)
+	Version 19.247:   May 25, 2020  New API function sendMyCurrentLocation. (302622 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS room_check_in (ChkCod INT NOT NULL AUTO_INCREMENT,UsrCod INT NOT NULL,RooCod INT NOT NULL,CheckInTime DATETIME NOT NULL,UNIQUE INDEX(ChkCod),INDEX(UsrCod,CheckInTime),INDEX(CheckInTime));
 					If you want to use MyISAM:
