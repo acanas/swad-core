@@ -8741,28 +8741,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  TmlNot_StoreAndPublishNote (Tml_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;

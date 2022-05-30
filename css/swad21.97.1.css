@@ -2788,21 +2788,25 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	border-top-style:solid;
 	border-width:1px;
+	border-color:#808080;
 	}
 .LINE_BOTTOM
 	{
 	border-bottom-style:solid;
 	border-width:1px;
+	border-color:#808080;
 	}
 .LINE_LEFT
 	{
 	border-left-style:solid;
 	border-width:1px;
+	border-color:#808080;
 	}
 .LINE_RIGHT
 	{
 	border-right-style:solid;
 	border-width:1px;
+	border-color:#808080;
 	}
 
 .DAT_SMALL_LIGHT_WHITE,
@@ -4167,7 +4171,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.Tml_COM_WIDTH		{width:220px;}	/* 460-240 */
 	.Tml_COM_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
 	.Tml_MED_INPUT_WIDTH	{width:160px;}	/* 400-240 */
-	.Tml_NOTE_FOOT_WIDTH	{width:260px;}	/* 500-240 */
+	.TmlNot_FOOT_WIDTH	{width:260px;}	/* 500-240 */
 	.Tml_COMM_FOOT_WIDTH	{width:220px;}	/* 460-240 */
 	.Tml_FAV_NOT_WIDTH	{width:120px;}	/* (480-240)/2 */
 	.Tml_SHA_NOT_WIDTH	{width:120px;}	/* (480-240)/2 */

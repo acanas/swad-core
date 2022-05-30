@@ -331,7 +331,7 @@ static long TmlPst_ReceivePost (void)
       PstCod = Tml_DB_CreateNewPost (&Content);
 
       /* Insert post in notes */
-      TmlNot_StoreAndPublishNoteInternal (Tml_NOTE_POST,PstCod,&Pub);
+      TmlNot_StoreAndPublishNoteInternal (TmlNot_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);

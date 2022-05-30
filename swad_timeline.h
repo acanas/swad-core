@@ -84,7 +84,7 @@ struct Tml_Timeline
    Tml_WhatToGet_t WhatToGet;
    struct
      {
-      struct TmlPub_Publication *Top;	// Points to first element in list of publications
+      struct TmlPub_Publication *Top;		// Points to first element in list of publications
       struct TmlPub_Publication *Bottom;	// Points to last  element in list of publications
      } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...

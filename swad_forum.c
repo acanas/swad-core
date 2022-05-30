@@ -2887,7 +2887,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         TmlNot_StoreAndPublishNote (Tml_NOTE_FORUM_POST,PstCod);
+         TmlNot_StoreAndPublishNote (TmlNot_FORUM_POST,PstCod);
          break;
       default:
 	 break;
@@ -2960,7 +2960,7 @@ void For_RemovePost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         Tml_DB_MarkNoteAsUnavailable (Tml_NOTE_FORUM_POST,Forums.PstCod);
+         Tml_DB_MarkNoteAsUnavailable (TmlNot_FORUM_POST,Forums.PstCod);
          break;
       default:
 	 break;

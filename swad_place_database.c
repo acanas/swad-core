@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 void Plc_DB_CreatePlace (const struct Plc_Place *Plc)
   {
    DB_QueryINSERT ("can not create place",
-		   "INSERT INTO places"
+		   "INSERT INTO plc_places"
 		   " (InsCod,ShortName,FullName)"
 		   " VALUES"
 		   " (%ld,'%s','%s')",

@@ -358,7 +358,7 @@ void Cfe_ReceiveCallForExam2 (void)
       Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new call for exam *****/
-   TmlNot_StoreAndPublishNote (Tml_NOTE_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
+   TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -457,7 +457,7 @@ void Cfe_RemoveCallForExam1 (void)
    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_CALL_FOR_EXAM,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   Tml_DB_MarkNoteAsUnavailable (Tml_NOTE_CALL_FOR_EXAM,ExaCod);
+   Tml_DB_MarkNoteAsUnavailable (TmlNot_CALL_FOR_EXAM,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

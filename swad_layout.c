@@ -154,7 +154,10 @@ void Lay_WriteStartOfPage (void)
    /***** Write start of HTML code *****/
    // WARNING: It is necessary to comment the line 'AddDefaultCharset UTF8'
    // in httpd.conf to enable meta tag
-   HTM_TxtF ("<html lang=\"%s\">\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+   HTM_TxtF ("<html lang=\"%s\" style=\"color-scheme:%s\">\n",
+             Lan_STR_LANG_ID[Gbl.Prefs.Language],
+             Gbl.Prefs.Theme == The_THEME_DARK ? "dark" :
+        	                                 "light");
    HTM_Txt ("<head>\n"
             "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
             "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
@@ -1561,8 +1564,8 @@ void Lay_AdvertisementMobile (void)
 		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
 		  HTM_BR ();
 		  HTM_BR ();
-		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,
-			   "style=\"width:250px; height:375px;\"");
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,Txt_Stay_connected_with_SWADroid,
+		           "class=\"SWADROID\"");
 	       HTM_A_End ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();

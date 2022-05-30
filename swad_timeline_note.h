@@ -38,27 +38,27 @@
 // it is necessary to change old numbers to new ones in database table tml_notes
 typedef enum
   {
-   Tml_NOTE_UNKNOWN		=  0,
+   TmlNot_UNKNOWN		=  0,
    /* Start tab */
-   Tml_NOTE_POST		= 10,	// Post written directly in timeline
+   TmlNot_POST			= 10,	// Post written directly in timeline
    /* Institution tab */
-   Tml_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
-   Tml_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
+   TmlNot_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
+   TmlNot_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
    /* Center tab */
-   Tml_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of center
-   Tml_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of center
+   TmlNot_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of center
+   TmlNot_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of center
    /* Degree tab */
-   Tml_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
-   Tml_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
+   TmlNot_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
+   TmlNot_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
    /* Course tab */
-   Tml_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
-   Tml_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
+   TmlNot_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
+   TmlNot_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
    /* Assessment tab */
-   Tml_NOTE_CALL_FOR_EXAM	=  9,	// Call for exam in a course
+   TmlNot_CALL_FOR_EXAM		=  9,	// Call for exam in a course
    /* Users tab */
    /* Messages tab */
-   Tml_NOTE_NOTICE		= 12,	// A public notice in a course
-   Tml_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
+   TmlNot_NOTICE		= 12,	// A public notice in a course
+   TmlNot_FORUM_POST		= 11,	// Post in global/swad forums
    /* Analytics tab */
    /* Profile tab */
   } TmlNot_Type_t;
@@ -73,7 +73,7 @@ struct TmlNot_Note
 			// (institution/center/degree/course)
    long Cod;		// Code of file, forum post,
 			// notice, timeline post...
-   bool Unavailable;	// File, forum post, notice,...
+   bool Unavailable;	// File, forum post, notice...
 			// unavailable (removed)
    time_t DateTimeUTC;	// Date-time of publication in UTC time
    unsigned NumShared;	// Number of times (users)
@@ -87,22 +87,22 @@ struct TmlNot_Note
 /*****************************************************************************/
 
 void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
-                                  struct TmlNot_Note *Not);
+                                 struct TmlNot_Note *Not);
 
 void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
-	                                  const struct TmlNot_Note *Not,
-                                          Tml_TopMessage_t TopMessage,
-                                          long PublisherCod);
+	                                 const struct TmlNot_Note *Not,
+                                         Tml_TopMessage_t TopMessage,
+                                         long PublisherCod);
 void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
 void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
-                              const char *Class);
+                             const char *Class);
 
 void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
-                             char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
+                            char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 
 void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod);
 void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
-                                          struct TmlPub_Publication *Pub);
+                                         struct TmlPub_Publication *Pub);
 void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path);
 void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 

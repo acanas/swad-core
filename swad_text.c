@@ -52342,7 +52342,7 @@ const char *Txt_TIMELINE_Not_shared_by_anyone =	// No shared
 
 const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	{
-	[Tml_NOTE_UNKNOWN] =
+	[TmlNot_UNKNOWN] =
 #if   L==1	// ca
 	"Esdeveniment desconegut"
 #elif L==2	// de
@@ -52363,7 +52363,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Evento desconhecido"
 #endif
 	,
-	[Tml_NOTE_INS_DOC_PUB_FILE] =
+	[TmlNot_INS_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
@@ -52384,7 +52384,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-	[Tml_NOTE_INS_SHA_PUB_FILE] =
+	[TmlNot_INS_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
@@ -52405,7 +52405,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-	[Tml_NOTE_CTR_DOC_PUB_FILE] =
+	[TmlNot_CTR_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (center)"
 #elif L==2	// de
@@ -52426,7 +52426,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (centro)"
 #endif
 	,
-	[Tml_NOTE_CTR_SHA_PUB_FILE] =
+	[TmlNot_CTR_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (center)"
 #elif L==2	// de
@@ -52447,7 +52447,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (centro)"
 #endif
 	,
-	[Tml_NOTE_DEG_DOC_PUB_FILE] =
+	[TmlNot_DEG_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
@@ -52468,7 +52468,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (grau)"
 #endif
 	,
-	[Tml_NOTE_DEG_SHA_PUB_FILE] =
+	[TmlNot_DEG_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
@@ -52489,7 +52489,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (grau)"
 #endif
 	,
-	[Tml_NOTE_CRS_DOC_PUB_FILE] =
+	[TmlNot_CRS_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (assignatura)"
 #elif L==2	// de
@@ -52510,7 +52510,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (disciplina)"
 #endif
 	,
-	[Tml_NOTE_CRS_SHA_PUB_FILE] =
+	[TmlNot_CRS_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (assignatura)"
 #elif L==2	// de
@@ -52531,7 +52531,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
 	,
-	[Tml_NOTE_CALL_FOR_EXAM] =
+	[TmlNot_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
@@ -52552,7 +52552,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Chamada para exame"
 #endif
 	,
-	[Tml_NOTE_POST] =
+	[TmlNot_POST] =
 #if   L==1	// ca
 	"Missatge social"
 #elif L==2	// de
@@ -52573,7 +52573,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Post sociais"
 #endif
 	,
-	[Tml_NOTE_FORUM_POST] =
+	[TmlNot_FORUM_POST] =
 #if   L==1	// ca
 	"Comentari en un f&ograve;rum"
 #elif L==2	// de
@@ -52594,7 +52594,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	"Post em um f&oacute;rum"
 #endif
 	,
-	[Tml_NOTE_NOTICE] =
+	[TmlNot_NOTICE] =
 #if   L==1	// ca
 	"Av&iacute;s"
 #elif L==2	// de

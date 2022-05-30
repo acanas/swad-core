@@ -617,7 +617,7 @@ void Tml_DB_RemoveAllPostsUsr (long UsrCod)
 		      " FROM tml_notes"
 	             " WHERE UsrCod=%ld"
 	               " AND NoteType=%u)",
-		   UsrCod,(unsigned) Tml_NOTE_POST);
+		   UsrCod,(unsigned) TmlNot_POST);
   }
 
 /*****************************************************************************/

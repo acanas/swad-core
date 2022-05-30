@@ -44,7 +44,7 @@
 /*****************************************************************************/
 
 static void TmlPub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
-                                           struct TmlPub_RangePubsToGet *RangePubsToGet);
+                                          struct TmlPub_RangePubsToGet *RangePubsToGet);
 
 static unsigned TmlPub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline);
 
@@ -195,7 +195,7 @@ void TmlPub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 /*****************************************************************************/
 
 static void TmlPub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
-                                           struct TmlPub_RangePubsToGet *RangePubsToGet)
+                                          struct TmlPub_RangePubsToGet *RangePubsToGet)
   {
    /*        tml_pubs
                _____  0

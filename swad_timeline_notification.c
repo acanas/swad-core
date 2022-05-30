@@ -124,7 +124,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 Not.NotCod = Pub.NotCod;
 	 TmlNot_GetDataOfNoteByCod (&Not);
 
-	 if (Not.Type == Tml_NOTE_POST)
+	 if (Not.Type == TmlNot_POST)
 	   {
 	    /***** Get post from database *****/
             if (Tml_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row

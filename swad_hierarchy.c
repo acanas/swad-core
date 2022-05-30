@@ -1270,7 +1270,7 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num)
   {
    /***** Write number *****/
-   HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
+   HTM_TD_Begin ("class=\"RM %s_%s\"",ClassTxt,The_GetSuffix ());
       if (Num >= 0)
 	 HTM_Unsigned ((unsigned) Num);
       else		// < 0 ==> do not show number

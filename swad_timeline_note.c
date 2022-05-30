@@ -60,14 +60,14 @@ extern struct Globals Gbl;
 
 static const TmlNot_Type_t TmlNot_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
   {
-   [Brw_ADMI_DOC_INS] = Tml_NOTE_INS_DOC_PUB_FILE,
-   [Brw_ADMI_SHR_INS] = Tml_NOTE_INS_SHA_PUB_FILE,
-   [Brw_ADMI_DOC_CTR] = Tml_NOTE_CTR_DOC_PUB_FILE,
-   [Brw_ADMI_SHR_CTR] = Tml_NOTE_CTR_SHA_PUB_FILE,
-   [Brw_ADMI_DOC_DEG] = Tml_NOTE_DEG_DOC_PUB_FILE,
-   [Brw_ADMI_SHR_DEG] = Tml_NOTE_DEG_SHA_PUB_FILE,
-   [Brw_ADMI_DOC_CRS] = Tml_NOTE_CRS_DOC_PUB_FILE,
-   [Brw_ADMI_SHR_CRS] = Tml_NOTE_CRS_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_INS] = TmlNot_INS_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_INS] = TmlNot_INS_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_CTR] = TmlNot_CTR_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_CTR] = TmlNot_CTR_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_DEG] = TmlNot_DEG_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_DEG] = TmlNot_DEG_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_CRS] = TmlNot_CRS_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_CRS] = TmlNot_CRS_SHA_PUB_FILE,
   };
 
 /*****************************************************************************/
@@ -173,9 +173,9 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 /*****************************************************************************/
 
 void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
-	                                  const struct TmlNot_Note *Not,
-                                          Tml_TopMessage_t TopMessage,
-                                          long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
+	                                 const struct TmlNot_Note *Not,
+                                         Tml_TopMessage_t TopMessage,
+                                         long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
   {
    /*
     ___________________________________________
@@ -206,7 +206,7 @@ void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
    /***** Trivial check: codes *****/
    if (Not->NotCod <= 0 ||
        Not->UsrCod <= 0 ||
-       Not->Type   == Tml_NOTE_UNKNOWN)
+       Not->Type   == TmlNot_UNKNOWN)
      {
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
       return;
@@ -371,7 +371,7 @@ void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
 
 static void TmlNot_WriteContent (const struct TmlNot_Note *Not)
   {
-   if (Not->Type == Tml_NOTE_POST)	// It's a post
+   if (Not->Type == TmlNot_POST)	// It's a post
       TmlPst_GetAndWritePost (Not->Cod);
    else					// Not a post
       TmlNot_GetAndWriteNoPost (Not);
@@ -431,33 +431,33 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
    /***** Get location in hierarchy *****/
    switch (Not->Type)
      {
-      case Tml_NOTE_INS_DOC_PUB_FILE:
-      case Tml_NOTE_INS_SHA_PUB_FILE:
+      case TmlNot_INS_DOC_PUB_FILE:
+      case TmlNot_INS_SHA_PUB_FILE:
 	 /* Get institution data */
 	 Hie->Ins.InsCod = Not->HieCod;
 	 Ins_GetDataOfInstitByCod (&Hie->Ins);
 	 break;
-      case Tml_NOTE_CTR_DOC_PUB_FILE:
-      case Tml_NOTE_CTR_SHA_PUB_FILE:
+      case TmlNot_CTR_DOC_PUB_FILE:
+      case TmlNot_CTR_SHA_PUB_FILE:
 	 /* Get center data */
 	 Hie->Ctr.CtrCod = Not->HieCod;
 	 Ctr_GetDataOfCenterByCod (&Hie->Ctr);
 	 break;
-      case Tml_NOTE_DEG_DOC_PUB_FILE:
-      case Tml_NOTE_DEG_SHA_PUB_FILE:
+      case TmlNot_DEG_DOC_PUB_FILE:
+      case TmlNot_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
 	 Hie->Deg.DegCod = Not->HieCod;
 	 Deg_GetDataOfDegreeByCod (&Hie->Deg);
 	 break;
-      case Tml_NOTE_CRS_DOC_PUB_FILE:
-      case Tml_NOTE_CRS_SHA_PUB_FILE:
-      case Tml_NOTE_CALL_FOR_EXAM:
-      case Tml_NOTE_NOTICE:
+      case TmlNot_CRS_DOC_PUB_FILE:
+      case TmlNot_CRS_SHA_PUB_FILE:
+      case TmlNot_CALL_FOR_EXAM:
+      case TmlNot_NOTICE:
 	 /* Get course data */
 	 Hie->Crs.CrsCod = Not->HieCod;
 	 Crs_GetDataOfCourseByCod (&Hie->Crs);
 	 break;
-      case Tml_NOTE_FORUM_POST:
+      case TmlNot_FORUM_POST:
 	 /* Get forum type of the post */
 	 For_GetForumTypeAndLocationOfAPost (Not->Cod,Forum);
 
@@ -489,37 +489,37 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
       /***** Write location *****/
       switch (Not->Type)
 	{
-	 case Tml_NOTE_INS_DOC_PUB_FILE:
-	 case Tml_NOTE_INS_SHA_PUB_FILE:
+	 case TmlNot_INS_DOC_PUB_FILE:
+	 case TmlNot_INS_SHA_PUB_FILE:
 	    /* Write location (institution) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Institution,
 	              Hie->Ins.ShrtName);
 	    break;
-	 case Tml_NOTE_CTR_DOC_PUB_FILE:
-	 case Tml_NOTE_CTR_SHA_PUB_FILE:
+	 case TmlNot_CTR_DOC_PUB_FILE:
+	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Center,
 	              Hie->Ctr.ShrtName);
 	    break;
-	 case Tml_NOTE_DEG_DOC_PUB_FILE:
-	 case Tml_NOTE_DEG_SHA_PUB_FILE:
+	 case TmlNot_DEG_DOC_PUB_FILE:
+	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Degree,
 	              Hie->Deg.ShrtName);
 	    break;
-	 case Tml_NOTE_CRS_DOC_PUB_FILE:
-	 case Tml_NOTE_CRS_SHA_PUB_FILE:
-	 case Tml_NOTE_CALL_FOR_EXAM:
-	 case Tml_NOTE_NOTICE:
+	 case TmlNot_CRS_DOC_PUB_FILE:
+	 case TmlNot_CRS_SHA_PUB_FILE:
+	 case TmlNot_CALL_FOR_EXAM:
+	 case TmlNot_NOTICE:
 	    /* Write location (course) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Course,
 	              Hie->Crs.ShrtName);
 	    break;
-	 case Tml_NOTE_FORUM_POST:
+	 case TmlNot_FORUM_POST:
 	    /* Write forum name */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Forum,
@@ -546,53 +546,53 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
    char *Anchor = NULL;
    static const Act_Action_t Tml_DefaultActions[Tml_NOT_NUM_NOTE_TYPES] =
      {
-      [Tml_NOTE_UNKNOWN          ] = ActUnk,
+      [TmlNot_UNKNOWN          ] = ActUnk,
       /* Start tab */
-      [Tml_NOTE_POST             ] = ActUnk,	// action not used
+      [TmlNot_POST             ] = ActUnk,	// action not used
       /* Institution tab */
-      [Tml_NOTE_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
-      [Tml_NOTE_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
+      [TmlNot_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
+      [TmlNot_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
       /* Center tab */
-      [Tml_NOTE_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
-      [Tml_NOTE_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
+      [TmlNot_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
+      [TmlNot_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
       /* Degree tab */
-      [Tml_NOTE_DEG_DOC_PUB_FILE ] = ActReqDatSeeDocDeg,
-      [Tml_NOTE_DEG_SHA_PUB_FILE ] = ActReqDatShaDeg,
+      [TmlNot_DEG_DOC_PUB_FILE ] = ActReqDatSeeDocDeg,
+      [TmlNot_DEG_SHA_PUB_FILE ] = ActReqDatShaDeg,
       /* Course tab */
-      [Tml_NOTE_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
-      [Tml_NOTE_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
+      [TmlNot_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
+      [TmlNot_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
       /* Assessment tab */
-      [Tml_NOTE_CALL_FOR_EXAM    ] = ActSeeOneCfe,
+      [TmlNot_CALL_FOR_EXAM    ] = ActSeeOneCfe,
       /* Users tab */
       /* Messages tab */
-      [Tml_NOTE_NOTICE           ] = ActSeeOneNot,
-      [Tml_NOTE_FORUM_POST       ] = ActSeeFor,
+      [TmlNot_NOTICE           ] = ActSeeOneNot,
+      [TmlNot_FORUM_POST       ] = ActSeeFor,
       /* Analytics tab */
       /* Profile tab */
      };
    static const char *Tml_Icons[Tml_NOT_NUM_NOTE_TYPES] =
      {
-      [Tml_NOTE_UNKNOWN          ] = NULL,
+      [TmlNot_UNKNOWN          ] = NULL,
       /* Start tab */
-      [Tml_NOTE_POST             ] = NULL,	// icon not used
+      [TmlNot_POST             ] = NULL,	// icon not used
       /* Institution tab */
-      [Tml_NOTE_INS_DOC_PUB_FILE ] = "file.svg",
-      [Tml_NOTE_INS_SHA_PUB_FILE ] = "file.svg",
+      [TmlNot_INS_DOC_PUB_FILE ] = "file.svg",
+      [TmlNot_INS_SHA_PUB_FILE ] = "file.svg",
       /* Center tab */
-      [Tml_NOTE_CTR_DOC_PUB_FILE ] = "file.svg",
-      [Tml_NOTE_CTR_SHA_PUB_FILE ] = "file.svg",
+      [TmlNot_CTR_DOC_PUB_FILE ] = "file.svg",
+      [TmlNot_CTR_SHA_PUB_FILE ] = "file.svg",
       /* Degree tab */
-      [Tml_NOTE_DEG_DOC_PUB_FILE ] = "file.svg",
-      [Tml_NOTE_DEG_SHA_PUB_FILE ] = "file.svg",
+      [TmlNot_DEG_DOC_PUB_FILE ] = "file.svg",
+      [TmlNot_DEG_SHA_PUB_FILE ] = "file.svg",
       /* Course tab */
-      [Tml_NOTE_CRS_DOC_PUB_FILE ] = "file.svg",
-      [Tml_NOTE_CRS_SHA_PUB_FILE ] = "file.svg",
+      [TmlNot_CRS_DOC_PUB_FILE ] = "file.svg",
+      [TmlNot_CRS_SHA_PUB_FILE ] = "file.svg",
       /* Assessment tab */
-      [Tml_NOTE_CALL_FOR_EXAM    ] = "bullhorn.svg",
+      [TmlNot_CALL_FOR_EXAM    ] = "bullhorn.svg",
       /* Users tab */
       /* Messages tab */
-      [Tml_NOTE_NOTICE           ] = "sticky-note.svg",
-      [Tml_NOTE_FORUM_POST       ] = "comments.svg",
+      [TmlNot_NOTICE           ] = "sticky-note.svg",
+      [TmlNot_FORUM_POST       ] = "comments.svg",
       /* Analytics tab */
       /* Profile tab */
      };
@@ -620,35 +620,35 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	 /***** Begin form with parameters depending on the type of note *****/
 	 switch (Not->Type)
 	   {
-	    case Tml_NOTE_INS_DOC_PUB_FILE:
-	    case Tml_NOTE_INS_SHA_PUB_FILE:
+	    case TmlNot_INS_DOC_PUB_FILE:
+	    case TmlNot_INS_SHA_PUB_FILE:
 	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 		     Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
 	       break;
-	    case Tml_NOTE_CTR_DOC_PUB_FILE:
-	    case Tml_NOTE_CTR_SHA_PUB_FILE:
+	    case TmlNot_CTR_DOC_PUB_FILE:
+	    case TmlNot_CTR_SHA_PUB_FILE:
 	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
 		     Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
 		  break;
-	    case Tml_NOTE_DEG_DOC_PUB_FILE:
-	    case Tml_NOTE_DEG_SHA_PUB_FILE:
+	    case TmlNot_DEG_DOC_PUB_FILE:
+	    case TmlNot_DEG_SHA_PUB_FILE:
 	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 		     Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
 	       break;
-	    case Tml_NOTE_CRS_DOC_PUB_FILE:
-	    case Tml_NOTE_CRS_SHA_PUB_FILE:
+	    case TmlNot_CRS_DOC_PUB_FILE:
+	    case TmlNot_CRS_SHA_PUB_FILE:
 	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
-	    case Tml_NOTE_CALL_FOR_EXAM:
+	    case TmlNot_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
 					  Anchor);	// Locate on this specific exam
@@ -657,9 +657,9 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
-	    case Tml_NOTE_POST:	// Not applicable
+	    case TmlNot_POST:	// Not applicable
 	       return;
-	    case Tml_NOTE_FORUM_POST:
+	    case TmlNot_FORUM_POST:
 	       Frm_BeginFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
 		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
 					       1,	// Page of posts   = first
@@ -671,7 +671,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
-	    case Tml_NOTE_NOTICE:
+	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
 					  Anchor);
@@ -717,28 +717,28 @@ void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
 
    switch (Not->Type)
      {
-      case Tml_NOTE_UNKNOWN:
+      case TmlNot_UNKNOWN:
           break;
-      case Tml_NOTE_INS_DOC_PUB_FILE:
-      case Tml_NOTE_INS_SHA_PUB_FILE:
-      case Tml_NOTE_CTR_DOC_PUB_FILE:
-      case Tml_NOTE_CTR_SHA_PUB_FILE:
-      case Tml_NOTE_DEG_DOC_PUB_FILE:
-      case Tml_NOTE_DEG_SHA_PUB_FILE:
-      case Tml_NOTE_CRS_DOC_PUB_FILE:
-      case Tml_NOTE_CRS_SHA_PUB_FILE:
+      case TmlNot_INS_DOC_PUB_FILE:
+      case TmlNot_INS_SHA_PUB_FILE:
+      case TmlNot_CTR_DOC_PUB_FILE:
+      case TmlNot_CTR_SHA_PUB_FILE:
+      case TmlNot_DEG_DOC_PUB_FILE:
+      case TmlNot_DEG_SHA_PUB_FILE:
+      case TmlNot_CRS_DOC_PUB_FILE:
+      case TmlNot_CRS_SHA_PUB_FILE:
 	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,false);
          break;
-      case Tml_NOTE_CALL_FOR_EXAM:
+      case TmlNot_CALL_FOR_EXAM:
          Cfe_GetSummaryAndContentCallForExam (SummaryStr,NULL,Not->Cod,false);
          break;
-      case Tml_NOTE_POST:
+      case TmlNot_POST:
 	 // Not applicable
          break;
-      case Tml_NOTE_FORUM_POST:
+      case TmlNot_FORUM_POST:
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,Not->Cod,false);
          break;
-      case Tml_NOTE_NOTICE:
+      case TmlNot_NOTICE:
          Not_GetSummaryAndContentNotice (SummaryStr,NULL,Not->Cod,false);
          break;
      }
@@ -890,22 +890,22 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 
    switch (NoteType)
      {
-      case Tml_NOTE_INS_DOC_PUB_FILE:
-      case Tml_NOTE_INS_SHA_PUB_FILE:
+      case TmlNot_INS_DOC_PUB_FILE:
+      case TmlNot_INS_SHA_PUB_FILE:
 	 HieCod = Gbl.Hierarchy.Ins.InsCod;
 	 break;
-      case Tml_NOTE_CTR_DOC_PUB_FILE:
-      case Tml_NOTE_CTR_SHA_PUB_FILE:
+      case TmlNot_CTR_DOC_PUB_FILE:
+      case TmlNot_CTR_SHA_PUB_FILE:
 	 HieCod = Gbl.Hierarchy.Ctr.CtrCod;
 	 break;
-      case Tml_NOTE_DEG_DOC_PUB_FILE:
-      case Tml_NOTE_DEG_SHA_PUB_FILE:
+      case TmlNot_DEG_DOC_PUB_FILE:
+      case TmlNot_DEG_SHA_PUB_FILE:
 	 HieCod = Gbl.Hierarchy.Deg.DegCod;
 	 break;
-      case Tml_NOTE_CRS_DOC_PUB_FILE:
-      case Tml_NOTE_CRS_SHA_PUB_FILE:
-      case Tml_NOTE_CALL_FOR_EXAM:
-      case Tml_NOTE_NOTICE:
+      case TmlNot_CRS_DOC_PUB_FILE:
+      case TmlNot_CRS_SHA_PUB_FILE:
+      case TmlNot_CALL_FOR_EXAM:
+      case TmlNot_NOTICE:
 	 HieCod = Gbl.Hierarchy.Crs.CrsCod;
 	 break;
       default:
@@ -1177,7 +1177,7 @@ static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove media associated to post *****/
-   if (Not->Type == Tml_NOTE_POST)
+   if (Not->Type == TmlNot_POST)
       if ((MedCod = Tml_DB_GetMedCodFromPost (Not->Cod)) > 0)
 	 Med_RemoveMedia (MedCod);
 
@@ -1199,7 +1199,7 @@ static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not)
    /***** Remove note *****/
    Tml_DB_RemoveNote (Not->NotCod);
 
-   if (Not->Type == Tml_NOTE_POST)
+   if (Not->Type == TmlNot_POST)
       /***** Remove post *****/
       Tml_DB_RemovePost (Not->Cod);
   }
@@ -1256,7 +1256,7 @@ static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str)
       if (UnsignedNum < Tml_NOT_NUM_NOTE_TYPES)
          return (TmlNot_Type_t) UnsignedNum;
 
-   return Tml_NOTE_UNKNOWN;
+   return TmlNot_UNKNOWN;
   }
 
 /*****************************************************************************/
@@ -1266,7 +1266,7 @@ static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str)
 static void TmlNot_ResetNote (struct TmlNot_Note *Not)
   {
    Not->NotCod      = -1L;
-   Not->Type        = Tml_NOTE_UNKNOWN;
+   Not->Type        = TmlNot_UNKNOWN;
    Not->UsrCod      = -1L;
    Not->HieCod      = -1L;
    Not->Cod         = -1L;
