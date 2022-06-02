@@ -2913,8 +2913,8 @@ static void Svy_GetDataOfQstFromRow (struct Svy_Question *SvyQst,
    /***** Get the answer type (row[2]) *****/
    SvyQst->AnswerType = Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
 
-   /***** Get the stem of the question from the database (row[2]) *****/
-   Str_Copy (Stem,row[2],Cns_MAX_BYTES_TEXT);
+   /***** Get the stem of the question from the database (row[3]) *****/
+   Str_Copy (Stem,row[3],Cns_MAX_BYTES_TEXT);
   }
 
 /*****************************************************************************/

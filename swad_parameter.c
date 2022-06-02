@@ -101,7 +101,7 @@ bool Par_GetQueryString (void)
      }
    else
      {
-      /***** PUSH method *****/
+      /***** POST method *****/
       /* Get content length */
       if (getenv ("CONTENT_LENGTH"))
 	{

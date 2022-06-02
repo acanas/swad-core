@@ -929,9 +929,10 @@ unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT QstInd,"	// row[0]
-			  "AnsType,"	// row[1]
-			  "Stem"	// row[2]
+		   "SELECT QstCod,"	// row[0]
+		          "QstInd,"	// row[1]
+		          "AnsType,"	// row[2]
+		          "Stem"	// row[3]
 		    " FROM svy_questions"
 		   " WHERE QstCod=%ld"
 		     " AND SvyCod=%ld",	// Extra check
