@@ -1069,12 +1069,6 @@ function readOldTimelineData () {
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 						timeline.appendChild(oldTimeline.firstChild);
-						
-					// There may be more publications
-					// Unhide icon to be hidden on click
-					document.getElementById('get_old_timeline').style.display = '';
-					// Hide icon to be shown on click
-					document.getElementById('getting_old_timeline').style.display = 'none';
 				}
 				else	// No old publications retrieved, so we have reached the oldest pub.
 						// Hide container with link to get old publications

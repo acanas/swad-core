@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.97.2 (2022-06-02)"
+#define Log_PLATFORM_VERSION	"SWAD 21.97.3 (2022-06-03)"
 #define CSS_FILE		"swad21.97.1.css"
-#define JS_FILE			"swad21.92.js"
+#define JS_FILE			"swad21.97.3.js"
 /*
+	Version 21.97.3:  Jun 07, 2022  Fixed bug in JavaScript when getting old timeline. (323163 lines)
 	Version 21.97.2:  Jun 02, 2022  Fixed bug in surveys. (323168 lines)
 	Version 21.97.1:  May 30, 2022  Fixing design of dark theme. (323166 lines)
 	Version 21.97:    May 25, 2022  Code refactoring in timeline. (? lines)
