@@ -397,8 +397,8 @@ void TmlPub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
 	            The_GetSuffix (),		// ...from JavaScript...
                     Not.NotCod);		// ...to avoid repeating notes
 	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					      TmlPub_GetTopMessage (Pub->Type),
-					      Pub->PublisherCod);
+					     TmlPub_GetTopMessage (Pub->Type),
+					     Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
@@ -425,8 +425,8 @@ void TmlPub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
       /* Write note */
       HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP\"");
 	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					      TmlPub_GetTopMessage (Pub->Type),
-					      Pub->PublisherCod);
+					     TmlPub_GetTopMessage (Pub->Type),
+					     Pub->PublisherCod);
       HTM_LI_End ();
      }
   }
