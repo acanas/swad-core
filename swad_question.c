@@ -2909,7 +2909,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question)
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
-   extern const char *Txt_You_must_type_the_stem_of_the_question;
+   extern const char *Txt_You_must_type_the_question_stem;
    extern const char *Txt_You_must_select_a_T_F_answer;
    extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
    extern const char *Txt_You_must_type_at_least_the_first_two_answers;
@@ -2936,7 +2936,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
    /***** A question must have a stem *****/
    if (!Question->Stem[0])
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_question_stem);
       return false;
      }
 

@@ -904,7 +904,7 @@ void Plg_ReceiveFormNewPlg (void)
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_Created_new_plugin_X;
    extern const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin;
-   extern const char *Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin;
+   extern const char *Txt_You_must_specify_the_name;
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -954,7 +954,7 @@ void Plg_ReceiveFormNewPlg (void)
      }
    else	// If there is not a plugin name
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
+	               Txt_You_must_specify_the_name);
   }
 
 /*****************************************************************************/

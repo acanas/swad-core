@@ -1542,7 +1542,6 @@ void Agd_RequestCreatOrEditEvent (void)
 
 void Agd_ReceiveFormEvent (void)
   {
-   extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
    struct Agd_Agenda Agenda;
@@ -1586,14 +1585,14 @@ void Agd_ReceiveFormEvent (void)
    if (!AgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Event[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new event or update an existing one *****/

@@ -1491,7 +1491,6 @@ static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
 static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
   {
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_game;
    bool NewGameIsCorrect;
 
    /***** Check if title is correct *****/
@@ -1509,7 +1508,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
    else	// If there is not a game title
      {
       NewGameIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    return NewGameIsCorrect;

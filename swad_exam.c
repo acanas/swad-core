@@ -1508,7 +1508,6 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
   {
    extern const char *Txt_Already_existed_an_exam_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_exam;
    bool NewExamIsCorrect;
 
    /***** Check if title is correct *****/
@@ -1527,7 +1526,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
    else	// If there is not an exam title
      {
       NewExamIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_exam);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    return NewExamIsCorrect;

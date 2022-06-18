@@ -86,5 +86,9 @@ void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void);
 void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
 void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void);
 void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void);
+void Ale_ShowAlertYouMustSpecifyTheTitle (void);
+void Ale_ShowAlertYouMustSpecifyTheWebAddress (void);
+void Ale_ShowAlertYouMustSpecifyTheName (void);
+void Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName (void);
 
 #endif

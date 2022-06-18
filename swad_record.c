@@ -427,7 +427,6 @@ static void Rec_WriteHeadingRecordFields (void)
 void Rec_ReceiveFormField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_record_field;
 
    /***** Get parameters from the form *****/
    /* Get the name of the field */
@@ -458,7 +457,7 @@ void Rec_ReceiveFormField (void)
          Rec_CreateRecordField ();
      }
    else		// If there is not name
-      Ale_ShowAlert (Ale_ERROR,Txt_You_must_specify_the_name_of_the_new_record_field);
+      Ale_ShowAlertYouMustSpecifyTheName ();
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();

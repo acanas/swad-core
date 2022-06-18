@@ -958,9 +958,8 @@ void Ban_ReceiveFormNewBanner (void)
   {
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
-   extern const char *Txt_You_must_specify_the_URL_of_the_new_banner;
+   extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_banner_X;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner;
    struct Ban_Banner Ban;
 
    /***** Reset banner *****/
@@ -996,7 +995,7 @@ void Ban_ReceiveFormNewBanner (void)
                           Txt_You_must_specify_the_image_of_the_new_banner);
       else if (!Ban.WWW[0])
          Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_URL_of_the_new_banner);
+                          Txt_You_must_specify_the_web_address);
       else	// Add new banner to database
         {
          Ban_DB_CreateBanner (&Ban);
@@ -1005,8 +1004,7 @@ void Ban_ReceiveFormNewBanner (void)
         }
      }
    else	// If there is not a banner name
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner);
+      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
 
    /***** Set editing banner to use ot in a posterior function *****/
    Ban_SetEditingBanner (&Ban);

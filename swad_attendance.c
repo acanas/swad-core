@@ -1196,7 +1196,6 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 void Att_ReceiveFormAttEvent (void)
   {
    extern const char *Txt_Already_existed_an_event_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
    struct Att_Event OldAtt;
@@ -1250,7 +1249,7 @@ void Att_ReceiveFormAttEvent (void)
    else	// If there is not an attendance event title
      {
       ReceivedAttEventIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new attendance event or update an existing one *****/

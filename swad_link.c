@@ -746,9 +746,8 @@ static void Lnk_PutHeadLinks (void)
 void Lnk_ReceiveFormNewLink (void)
   {
    extern const char *Txt_The_link_X_already_exists;
-   extern const char *Txt_You_must_specify_the_URL_of_the_new_link;
+   extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link;
 
    /***** Link constructor *****/
    Lnk_EditingLinkConstructor ();
@@ -777,7 +776,7 @@ void Lnk_ReceiveFormNewLink (void)
                           Lnk_EditingLnk->FullName);
       else if (!Lnk_EditingLnk->WWW[0])
          Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_URL_of_the_new_link);
+                          Txt_You_must_specify_the_web_address);
       else	// Add new link to database
         {
          Lnk_DB_CreateLink (Lnk_EditingLnk);
@@ -787,8 +786,7 @@ void Lnk_ReceiveFormNewLink (void)
         }
      }
    else	// If there is not a link name
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
+      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

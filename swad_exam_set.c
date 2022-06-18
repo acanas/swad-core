@@ -346,7 +346,6 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
                                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
    extern const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_set_of_questions;
    bool NewTitleIsCorrect;
 
    /***** Check if title is correct *****/
@@ -369,7 +368,7 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
    else	// If there is not a set title
      {
       NewTitleIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_set_of_questions);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    return NewTitleIsCorrect;

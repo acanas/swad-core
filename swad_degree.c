@@ -1089,8 +1089,6 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
-   extern const char *Txt_You_must_specify_the_web_address_of_the_new_degree;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree;
 
    /***** Get parameters from form *****/
    /* Set degree center */
@@ -1131,12 +1129,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 	   }
 	}
       else	// If there is not a degree logo or web
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_You_must_specify_the_web_address_of_the_new_degree);
+         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a degree name
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
+      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

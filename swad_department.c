@@ -911,8 +911,6 @@ void Dpt_ReceiveFormNewDpt (void)
   {
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;
-   extern const char *Txt_You_must_specify_the_web_address_of_the_new_department;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department;
 
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
@@ -953,12 +951,10 @@ void Dpt_ReceiveFormNewDpt (void)
            }
         }
       else	// If there is not a web
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_web_address_of_the_new_department);
+         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a department name
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
+      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

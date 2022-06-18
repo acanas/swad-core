@@ -502,3 +502,51 @@ void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void)
 
    Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_field_empty);
   }
+
+/*****************************************************************************/
+/********************* Create alert when title is empty **********************/
+/*****************************************************************************/
+
+void Ale_ShowAlertYouMustSpecifyTheTitle (void)
+  {
+   extern const char *Txt_You_must_specify_the_title;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_You_must_specify_the_title);
+  }
+
+/*****************************************************************************/
+/****************** Create alert when web address is empty *******************/
+/*****************************************************************************/
+
+void Ale_ShowAlertYouMustSpecifyTheWebAddress (void)
+  {
+   extern const char *Txt_You_must_specify_the_web_address;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_You_must_specify_the_web_address);
+  }
+
+/*****************************************************************************/
+/************ Create alert when short name or full name are empty ************/
+/*****************************************************************************/
+
+void Ale_ShowAlertYouMustSpecifyTheName (void)
+  {
+   extern const char *Txt_You_must_specify_the_name;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_You_must_specify_the_name);
+  }
+
+/*****************************************************************************/
+/************ Create alert when short name or full name are empty ************/
+/*****************************************************************************/
+
+void Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName (void)
+  {
+   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_You_must_specify_the_short_name_and_the_full_name);
+  }

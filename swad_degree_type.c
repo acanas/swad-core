@@ -654,7 +654,7 @@ void DegTyp_ReceiveFormNewDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_Created_new_type_of_degree_X;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree;
+   extern const char *Txt_You_must_specify_the_name;
 
    /***** Degree type constructor *****/
    DegTyp_EditingDegreeTypeConstructor ();
@@ -680,7 +680,7 @@ void DegTyp_ReceiveFormNewDegreeType (void)
      }
    else	// If there is not a degree type name
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_name_of_the_new_type_of_degree);
+	               Txt_You_must_specify_the_name);
   }
 
 /*****************************************************************************/

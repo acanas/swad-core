@@ -1987,7 +1987,6 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 void Svy_ReceiveFormSurvey (void)
   {
    extern const char *Txt_Already_existed_a_survey_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_survey;
    struct Svy_Surveys Surveys;
    struct Svy_Survey OldSvy;
    struct Svy_Survey NewSvy;
@@ -2102,7 +2101,7 @@ void Svy_ReceiveFormSurvey (void)
    else	// If there is not a survey title
      {
       NewSurveyIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_survey);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new survey or update an existing one *****/
@@ -2585,7 +2584,7 @@ static void Svy_FreeTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAn
 
 void Svy_ReceiveQst (void)
   {
-   extern const char *Txt_You_must_type_the_stem_of_the_question;
+   extern const char *Txt_You_must_type_the_question_stem;
    extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
    extern const char *Txt_You_must_type_at_least_the_first_two_answers;
    extern const char *Txt_The_survey_has_been_modified;
@@ -2672,7 +2671,7 @@ void Svy_ReceiveQst (void)
      }
    else
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_question_stem);
       Error = true;
      }
 

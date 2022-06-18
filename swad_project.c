@@ -3566,7 +3566,6 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 
 void Prj_ReceiveFormProject (void)
   {
-   extern const char *Txt_You_must_specify_the_title_of_the_project;
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
@@ -3638,7 +3637,7 @@ void Prj_ReceiveFormProject (void)
       if (!Prj.Title[0])	// If there is not a project title
 	{
 	 NewProjectIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_project);
+         Ale_ShowAlertYouMustSpecifyTheTitle ();
 	}
 
       /***** Create a new project or update an existing one *****/

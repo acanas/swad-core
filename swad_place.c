@@ -790,7 +790,6 @@ void Plc_ReceiveFormNewPlace (void)
   {
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place;
 
    /***** Place constructor *****/
    Plc_EditingPlaceConstructor ();
@@ -822,8 +821,7 @@ void Plc_ReceiveFormNewPlace (void)
         }
      }
    else	// If there is not a place name
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
+      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

@@ -1030,7 +1030,7 @@ static void Hld_PutHeadHolidays (void)
 void Hld_ReceiveFormNewHoliday (void)
   {
    extern const char *Txt_Created_new_holiday_X;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_holiday;
+   extern const char *Txt_You_must_specify_the_name;
 
    /***** Holiday constructor *****/
    Hld_EditingHolidayConstructor ();
@@ -1088,7 +1088,7 @@ void Hld_ReceiveFormNewHoliday (void)
    else	// If there is not a holiday name
       /* Error message */
       Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_must_specify_the_name_of_the_new_holiday);
+	               Txt_You_must_specify_the_name);
   }
 
 /*****************************************************************************/

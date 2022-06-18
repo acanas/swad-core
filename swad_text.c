@@ -48452,21 +48452,21 @@ const char *Txt_The_institution_of_the_center_has_changed =
 
 const char *Txt_The_institution_of_the_department_has_changed =
 #if   L==1	// ca
-	"La instituci&oacute;n del departamento ha cambiado.";	// Necessita traducció
+	"La instituci&oacute; del departament ha canviat.";
 #elif L==2	// de
-	"The institution of the department has changed.";	// Need Übersetzung
+	"Die Institution des Fachbereichs hat sich ge&auml;ndert.";
 #elif L==3	// en
 	"The institution of the department has changed.";
 #elif L==4	// es
 	"La instituci&oacute;n del departamento ha cambiado.";
 #elif L==5	// fr
-	"The institution of the department has changed.";	// Besoin de traduction
+	"L'institution du d&eacute;partement a chang&eacute;.";
 #elif L==6	// gn
 	"La instituci&oacute;n del departamento ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'istituzione del dipartimento &egrave; cambiata.";
 #elif L==8	// pl
-	"The institution of the department has changed.";	// Potrzebujesz tlumaczenie
+	"Zmieni&lstrok;a si&eogon; instytucja wydzia&lstrok;u.";
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o do departamento mudou.";
 #endif
@@ -48617,42 +48617,42 @@ const char *Txt_The_link_X_has_been_renamed_as_Y =	// Warning: it is very import
 
 const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"La lista de %u asignaturas es demasiado grande para mostrarla.";	// Necessita traducció
+	"La llista de %u assignatures &eacute;s massa gran per mostrar-se.";
 #elif L==2	// de
-	"The list of %u courses is too large to be displayed.";			// Need Übersetzung
+	"Die Liste mit %u Kursen ist zu gro&szlig;, um angezeigt zu werden.";
 #elif L==3	// en
 	"The list of %u courses is too large to be displayed.";
 #elif L==4	// es
 	"La lista de %u asignaturas es demasiado grande para mostrarla.";
 #elif L==5	// fr
-	"The list of %u courses is too large to be displayed.";			// Besoin de traduction
+	"La liste des %u mati&egrave;res est trop longue pour &ecirc;tre affich&eacute;e.";
 #elif L==6	// gn
 	"La lista de %u asignaturas es demasiado grande para mostrarla.";	// Okoteve traducción
 #elif L==7	// it
 	"La lista di %u corsi &egrave; troppo grande per essere mostrata.";
 #elif L==8	// pl
-	"The list of %u courses is too large to be displayed.";			// Potrzebujesz tlumaczenie
+	"Lista %u kurs&oacute;w jest za du&zdot;a, aby mo&zdot;na j&aogon; by&lstrok;o wy&sacute;wietli&cacute;.";
 #elif L==9	// pt
 	"A lista de %u disciplinas &eacute; muito grande para ser exibida.";
 #endif
 
 const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"La lista de %u usuarios es demasiado grande para mostrarla.";	// Necessita traducció
+	"La llista de %u usuaris &eacute;s massa gran per mostrar-se.";
 #elif L==2	// de
-	"The list of %u users is too large to be displayed.";		// Need Übersetzung
+	"Die Liste mit %u Benutzern ist zu gro&szlig;, um angezeigt zu werden.";
 #elif L==3	// en
 	"The list of %u users is too large to be displayed.";
 #elif L==4	// es
 	"La lista de %u usuarios es demasiado grande para mostrarla.";
 #elif L==5	// fr
-	"The list of %u users is too large to be displayed.";		// Besoin de traduction
+	"La liste des %u utilisateurs est trop longue pour &ecirc;tre affich&eacute;e.";
 #elif L==6	// gn
 	"La lista de %u usuarios es demasiado grande para mostrarla.";	// Okoteve traducción
 #elif L==7	// it
 	"La lista di %u utenti &egrave; troppo grande per essere mostrata.";
 #elif L==8	// pl
-	"The list of %u users is too large to be displayed.";		// Potrzebujesz tlumaczenie
+	"Lista %u u&zdot;ytkownik&oacute;w jest za du&zdot;a, aby mo&zdot;na j&aogon; by&lstrok;o wy&sacute;wietli&cacute;.";
 #elif L==9	// pt
 	"A lista de %u usu&aacute;rios &eacute; muito grande para ser exibida.";
 #endif
@@ -48965,42 +48965,42 @@ const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to in
 
 const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El nuevo logo es <strong>%s</strong>.";	// Necessita traducció
+	"El nou logotip &eacute;s <strong>%s</strong>.";
 #elif L==2	// de
-	"The new logo is <strong>%s</strong>.";		// Need Übersetzung
+	"Das neue Logo ist <strong>%s</strong>.";
 #elif L==3	// en
 	"The new logo is <strong>%s</strong>.";
 #elif L==4	// es
 	"El nuevo logo es <strong>%s</strong>.";
 #elif L==5	// fr
-	"The new logo is <strong>%s</strong>.";		// Besoin de traduction
+	"Le nouveau logo est <strong>%s</strong>.";
 #elif L==6	// gn
 	"El nuevo logo es <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nuovo logo &egrave; <strong>%s</strong>.";
 #elif L==8	// pl
-	"The new logo is <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Nowe logo to <strong>%s</strong>.";
 #elif L==9	// pt
 	"O novo logotipo &eacute; <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_nickname_has_been_registered_successfully =
 #if   L==1	// ca
-	"El apodo se ha registrado correctamente.";		// Necessita traducció
+	"El sobrenom s'ha registrat correctament.";
 #elif L==2	// de
-	"The nickname has been registered successfully.";	// Need Übersetzung
+	"Der Spitzname wurde erfolgreich registriert.";
 #elif L==3	// en
 	"The nickname has been registered successfully.";
 #elif L==4	// es
 	"El apodo se ha registrado correctamente.";
 #elif L==5	// fr
-	"The nickname has been registered successfully.";	// Besoin de traduction
+	"Le surnom a &eacute;t&eacute; enregistr&eacute; avec succ&egrave;s.";
 #elif L==6	// gn
 	"El apodo se ha registrado correctamente.";		// Okoteve traducción
 #elif L==7	// it
 	"Il nome utente &egrave; stato registrato con successo.";
 #elif L==8	// pl
-	"The nickname has been registered successfully.";	// Potrzebujesz tlumaczenie
+	"Pseudonim zosta&lstrok; pomy&sacute;lnie zarejestrowany.";
 #elif L==9	// pt
 	"A alcunha foi registrada com sucesso.";
 #endif
@@ -49153,42 +49153,42 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 
 const char *Txt_The_new_web_address_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La nueva direcci&oacute;n web es <strong>%s</strong>.";	// Necessita traducció
+	"La nova adre&ccedil;a web &eacute;s <strong>%s</strong>.";
 #elif L==2	// de
-	"The new web address is <strong>%s</strong>.";			// Need Übersetzung
+	"Die neue Webadresse ist <strong>%s</strong>.";
 #elif L==3	// en
 	"The new web address is <strong>%s</strong>.";
 #elif L==4	// es
 	"La nueva direcci&oacute;n web es <strong>%s</strong>.";
 #elif L==5	// fr
-	"The new web address is <strong>%s</strong>.";			// Besoin de traduction
+	"La nouvelle adresse Web est <strong>%s</strong>.";
 #elif L==6	// gn
 	"La nueva direcci&oacute;n web es <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il nuovo indirizzo web &egrave; <strong>%s</strong>.";
 #elif L==8	// pl
-	"The new web address is <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"Nowy adres internetowy to <strong>%s</strong>.";
 #elif L==9	// pt
 	"O novo endere&ccedil;o web &eacute; <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_new_description_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La nueva descripci&oacute;n web es <strong>%s</strong>.";	// Necessita traducció
+	"La nova descripci&oacute; &eacute;s <strong>%s</strong>.";
 #elif L==2	// de
-	"The new description is <strong>%s</strong>.";			// Need Übersetzung
+	"Die neue Beschreibung ist <strong>%s</strong>.";
 #elif L==3	// en
 	"The new description is <strong>%s</strong>.";
 #elif L==4	// es
-	"La nueva descripci&oacute;n web es <strong>%s</strong>.";
+	"La nueva descripci&oacute;n es <strong>%s</strong>.";
 #elif L==5	// fr
-	"The new description is <strong>%s</strong>.";			// Besoin de traduction
+	"La nouvelle description est <strong>%s</strong>.";
 #elif L==6	// gn
-	"La nueva descripci&oacute;n web es <strong>%s</strong>.";	// Okoteve traducción
+	"La nueva descripci&oacute;n es <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"La nuova descrizione &egrave; <strong>%s</strong>.";
 #elif L==8	// pl
-	"The new description is <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"Nowy opis to <strong>%s</strong>.";
 #elif L==9	// pt
 	"A nova descri&ccedil;&atilde;o &eacute; <strong>%s</strong>.";
 #endif
@@ -58802,873 +58802,170 @@ const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
 	"Voc&ecirc; deve especificar o c&oacute;digo num&eacute;rico ISO 3166-1 do novo pa&iacute;s.";
 #endif
 
-const char *Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin =
+const char *Txt_You_must_specify_the_name =
 #if   L==1	// ca
-	"Debe especificar el nombre y la descripci&oacute;n del nuevo complemento.";	// Necessita traducció
+	"Debe especificar el nombre.";	// Necessita traducció
 #elif L==2	// de
-	"You must specify the name and the description of the new plugin.";		// Need Übersetzung
+	"You must specify the name.";	// Need Übersetzung
 #elif L==3	// en
-	"You must specify the name and the description of the new plugin.";
+	"You must specify the name.";
 #elif L==4	// es
-	"Debe especificar el nombre y la descripci&oacute;n del nuevo complemento.";
+	"Debe especificar el nombre.";
 #elif L==5	// fr
-	"You must specify the name and the description of the new plugin.";		// Besoin de traduction
+	"You must specify the name.";	// Besoin de traduction
 #elif L==6	// gn
-	"Debe especificar el nombre y la descripci&oacute;n del nuevo complemento.";	// Okoteve traducción
+	"Debe especificar el nombre.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare il nome e la descrizione del nuovo plugin.";
+	"Devi specificare il nome.";
 #elif L==8	// pl
-	"You must specify the name and the description of the new plugin.";		// Potrzebujesz tlumaczenie
+	"You must specify the name.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome e a descri&ccedil;&atilde;o do novo plugin.";
+	"Voc&ecirc; deve especificar o nome.";
 #endif
 
-const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages =
+const char *Txt_You_must_specify_the_short_name_and_the_full_name =
 #if   L==1	// ca
-	"Debe especificar el nombre del nuevo pa&iacute;s en todos los idiomas.";	// Necessita traducció
+	"Heu d'especificar el nom curt i el nom complet.";
 #elif L==2	// de
-	"You must specify the name of the new country in all languages.";		// Need Übersetzung
+	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen angeben.";
 #elif L==3	// en
-	"You must specify the name of the new country in all languages.";
+	"You must specify the short name and the full name.";
 #elif L==4	// es
-	"Debe especificar el nombre del nuevo pa&iacute;s en todos los idiomas.";
+	"Debe especificar el nombre breve y el nombre completo.";
 #elif L==5	// fr
-	"You must specify the name of the new country in all languages.";		// Besoin de traduction
+	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet.";
 #elif L==6	// gn
-	"Debe especificar el nombre del nuevo pa&iacute;s en todos los idiomas.";	// Okoteve traducción
+	"Debe especificar el nombre breve y el nombre completo.";		// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare il nome del nuovo paese in tutte le lingue.";
+	"Devi specificare il nome breve e completo.";
 #elif L==8	// pl
-	"You must specify the name of the new country in all languages.";		// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;.";
 #elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo pa&iacute;s em todos os idiomas.";
+	"Voc&ecirc; deve especificar o nome abreviado e o nome completo.";
 #endif
 
-const char *Txt_You_must_specify_the_name_of_the_new_group =
+const char *Txt_You_must_specify_the_title =
 #if   L==1	// ca
-	"Debe especificar el nombre del nuevo grupo.";	// Necessita traducció
+	"Heu d'especificar el t&iacute;tol.";
 #elif L==2	// de
-	"You must specify the name of the new group.";	// Need Übersetzung
+	"Sie m&uuml;ssen den Titel angeben.";
 #elif L==3	// en
-	"You must specify the name of the new group.";
+	"You must specify the title.";
 #elif L==4	// es
-	"Debe especificar el nombre del nuevo grupo.";
+	"Debe especificar el t&iacute;tulo.";
 #elif L==5	// fr
-	"You must specify the name of the new group.";	// Besoin de traduction
+	"Vous devez sp&eacute;cifier le titre.";
 #elif L==6	// gn
-	"Debe especificar el nombre del nuevo grupo.";	// Okoteve traducción
+	"Debe especificar el t&iacute;tulo.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare il nome del nuovo gruppo.";
+	"&Egrave; necessario specificare il titolo.";
 #elif L==8	// pl
-	"You must specify the name of the new group.";	// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; tytu&lstrok;.";
 #elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo grupo.";
+	"Voc&ecirc; deve especificar o t&iacute;tulo.";
 #endif
 
-const char *Txt_You_must_specify_the_name_of_the_new_holiday =
+const char *Txt_You_must_specify_the_web_address =
 #if   L==1	// ca
-	"Debe especificar el nombre de la nueva festividad.";	// Necessita traducció
+	"Heu d'especificar l'adre&ccedil;a web.";
 #elif L==2	// de
-	"You must specify the name of the new holiday.";	// Need Übersetzung
+	"Sie m&uuml;ssen die Webadresse angeben.";
 #elif L==3	// en
-	"You must specify the name of the new holiday.";
+	"You must specify the web address.";
 #elif L==4	// es
-	"Debe especificar el nombre de la nueva festividad.";
+	"Debe especificar la direcci&oacute;n web.";
 #elif L==5	// fr
-	"You must specify the name of the new holiday.";	// Besoin de traduction
+	"Vous devez sp&eacute;cifier l'adresse Web.";
 #elif L==6	// gn
-	"Debe especificar el nombre de la nueva festividad.";	// Okoteve traducción
+	"Debe especificar la direcci&oacute;n web.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare il nome della nuova festivit&agrave;.";
+	"Devi specificare l'indirizzo web.";
 #elif L==8	// pl
-	"You must specify the name of the new holiday.";	// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; adres internetowy.";
 #elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo feriado.";
-#endif
-
-const char *Txt_You_must_specify_the_name_of_the_new_record_field =
-#if   L==1	// ca
-	"Debe especificar el nombre del nuevo campo de ficha.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the name of the new record field.";	// Need Übersetzung
-#elif L==3	// en
-	"You must specify the name of the new record field.";
-#elif L==4	// es
-	"Debe especificar el nombre del nuevo campo de ficha.";
-#elif L==5	// fr
-	"You must specify the name of the new record field.";	// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre del nuevo campo de ficha.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome del nuovo campo di scheda.";
-#elif L==8	// pl
-	"You must specify the name of the new record field.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo campo de cart&atilde;o.";
-#endif
-
-const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree =
-#if   L==1	// ca
-	"Debe especificar el nombre del nuevo tipo de titulaci&oacute;n.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the name of the new type of degree.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the name of the new type of degree.";
-#elif L==4	// es
-	"Debe especificar el nombre del nuevo tipo de titulaci&oacute;n.";
-#elif L==5	// fr
-	"You must specify the name of the new type of degree.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre del nuevo tipo de titulaci&oacute;n.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome del nuovo tipo di laurea.";
-#elif L==8	// pl
-	"You must specify the name of the new type of degree.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo tipo de grau.";
-#endif
-
-const char *Txt_You_must_specify_the_name_of_the_new_type_of_group =
-#if   L==1	// ca
-	"Debe especificar el nombre del nuevo tipo de grupo.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the name of the new type of group.";	// Need Übersetzung
-#elif L==3	// en
-	"You must specify the name of the new type of group.";
-#elif L==4	// es
-	"Debe especificar el nombre del nuevo tipo de grupo.";
-#elif L==5	// fr
-	"You must specify the name of the new type of group.";	// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre del nuevo tipo de grupo.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome del nuovo tipo di gruppo.";
-#elif L==8	// pl
-	"You must specify the name of the new type of group.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome do novo tipo de grupo.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo banner.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new banner.";		// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new banner.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo banner.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new banner.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo banner.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo banner.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new banner.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo banner.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_building =
-#if   L==1	// ca
-	"Heu d'especificar el nom curt i el nom complet"
-	" de el nou edifici.";
-#elif L==2	// de
-	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
-	" des neuen Geb&auml;ude angeben.";
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new building.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo edificio.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
-	"  du nouveau b&acirc;timent.";
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo edificio.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo edificio.";
-#elif L==8	// pl
-	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;"
-	" nowej budynek.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo edif&iacute;cio.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_center =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo centro.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new center.";		// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new center.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo centro.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new center.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo centro.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo centro.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new center.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo centro.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva asignatura.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new course.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new course.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva asignatura.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new course.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva asignatura.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo corso.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new course.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" da nova disciplina.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva titulaci&oacute;n.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new degree.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new degree.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva titulaci&oacute;n.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new degree.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva titulaci&oacute;n.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" della nuova laurea.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new degree.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo grau.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo departamento.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new department.";		// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new department.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo departamento.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new department.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo departamento.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo dipartimento.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new department.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo departamento.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva instituci&oacute;n.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new institution.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new institution.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva instituci&oacute;n.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new institution.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva instituci&oacute;n.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" della nuova instituzione.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new institution.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" da nova institui&ccedil;&atilde;o.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo enlace.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new link.";		// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new link.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo enlace.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new link.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo enlace.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo link.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new link.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo link.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain =
-#if   L==1	// ca
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo dominio de correo.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the short name and the full name"
-	" of the new email domain.";		// Need Übersetzung
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new email domain.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo dominio de correo.";
-#elif L==5	// fr
-	"You must specify the short name and the full name"
-	" of the new email domain.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo dominio de correo.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo campo mail.";
-#elif L==8	// pl
-	"You must specify the short name and the full name"
-	" of the new email domain.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" do novo dom&iacute;nio de email.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place =
-#if   L==1	// ca
-	"Heu d'especificar el nom curt i el nom complet"
-	" del nou lloc.";
-#elif L==2	// de
-	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
-	" des neuen Standortes angeben.";
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new place.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo lugar.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
-	" du nouvel emplacement.";
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" del nuevo lugar.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" del nuovo luogo.";
-#elif L==8	// pl
-	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;"
-	" nowego miejsca.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" da nova localiza&ccedil;&atilde;o.";
-#endif
-
-const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_room =
-#if   L==1	// ca
-	"Heu d'especificar el nom curt i el nom complet"
-	" de la nova sala.";
-#elif L==2	// de
-	"Sie m&uml;ssen den Kurznamen und den vollst&auml;ndigen Namen"
-	" des neuen Raum angeben.";
-#elif L==3	// en
-	"You must specify the short name and the full name"
-	" of the new room.";
-#elif L==4	// es
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva sala.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet"
-	"  de la nouvelle salle.";
-#elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo"
-	" de la nueva sala.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare il nome breve e completo"
-	" della nuova aula.";
-#elif L==8	// pl
-	"Musisz poda&cacute; kr&oacute;tk&aogon; nazw&eogon; i pe&lstrok;n&aogon; nazw&eogon;"
-	" nowej klasy.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o nome abreviado e o nome completo"
-	" da nova sala.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_assignment =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l'activitat.";
-#elif L==2	// de
-	"Die Aufgabe muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the assignment.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo de la actividad.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l'activit&eacute;.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo de la actividad.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell'attivit&agrave;.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; zadania.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo da atividade.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_event =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l'esdeveniment.";
-#elif L==2	// de
-	"Der Ereignis muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the event.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del evento.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre du &eacute;v&eacute;nement.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del evento.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell'evento.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; wydarzenia.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do evento.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_exam =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l'examen.";
-#elif L==2	// de
-	"Der Pr&uuml;fung muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the exam.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del examen.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l'examen.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del examen.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo dell'esame.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; egzaminu.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do exame.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_game =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol del joc.";
-#elif L==2	// de
-	"Die Spiel muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the game.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del juego.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre du jeu.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del juego.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo del gioco.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; gra.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do jogo.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_project =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol del projecte.";
-#elif L==2	// de
-	"Der Projekt muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the project.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del proyecto.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre du projet.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del proyecto.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo del progetto.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; projektu.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do projeto.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_set_of_questions =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol del conjunt de preguntes.";
-#elif L==2	// de
-	"Der Satz von Fragen muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the set of questions.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre de l'ensemble de questions.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo del conjunto de preguntas.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo del set di domande.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; zestaw pyta&nacute;.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do conjunto de perguntas.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_survey =
-#if   L==1	// ca
-	"Cal especificar el t&iacute;tol de l'enquesta.";
-#elif L==2	// de
-	"Die Umfrage muss angegeben werden.";
-#elif L==3	// en
-	"You must specify the title of the survey.";
-#elif L==4	// es
-	"Debe especificar el t&iacute;tulo de la encuesta.";
-#elif L==5	// fr
-	"Vous devez sp&eacute;cifier le titre du sondage.";
-#elif L==6	// gn
-	"Debe especificar el t&iacute;tulo de la encuesta.";	// Okoteve traducción
-#elif L==7	// it
-	"&Egrave; necessario specificare il titolo del sondaggio.";
-#elif L==8	// pl
-	"Musisz poda&cacute; tytu&lstrok; badania.";
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o t&iacute;tulo do inqu&eacute;rito.";
-#endif
-
-const char *Txt_You_must_specify_the_URL_of_the_new_banner =
-#if   L==1	// ca
-	"Debe especificar el URL del nuevo banner.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the URL of the new banner.";	// Need Übersetzung
-#elif L==3	// en
-	"You must specify the URL of the new banner.";
-#elif L==4	// es
-	"Debe especificar el URL del nuevo banner.";
-#elif L==5	// fr
-	"You must specify the URL of the new banner.";	// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el URL del nuevo banner.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'URL del nuovo banner.";
-#elif L==8	// pl
-	"You must specify the URL of the new banner.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o URL do novo banner.";
-#endif
-
-const char *Txt_You_must_specify_the_URL_of_the_new_link =
-#if   L==1	// ca
-	"Debe especificar el URL del nuevo enlace.";	// Necessita traducció
-#elif L==2	// de
-	"You must specify the URL of the new link.";	// Need Übersetzung
-#elif L==3	// en
-	"You must specify the URL of the new link.";
-#elif L==4	// es
-	"Debe especificar el URL del nuevo enlace.";
-#elif L==5	// fr
-	"You must specify the URL of the new link.";	// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar el URL del nuevo enlace.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'URL del nuovo link.";
-#elif L==8	// pl
-	"You must specify the URL of the new link.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o URL do novo link.";
-#endif
-
-const char *Txt_You_must_specify_the_web_address_of_the_new_center =
-#if   L==1	// ca
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo centro.";				// Necessita traducció
-#elif L==2	// de
-	"You must specify the web address"
-	" of the new center.";				// Need Übersetzung
-#elif L==3	// en
-	"You must specify the web address"
-	" of the new center.";
-#elif L==4	// es
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo centro.";
-#elif L==5	// fr
-	"You must specify the web address"
-	" of the new center.";				// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo centro.";				// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'indirizzo web"
-	" del nuovo centro.";
-#elif L==8	// pl
-	"You must specify the web address"
-	" of the new center.";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o endere&ccedil;o web"
-	" do novo centro.";
-#endif
-
-
-const char *Txt_You_must_specify_the_web_address_of_the_new_degree =
-#if   L==1	// ca
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva titulaci&oacute;n.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the web address"
-	" of the new degree.";				// Need Übersetzung
-#elif L==3	// en
-	"You must specify the web address"
-	" of the new degree.";
-#elif L==4	// es
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva titulaci&oacute;n.";
-#elif L==5	// fr
-	"You must specify the web address"
-	" of the new degree.";				// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva titulaci&oacute;n.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'indirizzo web"
-	" della nuova laurea.";
-#elif L==8	// pl
-	"You must specify the web address"
-	" of the new degree.";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o endere&ccedil;o web"
-	" do novo grau.";
-#endif
-
-const char *Txt_You_must_specify_the_web_address_of_the_new_department =
-#if   L==1	// ca
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo departamento.";			// Necessita traducció
-#elif L==2	// de
-	"You must specify the web address"
-	" of the new department.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the web address"
-	" of the new department.";
-#elif L==4	// es
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo departamento.";
-#elif L==5	// fr
-	"You must specify the web address"
-	" of the new department.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar la direcci&oacute;n web"
-	" del nuevo departamento.";			// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'indirizzo web"
-	" del nuovo dipartimento.";
-#elif L==8	// pl
-	"You must specify the web address"
-	" of the new department.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o endere&ccedil;o web"
-	" do novo departamento.";
-#endif
-
-const char *Txt_You_must_specify_the_web_address_of_the_new_institution =
-#if   L==1	// ca
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva instituci&oacute;n.";		// Necessita traducció
-#elif L==2	// de
-	"You must specify the web address"
-	" of the new institution.";			// Need Übersetzung
-#elif L==3	// en
-	"You must specify the web address"
-	" of the new institution.";
-#elif L==4	// es
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva instituci&oacute;n.";
-#elif L==5	// fr
-	"You must specify the web address"
-	" of the new institution.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe especificar la direcci&oacute;n web"
-	" de la nueva instituci&oacute;n.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi specificare l'indirizzo web"
-	" della nuova istituzione.";
-#elif L==8	// pl
-	"You must specify the web address"
-	" of the new institution.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve especificar o endere&ccedil;o web"
-	" da nova institui&ccedil;&atilde;o.";
+	"Voc&ecirc; deve especificar o endere&ccedil;o web.";
 #endif
 
 const char *Txt_You_must_type_at_least_one_tag_for_the_question =
 #if   L==1	// ca
-	"Debe escribir al menos un descriptor para la pregunta.";	// Necessita traducció
+	"Heu d'escriure almenys un descriptor per a la pregunta.";
 #elif L==2	// de
-	"You must type at least one tag for the question.";		// Need Übersetzung
+	"Sie m&uuml;ssen mindestens ein Tag f&uuml;r die Frage eingeben.";
 #elif L==3	// en
 	"You must type at least one tag for the question.";
 #elif L==4	// es
 	"Debe escribir al menos un descriptor para la pregunta.";
 #elif L==5	// fr
-	"You must type at least one tag for the question.";		// Besoin de traduction
+	"Vous devez saisir au moins une balise pour la question.";
 #elif L==6	// gn
 	"Debe escribir al menos un descriptor para la pregunta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi scrivere almeno un'etichetta per la domanda.";
 #elif L==8	// pl
-	"You must type at least one tag for the question.";		// Potrzebujesz tlumaczenie
+	"Musisz wpisa&cacute; co najmniej jeden tag dla pytania.";
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos um descritor para a pergunta.";
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_answer =
 #if   L==1	// ca
-	"Debe escribir al menos la primera respuesta.";	// Necessita traducció
+	"Heu d'escriure almenys la primera resposta.";
 #elif L==2	// de
-	"You must type at least the first answer.";	// Need Übersetzung
+	"Sie m&uuml;ssen mindestens die erste Antwort eingeben.";
 #elif L==3	// en
 	"You must type at least the first answer.";
 #elif L==4	// es
 	"Debe escribir al menos la primera respuesta.";
 #elif L==5	// fr
-	"You must type at least the first answer.";	// Besoin de traduction
+	"Vous devez taper au moins la premi&egrave;re r&eacute;ponse.";
 #elif L==6	// gn
 	"Debe escribir al menos la primera respuesta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi scrivere almeno la prima risposta.";
 #elif L==8	// pl
-	"You must type at least the first answer.";	// Potrzebujesz tlumaczenie
+	"Musisz wpisa&cacute; przynajmniej pierwsz&aogon; odpowied&zacute;.";
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos a primeira resposta.";
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_two_answers =
 #if   L==1	// ca
-	"Debe escribir al menos las dos primeras respuestas.";	// Necessita traducció
+	"Heu d'escriure almenys les dues primeres respostes.";
 #elif L==2	// de
-	"You must type at least the first two answers.";	// Need Übersetzung
+	"Sie m&uuml;ssen mindestens die ersten beiden Antworten eingeben.";
 #elif L==3	// en
 	"You must type at least the first two answers.";
 #elif L==4	// es
 	"Debe escribir al menos las dos primeras respuestas.";
 #elif L==5	// fr
-	"You must type at least the first two answers.";	// Besoin de traduction
+	"Vous devez taper au moins les deux premi&egrave;res r&eacute;ponses.";
 #elif L==6	// gn
 	"Debe escribir al menos las dos primeras respuestas.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi scrivere almeno le prime due risposte.";
 #elif L==8	// pl
-	"You must type at least the first two answers.";	// Potrzebujesz tlumaczenie
+	"Musisz wpisa&cacute; co najmniej dwie pierwsze odpowiedzi.";
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos as duas primeiras respostas.";
 #endif
 
-const char *Txt_You_must_type_the_stem_of_the_question =
+const char *Txt_You_must_type_the_question_stem =
 #if   L==1	// ca
-	"Debe escribir el enunciado de la pregunta.";	// Necessita traducció
+	"Heu d'escriure l'enunciat de la pregunta.";
 #elif L==2	// de
-	"You must type the stem of the question.";	// Need Übersetzung
+	"Sie m&uuml;ssen den Fragenstamm eingeben.";
 #elif L==3	// en
-	"You must type the stem of the question.";
+	"You must type the question stem.";
 #elif L==4	// es
 	"Debe escribir el enunciado de la pregunta.";
 #elif L==5	// fr
-	"You must type the stem of the question.";	// Besoin de traduction
+	"Vous devez r&eacute;diger l'&eacute;nonc&eacute; de la question.";
 #elif L==6	// gn
 	"Debe escribir el enunciado de la pregunta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi scrivere l'enunciato della domanda.";
 #elif L==8	// pl
-	"You must type the stem of the question.";	// Potrzebujesz tlumaczenie
+	"Musisz wpisa&cacute; temat pytania.";
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar a declara&ccedil;&atilde;o da pergunta.";
 #endif
@@ -59798,17 +59095,17 @@ const char *Txt_Your_password_is_not_secure_enough =
 
 const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"La contrase&ntilde;a debe tener al menos %u caracteres"
-	" y no puede contener espacios."
-	" Es muy importante que no use solo"
-	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido,"
-	" ni una palabra conocida.";			// Necessita traducció
+	"La vostra contrasenya ha de tenir almenys %u car&agrave;cters"
+	" i no pot contenir espais."
+	" &Eacute;s molt important no utilitzar nom&eacute;s"
+	" dígits num&egrave;rics, ni un nom o cognom,"
+	" ni una paraula coneguda.";
 #elif L==2	// de
-	"Your password must be at least %u characters"
-	" and can not contain spaces."
-	" It's very important not to use only"
-	" numeric digits, or a name or surname,"
-	" or a known word.";				// Need Übersetzung
+	"Ihr Passwort muss mindestens %u Zeichen lang sein"
+	" und darf keine Leerzeichen enthalten."
+	" Es ist sehr wichtig, nicht nur Ziffern oder"
+	" einen Vor- oder Nachnamen oder ein bekanntes Wort"
+	" zu verwenden.";
 #elif L==3	// en
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
@@ -59822,11 +59119,11 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	" d&iacute;gitos num&eacute;ricos, ni un nombre o apellido,"
 	" ni una palabra conocida.";
 #elif L==5	// fr
-	"Your password must be at least %u characters"
-	" and can not contain spaces."
-	" It's very important not to use only"
-	" numeric digits, or a name or surname,"
-	" or a known word.";				// Besoin de traduction
+	"Votre mot de passe doit comporter au moins %u caract&egrave;res"
+	" et ne peut pas contenir d'espaces."
+	" Il est tr&egrave;s important de ne pas utiliser uniquement"
+	" des chiffres, ni un nom ou un pr&eacute;nom,"
+	" ni un mot connu.";
 #elif L==6	// gn
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
 	" y no puede contener espacios."
@@ -59840,11 +59137,11 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	" tasti numerici, o un nome o cognome,"
 	" o una parola conosciuta.";
 #elif L==8	// pl
-	"Your password must be at least %u characters"
-	" and can not contain spaces."
-	" It's very important not to use only"
-	" numeric digits, or a name or surname,"
-	" or a known word.";				// Potrzebujesz tlumaczenie
+	"Twoje has&lstrok;o musi mie&cacute; co najmniej %u znak&oacute;w"
+	" i nie mo&zdot;e zawiera&cacute; spacji. "
+	"Bardzo wa&zdot;ne jest, aby nie u&zdot;ywa&cacute;"
+	" tylko cyfr, imienia, nazwiska"
+	" lub znanego s&lstrok;owa.";
 #elif L==9	// pt
 	"Sua senha deve ter pelo menos %u caracteres"
 	" e n&atilde;o pode conter espa&ccedil;os."

@@ -1312,7 +1312,6 @@ void Asg_ReceiveFormAssignment (void)
   {
    extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_assignment;
    extern const char *Txt_Created_new_assignment_X;
    extern const char *Txt_The_assignment_has_been_modified;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
@@ -1417,7 +1416,7 @@ void Asg_ReceiveFormAssignment (void)
    else	// If there is not an assignment title
      {
       NewAssignmentIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new assignment or update an existing one *****/

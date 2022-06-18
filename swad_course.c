@@ -1500,7 +1500,6 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
 
@@ -1538,8 +1537,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	   }
 	}
       else	// If there is not a course name
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
+         Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
      }
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,

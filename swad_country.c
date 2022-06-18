@@ -1576,7 +1576,7 @@ void Cty_ReceiveFormNewCountry (void)
    extern const char *Txt_The_alphabetical_code_X_already_exists;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_country_X_already_exists;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages;
+   extern const char *Txt_You_must_specify_the_name;
    extern const char *Txt_Created_new_country_X;
    char ParamName[32];
    bool CreateCountry = true;
@@ -1651,7 +1651,7 @@ void Cty_ReceiveFormNewCountry (void)
                else	// If there is not a country name
                  {
                   Ale_CreateAlert (Ale_WARNING,NULL,
-                	           Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
+                	           Txt_You_must_specify_the_name);
                   CreateCountry = false;
                   break;
                  }

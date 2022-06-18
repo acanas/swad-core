@@ -3238,7 +3238,7 @@ void Grp_ReceiveFormNewGrpTyp (void)
   {
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_Created_new_type_of_group_X;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_group;
+   extern const char *Txt_You_must_specify_the_name;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
@@ -3279,7 +3279,7 @@ void Grp_ReceiveFormNewGrpTyp (void)
    else	// If there is not a group type name
      {
       AlertType = Ale_WARNING;
-      Str_Copy (AlertTxt,Txt_You_must_specify_the_name_of_the_new_type_of_group,
+      Str_Copy (AlertTxt,Txt_You_must_specify_the_name,
 		sizeof (AlertTxt) - 1);
      }
 
@@ -3310,7 +3310,7 @@ void Grp_ReceiveFormNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_Created_new_group_X;
-   extern const char *Txt_You_must_specify_the_name_of_the_new_group;
+   extern const char *Txt_You_must_specify_the_name;
    Ale_AlertType_t AlertType;
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
@@ -3355,7 +3355,7 @@ void Grp_ReceiveFormNewGrp (void)
       else	// If there is not a group name
         {
          AlertType = Ale_ERROR;
-	 Str_Copy (AlertTxt,Txt_You_must_specify_the_name_of_the_new_group,
+	 Str_Copy (AlertTxt,Txt_You_must_specify_the_name,
 		   sizeof (AlertTxt) - 1);
         }
      }
