@@ -58558,49 +58558,49 @@ const char *Txt_You_must_enter_your_nick_email_or_ID =
 
 const char *Txt_You_must_mark_an_answer_as_correct =
 #if   L==1	// ca
-	"Debe marcar alguna respuesta como correcta.";	// Necessita traducció
+	"Heu de marcar una resposta com a correcta.";
 #elif L==2	// de
-	"You must mark an answer as correct.";		// Need Übersetzung
+	"Sie m&uuml;ssen eine Antwort als richtig markieren.";
 #elif L==3	// en
 	"You must mark an answer as correct.";
 #elif L==4	// es
 	"Debe marcar alguna respuesta como correcta.";
 #elif L==5	// fr
-	"You must mark an answer as correct.";		// Besoin de traduction
+	"Vous devez marquer une r&eacute;ponse comme correcte.";
 #elif L==6	// gn
 	"Debe marcar alguna respuesta como correcta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi segnare una risposta come corretta.";
 #elif L==8	// pl
-	"You must mark an answer as correct.";		// Potrzebujesz tlumaczenie
+	"Musisz oznaczy&cacute; odpowied&zacute; jako poprawn&aogon;.";
 #elif L==9	// pt
 	"Voc&ecirc; deve marcar uma resposta como correta.";
 #endif
 
 const char *Txt_You_must_select_a_T_F_answer =
 #if   L==1	// ca
-	"Debe seleccionar una respuesta V o F.";	// Necessita traducció
+	"Heu de seleccionar una resposta V o F.";
 #elif L==2	// de
-	"You must select a T/F answer.";		// Need Übersetzung
+	"Sie m&uuml;ssen eine R/F-Antwort ausw&auml;hlen.";
 #elif L==3	// en
 	"You must select a T/F answer.";
 #elif L==4	// es
 	"Debe seleccionar una respuesta V o F.";
 #elif L==5	// fr
-	"You must select a T/F answer.";		// Besoin de traduction
+	"Vous devez sélectionner une r&eacute;ponse V/F.";
 #elif L==6	// gn
 	"Debe seleccionar una respuesta V o F.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi selezionare una risposta V/F.";
 #elif L==8	// pl
-	"You must select a T/F answer.";		// Potrzebujesz tlumaczenie
+	"Musisz wybra&cacute; odpowied&zacute; P/F.";
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma resposta V ou F.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_recipients =
 #if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s destinatarios.";	// Necessita traducció
+	"Heu de seleccionar un o m&eacute;s destinataris.";
 #elif L==2	// de
 	"Es muss mindestens ein Empf&auml;nger angegeben werden.";
 #elif L==3	// en
@@ -58608,20 +58608,20 @@ const char *Txt_You_must_select_one_ore_more_recipients =
 #elif L==4	// es
 	"Debe seleccionar uno o m&aacute;s destinatarios.";
 #elif L==5	// fr
-	"You must select one or more recipients.";		// Besoin de traduction
+	"Vous devez s&eacute;lectionner un ou plusieurs destinataires.";
 #elif L==6	// gn
 	"Debe seleccionar uno o m&aacute;s destinatarios.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi selezionare uno o pi&ugrave; destinatari.";
 #elif L==8	// pl
-	"You must select one or more recipients.";		// Potrzebujesz tlumaczenie
+	"Musisz wybra&cacute; jednego lub wi&eogon;cej odbiorc&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais destinat&aacute;rios.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_tags =
 #if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s descriptores.";	// Necessita traducció
+	"Heu de seleccionar una o m&eacute;s descriptors.";
 #elif L==2	// de
 	"Es muss mindestens ein Tag ausgew&auml;hlt werden.";
 #elif L==3	// en
@@ -58629,20 +58629,20 @@ const char *Txt_You_must_select_one_ore_more_tags =
 #elif L==4	// es
 	"Debe seleccionar uno o m&aacute;s descriptores.";
 #elif L==5	// fr
-	"You must select one or more tags.";			// Besoin de traduction
+	"Vous devez s&eacute;lectionner une ou plusieurs descripteurs.";
 #elif L==6	// gn
 	"Debe seleccionar uno o m&aacute;s descriptores.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi selezionare una o pi&ugrave; etichette.";
 #elif L==8	// pl
-	"You must select one or more tags.";			// Potrzebujesz tlumaczenie
+	"Musisz wybra&cacute; jeden lub wi&eogon;cej tag&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma ou mais descritores.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_types_of_answer =
 #if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s tipos de respuesta.";	// Necessita traducció
+	"Heu de seleccionar un o m&eacute;s tipus de resposta.";
 #elif L==2	// de
 	"Es muss mindestens ein Antworttyp ausgew&auml;hlt werden.";
 #elif L==3	// en
@@ -58650,20 +58650,20 @@ const char *Txt_You_must_select_one_ore_more_types_of_answer =
 #elif L==4	// es
 	"Debe seleccionar uno o m&aacute;s tipos de respuesta.";
 #elif L==5	// fr
-	"You must select one or more types of answer.";			// Besoin de traduction
+	"Vous devez s&eacute;lectionner un ou plusieurs types de r&eacute;ponse.";
 #elif L==6	// gn
 	"Debe seleccionar uno o m&aacute;s tipos de respuesta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi selezionare uno o pi&ugrave; tipi di risposta.";
 #elif L==8	// pl
-	"You must select one or more types of answer.";			// Potrzebujesz tlumaczenie
+	"Musisz wybra&cacute; jeden lub wi&eogon;cej typ&oacute;w odpowiedzi.";
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais tipos de resposta.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_users =
 #if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s usuarios.";	// Necessita traducció
+	"Heu de seleccionar un o m&eacute;s usuaris.";
 #elif L==2	// de
 	"Es muss mindestens ein Benutzer ausgew&auml;hlt werden.";
 #elif L==3	// en
@@ -58671,26 +58671,26 @@ const char *Txt_You_must_select_one_ore_more_users =
 #elif L==4	// es
 	"Debe seleccionar uno o m&aacute;s usuarios.";
 #elif L==5	// fr
-	"You must select one or more users.";		// Besoin de traduction
+	"Vous devez s&eacute;lectionner un ou plusieurs utilisateurs.";
 #elif L==6	// gn
 	"Debe seleccionar uno o m&aacute;s usuarios.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi selezionare uno o pi&ugrave; utenti.";
 #elif L==8	// pl
-	"You must select one or more users.";		// Potrzebujesz tlumaczenie
+	"Musisz wybra&cacute; jednego lub wi&eogon;cej u&zdot;ytkownik&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais usu&acute;rios.";
 #endif
 
 const char *Txt_You_must_send_your_photo_because_ =
 #if   L==1	// ca
-	"Tiene que enviar su fotograf&iacute;a,"
-	" ya que ha agotado el n&uacute;mero de accesos"
-	" permitido sin fotograf&iacute;a.";	// Necessita traducció
+	"Heu d'enviar la seva foto,"
+	" perqu&egrave; has esgotat el nombre de clics"
+	" permesos sense foto.";
 #elif L==2	// de
-	"You must send your photo,"
-	" because you have exhausted the number of clicks"
-	" allowed without photo.";		// Need Übersetzung
+	"Sie m&uuml;ssen Ihr Foto senden,"
+	" da Sie die Anzahl der zul&auml;ssigen Klicks"
+	" ohne Foto ausgesch&ouml;pft haben.";
 #elif L==3	// en
 	"You must send your photo,"
 	" because you have exhausted the number of clicks"
@@ -58700,9 +58700,9 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" ya que ha agotado el n&uacute;mero de accesos"
 	" permitido sin fotograf&iacute;a.";
 #elif L==5	// fr
-	"You must send your photo,"
-	" because you have exhausted the number of clicks"
-	" allowed without photo.";		// Besoin de traduction
+	"Vous devez envoyer votre photo,"
+	" car vous avez &eacute;puis&eacute; le nombre de clics"
+	" autoris&eacute;s sans photo.";
 #elif L==6	// gn
 	"Tiene que enviar su fotograf&iacute;a,"
 	" ya que ha agotado el n&uacute;mero de accesos"
@@ -58712,9 +58712,9 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" perch&egrave; hai esaurito il numero di accessi"
 	" permessi senza foto.";
 #elif L==8	// pl
-	"You must send your photo,"
-	" because you have exhausted the number of clicks"
-	" allowed without photo.";		// Potrzebujesz tlumaczenie
+	"Musisz wys&lstrok;a&cacute; swoje zdj&eogon;cie,"
+	" poniewa&zdot; wyczerpa&lstrok;e&sacute; dozwolon&aogon; liczb&eogon; klikni&eogon;&cacute;"
+	" bez zdj&eogon;cia.";
 #elif L==9	// pt
 	"Voc&ecirc; deve enviar sua foto,"
 	" porque esgotou o n&uacute;mero de cliques"
@@ -58723,41 +58723,32 @@ const char *Txt_You_must_send_your_photo_because_ =
 
 const char *Txt_You_must_specify_the_image_of_the_new_banner =
 #if   L==1	// ca
-	"Debe especificar la imagen"
-	" del nuevo banner.";		// Necessita traducció
+	"Heu d'especificar la imatge del nou banner.";
 #elif L==2	// de
-	"You must specify the image"
-	" of the new banner.";		// Need Übersetzung
+	"Sie m&uuml;ssen das Bild des neuen Banners angeben.";
 #elif L==3	// en
-	"You must specify the image"
-	" of the new banner.";
+	"You must specify the image of the new banner.";
 #elif L==4	// es
-	"Debe especificar la imagen"
-	" del nuevo banner.";
+	"Debe especificar la imagen del nuevo banner.";
 #elif L==5	// fr
-	"You must specify the image"
-	" of the new banner.";		// Besoin de traduction
+	"Vous devez sp&eacute;cifier l'image de la nouvelle banni&egrave;re.";
 #elif L==6	// gn
-	"Debe especificar la imagen"
-	" del nuevo banner.";		// Okoteve traducción
+	"Debe especificar la imagen del nuevo banner.";	// Okoteve traducción
 #elif L==7	// it
-	"Devi specificare l'image"
-	" del nuovo banner.";
+	"Devi specificare l'image del nuovo banner.";
 #elif L==8	// pl
-	"You must specify the image"
-	" of the new banner.";		// Potrzebujesz tlumaczenie
+	"Musisz okre&sacute;li&cacute; obraz nowego banera.";
 #elif L==9	// pt
-	"Voc&ecirc; deve especificar a imagem"
-	" do novo banner.";
+	"Voc&ecirc; deve especificar a imagem do novo banner.";
 #endif
 
 const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin =
 #if   L==1	// ca
-	"Debe especificar el logo, la clave de aplicaci&oacute;n,"
-	" el URL y la IP del nuevo complemento.";		// Necessita traducció
+	"Heu d'especificar el logotip, la clau de l'aplicaci&oacute;,"
+	" l'URL i l'adre&ccedil;a IP del nou complement.";
 #elif L==2	// de
-	"You must specify the logo, the application key,"
-	" the URL and the IP address of the new plugin.";	// Need Übersetzung
+	"Sie m&uuml;ssen das Logo, den Anwendungsschl&uuml;ssel,"
+	" die URL und die IP-Adresse des neuen Plugins angeben.";
 #elif L==3	// en
 	"You must specify the logo, the application key,"
 	" the URL and the IP address of the new plugin.";
@@ -58765,8 +58756,8 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 	"Debe especificar el logo, la clave de aplicaci&oacute;n,"
 	" el URL y la IP del nuevo complemento.";
 #elif L==5	// fr
-	"You must specify the logo, the application key,"
-	" the URL and the IP address of the new plugin.";	// Besoin de traduction
+	"Vous devez sp&eacute;cifier le logo, la cl&eacute; d'application,"
+	" l'URL et l'adresse IP du nouveau plugin.";
 #elif L==6	// gn
 	"Debe especificar el logo, la clave de aplicaci&oacute;n,"
 	" el URL y la IP del nuevo complemento.";		// Okoteve traducción
@@ -58774,8 +58765,8 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 	"Devi specificare il logo, il codice di applicazione,"
 	" l'URL e l'indirizzo IP del nuovo plugin.";
 #elif L==8	// pl
-	"You must specify the logo, the application key,"
-	" the URL and the IP address of the new plugin.";	// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; logo, klucz aplikacji,"
+	" adres URL i adres IP nowej wtyczki.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o logotipo, a chave do aplicativo,"
 	" o URL e o endere&ccedil;o IP do novo plugin.";
@@ -58783,42 +58774,42 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 
 const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
 #if   L==1	// ca
-	"Debe especificar el c&oacute;digo num&eacute;rico ISO 3166-1 del nuevo pa&iacute;s.";	// Necessita traducció
+	"Heu d'especificar el codi num&egrave;ric ISO 3166-1 del nou pa&iacute;s.";
 #elif L==2	// de
-	"You must specify the ISO 3166-1 numerical code of the new country.";			// Need Übersetzung
+	"Sie m&uuml;ssen den ISO 3166-1-Zahlencode des neuen Landes angeben.";
 #elif L==3	// en
 	"You must specify the ISO 3166-1 numerical code of the new country.";
 #elif L==4	// es
 	"Debe especificar el c&oacute;digo num&eacute;rico ISO 3166-1 del nuevo pa&iacute;s.";
 #elif L==5	// fr
-	"You must specify the ISO 3166-1 numerical code of the new country.";			// Besoin de traduction
+	"Vous devez sp&eacute;cifier le code num&eacute;rique ISO 3166-1 du nouveau pays.";
 #elif L==6	// gn
 	"Debe especificar el c&oacute;digo num&eacute;rico ISO 3166-1 del nuevo pa&iacute;s.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare il codice numerico ISO 3166-1 del nuovo paese.";
 #elif L==8	// pl
-	"You must specify the ISO 3166-1 numerical code of the new country.";			// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; kod numeryczny ISO 3166-1 nowego kraju.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o c&oacute;digo num&eacute;rico ISO 3166-1 do novo pa&iacute;s.";
 #endif
 
 const char *Txt_You_must_specify_the_name =
 #if   L==1	// ca
-	"Debe especificar el nombre.";	// Necessita traducció
+	"Heu d'especificar el nom.";
 #elif L==2	// de
-	"You must specify the name.";	// Need Übersetzung
+	"Sie m&uml;ssen den Namen angeben.";
 #elif L==3	// en
 	"You must specify the name.";
 #elif L==4	// es
 	"Debe especificar el nombre.";
 #elif L==5	// fr
-	"You must specify the name.";	// Besoin de traduction
+	"Vous devez sp&eacute;cifier le nom.";
 #elif L==6	// gn
 	"Debe especificar el nombre.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare il nome.";
 #elif L==8	// pl
-	"You must specify the name.";	// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; nazw&eogon;.";
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome.";
 #endif
