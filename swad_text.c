@@ -2229,7 +2229,7 @@ const char *Txt_Application_key =
 #if   L==1	// ca
 	"Clau de aplicaci&oacute;";
 #elif L==2	// de
-	"Application key";		// Need Übersetzung
+	"Anwendungsschl&uuml;ssel";
 #elif L==3	// en
 	"Application key";
 #elif L==4	// es
@@ -23400,19 +23400,19 @@ const char *Txt_message_sent_to_X_not_notified_by_email =	// Warning: it is very
 #if   L==1	// ca
 	"Missatge enviat a %s (no notificat per email).";
 #elif L==2	// de
-	"Message sent to %s (not notified by email).";		// Need Übersetzung
+	"Nachricht an %s gesendet (nicht per E-Mail benachrichtigt).";
 #elif L==3	// en
 	"Message sent to %s (not notified by email).";
 #elif L==4	// es
 	"Mensaje enviado a %s (no notificado por email).";
 #elif L==5	// fr
-	"Message sent to %s (not notified by email).";		// Besoin de traduction
+	"Message envoy&eacute; &agrave; %s (non notifi&eacute; par email).";
 #elif L==6	// gn
 	"Mensaje enviado a %s (no notificado por email).";	// Okoteve traducción
 #elif L==7	// it
 	"Messaggio inviato a %s (non notificato per email).";
 #elif L==8	// pl
-	"Wiadomo&sacute;&cacute; wyslana do %s (nie zgloszonych przez email).";	//
+	"Wiadomo&sacute;&cacute; wyslana do %s (nie zgloszonych przez email).";
 #elif L==9	// pt
 	"Mensagem enviada para %s (n&atilde;o notificada por email).";
 #endif
@@ -27316,8 +27316,8 @@ const char *Txt_Not_visible =
 
 const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 #if   L==1	// ca
-	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
-	" Trate de copiar y pegar de nuevo.";	// Necessita traducció
+	"No s'enganxa res perqu&egrave; el porta-retalls &eacute;s buit."
+	" Intenta copiar i enganxar de nou.";
 #elif L==2	// de
 	"Es konnten keine Daten eingef&uuml;gt werden. Der Zwischenspeicher ist leer."
 	" Versuchen Sie den Kopieren-Einf&uuml;gen-Vorgang bitte erneut.";
@@ -27328,8 +27328,8 @@ const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
 	" Trate de copiar y pegar de nuevo.";
 #elif L==5	// fr
-	"Nothing has been pasted because the clipboard is empty."
-	" Try copy-paste again.";		// Besoin de traduction
+	"Rien n'a &eacute;t&eacute; coll&eacute; car le presse-papiers est vide."
+	" Essayez &agrave; nouveau de copier-coller.";
 #elif L==6	// gn
 	"No se pegado nada porque el portapapeles est&aacute; vac&iacute;o."
 	" Trate de copiar y pegar de nuevo.";	// Okoteve traducción
@@ -44844,19 +44844,19 @@ const char *Txt_Stay_connected_with_SWADroid =
 #if   L==1	// ca
 	"Seguiu connectat/da amb <strong>SWADroid</strong>.";
 #elif L==2	// de
-	"Stay connected with <strong>SWADroid</strong>.";		// Need Übersetzung
+	"Bleiben Sie mit <strong>SWADroid</strong> in Verbindung.";
 #elif L==3	// en
 	"Stay connected with <strong>SWADroid</strong>.";
 #elif L==4	// es
 	"Siga conectado/a con <strong>SWADroid</strong>.";
 #elif L==5	// fr
-	"Stay connected with <strong>SWADroid</strong>.";		// Besoin de traduction
+	"Restez connect&eacute; avec <strong>SWADroid</strong>.";
 #elif L==6	// gn
 	"Siga conectado/a con <strong>SWADroid</strong>.";		// Okoteve traducción
 #elif L==7	// it
 	"Resta in contatto con <strong>SWADroid</strong>.";
 #elif L==8	// pl
-	"Stay connected with <strong>SWADroid</strong>.";		// Potrzebujesz tlumaczenie
+	"Pozosta&nacute; w kontakcie z <strong>SWADroid</strong>.";
 #elif L==9	// pt
 	"Fique ligado/a com <strong>SWADroid</strong>.";
 #endif
@@ -45010,42 +45010,42 @@ const char *Txt_Student_record_card_in_this_course_has_been_updated =
 
 const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
 #if   L==1	// ca
-	"Los estudiantes ya no est&aacute;n obligados a leer esta informaci&oacute;n.";	// Necessita traducció
+	"Els estudiants ja no estan obligats a llegir aquesta informaci&oacute;.";
 #elif L==2	// de
-	"Students are no longer obliged to read this information.";			// Need Übersetzung
+	"Studierende sind nicht mehr verpflichtet, diese Informationen zu lesen.";
 #elif L==3	// en
 	"Students are no longer obliged to read this information.";
 #elif L==4	// es
 	"Los estudiantes ya no est&aacute;n obligados a leer esta informaci&oacute;n.";
 #elif L==5	// fr
-	"Students are no longer obliged to read this information.";			// Besoin de traduction
+	"Les &eacute;tudiants ne sont plus oblig&eacute;s de lire ces informations.";
 #elif L==6	// gn
 	"Los estudiantes ya no est&aacute;n obligados a leer esta informaci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
 	"Gli studenti non sono obbligati a leggere questa informazione.";
 #elif L==8	// pl
-	"Students are no longer obliged to read this information.";			// Potrzebujesz tlumaczenie
+	"Studenci nie s&aogon; ju&zdot; zobowi&aogon;zani do czytania tych informacji.";
 #elif L==9	// pt
 	"Os estudantes n&atilde;o precisam mais ler essas informa&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_Students_now_are_required_to_read_this_information =
 #if   L==1	// ca
-	"Los estudiantes ahora est&aacute;n obligados a leer esta informaci&oacute;n.";	// Necessita traducció
+	"Ara els estudiants han de llegir aquesta informaci&oacute;.";
 #elif L==2	// de
-	"Students now are required to read this information.";				// Need Übersetzung
+	"Die Sch&uuml;ler m&uuml;ssen diese Informationen jetzt lesen.";
 #elif L==3	// en
 	"Students now are required to read this information.";
 #elif L==4	// es
 	"Los estudiantes ahora est&aacute;n obligados a leer esta informaci&oacute;n.";
 #elif L==5	// fr
-	"Students now are required to read this information.";				// Besoin de traduction
+	"Les &eacute;tudiants sont maintenant tenus de lire ces informations.";
 #elif L==6	// gn
 	"Los estudiantes ahora est&aacute;n obligados a leer esta informaci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
 	"Gli studenti ora sono obbligati a leggere questa informazione.";
 #elif L==8	// pl
-	"Students now are required to read this information.";				// Potrzebujesz tlumaczenie
+	"Uczniowie s&aogon; teraz zobowi&aogon;zani do przeczytania tych informacji.";
 #elif L==9	// pt
 	"Os estudantes agora precisam ler essas informa&ccedil;&otilde;es.";
 #endif
@@ -47095,19 +47095,19 @@ const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very imp
 #if   L==1	// ca
 	"El pa&iacute;s <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
+	"Das Land <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
 	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
 	"El pa&iacute;s <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+	"Le pays <strong>%s</strong> a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
 	"El pa&iacute;s <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il paese <strong>%s</strong> &egrave; stato rimosso come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Kraj <strong>%s</strong> zosta&lstrok; przemianowany na <strong>%s</strong>.";
 #elif L==9	// pt
 	"O pa&iacute;s <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
@@ -47152,13 +47152,13 @@ const char *Txt_The_course_X_already_exists =	// Warning: it is very important t
 #elif L==4	// es
 	"La asignatura <strong>%s</strong> ya existe.";
 #elif L==5	// fr
-	"The course <strong>%s</strong> already exists.";	// Besoin de traduction
+	"La mati&egrave;re <strong>%s</strong> existe d&eacute;j&agrave;.";
 #elif L==6	// gn
 	"La asignatura <strong>%s</strong> ya existe.";		// Okoteve traducción
 #elif L==7	// it
 	"Il corso <strong>%s</strong> gi&agrave; esiste.";
 #elif L==8	// pl
-	"The course <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
+	"Kurs <strong>%s</strong> ju&zdot; istnieje.";
 #elif L==9	// pt
 	"A disciplina <strong>%s</strong> j&aacute; existe.";
 #endif
@@ -47173,13 +47173,13 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 #elif L==4	// es
 	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";
 #elif L==5	// fr
-	"The course <strong>%s</strong> already exists in year/semester %s.";		// Besoin de traduction
+	"La mati&egrave;re <strong>%s</strong> existe d&eacute;j&agrave; en ann&eacute;e/semestre %s.";
 #elif L==6	// gn
 	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";	// Okoteve traducción
 #elif L==7	// it
 	"Il corso <strong>%s</strong> esiste gi&agrave; nell'anno/semester %s.";
 #elif L==8	// pl
-	"The course <strong>%s</strong> already exists in year/semester %s.";		// Potrzebujesz tlumaczenie
+	"Kurs <strong>%s</strong> istnieje ju&zdot; na roku/semestrze %s.";
 #elif L==9	// pt
 	"A disciplina <strong>%s</strong> j&aacute; existe no ano/semestre %s.";
 #endif
@@ -47465,11 +47465,11 @@ const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is ver
 
 const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" ya ha sido registrada por otro usuario.";	// Necessita traducció
+	"L'adre&ccedil;a de correu electr&ograve;nic <strong>%s</strong>"
+	" ha estat registrada per un altre usuari.";
 #elif L==2	// de
-	"The email address <strong>%s</strong>"
-	" had been registered by another user.";	// Need Übersetzung
+	"Die E-Mail-Adresse <strong>%s</strong>"
+	" wurde von einem anderen Benutzer registriert.";
 #elif L==3	// en
 	"The email address <strong>%s</strong>"
 	" had been registered by another user.";
@@ -47477,8 +47477,8 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	"La direcci&oacute;n de correo <strong>%s</strong>"
 	" ya ha sido registrada por otro usuario.";
 #elif L==5	// fr
-	"The email address <strong>%s</strong>"
-	" had been enroled by another user.";		// Besoin de traduction
+	"L'adresse e-mail <strong>%s</strong>"
+	" a &eacute;t&eacute; inscrite par un autre utilisateur.";
 #elif L==6	// gn
 	"La direcci&oacute;n de correo <strong>%s</strong>"
 	" ya ha sido registrada por otro usuario.";	// Okoteve traducción
@@ -47486,8 +47486,8 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	"Il email <strong>%s</strong>"
 	" &egrave; stato registrato da un altro utente.";
 #elif L==8	// pl
-	"The email address <strong>%s</strong>"
-	" had been registered by another user.";	// Potrzebujesz tlumaczenie
+	"Adres e-mail <strong>%s</strong>"
+	" zosta&lstrok; zarejestrowany przez innego u&zdot;ytkownika.";
 #elif L==9	// pt
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" foi registrado por outro usu&aacute;rio.";
@@ -47495,11 +47495,11 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 
 const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El correo <strong>%s</strong>"
-	" se ha registrado correctamente.";		// Necessita traducció
+	"L'adre&ccedil;a de correu electr&ograve;nic <strong>%s</strong>"
+	" s'ha registrat correctament.";
 #elif L==2	// de
-	"The email address <strong>%s</strong>"
-	" has been registered successfully.";		// Need Übersetzung
+	"Die E-Mail-Adresse <strong>%s</strong>"
+	" wurde erfolgreich registriert.";
 #elif L==3	// en
 	"The email address <strong>%s</strong>"
 	" has been registered successfully.";
@@ -47507,17 +47507,17 @@ const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warnin
 	"El correo <strong>%s</strong>"
 	" se ha registrado correctamente.";
 #elif L==5	// fr
-	"The email address <strong>%s</strong>"
-	" has been registered successfully.";		// Besoin de traduction
+	"L'adresse e-mail <strong>%s</strong>"
+	" a &eacute;t&eacute; enregistr&eacute;e avec succ&egrave;s.";
 #elif L==6	// gn
 	"El correo <strong>%s</strong>"
-	" se ha registrado correctamente.";		// Okoteve traducción
+	" se ha registrado correctamente.";	// Okoteve traducción
 #elif L==7	// it
 	"Il email <strong>%s</strong>"
 	" &egrave; stato registrato con successo.";
 #elif L==8	// pl
-	"The email address <strong>%s</strong>"
-	" has been registered successfully.";		// Potrzebujesz tlumaczenie
+	"Adres e-mail <strong>%s</strong>"
+	" zosta&lstrok; pomy&sacute;lnie zarejestrowany.";
 #elif L==9	// pt
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" foi registrado com sucesso.";
@@ -47525,11 +47525,11 @@ const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warnin
 
 const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La direcci&oacute;n de correo <strong>%s</strong>"
-	" coincide con una registrada previamente.";	// Necessita traducció
+	"L'adre&ccedil;a de correu electr&ograve;nic <strong>%s</strong>"
+	" coincideix amb una registrada anteriorment.";
 #elif L==2	// de
-	"The email address <strong>%s</strong>"
-	" matches one previously registered.";		// Need Übersetzung
+	"Die E-Mail-Adresse <strong>%s</strong>"
+	" stimmt mit einer zuvor registrierten &uuml;berein.";
 #elif L==3	// en
 	"The email address <strong>%s</strong>"
 	" matches one previously registered.";
@@ -47537,8 +47537,8 @@ const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warni
 	"La direcci&oacute;n de correo <strong>%s</strong>"
 	" coincide con una registrada previamente.";
 #elif L==5	// fr
-	"The email address <strong>%s</strong>"
-	" matches one previously registered.";		// Besoin de traduction
+	"L'adresse e-mail <strong>%s</strong>"
+	" correspond &agrave; une adresse pr&eacute;c&eacute;demment enregistr&eacute;e.";
 #elif L==6	// gn
 	"La direcci&oacute;n de correo <strong>%s</strong>"
 	" coincide con una registrada previamente.";	// Okoteve traducción
@@ -47546,8 +47546,8 @@ const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warni
 	"Il email <strong>%s</strong>"
 	" coincide con uno precedentemente registrato.";
 #elif L==8	// pl
-	"The email address <strong>%s</strong>"
-	" matches one previously registered.";		// Potrzebujesz tlumaczenie
+	"Adres e-mail <strong>%s</strong>"
+	" odpowiada poprzednio zarejestrowanemu.";
 #elif L==9	// pt
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" corresponde a um registrado anteriormente.";
@@ -49581,19 +49581,19 @@ const char *Txt_The_place_of_the_center_has_changed =
 #if   L==1	// ca
 	"El lloc del centre ha canviat.";
 #elif L==2	// de
-	"The place of the center has changed.";		// Need Übersetzung
+	"Der Ort des Zentrums hat sich ge&auml;ndert.";
 #elif L==3	// en
 	"The place of the center has changed.";
 #elif L==4	// es
 	"El lugar del centro ha cambiado.";
 #elif L==5	// fr
-	"The place of the center has changed.";		// Besoin de traduction
+	"L'emplacement du centre a chang&eacute;.";
 #elif L==6	// gn
-	"El lugar del centro ha cambiado.";		// Okoteve traducción
+	"El lugar del centro ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il luogo del centro &egrave; cambiato.";
 #elif L==8	// pl
-	"The place of the center has changed.";		// Potrzebujesz tlumaczenie
+	"Zmieni&lstrok;o si&eogon; miejsce centrum.";
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o do centro mudou.";
 #endif
@@ -57538,21 +57538,21 @@ const char *Txt_You_can_create_a_new_folder_inside_the_folder_X =	// Warning: it
 
 const char *Txt_You_can_not_create_folders_files_or_links_here =
 #if   L==1	// ca
-	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";	// Necessita traducció
+	"No podeu crear carpetes, arxius o enlla&ccedil;os aqu&iacute;.";
 #elif L==2	// de
-	"You can not create folders, files or links here.";		// Need Übersetzung
+	"Sie k&ouml;nnen hier keine Ordner, Dateien oder Links erstellen.";
 #elif L==3	// en
 	"You can not create folders, files or links here.";
 #elif L==4	// es
 	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";
 #elif L==5	// fr
-	"You can not create folders, files or links here.";		// Besoin de traduction
+	"Vous ne pouvez pas cr&eacute;er de dossiers, de fichiers ou de liens ici.";
 #elif L==6	// gn
 	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi creare cartelle, file o linki qui.";
 #elif L==8	// pl
-	"You can not create folders, files or links here.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz tutaj tworzy&cacute; folder&oacute;w, plik&oacute;w ani link&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar pastas, arquivos ou links aqui.";
 #endif
@@ -57715,105 +57715,105 @@ const char *Txt_You_can_not_leave_the_field_empty =
 
 const char *Txt_You_can_not_paste_file_or_folder_here =
 #if   L==1	// ca
-	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Necessita traducció
+	"No podeu enganxar un arxiu o una carpeta aqu&iacute;.";
 #elif L==2	// de
-	"You can not paste file or folder here.";			// Need Übersetzung
+	"Sie k&ouml;nnen hier keine Dateien oder Ordner einf&uuml;gen.";
 #elif L==3	// en
 	"You can not paste file or folder here.";
 #elif L==4	// es
 	"No puede pegar un archivo o carpeta aqu&iacute;.";
 #elif L==5	// fr
-	"You can not paste file or folder here.";			// Besoin de traduction
+	"Vous ne pouvez pas coller de fichier ou de r&eacute;pertoire ici.";
 #elif L==6	// gn
-	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Okoteve traducción
+	"No puede pegar un archivo o carpeta aqu&iacute;.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi copiare file o cartella qui.";
 #elif L==8	// pl
-	"You can not paste file or folder here.";			// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz tutaj wklei&cacute; pliku lub folderu.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode colar arquivos ou pastas aqui.";
 #endif
 
 const char *Txt_You_can_not_remove_this_file_or_link =
 #if   L==1	// ca
-	"No puede eliminar este archivo o enlace.";		// Necessita traducció
+	"No podeu eliminar aquest arxiu o enlla&ccedil;.";
 #elif L==2	// de
-	"You can not remove this file or link.";		// Need Übersetzung
+	"Sie k&ouml;nnen diese Datei oder diesen Link nicht entfernen.";
 #elif L==3	// en
 	"You can not remove this file or link.";
 #elif L==4	// es
 	"No puede eliminar este archivo o enlace.";
 #elif L==5	// fr
-	"You can not remove this file or link.";		// Besoin de traduction
+	"Vous ne pouvez pas supprimer ce fichier ou ce lien.";
 #elif L==6	// gn
 	"No puede eliminar este archivo o enlace.";		// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rimuovere questo file o link.";
 #elif L==8	// pl
-	"You can not remove this file or link.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz usun&aogon;&cacute; tego pliku lub linku.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover este arquivo ou link.";
 #endif
 
 const char *Txt_You_can_not_remove_this_folder =
 #if   L==1	// ca
-	"No puede eliminar esta carpeta.";		// Necessita traducció
+	"No podeu eliminar aquesta carpeta.";
 #elif L==2	// de
-	"You can not remove this folder.";		// Need Übersetzung
+	"Sie k&ouml;nnen diesen Ordner nicht entfernen.";
 #elif L==3	// en
 	"You can not remove this folder.";
 #elif L==4	// es
 	"No puede eliminar esta carpeta.";
 #elif L==5	// fr
-	"You can not remove this folder.";		// Besoin de traduction
+	"Vous ne pouvez pas supprimer ce r&eacute;pertoire.";
 #elif L==6	// gn
 	"No puede eliminar esta carpeta.";		// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rimuovere questa cartella.";
 #elif L==8	// pl
-	"You can not remove this folder.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz usun&aogon;&cacute; tego folderu.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover esta pasta.";
 #endif
 
 const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #if   L==1	// ca
-	"No puede eliminar un pa&iacute;s con instituciones o usuarios.";	// Necessita traducció
+	"No pots eliminar un pa&iacute;s amb institucions o usuaris.";
 #elif L==2	// de
-	"You can not remove a country with institutions or users.";		// Need Übersetzung
+	"Sie k&ouml;nnen kein Land mit Institutionen oder Benutzern entfernen.";
 #elif L==3	// en
 	"You can not remove a country with institutions or users.";
 #elif L==4	// es
 	"No puede eliminar un pa&iacute;s con instituciones o usuarios.";
 #elif L==5	// fr
-	"You can not remove a country with instituciones or users.";		// Besoin de traduction
+	"Vous ne pouvez pas supprimer un pays avec des institutions ou des utilisateurs.";
 #elif L==6	// gn
 	"No puede eliminar un pa&iacute;s con instituciones o usuarios.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rimuovere un paese con istituzioni o utenti.";
 #elif L==8	// pl
-	"You can not remove a country with instituciones or users.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz usun&aogon;&cacute; kraju z instytucjami lub u&zdot;ytkownikami.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover um pa&iacute;s com instituciones ou usu&aacute;rios.";
 #endif
 
 const char *Txt_You_can_not_rename_this_folder =
 #if   L==1	// ca
-	"No puede cambiar el nombre de esta carpeta.";	// Necessita traducció
+	"No podeu canviar el nom d'aquesta carpeta.";
 #elif L==2	// de
-	"You can not rename this folder.";		// Need Übersetzung
+	"Sie k&ouml;nnen diesen Ordner nicht umbenennen.";
 #elif L==3	// en
 	"You can not rename this folder.";
 #elif L==4	// es
 	"No puede cambiar el nombre de esta carpeta.";
 #elif L==5	// fr
-	"You can not rename this folder.";		// Besoin de traduction
+	"Vous ne pouvez pas renommer ce r&eacute;pertoire.";
 #elif L==6	// gn
 	"No puede cambiar el nombre de esta carpeta.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rinominare questa cartella.";
 #elif L==8	// pl
-	"You can not rename this folder.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz zmieni&cacute; nazwy tego folderu.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode renomear esta pasta.";
 #endif
@@ -57871,11 +57871,11 @@ const char *Txt_You_can_not_take_a_new_test_until =
 
 const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Solo podr&aacute; realizar %u acciones m&aacute;s"
-	" si no env&iacute;a su fotograf&iacute;a.";		// Necessita traducció
+	"Nom&eacute;s podeu realitzar %u accions m&eacute;s"
+	" si no envieu la vostra foto.";
 #elif L==2	// de
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Need Übersetzung
+	"Sie k&ouml;nnen nur %u weitere Aktionen ausf&uuml;hren,"
+	" wenn Sie Ihr Foto nicht senden.";
 #elif L==3	// en
 	"You can only perform %u further actions"
 	" if you don't send your photo.";
@@ -57883,8 +57883,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";
 #elif L==5	// fr
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Besoin de traduction
+	"Vous ne pouvez effectuer que %u actions suppl&eacute;mentaires"
+	" si vous n'envoyez pas votre photo.";
 #elif L==6	// gn
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
 	" si no env&iacute;a su fotograf&iacute;a.";		// Okoteve traducción
@@ -57892,8 +57892,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"Puoi solo realizzare %u massime azioni"
 	" se non hai inviato la tua foto.";
 #elif L==8	// pl
-	"You can only perform %u further actions"
-	" if you don't send your photo.";			// Potrzebujesz tlumaczenie
+	"Je&sacute;li nie wy&sacute;lesz swojego zdj&eogon;cia,"
+	" mo&zdot;esz wykona&cacute; tylko %u dalszych dzia&lstrok;a&nacute;.";
 #elif L==9	// pt
 	"Voc&ecirc; s&oacute; pode executar %u a&ccedil;&otilde;es adicionais"
 	" se n&atilde;o enviar sua foto.";
@@ -57940,32 +57940,32 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is
 
 const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Puede apuntarse voluntariamente a un grupo de tipo %s.";	// Necessita traducció
+	"Podeu apuntar-vos volunt&agrave;riament a un grup de tipus %s.";
 #elif L==2	// de
-	"You can register voluntarily in one group of type %s.";	// Need Übersetzung
+	"Sie k&ouml;nnen sich freiwillig in einer Gruppe vom Typ %s anmelden.";
 #elif L==3	// en
 	"You can register voluntarily in one group of type %s.";
 #elif L==4	// es
 	"Puede apuntarse voluntariamente a un grupo de tipo %s.";
 #elif L==5	// fr
-	"You can register voluntarily in one group of type %s.";	// Besoin de traduction
+	"Vous pouvez vous inscrire volontairement dans un groupe de type %s.";
 #elif L==6	// gn
 	"Puede apuntarse voluntariamente a un grupo de tipo %s.";	// Okoteve traducción
 #elif L==7	// it
 	"Ti puoi registrare volontariamente in uno dei gruppi di tipo %s.";
 #elif L==8	// pl
-	"You can register voluntarily in one group of type %s.";	// Potrzebujesz tlumaczenie
+	"Mo&zdot;esz zarejestrowa&cacute; si&eogon; dobrowolnie w jednej grupie typu %s.";
 #elif L==9	// pt
 	"Voc&ecirc; pode se inscrever voluntariamente em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Puede apuntarse voluntariamente"
-	" a uno o a varios grupos de tipo %s.";		// Necessita traducció
+	"Podeu registrar-vos volunt&agrave;riament"
+	" en un o m&eacute;s grups de tipus %s.";
 #elif L==2	// de
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Need Übersetzung
+	"Sie k&ouml;nnen sich freiwillig"
+	" in einer oder mehreren Gruppen vom Typ %s registrieren.";
 #elif L==3	// en
 	"You can register voluntarily"
 	" in one or more groups of type %s.";
@@ -57973,8 +57973,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Puede apuntarse voluntariamente"
 	" a uno o a varios grupos de tipo %s.";
 #elif L==5	// fr
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Besoin de traduction
+	"Vous pouvez vous inscrire volontairement"
+	" dans un ou plusieurs groupes de type %s.";
 #elif L==6	// gn
 	"Puede apuntarse voluntariamente"
 	" a uno o a varios grupos de tipo %s.";		// Okoteve traducción
@@ -57982,8 +57982,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Ti puoi registrare volontariamente"
 	" in uno o pi&ugrave; gruppi di tipo %s.";
 #elif L==8	// pl
-	"You can register voluntarily"
-	" in one or more groups of type %s.";		// Potrzebujesz tlumaczenie
+	"Mo&zdot;esz zarejestrowa&cacute; si&eogon; dobrowolnie"
+	" w jednej lub kilku grupach typu %s.";
 #elif L==9	// pt
 	"Voc&ecirc; pode se inscrever voluntariamente"
 	" em um ou mais grupos do tipo %s.";
@@ -58162,21 +58162,21 @@ const char *Txt_You_dont_have_permission_to_perform_this_action =
 
 const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 #if   L==1	// ca
-	"Usted ha confirmado que ha leido esta informaci&oacute;n.";	// Necessita traducció
+	"Heu confirmat que heu llegit aquesta informaci&oacute;.";
 #elif L==2	// de
-	"You have confirmed that you have read this information.";	// Need Übersetzung
+	"Sie haben best&auml;tigt, dass Sie diese Informationen gelesen haben.";
 #elif L==3	// en
 	"You have confirmed that you have read this information.";
 #elif L==4	// es
 	"Usted ha confirmado que ha leido esta informaci&oacute;n.";
 #elif L==5	// fr
-	"You have confirmed that you have read this information.";	// Besoin de traduction
+	"Vous avez confirm&eacute; avoir lu ces informations.";
 #elif L==6	// gn
 	"Usted ha confirmado que ha leido esta informaci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
 	"Hai confermato che hai letto questa informazione.";
 #elif L==8	// pl
-	"You have confirmed that you have read this information.";	// Potrzebujesz tlumaczenie
+	"Potwierdzi&lstrok;e&sacute;, &zdot;e zapozna&lstrok;e&sacute; si&eogon; z tymi informacjami.";
 #elif L==9	// pt
 	"Voc&ecirc; confirmou que leu esta informa&ccedil;&atilde;o.";
 #endif
@@ -58390,21 +58390,21 @@ const char *Txt_You_have_not_entered_your_password_correctly =
 
 const char *Txt_You_have_not_written_twice_the_same_new_password =
 #if   L==1	// ca
-	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Necessita traducció
+	"No heu escrit dues vegades la mateixa contrasenya nova.";
 #elif L==2	// de
-	"You have not written twice the same new password.";			// Need Übersetzung
+	"Sie haben nicht zweimal das gleiche neue Passwort geschrieben.";
 #elif L==3	// en
 	"You have not written twice the same new password.";
 #elif L==4	// es
 	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";
 #elif L==5	// fr
-	"You have not written twice the same new password.";			// Besoin de traduction
+	"Vous n'avez pas &eacute;crit deux fois le m&ecirc;me nouveau mot de passe.";
 #elif L==6	// gn
 	"No ha escrito dos veces la misma contrase&ntilde;a nueva.";	// Okoteve traducción
 #elif L==7	// it
 	"Non hai scritto due volte la stessa password nuova.";
 #elif L==8	// pl
-	"You have not written twice the same new password.";			// Potrzebujesz tlumaczenie
+	"Nie wpisa&lstrok;e&sacute; dwa razy tego samego nowego has&lstrok;a.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o escreveu duas vezes a mesma nova senha.";
 #endif
@@ -58453,84 +58453,84 @@ const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very impo
 
 const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Tiene que apuntarse obligatoriamente al menos a un grupo de tipo %s.";	// Necessita traducció
+	"Cal registrar-se obligat&ograve;riament almenys en un grup de tipus %s.";
 #elif L==2	// de
-	"You have to register compulsorily at least in one group of type %s.";	// Need Übersetzung
+	"Sie m&uuml;ssen sich mindestens in einer Gruppe vom Typ %s verpflichtend anmelden.";
 #elif L==3	// en
 	"You have to register compulsorily at least in one group of type %s.";
 #elif L==4	// es
 	"Tiene que apuntarse obligatoriamente al menos a un grupo de tipo %s.";
 #elif L==5	// fr
-	"You have to register compulsorily at least in one group of type %s.";	// Besoin de traduction
+	"Vous devez obligatoirement vous inscrire au moins dans un groupe de type %s.";
 #elif L==6	// gn
 	"Tiene que apuntarse obligatoriamente al menos a un grupo de tipo %s.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi registrarti obbligatoriamente almeno in uno dei gruppi del tipo %s.";
 #elif L==8	// pl
-	"You have to register compulsorily at least in one group of type %s.";	// Potrzebujesz tlumaczenie
+	"Musisz obowi&aogon;zkowo zarejestrowa&cacute; si&eogon; przynajmniej w jednej grupie typu %s.";
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente pelo menos em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Tiene que apuntarse obligatoriamente a un grupo de tipo %s.";	// Necessita traducció
+	"Cal inscriure's obligat&ograve;riament en un grup de tipus %s.";
 #elif L==2	// de
-	"You have to register compulsorily in one group of type %s.";	// Need Übersetzung
+	"Sie m&uuml;ssen sich zwingend in einer Gruppe vom Typ %s anmelden.";
 #elif L==3	// en
 	"You have to register compulsorily in one group of type %s.";
 #elif L==4	// es
 	"Tiene que apuntarse obligatoriamente a un grupo de tipo %s.";
 #elif L==5	// fr
-	"You have to register compulsorily in one group of type %s.";	// Besoin de traduction
+	"Vous devez obligatoirement vous inscrire dans un groupe de type %s.";
 #elif L==6	// gn
 	"Tiene que apuntarse obligatoriamente a un grupo de tipo %s.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi registrarti obbligatoriamente in uno dei gruppi del tipo %s.";
 #elif L==8	// pl
-	"You have to register compulsorily in one group of type %s.";	// Potrzebujesz tlumaczenie
+	"Musisz obowi&aogon;zkowo zarejestrowa&cacute; si&eogon; w jednej grupie typu %s.";
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente em um grupo do tipo %s.";
 #endif
 
 const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
 #if   L==1	// ca
-	"Debe escribir un valor entero como respuesta correcta.";	// Necessita traducció
+	"Heu d'introduir un valor enter com a resposta correcta.";
 #elif L==2	// de
-	"You must enter an integer value as the correct answer.";	// Übersetzung notwendig
+	"Als richtige Antwort m&uuml;ssen Sie einen ganzzahligen Wert eingeben.";
 #elif L==3	// en
 	"You must enter an integer value as the correct answer.";
 #elif L==4	// es
 	"Debe escribir un valor entero como respuesta correcta.";
 #elif L==5	// fr
-	"You must enter an integer value as the correct answer.";	// Besoin de traduction
+	"Vous devez entrer une valeur enti&egrave;re comme r&eacute;ponse correcte.";
 #elif L==6	// gn
 	"Debe escribir un valor entero como respuesta correcta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi inserire un valore intero come risposta corretta.";
 #elif L==8	// pl
-	"You must enter an integer value as the correct answer.";	// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; warto&sacute;&cacute; ca&lstrok;kowit&aogon; jako poprawn&aogon; odpowied&zacute;.";
 #elif L==9	// pt
 	"Voc&ecirc; deve inserir um valor inteiro como a resposta correta.";
 #endif
 
 const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer =
 #if   L==1	// ca
-	"Debe escribir el intervalo de valores reales permitidos como respuesta.";	// Necessita traducció
+	"Heu d'introduir l'interval de valors de coma flotant perm&egrave;s com a resposta.";
 #elif L==2	// de
-	"You must enter the range of floating point values allowed as answer.";		// Übersetzung notwendig
+	"Als Antwort m&uuml;ssen Sie den Bereich der zul&auml;ssigen Flie&szlig;kommawerte eingeben.";
 #elif L==3	// en
 	"You must enter the range of floating point values allowed as answer.";
 #elif L==4	// es
 	"Debe escribir el intervalo de valores reales permitidos como respuesta.";
 #elif L==5	// fr
-	"You must enter the range of floating point values allowed as answer.";		// Besoin de traduction
+	"Vous devez entrer la plage de valeurs &agrave; virgule flottante autoris&eacute;e comme r&eacute;ponse.";
 #elif L==6	// gn
 	"Debe escribir el intervalo de valores reales permitidos como respuesta.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi inserire il range di valori reali permessi come risposta.";
 #elif L==8	// pl
-	"You must enter the range of floating point values allowed as answer.";		// Potrzebujesz tlumaczenie
+	"Musisz poda&cacute; zakres warto&sacute;ci zmiennoprzecinkowych dozwolonych jako odpowied&zacute;.";
 #elif L==9	// pt
 	"Voc&ecirc; deve inserir o intervalo de valores de ponto flutuante permitidos como resposta.";
 #endif
