@@ -612,7 +612,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_inst
 #elif L==4	// es
 	"accesible para lectura y escritura por administradores de la instituci&oacute;n";
 #elif L==5	// fr
-	"accessible en lecture et en &eacute;criture par les administrateurs du &eacute;tablissement";
+	"accessible en lecture et en &eacute;criture par les administrateurs de l'&eacute;tablissement";
 #elif L==6	// gn
 	"accesible para lectura y escritura por administradores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -747,7 +747,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #elif L==4	// es
 	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";
 #elif L==5	// fr
-	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants du &eacute;tablissement";
+	"accessible en lecture et en &eacute;criture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
 #elif L==6	// gn
 	"accesible para lectura y escritura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -924,7 +924,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_inst
 #elif L==4	// es
 	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";
 #elif L==5	// fr
-	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du &eacute;tablissement";
+	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants de l'&eacute;tablissement";
 #elif L==6	// gn
 	"accesible solo para lectura por estudiantes y profesores de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -3844,8 +3844,8 @@ const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or
 	"No s'ha creat la carpeta <strong>%s</strong>"
 	" perque ja existeix una carpeta o un fitxer amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the folder <strong>%s</strong>"
-	" because there is already a folder or a file with that name.";	// Need Übersetzung
+	"Der Ordner <strong>%s</strong> kann nicht erstellt werden,"
+	" da bereits ein Ordner oder eine Datei mit diesem Namen vorhanden ist.";
 #elif L==3	// en
 	"Cannot create the folder <strong>%s</strong>"
 	" because there is already a folder or a file with that name.";
@@ -3904,8 +3904,8 @@ const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a
 	"No s'ha creat l'enlla&ccedil; <strong>%s</strong>"
 	" perque ja existeix una carpeta o un enlla&ccedil; amb aquest nom.";
 #elif L==2	// de
-	"Cannot create the link <strong>%s</strong>"
-	" because there is already a folder or a link with that name.";	// Need Übersetzung
+	"Der Link <strong>%s</strong> kann nicht erstellt werden,"
+	" da bereits ein Ordner oder Link mit diesem Namen vorhanden ist.";
 #elif L==3	// en
 	"Cannot create the link <strong>%s</strong>"
 	" because there is already a folder or a link with that name.";
@@ -9490,7 +9490,7 @@ const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z
 #elif L==5	// fr
 	"Do you really want to remove the field <strong>%s</strong>"
 	" from the records of <strong>%s</strong>"
-	" (this field is filled in the records of %u student(s))?";		// Besoin de traduction
+	" (this field is filled in the records of %u student(s))?";			// Besoin de traduction
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
 	" de las fichas de <strong>%s</strong>"
@@ -9502,7 +9502,7 @@ const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z
 #elif L==8	// pl
 	"Do you really want to remove the field <strong>%s</strong>"
 	" from the records of <strong>%s</strong>"
-	" (this field is filled in the records of %u student(s))?";		// Potrzebujesz tlumaczenie
+	" (this field is filled in the records of %u student(s))?";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o campo <strong>%s</strong>"
 	" dos cart&otilde;es de <strong>%s</strong>"
@@ -9811,8 +9811,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"De veres voleu eliminar el grup <strong>%s</strong>?<br />"
 	"Si ho fa, %u estudiants deixaran de pert&agrave;nyer a aquest grup.";
 #elif L==2	// de
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove %u students from that group.";			// Need Übersetzung
+	"M&ouml;chten Sie die Gruppe <strong>%s</strong> wirklich entfernen?<br />"
+	"Dadurch werden %u Sch&uuml;ler aus dieser Gruppe entfernt.";
 #elif L==3	// en
 	"Do you really want to remove the group <strong>%s</strong>?<br />"
 	"Doing so will remove %u students from that group.";
@@ -9820,8 +9820,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
 	"Si lo hace, %u estudiantes dejar&aacute;n de pertenecer a ese grupo.";
 #elif L==5	// fr
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove %u students from that group.";			// Besoin de traduction
+	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?<br />"
+	"Cela supprimera les %u &eacute;tudiants de ce groupe.";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
 	"Si lo hace, %u estudiantes dejar&aacute;n de pertenecer a ese grupo.";	// Okoteve traducción
@@ -14591,7 +14591,7 @@ const char *Txt_Full_name_of_the_institution =
 #elif L==4	// es
 	"Nombre completo de la instituci&oacute;n";
 #elif L==5	// fr
-	"Nom complet de l'institution";
+	"Nom complet de l'&eacute;tablissement";
 #elif L==6	// gn
 	"Nombre completo de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -16195,7 +16195,7 @@ const char *Txt_ID =
 
 const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El ID (DNI/c&eacute;dula) %s ja havia estat confirmat.";
+	"El ID (DNI/c&egrave;dula) %s ja havia estat confirmat.";
 #elif L==2	// de
 	"ID %s hatte bereits best&auml;tigt worden.";
 #elif L==3	// en
@@ -16216,7 +16216,7 @@ const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very importa
 
 const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"ID (DNI/c&eacute;dula) %s confirmat";
+	"ID (DNI/c&egrave;dula) %s confirmat";
 #elif L==2	// de
 	"ID %s best&auml;tigt";
 #elif L==3	// en
@@ -16237,7 +16237,7 @@ const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s 
 
 const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"ID (DNI/c&eacute;dula) %s no confirmat";
+	"ID (DNI/c&egrave;dula) %s no confirmat";
 #elif L==2	// de
 	"ID %s nicht best&auml;tigt";
 #elif L==3	// en
@@ -16258,7 +16258,7 @@ const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include
 
 const char *Txt_ID_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"ID (DNI/c&eacute;dula) <strong>%s</strong> eliminat.";
+	"ID (DNI/c&egrave;dula) <strong>%s</strong> eliminat.";
 #elif L==2	// de
 	"ID <strong>%s</strong> entfernt.";
 #elif L==3	// en
@@ -17836,7 +17836,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 #elif L==4	// es
 	"Usuarios de la instituci&oacute;n"
 #elif L==5	// fr
-	"Utilisateurs du &eacute;tablissement"
+	"Utilisateurs de l'&eacute;tablissement"
 #elif L==6	// gn
 	"Usuarios de la instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
@@ -26478,13 +26478,13 @@ const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is 
 #if   L==1	// ca
 	"No s'han creat grups a l'assignatura <strong>%s</strong>.";
 #elif L==2	// de
-	"No groups have been created in the course <strong>%s</strong>.";	// Need Übersetzung
+	"Im Kurs <strong>%s</strong> wurden keine Gruppen erstellt.";
 #elif L==3	// en
 	"No groups have been created in the course <strong>%s</strong>.";
 #elif L==4	// es
 	"No se han creado grupos en la asignatura <strong>%s</strong>.";
 #elif L==5	// fr
-	"No groups have been created in the course <strong>%s</strong>.";	// Besoin de traduction
+	"Aucun groupe n'a &eacute;t&eacute; cr&eacute;&eacute; dans la mati&egrave;re <strong>%s</strong>.";
 #elif L==6	// gn
 	"No se han creado grupos en la asignatura <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -26497,32 +26497,41 @@ const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is 
 
 const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"No se han creado grupos en la asignatura <strong>%s</strong>."
-	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";	// Necessita traducció
+	"No s'ha creat cap grup a l'assignatura <strong>%s</strong>."
+	" Per tant, els usuaris especificats"
+	" seran inscrits/eliminats en/de l'assignatura.";
 #elif L==2	// de
-	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enroled/removed in/from the course.";				// Need Übersetzung
+	"Im Kurs <strong>%s</strong> wurden keine Gruppen erstellt."
+	" Daher werden die angegebenen Benutzer"
+	" in den Kurs eingeschrieben/aus diesem entfernt.";
 #elif L==3	// en
 	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enroled/removed in/from the course.";
+	"Therefore, the specified users"
+	" will be enroled/removed in/from the course.";
 #elif L==4	// es
 	"No se han creado grupos en la asignatura <strong>%s</strong>."
-	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";
+	" Por tanto, los usuarios especificados"
+	" ser&aacute;n inscritos/eliminados en/de la asignatura.";
 #elif L==5	// fr
-	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enroled/removed in/from the course.";				// Besoin de traduction
+	"Aucun groupe n'a &eacute;t&eacute; cr&eacute;&eacute; dans la mati&egrave;re <strong>%s</strong>."
+	" Par cons&eacute;quent, les utilisateurs sp&eacute;cifi&eacute;s"
+	" seront inscrits/retir&eacute;s de la mati&egrave;re.";
 #elif L==6	// gn
 	"No se han creado grupos en la asignatura <strong>%s</strong>."
-	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";	// Okoteve traducción
+	" Por tanto, los usuarios especificados"
+	" ser&aacute;n inscritos/eliminados en/de la asignatura.";	// Okoteve traducción
 #elif L==7	// it
 	"Nessun gruppo &egrave; stato creato nel corso <strong>%s</strong>."
-	"Dunque, gli utenti specificati saranno registrati/rimossi in/dal corso.";
+	"Dunque, gli utenti specificati"
+	" saranno registrati/rimossi in/dal corso.";
 #elif L==8	// pl
 	"Nr grupy zostaly utworzone w ramach <strong>%s</strong>."
-	"Dlatego okreslonych uzytkownik&oacute;w zostanie zarejestrowany/usuniete w/z kursu.";
+	"Dlatego okreslonych uzytkownik&oacute;w"
+	" zostanie zarejestrowany/usuniete w/z kursu.";
 #elif L==9	// pt
 	"Nenhum grupo foi criado na disciplina <strong>%s</strong>."
-	" Portanto, os usu&aacute;rios especificados ser&atilde;o inscritos/removidos da disciplina.";
+	" Portanto, os usu&aacute;rios especificados"
+	" ser&atilde;o inscritos/removidos da disciplina.";
 #endif
 
 const char *Txt_No_holidays =
@@ -28596,13 +28605,13 @@ const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Wa
 #if   L==1	// ca
 	"Ara cada estudiant pot pertànyer a diversos grups tipus <strong>%s</strong>.";
 #elif L==2	// de
-	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		// Need Übersetzung
+	"Jetzt kann jeder Sch&uuml;ler mehreren Gruppen des Typs <strong>%s</strong> angeh&ouml;ren.";
 #elif L==3	// en
 	"Now each student can belong to multiple groups of type <strong>%s</strong>.";
 #elif L==4	// es
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";
 #elif L==5	// fr
-	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		// Besoin de traduction
+	"D&eacute;sormais, chaque &eacute;tudiant peut appartenir &agrave; plusieurs groupes de type <strong>%s</strong>.";
 #elif L==6	// gn
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -28617,13 +28626,13 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 #if   L==1	// ca
 	"Ara cada estudiant nom&eacute;s pot pert&agrave;nyer a un grup de tipus <strong>%s</strong>.";
 #elif L==2	// de
-	"Now each student can only belong to a group of type <strong>%s</strong>.";		// Need Übersetzung
+	"Jetzt kann jeder Sch&uuml;ler nur noch einer Gruppe vom Typ <strong>%s</strong> angeh&ouml;ren.";
 #elif L==3	// en
 	"Now each student can only belong to a group of type <strong>%s</strong>.";
 #elif L==4	// es
 	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";
 #elif L==5	// fr
-	"Now each student can only belong to a group of type <strong>%s</strong>.";		// Besoin de traduction
+	"D&eacute;sormais, chaque &eacute;tudiant ne peut appartenir qu'&agrave; un groupe de type <strong>%s</strong>.";
 #elif L==6	// gn
 	"Ahora cada estudiante solo puede pertenecer a un grupo de tipo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -33374,15 +33383,15 @@ const char *Txt_Recommended_resolution =
 
 const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Se ha eliminado la ficha de <strong>%s</strong>.";	// Necessita traducció
+	"S'ha suprimit la fitxa <strong>%s</strong>.";
 #elif L==2	// de
-	"Record card of <strong>%s</strong> has been removed.";	// Need Übersetzung
+	"Karteikarte von <strong>%s</strong> wurde entfernt.";
 #elif L==3	// en
 	"Record card of <strong>%s</strong> has been removed.";
 #elif L==4	// es
 	"Se ha eliminado la ficha de <strong>%s</strong>.";
 #elif L==5	// fr
-	"Record card of <strong>%s</strong> has been removed.";	// Besoin de traduction
+	"La carte d'enregistrement de <strong>%s</strong> a &eacute;t&eacute; supprim&eacute;e.";
 #elif L==6	// gn
 	"Se ha eliminado la ficha de <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
@@ -33975,7 +33984,7 @@ const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warn
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
 	"Inscrire en tant qu'administrateur"
-	" du &eacute;tablissement <strong>%s</strong>";
+	" de l'&eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Inscribir como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
@@ -34485,7 +34494,7 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
 	"Enlever-moi en tant qu'administrateur"
-	" du &eacute;tablissement <strong>%s</strong>";
+	" de l'&eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminarme como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
@@ -34953,7 +34962,7 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warnin
 	" de la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
 	"Enlever en tant qu'administrateur"
-	" du &eacute;tablissement <strong>%s</strong>";
+	" de l'&eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Eliminar como administrador/a"
 	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
@@ -41163,7 +41172,7 @@ const char *Txt_Select_or_create_another_center_in_X =	// Warning: it is very im
 #elif L==4	// es
 	"Seleccionar o crear otro centro en la instituci&oacute;n <strong>%s</strong>";
 #elif L==5	// fr
-	"S&eacute;lectionnez ou cr&eacute;ez un autre &eacute;tude du &eacute;tablissement <strong>%s</strong>";
+	"S&eacute;lectionnez ou cr&eacute;ez un autre &eacute;tude de l'&eacute;tablissement <strong>%s</strong>";
 #elif L==6	// gn
 	"Seleccionar o crear otro centro en la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
 #elif L==7	// it
@@ -46357,19 +46366,19 @@ const char *Txt_The_alphabetical_code_X_already_exists =	// Warning: it is very 
 #if   L==1	// ca
 	"El codi alfab&egrave;tic ISO 3166-1 %s ja existeix.";
 #elif L==2	// de
-	"The ISO 3166-1 alphabetical code %s already exists.";		// Need Übersetzung
+	"Der alphabetische ISO 3166-1-Code %s existiert bereits.";
 #elif L==3	// en
 	"The ISO 3166-1 alphabetical code %s already exists.";
 #elif L==4	// es
 	"El c&oacute;digo alfab&eacute;tico ISO 3166-1 %s ya existe.";
 #elif L==5	// fr
-	"The ISO 3166-1 alphabetical code %s already exists.";		// Besoin de traduction
+	"Le code alphab&eacute;tique ISO 3166-1 %s existe d&eacute;j&agrave;.";
 #elif L==6	// gn
 	"El c&oacute;digo alfab&eacute;tico ISO 3166-1 %s ya existe.";	// Okoteve traducción
 #elif L==7	// it
 	"Il codice alfabetico ISO 3166-1 %s gi&agrave; esiste.";
 #elif L==8	// pl
-	"The ISO 3166-1 alphabetical code %s already exists.";		// Potrzebujesz tlumaczenie
+	"Kod alfabetyczny ISO 3166-1 %s ju&zdot; istnieje.";
 #elif L==9	// pt
 	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s j&aacute; existe.";
 #endif
@@ -46378,30 +46387,30 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 #if   L==1	// ca
 	"El codi alfab&egrave;tic ISO 3166-1 %s no &eacute;s correcte.";
 #elif L==2	// de
-	"The ISO 3166-1 alphabetical code %s is not correct.";			// Need Übersetzung
+	"Der alphabetische ISO 3166-1-Code %s ist nicht korrekt.";
 #elif L==3	// en
 	"The ISO 3166-1 alphabetical code %s is not correct.";
 #elif L==4	// es
 	"El c&oacute;digo alfab&eacute;tico ISO 3166-1 %s no es correcto.";
 #elif L==5	// fr
-	"The ISO 3166-1 alphabetical code %s is not correct.";			// Besoin de traduction
+	"Le code alphab&eacute;tique ISO 3166-1 %s n'est pas correct.";
 #elif L==6	// gn
 	"El c&oacute;digo alfab&eacute;tico ISO 3166-1 %s no es correcto.";	// Okoteve traducción
 #elif L==7	// it
 	"Il codice alfabetico ISO 3166-1 %s non &egrave; corretto.";
 #elif L==8	// pl
-	"The ISO 3166-1 alphabetical code %s is not correct.";			// Potrzebujesz tlumaczenie
+	"Kod alfabetyczny ISO 3166-1 %s jest nieprawid&lstrok;owy.";
 #elif L==9	// pt
 	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s n&atilde;o est&aacute; correto.";
 #endif
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
-	" aparecer&aacute;n barajadas.";	// Necessita traducció
+	"Les respostes de la pregunta amb el codi <strong>%ld</strong>"
+	" apareixeran remenades.";
 #elif L==2	// de
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear shuffled.";		// Need Übersetzung
+	"Die Antworten der Frage mit dem Code <strong>%ld</strong>"
+	" erscheinen gemischt.";
 #elif L==3	// en
 	"The answers of the question with code <strong>%ld</strong>"
 	" will appear shuffled.";
@@ -46409,8 +46418,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	/
 	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
 	" aparecer&aacute;n barajadas.";
 #elif L==5	// fr
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear shuffled.";		// Besoin de traduction
+	"Les r&eacute;ponses &agrave; la question avec le code <strong>%ld</strong>"
+	" appara&icirc;tront m&eacute;lang&eacute;es.";
 #elif L==6	// gn
 	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
 	" aparecer&aacute;n barajadas.";	// Okoteve traducción
@@ -46418,8 +46427,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	/
 	"Le risposte alla domande con il codice <strong>%ld</strong>"
 	" appariranno mischiate.";
 #elif L==8	// pl
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear shuffled.";		// Potrzebujesz tlumaczenie
+	"Odpowiedzi na pytanie z kodem <strong>%ld</strong>"
+	" pojawi&aogon; si&eogon; potasowane.";
 #elif L==9	// pt
 	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
 	" aparecer&atilde;o embaralhadas.";
@@ -46427,11 +46436,11 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	/
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
-	" aparecer&aacute;n sin barajar.";	// Necessita traducció
+	"Les respostes de la pregunta amb el codi <strong>%ld</strong>"
+	" apareixeran sense remenar.";
 #elif L==2	// de
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear without shuffling.";	// Need Übersetzung
+	"Die Antworten der Frage mit Code <strong>%ld</strong>"
+	" erscheinen ohne Mischen.";
 #elif L==3	// en
 	"The answers of the question with code <strong>%ld</strong>"
 	" will appear without shuffling.";
@@ -46439,8 +46448,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
 	" aparecer&aacute;n sin barajar.";
 #elif L==5	// fr
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear without shuffling.";	// Besoin de traduction
+	"Les r&eacute;ponses de la question avec le code <strong>%ld</strong>"
+	" appara&icirc;tront sans m&eacute;lange.";
 #elif L==6	// gn
 	"Las respuestas de la pregunta con c&oacute;digo <strong>%ld</strong>"
 	" aparecer&aacute;n sin barajar.";	// Okoteve traducción
@@ -46448,8 +46457,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 	"Le risposte della domanda con il codice <strong>%ld</strong>"
 	" appariranno senza essere mischiate.";
 #elif L==8	// pl
-	"The answers of the question with code <strong>%ld</strong>"
-	" will appear without shuffling.";	// Potrzebujesz tlumaczenie
+	"Odpowiedzi na pytanie z kodem <strong>%ld</strong>"
+	" pojawi&aogon; si&eogon; bez tasowania.";
 #elif L==9	// pt
 	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
 	" aparecer&atilde;o sem embaralhar.";
@@ -46688,11 +46697,11 @@ const char *Txt_The_center_X_already_exists =	// Warning: it is very important t
 
 const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El centro <strong>%s</strong> se ha movido"
-	" a la instituci&oacute;n <strong>%s</strong>.";	// Necessita traducció
+	"El centre <strong>%s</strong> s'ha traslladat"
+	" a la instituci&oacute; <strong>%s</strong>.";
 #elif L==2	// de
-	"The center <strong>%s</strong> has been moved"
-	" to the institution <strong>%s</strong>.";		// Need Übersetzung
+	"Das Zentrum <strong>%s</strong> wurde"
+	" in die Institution <strong>%s</strong> verlegt.";
 #elif L==3	// en
 	"The center <strong>%s</strong> has been moved"
 	" to the institution <strong>%s</strong>.";
@@ -46700,8 +46709,8 @@ const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: i
 	"El centro <strong>%s</strong> se ha movido"
 	" a la instituci&oacute;n <strong>%s</strong>.";
 #elif L==5	// fr
-	"The center <strong>%s</strong> has been moved"
-	" to the institution <strong>%s</strong>.";		// Besoin de traduction
+	"Le centre <strong>%s</strong> a &eacute;t&eacute; transf&eacute;r&eacute;"
+	" dans l'&eacute;tablissement <strong>%s</strong>.";
 #elif L==6	// gn
 	"El centro <strong>%s</strong> se ha movido"
 	" a la instituci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
@@ -46709,8 +46718,8 @@ const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: i
 	"Il center <strong>%s</strong> &egrave; stato spostato"
 	" alla istituzione <strong>%s</strong>.";
 #elif L==8	// pl
-	"The center <strong>%s</strong> has been moved"
-	" to the institution <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Centrum <strong>%s</strong> zosta&lstrok;o przeniesione"
+	" do instytucji <strong>%s</strong>.";
 #elif L==9	// pt
 	"O centro <strong>%s</strong> foi transferido"
 	" para a institui&ccedil;&atilde;o <strong>%s</strong>.";
@@ -46720,19 +46729,19 @@ const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #if   L==1	// ca
 	"El centre <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
+	"Das Zentrum <strong>%s</strong> wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
 	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Besoin de traduction
+	"Le centre <strong>%s</strong> a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
 	"El centro <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Il centro <strong>%s</strong> &egrave; stato rinominato <strong>%s</strong>.";
 #elif L==8	// pl
-	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"Centrum <strong>%s</strong> zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
@@ -47186,11 +47195,11 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 
 const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La asignatura <strong>%s</strong> se ha movido"
-	" a la titulaci&oacute;n <strong>%s</strong>.";	// Necessita traducció
+	"L'assignatura <strong>%s</strong>"
+	" s'ha traslladat al grau <strong>%s</strong>.";
 #elif L==2	// de
-	"The course <strong>%s</strong> has been moved"
-	" to the degree <strong>%s</strong>.";		// Need Übersetzung
+	"Der Studiengang <strong>%s</strong>"
+	" wurde in den Studiengang <strong>%s</strong> verschoben.";
 #elif L==3	// en
 	"The course <strong>%s</strong> has been moved"
 	" to the degree <strong>%s</strong>.";
@@ -47198,8 +47207,8 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 	"La asignatura <strong>%s</strong> se ha movido"
 	" a la titulaci&oacute;n <strong>%s</strong>.";
 #elif L==5	// fr
-	"The course <strong>%s</strong> has been moved"
-	" to the degree <strong>%s</strong>.";		// Besoin de traduction
+	"La mati&egrave;re <strong>%s</strong> a &eacute;t&eacute; d&eacute;plac&eacute;e"
+	" &agrave; l'&eacute;tude <strong>%s</strong>.";
 #elif L==6	// gn
 	"La asignatura <strong>%s</strong> se ha movido"
 	" a la titulaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
@@ -47207,8 +47216,8 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 	"Il corso <strong>%s</strong> &egrave; stato spostato"
 	" dalla laurea <strong>%s</strong>.";
 #elif L==8	// pl
-	"The course <strong>%s</strong> has been moved"
-	" to the degree <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Kurs <strong>%s</strong> zosta&lstrok; przeniesiony"
+	" na stopie&nacute; <strong>%s</strong>.";
 #elif L==9	// pt
 	"A disciplina curso <strong>%s</strong> foi movida"
 	" para o grau <strong>%s</strong>.";
@@ -47246,21 +47255,21 @@ const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very impo
 
 const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La fecha de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Necessita traducció
+	"La data de la festivitat <strong>%s</strong> ha canviat a <strong>%s</strong>.";
 #elif L==2	// de
-	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Need Übersetzung
+	"Das Datum des Feiertags <strong>%s</strong> hat sich auf <strong>%s</strong> ge&auml;ndert.";
 #elif L==3	// en
 	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";
 #elif L==4	// es
 	"La fecha de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";
 #elif L==5	// fr
-	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Besoin de traduction
+	"La date de la f&ecirc;te <strong>%s</strong> est pass&eacute;e &agrave; <strong>%s</strong>.";
 #elif L==6	// gn
 	"La fecha de la festividad <strong>%s</strong> ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"La data delle festivit&agrave; <strong>%s</strong> &egrave; cambiata a <strong>%s</strong>.";
 #elif L==8	// pl
-	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"Data &sacute;wi&eogon;ta <strong>%s</strong> zmieni&lstrok;a si&eogon; na <strong>%s</strong>.";
 #elif L==9	// pt
 	"A data do feriado <strong>%s</strong> mudou para <strong>%s</strong>.";
 #endif
@@ -48215,32 +48224,31 @@ const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very imp
 
 const char *Txt_The_HTML_file_has_been_received_successfully =
 #if   L==1	// ca
-	"El archivo <em>HTML</em> se ha recibido correctamente.";	// Necessita traducció
+	"L'arxiu <em>HTML</em> s'ha rebut correctament.";
 #elif L==2	// de
-	"The <em>HTML</em> file has been received successfully.";	// Need Übersetzung
+	"Die <em>HTML</em>-Datei wurde erfolgreich empfangen.";
 #elif L==3	// en
 	"The <em>HTML</em> file has been received successfully.";
 #elif L==4	// es
 	"El archivo <em>HTML</em> se ha recibido correctamente.";
 #elif L==5	// fr
-	"The <em>HTML</em> file has been received successfully.";	// Besoin de traduction
+	"Le fichier <em>HTML</em> a bien &eacute;t&eacute; re&ccedil;u.";
 #elif L==6	// gn
 	"El archivo <em>HTML</em> se ha recibido correctamente.";	// Okoteve traducción
 #elif L==7	// it
 	"Il <em>HTML</em> file &egrave; stato ricevuto con successo.";
 #elif L==8	// pl
-	"The <em>HTML</em> file has been received successfully.";	// Potrzebujesz tlumaczenie
+	"Plik <em>HTML</em> zosta&lstrok; pomy&sacute;lnie odebrany.";
 #elif L==9	// pt
 	"O arquivo <em>HTML</em> foi recebido com sucesso.";
 #endif
 
 const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
-	" ha sido confirmado.";		// Necessita traducció
+	"S'ha confirmat l'ID (DNI/c&egrave;dula) <strong>%s</strong>.";
 #elif L==2	// de
-	"The ID <strong>%s</strong>"
-	" has been confirmed.";		// Need Übersetzung
+	"Die ID <strong>%s</strong>"
+	" wurde best&auml;tigt.";
 #elif L==3	// en
 	"The ID <strong>%s</strong>"
 	" has been confirmed.";
@@ -48248,8 +48256,8 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" ha sido confirmado.";
 #elif L==5	// fr
-	"The ID <strong>%s</strong>"
-	" has been confirmed.";		// Besoin de traduction
+	"L'ID <strong>%s</strong>"
+	" a &eacute;t&eacute; confirm&eacute;.";
 #elif L==6	// gn
 	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" ha sido confirmado.";		// Okoteve traducción
@@ -48257,8 +48265,8 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 	"Il ID <strong>%s</strong>"
 	" &egrave; stato confermato.";
 #elif L==8	// pl
-	"The ID <strong>%s</strong>"
-	" has been confirmed.";		// Potrzebujesz tlumaczenie
+	"Identyfikator <strong>%s</strong>"
+	" zosta&lstrok; potwierdzony.";
 #elif L==9	// pt
 	"O ID <strong>%s</strong>"
 	" foi confirmado.";
@@ -48266,11 +48274,11 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 
 const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
-	" se ha registrado correctamente.";		// Necessita traducció
+	"L'ID (DNI/c&egrave;dula) <strong>%s</strong>"
+	" s'ha registrat correctament.";
 #elif L==2	// de
-	"The ID <strong>%s</strong>"
-	" has been registered successfully.";		// Need Übersetzung
+	"Die ID <strong>%s</strong>"
+	" wurde korrekt registriert.";
 #elif L==3	// en
 	"The ID <strong>%s</strong>"
 	" has been registered successfully.";
@@ -48278,8 +48286,8 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" se ha registrado correctamente.";
 #elif L==5	// fr
-	"The ID <strong>%s</strong>"
-	" has been registered successfully.";		// Besoin de traduction
+	"L'ID <strong>%s</strong>"
+	" a &eacute;t&eacute; enregistr&eacute; correctement.";
 #elif L==6	// gn
 	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" se ha registrado correctamente.";		// Okoteve traducción
@@ -48287,8 +48295,8 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 	"Il ID <strong>%s</strong>"
 	" &egrave; stato registrato con successo.";
 #elif L==8	// pl
-	"The ID <strong>%s</strong>"
-	" has been registered successfully.";		// Potrzebujesz tlumaczenie
+	"Identyfikator <strong>%s</strong>"
+	" zosta&lstrok; poprawnie zarejestrowany.";
 #elif L==9	// pt
 	"O ID <strong>%s</strong>"
 	" foi registrado com sucesso.";
@@ -48392,21 +48400,21 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Necessita traducció
+	"El @nick, el correu electr&ograve;nic o l'ID <strong>%s</strong> no &eacute;s v&agrave;lid.";
 #elif L==2	// de
-	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Need Übersetzung
+	"Der @nick, die E-Mail-Adresse oder die ID <strong>%s</strong> ist ung&uuml;ltig.";
 #elif L==3	// en
 	"The @nick, email or ID <strong>%s</strong> is not valid.";
 #elif L==4	// es
 	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";
 #elif L==5	// fr
-	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Besoin de traduction
+	"Le @nick, email ou ID <strong>%s</strong> n'est pas valide.";
 #elif L==6	// gn
 	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Okoteve traducción
 #elif L==7	// it
 	"Il @nome-utente, email o ID <strong>%s</strong> non &egrave; valido.";
 #elif L==8	// pl
-	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Potrzebujesz tlumaczenie
+	"@nick, e-mail lub identyfikator <strong>%s</strong> jest nieprawid&lstrok;owy.";
 #elif L==9	// pt
 	"O @nick, email ou ID <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido.";
 #endif
@@ -50530,21 +50538,21 @@ const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very i
 
 const char *Txt_The_URL_X_has_been_updated =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El URL <strong>%s</strong> se ha actualizado.";	// Necessita traducció
+	"L'URL <strong>%s</strong> s'ha actualitzat.";
 #elif L==2	// de
-	"The URL <strong>%s</strong> has been updated.";	// Need Übersetzung
+	"Die URL <strong>%s</strong> wurde aktualisiert.";
 #elif L==3	// en
 	"The URL <strong>%s</strong> has been updated.";
 #elif L==4	// es
 	"El URL <strong>%s</strong> se ha actualizado.";
 #elif L==5	// fr
-	"The URL <strong>%s</strong> has been updated.";	// Besoin de traduction
+	"L'URL <strong>%s</strong> a &eacute;t&eacute; mise &agrave; jour.";
 #elif L==6	// gn
 	"El URL <strong>%s</strong> se ha actualizado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'URL <strong>%s</strong> &egrave; stata archiviata.";
 #elif L==8	// pl
-	"The URL <strong>%s</strong> has been updated.";	// Potrzebujesz tlumaczenie
+	"Zaktualizowano adres URL <strong>%s</strong>.";
 #elif L==9	// pt
 	"O URL <strong>%s</strong> foi atualizado.";
 #endif
@@ -51169,21 +51177,21 @@ const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks =	// Warning: it is
 
 const char *Txt_The_visibility_of_the_record_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La visibilidad del campo <strong>%s</strong> no ha cambiado.";			// Necessita traducció
+	"La visibilitat del camp <strong>%s</strong> no ha canviat.";
 #elif L==2	// de
-	"The visibility of the record field <strong>%s</strong> has not changed.";	// Need Übersetzung
+	"Die Sichtbarkeit des Datensatzfeldes <strong>%s</strong> hat sich nicht ge&auml;ndert.";
 #elif L==3	// en
 	"The visibility of the record field <strong>%s</strong> has not changed.";
 #elif L==4	// es
 	"La visibilidad del campo <strong>%s</strong> no ha cambiado.";
 #elif L==5	// fr
-	"The visibility of the record field <strong>%s</strong> has not changed.";	// Besoin de traduction
+	"La visibilit&eacute; du champ de carte <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"La visibilidad del campo <strong>%s</strong> no ha cambiado.";			// Okoteve traducción
 #elif L==7	// it
 	"La visibilit&agrave; del campo di scheda <strong>%s</strong> non &egrave; cambiata.";
 #elif L==8	// pl
-	"The visibility of the record field <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
+	"Widoczno&sacute;&cacute; pola rekordu <strong>%s</strong> nie uleg&lstrok;a zmianie.";
 #elif L==9	// pt
 	"A visibilidade do campo de cart&atilde;o <strong>%s</strong> n&atilde;o foi alterada.";
 #endif
@@ -51211,42 +51219,42 @@ const char *Txt_The_whole_course =
 
 const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Necessita traducció
+	"L'any/semestre <strong>%u</strong> no est&agrave; perm&egrave;s.";
 #elif L==2	// de
-	"The year/semester <strong>%u</strong> is not enabled.";			// Need Übersetzung
+	"Das Jahr/Semester <strong>%u</strong> ist nicht erlaubt.";
 #elif L==3	// en
-	"The year/semester <strong>%u</strong> is not enabled.";
+	"The year/semester <strong>%u</strong> is not allowed.";
 #elif L==4	// es
 	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";
 #elif L==5	// fr
-	"The year/semester <strong>%u</strong> is not enabled.";			// Besoin de traduction
+	"L'ann&eacute;e/semestre <strong>%u</strong> n'est pas autoris&eacute;.";
 #elif L==6	// gn
 	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Okoteve traducción
 #elif L==7	// it
 	"L'anno/semester <strong>%u</strong> non &egrave; consentito.";
 #elif L==8	// pl
-	"The year/semester <strong>%u</strong> is not allowed.";			// Potrzebujesz tlumaczenie
+	"Rok/semestr <strong>%u</strong> jest niedozwolony.";
 #elif L==9	// pt
 	"O ano/semestre <strong>%u</strong> n&atilde;o &eacute; permitido.";
 #endif
 
 const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Necessita traducció
+	"L'any/semestre de l'assignatura <strong>%s</strong> ha canviat.";
 #elif L==2	// de
-	"The year/semester of the couse <strong>%s</strong> has changed.";		// Need Übersetzung
+	"Das Jahr/Semester des Kurses <strong>%s</strong> hat sich ge&auml;ndert.";
 #elif L==3	// en
 	"The year/semester of the couse <strong>%s</strong> has changed.";
 #elif L==4	// es
 	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";
 #elif L==5	// fr
-	"The year/semester of the couse <strong>%s</strong> has changed.";		// Besoin de traduction
+	"L'année/le semestre de la mati&egrave;re <strong>%s</strong> a chang&eacute;.";
 #elif L==6	// gn
 	"El a&ntilde;o/semestre de la asignatura <strong>%s</strong> ha cambiado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'anno/semestre del corso <strong>%s</strong> &egrave; cambiato.";
 #elif L==8	// pl
-	"The year/semestre of the couse <strong>%s</strong> has changed.";		// Potrzebujesz tlumaczenie
+	"Zmieni&lstrok; si&eogon; rok/semestr przypadku <strong>%s</strong>.";
 #elif L==9	// pt
 	"O ano/semestre da disciplina <strong>%s</strong> mudou.";
 #endif
@@ -52018,84 +52026,84 @@ const char *Txt_thread =
 
 const char *Txt_Thread_marked_to_be_moved =
 #if   L==1	// ca
-	"Discusi&oacute;n marcada para moverla.";	// Necessita traducció
+	"Discussi&oacute; marcada per moure-la.";
 #elif L==2	// de
-	"Thread marked to be moved.";			// Need Übersetzung
+	"Thread zum Verschieben markiert.";
 #elif L==3	// en
 	"Thread marked to be moved.";
 #elif L==4	// es
 	"Discusi&oacute;n marcada para moverla.";
 #elif L==5	// fr
-	"Thread marked to be moved.";			// Besoin de traduction
+	"Fil marqu&eacute; pour &ecirc;tre d&eacute;plac&eacute;.";
 #elif L==6	// gn
 	"Discusi&oacute;n marcada para moverla.";	// Okoteve traducción
 #elif L==7	// it
 	"Discussione segnata per spostarla.";
 #elif L==8	// pl
-	"Thread marked to be moved.";			// Potrzebujesz tlumaczenie
+	"W&aogon;tek oznaczony do przeniesienia.";
 #elif L==9	// pt
 	"Discuss&atilde;o marcada para ser movida.";
 #endif
 
 const char *Txt_Thread_X_marked_to_be_moved =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Discusi&oacute;n <strong>%s</strong> marcada para moverla.";	// Necessita traducció
+	"Discussi&oacute; <strong>%s</strong> marcada per moure-la.";
 #elif L==2	// de
-	"Thread <strong>%s</strong> marked to be moved.";		// Need Übersetzung
+	"Thread <strong>%s</strong> zum Verschieben markiert.";
 #elif L==3	// en
 	"Thread <strong>%s</strong> marked to be moved.";
 #elif L==4	// es
 	"Discusi&oacute;n <strong>%s</strong> marcada para moverla.";
 #elif L==5	// fr
-	"Thread <strong>%s</strong> marked to be moved.";		// Besoin de traduction
+	"Fil <strong>%s</strong> marqu&eacute; pour &ecirc;tre d&eacute;plac&eacute;.";
 #elif L==6	// gn
 	"Discusi&oacute;n <strong>%s</strong> marcada para moverla.";	// Okoteve traducción
 #elif L==7	// it
 	"Discussione <strong>%s</strong> segnata per spostarla.";
 #elif L==8	// pl
-	"Thread <strong>%s</strong> marked to be moved.";		// Potrzebujesz tlumaczenie
+	"W&aogon;tek <strong>%s</strong> oznaczony do przeniesienia.";
 #elif L==9	// pt
 	"Discuss&atilde;o <strong>%s</strong> marcada para ser movida.";
 #endif
 
 const char *Txt_Thread_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Discusi&oacute;n movida a este foro.";	// Necessita traducció
+	"Discussi&oacute; moguda a aquest f&ograve;rum.";
 #elif L==2	// de
-	"Thread moved to this forum.";		// Need Übersetzung
+	"Thread wurde in dieses Forum verschoben.";
 #elif L==3	// en
 	"Thread moved to this forum.";
 #elif L==4	// es
 	"Discusi&oacute;n movida a este foro.";
 #elif L==5	// fr
-	"Thread moved to this forum.";		// Besoin de traduction
+	"Fil d&eacute;plac&eacute; dans ce forum.";
 #elif L==6	// gn
 	"Discusi&oacute;n movida a este foro.";	// Okoteve traducción
 #elif L==7	// it
 	"Discussione spostata in questo forum.";
 #elif L==8	// pl
-	"Thread moved to this forum.";		// Potrzebujesz tlumaczenie
+	"W&aogon;tek zosta&lstrok; przeniesiony na to forum.";
 #elif L==9	// pt
 	"Discuss&atilde;o movida para este f&oacute;rum.";
 #endif
 
 const char *Txt_Thread_X_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Discusi&oacute;n <strong>%s</strong> movida a este foro.";	// Necessita traducció
+	"Discussi&oacute; <strong>%s</strong> moguda a aquest f&ograve;rum.";
 #elif L==2	// de
-	"Thread <strong>%s</strong> moved to this forum.";		// Need Übersetzung
+	"Thread <strong>%s</strong> wurde in dieses Forum verschoben.";
 #elif L==3	// en
 	"Thread <strong>%s</strong> moved to this forum.";
 #elif L==4	// es
 	"Discusi&oacute;n <strong>%s</strong> movida a este foro.";
 #elif L==5	// fr
-	"Thread <strong>%s</strong> moved to this forum.";		// Besoin de traduction
+	"Fil <strong>%s</strong> d&eacute;plac&eacute; dans ce forum.";
 #elif L==6	// gn
 	"Discusi&oacute;n <strong>%s</strong> movida a este foro.";	// Okoteve traducción
 #elif L==7	// it
 	"Discussione <strong>%s</strong> spostata in questo forum.";
 #elif L==8	// pl
-	"Thread <strong>%s</strong> moved to this forum.";		// Potrzebujesz tlumaczenie
+	"W&aogon;tek <strong>%s</strong> zosta&lstrok; przeniesiony na to forum.";
 #elif L==9	// pt
 	"Discuss&atilde;o <strong>%s</strong> movida para este f&oacute;rum.";
 #endif
@@ -52144,21 +52152,21 @@ const char *Txt_Thread_X_removed =	// Warning: it is very important to include %
 
 const char *Txt_Thread_with_posts_from_you =
 #if   L==1	// ca
-	"Discusi&oacute;n con comentarios de usted";	// Necessita traducció
+	"Discussi&oacute; amb comentaris de vost&egrave;";
 #elif L==2	// de
-	"Thread with posts from you";			// Need Übersetzung
+	"Thread mit Beitr&auml;gen von Ihnen";
 #elif L==3	// en
 	"Thread with posts from you";
 #elif L==4	// es
 	"Discusi&oacute;n con comentarios de usted";
 #elif L==5	// fr
-	"Thread with posts from you";			// Besoin de traduction
+	"Fil avec des messages de votre part";
 #elif L==6	// gn
 	"Discusi&oacute;n con comentarios de usted";	// Okoteve traducción
 #elif L==7	// it
 	"Discussione con post per te";
 #elif L==8	// pl
-	"Thread with posts from you";			// Potrzebujesz tlumaczenie
+	"W&aogon;tek z wpisami od Ciebie";
 #elif L==9	// pt
 	"Discuss&atilde;o com mensagens de voc&ecirc;";
 #endif
@@ -53083,11 +53091,11 @@ const char *Txt_Title_attribution =
 
 const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center =
 #if   L==1	// ca
-	"Para eliminar un centro, primero debe eliminar"
-	" todas las titulaciones y todos los profesores de ese centro.";	// Necessita traducció
+	"Per eliminar un centre, primer heu d'eliminar"
+	" tots els graus i professors del centre.";
 #elif L==2	// de
-	"To remove a center, you must first remove"
-	" all degrees and teachers in the center.";				// Need Übersetzung
+	"Um ein Zentrum zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Abschlüsse und Lehrer im Zentrum entfernen.";
 #elif L==3	// en
 	"To remove a center, you must first remove"
 	" all degrees and teachers in the center.";
@@ -53095,8 +53103,8 @@ const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teacher
 	"Para eliminar un centro, primero debe eliminar"
 	" todas las titulaciones y todos los profesores de ese centro.";
 #elif L==5	// fr
-	"To remove a center, you must first remove"
-	" all degrees and teachers in the center.";				// Besoin de traduction
+	"Pour supprimer un centre, vous devez d'abord supprimer"
+	" tous les dipl&ocirc;mes et enseignants du centre.";
 #elif L==6	// gn
 	"Para eliminar un centro, primero debe eliminar"
 	" todas las titulaciones y todos los profesores de ese centro.";	// Okoteve traducción
@@ -53104,8 +53112,8 @@ const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teacher
 	"Per rimuovere un centro, devi prima rimuovere"
 	" tutte le lauree e professori di quel centro.";
 #elif L==8	// pl
-	"To remove a center, you must first remove"
-	" all degrees and teachers in the center.";				// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; &sacute;rodek, musisz najpierw usun&aogon;&cacute;"
+	" wszystkie stopnie i nauczycieli ze &sacute;rodka.";
 #elif L==9	// pt
 	"Para remover um centro, voc&ecirc; deve primeiro remover"
 	" todos os graus e professores no centro.";
@@ -53113,11 +53121,11 @@ const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teacher
 
 const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course =
 #if   L==1	// ca
-	"Para eliminar una asignatura, primero debe eliminar"
-	" todos los usuarios de esa asignatura.";		// Necessita traducció
+	"Per eliminar una assignatura, primer heu d'eliminar"
+	" tots els usuaris de la assignatura.";
 #elif L==2	// de
-	"To remove a course, you must first remove"
-	" all users in the course.";				// Need Übersetzung
+	"Um einen Kurs zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Benutzer im Kurs entfernen.";
 #elif L==3	// en
 	"To remove a course, you must first remove"
 	" all users in the course.";
@@ -53125,8 +53133,8 @@ const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course
 	"Para eliminar una asignatura, primero debe eliminar"
 	" todos los usuarios de esa asignatura.";
 #elif L==5	// fr
-	"To remove a course, you must first remove"
-	" all users in the course.";				// Besoin de traduction
+	"Pour supprimer une mati&egrave;re, vous devez d'abord supprimer"
+	" tous les utilisateurs de la mati&egrave;re.";
 #elif L==6	// gn
 	"Para eliminar una asignatura, primero debe eliminar"
 	" todos los usuarios de esa asignatura.";		// Okoteve traducción
@@ -53134,8 +53142,8 @@ const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course
 	"Per rimuovere un corso, devi prima rimuovere"
 	" tutti gli utenti di quel corso.";
 #elif L==8	// pl
-	"To remove a course, you must first remove"
-	" all users in the course.";				// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; kurs, musisz najpierw usun&aogon;&cacute;"
+	" wszystkich u&zdot;ytkownik&oacute;w kursu.";
 #elif L==9	// pt
 	"Para remover uma disciplina, voc&ecirc; deve primeiro remover"
 	" todos os usu&aacute;rios da disciplina.";
@@ -53143,11 +53151,11 @@ const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course
 
 const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree =
 #if   L==1	// ca
-	"Para eliminar una titulaci&oacute;n, primero debe eliminar"
-	" todas las asignaturas de esa titulaci&oacute;n.";	// Necessita traducció
+	"Per eliminar una titulaci&oacute;, primer heu d'eliminar"
+	" tots els cursos de la titulaci&oacute;.";
 #elif L==2	// de
-	"To remove a degree, you must first remove"
-	" all courses in the degree.";				// Need Übersetzung
+	"Um einen Abschluss zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Kurse des Abschlusses entfernen.";
 #elif L==3	// en
 	"To remove a degree, you must first remove"
 	" all courses in the degree.";
@@ -53155,8 +53163,8 @@ const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degr
 	"Para eliminar una titulaci&oacute;n, primero debe eliminar"
 	" todas las asignaturas de esa titulaci&oacute;n.";
 #elif L==5	// fr
-	"To remove a degree, you must first remove"
-	" all courses in the degree.";				// Besoin de traduction
+	"Pour supprimer un &eacute;tude, vous devez d'abord supprimer"
+	" tous les mati&egrave;res de l'&eacute;tude.";
 #elif L==6	// gn
 	"Para eliminar una titulaci&oacute;n, primero debe eliminar"
 	" todas las asignaturas de esa titulaci&oacute;n.";	// Okoteve traducción
@@ -53164,8 +53172,8 @@ const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degr
 	"Per rimuovere una laurea, devi prima rimuovere"
 	" tutti i corsi della laurea.";
 #elif L==8	// pl
-	"To remove a degree, you must first remove"
-	" all courses in the degree.";				// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; stopie&nacute;, musisz najpierw usun&aogon;&cacute;"
+	" wszystkie przedmioty z tego stopnia.";
 #elif L==9	// pt
 	"Para remover um grau, voc&ecirc; deve primeiro remover"
 	" todas as disciplinas do grau.";
@@ -53173,11 +53181,11 @@ const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degr
 
 const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department =
 #if   L==1	// ca
-	"Para eliminar un departamento, primero debe eliminar"
-	" todos los profesores de ese departamento.";	// Necessita traducció
+	"Per eliminar un departament, primer heu d'eliminar"
+	" tots els professors del departament.";
 #elif L==2	// de
-	"To remove a department, you must first remove"
-	" all teachers in the department.";		// Need Übersetzung
+	"Um eine Abteilung zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Lehrer in der Abteilung entfernen.";
 #elif L==3	// en
 	"To remove a department, you must first remove"
 	" all teachers in the department.";
@@ -53185,8 +53193,8 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 	"Para eliminar un departamento, primero debe eliminar"
 	" todos los profesores de ese departamento.";
 #elif L==5	// fr
-	"To remove a department, you must first remove"
-	" all teachers in the department.";		// Besoin de traduction
+	"Pour supprimer un d&eacute;partement, vous devez d'abord supprimer"
+	" tous les enseignants du d&eacute;partement.";
 #elif L==6	// gn
 	"Para eliminar un departamento, primero debe eliminar"
 	" todos los profesores de ese departamento.";	// Okoteve traducción
@@ -53194,8 +53202,8 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 	"Per rimuovere un dipartimento, devi prima rimuovere"
 	" tutti i professori di quel dipartimento.";
 #elif L==8	// pl
-	"To remove a department, you must first remove"
-	" all teachers in the department.";		// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; dzia&lstrok;, musisz najpierw usun&aogon;&cacute;"
+	" wszystkich nauczycieli z dzia&lstrok;u.";
 #elif L==9	// pt
 	"Para remover um departamento, voc&ecirc; deve primeiro remover"
 	" todos os professores do departamento.";
@@ -53203,11 +53211,11 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 
 const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place =
 #if   L==1	// ca
-	"Para eliminar un lugar, primero debe eliminar"
-	" todos los centros de ese lugar.";		// Necessita traducció
+	"Per eliminar un lloc, primer heu d'eliminar"
+	" tots els centres d'aquest lloc.";
 #elif L==2	// de
-	"To remove a place, you must first remove"
-	" all centers of that place.";			// Need Übersetzung
+	"Um einen Ort zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Zentren dieses Ortes entfernen.";
 #elif L==3	// en
 	"To remove a place, you must first remove"
 	" all centers of that place.";
@@ -53215,8 +53223,8 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_plac
 	"Para eliminar un lugar, primero debe eliminar"
 	" todos los centros de ese lugar.";
 #elif L==5	// fr
-	"To remove a place, you must first remove"
-	" all centers of that place.";			// Besoin de traduction
+	"Pour supprimer un lieu, vous devez d'abord supprimer"
+	" tous les centres de ce lieu.";
 #elif L==6	// gn
 	"Para eliminar un lugar, primero debe eliminar"
 	" todos los centros de ese lugar.";		// Okoteve traducción
@@ -53224,8 +53232,8 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_plac
 	"Per rimuovere un luogo, devi prima rimuovere"
 	" tutte le centri di quel luogo.";
 #elif L==8	// pl
-	"To remove a place, you must first remove"
-	" all centers of that place.";			// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; miejsce, musisz najpierw usun&aogon;&cacute;"
+	" wszystkie centra tego miejsca.";
 #elif L==9	// pt
 	"Para remover uma localiza&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros da localiza&ccedil;&atilde;o.";
@@ -53233,41 +53241,50 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_plac
 
 const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type =
 #if   L==1	// ca
-	"Para eliminar un tipo de titulaci&oacute;n, primero debe eliminar"
-	" todas las titulaciones de ese tipo.";		// Necessita traducció
+	"Per eliminar un tipus de grau,"
+	" primer heu d'eliminar"
+	" tots els graus d'aquest tipus.";
 #elif L==2	// de
-	"To remove a type of degree, you must first remove"
-	" all degrees of that type.";			// Need Übersetzung
+	"Um einen Abschlusstyp zu entfernen,"
+	" m&uuml;ssen Sie zuerst"
+	" alle Abschl&uuml;sse dieses Typs entfernen.";
 #elif L==3	// en
-	"To remove a type of degree, you must first remove"
+	"To remove a type of degree,"
+	" you must first remove"
 	" all degrees of that type.";
 #elif L==4	// es
-	"Para eliminar un tipo de titulaci&oacute;n, primero debe eliminar"
+	"Para eliminar un tipo de titulaci&oacute;n,"
+	" primero debe eliminar"
 	" todas las titulaciones de ese tipo.";
 #elif L==5	// fr
-	"To remove a type of degree, you must first remove"
-	" all degrees of that type.";			// Besoin de traduction
+	"Pour supprimer un type d'&eacute;tude,"
+	" vous devez d'abord supprimer"
+	" tous les &eacute;tudes de ce type.";
 #elif L==6	// gn
-	"Para eliminar un tipo de titulaci&oacute;n, primero debe eliminar"
+	"Para eliminar un tipo de titulaci&oacute;n,"
+	" primero debe eliminar"
 	" todas las titulaciones de ese tipo.";		// Okoteve traducción
 #elif L==7	// it
-	"Per rimuovere un tipo di laurea, devi prima rimuovere"
+	"Per rimuovere un tipo di laurea,"
+	" devi prima rimuovere"
 	" tutte le lauree di quel tipo.";
 #elif L==8	// pl
-	"To remove a type of degree, you must first remove"
-	" all degrees of that type.";			// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; rodzaj stopnia,"
+	" musisz najpierw usun&aogon;&cacute;"
+	" wszystkie stopnie tego typu.";
 #elif L==9	// pt
-	"Para remover um tipo de grau, voc&ecirc; deve primeiro remover"
+	"Para remover um tipo de grau,"
+	" voc&ecirc; deve primeiro remover"
 	" todos os graus desse tipo.";
 #endif
 
 const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution =
 #if   L==1	// ca
-	"Para eliminar una instituci&oacute;n, primero debe eliminar"
-	" todos los centros y todos los usuarios de esa instituci&oacute;n.";	// Necessita traducció
+	"Per eliminar una instituci&oacute;, primer heu d'eliminar"
+	" tots els centres i usuaris de la instituci&oacute;.";
 #elif L==2	// de
-	"To remove an institution, you must first remove"
-	" all centers and users in the institution.";				// Need Übersetzung
+	"Um eine Institution zu entfernen, m&uuml;ssen Sie zuerst"
+	" alle Zentren und Benutzer in der Institution entfernen.";
 #elif L==3	// en
 	"To remove an institution, you must first remove"
 	" all centers and users in the institution.";
@@ -53275,8 +53292,8 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_u
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos los centros y todos los usuarios de esa instituci&oacute;n.";
 #elif L==5	// fr
-	"To remove an institution, you must first remove"
-	" all centers and users in the institution.";				// Besoin de traduction
+	"Pour supprimer un &eacute;tablissement, vous devez d'abord supprimer"
+	" tous les centres et utilisateurs de l'&eacute;tablissement.";
 #elif L==6	// gn
 	"Para eliminar una instituci&oacute;n, primero debe eliminar"
 	" todos centros y todos los usuarios de esa instituci&oacute;n.";	// Okoteve traducción
@@ -53284,8 +53301,8 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_u
 	"Per rimuovere un'istituzione, devi prima rimuovere"
 	" tutti gli centri e utenti di quell'istituzione.";
 #elif L==8	// pl
-	"To remove an institution, you must first remove"
-	" all centers and users in the institution.";				// Potrzebujesz tlumaczenie
+	"Aby usun&aogon;&cacute; instytucj&eogon;, musisz najpierw"
+	" usun&aogon;&cacute; wszystkie centra i u&zdot;ytkownik&oacute;w w instytucji.";
 #elif L==9	// pt
 	"Para remover uma institui&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros e usu&aacute;rios da institui&ccedil;&atilde;o.";
@@ -54490,19 +54507,19 @@ const char *Txt_Unknown_or_without_photo =
 #if   L==1
 	"Desconegut/da o sense fotografia";
 #elif L==2
-	"Unknown or without photo";			// Need Übersetzung
+	"Unbekannt oder ohne Foto";
 #elif L==3
 	"Unknown or without photo";
 #elif L==4
 	"Desconocido/a o sin fotograf&iacute;a";
 #elif L==5
-	"Unknown or without photo";			// Besoin de traduction
+	"Inconnu ou sans photo";
 #elif L==6
 	"Desconocido/a o sin fotograf&iacute;a";	// Okoteve traducción
 #elif L==7
 	"Sconosciuto/a o senza foto";
 #elif L==8
-	"Unknown or without photo";			// Potrzebujesz tlumaczenie
+	"Nieznany lub bez zdj&eogon;cia";
 #elif L==9
 	"Desconhecido/a ou sem foto";
 #endif
@@ -55292,7 +55309,7 @@ const char *Txt_USER_comments =
 
 const char *Txt_User_ID =
 #if   L==1	// ca
-	"ID (DNI/c&egrave;dula/passaport) de l'usuari";
+	"ID (DNI/c&egrave;dula) de l'usuari";
 #elif L==2	// de
 	"Ausweis-Nr.";
 #elif L==3	// en
@@ -55502,32 +55519,32 @@ const char *Txt_users[Usr_NUM_SEXS] =
 
 const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Se ha(n) eliminado %u usuario(s).";		// Necessita traducció
+	"S'ha(n) eliminat %u usuari(s).";
 #elif L==2	// de
-	"%u user(s) have been eliminated.";		// Need Übersetzung
+	"%u Benutzer wurden eliminiert.";
 #elif L==3	// en
 	"%u user(s) have been eliminated.";
 #elif L==4	// es
 	"Se ha(n) eliminado %u usuario(s).";
 #elif L==5	// fr
-	"%u users have been eliminated.";		// Besoin de traduction
+	"%u utilisateur(s) ont &eacute;t&eacute; &eacute;limin&eacute;s.";
 #elif L==6	// gn
 	"Se ha(n) eliminado %u usuario(s).";		// Okoteve traducción
 #elif L==7	// it
 	"%u utenti sono stati rimossi.";
 #elif L==8	// pl
-	"%u user(s) have been eliminated.";		// Potrzebujesz tlumaczenie
+	"Wyeliminowano %u u&zdot;ytkownik&oacute;w.";
 #elif L==9	// pt
 	"%u usu&aacute;rio(s) foram eliminados.";
 #endif
 
 const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Se han inscrito %u usuarios"
-	" (incluyendo posibles repeticiones).";	// Necessita traducció
+	"S'han inscrit %u usuaris"
+	" (incloent possibles repeticions).";
 #elif L==2	// de
-	"%u users have been enroled"
-	" (including possible repetitions).";	// Need Übersetzung
+	"Es wurden %u Benutzer eingeschrieben"
+	" (einschlie&szlig;lich m&ouml;glicher Wiederholungen).";
 #elif L==3	// en
 	"%u users have been enroled"
 	" (including possible repetitions).";
@@ -55535,8 +55552,8 @@ const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Wa
 	"Se han inscrito %u usuarios"
 	" (incluyendo posibles repeticiones).";
 #elif L==5	// fr
-	"%u users have been enroled"
-	" (including possible repetitions).";	// Besoin de traduction
+	"%u utilisateurs ont &eacute;t&eacute; inscrits"
+	" (y compris les r&eacute;p&eacute;titions possibles).";
 #elif L==6	// gn
 	"Se han inscrito %u usuarios"
 	" (incluyendo posibles repeticiones).";	// Okoteve traducción
@@ -55544,8 +55561,8 @@ const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Wa
 	"%u utenti sono stati registrati"
 	" (comprese le eventuali ripetizioni).";
 #elif L==8	// pl
-	"%u users have been enroled"
-	" (including possible repetitions).";	// Potrzebujesz tlumaczenie
+	"Zarejestrowano %u u&zdot;ytkownik&oacute;w"
+	" (wliczaj&aogon;c mo&zdot;liwe powt&oacute;rki).";
 #elif L==9	// pt
 	"%u usu&aacute;rios foram inscritos"
 	" (incluindo poss&iacute;veis repeti&ccedil;&otilde;es).";
@@ -55553,21 +55570,21 @@ const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Wa
 
 const char *Txt_X_users_have_been_removed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"Se han eliminado %u usuarios.";	// Necessita traducció
+	"S'han eliminat %u usuaris.";
 #elif L==2	// de
-	"%u users have been removed.";		// Need Übersetzung
+	"%u Benutzer wurden entfernt.";
 #elif L==3	// en
 	"%u users have been removed.";
 #elif L==4	// es
 	"Se han eliminado %u usuarios.";
 #elif L==5	// fr
-	"%u users have been removed.";		// Besoin de traduction
+	"%u utilisateurs ont &eacute;t&eacute; supprim&eacute;s.";
 #elif L==6	// gn
 	"Se han eliminado %u usuarios.";	// Okoteve traducción
 #elif L==7	// it
 	"%u utenti sono stati rimossi.";
 #elif L==8	// pl
-	"%u users have been removed.";		// Potrzebujesz tlumaczenie
+	"Usuni&eogon;to %u u&zdot;ytkownik&oacute;w.";
 #elif L==9	// pt
 	"%u usu&aacute;rios foram removidos.";
 #endif
@@ -55645,7 +55662,7 @@ const char *Txt_Users_of_the_institution =
 #elif L==4	// es
 	"Usuarios de la instituci&oacute;n";
 #elif L==5	// fr
-	"Utilisateurs du &eacute;tablissement";
+	"Utilisateurs de l'&eacute;tablissement";
 #elif L==6	// gn
 	"Usuarios de la instituci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
@@ -57874,11 +57891,11 @@ const char *Txt_You_can_not_rename_this_folder =
 
 const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 #if   L==1	// ca
-	"No puede enviar un mensaje a tantísimos destinatarios."
-	" Es mejor usar los foros.";		// Necessita traducció
+	"No podeu enviar un missatge a tant&iacute;ssims destinataris."
+	" &Eacute;s millor utilitzar els f&ograve;rums.";
 #elif L==2	// de
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Need Übersetzung
+	"Sie k&ouml;nnen eine Nachricht nicht an so viele Empf&auml;nger senden."
+	" Benutze besser die Foren.";
 #elif L==3	// en
 	"You can not send a message to so many recipients."
 	" Better use the forums.";
@@ -57886,8 +57903,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"No puede enviar un mensaje a tantísimos destinatarios."
 	" Es mejor usar los foros.";
 #elif L==5	// fr
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Besoin de traduction
+	"Vous ne pouvez pas envoyer un message &agrave; autant de destinataires."
+	" Mieux vaut utiliser les forums.";
 #elif L==6	// gn
 	"No puede enviar un mensaje a tantísimos destinatarios."
 	" Es mejor usar los foros.";		// Okoteve traducción
@@ -57895,8 +57912,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"Non puoi inviare un messaggio a così tanti destinatari."
 	" Meglio usare il forum.";
 #elif L==8	// pl
-	"You can not send a message to so many recipients."
-	" Better use the forums.";		// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz wys&lstrok;a&cacute; wiadomo&sacute;ci do tylu odbiorc&oacute;w."
+	" Lepiej korzystaj z for&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode enviar uma mensagem para tantos destinat&aacute;rios."
 	" Melhor usar os f&oacute;runs.";
@@ -58075,11 +58092,11 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolmen
 
 const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
 #if   L==1	// ca
-	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
-	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Necessita traducció
+	"Podeu enviar un arxiu amb una imatge en format <em>PNG</em>,"
+	" fons transparent i mida %u&times;%u p&iacute;xels.";
 #elif L==2	// de
-	"You can send a file with an image in <em>PNG</em> format,"
-	" transparent background and size %u&times;%u pixels.";			// Need Übersetzung
+	"Sie k&ouml;nnen eine Datei mit einem Bild im <em>PNG</em>-Format,"
+	" transparentem Hintergrund und der Gr&ouml;ße %u&times;%u Pixel senden.";
 #elif L==3	// en
 	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";
@@ -58087,8 +58104,8 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";
 #elif L==5	// fr
-	"You can send a file with an image in <em>PNG</em> format,"
-	" transparent background and size %u&times;%u pixels.";			// Besoin de traduction
+	"Vous pouvez envoyer un fichier avec une image au format <em>PNG</em>,"
+	" fond transparent et taille %u&times;%u pixels.";
 #elif L==6	// gn
 	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Okoteve traducción
@@ -58096,8 +58113,8 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 	"Puoi inviare un file con un'immagine in formato <em>PNG</em>,"
 	" sfondo trasparente e di dimensione %u&times;%u pixel.";
 #elif L==8	// pl
-	"You can send a file with an image in <em>PNG</em> format,"
-	" transparent background and size %u&times;%u pixels.";			// Potrzebujesz tlumaczenie
+	"Mo&zdot;esz wys&lstrok;a&cacute; plik z obrazem w formacie <em>PNG</em>,"
+	" z przezroczystym t&lstrok;em i rozmiarem %u&times;%u pikseli.";
 #elif L==9	// pt
 	"Voc&ecirc; pode enviar um arquivo com uma imagem no formato <em>PNG</em>,"
 	" fundo transparente e tamanho %u&times;%u pixels.";
@@ -58237,11 +58254,11 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 
 const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Usted ha confirmado su inscripci&oacute;n"
-	" en la asignatura <strong>%s</strong>.";	// Necessita traducció
+	"Heu confirmat la seva inscripci&oacute;"
+	" a l'assignatura <strong>%s</strong>.";
 #elif L==2	// de
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Need Übersetzung
+	"Sie haben Ihre Einschreibung"
+	" in den Kurs <strong>%s</strong> best&auml;tigt.";
 #elif L==3	// en
 	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";
@@ -58249,8 +58266,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5	// fr
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Besoin de traduction
+	"Vous avez confirm&eacute; votre inscription"
+	" &agrave; la mati&egrave;re <strong>%s</strong>.";
 #elif L==6	// gn
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
@@ -58258,8 +58275,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"Hai confermato la tua registrazione"
 	" in questo corso <strong>%s</strong>.";
 #elif L==8	// pl
-	"You have confirmed your enrolment"
-	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Potwierdzi&lstrok;e&sacute; zapis"
+	" na kurs <strong>%s</strong>.";
 #elif L==9	// pt
 	"Voc&ecirc; confirmou sua inscri&ccedil;&atilde;o"
 	" na disciplina <strong>%s</strong>.";
@@ -58267,11 +58284,11 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 
 const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information =
 #if   L==1	// ca
-	"Usted ha eliminado la confirmaci&oacute;n"
-	" de que ha leido esta informaci&oacute;n.";	// Necessita traducció
+	"Heu eliminat la confirmaci&oacute;"
+	" que heu llegit aquesta informaci&oacute;.";
 #elif L==2	// de
-	"You have eliminated the confirmation"
-	" that you have read this information.";	// Need Übersetzung
+	"Sie haben die Best&auml;tigung,"
+	" dass Sie diese Informationen gelesen haben, gel&ouml;scht.";
 #elif L==3	// en
 	"You have eliminated the confirmation"
 	" that you have read this information.";
@@ -58279,8 +58296,8 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 	"Usted ha eliminado la confirmaci&oacute;n"
 	" de que ha leido esta informaci&oacute;n.";
 #elif L==5	// fr
-	"You have eliminated the confirmation"
-	" that you have read this information.";	// Besoin de traduction
+	"Vous avez &eacute;limin&eacute; la confirmation"
+	" que vous avez lu ces informations.";
 #elif L==6	// gn
 	"Usted ha eliminado la confirmaci&oacute;n"
 	" de que ha leido esta informaci&oacute;n.";	// Okoteve traducción
@@ -58288,8 +58305,8 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 	"Hai rimosso la conferma"
 	" che hai letto questa informazione.";
 #elif L==8	// pl
-	"You have eliminated the confirmation"
-	" that you have read this information.";	// Potrzebujesz tlumaczenie
+	"Usun&aogon;&lstrok;e&sacute; potwierdzenie,"
+	" &zdot;e przeczyta&lstrok;e&sacute; te informacje.";
 #elif L==9	// pt
 	"Voc&ecirc; eliminou a confirma&ccedil;&atilde;o"
 	" de que leu esta informa&ccedil;&atilde;o.";
@@ -59068,7 +59085,7 @@ const char *Txt_You_should_read_the_following_information =
 
 const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"Ja estaves matriculat com a <strong>%s</strong>"
+	"Vost&egrave; ja estava inscrit/a com a <strong>%s</strong>"
 	" a l'assignatura <strong>%s</strong>.";
 #elif L==2	// de
 	"Sie waren bereits als <strong>%s</strong>"
