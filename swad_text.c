@@ -47216,23 +47216,32 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 
 const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"L'assignatura <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"L'assignatura <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
+	"Der Kurs <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The course <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"La asignatura <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+	"La mati&egrave;re <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute;e en <strong>%s</strong>.";
 #elif L==6	// gn
-	"La asignatura <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"La asignatura <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il corso <strong>%s</strong> &egrave; cambiato a <strong>%s</strong>.";
+	"Il corso <strong>%s</strong>"
+	" &egrave; cambiato a <strong>%s</strong>.";
 #elif L==8	// pl
-	"The course <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Kurs <strong>%s</strong>"
+	" zosta&lstrok; przemianowany na <strong>%s</strong>.";
 #elif L==9	// pt
-	"A disciplina <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
+	"A disciplina <strong>%s</strong>"
+	" foi renomeada como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -47258,21 +47267,21 @@ const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is v
 
 const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
-	"El rango de fechas debe ser menor o igual a %u d&iacute;as.";	// Necessita traducció
+	"L'interval de dates ha de ser inferior o igual a %u dies.";
 #elif L==2	// de
-	"The date range must be less than or equal to %u days.";	// Need Übersetzung
+	"Der Datumsbereich muss kleiner oder gleich %u Tage sein.";
 #elif L==3	// en
 	"The date range must be less than or equal to %u days.";
 #elif L==4	// es
 	"El rango de fechas debe ser menor o igual a %u d&iacute;as.";
 #elif L==5	// fr
-	"The date range must be less than or equal to %u days.";	// Besoin de traduction
+	"La plage de dates doit &ecirc;tre inf&eacute;rieure ou &eacute;gale &agrave; %u jours.";
 #elif L==6	// gn
 	"El rango de fechas debe ser menor o igual a %u d&iacute;as.";	// Okoteve traducción
 #elif L==7	// it
 	"Il range della data deve essere minore o uguale a %u giorni.";
 #elif L==8	// pl
-	"The date range must be less than or equal to %u days.";	// Potrzebujesz tlumaczenie
+	"Zakres dat musi by&cacute; kr&oacute;tszy lub r&oacute;wny %u dniom.";
 #elif L==9	// pt
 	"O intervalo de datas deve ser menor ou igual a %u dias.";
 #endif
@@ -47351,23 +47360,32 @@ const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is 
 
 const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La titulaci&oacute; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"La titulaci&oacute; <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
+	"Der Grad <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The degree <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"La titulaci&oacute;n <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
+	"L'&eacute;tude <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
-	"La titulaci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"La titulaci&oacute;n <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"La laurea <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+	"La laurea <strong>%s</strong>"
+	" &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"Stopie&nacute; <strong>%s</strong>"
+	" zosta&lstrok; przemianowany na <strong>%s</strong>.";
 #elif L==9	// pt
-	"O grau <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
+	"O grau <strong>%s</strong>"
+	" foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -47393,23 +47411,32 @@ const char *Txt_The_department_X_already_exists =	// Warning: it is very importa
 
 const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El departament <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"El departament <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
+	"Die Abteilung <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The department <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"El departamento <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"El departamento <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+	"Le d&eacute;partement <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
-	"El departamento <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"El departamento <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il dipartimento <strong>%s</strong> &egrave; stato rinominato come <strong>%s</strong>.";
+	"Il dipartimento <strong>%s</strong>"
+	" &egrave; stato rinominato come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The department <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Dzia&lstrok; <strong>%s</strong>"
+	" zosta&lstrok; przemianowany na <strong>%s</strong>.";
 #elif L==9	// pt
-	"O departamento <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
+	"O departamento <strong>%s</strong>"
+	" foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -47576,23 +47603,32 @@ const char *Txt_The_email_domain_X_already_exists =
 
 const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El domini de correu <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"El domini de correu <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
+	"Die E-Mail-Dom&auml;ne <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The email domain <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"El dominio de correo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"El dominio de correo <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
+	"Le domaine de messagerie <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
-	"El dominio de correo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"El dominio de correo <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il campo mail <strong>%s</strong> &egrave; stato rinominato come <strong>%s</strong>.";
+	"Il campo mail <strong>%s</strong>"
+	" &egrave; stato rinominato come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The email domain <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"Domena poczty e-mail <strong>%s</strong>"
+	" zosta&lstrok;a zmieniona na <strong>%s</strong>.";
 #elif L==9	// pt
-	"O dom&iacute;nio de email <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
+	"O dom&iacute;nio de email <strong>%s</strong>"
+	" foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -48014,23 +48050,32 @@ const char *Txt_The_group_X_already_exists =	// Warning: it is very important to
 
 const char *Txt_The_group_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"El grup <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"El grup <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Need Übersetzung
+	"Die Gruppe <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The group <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The group <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"El grupo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"El grupo <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Besoin de traduction
+	"Le groupe <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute; en <strong>%s</strong>.";
 #elif L==6	// gn
-	"El grupo <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"El grupo <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"Il gruppo <strong>%s</strong> &egrave; stato rinominato come <strong>%s</strong>.";
+	"Il gruppo <strong>%s</strong>"
+	" &egrave; stato rinominato come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+	"Grupa <strong>%s</strong>"
+	" zosta&lstrok;a przemianowana na <strong>%s</strong>.";
 #elif L==9	// pt
-	"O grupo <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
+	"O grupo <strong>%s</strong>"
+	" foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_group_X_is_now_closed =	// Warning: it is very important to include %s in the following sentences
@@ -48100,19 +48145,19 @@ const char *Txt_The_groups_will_automatically_open =
 #if   L==1	// ca
 	"Els grups s'obriran autom&agrave;ticament.";
 #elif L==2	// de
-	"The groups will automatically open.";			// Need Übersetzung
+	"Die Gruppen werden automatisch ge&ouml;ffnet.";
 #elif L==3	// en
 	"The groups will automatically open.";
 #elif L==4	// es
 	"Los grupos se abrir&aacute;n autom&aacute;ticamente.";
 #elif L==5	// fr
-	"The groups will automatically open.";			// Besoin de traduction
+	"Les groupes s'ouvriront automatiquement.";
 #elif L==6	// gn
 	"Los grupos se abrir&aacute;n autom&aacute;ticamente.";	// Okoteve traducción
 #elif L==7	// it
 	"I gruppi si aprir&agrave; automaticamente.";
 #elif L==8	// pl
-	"The groups will automatically open.";			// Potrzebujesz tlumaczenie
+	"Grupy otworz&aogon; si&eogon; automatycznie.";
 #elif L==9	// pt
 	"Os grupos ser&atilde;o abertos automaticamente.";
 #endif
@@ -48121,42 +48166,51 @@ const char *Txt_The_groups_will_not_automatically_open =
 #if   L==1	// ca
 	"Els grups no s'obriran autom&agrave;ticament.";
 #elif L==2	// de
-	"The groups will not automatically open.";			// Need Übersetzung
+	"Die Gruppen werden nicht automatisch ge&ouml;ffnet.";
 #elif L==3	// en
 	"The groups will not automatically open.";
 #elif L==4	// es
 	"Los grupos no se abrir&aacute;n autom&aacute;ticamente.";
 #elif L==5	// fr
-	"The groups will not automatically open.";			// Besoin de traduction
+	"Les groupes ne s'ouvriront pas automatiquement.";
 #elif L==6	// gn
 	"Los grupos no se abrir&aacute;n autom&aacute;ticamente.";	// Okoteve traducción
 #elif L==7	// it
 	"I gruppi non si aprir&agrave; automaticamente.";
 #elif L==8	// pl
-	"The groups will not automatically open.";			// Potrzebujesz tlumaczenie
+	"Grupy nie otworz&aogon; si&eogon; automatycznie.";
 #elif L==9	// pt
 	"Os grupos n&atilde;o ser&atilde;o abertos automaticamente.";
 #endif
 
 const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"La festivitat <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
+	"La festivitat <strong>%s</strong>"
+	" ha passat a anomenar-se <strong>%s</strong>.";
 #elif L==2	// de
-	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Need Übersetzung
+	"Der Feiertag <strong>%s</strong>"
+	" wurde in <strong>%s</strong> umbenannt.";
 #elif L==3	// en
-	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+	"The holiday <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";
 #elif L==4	// es
-	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+	"La festividad <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";
 #elif L==5	// fr
-	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Besoin de traduction
+	"La f&ecirc;te <strong>%s</strong>"
+	" a &eacute;t&eacute; renomm&eacute;e en <strong>%s</strong>.";
 #elif L==6	// gn
-	"La festividad <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+	"La festividad <strong>%s</strong>"
+	" ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"La festivit&agrave; <strong>%s</strong> &egrave; stata rinominata come <strong>%s</strong>.";
+	"La festivit&agrave; <strong>%s</strong>"
+	" &egrave; stata rinominata come <strong>%s</strong>.";
 #elif L==8	// pl
-	"The holiday <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"&Sacute;wi&eogon;to <strong>%s</strong>"
+	" zosta&lstrok;o przemianowane na <strong>%s</strong>.";
 #elif L==9	// pt
-	"O feriado <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
+	"O feriado <strong>%s</strong>"
+	" foi renomeado como <strong>%s</strong>.";
 #endif
 
 const char *Txt_The_HTML_file_has_been_received_successfully =
@@ -57559,84 +57613,84 @@ const char *Txt_You_can_not_create_folders_files_or_links_here =
 
 const char *Txt_You_can_not_create_folders_here =
 #if   L==1	// ca
-	"No puede crear carpetas aqu&iacute;.";	// Necessita traducció
+	"No podeu crear carpetes aqu&iacute;.";
 #elif L==2	// de
-	"You can not create folders here.";	// Need Übersetzung
+	"Sie k&ouml;nnen hier keine Ordner erstellen.";
 #elif L==3	// en
 	"You can not create folders here.";
 #elif L==4	// es
 	"No puede crear carpetas aqu&iacute;.";
 #elif L==5	// fr
-	"You can not create folders here.";	// Besoin de traduction
+	"Vous ne pouvez pas cr&eacute;er de r&eacute;pertoires ici.";
 #elif L==6	// gn
 	"No puede crear carpetas aqu&iacute;.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi creare cartelle qui.";
 #elif L==8	// pl
-	"You can not create folders here.";	// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz tutaj tworzy&cacute; folder&oacute;w.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar pastas aqui.";
 #endif
 
 const char *Txt_You_can_not_create_links_here =
 #if   L==1	// ca
-	"No puede crear enlaces aqu&iacute;.";	// Necessita traducció
+	"No podeu crear enlla&ccedil;os aqu&iacute;.";
 #elif L==2	// de
-	"You can not create links here.";	// Need Übersetzung
+	"Sie k&ouml;nnen hier keine Links erstellen.";
 #elif L==3	// en
 	"You can not create links here.";
 #elif L==4	// es
 	"No puede crear enlaces aqu&iacute;.";
 #elif L==5	// fr
-	"You can not create links here.";	// Besoin de traduction
+	"Vous ne pouvez pas cr&eacute;er de liens ici.";
 #elif L==6	// gn
 	"No puede crear enlaces aqu&iacute;.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi creare linki qui.";
 #elif L==8	// pl
-	"You can not create links here.";	// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz tutaj tworzy&cacute; link&oacute;w..";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar links aqui.";
 #endif
 
 const char *Txt_You_can_not_delete_your_current_nickname =
 #if   L==1	// ca
-	"No puede eliminar su apodo actual.";		// Necessita traducció
+	"No podeu suprimir el sobrenom actual.";
 #elif L==2	// de
-	"You can not delete your current nickname.";	// Need Übersetzung
+	"Sie k&ouml;nnen Ihren aktuellen Spitznamen nicht l&ouml;schen.";
 #elif L==3	// en
 	"You can not delete your current nickname.";
 #elif L==4	// es
 	"No puede eliminar su apodo actual.";
 #elif L==5	// fr
-	"You can not delete your current nickname.";	// Besoin de traduction
+	"Vous ne pouvez pas supprimer votre pseudo actuel.";
 #elif L==6	// gn
 	"No puede eliminar su apodo actual.";		// Okoteve traducción
 #elif L==7	// it
 	"Non puoi cancellare il tuo nome utente attuale.";
 #elif L==8	// pl
-	"You can not delete your current nickname.";	// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz usun&aogon;&cacute; swojego obecnego pseudonimu.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode excluir sua alcunha atual.";
 #endif
 
 const char *Txt_You_can_not_delete_this_ID =
 #if   L==1	// ca
-	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Necessita traducció
+	"No podeu suprimir aquest ID (DNI/c&egrave;dula).";
 #elif L==2	// de
-	"You can not delete this ID.";				// Need Übersetzung
+	"Sie k&ouml;nnen diese ID nicht l&ouml;schen.";
 #elif L==3	// en
 	"You can not delete this ID.";
 #elif L==4	// es
 	"No puede eliminar este ID (DNI/c&eacute;dula).";
 #elif L==5	// fr
-	"You can not delete this ID.";				// Besoin de traduction
+	"Vous ne pouvez pas supprimer cet ID.";
 #elif L==6	// gn
 	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi cancellare questo ID.";
 #elif L==8	// pl
-	"You can not delete this ID.";				// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz usun&aogon;&cacute; tego identyfikatora.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode excluir este ID.";
 #endif
@@ -57673,21 +57727,21 @@ const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_create
 
 const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
-	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traducció
+	"No podeu deixar buides les respostes interm&egrave;dies.";
 #elif L==2	// de
-	"You can not leave empty intermediate answers.";	// Need Übersetzung
+	"Sie k&ouml;nnen keine leeren Zwischenantworten hinterlassen.";
 #elif L==3	// en
 	"You can not leave empty intermediate answers.";
 #elif L==4	// es
 	"No puede dejar respuestas intermedias sin rellenar.";
 #elif L==5	// fr
-	"You can not leave empty intermediate answers.";	// Besoin de traduction
+	"Vous ne pouvez pas laisser de r&eacute;ponses interm&eacute;diaires vides.";
 #elif L==6	// gn
 	"No puede dejar respuestas intermedias sin rellenar.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi lasciare vuote domande intermedie.";
 #elif L==8	// pl
-	"You can not leave empty intermediate answers.";	// Potrzebujesz tlumaczenie
+	"Nie mo&zdot;esz pozostawi&cacute; pustych odpowiedzi po&sacute;rednich.";
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode deixar respostas intermedi&aacute;rias vazias.";
 #endif
