@@ -56,6 +56,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Wszelkie dzia&lstrok;ania"
 #elif L==9	// pt
 	"Qualquer a&ccedil;&atilde;o"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnk] =
@@ -77,6 +79,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Nieznane dzia&lstrok;anie"
 #elif L==9	// pt
 	"A&ccedil;&atilde;o desconhecida"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMnu] =
@@ -98,6 +102,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Poka&zdot; menu"
 #elif L==9	// pt
 	"Mostrar menu"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefCon] =
@@ -119,6 +125,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Od&sacute;wie&zdot;y&cacute; powiadomienia i po&lstrok;&aogon;czy&cacute;"
 #elif L==9	// pt
 	"Atualizar notifica&ccedil;&otilde;es e conectados"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActWebSvc] =
@@ -140,6 +148,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Serwis internetowy (funkcja API)"
 #elif L==9	// pt
 	"Servi&ccedil;o da Web (fun&ccedil;&atilde;o de API)"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmLogIn] =
@@ -161,6 +171,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Landing page"
 #elif L==9	// pt
 	"Landing page"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSch] =
@@ -182,6 +194,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Popro&sacute; o wyszukiwanie"
 #elif L==9	// pt
 	"Solicitar pesquisa"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeGblTL] =
@@ -203,6 +217,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Poka&zdot; globaln&aogon; timeline"
 #elif L==9	// pt
 	"Mostrar timeline global"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSocPrf] =
@@ -224,6 +240,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Zasugeruj list&eogon; u&zdot;ytkownik&oacute;w do obserwowania"
 #elif L==9	// pt
 	"Sugerir lista de usu&aacute;rios a seguir"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCal] =
@@ -245,6 +263,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Poka&zdot; kalendarz"
 #elif L==9	// pt
 	"Mostrar calend&aacute;rio"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeNtf] =
@@ -266,6 +286,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Poka&zdot; powiadomienia"
 #elif L==9	// pt
 	"Mostrar notifica&ccedil;&otilde;es"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogIn] =
@@ -287,6 +309,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Uwierzytelnij u&zdot;ytkownika"
 #elif L==9	// pt
 	"Autenticar usu&aacute;rio"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogInNew] =
@@ -308,6 +332,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Authenticate user in empty account"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Authenticate user in empty account"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogInLan] =
@@ -329,6 +355,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change language after authentication"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change language after authentication"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAnnSee] =
@@ -350,6 +378,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Mark announcement as seen"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mark announcement as seen"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSndNewPwd] =
@@ -371,6 +401,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request to send a new password"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request to send a new password"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSndNewPwd] =
@@ -392,6 +424,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send new password"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send new password"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogOut] =
@@ -413,6 +447,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Close session"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Close session"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSch] =
@@ -434,6 +470,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Search"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Search"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefNewPubGblTL] =
@@ -455,6 +493,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Refresh global timeline (new publications)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Refresh global timeline (new publications)"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefOldPubGblTL] =
@@ -476,6 +516,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show previous publications in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show previous publications in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPstGblTL] =
@@ -497,6 +539,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create post in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create post in global timeline"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvComGblTL] =
@@ -518,6 +562,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create comment in global timeline"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create comment in global timeline"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoHidComGblTL] =
@@ -539,6 +585,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show hidden comments in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show hidden comments in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllShaNotGblTL] =
@@ -560,6 +608,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who shared a publication in global timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who shared a publication in global timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllFavNotGblTL] =
@@ -581,6 +631,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a publication in global timeline"						// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who favourited a publication in global timeline"						// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllFavComGblTL] =
@@ -602,6 +654,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a comment in global timeline"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who favourited a comment in global timeline"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShaNotGblTL] =
@@ -623,6 +677,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Share a publication in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Share a publication in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnsNotGblTL] =
@@ -644,6 +700,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unshare a publication in global timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unshare a publication in global timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFavNotGblTL] =
@@ -665,6 +723,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a publication in global timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Favourite a publication in global timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfNotGblTL] =
@@ -686,6 +746,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a publication in global timeline"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfavourite a publication in global timeline"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFavComGblTL] =
@@ -707,6 +769,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a comment in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Favourite a comment in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfComGblTL] =
@@ -728,6 +792,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a comment in global timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfavourite a comment in global timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPubGblTL] =
@@ -749,6 +815,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a publication in global timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request deletion of a publication in global timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPubGblTL] =
@@ -770,6 +838,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a publication in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Delete a publication in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemComGblTL] =
@@ -791,6 +861,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a comment in global timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request deletion of a comment in global timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemComGblTL] =
@@ -812,6 +884,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a comment in global timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Delete a comment in global timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqOthPubPrf] =
@@ -833,6 +907,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request to show public user profile"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request to show public user profile"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefOldPubUsrTL] =
@@ -854,6 +930,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show previous publications in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show previous publications in user timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPstUsrTL] =
@@ -875,6 +953,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create post in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create post in user timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvComUsrTL] =
@@ -896,6 +976,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create comment in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create comment in user timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoHidComUsrTL] =
@@ -917,6 +999,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show hidden comments in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show hidden comments in user timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllShaNotUsrTL] =
@@ -938,6 +1022,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who shared a publication in user timeline"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who shared a publication in user timeline"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllFavNotUsrTL] =
@@ -959,6 +1045,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a publication in user timeline"						// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who favourited a publication in user timeline"						// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAllFavComUsrTL] =
@@ -980,6 +1068,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show who favourited a comment in user timeline"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show who favourited a comment in user timeline"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShaNotUsrTL] =
@@ -1001,6 +1091,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Share a publication in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Share a publication in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnsNotUsrTL] =
@@ -1022,6 +1114,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unshare a publication in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unshare a publication in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFavNotUsrTL] =
@@ -1043,6 +1137,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a publication in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Favourite a publication in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfNotUsrTL] =
@@ -1064,6 +1160,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a publication in user timeline"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfavourite a publication in user timeline"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFavComUsrTL] =
@@ -1085,6 +1183,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Favourite a comment in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Favourite a comment in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfComUsrTL] =
@@ -1106,6 +1206,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfavourite a comment in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfavourite a comment in user timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPubUsrTL] =
@@ -1127,6 +1229,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a publication in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request deletion of a publication in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPubUsrTL] =
@@ -1148,6 +1252,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a publication in user timeline"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Delete a publication in user timeline"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemComUsrTL] =
@@ -1169,6 +1275,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request deletion of a comment in user timeline"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request deletion of a comment in user timeline"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemComUsrTL] =
@@ -1190,6 +1298,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Delete a comment in user timeline"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Delete a comment in user timeline"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOthPubPrf] =
@@ -1211,6 +1321,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show user profile"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show user profile"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCalFig] =
@@ -1232,6 +1344,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Calculate user figures"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Calculate user figures"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFolUsr] =
@@ -1253,6 +1367,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Follow a user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Follow a user"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfUsr] =
@@ -1274,6 +1390,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfollow a user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfollow a user"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeFlg] =
@@ -1295,6 +1413,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show followed users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show followed users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeFlr] =
@@ -1316,6 +1436,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show followers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show followers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCal] =
@@ -1337,6 +1459,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print calendar"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print calendar"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCal1stDay] =
@@ -1358,6 +1482,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change first day of the week in calendar"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change first day of the week in calendar"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeNewNtf] =
@@ -1379,6 +1505,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show notifications"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show notifications"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMrkNtfSee] =
@@ -1400,6 +1528,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Mark notifications as seen"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mark notifications as seen"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMai] =
@@ -1421,6 +1551,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show mail domains"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show mail domains"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiMai] =
@@ -1442,6 +1574,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit mail domains"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit mail domains"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewMai] =
@@ -1463,6 +1597,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create email domain"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create email domain"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMai] =
@@ -1484,6 +1620,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove email domain"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove email domain"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenMaiSho] =
@@ -1505,6 +1643,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change email domain"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change email domain"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenMaiFul] =
@@ -1526,6 +1666,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change email domain information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change email domain information"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSysInf] =
@@ -1547,6 +1689,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the platform"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCty] =
@@ -1568,6 +1712,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List countries"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List countries"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePen] =
@@ -1589,6 +1735,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Instytucje, centra, stopnie i kurs&otilde;w oczekuj&aogon;cy"
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeLnk] =
@@ -1610,6 +1758,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See institutional links"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See institutional links"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstPlg] =
@@ -1631,6 +1781,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List plugins"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List plugins"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMtn] =
@@ -1652,6 +1804,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Utrzymanie"
 #elif L==9	// pt
 	"Manuten&ccedil;&atilde;o"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnSysInf] =
@@ -1673,6 +1827,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the platform"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCty] =
@@ -1694,6 +1850,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit countries"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit countries"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewCty] =
@@ -1715,6 +1873,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a country"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemCty] =
@@ -1736,6 +1896,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove country"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove country"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCty] =
@@ -1757,6 +1919,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change name of a country"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change name of a country"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtyWWW] =
@@ -1778,6 +1942,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of country"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of country"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeBan] =
@@ -1799,6 +1965,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See banners"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See banners"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiBan] =
@@ -1820,6 +1988,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit banners"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit banners"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewBan] =
@@ -1841,6 +2011,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a banner"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a banner"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemBan] =
@@ -1862,6 +2034,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a banner"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a banner"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoBan] =
@@ -1883,6 +2057,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show a hidden banner"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show a hidden banner"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidBan] =
@@ -1904,6 +2080,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide visible banner"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide visible banner"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenBanSho] =
@@ -1925,6 +2103,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the short name of a banner"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the short name of a banner"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenBanFul] =
@@ -1946,6 +2126,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the full name of a banner"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the full name of a banner"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgBanImg] =
@@ -1967,6 +2149,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the image of a banner"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the image of a banner"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgBanWWW] =
@@ -1988,6 +2172,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the web of a banner"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the web of a banner"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActClkBan] =
@@ -2009,6 +2195,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Go to a banner when clicked"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Go to a banner when clicked"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiLnk] =
@@ -2030,6 +2218,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit institutional links"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit institutional links"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewLnk] =
@@ -2051,6 +2241,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of institutional link"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of institutional link"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemLnk] =
@@ -2072,6 +2264,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of institutional link"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of institutional link"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenLnkSho] =
@@ -2093,6 +2287,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the short name of institutional link"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the short name of institutional link"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenLnkFul] =
@@ -2114,6 +2310,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the full name of institutional link"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the full name of institutional link"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgLnkWWW] =
@@ -2135,6 +2333,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the web of institutional link"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the web of institutional link"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiPlg] =
@@ -2156,6 +2356,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit plugins"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit plugins"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewPlg] =
@@ -2177,6 +2379,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a plugin"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a plugin"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPlg] =
@@ -2198,6 +2402,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove plugin"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove plugin"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenPlg] =
@@ -2219,6 +2425,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename plugin"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename plugin"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPlgDes] =
@@ -2240,6 +2448,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change description of a plugin"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change description of a plugin"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPlgLog] =
@@ -2261,6 +2471,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change logo of a plugin"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change logo of a plugin"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPlgAppKey] =
@@ -2282,6 +2494,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change application key of a plugin"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change application key of a plugin"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPlgURL] =
@@ -2303,6 +2517,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change URL of a plugin"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change URL of a plugin"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPlgIP] =
@@ -2324,6 +2540,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change IP address of a plugin"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change IP address of a plugin"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSetUp] =
@@ -2345,6 +2563,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set up"
 #elif L==9	// pt
 	"Instalar"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemOldCrs] =
@@ -2366,6 +2586,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request total removal of old courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request total removal of old courses"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldCrs] =
@@ -2387,6 +2609,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove completely old courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove completely old courses"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCtyInf] =
@@ -2408,6 +2632,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the country"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeIns] =
@@ -2429,6 +2655,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List institutions"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List institutions"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCtyInf] =
@@ -2450,6 +2678,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the country"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtyMapAtt] =
@@ -2471,6 +2701,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change map attribution of a country"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change map attribution of a country"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiIns] =
@@ -2492,6 +2724,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit institutions"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit institutions"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqIns] =
@@ -2513,6 +2747,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewIns] =
@@ -2534,6 +2770,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create an institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create an institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemIns] =
@@ -2555,6 +2793,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenInsSho] =
@@ -2576,6 +2816,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenInsFul] =
@@ -2597,6 +2839,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsWWW] =
@@ -2618,6 +2862,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsSta] =
@@ -2639,6 +2885,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change status of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change status of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeInsInf] =
@@ -2660,6 +2908,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCtr] =
@@ -2681,6 +2931,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List centers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List centers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePlc] =
@@ -2702,6 +2954,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List places"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List places"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDpt] =
@@ -2723,6 +2977,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List departments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List departments"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeHld] =
@@ -2744,6 +3000,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List holidays"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List holidays"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnInsInf] =
@@ -2765,6 +3023,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsCtyCfg] =
@@ -2786,6 +3046,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change country of institution in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change country of institution in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenInsShoCfg] =
@@ -2807,6 +3069,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of institution in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of institution in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenInsFulCfg] =
@@ -2828,6 +3092,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of institution in its configuration"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of institution in its configuration"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsWWWCfg] =
@@ -2849,6 +3115,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of institution in its configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of institution in its configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqInsLog] =
@@ -2870,6 +3138,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request logo of the current institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request logo of the current institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecInsLog] =
@@ -2891,6 +3161,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change logo of the current institution"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change logo of the current institution"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemInsLog] =
@@ -2912,6 +3184,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove the logo of the current institution"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove the logo of the current institution"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCtr] =
@@ -2933,6 +3207,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit centers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit centers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqCtr] =
@@ -2954,6 +3230,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewCtr] =
@@ -2975,6 +3253,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemCtr] =
@@ -2996,6 +3276,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrPlc] =
@@ -3017,6 +3299,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change place of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change place of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCtrSho] =
@@ -3038,6 +3322,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCtrFul] =
@@ -3059,6 +3345,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrWWW] =
@@ -3080,6 +3368,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrSta] =
@@ -3101,6 +3391,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change status of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change status of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiPlc] =
@@ -3122,6 +3414,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit places"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit places"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewPlc] =
@@ -3143,6 +3437,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a place"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a place"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPlc] =
@@ -3164,6 +3460,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove place"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove place"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenPlcSho] =
@@ -3185,6 +3483,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of a place"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of a place"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenPlcFul] =
@@ -3206,6 +3506,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of a place"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of a place"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiDpt] =
@@ -3227,6 +3529,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit departments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit departments"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewDpt] =
@@ -3248,6 +3552,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemDpt] =
@@ -3269,6 +3575,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove department"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove department"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDptIns] =
@@ -3290,6 +3598,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change institution of a department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change institution of a department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDptSho] =
@@ -3311,6 +3621,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of a department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of a department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDptFul] =
@@ -3334,6 +3646,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of a department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of a department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDptWWW] =
@@ -3355,6 +3669,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of a department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of a department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiHld] =
@@ -3376,6 +3692,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit holidays"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit holidays"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewHld] =
@@ -3397,6 +3715,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a holiday"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a holiday"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemHld] =
@@ -3418,6 +3738,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove holiday"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove holiday"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHldPlc] =
@@ -3439,6 +3761,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change place of a holiday"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change place of a holiday"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHldTyp] =
@@ -3460,6 +3784,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change type of a holiday"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change type of a holiday"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHldStrDat] =
@@ -3481,6 +3807,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change start date of a holiday"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change start date of a holiday"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHldEndDat] =
@@ -3502,6 +3830,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change end date of a holiday"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change end date of a holiday"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenHld] =
@@ -3523,6 +3853,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change name of a holiday"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change name of a holiday"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCtrInf] =
@@ -3544,6 +3876,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDeg] =
@@ -3565,6 +3899,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List degrees in a center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List degrees in a center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeBld] =
@@ -3586,6 +3922,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List buildings in a center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List buildings in a center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRoo] =
@@ -3607,6 +3945,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List rooms in a center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List rooms in a center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCtrInf] =
@@ -3628,6 +3968,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrInsCfg] =
@@ -3649,6 +3991,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change institution of center in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change institution of center in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCtrShoCfg] =
@@ -3670,6 +4014,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name center in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name center in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCtrFulCfg] =
@@ -3691,6 +4037,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name center in its configuratio"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name center in its configuratio"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrPlcCfg] =
@@ -3712,6 +4060,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change place of center in its configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change place of center in its configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrLatCfg] =
@@ -3733,6 +4083,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change latitude of center in its configuration"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change latitude of center in its configuration"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrLgtCfg] =
@@ -3754,6 +4106,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change longitude of center in its configuration"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change longitude of center in its configuration"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrAltCfg] =
@@ -3775,6 +4129,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change altitude of center in its configuration"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change altitude of center in its configuration"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrWWWCfg] =
@@ -3796,6 +4152,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of center in its configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of center in its configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqCtrLog] =
@@ -3817,6 +4175,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the logo of the current center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the logo of the current center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecCtrLog] =
@@ -3838,6 +4198,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change logo of the current center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change logo of the current center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemCtrLog] =
@@ -3859,6 +4221,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove the logo of the current center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove the logo of the current center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqCtrPho] =
@@ -3880,6 +4244,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the photo of the current center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the photo of the current center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecCtrPho] =
@@ -3901,6 +4267,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change photo of the current center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change photo of the current center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrPhoAtt] =
@@ -3922,6 +4290,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change attribution of center photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change attribution of center photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDegTyp] =
@@ -3943,6 +4313,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List types of degrees"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List types of degrees"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiDegTyp] =
@@ -3964,6 +4336,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request edition of types of degrees"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request edition of types of degrees"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewDegTyp] =
@@ -3985,6 +4359,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create type of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemDegTyp] =
@@ -4006,6 +4382,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove type of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDegTyp] =
@@ -4027,6 +4405,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename type of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiDeg] =
@@ -4048,6 +4428,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit degrees"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit degrees"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDeg] =
@@ -4069,6 +4451,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewDeg] =
@@ -4090,6 +4474,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemDeg] =
@@ -4111,6 +4497,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDegSho] =
@@ -4132,6 +4520,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDegFul] =
@@ -4153,6 +4543,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDegTyp] =
@@ -4174,6 +4566,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change type of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDegWWW] =
@@ -4195,6 +4589,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDegSta] =
@@ -4216,6 +4612,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change status of degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change status of degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiBld] =
@@ -4237,6 +4635,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit buildings"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit buildings"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewBld] =
@@ -4258,6 +4658,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a buildin"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a buildin"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemBld] =
@@ -4279,6 +4681,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove building"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove building"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenBldSho] =
@@ -4300,6 +4704,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of building"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of building"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenBldFul] =
@@ -4321,6 +4727,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of building"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of building"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenBldLoc] =
@@ -4342,6 +4750,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change location of building"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change location of building"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiRoo] =
@@ -4363,6 +4773,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit rooms"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit rooms"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewRoo] =
@@ -4384,6 +4796,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of room"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of room"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemRoo] =
@@ -4405,6 +4819,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove room"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove room"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgRooBld] =
@@ -4426,6 +4842,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change building of room"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change building of room"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgRooMaxUsr] =
@@ -4447,6 +4865,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of users of room"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of users of room"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenRooSho] =
@@ -4468,6 +4888,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of room"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of room"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenRooFul] =
@@ -4489,6 +4911,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of room"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of room"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgRooFlo] =
@@ -4510,6 +4934,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change floor of room"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change floor of room"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDegInf] =
@@ -4531,6 +4957,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCrs] =
@@ -4552,6 +4980,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List courses of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List courses of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnDegInf] =
@@ -4573,6 +5003,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDegCtrCfg] =
@@ -4594,6 +5026,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change center of degree in its configuration"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change center of degree in its configuration"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDegShoCfg] =
@@ -4615,6 +5049,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of degree in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of degree in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenDegFulCfg] =
@@ -4636,6 +5072,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of degree in its configuration"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of degree in its configuration"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDegWWWCfg] =
@@ -4657,6 +5095,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change web of degree in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change web of degree in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDegLog] =
@@ -4678,6 +5118,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of the logo of the current degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of the logo of the current degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecDegLog] =
@@ -4699,6 +5141,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change logo of the current degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change logo of the current degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemDegLog] =
@@ -4720,6 +5164,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove the logo of the current degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove the logo of the current degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCrs] =
@@ -4741,6 +5187,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit courses"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit courses"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqCrs] =
@@ -4762,6 +5210,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewCrs] =
@@ -4783,6 +5233,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemCrs] =
@@ -4804,6 +5256,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsCrsCod] =
@@ -4825,6 +5279,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change institutional code of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change institutional code of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsYea] =
@@ -4846,6 +5302,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change year/semester of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change year/semester of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCrsSho] =
@@ -4867,6 +5325,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCrsFul] =
@@ -4888,6 +5348,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsSta] =
@@ -4909,6 +5371,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change status of course"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change status of course"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCrsInf] =
@@ -4930,6 +5394,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show information on the course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show information on the course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePrg] =
@@ -4951,6 +5417,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See educational schedule of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See educational schedule of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewPrgItm] =
@@ -4972,6 +5440,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request new program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request new program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmChgPrgItm] =
@@ -4993,6 +5463,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewPrgItm] =
@@ -5014,6 +5486,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new program item"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new program item"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPrgItm] =
@@ -5035,6 +5509,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPrgItm] =
@@ -5056,6 +5532,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of program item"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of program item"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPrgItm] =
@@ -5077,6 +5555,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove of program item"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove of program item"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidPrgItm] =
@@ -5098,6 +5578,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoPrgItm] =
@@ -5119,6 +5601,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUp_PrgItm] =
@@ -5140,6 +5624,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move up program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move up program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDwnPrgItm] =
@@ -5161,6 +5647,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down program item"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move down program item"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLftPrgItm] =
@@ -5182,6 +5670,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move left program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move left program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRgtPrgItm] =
@@ -5203,6 +5693,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move right program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move right program item"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeTchGui] =
@@ -5224,6 +5716,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the teaching guide of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSyl] =
@@ -5245,6 +5739,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the syllabus (lectures or practicals)"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeBib] =
@@ -5266,6 +5762,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeFAQ] =
@@ -5287,6 +5785,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the FAQ"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCrsLnk] =
@@ -5308,6 +5808,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the links related to the course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the links related to the course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCrsTT] =
@@ -5329,6 +5831,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the course timetable"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the course timetable"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCrsInf] =
@@ -5350,6 +5854,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print information on the course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print information on the course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsDegCfg] =
@@ -5371,6 +5877,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change degree of course in its configuration"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change degree of course in its configuration"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCrsShoCfg] =
@@ -5392,6 +5900,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change short name of course in its configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change short name of course in its configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenCrsFulCfg] =
@@ -5413,6 +5923,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change full name of course in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change full name of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgInsCrsCodCfg] =
@@ -5434,6 +5946,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change institutional code of course in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change institutional code of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsYeaCfg] =
@@ -5455,6 +5969,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change year/semester of course in its configuration"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change year/semester of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCrsInf] =
@@ -5476,6 +5992,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit information about the course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit information about the course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiTchGui] =
@@ -5497,6 +6015,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit teaching guide of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit teaching guide of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSylLec] =
@@ -5518,6 +6038,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSylPra] =
@@ -5539,6 +6061,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiSylLec] =
@@ -5560,6 +6084,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit syllabus of lectures"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit syllabus of lectures"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiSylPra] =
@@ -5581,6 +6107,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelItmSylLec] =
@@ -5602,6 +6130,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove item from syllabus of lectures"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove item from syllabus of lectures"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelItmSylPra] =
@@ -5623,6 +6153,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove item from practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove item from practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUp_IteSylLec] =
@@ -5644,6 +6176,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Raise the position of a subtree of the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Raise the position of a subtree of the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUp_IteSylPra] =
@@ -5665,6 +6199,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Raise the position of a subtree of the practicals syllabus"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Raise the position of a subtree of the practicals syllabus"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDwnIteSylLec] =
@@ -5686,6 +6222,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Lower the position of a subtree of the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Lower the position of a subtree of the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDwnIteSylPra] =
@@ -5707,6 +6245,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Lower the position of a subtree of the practicals syllabus"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Lower the position of a subtree of the practicals syllabus"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRgtIteSylLec] =
@@ -5728,6 +6268,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Increase the level of an item on the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Increase the level of an item on the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRgtIteSylPra] =
@@ -5749,6 +6291,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Increase the level of an item on the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Increase the level of an item on the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLftIteSylLec] =
@@ -5770,6 +6314,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Decrease the level of an item on the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Decrease the level of an item on the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLftIteSylPra] =
@@ -5791,6 +6337,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Decrease the level of an item on the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Decrease the level of an item on the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActInsIteSylLec] =
@@ -5812,6 +6360,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Insert a new item in the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Insert a new item in the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActInsIteSylPra] =
@@ -5833,6 +6383,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Insert a new item in the practicals syllabus"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Insert a new item in the practicals syllabus"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActModIteSylLec] =
@@ -5854,6 +6406,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change item in the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change item in the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActModIteSylPra] =
@@ -5875,6 +6429,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change item in the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change item in the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiBib] =
@@ -5896,6 +6452,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiFAQ] =
@@ -5917,6 +6475,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCrsLnk] =
@@ -5938,6 +6498,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit course links"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaCrsInf] =
@@ -5959,6 +6521,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the course information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the course information"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaTchGui] =
@@ -5980,6 +6544,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaSylLec] =
@@ -6001,6 +6567,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaSylPra] =
@@ -6022,6 +6590,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaBib] =
@@ -6043,6 +6613,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaFAQ] =
@@ -6064,6 +6636,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change force students to read FAQ"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change force students to read FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaCrsLnk] =
@@ -6085,6 +6659,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the links"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the links"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaCrsInf] =
@@ -6106,6 +6682,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaTchGui] =
@@ -6127,6 +6705,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaSylLec] =
@@ -6148,6 +6728,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaSylPra] =
@@ -6169,6 +6751,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaBib] =
@@ -6190,6 +6774,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaFAQ] =
@@ -6211,6 +6797,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaCrsLnk] =
@@ -6232,6 +6820,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the course links"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcCrsInf] =
@@ -6253,6 +6843,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcTchGui] =
@@ -6274,6 +6866,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the teaching guide"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcSylLec] =
@@ -6295,6 +6889,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the lectures syllabus"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the lectures syllabus"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcSylPra] =
@@ -6316,6 +6912,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcBib] =
@@ -6337,6 +6935,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the bibliography"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcFAQ] =
@@ -6358,6 +6958,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcCrsLnk] =
@@ -6379,6 +6981,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the course links"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the course links"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLCrsInf] =
@@ -6400,6 +7004,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLTchGui] =
@@ -6421,6 +7027,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLSylLec] =
@@ -6442,6 +7050,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLSylPra] =
@@ -6463,6 +7073,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLBib] =
@@ -6484,6 +7096,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLFAQ] =
@@ -6505,6 +7119,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLCrsLnk] =
@@ -6526,6 +7142,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the course links"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the course links"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagCrsInf] =
@@ -6547,6 +7165,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagTchGui] =
@@ -6568,6 +7188,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the teaching guide"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagSylLec] =
@@ -6589,6 +7211,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagSylPra] =
@@ -6610,6 +7234,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the practicals syllabus"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the practicals syllabus"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagBib] =
@@ -6631,6 +7257,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the bibliography"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagFAQ] =
@@ -6652,6 +7280,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagCrsLnk] =
@@ -6673,6 +7303,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the course links"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the course links"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorCrsInf] =
@@ -6694,6 +7326,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of course information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of course information"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorTchGui] =
@@ -6715,6 +7349,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the teaching guide"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the teaching guide"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorSylLec] =
@@ -6736,6 +7372,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorSylPra] =
@@ -6757,6 +7395,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorBib] =
@@ -6778,6 +7418,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorFAQ] =
@@ -6799,6 +7441,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the FAQ"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorCrsLnk] =
@@ -6820,6 +7464,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of course links"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiCrsInf] =
@@ -6841,6 +7487,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiTchGui] =
@@ -6862,6 +7510,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiSylLec] =
@@ -6883,6 +7533,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiSylPra] =
@@ -6904,6 +7556,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiBib] =
@@ -6925,6 +7579,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the bibliography"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiFAQ] =
@@ -6946,6 +7602,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiCrsLnk] =
@@ -6967,6 +7625,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of course links"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiCrsInf] =
@@ -6988,6 +7648,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiTchGui] =
@@ -7009,6 +7671,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiSylLec] =
@@ -7030,6 +7694,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiSylPra] =
@@ -7051,6 +7717,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiBib] =
@@ -7072,6 +7740,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the bibliography"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiFAQ] =
@@ -7093,6 +7763,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiCrsLnk] =
@@ -7114,6 +7786,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of course links"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of course links"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtCrsInf] =
@@ -7135,6 +7809,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of course information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of course information"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtTchGui] =
@@ -7156,6 +7832,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the teaching guide"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the teaching guide"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtSylLec] =
@@ -7177,6 +7855,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the lectures syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the lectures syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtSylPra] =
@@ -7198,6 +7878,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the practicals syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the practicals syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtBib] =
@@ -7219,6 +7901,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtFAQ] =
@@ -7240,6 +7924,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the FAQ"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtCrsLnk] =
@@ -7261,6 +7947,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of course links"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtCrsInf] =
@@ -7282,6 +7970,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of course information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of course information"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtTchGui] =
@@ -7303,6 +7993,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtSylLec] =
@@ -7324,6 +8016,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the lectures syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the lectures syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtSylPra] =
@@ -7345,6 +8039,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the practicals syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the practicals syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtBib] =
@@ -7366,6 +8062,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the bibliography"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtFAQ] =
@@ -7387,6 +8085,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtCrsLnk] =
@@ -7408,6 +8108,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of course links"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of course links"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCrsTT] =
@@ -7429,6 +8131,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show print view of course timetable"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show print view of course timetable"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCrsTT] =
@@ -7450,6 +8154,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit course timetable"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit course timetable"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsTT] =
@@ -7471,6 +8177,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change course timetable"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change course timetable"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsTT1stDay] =
@@ -7492,6 +8200,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change first day of week of course timetable"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change first day of week of course timetable"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAss] =
@@ -7513,6 +8223,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAsg] =
@@ -7534,6 +8246,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See assignments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See assignments"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePrj] =
@@ -7555,6 +8269,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See projects"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See projects"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllExaAnn] =
@@ -7576,6 +8292,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See exam announcements"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See exam announcements"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiTstQst] =
@@ -7597,6 +8315,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request edition of test questions"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request edition of test questions"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqTst] =
@@ -7618,6 +8338,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request a test"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request a test"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllExa] =
@@ -7639,6 +8361,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all exams"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all exams"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllGam] =
@@ -7660,6 +8384,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all games"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all games"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllSvy] =
@@ -7681,6 +8407,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See surveys"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See surveys"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiAss] =
@@ -7702,6 +8430,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit assessment system"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaAss] =
@@ -7723,6 +8453,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether students are forced to read the assessment system"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether students are forced to read the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaAss] =
@@ -7744,6 +8476,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if I have read the assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if I have read the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSelInfSrcAss] =
@@ -7765,6 +8499,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select the type of information shown in the assessment system"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select the type of information shown in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLAss] =
@@ -7786,6 +8522,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create URL in the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPagAss] =
@@ -7807,6 +8545,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create web page in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEditorAss] =
@@ -7828,6 +8568,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Integrated editor of the assessment system"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Integrated editor of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlaTxtEdiAss] =
@@ -7849,6 +8591,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Plain text editor of the assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Plain text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiAss] =
@@ -7870,6 +8614,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rich text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtAss] =
@@ -7891,6 +8637,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change plain text of the assessment system"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change plain text of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtAss] =
@@ -7912,6 +8660,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change rich text of the assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change rich text of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewAsg] =
@@ -7933,6 +8683,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new assignment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new assignment"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneAsg] =
@@ -7954,6 +8706,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit an assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit an assignment"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnOneAsg] =
@@ -7975,6 +8729,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show print view of an assignment"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show print view of an assignment"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewAsg] =
@@ -7996,6 +8752,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create assignment"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgAsg] =
@@ -8017,6 +8775,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change an assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change an assignment"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemAsg] =
@@ -8038,6 +8798,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of an assignment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of an assignment"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAsg] =
@@ -8059,6 +8821,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove assignment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove assignment"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidAsg] =
@@ -8080,6 +8844,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide assignment"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoAsg] =
@@ -8101,6 +8867,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide assignment"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqUsrPrj] =
@@ -8122,6 +8890,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select users to list their projects"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select users to list their projects"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeTblAllPrj] =
@@ -8143,6 +8913,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show all projects in a table"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show all projects in a table"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCfgPrj] =
@@ -8164,6 +8936,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Configure all projects"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Configure all projects"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvCfgPrj] =
@@ -8185,6 +8959,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change configuration of all projects"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change configuration of all projects"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqLckAllPrj] =
@@ -8206,6 +8982,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request locking of all projects"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request locking of all projects"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqUnlAllPrj] =
@@ -8227,6 +9005,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request unlocking of all projects"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request unlocking of all projects"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLckAllPrj] =
@@ -8248,6 +9028,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Lock all projects"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Lock all projects"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnlAllPrj] =
@@ -8269,6 +9051,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unlock all projects"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unlock all projects"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewPrj] =
@@ -8290,6 +9074,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOnePrj] =
@@ -8311,6 +9097,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit a project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnOnePrj] =
@@ -8332,6 +9120,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show primt view of a project"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show primt view of a project"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewPrj] =
@@ -8353,6 +9143,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPrj] =
@@ -8374,6 +9166,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPrj] =
@@ -8395,6 +9189,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemPrj] =
@@ -8416,6 +9212,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidPrj] =
@@ -8437,6 +9235,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoPrj] =
@@ -8458,6 +9258,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLckPrj] =
@@ -8479,6 +9281,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Lock project edition"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Lock project edition"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnlPrj] =
@@ -8500,6 +9304,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unlock project edition"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unlock project edition"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAddStdPrj] =
@@ -8521,6 +9327,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request registering a student in a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request registering a student in a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAddTutPrj] =
@@ -8542,6 +9350,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request registering a tutor in a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request registering a tutor in a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAddEvlPrj] =
@@ -8563,6 +9373,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request registering an evaluator in a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request registering an evaluator in a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddStdPrj] =
@@ -8584,6 +9396,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register a student in a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register a student in a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddTutPrj] =
@@ -8605,6 +9419,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register a tutor in a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register a tutor in a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddEvlPrj] =
@@ -8626,6 +9442,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register an evaluator in a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register an evaluator in a project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemStdPrj] =
@@ -8647,6 +9465,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removing a student from a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removing a student from a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemTutPrj] =
@@ -8668,6 +9488,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removing a tutor from a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removing a tutor from a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemEvlPrj] =
@@ -8689,6 +9511,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removing an evaluator from a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removing an evaluator from a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemStdPrj] =
@@ -8710,6 +9534,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Eliminar estudiante de un proyecto"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Eliminar estudiante de un proyecto"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTutPrj] =
@@ -8731,6 +9557,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove tutor from a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove tutor from a project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemEvlPrj] =
@@ -8752,6 +9580,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove evaluator from a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove evaluator from a project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocPrj] =
@@ -8773,6 +9603,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage the documents of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage the documents of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocPrj] =
@@ -8794,6 +9626,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocPrj] =
@@ -8815,6 +9649,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocPrj] =
@@ -8836,6 +9672,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocPrj] =
@@ -8857,6 +9695,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocPrj] =
@@ -8878,6 +9718,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file into documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file into documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocPrj] =
@@ -8899,6 +9741,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocPrj] =
@@ -8920,6 +9764,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocPrj] =
@@ -8941,6 +9787,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocPrj] =
@@ -8962,6 +9810,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocPrj] =
@@ -8983,6 +9833,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocPrjDZ] =
@@ -9004,6 +9856,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in documents zone of a project using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in documents zone of a project using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocPrjCla] =
@@ -9025,6 +9879,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in documents zone of a project using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in documents zone of a project using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpDocPrj] =
@@ -9046,6 +9902,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConDocPrj] =
@@ -9067,6 +9925,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in documents zone of a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in documents zone of a project"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPDocPrj] =
@@ -9088,6 +9948,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatDocPrj] =
@@ -9109,6 +9971,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatDocPrj] =
@@ -9130,6 +9994,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowDocPrj] =
@@ -9151,6 +10017,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmAssPrj] =
@@ -9172,6 +10040,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage a assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage a assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilAssPrj] =
@@ -9193,6 +10063,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from assessment zone of a project"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from assessment zone of a project"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilAssPrj] =
@@ -9214,6 +10086,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolAssPrj] =
@@ -9235,6 +10109,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from assessment zone of a project"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from assessment zone of a project"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopAssPrj] =
@@ -9256,6 +10132,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in the assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in the assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasAssPrj] =
@@ -9277,6 +10155,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file into assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file into assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAssPrj] =
@@ -9298,6 +10178,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreAssPrj] =
@@ -9319,6 +10201,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in the assessment zone of a project"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in the assessment zone of a project"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolAssPrj] =
@@ -9340,6 +10224,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in the assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in the assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkAssPrj] =
@@ -9361,6 +10247,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in the assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in the assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolAssPrj] =
@@ -9382,6 +10270,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in the assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in the assessment zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAssPrjDZ] =
@@ -9403,6 +10293,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to the assessment zone of a project using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to the assessment zone of a project using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAssPrjCla] =
@@ -9424,6 +10316,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enviar a file in the assessment zone of a project using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enviar a file in the assessment zone of a project using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAssPrj] =
@@ -9445,6 +10339,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in the assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in the assessment zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAssPrj] =
@@ -9466,6 +10362,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in the assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in the assessment zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAssPrj] =
@@ -9487,6 +10385,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in the assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in the assessment zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAssPrj] =
@@ -9508,6 +10408,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in the assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in the assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAssPrj] =
@@ -9529,6 +10431,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in the assessment zone of a project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in the assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAssPrj] =
@@ -9550,6 +10454,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from the assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from the assessment zone of a project"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneCfe] =
@@ -9571,6 +10477,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See one exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See one exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDatCfe] =
@@ -9592,6 +10500,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See exam announcements of a given date"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See exam announcements of a given date"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCfe] =
@@ -9613,6 +10523,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit an exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit an exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvCfe] =
@@ -9634,6 +10546,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send an exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send an exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCfe] =
@@ -9655,6 +10569,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See an exam announcement ready to be printed"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See an exam announcement ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemCfe] =
@@ -9676,6 +10592,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of an exam announcement"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of an exam announcement"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemCfe] =
@@ -9697,6 +10615,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidCfe] =
@@ -9718,6 +10638,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnhCfe] =
@@ -9739,6 +10661,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide exam announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneTstQst] =
@@ -9760,6 +10684,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a test question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit a test question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqImpTstQst] =
@@ -9781,6 +10707,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request an XML file with test questions to import"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request an XML file with test questions to import"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActImpTstQst] =
@@ -9802,6 +10730,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Import test questions from XML file"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Import test questions from XML file"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstTstQst] =
@@ -9823,6 +10753,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List test questions for edition"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List test questions for edition"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvTstQst] =
@@ -9844,6 +10776,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create/Change test question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create/Change test question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSevTstQst] =
@@ -9865,6 +10799,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removing several test questions"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removing several test questions"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemSevTstQst] =
@@ -9886,6 +10822,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove several test questions"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove several test questions"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemOneTstQst] =
@@ -9907,6 +10845,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removing one test question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removing one test question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOneTstQst] =
@@ -9928,6 +10868,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove test question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove test question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgShfTstQst] =
@@ -9949,6 +10891,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change shuffle of a test question"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change shuffle of a test question"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiTag] =
@@ -9970,6 +10914,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit tags in the question bank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit tags in the question bank"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnaTag] =
@@ -9991,6 +10937,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable tag in the question bank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable tag in the question bank"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisTag] =
@@ -10012,6 +10960,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable tag in the question bank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable tag in the question bank"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenTag] =
@@ -10033,6 +10983,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename tag in the question bank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename tag in the question bank"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeTst] =
@@ -10054,6 +11006,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a test"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a test"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAssTst] =
@@ -10075,6 +11029,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request assessment of a test"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request assessment of a test"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAssTst] =
@@ -10096,6 +11052,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Assess a test"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Assess a test"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCfgTst] =
@@ -10117,6 +11075,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See test configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See test configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvCfgTst] =
@@ -10138,6 +11098,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change test configuration"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change test configuration"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSeeMyTstRes] =
@@ -10159,6 +11121,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request to see my test results"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request to see my test results"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyTstResCrs] =
@@ -10180,6 +11144,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my test results"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my test results"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneTstResMe] =
@@ -10201,6 +11167,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See one of my test results"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See one of my test results"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSeeUsrTstRes] =
@@ -10222,6 +11190,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request test results for several users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request test results for several users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrTstResCrs] =
@@ -10243,6 +11213,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See test results for several users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See test results for several users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneTstResOth] =
@@ -10264,6 +11236,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a test result for a user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a test result for a user"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeExa] =
@@ -10285,6 +11259,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See exams"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See exams"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewExa] =
@@ -10306,6 +11282,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request new exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request new exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneExa] =
@@ -10327,6 +11305,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request exam edition"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request exam edition"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewExa] =
@@ -10348,6 +11328,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new exam"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new exam"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgExa] =
@@ -10369,6 +11351,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemExa] =
@@ -10390,6 +11374,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request exam removal"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request exam removal"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemExa] =
@@ -10411,6 +11397,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidExa] =
@@ -10432,6 +11420,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoExa] =
@@ -10453,6 +11443,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewExaSet] =
@@ -10474,6 +11466,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request new exam set"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request new exam set"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewExaSet] =
@@ -10495,6 +11489,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new exam set"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new exam set"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemExaSet] =
@@ -10516,6 +11512,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request set of questions removal"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request set of questions removal"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemExaSet] =
@@ -10537,6 +11535,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove set of questions"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove set of questions"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUp_ExaSet] =
@@ -10558,6 +11558,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move up set of questions"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move up set of questions"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDwnExaSet] =
@@ -10579,6 +11581,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down set of questions"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move down set of questions"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgTitExaSet] =
@@ -10600,6 +11604,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change set of questions title"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change set of questions title"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumQstExaSet] =
@@ -10621,6 +11627,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of questions from set to each exam print"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of questions from set to each exam print"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAddQstExaSet] =
@@ -10642,6 +11650,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request add question to exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request add question to exam"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstTstQstForSet] =
@@ -10663,6 +11673,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List test questions for exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List test questions for exam"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddQstToExa] =
@@ -10684,6 +11696,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Add question to exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Add question to exam"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSetQst] =
@@ -10705,6 +11719,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request exam question removal"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request exam question removal"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemExaQst] =
@@ -10726,6 +11742,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove exam question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqNewExaSes] =
@@ -10747,6 +11765,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request new exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request new exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneExaSes] =
@@ -10768,6 +11788,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewExaSes] =
@@ -10789,6 +11811,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new exam session"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new exam session"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgExaSes] =
@@ -10810,6 +11834,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemExaSes] =
@@ -10831,6 +11857,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request exam session removal"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request exam session removal"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemExaSes] =
@@ -10852,6 +11880,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidExaSes] =
@@ -10873,6 +11903,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnhExaSes] =
@@ -10894,6 +11926,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeExaPrn] =
@@ -10915,6 +11949,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rozpocznij / wzn&oacute;w egzamin"
 #elif L==9	// pt
 	"Iniciar / retomar exame"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAnsExaPrn] =
@@ -10936,6 +11972,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Odpowiedz pytanie egzaminacyjne"
 #elif L==9	// pt
 	"Responda pergunta do exame"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEndExaPrn] =
@@ -10957,6 +11995,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Zako&nacute;czy&cacute; egzamin"
 #elif L==9	// pt
 	"Terminar exame"
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyExaResCrs] =
@@ -10978,6 +12018,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my exam results"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my exam results"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyExaResExa] =
@@ -10999,6 +12041,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my results in exam"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my results in exam"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyExaResSes] =
@@ -11020,6 +12064,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my results in exam session"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my results in exam session"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneExaResMe] =
@@ -11041,6 +12087,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See deatils of one of my exam results"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See deatils of one of my exam results"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSeeUsrExaRes] =
@@ -11062,6 +12110,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select users to see all their exam results"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select users to see all their exam results"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrExaResCrs] =
@@ -11083,6 +12133,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all exam results of a user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all exam results of a user"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrExaResExa] =
@@ -11104,6 +12156,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all results of a user in exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all results of a user in exam"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrExaResSes] =
@@ -11125,6 +12179,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all results of a user in exam session"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all results of a user in exam session"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneExaResOth] =
@@ -11146,6 +12202,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See details of one of the exam results of a user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See details of one of the exam results of a user"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgVisExaRes] =
@@ -11167,6 +12225,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change visibility of exam results"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change visibility of exam results"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeGam] =
@@ -11188,6 +12248,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemMch] =
@@ -11209,6 +12271,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of match"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of match"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMch] =
@@ -11230,6 +12294,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm removal of match"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm removal of match"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqNewMch] =
@@ -11251,6 +12317,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of new match"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of new match"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewMch] =
@@ -11272,6 +12340,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new match and show it in another tab"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new match and show it in another tab"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMch] =
@@ -11293,6 +12363,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change match"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change match"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActResMch] =
@@ -11314,6 +12386,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Resume match showing current question in another tab"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Resume match showing current question in another tab"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActBckMch] =
@@ -11335,6 +12409,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Go back when playing a match"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Go back when playing a match"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPlyPauMch] =
@@ -11356,6 +12432,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Play/pause current match"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Play/pause current match"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFwdMch] =
@@ -11377,6 +12455,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Go forward when playing a match"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Go forward when playing a match"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumColMch] =
@@ -11398,6 +12478,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of columns when playing a match"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of columns when playing a match"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgVisResMchQst] =
@@ -11419,6 +12501,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change visibility of question results when playing a match"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change visibility of question results when playing a match"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMchCntDwn] =
@@ -11440,6 +12524,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Start match countdown"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Start match countdown"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefMchTch] =
@@ -11461,6 +12547,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Refresh current question when playing a match (as teacher)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Refresh current question when playing a match (as teacher)"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActJoiMch] =
@@ -11482,6 +12570,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show current question when playing a match (as student)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show current question when playing a match (as student)"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMchAnsQstStd] =
@@ -11503,6 +12593,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"View my answer to match question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"View my answer to match question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMchAnsQstStd] =
@@ -11524,6 +12616,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove my answer to match question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove my answer to match question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAnsMchQstStd] =
@@ -11545,6 +12639,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Answer match question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Answer match question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefMchStd] =
@@ -11566,6 +12662,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Refresh current question while playing a match (as student)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Refresh current question while playing a match (as student)"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMchResCrs] =
@@ -11587,6 +12685,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all my matches results"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all my matches results"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMchResGam] =
@@ -11608,6 +12708,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all my matches results in a given game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all my matches results in a given game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMchResMch] =
@@ -11629,6 +12731,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my results in a given match"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my results in a given match"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneMchResMe] =
@@ -11650,6 +12754,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See details of match result mine as student"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See details of match result mine as student"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSeeUsrMchRes] =
@@ -11671,6 +12777,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select users and range of dates to see matches results"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select users and range of dates to see matches results"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrMchResCrs] =
@@ -11692,6 +12800,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all matches results of selected users"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all matches results of selected users"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrMchResGam] =
@@ -11713,6 +12823,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all matches results in a given game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all matches results in a given game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrMchResMch] =
@@ -11734,6 +12846,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See results de usuario in a given match"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See results de usuario in a given match"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneMchResOth] =
@@ -11755,6 +12869,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See details of match result of a user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See details of match result of a user"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgVisResMchUsr] =
@@ -11776,6 +12892,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change visibility of match results"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change visibility of match results"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstOneGam] =
@@ -11797,6 +12915,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"View game and its questions"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"View game and its questions"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewGam] =
@@ -11818,6 +12938,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneGam] =
@@ -11839,6 +12961,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewGam] =
@@ -11860,6 +12984,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgGam] =
@@ -11881,6 +13007,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGam] =
@@ -11902,6 +13030,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemGam] =
@@ -11923,6 +13053,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidGam] =
@@ -11944,6 +13076,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoGam] =
@@ -11965,6 +13099,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show game"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show game"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddOneGamQst] =
@@ -11986,6 +13122,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Add new question to game"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Add new question to game"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActGamLstTstQst] =
@@ -12007,6 +13145,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List questions to add some of them to game"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List questions to add some of them to game"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAddTstQstToGam] =
@@ -12028,6 +13168,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Add selected test questions to game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Add selected test questions to game"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGamQst] =
@@ -12049,6 +13191,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of game question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of game question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemGamQst] =
@@ -12070,6 +13214,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm removal of game question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm removal of game question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUp_GamQst] =
@@ -12091,6 +13237,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move up game question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move up game question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDwnGamQst] =
@@ -12112,6 +13260,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down game question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Move down game question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSvy] =
@@ -12133,6 +13283,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAnsSvy] =
@@ -12154,6 +13306,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Answer survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Answer survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewSvy] =
@@ -12175,6 +13329,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new survey"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new survey"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneSvy] =
@@ -12196,6 +13352,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewSvy] =
@@ -12217,6 +13375,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new survey"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new survey"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgSvy] =
@@ -12238,6 +13398,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSvy] =
@@ -12259,6 +13421,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of survey"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of survey"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemSvy] =
@@ -12280,6 +13444,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRstSvy] =
@@ -12301,6 +13467,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request reset of answers of survey"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request reset of answers of survey"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRstSvy] =
@@ -12322,6 +13490,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Reset answers of survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Reset answers of survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidSvy] =
@@ -12343,6 +13513,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoSvy] =
@@ -12364,6 +13536,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide survey"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide survey"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneSvyQst] =
@@ -12385,6 +13559,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new survey question"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new survey question"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvSvyQst] =
@@ -12406,6 +13582,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create survey question"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create survey question"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSvyQst] =
@@ -12427,6 +13605,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of survey question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of survey question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemSvyQst] =
@@ -12448,6 +13628,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm removal of survey question"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm removal of survey question"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocIns] =
@@ -12469,6 +13651,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Documents zone of institution (see or manage)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Documents zone of institution (see or manage)"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaIns] =
@@ -12490,6 +13674,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage shared files zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage shared files zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocCtr] =
@@ -12511,6 +13697,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Documents zone of center (see or manage)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Documents zone of center (see or manage)"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaCtr] =
@@ -12532,6 +13720,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage shared files zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage shared files zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocDeg] =
@@ -12553,6 +13743,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Documents zone of degree (see or manage)"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Documents zone of degree (see or manage)"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaDeg] =
@@ -12574,6 +13766,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage shared files zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage shared files zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocCrsGrp] =
@@ -12595,6 +13789,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Documents zone of course (see or manage)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Documents zone of course (see or manage)"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmTchCrsGrp] =
@@ -12616,6 +13812,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request management of teachers' documents zone of course/group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request management of teachers' documents zone of course/group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaCrsGrp] =
@@ -12637,6 +13835,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request management of shared zone of course/group"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request management of shared zone of course/group"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmAsgWrkUsr] =
@@ -12658,6 +13858,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage the assignments/works of user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage the assignments/works of user"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAsgWrkCrs] =
@@ -12679,6 +13881,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage assignments/works in course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage assignments/works in course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmMrk] =
@@ -12700,6 +13904,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Marks zone (see or manage)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Marks zone (see or manage)"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmBrf] =
@@ -12721,6 +13927,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocIns] =
@@ -12742,6 +13950,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of institution to view mode"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of institution to view mode"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDocIns] =
@@ -12763,6 +13973,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See documents zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See documents zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeDocIns] =
@@ -12784,6 +13996,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in institution documents"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in institution documents"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeDocIns] =
@@ -12805,6 +14019,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in institution documents"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in institution documents"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPSeeDocIns] =
@@ -12826,6 +14042,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in institution documents"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in institution documents"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeDocIns] =
@@ -12847,6 +14065,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowSeeDocIns] =
@@ -12868,6 +14088,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmDocIns] =
@@ -12889,6 +14111,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change to administration mode of institution documents"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change to administration mode of institution documents"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocIns] =
@@ -12910,6 +14134,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocIns] =
@@ -12931,6 +14157,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file in documents zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file in documents zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocIns] =
@@ -12952,6 +14180,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocIns] =
@@ -12973,6 +14203,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder documents zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder documents zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocIns] =
@@ -12994,6 +14226,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocIns] =
@@ -13015,6 +14249,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocIns] =
@@ -13036,6 +14272,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocIns] =
@@ -13057,6 +14295,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Form to create folder/file in documents zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Form to create folder/file in documents zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocIns] =
@@ -13078,6 +14318,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocIns] =
@@ -13099,6 +14341,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocIns] =
@@ -13120,6 +14364,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocInsDZ] =
@@ -13141,6 +14387,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of institution using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of institution using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocInsCla] =
@@ -13162,6 +14410,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in documents zone of institution using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in documents zone of institution using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmDocIns] =
@@ -13183,6 +14433,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder when managing documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder when managing documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmDocIns] =
@@ -13204,6 +14456,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder when managing documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder when managing documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmDocIns] =
@@ -13225,6 +14479,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder when managing documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoDocIns] =
@@ -13246,6 +14502,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file of documents zone of institution"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file of documents zone of institution"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidDocIns] =
@@ -13267,6 +14525,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file of documents zone of institution"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file of documents zone of institution"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmDocIns] =
@@ -13288,6 +14548,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmDocIns] =
@@ -13309,6 +14571,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocIns] =
@@ -13330,6 +14594,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilShaIns] =
@@ -13351,6 +14617,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file in shared zone of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file in shared zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaIns] =
@@ -13372,6 +14640,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from shared zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from shared zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolShaIns] =
@@ -13393,6 +14663,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from shared zone of institution"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from shared zone of institution"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaIns] =
@@ -13414,6 +14686,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasShaIns] =
@@ -13435,6 +14709,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaIns] =
@@ -13456,6 +14732,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaIns] =
@@ -13477,6 +14755,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Form to create folder/file in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Form to create folder/file in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolShaIns] =
@@ -13498,6 +14778,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in shared zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in shared zone of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkShaIns] =
@@ -13519,6 +14801,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolShaIns] =
@@ -13540,6 +14824,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaInsDZ] =
@@ -13561,6 +14847,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared zone of institution using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared zone of institution using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaInsCla] =
@@ -13582,6 +14870,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared zone of institution using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared zone of institution using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpShaIns] =
@@ -13603,6 +14893,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConShaIns] =
@@ -13624,6 +14916,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPShaIns] =
@@ -13645,6 +14939,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatShaIns] =
@@ -13666,6 +14962,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatShaIns] =
@@ -13687,6 +14985,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowShaIns] =
@@ -13708,6 +15008,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from shared zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocCtr] =
@@ -13729,6 +15031,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of center to view mode"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of center to view mode"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDocCtr] =
@@ -13750,6 +15054,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See files of documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See files of documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeDocCtr] =
@@ -13771,6 +15077,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeDocCtr] =
@@ -13792,6 +15100,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPSeeDocCtr] =
@@ -13813,6 +15123,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeDocCtr] =
@@ -13834,6 +15146,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowSeeDocCtr] =
@@ -13855,6 +15169,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmDocCtr] =
@@ -13876,6 +15192,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of center to management mode"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of center to management mode"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocCtr] =
@@ -13897,6 +15215,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocCtr] =
@@ -13918,6 +15238,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from documents zone of center"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from documents zone of center"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocCtr] =
@@ -13939,6 +15261,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocCtr] =
@@ -13960,6 +15284,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocCtr] =
@@ -13981,6 +15307,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocCtr] =
@@ -14002,6 +15330,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocCtr] =
@@ -14023,6 +15353,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocCtr] =
@@ -14044,6 +15376,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocCtr] =
@@ -14065,6 +15399,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocCtr] =
@@ -14086,6 +15422,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocCtr] =
@@ -14107,6 +15445,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocCtrDZ] =
@@ -14128,6 +15468,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of center using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of center using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocCtrCla] =
@@ -14149,6 +15491,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of center using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of center using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmDocCtr] =
@@ -14170,6 +15514,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder when managing documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder when managing documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmDocCtr] =
@@ -14191,6 +15537,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder when managing documents zone of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder when managing documents zone of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmDocCtr] =
@@ -14212,6 +15560,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder when managing documents zone of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoDocCtr] =
@@ -14233,6 +15583,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file of documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file of documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidDocCtr] =
@@ -14254,6 +15606,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file of documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file of documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmDocCtr] =
@@ -14275,6 +15629,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmDocCtr] =
@@ -14296,6 +15652,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocCtr] =
@@ -14317,6 +15675,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilShaCtr] =
@@ -14338,6 +15698,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of shared file of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of shared file of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaCtr] =
@@ -14359,6 +15721,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove shared file of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove shared file of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolShaCtr] =
@@ -14380,6 +15744,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaCtr] =
@@ -14401,6 +15767,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in shared zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in shared zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasShaCtr] =
@@ -14422,6 +15790,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaCtr] =
@@ -14443,6 +15813,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaCtr] =
@@ -14464,6 +15836,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in shared zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in shared zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolShaCtr] =
@@ -14485,6 +15859,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkShaCtr] =
@@ -14506,6 +15882,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolShaCtr] =
@@ -14527,6 +15905,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaCtrDZ] =
@@ -14548,6 +15928,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared zone of center using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared zone of center using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaCtrCla] =
@@ -14569,6 +15951,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared zone of center using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared zone of center using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpShaCtr] =
@@ -14590,6 +15974,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in shared zone of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in shared zone of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConShaCtr] =
@@ -14611,6 +15997,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in shared zone of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in shared zone of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPShaCtr] =
@@ -14632,6 +16020,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatShaCtr] =
@@ -14653,6 +16043,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatShaCtr] =
@@ -14674,6 +16066,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in shared zone of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in shared zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowShaCtr] =
@@ -14695,6 +16089,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from shared zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocDeg] =
@@ -14716,6 +16112,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of degree to view mode"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of degree to view mode"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDocDeg] =
@@ -14737,6 +16135,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeDocDeg] =
@@ -14758,6 +16158,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeDocDeg] =
@@ -14779,6 +16181,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPSeeDocDeg] =
@@ -14800,6 +16204,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeDocDeg] =
@@ -14821,6 +16227,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowSeeDocDeg] =
@@ -14842,6 +16250,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmDocDeg] =
@@ -14863,6 +16273,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of degree to management mode"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of degree to management mode"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocDeg] =
@@ -14884,6 +16296,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocDeg] =
@@ -14905,6 +16319,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from documents zone of degree"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from documents zone of degree"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocDeg] =
@@ -14926,6 +16342,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocDeg] =
@@ -14947,6 +16365,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocDeg] =
@@ -14968,6 +16388,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocDeg] =
@@ -14989,6 +16411,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocDeg] =
@@ -15010,6 +16434,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocDeg] =
@@ -15031,6 +16457,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in documents zone of degree"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in documents zone of degree"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocDeg] =
@@ -15052,6 +16480,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocDeg] =
@@ -15073,6 +16503,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocDeg] =
@@ -15094,6 +16526,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocDegDZ] =
@@ -15115,6 +16549,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of degree using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of degree using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocDegCla] =
@@ -15136,6 +16572,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of degree using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of degree using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmDocDeg] =
@@ -15157,6 +16595,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder when managing documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder when managing documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmDocDeg] =
@@ -15178,6 +16618,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder when managing documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder when managing documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmDocDeg] =
@@ -15199,6 +16641,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when mamaging documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder when mamaging documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoDocDeg] =
@@ -15220,6 +16664,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file in documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file in documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidDocDeg] =
@@ -15241,6 +16687,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmDocDeg] =
@@ -15262,6 +16710,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmDocDeg] =
@@ -15283,6 +16733,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocDeg] =
@@ -15304,6 +16756,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilShaDeg] =
@@ -15325,6 +16779,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaDeg] =
@@ -15346,6 +16802,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove shared file from shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove shared file from shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolShaDeg] =
@@ -15367,6 +16825,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaDeg] =
@@ -15388,6 +16848,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasShaDeg] =
@@ -15409,6 +16871,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaDeg] =
@@ -15430,6 +16894,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaDeg] =
@@ -15451,6 +16917,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolShaDeg] =
@@ -15472,6 +16940,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkShaDeg] =
@@ -15493,6 +16963,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolShaDeg] =
@@ -15514,6 +16986,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaDegDZ] =
@@ -15535,6 +17009,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared zone of degree using Dropzone.js"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared zone of degree using Dropzone.js"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaDegCla] =
@@ -15556,6 +17032,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in shared zone of degree using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in shared zone of degree using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpShaDeg] =
@@ -15577,6 +17055,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConShaDeg] =
@@ -15598,6 +17078,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPShaDeg] =
@@ -15619,6 +17101,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatShaDeg] =
@@ -15640,6 +17124,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatShaDeg] =
@@ -15661,6 +17147,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in shared zone of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in shared zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowShaDeg] =
@@ -15682,6 +17170,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocCrs] =
@@ -15703,6 +17193,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of course/group to view mode"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of course/group to view mode"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDocCrs] =
@@ -15724,6 +17216,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the files of documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the files of documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeDocCrs] =
@@ -15745,6 +17239,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeDocCrs] =
@@ -15766,6 +17262,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPSeeDocCrs] =
@@ -15787,6 +17285,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeDocCrs] =
@@ -15808,6 +17308,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowSeeDocCrs] =
@@ -15829,6 +17331,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeDocGrp] =
@@ -15850,6 +17354,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See files of documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See files of documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeDocGrp] =
@@ -15871,6 +17377,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeDocGrp] =
@@ -15892,6 +17400,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPSeeDocGrp] =
@@ -15913,6 +17423,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeDocGrp] =
@@ -15934,6 +17446,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowSeeDocGrp] =
@@ -15955,6 +17469,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmDocCrs] =
@@ -15976,6 +17492,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change documents zone of course/group to management mode"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change documents zone of course/group to management mode"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocCrs] =
@@ -15997,6 +17515,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocCrs] =
@@ -16018,6 +17538,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file in documents zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file in documents zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocCrs] =
@@ -16039,6 +17561,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocCrs] =
@@ -16060,6 +17584,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocCrs] =
@@ -16081,6 +17607,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocCrs] =
@@ -16102,6 +17630,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocCrs] =
@@ -16123,6 +17653,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocCrs] =
@@ -16144,6 +17676,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in documents zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in documents zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocCrs] =
@@ -16165,6 +17699,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocCrs] =
@@ -16186,6 +17722,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocCrs] =
@@ -16207,6 +17745,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocCrsDZ] =
@@ -16228,6 +17768,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of course using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of course using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocCrsCla] =
@@ -16249,6 +17791,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in documents zone of course using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in documents zone of course using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmDocCrs] =
@@ -16270,6 +17814,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder when managing documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder when managing documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmDocCrs] =
@@ -16291,6 +17837,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder when managing documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder when managing documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmDocCrs] =
@@ -16312,6 +17860,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder when managing documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoDocCrs] =
@@ -16333,6 +17883,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file in documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file in documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidDocCrs] =
@@ -16354,6 +17906,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmDocCrs] =
@@ -16375,6 +17929,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmDocCrs] =
@@ -16396,6 +17952,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocCrs] =
@@ -16417,6 +17975,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocGrp] =
@@ -16438,6 +17998,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilDocGrp] =
@@ -16459,6 +18021,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from documents zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from documents zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilDocGrp] =
@@ -16480,6 +18044,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolDocGrp] =
@@ -16501,6 +18067,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocGrp] =
@@ -16522,6 +18090,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasDocGrp] =
@@ -16543,6 +18113,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocGrp] =
@@ -16564,6 +18136,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreDocGrp] =
@@ -16585,6 +18159,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolDocGrp] =
@@ -16606,6 +18182,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkDocGrp] =
@@ -16627,6 +18205,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolDocGrp] =
@@ -16648,6 +18228,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocGrpDZ] =
@@ -16669,6 +18251,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of group using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of group using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilDocGrpCla] =
@@ -16690,6 +18274,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to documents zone of group using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to documents zone of group using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmDocGrp] =
@@ -16711,6 +18297,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder when managing documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder when managing documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmDocGrp] =
@@ -16732,6 +18320,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder when mamaging documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder when mamaging documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmDocGrp] =
@@ -16753,6 +18343,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder when managing documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoDocGrp] =
@@ -16774,6 +18366,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidDocGrp] =
@@ -16795,6 +18389,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmDocGrp] =
@@ -16816,6 +18412,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmDocGrp] =
@@ -16837,6 +18435,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocGrp] =
@@ -16858,6 +18458,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmTch] =
@@ -16879,6 +18481,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change teachers' documents zone of course/group to management mode"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change teachers' documents zone of course/group to management mode"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmTchCrs] =
@@ -16900,6 +18504,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilTchCrs] =
@@ -16921,6 +18527,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from teachers' documents zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from teachers' documents zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilTchCrs] =
@@ -16942,6 +18550,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolTchCrs] =
@@ -16963,6 +18573,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from teachers' documents zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from teachers' documents zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopTchCrs] =
@@ -16984,6 +18596,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasTchCrs] =
@@ -17005,6 +18619,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreTchCrs] =
@@ -17026,6 +18642,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreTchCrs] =
@@ -17047,6 +18665,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolTchCrs] =
@@ -17068,6 +18688,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in teachers' documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in teachers' documents zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkTchCrs] =
@@ -17089,6 +18711,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolTchCrs] =
@@ -17110,6 +18734,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilTchCrsDZ] =
@@ -17131,6 +18757,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to teachers' documents zone of course using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to teachers' documents zone of course using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilTchCrsCla] =
@@ -17152,6 +18780,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to teachers' documents zone of course using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to teachers' documents zone of course using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpTchCrs] =
@@ -17173,6 +18803,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConTchCrs] =
@@ -17194,6 +18826,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPTchCrs] =
@@ -17215,6 +18849,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatTchCrs] =
@@ -17236,6 +18872,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatTchCrs] =
@@ -17257,6 +18895,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in teachers' documents zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in teachers' documents zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowTchCrs] =
@@ -17278,6 +18918,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from teachers' documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmTchGrp] =
@@ -17299,6 +18941,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilTchGrp] =
@@ -17320,6 +18964,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilTchGrp] =
@@ -17341,6 +18987,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolTchGrp] =
@@ -17362,6 +19010,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder of teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder of teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopTchGrp] =
@@ -17383,6 +19033,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasTchGrp] =
@@ -17404,6 +19056,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreTchGrp] =
@@ -17425,6 +19079,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder of teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder of teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreTchGrp] =
@@ -17446,6 +19102,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolTchGrp] =
@@ -17467,6 +19125,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkTchGrp] =
@@ -17488,6 +19148,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolTchGrp] =
@@ -17509,6 +19171,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilTchGrpDZ] =
@@ -17530,6 +19194,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to teachers' documents zone of group using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to teachers' documents zone of group using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilTchGrpCla] =
@@ -17551,6 +19217,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file in teachers' documents zone of group using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file in teachers' documents zone of group using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpTchGrp] =
@@ -17572,6 +19240,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConTchGrp] =
@@ -17593,6 +19263,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPTchGrp] =
@@ -17614,6 +19286,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatTchGrp] =
@@ -17635,6 +19309,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in teachers' documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatTchGrp] =
@@ -17656,6 +19332,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowTchGrp] =
@@ -17677,6 +19355,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from teachers' documents zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from teachers' documents zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmSha] =
@@ -17698,6 +19378,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change shared files zone of course/group to management mode"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change shared files zone of course/group to management mode"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaCrs] =
@@ -17719,6 +19401,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilShaCrs] =
@@ -17740,6 +19424,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a shared file of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a shared file of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaCrs] =
@@ -17761,6 +19447,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolShaCrs] =
@@ -17782,6 +19470,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaCrs] =
@@ -17803,6 +19493,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasShaCrs] =
@@ -17824,6 +19516,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaCrs] =
@@ -17845,6 +19539,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaCrs] =
@@ -17866,6 +19562,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolShaCrs] =
@@ -17887,6 +19585,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkShaCrs] =
@@ -17908,6 +19608,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolShaCrs] =
@@ -17929,6 +19631,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaCrsDZ] =
@@ -17950,6 +19654,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared files zone of course using Dropzone.js"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared files zone of course using Dropzone.js"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaCrsCla] =
@@ -17971,6 +19677,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared files zone of course using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared files zone of course using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpShaCrs] =
@@ -17992,6 +19700,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConShaCrs] =
@@ -18013,6 +19723,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPShaCrs] =
@@ -18034,6 +19746,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatShaCrs] =
@@ -18055,6 +19769,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatShaCrs] =
@@ -18076,6 +19792,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in shared files zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowShaCrs] =
@@ -18097,6 +19815,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from shared files zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmShaGrp] =
@@ -18118,6 +19838,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilShaGrp] =
@@ -18139,6 +19861,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from shared files zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from shared files zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaGrp] =
@@ -18160,6 +19884,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolShaGrp] =
@@ -18181,6 +19907,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from shared files zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from shared files zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaGrp] =
@@ -18202,6 +19930,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasShaGrp] =
@@ -18223,6 +19953,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaGrp] =
@@ -18244,6 +19976,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaGrp] =
@@ -18265,6 +19999,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in shared zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in shared zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolShaGrp] =
@@ -18286,6 +20022,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in shared files zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in shared files zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkShaGrp] =
@@ -18307,6 +20045,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolShaGrp] =
@@ -18328,6 +20068,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in shared zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in shared zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaGrpDZ] =
@@ -18349,6 +20091,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared files zone of group using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared files zone of group using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilShaGrpCla] =
@@ -18370,6 +20114,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to shared files zone of group using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to shared files zone of group using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpShaGrp] =
@@ -18391,6 +20137,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConShaGrp] =
@@ -18412,6 +20160,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPShaGrp] =
@@ -18433,6 +20183,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatShaGrp] =
@@ -18454,6 +20206,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatShaGrp] =
@@ -18475,6 +20229,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowShaGrp] =
@@ -18496,6 +20252,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmAsgWrkCrs] =
@@ -18517,6 +20275,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage all assignments/works in course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage all assignments/works in course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilAsgUsr] =
@@ -18538,6 +20298,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from user's assignments"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from user's assignments"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilAsgUsr] =
@@ -18559,6 +20321,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolAsgUsr] =
@@ -18580,6 +20344,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from user's assignments"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from user's assignments"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopAsgUsr] =
@@ -18601,6 +20367,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set origin of copy in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set origin of copy in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasAsgUsr] =
@@ -18622,6 +20390,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAsgUsr] =
@@ -18643,6 +20413,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder of user's assignments"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder of user's assignments"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreAsgUsr] =
@@ -18664,6 +20436,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolAsgUsr] =
@@ -18685,6 +20459,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in user's assignments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in user's assignments"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkAsgUsr] =
@@ -18706,6 +20482,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolAsgUsr] =
@@ -18727,6 +20505,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAsgUsrDZ] =
@@ -18748,6 +20528,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send new file to user's assignments using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send new file to user's assignments using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAsgUsrCla] =
@@ -18769,6 +20551,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send new file to user's assignments using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send new file to user's assignments using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAsgUsr] =
@@ -18790,6 +20574,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAsgUsr] =
@@ -18811,6 +20597,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAsgUsr] =
@@ -18832,6 +20620,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAsgUsr] =
@@ -18853,6 +20643,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAsgUsr] =
@@ -18874,6 +20666,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in user's assignments"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in user's assignments"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAsgUsr] =
@@ -18895,6 +20689,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from user's assignments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilWrkUsr] =
@@ -18916,6 +20712,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from user's works"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from user's works"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilWrkUsr] =
@@ -18937,6 +20735,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolWrkUsr] =
@@ -18958,6 +20758,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopWrkUsr] =
@@ -18979,6 +20781,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set origin of copy in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set origin of copy in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasWrkUsr] =
@@ -19000,6 +20804,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreWrkUsr] =
@@ -19021,6 +20827,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreWrkUsr] =
@@ -19042,6 +20850,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolWrkUsr] =
@@ -19063,6 +20873,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in user's works"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkWrkUsr] =
@@ -19084,6 +20896,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in user's works"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolWrkUsr] =
@@ -19105,6 +20919,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilWrkUsrDZ] =
@@ -19126,6 +20942,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to user's works using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to user's works using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilWrkUsrCla] =
@@ -19147,6 +20965,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to user's works using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to user's works using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpWrkUsr] =
@@ -19168,6 +20988,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConWrkUsr] =
@@ -19189,6 +21011,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in user's works"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPWrkUsr] =
@@ -19210,6 +21034,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in user's works"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatWrkUsr] =
@@ -19231,6 +21057,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatWrkUsr] =
@@ -19252,6 +21080,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in user's works"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in user's works"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowWrkUsr] =
@@ -19273,6 +21103,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from user's works"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilAsgCrs] =
@@ -19294,6 +21126,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file in assignments zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file in assignments zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilAsgCrs] =
@@ -19315,6 +21149,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolAsgCrs] =
@@ -19336,6 +21172,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopAsgCrs] =
@@ -19357,6 +21195,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set origin of copy in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set origin of copy in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasAsgCrs] =
@@ -19378,6 +21218,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAsgCrs] =
@@ -19399,6 +21241,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreAsgCrs] =
@@ -19420,6 +21264,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolAsgCrs] =
@@ -19441,6 +21287,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkAsgCrs] =
@@ -19462,6 +21310,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolAsgCrs] =
@@ -19483,6 +21333,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAsgCrsDZ] =
@@ -19504,6 +21356,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to assignments zone of course using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to assignments zone of course using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilAsgCrsCla] =
@@ -19525,6 +21379,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to assignments zone of course using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to assignments zone of course using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAsgCrs] =
@@ -19546,6 +21402,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAsgCrs] =
@@ -19567,6 +21425,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAsgCrs] =
@@ -19588,6 +21448,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAsgCrs] =
@@ -19609,6 +21471,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in assignments zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAsgCrs] =
@@ -19630,6 +21494,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAsgCrs] =
@@ -19651,6 +21517,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from assignments zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilWrkCrs] =
@@ -19672,6 +21540,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from works zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from works zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilWrkCrs] =
@@ -19693,6 +21563,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolWrkCrs] =
@@ -19714,6 +21586,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from works zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from works zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopWrkCrs] =
@@ -19735,6 +21609,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set origin of copy in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set origin of copy in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasWrkCrs] =
@@ -19756,6 +21632,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreWrkCrs] =
@@ -19777,6 +21655,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreWrkCrs] =
@@ -19798,6 +21678,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolWrkCrs] =
@@ -19819,6 +21701,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in works zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkWrkCrs] =
@@ -19840,6 +21724,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in works zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolWrkCrs] =
@@ -19861,6 +21747,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilWrkCrsDZ] =
@@ -19882,6 +21770,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to works zone of course using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to works zone of course using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilWrkCrsCla] =
@@ -19903,6 +21793,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to works zone of course using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to works zone of course using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpWrkCrs] =
@@ -19924,6 +21816,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConWrkCrs] =
@@ -19945,6 +21839,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in works zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPWrkCrs] =
@@ -19966,6 +21862,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in works zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatWrkCrs] =
@@ -19987,6 +21885,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in works zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatWrkCrs] =
@@ -20008,6 +21908,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in works zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in works zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowWrkCrs] =
@@ -20029,6 +21931,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from works zone of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeMrk] =
@@ -20050,6 +21954,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change marks zone of course/group to view mode"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change marks zone of course/group to view mode"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMrkCrs] =
@@ -20071,6 +21977,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeMrkCrs] =
@@ -20092,6 +22000,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeMrkCrs] =
@@ -20113,6 +22023,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeMrkCrs] =
@@ -20134,6 +22046,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMrkCrs] =
@@ -20155,6 +22069,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Individualized access to marks file in course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Individualized access to marks file in course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMrkGrp] =
@@ -20176,6 +22092,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See marks zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See marks zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSeeMrkGrp] =
@@ -20197,6 +22115,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSeeMrkGrp] =
@@ -20218,6 +22138,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in marks zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in marks zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatSeeMrkGrp] =
@@ -20239,6 +22161,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMrkGrp] =
@@ -20260,6 +22184,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Individualized access to marks file in group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Individualized access to marks file in group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmMrk] =
@@ -20281,6 +22207,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change marks zone of course/group to management mode"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change marks zone of course/group to management mode"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmMrkCrs] =
@@ -20302,6 +22230,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilMrkCrs] =
@@ -20323,6 +22253,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file in marks in course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file in marks in course"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilMrkCrs] =
@@ -20344,6 +22276,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file in marks from a course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file in marks from a course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolMrkCrs] =
@@ -20365,6 +22299,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopMrkCrs] =
@@ -20386,6 +22322,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasMrkCrs] =
@@ -20407,6 +22345,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreMrkCrs] =
@@ -20428,6 +22368,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreMrkCrs] =
@@ -20449,6 +22391,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolMrkCrs] =
@@ -20470,6 +22414,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in marks zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolMrkCrs] =
@@ -20491,6 +22437,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in marks zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in marks zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilMrkCrsDZ] =
@@ -20512,6 +22460,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to marks zone of course using Dropzone.js"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to marks zone of course using Dropzone.js"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilMrkCrsCla] =
@@ -20533,6 +22483,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to marks zone of course using the classic way"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to marks zone of course using the classic way"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmMrkCrs] =
@@ -20554,6 +22506,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in marks management zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in marks management zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmMrkCrs] =
@@ -20575,6 +22529,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in marks management zone of course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in marks management zone of course"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmMrkCrs] =
@@ -20596,6 +22552,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in marks management zone of course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in marks management zone of course"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoMrkCrs] =
@@ -20617,6 +22575,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file in marks management zone of course"						// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file in marks management zone of course"						// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidMrkCrs] =
@@ -20638,6 +22598,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file in marks management zone of course"						// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file in marks management zone of course"						// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmMrkCrs] =
@@ -20659,6 +22621,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in marks management zone of course"						// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in marks management zone of course"						// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmMrkCrs] =
@@ -20680,6 +22644,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in marks management zone of course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in marks management zone of course"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmMrkCrs] =
@@ -20701,6 +22667,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from marks management zone of course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from marks management zone of course"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumRowHeaCrs] =
@@ -20722,6 +22690,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of head rows of a file in marks of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of head rows of a file in marks of course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumRowFooCrs] =
@@ -20743,6 +22713,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of foot rows of a file in marks in course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of foot rows of a file in marks in course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAdmMrkGrp] =
@@ -20764,6 +22736,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Manage marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Manage marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilMrkGrp] =
@@ -20785,6 +22759,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from marks zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from marks zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilMrkGrp] =
@@ -20806,6 +22782,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolMrkGrp] =
@@ -20827,6 +22805,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from marks zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from marks zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopMrkGrp] =
@@ -20848,6 +22828,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set the source of copy in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set the source of copy in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasMrkGrp] =
@@ -20869,6 +22851,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreMrkGrp] =
@@ -20890,6 +22874,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreMrkGrp] =
@@ -20911,6 +22897,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in marks zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in marks zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolMrkGrp] =
@@ -20932,6 +22920,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolMrkGrp] =
@@ -20953,6 +22943,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder in marks zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder in marks zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilMrkGrpDZ] =
@@ -20974,6 +22966,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to marks zone of group using Dropzone.js"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to marks zone of group using Dropzone.js"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilMrkGrpCla] =
@@ -20995,6 +22989,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to marks zone of group using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to marks zone of group using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpAdmMrkGrp] =
@@ -21016,6 +23012,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConAdmMrkGrp] =
@@ -21037,6 +23035,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPAdmMrkGrp] =
@@ -21058,6 +23058,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoMrkGrp] =
@@ -21079,6 +23081,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide folder/file of marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide folder/file of marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidMrkGrp] =
@@ -21100,6 +23104,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide folder/file of marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide folder/file of marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatAdmMrkGrp] =
@@ -21121,6 +23127,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in marks management zone of group"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in marks management zone of group"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatAdmMrkGrp] =
@@ -21142,6 +23150,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in marks management zone of group"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in marks management zone of group"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmMrkGrp] =
@@ -21163,6 +23173,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from marks management zone of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from marks management zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumRowHeaGrp] =
@@ -21184,6 +23196,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of head rows of a file in marks of group"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of head rows of a file in marks of group"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNumRowFooGrp] =
@@ -21205,6 +23219,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of foot rows of a file in marks of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of foot rows of a file in marks of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilBrf] =
@@ -21226,6 +23242,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of file from briefcase"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of file from briefcase"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFilBrf] =
@@ -21247,6 +23265,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove file from briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove file from briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFolBrf] =
@@ -21268,6 +23288,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove empty folder from briefcase"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove empty folder from briefcase"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCopBrf] =
@@ -21289,6 +23311,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Set source of copy in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Set source of copy in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasBrf] =
@@ -21310,6 +23334,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste folder/file in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste folder/file in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTreBrf] =
@@ -21331,6 +23357,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-empty folder from briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-empty folder from briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreBrf] =
@@ -21352,6 +23380,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new folder/file/link in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new folder/file/link in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreFolBrf] =
@@ -21373,6 +23403,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new folder in briefcase"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new folder in briefcase"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreLnkBrf] =
@@ -21394,6 +23426,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new link in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new link in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFolBrf] =
@@ -21415,6 +23449,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename folder of briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename folder of briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilBrfDZ] =
@@ -21436,6 +23472,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to briefcase using Dropzone.js"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to briefcase using Dropzone.js"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFilBrfCla] =
@@ -21457,6 +23495,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send file to briefcase using the classic way"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send file to briefcase using the classic way"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpBrf] =
@@ -21478,6 +23518,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Expand folder in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Expand folder in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConBrf] =
@@ -21499,6 +23541,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Contract folder in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Contract folder in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActZIPBrf] =
@@ -21520,6 +23564,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compress folder in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDatBrf] =
@@ -21541,6 +23587,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See file metadata in briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatBrf] =
@@ -21562,6 +23610,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in briefcase"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change file metadata in briefcase"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDowBrf] =
@@ -21583,6 +23633,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Download file from briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Download file from briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemOldBrf] =
@@ -21604,6 +23656,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of old files from briefcase"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of old files from briefcase"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldBrf] =
@@ -21625,6 +23679,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove old files in briefcase"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove old files in briefcase"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSelGrp] =
@@ -21646,6 +23702,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request selection of groups of students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request selection of groups of students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstStd] =
@@ -21667,6 +23725,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo or list of students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo or list of students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstTch] =
@@ -21688,6 +23748,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo or list of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo or list of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstOth] =
@@ -21709,6 +23771,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo or list of guests"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo or list of guests"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAtt] =
@@ -21730,6 +23794,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show attendance events"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show attendance events"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqSignUp] =
@@ -21751,6 +23817,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Apply for my enrolment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Apply for my enrolment"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSignUpReq] =
@@ -21772,6 +23840,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show pending requests for inscription in the current course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show pending requests for inscription in the current course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstCon] =
@@ -21793,6 +23863,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List connected users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List connected users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgGrp] =
@@ -21814,6 +23886,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my groups"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my groups"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEdiGrp] =
@@ -21835,6 +23909,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request edition of groups"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request edition of groups"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewGrpTyp] =
@@ -21856,6 +23932,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request creation of a type of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request creation of a type of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGrpTyp] =
@@ -21877,6 +23955,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a type of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a type of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemGrpTyp] =
@@ -21898,6 +23978,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove type of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove type of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenGrpTyp] =
@@ -21919,6 +24001,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename type of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename type of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMdtGrpTyp] =
@@ -21940,6 +24024,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if it is mandatory to register in groups of a type"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if it is mandatory to register in groups of a type"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMulGrpTyp] =
@@ -21961,6 +24047,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change if it is possible to register in multiple groups of a type"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change if it is possible to register in multiple groups of a type"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgTimGrpTyp] =
@@ -21982,6 +24070,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change date when groups of a type will open"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change date when groups of a type will open"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewGrp] =
@@ -22003,6 +24093,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create group"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create group"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGrp] =
@@ -22024,6 +24116,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemGrp] =
@@ -22045,6 +24139,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActOpeGrp] =
@@ -22066,6 +24162,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Open a group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Open a group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCloGrp] =
@@ -22087,6 +24185,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Close a group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Close a group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnaFilZonGrp] =
@@ -22108,6 +24208,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable filezones of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable filezones of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisFilZonGrp] =
@@ -22129,6 +24231,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable filezones of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable filezones of group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgGrpTyp] =
@@ -22150,6 +24254,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change type of group of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change type of group of group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenGrp] =
@@ -22171,6 +24277,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename group"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgGrpRoo] =
@@ -22192,6 +24300,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change room of group"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change room of group"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMaxStdGrp] =
@@ -22213,6 +24323,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change maximum number of students in group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change maximum number of students in group"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstGst] =
@@ -22234,6 +24346,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List main data of administrators"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List main data of administrators"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnGstPho] =
@@ -22255,6 +24369,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo of guests ready to be printed"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo of guests ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnStdPho] =
@@ -22276,6 +24392,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo of students ready to be printed"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo of students ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnTchPho] =
@@ -22297,6 +24415,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show class photo of teachers ready to be printed"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show class photo of teachers ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstGstAll] =
@@ -22318,6 +24438,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List the full data of the guests"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List the full data of the guests"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstStdAll] =
@@ -22339,6 +24461,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List the full data of students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List the full data of students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstTchAll] =
@@ -22360,6 +24484,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List the full data of the teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List the full data of the teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecOneStd] =
@@ -22381,6 +24507,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the record of a student"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the record of a student"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecOneTch] =
@@ -22402,6 +24530,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the record of a teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the record of a teacher"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDoActOnSevGst] =
@@ -22423,6 +24553,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Do an action on several selected guests"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Do an action on several selected guests"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDoActOnSevStd] =
@@ -22444,6 +24576,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Do an action on several selected students"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Do an action on several selected students"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDoActOnSevTch] =
@@ -22465,6 +24599,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Do an action on several selected teachers"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Do an action on several selected teachers"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevGst] =
@@ -22486,6 +24622,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected guests"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected guests"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevStd] =
@@ -22507,6 +24645,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevTch] =
@@ -22528,6 +24668,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnRecSevGst] =
@@ -22549,6 +24691,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected guests ready to print"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected guests ready to print"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnRecSevStd] =
@@ -22570,6 +24714,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected students ready to print"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected students ready to print"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnRecSevTch] =
@@ -22591,6 +24737,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See records of several selected teachers ready to print"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See records of several selected teachers ready to print"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRecOthUsr] =
@@ -22612,6 +24760,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update record fields of student in course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update record fields of student in course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiRecFie] =
@@ -22633,6 +24783,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit record fields of students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit record fields of students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewFie] =
@@ -22654,6 +24806,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create record field"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create record field"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFie] =
@@ -22675,6 +24829,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of record field"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of record field"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemFie] =
@@ -22696,6 +24852,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove record field"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove record field"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRenFie] =
@@ -22717,6 +24875,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Rename record field"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Rename record field"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgRowFie] =
@@ -22738,6 +24898,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change number of form lines in record field"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change number of form lines in record field"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgVisFie] =
@@ -22759,6 +24921,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change visibility of a record field"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change visibility of a record field"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRecCrs] =
@@ -22780,6 +24944,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update fields of my record in a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update fields of my record in a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmLogInUsrAgd] =
@@ -22801,6 +24967,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See form to log in and see a user's public agenda"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See form to log in and see a user's public agenda"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogInUsrAgd] =
@@ -22822,6 +24990,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a user's public agenda after log in"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a user's public agenda after log in"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLogInUsrAgdLan] =
@@ -22843,6 +25013,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a user's public agenda after change language"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a user's public agenda after change language"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrAgd] =
@@ -22864,6 +25036,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a user's public agenda"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a user's public agenda"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEnrSevStd] =
@@ -22885,6 +25059,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removing of several students to/from a course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removing of several students to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEnrSevNET] =
@@ -22906,6 +25082,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removing of several non-editing teachers to/from a course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removing of several non-editing teachers to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEnrSevTch] =
@@ -22927,6 +25105,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removing of several teachers to/from a course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removing of several teachers to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqLstUsrAtt] =
@@ -22948,6 +25128,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request listing of attendance of several students to several events"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request listing of attendance of several students to several events"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeLstMyAtt] =
@@ -22969,6 +25151,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List my attendance as student to several events"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List my attendance as student to several events"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnLstMyAtt] =
@@ -22990,6 +25174,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print my attendance as student to several events"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print my attendance as student to several events"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeLstUsrAtt] =
@@ -23011,6 +25197,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List the attendance of several students to several events"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List the attendance of several students to several events"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnLstUsrAtt] =
@@ -23032,6 +25220,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Print attendance of several students to several events"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Print attendance of several students to several events"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewAtt] =
@@ -23053,6 +25243,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new attendance event"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new attendance event"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneAtt] =
@@ -23074,6 +25266,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit one attendance event"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit one attendance event"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewAtt] =
@@ -23095,6 +25289,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new attendance event"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new attendance event"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgAtt] =
@@ -23116,6 +25312,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change an attendance event"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change an attendance event"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemAtt] =
@@ -23137,6 +25335,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of an attendance event"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of an attendance event"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAtt] =
@@ -23158,6 +25358,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove attendance event"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove attendance event"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidAtt] =
@@ -23179,6 +25381,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide attendance event"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide attendance event"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoAtt] =
@@ -23200,6 +25404,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide attendance event"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide attendance event"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneAtt] =
@@ -23221,6 +25427,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List students who attended to an event"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List students who attended to an event"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecAttStd] =
@@ -23242,6 +25450,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Save students who attended to an event and comments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Save students who attended to an event and comments"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRecAttMe] =
@@ -23263,6 +25473,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Save my comments as student in an attendance event"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Save my comments as student in an attendance event"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSignUp] =
@@ -23284,6 +25496,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Apply for my enrolment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Apply for my enrolment"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdSignUpReq] =
@@ -23305,6 +25519,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update pending requests for inscription"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update pending requests for inscription"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRejSignUp] =
@@ -23326,6 +25542,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request rejection of a user's enrolment"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request rejection of a user's enrolment"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRejSignUp] =
@@ -23347,6 +25565,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Reject the enrolment"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Reject the enrolment"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfOneOth] =
@@ -23368,6 +25588,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request a user's ID for enrolment/removal"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request a user's ID for enrolment/removal"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfOneStd] =
@@ -23389,6 +25611,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request a student's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request a student's ID for enrolment/removal"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfOneTch] =
@@ -23410,6 +25634,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request a teacher's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request a teacher's ID for enrolment/removal"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfOth] =
@@ -23431,6 +25657,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removal of a user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removal of a user"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfStd] =
@@ -23452,6 +25680,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removal of a student"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removal of a student"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfNET] =
@@ -23473,6 +25703,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removal of a non-editing teacher"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removal of a non-editing teacher"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMdfTch] =
@@ -23494,6 +25726,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request enrolment/removal of a teacher"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request enrolment/removal of a teacher"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqOthPho] =
@@ -23515,6 +25749,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a user's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit a user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqStdPho] =
@@ -23536,6 +25772,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a student's photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit a student's photo"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqTchPho] =
@@ -23557,6 +25795,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a teacher's photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit a teacher's photo"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDetOthPho] =
@@ -23578,6 +25818,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send user's photo and detect faces on it"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send user's photo and detect faces on it"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDetStdPho] =
@@ -23599,6 +25841,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send student's photo and detect faces on it"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send student's photo and detect faces on it"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDetTchPho] =
@@ -23620,6 +25864,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send teacher's photo and detect faces on it"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send teacher's photo and detect faces on it"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdOthPho] =
@@ -23641,6 +25887,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a user's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdStdPho] =
@@ -23662,6 +25910,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a student's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a student's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdTchPho] =
@@ -23683,6 +25933,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a teacher's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a teacher's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemOthPho] =
@@ -23704,6 +25956,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a user's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a user's photo"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemStdPho] =
@@ -23725,6 +25979,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a student's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a student's photo"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemTchPho] =
@@ -23746,6 +26002,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a teacher's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a teacher's photo"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOthPho] =
@@ -23767,6 +26025,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove user's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemStdPho] =
@@ -23788,6 +26048,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove student's photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove student's photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTchPho] =
@@ -23809,6 +26071,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove teacher's photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove teacher's photo"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreOth] =
@@ -23830,6 +26094,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new guest"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new guest"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreStd] =
@@ -23851,6 +26117,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new student"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new student"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreNET] =
@@ -23872,6 +26140,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new non-editing teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new non-editing teacher"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreTch] =
@@ -23893,6 +26163,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new teacher"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdOth] =
@@ -23914,6 +26186,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a user's data and groups"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a user's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdStd] =
@@ -23935,6 +26209,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a student's data and groups"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a student's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdNET] =
@@ -23956,6 +26232,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a non-editing teacher's data and groups"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a non-editing teacher's data and groups"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdTch] =
@@ -23977,6 +26255,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update a teacher's data and groups"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update a teacher's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAccEnrStd] =
@@ -23998,6 +26278,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See whether to accept or reject my enrolment as student"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See whether to accept or reject my enrolment as student"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAccEnrNET] =
@@ -24019,6 +26301,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See whether to accept or reject my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See whether to accept or reject my enrolment as non-editing teacher"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAccEnrTch] =
@@ -24040,6 +26324,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See whether to accept or reject my enrolment as teacher"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See whether to accept or reject my enrolment as teacher"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAccEnrStd] =
@@ -24061,6 +26347,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Accept my enrolment as student"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Accept my enrolment as student"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAccEnrNET] =
@@ -24082,6 +26370,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Accept my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Accept my enrolment as non-editing teacher"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActAccEnrTch] =
@@ -24103,6 +26393,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Accept my enrolment as teacher"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Accept my enrolment as teacher"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMe_Std] =
@@ -24124,6 +26416,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Reject my enrolment as student"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Reject my enrolment as student"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMe_NET] =
@@ -24145,6 +26439,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Reject my enrolment as non-editing teacher"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Reject my enrolment as non-editing teacher"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMe_Tch] =
@@ -24166,6 +26462,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Reject my enrolment as teacher"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Reject my enrolment as teacher"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewAdmIns] =
@@ -24187,6 +26485,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register an administrador in an institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register an administrador in an institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmIns] =
@@ -24208,6 +26508,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove administrador from an institution"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove administrador from an institution"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewAdmCtr] =
@@ -24229,6 +26531,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register an administrador in a center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register an administrador in a center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmCtr] =
@@ -24250,6 +26554,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove administrador from a center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove administrador from a center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewAdmDeg] =
@@ -24271,6 +26577,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register an administrador in a degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register an administrador in a degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAdmDeg] =
@@ -24292,6 +26600,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove administrador from a degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove administrador from a degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFrmEnrSevStd] =
@@ -24313,6 +26623,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register/remove several students in/from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register/remove several students in/from a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFrmEnrSevNET] =
@@ -24334,6 +26646,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register/remove several non-editing teachers in/from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register/remove several non-editing teachers in/from a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvFrmEnrSevTch] =
@@ -24355,6 +26669,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Register/remove several teachers in/from a course"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Register/remove several teachers in/from a course"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCnfID_Oth] =
@@ -24376,6 +26692,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm a user's ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm a user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCnfID_Std] =
@@ -24397,6 +26715,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm a student's ID"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm a student's ID"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCnfID_Tch] =
@@ -24418,6 +26738,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm a teacher's ID"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm a teacher's ID"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmAccOth] =
@@ -24439,6 +26761,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Forms to the change a user's account"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Forms to the change a user's account"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmAccStd] =
@@ -24460,6 +26784,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Forms to the change a student's account"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Forms to the change a student's account"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmAccTch] =
@@ -24481,6 +26807,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Forms to the change a teacher's account"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Forms to the change a teacher's account"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldNicOth] =
@@ -24502,6 +26830,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove user's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove user's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldNicStd] =
@@ -24523,6 +26853,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove student's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove student's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldNicTch] =
@@ -24544,6 +26876,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove teacher's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove teacher's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNicOth] =
@@ -24565,6 +26899,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change user's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change user's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNicStd] =
@@ -24586,6 +26922,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change student's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change student's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNicTch] =
@@ -24607,6 +26945,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change teacher's nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change teacher's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemID_Oth] =
@@ -24628,6 +26968,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove user's ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemID_Std] =
@@ -24649,6 +26991,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove student's ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove student's ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemID_Tch] =
@@ -24670,6 +27014,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove teacher's ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove teacher's ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewID_Oth] =
@@ -24691,6 +27037,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new user's ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewID_Std] =
@@ -24712,6 +27060,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new student's ID"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new student's ID"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewID_Tch] =
@@ -24733,6 +27083,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new teacher's ID"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new teacher's ID"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPwdOth] =
@@ -24754,6 +27106,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change user's password"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change user's password"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPwdStd] =
@@ -24775,6 +27129,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change student's password"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change student's password"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPwdTch] =
@@ -24796,6 +27152,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change teacher's password"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change teacher's password"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMaiOth] =
@@ -24817,6 +27175,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove user's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove user's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMaiStd] =
@@ -24838,6 +27198,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove student's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove student's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMaiTch] =
@@ -24859,6 +27221,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove teacher's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove teacher's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewMaiOth] =
@@ -24880,6 +27244,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new user's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new user's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewMaiStd] =
@@ -24901,6 +27267,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new student's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new student's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewMaiTch] =
@@ -24922,6 +27290,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new teacher's email"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new teacher's email"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemStdCrs] =
@@ -24943,6 +27313,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove student from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove student from a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemNETCrs] =
@@ -24964,6 +27336,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove non-editing teacher from a course"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove non-editing teacher from a course"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemTchCrs] =
@@ -24985,6 +27359,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove teacher from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove teacher from a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemUsrGbl] =
@@ -25006,6 +27382,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Eliminate completely a user from the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Eliminate completely a user from the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemAllStdCrs] =
@@ -25027,6 +27405,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of all students from a course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of all students from a course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAllStdCrs] =
@@ -25048,6 +27428,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove all students from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove all students from a course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemOldUsr] =
@@ -25069,6 +27451,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request complete elimination of old users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request complete elimination of old users"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemOldUsr] =
@@ -25090,6 +27474,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Eliminate completely old users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Eliminate completely old users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstDupUsr] =
@@ -25111,6 +27497,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List possible duplicate users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List possible duplicate users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstSimUsr] =
@@ -25132,6 +27520,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List users similar to a given one (possible duplicates)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List users similar to a given one (possible duplicates)"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemDupUsr] =
@@ -25153,6 +27543,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove user from a list of possible duplicate users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove user from a list of possible duplicate users"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqFolSevStd] =
@@ -25174,6 +27566,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request follow several students"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request follow several students"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqFolSevTch] =
@@ -25195,6 +27589,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request follow several teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request follow several teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqUnfSevStd] =
@@ -25216,6 +27612,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request unfollow several students"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request unfollow several students"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqUnfSevTch] =
@@ -25237,6 +27635,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request unfollow several teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request unfollow several teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFolSevStd] =
@@ -25258,6 +27658,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Follow several students"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Follow several students"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFolSevTch] =
@@ -25279,6 +27681,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Follow several teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Follow several teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfSevStd] =
@@ -25300,6 +27704,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfollow several students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfollow several students"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnfSevTch] =
@@ -25321,6 +27727,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unfollow several teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unfollow several teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAnn] =
@@ -25342,6 +27750,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show global announcements"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show global announcements"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllNot] =
@@ -25363,6 +27773,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See all notices"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See all notices"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeFor] =
@@ -25384,6 +27796,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the top level of the forums"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the top level of the forums"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeChtRms] =
@@ -25405,6 +27819,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the chat rooms"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the chat rooms"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeRcvMsg] =
@@ -25426,6 +27842,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show the messages received"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show the messages received"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMaiUsr] =
@@ -25447,6 +27865,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select users to send an email to them"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select users to send an email to them"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActWriAnn] =
@@ -25468,6 +27888,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See form to create a new global announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See form to create a new global announcement"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvAnn] =
@@ -25489,6 +27911,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new global announcement"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new global announcement"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidAnn] =
@@ -25510,6 +27934,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide global announcement"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide global announcement"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRevAnn] =
@@ -25531,6 +27957,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide global announcement"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide global announcement"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemAnn] =
@@ -25552,6 +27980,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove global announcement"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove global announcement"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneNot] =
@@ -25573,6 +28003,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Show (expand) a notice"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Show (expand) a notice"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActWriNot] =
@@ -25594,6 +28026,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Write a new notice"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Write a new notice"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvNot] =
@@ -25615,6 +28049,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new notice"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new notice"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidNot] =
@@ -25636,6 +28072,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide notice"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide notice"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRevNot] =
@@ -25657,6 +28095,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide notice"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide notice"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemNot] =
@@ -25678,6 +28118,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a notice"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a notice"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemNot] =
@@ -25699,6 +28141,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove notice"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove notice"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForCrsUsr] =
@@ -25720,6 +28164,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of users of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of users of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForCrsTch] =
@@ -25741,6 +28187,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of teachers of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForDegUsr] =
@@ -25762,6 +28210,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of users of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of users of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForDegTch] =
@@ -25783,6 +28233,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of teachers of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of teachers of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForCtrUsr] =
@@ -25804,6 +28256,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForCtrTch] =
@@ -25825,6 +28279,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of teachers of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of teachers of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForInsUsr] =
@@ -25846,6 +28302,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of users of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of users of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForInsTch] =
@@ -25867,6 +28325,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForGenUsr] =
@@ -25888,6 +28348,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of general forum of users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of general forum of users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForGenTch] =
@@ -25909,6 +28371,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForSWAUsr] =
@@ -25930,6 +28394,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForSWATch] =
@@ -25951,6 +28417,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See top level of forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See top level of forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForCrsUsr] =
@@ -25972,6 +28440,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForCrsTch] =
@@ -25993,6 +28463,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers of course"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers of course"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForDegUsr] =
@@ -26014,6 +28486,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of users of degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of users of degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForDegTch] =
@@ -26035,6 +28509,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers of degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers of degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForCtrUsr] =
@@ -26056,6 +28532,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of users of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of users of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForCtrTch] =
@@ -26077,6 +28555,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForInsUsr] =
@@ -26098,6 +28578,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForInsTch] =
@@ -26119,6 +28601,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForGenUsr] =
@@ -26140,6 +28624,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the general forum of users"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the general forum of users"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForGenTch] =
@@ -26161,6 +28647,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers general"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers general"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForSWAUsr] =
@@ -26182,6 +28670,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of users of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of users of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePstForSWATch] =
@@ -26203,6 +28693,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages of a thread of the forum of teachers of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages of a thread of the forum of teachers of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForCrsUsr] =
@@ -26224,6 +28716,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForCrsTch] =
@@ -26245,6 +28739,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of teachers of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForDegUsr] =
@@ -26266,6 +28762,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForDegTch] =
@@ -26287,6 +28785,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForCtrUsr] =
@@ -26308,6 +28808,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForCtrTch] =
@@ -26329,6 +28831,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of teachers of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForInsUsr] =
@@ -26350,6 +28854,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForInsTch] =
@@ -26371,6 +28877,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForGenUsr] =
@@ -26392,6 +28900,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of general forum of users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of general forum of users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForGenTch] =
@@ -26413,6 +28923,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForSWAUsr] =
@@ -26434,6 +28946,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvThrForSWATch] =
@@ -26455,6 +28969,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send the first message of a new thread of forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send the first message of a new thread of forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForCrsUsr] =
@@ -26476,6 +28992,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForCrsTch] =
@@ -26497,6 +29015,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of teachers of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForDegUsr] =
@@ -26518,6 +29038,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForDegTch] =
@@ -26539,6 +29061,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForCtrUsr] =
@@ -26560,6 +29084,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForCtrTch] =
@@ -26581,6 +29107,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of teachers of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForInsUsr] =
@@ -26602,6 +29130,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of users of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of users of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForInsTch] =
@@ -26623,6 +29153,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForGenUsr] =
@@ -26644,6 +29176,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the general forum of users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the general forum of users"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForGenTch] =
@@ -26665,6 +29199,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForSWAUsr] =
@@ -26686,6 +29222,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of users of the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of users of the platform"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRepForSWATch] =
@@ -26707,6 +29245,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send reply message in a thread of the forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send reply message in a thread of the forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCrsUsr] =
@@ -26728,6 +29268,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of users of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of users of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCrsTch] =
@@ -26749,6 +29291,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of teachers of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrDegUsr] =
@@ -26770,6 +29314,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of users of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of users of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrDegTch] =
@@ -26791,6 +29337,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of teachers of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of teachers of degree"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCtrUsr] =
@@ -26812,6 +29360,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of users of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of users of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCtrTch] =
@@ -26833,6 +29383,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of teachers of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of teachers of center"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrInsUsr] =
@@ -26854,6 +29406,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of users of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of users of institution"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrInsTch] =
@@ -26875,6 +29429,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrGenUsr] =
@@ -26896,6 +29452,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of general forum of users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of general forum of users"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrGenTch] =
@@ -26917,6 +29475,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of general forum of teachers"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of general forum of teachers"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrSWAUsr] =
@@ -26938,6 +29498,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of users of the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of users of the platform"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrSWATch] =
@@ -26959,6 +29521,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a thread of forum of teachers of the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of a thread of forum of teachers of the platform"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForCrsUsr] =
@@ -26980,6 +29544,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForCrsTch] =
@@ -27001,6 +29567,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of teachers of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of teachers of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForDegUsr] =
@@ -27022,6 +29590,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForDegTch] =
@@ -27043,6 +29613,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForCtrUsr] =
@@ -27064,6 +29636,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of users of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of users of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForCtrTch] =
@@ -27085,6 +29659,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of teachers of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForInsUsr] =
@@ -27106,6 +29682,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForInsTch] =
@@ -27127,6 +29705,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of teachers of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of teachers of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForGenUsr] =
@@ -27148,6 +29728,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of general forum of users"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of general forum of users"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForGenTch] =
@@ -27169,6 +29751,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of general forum of teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of general forum of teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForSWAUsr] =
@@ -27190,6 +29774,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of users of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of users of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForSWATch] =
@@ -27211,6 +29797,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove thread of forum of teachers of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove thread of forum of teachers of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForCrsUsr] =
@@ -27232,6 +29820,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForCrsTch] =
@@ -27253,6 +29843,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of teachers of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of teachers of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForDegUsr] =
@@ -27274,6 +29866,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of users of degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of users of degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForDegTch] =
@@ -27295,6 +29889,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForCtrUsr] =
@@ -27316,6 +29912,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of users of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of users of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForCtrTch] =
@@ -27337,6 +29935,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of teachers of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of teachers of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForInsUsr] =
@@ -27358,6 +29958,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of users of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of users of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForInsTch] =
@@ -27379,6 +29981,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of teachers of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of teachers of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForGenUsr] =
@@ -27400,6 +30004,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of general forum of users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of general forum of users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForGenTch] =
@@ -27421,6 +30027,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of general forum of teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of general forum of teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForSWAUsr] =
@@ -27442,6 +30050,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCutThrForSWATch] =
@@ -27463,6 +30073,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Cut thread of forum of teachers of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Cut thread of forum of teachers of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForCrsUsr] =
@@ -27484,6 +30096,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of users of course"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of users of course"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForCrsTch] =
@@ -27505,6 +30119,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of teachers of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of teachers of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForDegUsr] =
@@ -27526,6 +30142,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of users of degree"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of users of degree"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForDegTch] =
@@ -27547,6 +30165,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForCtrUsr] =
@@ -27568,6 +30188,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of users of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of users of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForCtrTch] =
@@ -27589,6 +30211,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of teachers of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of teachers of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForInsUsr] =
@@ -27610,6 +30234,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForInsTch] =
@@ -27631,6 +30257,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of teachers of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of teachers of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForGenUsr] =
@@ -27652,6 +30280,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of general forum of users"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of general forum of users"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForGenTch] =
@@ -27673,6 +30303,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of general forum of teachers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of general forum of teachers"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForSWAUsr] =
@@ -27694,6 +30326,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of users of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of users of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPasThrForSWATch] =
@@ -27715,6 +30349,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Paste thread of forum of teachers of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Paste thread of forum of teachers of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForCrsUsr] =
@@ -27736,6 +30372,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForCrsTch] =
@@ -27757,6 +30395,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of teachers of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of teachers of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForDegUsr] =
@@ -27778,6 +30418,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForDegTch] =
@@ -27799,6 +30441,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForCtrUsr] =
@@ -27820,6 +30464,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForCtrTch] =
@@ -27841,6 +30487,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of teachers of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForInsUsr] =
@@ -27862,6 +30510,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForInsTch] =
@@ -27883,6 +30533,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of teachers of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of teachers of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForGenUsr] =
@@ -27904,6 +30556,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of general forum of users"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of general forum of users"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForGenTch] =
@@ -27925,6 +30579,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForSWAUsr] =
@@ -27946,6 +30602,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelPstForSWATch] =
@@ -27967,6 +30625,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message of forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message of forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForCrsUsr] =
@@ -27988,6 +30648,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of users of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of users of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForCrsTch] =
@@ -28009,6 +30671,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of teachers of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForDegUsr] =
@@ -28030,6 +30694,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForDegTch] =
@@ -28051,6 +30717,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForCtrUsr] =
@@ -28072,6 +30740,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForCtrTch] =
@@ -28093,6 +30763,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of teachers of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of teachers of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForInsUsr] =
@@ -28114,6 +30786,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of users of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of users of institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForInsTch] =
@@ -28135,6 +30809,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForGenUsr] =
@@ -28156,6 +30832,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of general forum of users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of general forum of users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForGenTch] =
@@ -28177,6 +30855,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForSWAUsr] =
@@ -28198,6 +30878,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEnbPstForSWATch] =
@@ -28219,6 +30901,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enable message of forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enable message of forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForCrsUsr] =
@@ -28240,6 +30924,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of users of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of users of course"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForCrsTch] =
@@ -28261,6 +30947,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of teachers of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of teachers of course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForDegUsr] =
@@ -28282,6 +30970,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of users of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of users of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForDegTch] =
@@ -28303,6 +30993,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of teachers of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of teachers of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForCtrUsr] =
@@ -28324,6 +31016,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of users of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of users of center"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForCtrTch] =
@@ -28345,6 +31039,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of teachers of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of teachers of center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForInsUsr] =
@@ -28366,6 +31062,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of users of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of users of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForInsTch] =
@@ -28387,6 +31085,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of teachers of institution"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForGenUsr] =
@@ -28408,6 +31108,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of general forum of users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of general forum of users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForGenTch] =
@@ -28429,6 +31131,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of general forum of teachers"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of general forum of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForSWAUsr] =
@@ -28450,6 +31154,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of users of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of users of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDisPstForSWATch] =
@@ -28471,6 +31177,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable message of forum of teachers of the platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Disable message of forum of teachers of the platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCht] =
@@ -28492,6 +31200,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Enter in a chat room to chat"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Enter in a chat room to chat"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMsgUsr] =
@@ -28513,6 +31223,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Write message to other users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Write message to other users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeSntMsg] =
@@ -28534,6 +31246,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the messages sent"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the messages sent"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRcvMsgUsr] =
@@ -28555,6 +31269,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send message to other users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send message to other users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelAllSntMsg] =
@@ -28576,6 +31292,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of all messages sent"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of all messages sent"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqDelAllRcvMsg] =
@@ -28597,6 +31315,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of all messages received"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of all messages received"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelAllSntMsg] =
@@ -28618,6 +31338,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove all messages sent"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove all messages sent"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelAllRcvMsg] =
@@ -28639,6 +31361,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove all messages received"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove all messages received"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelSntMsg] =
@@ -28660,6 +31384,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message sent"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message sent"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDelRcvMsg] =
@@ -28681,6 +31407,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove message received"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove message received"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpSntMsg] =
@@ -28702,6 +31430,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See (expand) sent message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See (expand) sent message"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActExpRcvMsg] =
@@ -28723,6 +31453,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See (expand) received message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See (expand) received message"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConSntMsg] =
@@ -28744,6 +31476,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide (contract) sent message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide (contract) sent message"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActConRcvMsg] =
@@ -28765,6 +31499,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide (contract) received message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide (contract) received message"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstBanUsr] =
@@ -28786,6 +31522,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List banned users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List banned users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActBanUsrMsg] =
@@ -28807,6 +31545,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Ban sender of message when showing received messages"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Ban sender of message when showing received messages"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnbUsrMsg] =
@@ -28828,6 +31568,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unban sender of message when showing received messages"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unban sender of message when showing received messages"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUnbUsrLst] =
@@ -28849,6 +31591,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unban a user when listing banned users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unban a user when listing banned users"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMaiUsr] =
@@ -28870,6 +31614,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See email addresses to send an email"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See email addresses to send an email"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqUseGbl] =
@@ -28891,6 +31637,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request seeing use of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request seeing use of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeePhoDeg] =
@@ -28912,6 +31660,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See a class photo with average photos of students of each degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See a class photo with average photos of students of each degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqStaCrs] =
@@ -28933,6 +31683,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request statistics of courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request statistics of courses"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAccGbl] =
@@ -28954,6 +31706,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request query of clicks to the complete platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request query of clicks to the complete platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMyUsgRep] =
@@ -28975,6 +31729,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request my usage report"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request my usage report"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMFUAct] =
@@ -28996,6 +31752,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See most frequently used actions"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See most frequently used actions"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeUseGbl] =
@@ -29017,6 +31775,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See use of the platform"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See use of the platform"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnPhoDeg] =
@@ -29038,6 +31798,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See print view of class photo with average photos of students of each degree"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See print view of class photo with average photos of students of each degree"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCalPhoDeg] =
@@ -29059,6 +31821,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compute average photos of students of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Compute average photos of students of degree"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAccGbl] =
@@ -29080,6 +31844,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Query clicks to the complete platform"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Query clicks to the complete platform"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqAccCrs] =
@@ -29101,6 +31867,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request query of clicks in the current course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request query of clicks in the current course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAccCrs] =
@@ -29122,6 +31890,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Query clicks in the current course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Query clicks in the current course"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllStaCrs] =
@@ -29143,6 +31913,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See statistics of courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See statistics of courses"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActLstClk] =
@@ -29164,6 +31936,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List the last clicks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"List the last clicks"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRefLstClk] =
@@ -29185,6 +31959,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Refresh the last clicks in real time"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Refresh the last clicks in real time"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyUsgRep] =
@@ -29206,6 +31982,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my usage report"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my usage report"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmRolSes] =
@@ -29227,6 +32005,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See form to log out and to change the current role"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See form to log out and to change the current role"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActMyCrs] =
@@ -29248,6 +32028,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Select one of my courses"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Select one of my courses"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyTT] =
@@ -29269,6 +32051,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the timetable of all my courses"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the timetable of all my courses"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyAgd] =
@@ -29290,6 +32074,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my full agenda (personal organizer)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my full agenda (personal organizer)"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmMyAcc] =
@@ -29311,6 +32097,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See form to create or change my account"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See form to create or change my account"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEdiRecSha] =
@@ -29332,6 +32120,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request edition of the record with the personal data of the user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request edition of the record with the personal data of the user"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEdiSet] =
@@ -29353,6 +32143,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See forms to edit settings"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See forms to edit settings"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyRol] =
@@ -29374,6 +32166,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change user's role"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change user's role"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewEvtMyAgd] =
@@ -29395,6 +32189,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new event in my agenda"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new event in my agenda"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneEvtMyAgd] =
@@ -29416,6 +32212,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit one event from my agenda"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit one event from my agenda"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActNewEvtMyAgd] =
@@ -29437,6 +32235,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new event in my agenda"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new event in my agenda"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgEvtMyAgd] =
@@ -29458,6 +32258,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change event from my agenda"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change event from my agenda"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemEvtMyAgd] =
@@ -29479,6 +32281,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of an event from my agenda"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of an event from my agenda"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemEvtMyAgd] =
@@ -29500,6 +32304,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove event from my agenda"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove event from my agenda"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActHidEvtMyAgd] =
@@ -29521,6 +32327,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide event from my agenda"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Hide event from my agenda"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActShoEvtMyAgd] =
@@ -29542,6 +32350,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide event from my agenda"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Unhide event from my agenda"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrvEvtMyAgd] =
@@ -29563,6 +32373,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Make private an event from my agenda"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Make private an event from my agenda"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPubEvtMyAgd] =
@@ -29584,6 +32396,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Make public an event from my agenda"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Make public an event from my agenda"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnAgdQR] =
@@ -29605,6 +32419,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See agenda QR code ready to print"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See agenda QR code ready to print"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChkUsrAcc] =
@@ -29626,6 +32442,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Check if already exists a new account without password associated to a ID"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Check if already exists a new account without password associated to a ID"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreMyAcc] =
@@ -29647,6 +32465,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit new user account"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit new user account"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCreUsrAcc] =
@@ -29668,6 +32488,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new user account"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new user account"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMyID] =
@@ -29689,6 +32511,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove one of my user's IDs"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove one of my user's IDs"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyID] =
@@ -29710,6 +32534,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Create new user's ID for me"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Create new user's ID for me"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMyNck] =
@@ -29731,6 +32557,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove one of my old nicknames"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove one of my old nicknames"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyNck] =
@@ -29752,6 +32580,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my nickname"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my nickname"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMyMai] =
@@ -29773,6 +32603,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove one of my old emails"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove one of my old emails"				// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyMai] =
@@ -29794,6 +32626,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my email address"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my email address"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActCnfMai] =
@@ -29815,6 +32649,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Confirm email address"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Confirm email address"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyPwd] =
@@ -29836,6 +32672,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my password"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my password"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemMyAcc] =
@@ -29857,6 +32695,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of my account"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of my account"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMyAcc] =
@@ -29878,6 +32718,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove my account"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove my account"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyData] =
@@ -29899,6 +32741,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update my personal data"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update my personal data"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqMyPho] =
@@ -29920,6 +32764,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request sending of my photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request sending of my photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActDetMyPho] =
@@ -29941,6 +32787,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Send my photo and detect faces on it"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Send my photo and detect faces on it"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActUpdMyPho] =
@@ -29962,6 +32810,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Update my photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Update my photo"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemMyPho] =
@@ -29983,6 +32833,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of my photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request removal of my photo"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActRemMyPho] =
@@ -30004,6 +32856,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove my photo"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Remove my photo"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCtyMyIns] =
@@ -30025,6 +32879,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change country of my institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change country of my institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyIns] =
@@ -30046,6 +32902,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my institution"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyCtr] =
@@ -30067,6 +32925,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my center"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyDpt] =
@@ -30088,6 +32948,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my department"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my department"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyOff] =
@@ -30109,6 +32971,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my office"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my office"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyOffPho] =
@@ -30130,6 +32994,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my office phone"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my office phone"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqEdiMyNet] =
@@ -30151,6 +33017,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request edition of my social networks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request edition of my social networks"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyNet] =
@@ -30172,6 +33040,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my web and social networks"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my web and social networks"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgThe] =
@@ -30193,6 +33063,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change theme"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change theme"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActReqChgLan] =
@@ -30214,6 +33086,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request change of language"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Request change of language"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgLan] =
@@ -30235,6 +33109,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change language"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change language"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChg1stDay] =
@@ -30256,6 +33132,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change first day of the week"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change first day of the week"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgDatFmt] =
@@ -30277,6 +33155,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change date format"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change date format"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCol] =
@@ -30298,6 +33178,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change side columns"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change side columns"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgIco] =
@@ -30319,6 +33201,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change icon set"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change icon set"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMnu] =
@@ -30340,6 +33224,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change menu"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change menu"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgPriPho] =
@@ -30361,6 +33247,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change privacy of my photo"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change privacy of my photo"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgBasPriPrf] =
@@ -30382,6 +33270,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change privacy of my basic public profile"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change privacy of my basic public profile"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgExtPriPrf] =
@@ -30403,6 +33293,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change privacy of my extended public profile"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change privacy of my extended public profile"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgCooPrf] =
@@ -30424,6 +33316,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change setting about third party cookies"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change setting about third party cookies"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgNtfPrf] =
@@ -30445,6 +33339,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change whether to notify by email"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change whether to notify by email"	// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnUsrQR] =
@@ -30466,6 +33362,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See my QR code ready to print"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See my QR code ready to print"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActPrnMyTT] =
@@ -30487,6 +33385,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See the print view of the timetable of all my courses"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"See the print view of the timetable of all my courses"			// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActEdiTut] =
@@ -30508,6 +33408,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit my office timetable"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Edit my office timetable"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgTut] =
@@ -30529,6 +33431,8 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change my office timetable"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change my office timetable"		// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	,
 	[ActChgMyTT1stDay] =
@@ -30550,5 +33454,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change first day of week and show office timetable"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Change first day of week and show office timetable"					// Precisa de tradução
+#elif L==10	// tr
+	""	// Çeviri lazim!
 #endif
 	};

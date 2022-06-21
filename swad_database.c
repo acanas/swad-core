@@ -958,7 +958,7 @@ mysql> DESCRIBE cty_countrs;
 +----------------+--------------+------+-----+---------+-------+
 | Field          | Type         | Null | Key | Default | Extra |
 +----------------+--------------+------+-----+---------+-------+
-| CtyCod         | int(11)      | NO   | PRI | NULL    |       |
+| CtyCod         | int          | NO   | PRI | NULL    |       |
 | Alpha2         | char(2)      | NO   | UNI | NULL    |       |
 | MapAttribution | text         | NO   |     | NULL    |       |
 | Name_ca        | varchar(767) | NO   | MUL | NULL    |       |
@@ -970,6 +970,7 @@ mysql> DESCRIBE cty_countrs;
 | Name_it        | varchar(767) | NO   | MUL | NULL    |       |
 | Name_pl        | varchar(767) | NO   | MUL | NULL    |       |
 | Name_pt        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_tr        | varchar(767) | NO   | MUL | NULL    |       |
 | WWW_ca         | varchar(255) | NO   |     | NULL    |       |
 | WWW_de         | varchar(255) | NO   |     | NULL    |       |
 | WWW_en         | varchar(255) | NO   |     | NULL    |       |
@@ -979,8 +980,9 @@ mysql> DESCRIBE cty_countrs;
 | WWW_it         | varchar(255) | NO   |     | NULL    |       |
 | WWW_pl         | varchar(255) | NO   |     | NULL    |       |
 | WWW_pt         | varchar(255) | NO   |     | NULL    |       |
+| WWW_tr         | varchar(255) | NO   |     | NULL    |       |
 +----------------+--------------+------+-----+---------+-------+
-21 rows in set (0,00 sec)
+23 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS cty_countrs ("
 			"CtyCod INT NOT NULL,"
@@ -995,6 +997,7 @@ mysql> DESCRIBE cty_countrs;
 			"Name_it VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_pl VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_pt VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_tr VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"WWW_ca VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 			"WWW_de VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 			"WWW_en VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
@@ -1004,6 +1007,7 @@ mysql> DESCRIBE cty_countrs;
 			"WWW_it VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 			"WWW_pl VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 			"WWW_pt VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_tr VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(CtyCod),UNIQUE INDEX(Alpha2),"
 		   "INDEX(Name_ca),"
 		   "INDEX(Name_de),"
@@ -1013,7 +1017,8 @@ mysql> DESCRIBE cty_countrs;
 		   "INDEX(Name_gn),"
 		   "INDEX(Name_it),"
 		   "INDEX(Name_pl),"
-		   "INDEX(Name_pt))");	// ISO 3166-1 country codes
+		   "INDEX(Name_pt),"
+		   "INDEX(Name_tr))");	// ISO 3166-1 country codes
 
    /***** Table deg_types *****/
 /*

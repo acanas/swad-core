@@ -431,6 +431,7 @@ CREATE TABLE IF NOT EXISTS cty_countrs (
 	Name_it VARCHAR(767) NOT NULL,
 	Name_pl VARCHAR(767) NOT NULL,
 	Name_pt VARCHAR(767) NOT NULL,
+	Name_tr VARCHAR(767) NOT NULL,
 	WWW_ca VARCHAR(255) NOT NULL,
 	WWW_de VARCHAR(255) NOT NULL,
 	WWW_en VARCHAR(255) NOT NULL,
@@ -440,6 +441,7 @@ CREATE TABLE IF NOT EXISTS cty_countrs (
 	WWW_it VARCHAR(255) NOT NULL,
 	WWW_pl VARCHAR(255) NOT NULL,
 	WWW_pt VARCHAR(255) NOT NULL,
+	WWW_tr VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(CtyCod),
 	UNIQUE INDEX(Alpha2),
 	INDEX(Name_ca),
@@ -450,7 +452,8 @@ CREATE TABLE IF NOT EXISTS cty_countrs (
 	INDEX(Name_gn),
 	INDEX(Name_it),
 	INDEX(Name_pl),
-	INDEX(Name_pt));
+	INDEX(Name_pt),
+	INDEX(Name_tr));
 --
 -- Table dbg_debug: used for debugging purposes
 --

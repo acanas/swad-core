@@ -48,6 +48,8 @@ const char *Hlp_Multimedia =
 	"Multimedia.en";
 #elif L==9
 	"Multimedia.en";
+#elif L==10	// tr
+	"Multimedia.en";
 #endif
 
 /***** START tab *****/
@@ -71,6 +73,8 @@ const char *Hlp_START_Search =
 	"START.Search.en";
 #elif L==9
 	"START.Search.en";
+#elif L==10	// tr
+	"START.Search.en";
 #endif
 
 const char *Hlp_START_Timeline =
@@ -91,6 +95,8 @@ const char *Hlp_START_Timeline =
 #elif L==8
 	"START.Timeline.en";
 #elif L==9
+	"START.Timeline.en";
+#elif L==10	// tr
 	"START.Timeline.en";
 #endif
 
@@ -113,6 +119,8 @@ const char *Hlp_START_Profiles_view_public_profile =
 	"START.Profiles.en#view-public-profile";
 #elif L==9
 	"START.Profiles.en#view-public-profile";
+#elif L==10	// tr
+	"START.Profiles.en#view-public-profile";
 #endif
 
 const char *Hlp_START_Profiles_who_to_follow =
@@ -133,6 +141,8 @@ const char *Hlp_START_Profiles_who_to_follow =
 #elif L==8
 	"START.Profiles.en#who-to-follow";
 #elif L==9
+	"START.Profiles.en#who-to-follow";
+#elif L==10	// tr
 	"START.Profiles.en#who-to-follow";
 #endif
 
@@ -155,6 +165,8 @@ const char *Hlp_START_Calendar =
 	"START.Calendar.en";
 #elif L==9
 	"START.Calendar.en";
+#elif L==10	// tr
+	"START.Calendar.en";
 #endif
 
 const char *Hlp_START_Notifications =
@@ -175,6 +187,8 @@ const char *Hlp_START_Notifications =
 #elif L==8
 	"START.Notifications.en";
 #elif L==9
+	"START.Notifications.en";
+#elif L==10	// tr
 	"START.Notifications.en";
 #endif
 
@@ -197,6 +211,8 @@ const char *Hlp_START_Domains =
 	"START.Domains.en";
 #elif L==9
 	"START.Domains.en";
+#elif L==10	// tr
+	"START.Domains.en";
 #endif
 
 const char *Hlp_START_Domains_edit =
@@ -217,6 +233,8 @@ const char *Hlp_START_Domains_edit =
 #elif L==8
 	"START.Domains.en#edit";
 #elif L==9
+	"START.Domains.en#edit";
+#elif L==10	// tr
 	"START.Domains.en#edit";
 #endif
 
@@ -241,6 +259,8 @@ const char *Hlp_SYSTEM_Information =
 	"SYSTEM.Information.en";
 #elif L==9
 	"SYSTEM.Information.en";
+#elif L==10	// tr
+	"SYSTEM.Information.en";
 #endif
 
 const char *Hlp_SYSTEM_Countries =
@@ -261,6 +281,8 @@ const char *Hlp_SYSTEM_Countries =
 #elif L==8
 	"SYSTEM.Countries.en";
 #elif L==9
+	"SYSTEM.Countries.en";
+#elif L==10	// tr
 	"SYSTEM.Countries.en";
 #endif
 
@@ -283,6 +305,8 @@ const char *Hlp_SYSTEM_Pending =
 	"SYSTEM.Pending.en";
 #elif L==9
 	"SYSTEM.Pending.en";
+#elif L==10	// tr
+	"SYSTEM.Pending.en";
 #endif
 
 const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses =
@@ -303,6 +327,8 @@ const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses =
 #elif L==8
 	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #elif L==9
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==10	// tr
 	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #endif
 
@@ -325,6 +351,8 @@ const char *Hlp_SYSTEM_Banners =
 	"SYSTEM.Banners.en";
 #elif L==9
 	"SYSTEM.Banners.en";
+#elif L==10	// tr
+	"SYSTEM.Banners.en";
 #endif
 
 const char *Hlp_SYSTEM_Banners_edit =
@@ -345,6 +373,8 @@ const char *Hlp_SYSTEM_Banners_edit =
 #elif L==8
 	"SYSTEM.Banners.en#edit";
 #elif L==9
+	"SYSTEM.Banners.en#edit";
+#elif L==10	// tr
 	"SYSTEM.Banners.en#edit";
 #endif
 
@@ -367,6 +397,8 @@ const char *Hlp_SYSTEM_Links =
 	"SYSTEM.Links.en";
 #elif L==9
 	"SYSTEM.Links.en";
+#elif L==10	// tr
+	"SYSTEM.Links.en";
 #endif
 
 const char *Hlp_SYSTEM_Links_edit =
@@ -387,6 +419,8 @@ const char *Hlp_SYSTEM_Links_edit =
 #elif L==8
 	"SYSTEM.Links.en#edit";
 #elif L==9
+	"SYSTEM.Links.en#edit";
+#elif L==10	// tr
 	"SYSTEM.Links.en#edit";
 #endif
 
@@ -411,6 +445,8 @@ const char *Hlp_COUNTRY_Information =
 	"COUNTRY.Information.en";
 #elif L==9
 	"COUNTRY.Information.en";
+#elif L==10	// tr
+	"COUNTRY.Information.en";
 #endif
 
 const char *Hlp_COUNTRY_Institutions =
@@ -431,6 +467,8 @@ const char *Hlp_COUNTRY_Institutions =
 #elif L==8
 	"COUNTRY.Institutions.en";
 #elif L==9
+	"COUNTRY.Institutions.en";
+#elif L==10	// tr
 	"COUNTRY.Institutions.en";
 #endif
 
@@ -455,6 +493,8 @@ const char *Hlp_INSTITUTION_Information =
 	"INSTITUTION.Information.en";
 #elif L==9
 	"INSTITUTION.Information.en";
+#elif L==10	// tr
+	"INSTITUTION.Information.en";
 #endif
 
 const char *Hlp_INSTITUTION_Centers =
@@ -475,6 +515,8 @@ const char *Hlp_INSTITUTION_Centers =
 #elif L==8
 	"INSTITUTION.Centers.en";
 #elif L==9
+	"INSTITUTION.Centers.en";
+#elif L==10	// tr
 	"INSTITUTION.Centers.en";
 #endif
 
@@ -497,6 +539,8 @@ const char *Hlp_INSTITUTION_Departments =
 	"INSTITUTION.Departments.en";
 #elif L==9
 	"INSTITUTION.Departments.en";
+#elif L==10	// tr
+	"INSTITUTION.Departments.en";
 #endif
 
 const char *Hlp_INSTITUTION_Departments_edit =
@@ -517,6 +561,8 @@ const char *Hlp_INSTITUTION_Departments_edit =
 #elif L==8
 	"INSTITUTION.Departments.en#edit";
 #elif L==9
+	"INSTITUTION.Departments.en#edit";
+#elif L==10	// tr
 	"INSTITUTION.Departments.en#edit";
 #endif
 
@@ -539,6 +585,8 @@ const char *Hlp_INSTITUTION_Places =
 	"INSTITUTION.Places.en";
 #elif L==9
 	"INSTITUTION.Places.en";
+#elif L==10	// tr
+	"INSTITUTION.Places.en";
 #endif
 
 const char *Hlp_INSTITUTION_Places_edit =
@@ -559,6 +607,8 @@ const char *Hlp_INSTITUTION_Places_edit =
 #elif L==8
 	"INSTITUTION.Places.en#edit";
 #elif L==9
+	"INSTITUTION.Places.en#edit";
+#elif L==10	// tr
 	"INSTITUTION.Places.en#edit";
 #endif
 
@@ -581,6 +631,8 @@ const char *Hlp_INSTITUTION_Holidays =
 	"INSTITUTION.Holidays.en";
 #elif L==9
 	"INSTITUTION.Holidays.en";
+#elif L==10	// tr
+	"INSTITUTION.Holidays.en";
 #endif
 
 const char *Hlp_INSTITUTION_Holidays_edit =
@@ -601,6 +653,8 @@ const char *Hlp_INSTITUTION_Holidays_edit =
 #elif L==8
 	"INSTITUTION.Holidays.en#edit";
 #elif L==9
+	"INSTITUTION.Holidays.en#edit";
+#elif L==10	// tr
 	"INSTITUTION.Holidays.en#edit";
 #endif
 
@@ -625,6 +679,8 @@ const char *Hlp_CENTER_Information =
 	"CENTER.Information.en";
 #elif L==9
 	"CENTER.Information.en";
+#elif L==10	// tr
+	"CENTER.Information.en";
 #endif
 
 const char *Hlp_CENTER_DegreeTypes =
@@ -645,6 +701,8 @@ const char *Hlp_CENTER_DegreeTypes =
 #elif L==8
 	"CENTER.DegreeTypes.en";
 #elif L==9
+	"CENTER.DegreeTypes.en";
+#elif L==10	// tr
 	"CENTER.DegreeTypes.en";
 #endif
 
@@ -667,6 +725,8 @@ const char *Hlp_CENTER_DegreeTypes_edit =
 	"CENTER.DegreeTypes.en#edit";
 #elif L==9
 	"CENTER.DegreeTypes.en#edit";
+#elif L==10	// tr
+	"CENTER.DegreeTypes.en#edit";
 #endif
 
 const char *Hlp_CENTER_Degrees =
@@ -687,6 +747,8 @@ const char *Hlp_CENTER_Degrees =
 #elif L==8
 	"CENTER.Degrees.en";
 #elif L==9
+	"CENTER.Degrees.en";
+#elif L==10	// tr
 	"CENTER.Degrees.en";
 #endif
 
@@ -709,6 +771,8 @@ const char *Hlp_CENTER_Buildings =
 	"CENTER.Buildings.en";
 #elif L==9
 	"CENTER.Buildings.en";
+#elif L==10	// tr
+	"CENTER.Buildings.en";
 #endif
 
 const char *Hlp_CENTER_Buildings_edit =
@@ -729,6 +793,8 @@ const char *Hlp_CENTER_Buildings_edit =
 #elif L==8
 	"CENTER.Buildings.en#edit-buildings";
 #elif L==9
+	"CENTER.Buildings.en#edit-buildings";
+#elif L==10	// tr
 	"CENTER.Buildings.en#edit-buildings";
 #endif
 
@@ -751,6 +817,8 @@ const char *Hlp_CENTER_Rooms =
 	"CENTER.Rooms.en";
 #elif L==9
 	"CENTER.Rooms.en";
+#elif L==10	// tr
+	"CENTER.Rooms.en";
 #endif
 
 const char *Hlp_CENTER_Rooms_edit =
@@ -771,6 +839,8 @@ const char *Hlp_CENTER_Rooms_edit =
 #elif L==8
 	"CENTER.Rooms.en#edit-rooms";
 #elif L==9
+	"CENTER.Rooms.en#edit-rooms";
+#elif L==10	// tr
 	"CENTER.Rooms.en#edit-rooms";
 #endif
 
@@ -795,6 +865,8 @@ const char *Hlp_DEGREE_Information =
 	"DEGREE.Information.en";
 #elif L==9
 	"DEGREE.Information.en";
+#elif L==10	// tr
+	"DEGREE.Information.en";
 #endif
 
 const char *Hlp_DEGREE_Courses =
@@ -815,6 +887,8 @@ const char *Hlp_DEGREE_Courses =
 #elif L==8
 	"DEGREE.Courses.en";
 #elif L==9
+	"DEGREE.Courses.en";
+#elif L==10	// tr
 	"DEGREE.Courses.en";
 #endif
 
@@ -839,6 +913,8 @@ const char *Hlp_COURSE_Information =
 	"COURSE.Information.en";
 #elif L==9
 	"COURSE.Information.en";
+#elif L==10	// tr
+	"COURSE.Information.en";
 #endif
 
 const char *Hlp_COURSE_Information_textual_information =
@@ -859,6 +935,8 @@ const char *Hlp_COURSE_Information_textual_information =
 #elif L==8
 	"COURSE.Information.en#textual-information";
 #elif L==9
+	"COURSE.Information.en#textual-information";
+#elif L==10	// tr
 	"COURSE.Information.en#textual-information";
 #endif
 
@@ -881,6 +959,8 @@ const char *Hlp_COURSE_Information_edit =
 	"COURSE.Information.en#edit";
 #elif L==9
 	"COURSE.Information.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Program =
@@ -902,6 +982,8 @@ const char *Hlp_COURSE_Program =
 	"COURSE.Program.en";
 #elif L==9
 	"COURSE.Program.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Program_new_item =
@@ -923,6 +1005,8 @@ const char *Hlp_COURSE_Program_new_item =
 	"COURSE.Program.en#new-item";
 #elif L==9
 	"COURSE.Program.en#new-item";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Program_edit_item =
@@ -944,6 +1028,8 @@ const char *Hlp_COURSE_Program_edit_item =
 	"COURSE.Program.en#edit-item";
 #elif L==9
 	"COURSE.Program.en#edit-item";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Guide =
@@ -965,6 +1051,8 @@ const char *Hlp_COURSE_Guide =
 	"COURSE.Guide.en";
 #elif L==9
 	"COURSE.Guide.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Guide_edit =
@@ -986,6 +1074,8 @@ const char *Hlp_COURSE_Guide_edit =
 	"COURSE.Guide.en#edit";
 #elif L==9
 	"COURSE.Guide.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Syllabus =
@@ -1007,6 +1097,8 @@ const char *Hlp_COURSE_Syllabus =
 	"COURSE.Syllabus.en";
 #elif L==9
 	"COURSE.Syllabus.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Syllabus_edit =
@@ -1028,6 +1120,8 @@ const char *Hlp_COURSE_Syllabus_edit =
 	"COURSE.Syllabus.en#edit";
 #elif L==9
 	"COURSE.Syllabus.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Timetable =
@@ -1049,6 +1143,8 @@ const char *Hlp_COURSE_Timetable =
 	"COURSE.Timetable.en";
 #elif L==9
 	"COURSE.Timetable.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Bibliography =
@@ -1070,6 +1166,8 @@ const char *Hlp_COURSE_Bibliography =
 	"COURSE.Bibliography.en";
 #elif L==9
 	"COURSE.Bibliography.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Bibliography_edit =
@@ -1091,6 +1189,8 @@ const char *Hlp_COURSE_Bibliography_edit =
 	"COURSE.Bibliography.en#edit";
 #elif L==9
 	"COURSE.Bibliography.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_FAQ =
@@ -1112,6 +1212,8 @@ const char *Hlp_COURSE_FAQ =
 	"COURSE.FAQ.en";
 #elif L==9
 	"COURSE.FAQ.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_FAQ_edit =
@@ -1133,6 +1235,8 @@ const char *Hlp_COURSE_FAQ_edit =
 	"COURSE.FAQ.en#edit";
 #elif L==9
 	"COURSE.FAQ.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Links =
@@ -1154,6 +1258,8 @@ const char *Hlp_COURSE_Links =
 	"COURSE.Links.en";
 #elif L==9
 	"COURSE.Links.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COURSE_Links_edit =
@@ -1175,6 +1281,8 @@ const char *Hlp_COURSE_Links_edit =
 	"COURSE.Links.en#edit";
 #elif L==9
 	"COURSE.Links.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** ASSESSMENT tab *****/
@@ -1198,6 +1306,8 @@ const char *Hlp_ASSESSMENT_System =
 	"ASSESSMENT.System.en";
 #elif L==9
 	"ASSESSMENT.System.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_System_edit =
@@ -1219,6 +1329,8 @@ const char *Hlp_ASSESSMENT_System_edit =
 	"ASSESSMENT.System.en#edit";
 #elif L==9
 	"ASSESSMENT.System.en#edit";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Assignments =
@@ -1240,6 +1352,8 @@ const char *Hlp_ASSESSMENT_Assignments =
 	"ASSESSMENT.Assignments.en";
 #elif L==9
 	"ASSESSMENT.Assignments.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Assignments_new_assignment =
@@ -1261,6 +1375,8 @@ const char *Hlp_ASSESSMENT_Assignments_new_assignment =
 	"ASSESSMENT.Assignments.en#new-assignment";
 #elif L==9
 	"ASSESSMENT.Assignments.en#new-assignment";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
@@ -1282,6 +1398,8 @@ const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 	"ASSESSMENT.Assignments.en#edit-assignment";
 #elif L==9
 	"ASSESSMENT.Assignments.en#edit-assignment";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 
@@ -1304,6 +1422,8 @@ const char *Hlp_ASSESSMENT_Projects =
 	"ASSESSMENT.Projects.en";
 #elif L==9
 	"ASSESSMENT.Projects.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Projects_new_project =
@@ -1325,6 +1445,8 @@ const char *Hlp_ASSESSMENT_Projects_new_project =
 	"ASSESSMENT.Projects.en#new-project";
 #elif L==9
 	"ASSESSMENT.Projects.en#new-project";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Projects_edit_project =
@@ -1346,6 +1468,8 @@ const char *Hlp_ASSESSMENT_Projects_edit_project =
 	"ASSESSMENT.Projects.en#edit-project";
 #elif L==9
 	"ASSESSMENT.Projects.en#edit-project";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Projects_add_user =
@@ -1367,6 +1491,8 @@ const char *Hlp_ASSESSMENT_Projects_add_user =
 	"ASSESSMENT.Projects.en#add-user";
 #elif L==9
 	"ASSESSMENT.Projects.en#add-user";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Questions_editing_questions =
@@ -1388,6 +1514,8 @@ const char *Hlp_ASSESSMENT_Questions_editing_questions =
 	"ASSESSMENT.Questions.en#editing-questions";
 #elif L==9
 	"ASSESSMENT.Questions.en#editing-questions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Questions_writing_a_question =
@@ -1409,6 +1537,8 @@ const char *Hlp_ASSESSMENT_Questions_writing_a_question =
 	"ASSESSMENT.Questions.en#writing-a-question";
 #elif L==9
 	"ASSESSMENT.Questions.en#writing-a-question";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Questions_editing_tags =
@@ -1430,6 +1560,8 @@ const char *Hlp_ASSESSMENT_Questions_editing_tags =
 	"ASSESSMENT.Questions.en#editing-tags";
 #elif L==9
 	"ASSESSMENT.Questions.en#editing-tags";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Tests =
@@ -1451,6 +1583,8 @@ const char *Hlp_ASSESSMENT_Tests =
 	"ASSESSMENT.Tests.en";
 #elif L==9
 	"ASSESSMENT.Tests.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Tests_configuring_tests =
@@ -1472,6 +1606,8 @@ const char *Hlp_ASSESSMENT_Tests_configuring_tests =
 	"ASSESSMENT.Tests.en#configuring-tests";
 #elif L==9
 	"ASSESSMENT.Tests.en#configuring-tests";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Tests_results =
@@ -1493,6 +1629,8 @@ const char *Hlp_ASSESSMENT_Tests_results =
 	"ASSESSMENT.Tests.en#results";
 #elif L==9
 	"ASSESSMENT.Tests.en#results";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams =
@@ -1514,6 +1652,8 @@ const char *Hlp_ASSESSMENT_Exams =
 	"ASSESSMENT.Exams.en";
 #elif L==9
 	"ASSESSMENT.Exams.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_edit_exam =
@@ -1535,6 +1675,8 @@ const char *Hlp_ASSESSMENT_Exams_edit_exam =
 	"ASSESSMENT.Exams.en#edit-exam";
 #elif L==9
 	"ASSESSMENT.Exams.en#edit-exam";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_question_sets =
@@ -1556,6 +1698,8 @@ const char *Hlp_ASSESSMENT_Exams_question_sets =
 	"ASSESSMENT.Exams.en#question-set";
 #elif L==9
 	"ASSESSMENT.Exams.en#question-set";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_sessions =
@@ -1577,6 +1721,8 @@ const char *Hlp_ASSESSMENT_Exams_sessions =
 	"ASSESSMENT.Exams.en#sessions";
 #elif L==9
 	"ASSESSMENT.Exams.en#sessions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_new_exam =
@@ -1598,6 +1744,8 @@ const char *Hlp_ASSESSMENT_Exams_new_exam =
 	"ASSESSMENT.Exams.en#new-exam";
 #elif L==9
 	"ASSESSMENT.Exams.en#new-exam";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_questions =
@@ -1619,6 +1767,8 @@ const char *Hlp_ASSESSMENT_Exams_questions =
 	"ASSESSMENT.Exams.en#questions";
 #elif L==9
 	"ASSESSMENT.Exams.en#questions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_answer_exam =
@@ -1640,6 +1790,8 @@ const char *Hlp_ASSESSMENT_Exams_answer_exam =
 	"ASSESSMENT.Exams.en#answer-exam";
 #elif L==9
 	"ASSESSMENT.Exams.en#answer-exam";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_results =
@@ -1661,6 +1813,8 @@ const char *Hlp_ASSESSMENT_Exams_results =
 	"ASSESSMENT.Exams.en#results";
 #elif L==9
 	"ASSESSMENT.Exams.en#results";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games =
@@ -1682,6 +1836,8 @@ const char *Hlp_ASSESSMENT_Games =
 	"ASSESSMENT.Games.en";
 #elif L==9
 	"ASSESSMENT.Games.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games_edit_game =
@@ -1703,6 +1859,8 @@ const char *Hlp_ASSESSMENT_Games_edit_game =
 	"ASSESSMENT.Games.en#edit-game";
 #elif L==9
 	"ASSESSMENT.Games.en#edit-game";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games_matches =
@@ -1724,6 +1882,8 @@ const char *Hlp_ASSESSMENT_Games_matches =
 	"ASSESSMENT.Games.en#matches";
 #elif L==9
 	"ASSESSMENT.Games.en#matches";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games_new_game =
@@ -1745,6 +1905,8 @@ const char *Hlp_ASSESSMENT_Games_new_game =
 	"ASSESSMENT.Games.en#new-game";
 #elif L==9
 	"ASSESSMENT.Games.en#new-game";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games_questions =
@@ -1766,6 +1928,8 @@ const char *Hlp_ASSESSMENT_Games_questions =
 	"ASSESSMENT.Games.en#questions";
 #elif L==9
 	"ASSESSMENT.Games.en#questions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Games_results =
@@ -1787,6 +1951,8 @@ const char *Hlp_ASSESSMENT_Games_results =
 	"ASSESSMENT.Games.en#results";
 #elif L==9
 	"ASSESSMENT.Games.en#results";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Surveys =
@@ -1808,6 +1974,8 @@ const char *Hlp_ASSESSMENT_Surveys =
 	"ASSESSMENT.Surveys.en";
 #elif L==9
 	"ASSESSMENT.Surveys.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Surveys_new_survey =
@@ -1829,6 +1997,8 @@ const char *Hlp_ASSESSMENT_Surveys_new_survey =
 	"ASSESSMENT.Surveys.en#new-survey";
 #elif L==9
 	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Surveys_edit_survey =
@@ -1850,6 +2020,8 @@ const char *Hlp_ASSESSMENT_Surveys_edit_survey =
 	"ASSESSMENT.Surveys.en#edit-survey";
 #elif L==9
 	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Surveys_questions =
@@ -1871,6 +2043,8 @@ const char *Hlp_ASSESSMENT_Surveys_questions =
 	"ASSESSMENT.Surveys.en#questions";
 #elif L==9
 	"ASSESSMENT.Surveys.en#questions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Calls_for_exams =
@@ -1892,6 +2066,8 @@ const char *Hlp_ASSESSMENT_Calls_for_exams =
 	"ASSESSMENT.Calls_for_exams.en";
 #elif L==9
 	"ASSESSMENT.Calls_for_exams.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Calls_for_exam_new_call =
@@ -1913,6 +2089,8 @@ const char *Hlp_ASSESSMENT_Calls_for_exam_new_call =
 	"ASSESSMENT.Calls_for_exams.en#new-call";
 #elif L==9
 	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
@@ -1934,6 +2112,8 @@ const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 	"ASSESSMENT.Calls_for_exams.en#edit-call";
 #elif L==9
 	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** FILES tab *****/
@@ -1957,6 +2137,8 @@ const char *Hlp_FILES_Documents =
 	"FILES.Documents.en";
 #elif L==9
 	"FILES.Documents.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Private =
@@ -1978,6 +2160,8 @@ const char *Hlp_FILES_Private =
 	"FILES.Private.en";
 #elif L==9
 	"FILES.Private.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Shared =
@@ -1999,6 +2183,8 @@ const char *Hlp_FILES_Shared =
 	"FILES.Shared.en";
 #elif L==9
 	"FILES.Shared.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Homework_for_students =
@@ -2020,6 +2206,8 @@ const char *Hlp_FILES_Homework_for_students =
 	"FILES.Homework.en#for-students";
 #elif L==9
 	"FILES.Homework.en#for-students";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Homework_for_teachers =
@@ -2041,6 +2229,8 @@ const char *Hlp_FILES_Homework_for_teachers =
 	"FILES.Homework.en#for-teachers";
 #elif L==9
 	"FILES.Homework.en#for-teachers";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Marks =
@@ -2062,6 +2252,8 @@ const char *Hlp_FILES_Marks =
 	"FILES.Marks.en";
 #elif L==9
 	"FILES.Marks.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_FILES_Briefcase =
@@ -2083,6 +2275,8 @@ const char *Hlp_FILES_Briefcase =
 	"FILES.Briefcase.en";
 #elif L==9
 	"FILES.Briefcase.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** USERS tab *****/
@@ -2106,6 +2300,8 @@ const char *Hlp_USERS_Groups =
 	"USERS.Groups.en";
 #elif L==9
 	"USERS.Groups.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Students =
@@ -2127,6 +2323,8 @@ const char *Hlp_USERS_Students =
 	"USERS.Students.en";
 #elif L==9
 	"USERS.Students.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Students_shared_record_card =
@@ -2148,6 +2346,8 @@ const char *Hlp_USERS_Students_shared_record_card =
 	"USERS.Students.en#shared-record-card";
 #elif L==9
 	"USERS.Students.en#shared-record-card";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Students_course_record_card =
@@ -2169,6 +2369,8 @@ const char *Hlp_USERS_Students_course_record_card =
 	"USERS.Students.en#course-record-card";
 #elif L==9
 	"USERS.Students.en#course-record-card";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Administration_administer_one_user =
@@ -2190,6 +2392,8 @@ const char *Hlp_USERS_Administration_administer_one_user =
 	"USERS.Administration.en#administer-one-user";
 #elif L==9
 	"USERS.Administration.en#administer-one-user";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Administration_administer_multiple_users =
@@ -2211,6 +2415,8 @@ const char *Hlp_USERS_Administration_administer_multiple_users =
 	"USERS.Administration.en#administer-multiple-users";
 #elif L==9
 	"USERS.Administration.en#administer-multiple-users";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Administration_remove_all_students =
@@ -2232,6 +2438,8 @@ const char *Hlp_USERS_Administration_remove_all_students =
 	"USERS.Administration.en#remove-all-students";
 #elif L==9
 	"USERS.Administration.en#remove-all-students";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Teachers =
@@ -2253,6 +2461,8 @@ const char *Hlp_USERS_Teachers =
 	"USERS.Teachers.en";
 #elif L==9
 	"USERS.Teachers.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Teachers_shared_record_card =
@@ -2274,6 +2484,8 @@ const char *Hlp_USERS_Teachers_shared_record_card =
 	"USERS.Teachers.en#shared-record-card";
 #elif L==9
 	"USERS.Teachers.en#shared-record-card";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Teachers_timetable =
@@ -2295,6 +2507,8 @@ const char *Hlp_USERS_Teachers_timetable =
 	"USERS.Teachers.en#timetable";
 #elif L==9
 	"USERS.Teachers.en#timetable";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Administrators =
@@ -2316,6 +2530,8 @@ const char *Hlp_USERS_Administrators =
 	"USERS.Administrators.en";
 #elif L==9
 	"USERS.Administrators.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Guests =
@@ -2337,6 +2553,8 @@ const char *Hlp_USERS_Guests =
 	"USERS.Guests.en";
 #elif L==9
 	"USERS.Guests.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
@@ -2358,6 +2576,8 @@ const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 	"USERS.Duplicates.en#possibly-duplicate-users";
 #elif L==9
 	"USERS.Duplicates.en#possibly-duplicate-users";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Duplicates_similar_users =
@@ -2379,6 +2599,8 @@ const char *Hlp_USERS_Duplicates_similar_users =
 	"USERS.Duplicates.en#similar-users";
 #elif L==9
 	"USERS.Duplicates.en#similar-users";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Attendance =
@@ -2400,6 +2622,8 @@ const char *Hlp_USERS_Attendance =
 	"USERS.Attendance.en";
 #elif L==9
 	"USERS.Attendance.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Attendance_new_event =
@@ -2421,6 +2645,8 @@ const char *Hlp_USERS_Attendance_new_event =
 	"USERS.Attendance.en#new-event";
 #elif L==9
 	"USERS.Attendance.en#new-event";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Attendance_edit_event =
@@ -2442,6 +2668,8 @@ const char *Hlp_USERS_Attendance_edit_event =
 	"USERS.Attendance.en#edit-event";
 #elif L==9
 	"USERS.Attendance.en#edit-event";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Attendance_attendance_list =
@@ -2463,6 +2691,8 @@ const char *Hlp_USERS_Attendance_attendance_list =
 	"USERS.Attendance.en#attendance-list";
 #elif L==9
 	"USERS.Attendance.en#attendance-list";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_SignUp =
@@ -2484,6 +2714,8 @@ const char *Hlp_USERS_SignUp =
 	"USERS.SignUp.en";
 #elif L==9
 	"USERS.SignUp.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_SignUp_confirm_enrolment =
@@ -2505,6 +2737,8 @@ const char *Hlp_USERS_SignUp_confirm_enrolment =
 	"USERS.SignUp.en#confirm_enrolment";
 #elif L==9
 	"USERS.SignUp.en#confirm_enrolment";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Requests =
@@ -2526,6 +2760,8 @@ const char *Hlp_USERS_Requests =
 	"USERS.Requests.en";
 #elif L==9
 	"USERS.Requests.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Connected =
@@ -2547,6 +2783,8 @@ const char *Hlp_USERS_Connected =
 	"USERS.Connected.en";
 #elif L==9
 	"USERS.Connected.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_USERS_Connected_last_clicks =
@@ -2568,6 +2806,8 @@ const char *Hlp_USERS_Connected_last_clicks =
 	"USERS.Connected.en#last-clicks";
 #elif L==9
 	"USERS.Connected.en#last-clicks";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** COMMUNICATION tab *****/
@@ -2591,6 +2831,8 @@ const char *Hlp_COMMUNICATION_Announcements =
 	"COMMUNICATION.Announcements.en";
 #elif L==9
 	"COMMUNICATION.Announcements.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Notices =
@@ -2612,6 +2854,8 @@ const char *Hlp_COMMUNICATION_Notices =
 	"COMMUNICATION.Notices.en";
 #elif L==9
 	"COMMUNICATION.Notices.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Forums =
@@ -2633,6 +2877,8 @@ const char *Hlp_COMMUNICATION_Forums =
 	"COMMUNICATION.Forums.en";
 #elif L==9
 	"COMMUNICATION.Forums.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Forums_threads =
@@ -2654,6 +2900,8 @@ const char *Hlp_COMMUNICATION_Forums_threads =
 	"COMMUNICATION.Forums.en#threads";
 #elif L==9
 	"COMMUNICATION.Forums.en#threads";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Forums_new_thread =
@@ -2675,6 +2923,8 @@ const char *Hlp_COMMUNICATION_Forums_new_thread =
 	"COMMUNICATION.Forums.en#new-thread";
 #elif L==9
 	"COMMUNICATION.Forums.en#new-thread";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Forums_posts =
@@ -2696,6 +2946,8 @@ const char *Hlp_COMMUNICATION_Forums_posts =
 	"COMMUNICATION.Forums.en#posts";
 #elif L==9
 	"COMMUNICATION.Forums.en#posts";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Forums_new_post =
@@ -2717,6 +2969,8 @@ const char *Hlp_COMMUNICATION_Forums_new_post =
 	"COMMUNICATION.Forums.en#new-post";
 #elif L==9
 	"COMMUNICATION.Forums.en#new-post";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Messages_write =
@@ -2738,6 +2992,8 @@ const char *Hlp_COMMUNICATION_Messages_write =
 	"COMMUNICATION.Write.en";
 #elif L==9
 	"COMMUNICATION.Write.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Messages_received =
@@ -2759,6 +3015,8 @@ const char *Hlp_COMMUNICATION_Messages_received =
 	"COMMUNICATION.Received.en";
 #elif L==9
 	"COMMUNICATION.Received.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Messages_received_filter =
@@ -2780,6 +3038,8 @@ const char *Hlp_COMMUNICATION_Messages_received_filter =
 	"COMMUNICATION.Received.en#filter";
 #elif L==9
 	"COMMUNICATION.Received.en#filter";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Messages_sent =
@@ -2801,6 +3061,8 @@ const char *Hlp_COMMUNICATION_Messages_sent =
 	"COMMUNICATION.Sent.en";
 #elif L==9
 	"COMMUNICATION.Sent.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Messages_sent_filter =
@@ -2822,6 +3084,8 @@ const char *Hlp_COMMUNICATION_Messages_sent_filter =
 	"COMMUNICATION.Sent.en#filter";
 #elif L==9
 	"COMMUNICATION.Sent.en#filter";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_COMMUNICATION_Email =
@@ -2843,6 +3107,8 @@ const char *Hlp_COMMUNICATION_Email =
 	"COMMUNICATION.Email.en";
 #elif L==9
 	"COMMUNICATION.Email.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** ANALYTICS tab *****/
@@ -2866,6 +3132,8 @@ const char *Hlp_ANALYTICS_Figures =
 	"ANALYTICS.Figures.en";
 #elif L==9
 	"ANALYTICS.Figures.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_users =
@@ -2887,6 +3155,8 @@ const char *Hlp_ANALYTICS_Figures_users =
 	"ANALYTICS.Figures.en#users";
 #elif L==9
 	"ANALYTICS.Figures.en#users";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_ranking =
@@ -2908,6 +3178,8 @@ const char *Hlp_ANALYTICS_Figures_ranking =
 	"ANALYTICS.Figures.en#ranking";
 #elif L==9
 	"ANALYTICS.Figures.en#ranking";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_hierarchy =
@@ -2929,6 +3201,8 @@ const char *Hlp_ANALYTICS_Figures_hierarchy =
 	"ANALYTICS.Figures.en#hierarchy";
 #elif L==9
 	"ANALYTICS.Figures.en#hierarchy";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_institutions =
@@ -2950,6 +3224,8 @@ const char *Hlp_ANALYTICS_Figures_institutions =
 	"ANALYTICS.Figures.en#institutions";
 #elif L==9
 	"ANALYTICS.Figures.en#institutions";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_types_of_degree =
@@ -2971,6 +3247,8 @@ const char *Hlp_ANALYTICS_Figures_types_of_degree =
 	"ANALYTICS.Figures.en#types-of-degree";
 #elif L==9
 	"ANALYTICS.Figures.en#types-of-degree";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_folders_and_files =
@@ -2992,6 +3270,8 @@ const char *Hlp_ANALYTICS_Figures_folders_and_files =
 	"ANALYTICS.Figures.en#folders-and-files";
 #elif L==9
 	"ANALYTICS.Figures.en#folders-and-files";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer =
@@ -3013,6 +3293,8 @@ const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer =
 	"ANALYTICS.Figures.en#open-educational-resources-oer";
 #elif L==9
 	"ANALYTICS.Figures.en#open-educational-resources-oer";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_course_programs =
@@ -3034,6 +3316,8 @@ const char *Hlp_ANALYTICS_Figures_course_programs =
 	"ANALYTICS.Figures.en#course-programs";
 #elif L==9
 	"ANALYTICS.Figures.en#course-programs";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_assignments =
@@ -3055,6 +3339,8 @@ const char *Hlp_ANALYTICS_Figures_assignments =
 	"ANALYTICS.Figures.en#assignments";
 #elif L==9
 	"ANALYTICS.Figures.en#assignments";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_projects =
@@ -3076,6 +3362,8 @@ const char *Hlp_ANALYTICS_Figures_projects =
 	"ANALYTICS.Figures.en#projects";
 #elif L==9
 	"ANALYTICS.Figures.en#projects";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_tests =
@@ -3097,6 +3385,8 @@ const char *Hlp_ANALYTICS_Figures_tests =
 	"ANALYTICS.Figures.en#tests";
 #elif L==9
 	"ANALYTICS.Figures.en#tests";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_exams =
@@ -3118,6 +3408,8 @@ const char *Hlp_ANALYTICS_Figures_exams =
 	"ANALYTICS.Figures.en#exams";
 #elif L==9
 	"ANALYTICS.Figures.en#exams";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_games =
@@ -3139,6 +3431,8 @@ const char *Hlp_ANALYTICS_Figures_games =
 	"ANALYTICS.Figures.en#games";
 #elif L==9
 	"ANALYTICS.Figures.en#games";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_surveys =
@@ -3160,6 +3454,8 @@ const char *Hlp_ANALYTICS_Figures_surveys =
 	"ANALYTICS.Figures.en#surveys";
 #elif L==9
 	"ANALYTICS.Figures.en#surveys";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_timeline =
@@ -3181,6 +3477,8 @@ const char *Hlp_ANALYTICS_Figures_timeline =
 	"ANALYTICS.Figures.en#timeline";
 #elif L==9
 	"ANALYTICS.Figures.en#timeline";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_followed_followers =
@@ -3202,6 +3500,8 @@ const char *Hlp_ANALYTICS_Figures_followed_followers =
 	"ANALYTICS.Figures.en#followed--followers";
 #elif L==9
 	"ANALYTICS.Figures.en#followed--followers";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_forums =
@@ -3223,6 +3523,8 @@ const char *Hlp_ANALYTICS_Figures_forums =
 	"ANALYTICS.Figures.en#forums";
 #elif L==9
 	"ANALYTICS.Figures.en#forums";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_notifications =
@@ -3244,6 +3546,8 @@ const char *Hlp_ANALYTICS_Figures_notifications =
 	"ANALYTICS.Figures.en#notifications";
 #elif L==9
 	"ANALYTICS.Figures.en#notifications";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_notices =
@@ -3265,6 +3569,8 @@ const char *Hlp_ANALYTICS_Figures_notices =
 	"ANALYTICS.Figures.en#notices";
 #elif L==9
 	"ANALYTICS.Figures.en#notices";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_messages =
@@ -3286,6 +3592,8 @@ const char *Hlp_ANALYTICS_Figures_messages =
 	"ANALYTICS.Figures.en#messages";
 #elif L==9
 	"ANALYTICS.Figures.en#messages";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_agendas =
@@ -3307,6 +3615,8 @@ const char *Hlp_ANALYTICS_Figures_agendas =
 	"ANALYTICS.Figures.en#agendas";
 #elif L==9
 	"ANALYTICS.Figures.en#agendas";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_webs_social_networks =
@@ -3328,6 +3638,8 @@ const char *Hlp_ANALYTICS_Figures_webs_social_networks =
 	"ANALYTICS.Figures.en#webs--social-networks";
 #elif L==9
 	"ANALYTICS.Figures.en#webs--social-networks";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_language =
@@ -3349,6 +3661,8 @@ const char *Hlp_ANALYTICS_Figures_language =
 	"ANALYTICS.Figures.en#language";
 #elif L==9
 	"ANALYTICS.Figures.en#language";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_calendar =
@@ -3370,6 +3684,8 @@ const char *Hlp_ANALYTICS_Figures_calendar =
 	"ANALYTICS.Figures.en#calendar";
 #elif L==9
 	"ANALYTICS.Figures.en#calendar";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_dates =
@@ -3391,6 +3707,8 @@ const char *Hlp_ANALYTICS_Figures_dates =
 	"ANALYTICS.Figures.en#dates";
 #elif L==9
 	"ANALYTICS.Figures.en#dates";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_icons =
@@ -3412,6 +3730,8 @@ const char *Hlp_ANALYTICS_Figures_icons =
 	"ANALYTICS.Figures.en#icons";
 #elif L==9
 	"ANALYTICS.Figures.en#icons";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_menu =
@@ -3433,6 +3753,8 @@ const char *Hlp_ANALYTICS_Figures_menu =
 	"ANALYTICS.Figures.en#menu";
 #elif L==9
 	"ANALYTICS.Figures.en#menu";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_theme =
@@ -3454,6 +3776,8 @@ const char *Hlp_ANALYTICS_Figures_theme =
 	"ANALYTICS.Figures.en#theme";
 #elif L==9
 	"ANALYTICS.Figures.en#theme";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_columns =
@@ -3475,6 +3799,8 @@ const char *Hlp_ANALYTICS_Figures_columns =
 	"ANALYTICS.Figures.en#columns";
 #elif L==9
 	"ANALYTICS.Figures.en#columns";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_user_photos =
@@ -3496,6 +3822,8 @@ const char *Hlp_ANALYTICS_Figures_user_photos =
 	"ANALYTICS.Figures.en#user-photos";
 #elif L==9
 	"ANALYTICS.Figures.en#user-photos";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_privacy =
@@ -3517,6 +3845,8 @@ const char *Hlp_ANALYTICS_Figures_privacy =
 	"ANALYTICS.Figures.en#privacy";
 #elif L==9
 	"ANALYTICS.Figures.en#privacy";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Figures_cookies =
@@ -3538,6 +3868,8 @@ const char *Hlp_ANALYTICS_Figures_cookies =
 	"ANALYTICS.Figures.en#cookies";
 #elif L==9
 	"ANALYTICS.Figures.en#cookies";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Degrees =
@@ -3559,6 +3891,8 @@ const char *Hlp_ANALYTICS_Degrees =
 	"ANALYTICS.Degrees.en";
 #elif L==9
 	"ANALYTICS.Degrees.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Indicators =
@@ -3580,6 +3914,8 @@ const char *Hlp_ANALYTICS_Indicators =
 	"ANALYTICS.Indicators.en";
 #elif L==9
 	"ANALYTICS.Indicators.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Visits_global_visits =
@@ -3601,6 +3937,8 @@ const char *Hlp_ANALYTICS_Visits_global_visits =
 	"ANALYTICS.Visits.en#global-visits";
 #elif L==9
 	"ANALYTICS.Visits.en#global-visits";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Visits_visits_to_course =
@@ -3622,6 +3960,8 @@ const char *Hlp_ANALYTICS_Visits_visits_to_course =
 	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==9
 	"ANALYTICS.Visits.en#visits-to-course";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Report =
@@ -3643,6 +3983,8 @@ const char *Hlp_ANALYTICS_Report =
 	"ANALYTICS.Report.en";
 #elif L==9
 	"ANALYTICS.Report.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_ANALYTICS_Frequent =
@@ -3664,6 +4006,8 @@ const char *Hlp_ANALYTICS_Frequent =
 	"ANALYTICS.Frequent.en";
 #elif L==9
 	"ANALYTICS.Frequent.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 /***** PROFILE tab *****/
@@ -3687,6 +4031,8 @@ const char *Hlp_PROFILE_LogIn =
 	"PROFILE.LogIn.en";
 #elif L==9
 	"PROFILE.LogIn.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_SignUp =
@@ -3708,6 +4054,8 @@ const char *Hlp_PROFILE_SignUp =
 	"PROFILE.SignUp.en";
 #elif L==9
 	"PROFILE.SignUp.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Account =
@@ -3729,6 +4077,8 @@ const char *Hlp_PROFILE_Account =
 	"PROFILE.Account.en";
 #elif L==9
 	"PROFILE.Account.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 /*
 const char *Hlp_PROFILE_Account_email =
@@ -3750,6 +4100,8 @@ const char *Hlp_PROFILE_Account_email =
 	"PROFILE.Account.en#email";
 #elif L==9
 	"PROFILE.Account.en#email";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 */
 const char *Hlp_PROFILE_Session_role =
@@ -3771,6 +4123,8 @@ const char *Hlp_PROFILE_Session_role =
 	"PROFILE.Session.en#role";
 #elif L==9
 	"PROFILE.Session.en#role";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Password =
@@ -3792,6 +4146,8 @@ const char *Hlp_PROFILE_Password =
 	"PROFILE.Password.en";
 #elif L==9
 	"PROFILE.Password.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Courses =
@@ -3813,6 +4169,8 @@ const char *Hlp_PROFILE_Courses =
 	"PROFILE.Courses.en";
 #elif L==9
 	"PROFILE.Courses.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Timetable =
@@ -3834,6 +4192,8 @@ const char *Hlp_PROFILE_Timetable =
 	"PROFILE.Timetable.en";
 #elif L==9
 	"PROFILE.Timetable.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Agenda =
@@ -3855,6 +4215,8 @@ const char *Hlp_PROFILE_Agenda =
 	"PROFILE.Agenda.en";
 #elif L==9
 	"PROFILE.Agenda.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Agenda_new_event =
@@ -3876,6 +4238,8 @@ const char *Hlp_PROFILE_Agenda_new_event =
 	"PROFILE.Agenda.en#new-event";
 #elif L==9
 	"PROFILE.Agenda.en#new-event";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Agenda_edit_event =
@@ -3897,6 +4261,8 @@ const char *Hlp_PROFILE_Agenda_edit_event =
 	"PROFILE.Agenda.en#edit-event";
 #elif L==9
 	"PROFILE.Agenda.en#edit-event";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Agenda_public_agenda =
@@ -3918,6 +4284,8 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 	"PROFILE.Agenda.en#public-agenda";
 #elif L==9
 	"PROFILE.Agenda.en#public-agenda";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Record =
@@ -3939,6 +4307,8 @@ const char *Hlp_PROFILE_Record =
 	"PROFILE.Record.en";
 #elif L==9
 	"PROFILE.Record.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Institution =
@@ -3960,6 +4330,8 @@ const char *Hlp_PROFILE_Institution =
 	"PROFILE.Institution.en";
 #elif L==9
 	"PROFILE.Institution.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Webs =
@@ -3981,6 +4353,8 @@ const char *Hlp_PROFILE_Webs =
 	"PROFILE.Webs.en";
 #elif L==9
 	"PROFILE.Webs.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Photo =
@@ -4002,6 +4376,8 @@ const char *Hlp_PROFILE_Photo =
 	"PROFILE.Photo.en";
 #elif L==9
 	"PROFILE.Photo.en";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_internationalization =
@@ -4023,6 +4399,8 @@ const char *Hlp_PROFILE_Settings_internationalization =
 	"PROFILE.Settings.en#internationalization";
 #elif L==9
 	"PROFILE.Settings.en#internationalization";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_language =
@@ -4044,6 +4422,8 @@ const char *Hlp_PROFILE_Settings_language =
 	"PROFILE.Settings.en#language";
 #elif L==9
 	"PROFILE.Settings.en#language";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_calendar =
@@ -4065,6 +4445,8 @@ const char *Hlp_PROFILE_Settings_calendar =
 	"PROFILE.Settings.en#calendar";
 #elif L==9
 	"PROFILE.Settings.en#calendar";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_dates =
@@ -4086,6 +4468,8 @@ const char *Hlp_PROFILE_Settings_dates =
 	"PROFILE.Settings.en#dates";
 #elif L==9
 	"PROFILE.Settings.en#dates";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_design =
@@ -4107,6 +4491,8 @@ const char *Hlp_PROFILE_Settings_design =
 	"PROFILE.Settings.en#design";
 #elif L==9
 	"PROFILE.Settings.en#design";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_icons =
@@ -4128,6 +4514,8 @@ const char *Hlp_PROFILE_Settings_icons =
 	"PROFILE.Settings.en#icons";
 #elif L==9
 	"PROFILE.Settings.en#icons";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_theme =
@@ -4149,6 +4537,8 @@ const char *Hlp_PROFILE_Settings_theme =
 	"PROFILE.Settings.en#theme";
 #elif L==9
 	"PROFILE.Settings.en#theme";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_menu =
@@ -4170,6 +4560,8 @@ const char *Hlp_PROFILE_Settings_menu =
 	"PROFILE.Settings.en#menu";
 #elif L==9
 	"PROFILE.Settings.en#menu";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_columns =
@@ -4191,6 +4583,8 @@ const char *Hlp_PROFILE_Settings_columns =
 	"PROFILE.Settings.en#columns";
 #elif L==9
 	"PROFILE.Settings.en#columns";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_user_photos =
@@ -4212,6 +4606,8 @@ const char *Hlp_PROFILE_Settings_user_photos =
 	"PROFILE.Settings.en#user-photos";
 #elif L==9
 	"PROFILE.Settings.en#user-photos";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_privacy =
@@ -4233,6 +4629,8 @@ const char *Hlp_PROFILE_Settings_privacy =
 	"PROFILE.Settings.en#privacy";
 #elif L==9
 	"PROFILE.Settings.en#privacy";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_cookies =
@@ -4254,6 +4652,8 @@ const char *Hlp_PROFILE_Settings_cookies =
 	"PROFILE.Settings.en#cookies";
 #elif L==9
 	"PROFILE.Settings.en#cookies";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Hlp_PROFILE_Settings_notifications =
@@ -4275,4 +4675,6 @@ const char *Hlp_PROFILE_Settings_notifications =
 	"PROFILE.Settings.en#notifications";
 #elif L==9
 	"PROFILE.Settings.en#notifications";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif

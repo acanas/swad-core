@@ -64,6 +64,7 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
    [Lan_LANGUAGE_IT     ] = "it",
    [Lan_LANGUAGE_PL     ] = "pl",
    [Lan_LANGUAGE_PT     ] = "pt",
+   [Lan_LANGUAGE_TR     ] = "tr",
   };
 
 /*****************************************************************************/

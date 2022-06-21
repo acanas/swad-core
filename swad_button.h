@@ -48,6 +48,5 @@ void Btn_PutConfirmButton (const char *TxtButton);
 void Btn_PutConfirmButtonInline (const char *TxtButton);
 void Btn_PutRemoveButton (const char *TxtButton);
 void Btn_PutRemoveButtonInline (const char *TxtButton);
-// void Btn_PutCloseTabButton (const char *TxtButton);
 
 #endif

@@ -108,7 +108,7 @@ LIBS = -lssl -lcrypto -lpthread -lrt -lmysqlclient -lz -L/usr/lib64/mysql -lm -l
 # CFLAGS = -Wall -Wextra -mtune=native -O2 -s
 CFLAGS = -Wall -Wextra -mtune=native -O2
 
-all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt
+all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_tr
 
 swad_ca: $(OBJS) $(SOAPOBJS) $(SHAOBJS)
 	$(CC) $(CFLAGS) -c -D L=1 swad_help_URL.c swad_text.c swad_text_action.c swad_text_no_html.c
@@ -155,7 +155,12 @@ swad_pt: $(OBJS) $(SOAPOBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o swad_text_action.o swad_text_no_html.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
+swad_tr: $(OBJS) $(SOAPOBJS)
+	$(CC) $(CFLAGS) -c -D L=10 swad_help_URL.c swad_text.c swad_text_action.c swad_text_no_html.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o swad_text_action.o swad_text_no_html.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	chmod a+x $@
+
 .PHONY: clean
 
 clean:
-	rm -f swad swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_help_URL.o swad_text.o swad_text_no_html.o swad_text_action.o $(OBJS) 
+	rm -f swad swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_tr swad_help_URL.o swad_text.o swad_text_no_html.o swad_text_action.o $(OBJS) 

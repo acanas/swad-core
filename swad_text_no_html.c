@@ -95,6 +95,8 @@ const char *Txt_Country_NO_HTML =
 	"Kraj";
 #elif L==9
 	"País";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities like &egrave; here
@@ -116,6 +118,8 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 	"Potwierdzenie Twojego adresu e-mail";
 #elif L==9
 	"Confirmação do seu email";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 // The following variables are compilated together in all languages because they are used in emails...
@@ -314,6 +318,8 @@ const char *Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO
 	"Se não foi você, não clique no link acima!"
 	" Nesse caso, recomendamos que você verifique em %s"
 	" se você confirmou seu endereço de e-mail.\n\n";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -358,6 +364,8 @@ const char *Txt_Institutions_NO_HTML =
 	"Instytucje";
 #elif L==9
 	"Instituções";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_From_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -861,6 +869,8 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" alguém que conhece seu ID, alcunha ou e-mail solicitou uma nova senha enviada para você.\n"
 	"Esta nova senha foi enviada apenas para o endereço de e-mail %s,"
 	" que está no seu cartão de registro.\n\n";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -882,6 +892,8 @@ const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is ve
 	"%s: nie mozna utworzyc plik.";
 #elif L==9
 	"%s: não foi possível criar arquivo.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
@@ -903,6 +915,8 @@ const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 	"Nie mozesz tutaj tworzyc plików.";
 #elif L==9
 	"Você não pode criar arquivos aqui.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
@@ -924,6 +938,8 @@ const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
 	"Musisz okreslic plik.";
 #elif L==9
 	"Você deve especificar o arquivo.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -945,6 +961,8 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 	"%s: rozszerzenie pliku jest niedozwolone.";
 #elif L==9
 	"%s: extensão não permitida.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -966,6 +984,8 @@ const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is ve
 	"%s: plik juz istnieje.";
 #elif L==9
 	"%s: o arquivo já existe.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
@@ -996,6 +1016,8 @@ const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: i
 #elif L==9
 	"Arquivo muito grande (máximo %lu MiB) /"
 	" outro problema de upload.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1017,6 +1039,8 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 	"Bledna nazwa.";
 #elif L==9
 	"Nome inválido.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1038,6 +1062,8 @@ const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very impo
 	"%s: bledna nazwa.";
 #elif L==9
 	"%s: nome inválido.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it is very important to include two %s in the following sentences
@@ -1059,6 +1085,8 @@ const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it i
 	"%s: Typ MIME %s jest niedozwolony.";
 #elif L==9
 	"%s: Tipo MIME %s não permitido.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1080,6 +1108,8 @@ const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very importan
 	"%s: nie HTML.";
 #elif L==9
 	"%s: não HTML.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1101,6 +1131,8 @@ const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very im
 	"%s: przekroczono przydzial.";
 #elif L==9
 	"5s: quota excedida.";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
@@ -1122,6 +1154,8 @@ const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// 
 	"Upload time too long (maximum %lu minuty).";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Tempo de upload muito longo (máximo %lu minutos).";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif
 
 const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -1138,6 +1172,7 @@ const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use
 	[Lan_LANGUAGE_IT     ] = "utente",
 	[Lan_LANGUAGE_PL     ] = "uzytkownika",
 	[Lan_LANGUAGE_PT     ] = "utilizador/a",
+	[Lan_LANGUAGE_TR     ] = "",	// Çeviri lazim!
 	},
 [Usr_SEX_FEMALE] =
 	{
@@ -1151,6 +1186,7 @@ const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use
 	[Lan_LANGUAGE_IT     ] = "utente",
 	[Lan_LANGUAGE_PL     ] = "uzytkownika",
 	[Lan_LANGUAGE_PT     ] = "utilizadora",
+	[Lan_LANGUAGE_TR     ] = "",	// Çeviri lazim!
 	},
 [Usr_SEX_MALE] =
 	{
@@ -1164,6 +1200,7 @@ const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use
 	[Lan_LANGUAGE_IT     ] = "utente",
 	[Lan_LANGUAGE_PL     ] = "uzytkownika",
 	[Lan_LANGUAGE_PT     ] = "utilizador",
+	[Lan_LANGUAGE_TR     ] = "",	// Çeviri lazim!
 	},
 [Usr_SEX_ALL] =
 	{
@@ -1177,6 +1214,7 @@ const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use
 	[Lan_LANGUAGE_IT     ] = "utente",
 	[Lan_LANGUAGE_PL     ] = "uzytkownika",
 	[Lan_LANGUAGE_PT     ] = "utilizador/a",
+	[Lan_LANGUAGE_TR     ] = "",	// Çeviri lazim!
 	}
 };
 
@@ -1199,4 +1237,6 @@ const char *Txt_Users_NO_HTML =
 	"Uzytkowników";
 #elif L==9
 	"Utilizadores";
+#elif L==10	// tr
+	"";	// Çeviri lazim!
 #endif

@@ -606,10 +606,17 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.98.6 (2022-06-21)"
+#define Log_PLATFORM_VERSION	"SWAD 21.99 (2022-06-22)"
 #define CSS_FILE		"swad21.97.1.css"
 #define JS_FILE			"swad21.97.4.js"
 /*
+	Version 21.99:    Jun 22, 2022  New language: Turkish. (331259 lines)
+					2 changes necessary in database:
+ALTER TABLE cty_countrs ADD COLUMN Name_tr VARCHAR(767) NOT NULL AFTER Name_pt,ADD INDEX (Name_tr);
+ALTER TABLE cty_countrs ADD COLUMN WWW_tr VARCHAR(255) NOT NULL AFTER WWW_pt;
+				        Add Turkish language to Apache config files
+				        Add Turkish language to swad_copy.sh
+
 	Version 21.98.6:  Jun 21, 2022  Some messages translated. (322554 lines)
 	Version 21.98.5:  Jun 21, 2022  Some messages translated. (322554 lines)
 	Version 21.98.4:  Jun 21, 2022  Some messages translated. (322555 lines)

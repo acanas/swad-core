@@ -27,7 +27,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Lan_NUM_LANGUAGES 9	// From 1 to 9. 0 is reserved to unknown language
+#define Lan_NUM_LANGUAGES 10	// From 1 to 10. 0 is reserved to unknown language
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -35,16 +35,17 @@
 
 typedef enum
   {
-   Lan_LANGUAGE_UNKNOWN = 0,
-   Lan_LANGUAGE_CA = 1,
-   Lan_LANGUAGE_DE = 2,
-   Lan_LANGUAGE_EN = 3,
-   Lan_LANGUAGE_ES = 4,
-   Lan_LANGUAGE_FR = 5,
-   Lan_LANGUAGE_GN = 6,
-   Lan_LANGUAGE_IT = 7,
-   Lan_LANGUAGE_PL = 8,
-   Lan_LANGUAGE_PT = 9,
+   Lan_LANGUAGE_UNKNOWN =  0,
+   Lan_LANGUAGE_CA      =  1,
+   Lan_LANGUAGE_DE      =  2,
+   Lan_LANGUAGE_EN      =  3,
+   Lan_LANGUAGE_ES      =  4,
+   Lan_LANGUAGE_FR      =  5,
+   Lan_LANGUAGE_GN      =  6,
+   Lan_LANGUAGE_IT      =  7,
+   Lan_LANGUAGE_PL      =  8,
+   Lan_LANGUAGE_PT      =  9,
+   Lan_LANGUAGE_TR      = 10,
   } Lan_Language_t; // ISO 639-1 language codes
 
 /*****************************************************************************/
