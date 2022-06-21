@@ -753,7 +753,7 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 #if   L==1
 	"Se li ha assignat la següent contrasenya per entrar a %s: %s\n"
 	"Si desitja activar aquesta nova contrasenya,"
-	" ha de entrar a %s amb el seu ID (DNI/cédula), sobrenom o email"
+	" ha de entrar a %s amb el seu ID (DNI/cèdula), sobrenom o email"
 	" i aquesta nova contrasenya abans de %u dies."
 	" Un cop hagi entrat, pot canviar la contrasenya per una altra.\n"
 	"Si no accedeix amb aquesta nova contrasenya,"
