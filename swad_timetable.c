@@ -1175,7 +1175,7 @@ static void Tmt_TimeTableDrawAdjustRow (void)
 
 static void Tmt_TimeTableDrawDaysCells (void)
   {
-   extern const char *Txt_DAYS_CAPS[7];
+   extern const char *Txt_DAYS[7];
    unsigned DayColumn;
    unsigned Weekday;
 
@@ -1190,7 +1190,7 @@ static void Tmt_TimeTableDrawDaysCells (void)
 				   "Tmt_DAY_",		// Monday to Saturday
 		    The_GetSuffix (),
 		    Tmt_PERCENT_WIDTH_OF_A_DAY);
-	 HTM_Txt (Txt_DAYS_CAPS[Weekday]);
+	 HTM_Txt (Txt_DAYS[Weekday]);
       HTM_TD_End ();
      }
   }

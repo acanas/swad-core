@@ -97,7 +97,7 @@ void Set_EditSettings (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Dat_PutBoxToSelectDateFormat ();		// 3. Date format
+	 Dat_PutBoxToSelectDateFormat ();	// 3. Date format
       HTM_DIV_End ();
 
    Box_BoxEnd ();

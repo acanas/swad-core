@@ -481,8 +481,8 @@ static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
 
 static void Lay_WriteScripts (void)
   {
-   extern const char *Txt_DAYS_CAPS[7];
-   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_DAYS[7];
+   extern const char *Txt_DAYS2[7];
    extern const char *Txt_Exam_of_X;
    struct Hld_Holidays Holidays;
    struct Cfe_CallsForExams ExamAnns;
@@ -505,14 +505,14 @@ static void Lay_WriteScripts (void)
 
    /***** Write script to initialize variables used to draw dates *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-      HTM_Txt ("\tvar DAYS = [");
+      HTM_Txt ("\tvar DAYS2 = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
 	   DayOfWeek++)
 	{
 	 if (DayOfWeek)
 	    HTM_Comma ();
-	 HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
+	 HTM_TxtF ("'%s'",Txt_DAYS2[DayOfWeek]);
 	}
       HTM_Txt ("];\n");
    HTM_SCRIPT_End ();
@@ -539,14 +539,14 @@ static void Lay_WriteScripts (void)
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
 
-	 HTM_Txt ("\tvar DAYS_CAPS = [");
+	 HTM_Txt ("\tvar DAYS = [");
 	 for (DayOfWeek = 0;
 	      DayOfWeek < 7;
 	      DayOfWeek++)
 	   {
 	    if (DayOfWeek)
 	       HTM_Comma ();
-	    HTM_TxtF ("'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+	    HTM_TxtF ("'%s'",Txt_DAYS[DayOfWeek]);
 	   }
 	 HTM_Txt ("];\n");
 

@@ -501,7 +501,7 @@ const char *Txt_About_X =	// Warning: it is very important to include %s in the 
 #elif L==9	// pt
 	"Sobre %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s hakk&inodot;nda";
 #endif
 
 const char *Txt_Absent =
@@ -1043,7 +1043,7 @@ const char *Txt_Action =
 #elif L==9	// pt
 	"A&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eylem";
 #endif
 
 const char *Txt_Add_questions =
@@ -1903,7 +1903,7 @@ const char *Txt_Announcements =
 #elif L==9	// pt
 	"An&uacute;ncios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Duyurular";
 #endif
 
 const char *Txt_Another_building =
@@ -2737,7 +2737,7 @@ const char *Txt_Attendance =	// Number of times a students has attended to face-
 #elif L==9	// pt
 	"Presen&ccedil;a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kat&inodot;l&inodot;m";
 #endif
 
 const char *Txt_Attendance_list =
@@ -3748,7 +3748,7 @@ const char *Txt_Calendar =
 #elif L==9	// pt
 	"Calend&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Takvim";
 #endif
 
 const char *Txt_CALL_FOR_EXAM =
@@ -4897,7 +4897,7 @@ const char *Txt_Change_password =
 #elif L==9	// pt
 	"Alterar senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Scedil;ifre de&gbreve;i&scedil;tir";
 #endif
 
 const char *Txt_Change_photo =
@@ -6538,7 +6538,7 @@ const char *Txt_Create_account =
 #elif L==9	// pt
 	"Criar conta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hesab&inodot; olu&scedil;tur";
 #endif
 
 const char *Txt_Create_announcement =
@@ -7182,7 +7182,7 @@ const char *Txt_Create_password =
 #elif L==9	// pt
 	"Criar senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Scedil;ifre olu&scedil;tur";
 #endif
 
 const char *Txt_Create_place =
@@ -8194,7 +8194,7 @@ const char *Txt_Current_password =
 #elif L==9	// pt
 	"Senha atual";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mevcut &scedil;ifre";
 #endif
 
 const char *Txt_Cut =	// First part of "Cut-Paste"
@@ -8450,164 +8450,7 @@ const char *Txt_days =
 	"";	// Çeviri lazim!
 #endif
 
-const char *Txt_DAYS_CAPS[7] =
-	{
-#if   L==1	// ca
-	"DILLUNS"
-#elif L==2	// de
-	"MONTAG"
-#elif L==3	// en
-	"MONDAY"
-#elif L==4	// es
-	"LUNES"
-#elif L==5	// fr
-	"LUNDI"
-#elif L==6	// gn
-	"ARAKOI"
-#elif L==7	// it
-	"LUNED&Igrave;"
-#elif L==8	// pl
-	"Poniedzialek"
-#elif L==9	// pt
-	"SEGUNDA-FEIRA"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DIMARTS"
-#elif L==2	// de
-	"DIENSTAG"
-#elif L==3	// en
-	"TUESDAY"
-#elif L==4	// es
-	"MARTES"
-#elif L==5	// fr
-	"MARDI"
-#elif L==6	// gn
-	"ARAAPY"
-#elif L==7	// it
-	"MARTED&Igrave;"
-#elif L==8	// pl
-	"Wtorek"
-#elif L==9	// pt
-	"TER&Ccedil;A-FEIRA"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DIMECRES"
-#elif L==2	// de
-	"MITTWOCH"
-#elif L==3	// en
-	"WEDNESDAY"
-#elif L==4	// es
-	"MI&Eacute;RCOLES"
-#elif L==5	// fr
-	"MERCREDI"
-#elif L==6	// gn
-	"ARARUNDY"
-#elif L==7	// it
-	"MERCOLED&Igrave;"
-#elif L==8	// pl
-	"Sroda"
-#elif L==9	// pt
-	"QUARTA-FEIRA"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DIJOUS"
-#elif L==2	// de
-	"DONNERSTAG"
-#elif L==3	// en
-	"THURSDAY"
-#elif L==4	// es
-	"JUEVES"
-#elif L==5	// fr
-	"JEUDI"
-#elif L==6	// gn
-	"ARAPO"
-#elif L==7	// it
-	"GIOVED&Igrave;"
-#elif L==8	// pl
-	"Czwartek"
-#elif L==9	// pt
-	"QUINTA-FEIRA"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DIVENDRES"
-#elif L==2	// de
-	"FREITAG"
-#elif L==3	// en
-	"FRIDAY"
-#elif L==4	// es
-	"VIERNES"
-#elif L==5	// fr
-	"VENDREDI"
-#elif L==6	// gn
-	"ARAPOTE&#296;"
-#elif L==7	// it
-	"VENERD&Igrave;"
-#elif L==8	// pl
-	"Piatek"
-#elif L==9	// pt
-	"SEXTA-FEIRA"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DISSABTE"
-#elif L==2	// de
-	"SAMSTAG"
-#elif L==3	// en
-	"SATURDAY"
-#elif L==4	// es
-	"S&Aacute;BADO"
-#elif L==5	// fr
-	"SAMEDI"
-#elif L==6	// gn
-	"ARAPOK&Otilde;I"
-#elif L==7	// it
-	"SABATO"
-#elif L==8	// pl
-	"Sobota"
-#elif L==9	// pt
-	"SABADO"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	,
-#if   L==1	// ca
-	"DIUMENGE"
-#elif L==2	// de
-	"SONNTAG"
-#elif L==3	// en
-	"SUNDAY"
-#elif L==4	// es
-	"DOMINGO"
-#elif L==5	// fr
-	"DIMANCHE"
-#elif L==6	// gn
-	"ARATE&#296;"
-#elif L==7	// it
-	"DOMENICA"
-#elif L==8	// pl
-	"Niedziela"
-#elif L==9	// pt
-	"DOMINGO"
-#elif L==10	// tr
-	""	// Çeviri lazim!
-#endif
-	};
-
-const char *Txt_DAYS_SMALL[7] =
+const char *Txt_DAYS[7] =
 	{
 #if   L==1	// ca
 	"dilluns"
@@ -8628,7 +8471,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Segunda-feira"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Pazartesi"
 #endif
 	,
 #if   L==1	// ca
@@ -8650,7 +8493,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Ter&ccedil;a-feira"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sal&inodot;"
 #endif
 	,
 #if   L==1	// ca
@@ -8672,7 +8515,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Quarta-feira"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ccedil;ar&scedil;amba"
 #endif
 	,
 #if   L==1	// ca
@@ -8694,7 +8537,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Quinta-feira"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Per&scedil;embe"
 #endif
 	,
 #if   L==1	// ca
@@ -8716,7 +8559,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Sexta-feira"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Cuma"
 #endif
 	,
 #if   L==1	// ca
@@ -8738,7 +8581,7 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Sabado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Cumartesi"
 #endif
 	,
 #if   L==1	// ca
@@ -8760,7 +8603,164 @@ const char *Txt_DAYS_SMALL[7] =
 #elif L==9	// pt
 	"Domingo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Pazar"
+#endif
+	};
+
+const char *Txt_DAYS2[7] =
+	{
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Mo"
+#elif L==3	// en
+	"Mo"
+#elif L==4	// es
+	"lu"
+#elif L==5	// fr
+	"Lu"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Lu"
+#elif L==8	// pl
+	"Po"
+#elif L==9	// pt
+	"Se"
+#elif L==10	// tr
+	"Pa"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Di"
+#elif L==3	// en
+	"Tu"
+#elif L==4	// es
+	"ma"
+#elif L==5	// fr
+	"Ma"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Ma"
+#elif L==8	// pl
+	"Wt"
+#elif L==9	// pt
+	"Te"
+#elif L==10	// tr
+	"Sa"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Mi"
+#elif L==3	// en
+	"We"
+#elif L==4	// es
+	"mi"
+#elif L==5	// fr
+	"Me"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Me"
+#elif L==8	// pl
+	"Sr"
+#elif L==9	// pt
+	"Qu"
+#elif L==10	// tr
+	"&Ccedil;a"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Do"
+#elif L==3	// en
+	"Th"
+#elif L==4	// es
+	"ju"
+#elif L==5	// fr
+	"Je"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Gi"
+#elif L==8	// pl
+	"Cz"
+#elif L==9	// pt
+	"Qu"
+#elif L==10	// tr
+	"Pe"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Fr"
+#elif L==3	// en
+	"Fr"
+#elif L==4	// es
+	"vi"
+#elif L==5	// fr
+	"Ve"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Ve"
+#elif L==8	// pl
+	"Pi"
+#elif L==9	// pt
+	"Se"
+#elif L==10	// tr
+	"Cu"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"Sa"
+#elif L==3	// en
+	"Sa"
+#elif L==4	// es
+	"s&aacute;"
+#elif L==5	// fr
+	"Sa"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Sa"
+#elif L==8	// pl
+	"So"
+#elif L==9	// pt
+	"Sa"
+#elif L==10	// tr
+	"Cu"
+#endif
+	,
+#if   L==1	// ca
+	"di"
+#elif L==2	// de
+	"So"
+#elif L==3	// en
+	"Su"
+#elif L==4	// es
+	"do"
+#elif L==5	// fr
+	"Di"
+#elif L==6	// gn
+	"ar"
+#elif L==7	// it
+	"Do"
+#elif L==8	// pl
+	"Ni"
+#elif L==9	// pt
+	"Do"
+#elif L==10	// tr
+	"Pa"
 #endif
 	};
 
@@ -9534,7 +9534,7 @@ const char *Txt_DEPARTMENTS_ORDER[Dpt_NUM_ORDERS] =
 #elif L==9	// pt
 	"Professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	};
 
@@ -12356,7 +12356,7 @@ const char *Txt_Email =
 #elif L==9	// pt
 	"Email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"E-posta";
 #endif
 
 const char *Txt_Email_addresses =
@@ -13850,7 +13850,7 @@ const char *Txt_Figures =
 #elif L==9	// pt
 	"N&uacute;meros";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Rakamlar";
 #endif
 
 const char *Txt_File =
@@ -14562,7 +14562,7 @@ const char *Txt_First_day_of_the_week_X =	// Warning: it is very important to in
 #elif L==9	// pt
 	"Primeiro dia da semana: %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Haftan&inodot;n ilk g&uuml;n&uuml;: %s";
 #endif
 
 const char *Txt_First_name =
@@ -15092,7 +15092,7 @@ const char *Txt_Forgotten_password =
 #elif L==9	// pt
 	"Senha esquecida?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unutulan &scedil;ifre?";
 #endif
 
 const char *Txt_Format =
@@ -15607,7 +15607,7 @@ const char *Txt_Forums =
 #elif L==9	// pt
 	"F&oacute;runs";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Forumlar";
 #endif
 
 const char *Txt_Found_an_index_html_file =
@@ -15653,7 +15653,7 @@ const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the a
 #elif L==9	// pt
 	"Freq&uuml;entes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"S&inodot;k";
 #endif
 
 const char *Txt_from =
@@ -16252,7 +16252,7 @@ const char *Txt_Get_a_new_password =
 #elif L==9	// pt
 	"Obter uma nova senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yeni bir &scedil;ifre al&inodot;n";
 #endif
 
 const char *Txt_Global_visits =
@@ -16713,7 +16713,7 @@ const char *Txt_Groups =
 #elif L==9	// pt
 	"Grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Gruplar";
 #endif
 
 const char *Txt_Groups_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
@@ -18221,9 +18221,9 @@ const char *Txt_Indicators =
 #elif L==8	// pl
 	"Wska&zacute;niki";
 #elif L==9	// pt
-	"Indocadores";
+	"Indicadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"G&ouml;stergeler";
 #endif
 
 const char *Txt_Indicators_of_courses =
@@ -19535,7 +19535,7 @@ const char *Txt_Internationalization =
 #elif L==9	// pt
 	"Internacionaliza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Uluslararas&inodot;la&scedil;ma";
 #endif
 
 const char *Txt_Invalid_question =
@@ -19719,7 +19719,7 @@ const char *Txt_Language =
 #elif L==9	// pt
 	"Lingua";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Dil";
 #endif
 
 const char *Txt_Last_clicks =
@@ -20529,7 +20529,7 @@ const char *Txt_Log_in =
 #elif L==9	// pt
 	"Entrar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Giri&scedil; yapmak";
 #endif
 
 const char *Txt_Log_out =
@@ -22412,7 +22412,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Compartilhados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Payla&scedil;&inodot;lan"
 #endif
 	,
 	//  2: ActSeeAdmDocCtr
@@ -22458,7 +22458,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Compartilhados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Payla&scedil;&inodot;lan"
 #endif
 	,
 	//  4: ActSeeAdmDocDeg
@@ -22504,7 +22504,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Compartilhados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Payla&scedil;&inodot;lan"
 #endif
 	,
 	//  6: ActSeeAdmDocCrsGrp
@@ -22550,7 +22550,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Privados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;zel"
 #endif
 	,
 	//  8: ActAdmShaCrsGrp
@@ -22573,7 +22573,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Compartilhados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Payla&scedil;&inodot;lan"
 #endif
 	,
 	//  9: ActAdmAsgWrkUsr
@@ -22596,7 +22596,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Trabalhos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ev &ouml;devi"
 #endif
 	,
 	// 10: ActReqAsgWrkCrs
@@ -22619,7 +22619,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Trabalhos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ev &ouml;devi"
 #endif
 	,
 	// 11: ActSeeMrk
@@ -22642,7 +22642,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"I&scedil;aretler"
 #endif
 	,
 	// 12: ActAdmBrf
@@ -22665,7 +22665,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Pasta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"I&scedil; &ccedil;antas&inodot;"
 #endif
 	},
 [TabUsr] =
@@ -22690,7 +22690,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Grupos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Gruplar"
 #endif
 	,
 	//  1: ActLstStd
@@ -22713,7 +22713,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	//  2: ActLstTch
@@ -22736,7 +22736,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	//  3: ActLstOth
@@ -22759,7 +22759,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Outros"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Di&gbreve;erleri"
 #endif
 	,
 	//  4: ActSeeAtt
@@ -22782,7 +22782,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Presen&ccedil;a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kat&inodot;l&inodot;m"
 #endif
 	,
 	//  5: ActReqSignUp
@@ -22805,7 +22805,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Inscrever"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Uuml;ye olmak"
 #endif
 	,
 	//  6: ActSeeSignUpReq
@@ -22828,7 +22828,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Solicita&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Talepleri"
 #endif
 	,
 	//  7: ActLstCon
@@ -22851,7 +22851,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Conectados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ba&gbreve;l&inodot;"
 #endif
 	,
 	NULL,	//  8
@@ -22882,7 +22882,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"An&uacute;ncios"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Duyurular"
 #endif
 	,
 	//  1: ActSeeAllNot
@@ -22905,7 +22905,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Avisos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Bildirimler"
 #endif
 	,
 	//  2: ActSeeFor
@@ -22928,7 +22928,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"F&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Forumlar"
 #endif
 	,
 	//  3: ActSeeChtRms
@@ -22951,7 +22951,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Chat"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sohbet"
 #endif
 	,
 	//  4: ActMsgUsr
@@ -22974,7 +22974,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Mensagens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mesajlar"
 #endif
 	,
 	//  5: ActReqMaiUsr
@@ -22997,7 +22997,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Email"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"E-posta"
 #endif
 	,
 	NULL,	//  6
@@ -23030,7 +23030,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"N&uacute;meros"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Rakamlar"
 #endif
 	,
 	//  1: ActSeePhoDeg
@@ -23076,7 +23076,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Indicadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"G&ouml;stergeler"
 #endif
 	,
 	//  3: ActReqAccGbl
@@ -23099,7 +23099,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Visitas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ziyaretler"
 #endif
 	,
 	//  4: ActReqMyUsgRep
@@ -23122,7 +23122,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Relat&oacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Bildiri"
 #endif
 	,
 	//  5: ActMFUAct
@@ -23145,7 +23145,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Freq&uuml;entes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"S&inodot;k"
 #endif
 	,
 	NULL,	//  6
@@ -23178,7 +23178,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Sess&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Oturum"
 #endif
 	,
 	//  1: ActMyCrs
@@ -23247,7 +23247,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Agenda"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"G&uuml;nl&uuml;k"
 #endif
 	,
 	//  4: ActFrmMyAcc
@@ -23270,7 +23270,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Conta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hesab&inodot;"
 #endif
 	,
 	//  5: ActReqEdiRecSha
@@ -23293,7 +23293,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Cart&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kart&inodot;"
 #endif
 	,
 	//  6: ActReqEdiSet
@@ -23316,7 +23316,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Configura&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ayarlar"
 #endif
 	,
 	NULL,	//  7
@@ -24758,7 +24758,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Grupos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Gruplar"
 #endif
 	,
 	//  1: ActLstStd
@@ -24923,7 +24923,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Conectados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ba&gbreve;l&inodot;"
 #endif
 	,
 	NULL,	//  8
@@ -24980,7 +24980,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Avisos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Bildirimler"
 #endif
 	,
 	//  2: ActSeeFor
@@ -25006,7 +25006,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"F&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Forumlar"
 #endif
 	,
 	//  3: ActSeeChtRms
@@ -25029,7 +25029,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Chat"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Di&gbreve;er kullan&inodot;c&inodot;larla ger&ccedil;ek zamanl&inodot; sohbet edin"
 #endif
 	,
 	//  4: ActMsgUsr
@@ -25052,7 +25052,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Mensagens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mesajlar"
 #endif
 	,
 	//  5: ActReqMaiUsr
@@ -25081,7 +25081,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Email"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"E-posta"
 #endif
 	,
 	NULL,	//  6
@@ -25338,7 +25338,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Agenda"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"G&uuml;nl&uuml;k"
 #endif
 	,
 	//  4: ActFrmMyAcc
@@ -25361,7 +25361,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Criar ou editar minha conta de usu&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kullan&inodot;c&inodot; hesab&inodot;m&inodot; olu&scedil;tur veya d&uuml;zenle"
 #endif
 	,
 	//  5: ActReqEdiRecSha
@@ -25554,7 +25554,7 @@ const char *Txt_Messages =
 #elif L==9	// pt
 	"Mensagens";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mesajlar";
 #endif
 
 const char *Txt_messages =
@@ -27928,7 +27928,7 @@ const char *Txt_New_on_PLATFORM_Sign_up =	// Warning: it is very important to in
 #elif L==9	// pt
 	"Novo no %s? Inscreva-se";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s'da yeni misiniz? &Uuml;ye olmak";
 #endif
 
 const char *Txt_New_password =
@@ -27951,7 +27951,7 @@ const char *Txt_New_password =
 #elif L==9	// pt
 	"Nova senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yeni &scedil;ifre";
 #endif
 
 const char *Txt_New_place =
@@ -28365,7 +28365,7 @@ const char *Txt_nick_email_or_ID =
 #elif L==9	// pt
 	"@alcunha, email ou n&ordm; identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"@nick, e-posta veya kimlik";	// Çeviri lazim!
 #endif
 
 const char *Txt_nicks_emails_or_IDs_separated_by_commas =
@@ -29977,7 +29977,7 @@ const char *Txt_Notices =
 #elif L==9	// pt
 	"Avisos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bildirimler";
 #endif
 
 const char *Txt_NOTIF_new_SINGULAR =
@@ -33058,7 +33058,7 @@ const char *Txt_Password =
 #elif L==9	// pt
 	"Senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Scedil;ifre";
 #endif
 
 const char *Txt_password =
@@ -33081,7 +33081,7 @@ const char *Txt_password =
 #elif L==9	// pt
 	"senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&scedil;ifre";
 #endif
 
 const char *Txt_Paste =
@@ -33799,7 +33799,7 @@ const char *Txt_Please_check_your_email_address =
 #elif L==9	// pt
 	"Por favor, verifique seu endere&ccedil;o de email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"L&uuml;tfen e-posta adresinizi kontrol edin.";
 #endif
 
 const char *Txt_Please_confirm_your_email_address =
@@ -35396,7 +35396,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	[Prj_ROLE_TUT] =
@@ -38255,7 +38255,7 @@ const char *Txt_Report =
 #elif L==9	// pt
 	"Relat&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bildiri";
 #endif
 
 const char *Txt_Report_of_use_of_PLATFORM =	// Warning: it is very important to include %s in the following sentences
@@ -38669,7 +38669,7 @@ const char *Txt_Retype_new_password =
 #elif L==9	// pt
 	"Redigite a nova senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yeni &scedil;ifrenizi tekrar yaz&inodot;n&inodot;z";
 #endif
 
 const char *Txt_Role =
@@ -41118,7 +41118,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	[Rol_STD][Usr_SEX_FEMALE] =
@@ -41141,7 +41141,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	[Rol_STD][Usr_SEX_MALE] =
@@ -41164,7 +41164,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	[Rol_STD][Usr_SEX_ALL] =
@@ -41187,7 +41187,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;renciler"
 #endif
 	,
 	[Rol_NET][Usr_SEX_UNKNOWN] =
@@ -41302,7 +41302,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -41325,7 +41325,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -41348,7 +41348,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -41371,7 +41371,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
@@ -45433,7 +45433,7 @@ const char *Txt_Session =
 #elif L==9	// pt
 	"Sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Oturum";
 #endif
 
 const char *Txt_session =
@@ -45594,7 +45594,7 @@ const char *Txt_Set_password =
 #elif L==9	// pt
 	"Definir senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Scedil;ifreyi belirle";
 #endif
 
 const char *Txt_Set_up =
@@ -45663,7 +45663,7 @@ const char *Txt_Settings =
 #elif L==9	// pt
 	"Configura&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Ayarlar";
 #endif
 
 const char *Txt_Sex =
@@ -47612,7 +47612,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Trabalhos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ev &ouml;devi"
 #endif
 	,
 	[10] =
@@ -47852,7 +47852,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #endif
 	};
 
-const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES] =
+const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 	{
 	[Sta_TOTAL_CLICKS] =
 #if   L==1	// ca
@@ -48474,11 +48474,11 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==7	// it
 	"Forum"
 #elif L==8	// pl
-	"Forums"	// Potrzebujesz tlumaczenie
+	"Forum"
 #elif L==9	// pt
 	"F&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Forumlar"
 #endif
 	,
 	[Fig_NOTIFY_EVENTS] =
@@ -48524,7 +48524,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Avisos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Bildirimler"
 #endif
 	,
 	[Fig_MESSAGES] =
@@ -48547,7 +48547,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Mensagens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mesajlar"
 #endif
 	,
 	[Fig_AGENDAS] =
@@ -48616,7 +48616,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Lingua"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Dil"
 #endif
 	,
 	[Fig_FIRST_DAY_OF_WEEK] =
@@ -48639,7 +48639,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Calend&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Takvim"
 #endif
 	,
 	[Fig_DATE_FORMAT] =
@@ -50318,7 +50318,7 @@ const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #elif L==9	// pt
 	"prof.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&ouml;&gbreve;re.";
 #endif
 
 const char *Txt_Teachers_comment =

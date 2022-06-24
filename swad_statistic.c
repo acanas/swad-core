@@ -756,7 +756,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
    extern const char *Txt_There_are_no_accesses_with_the_selected_search_criteria;
    extern const char *Txt_List_of_detailed_clicks;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
    struct Sta_Stats Stats;
    MYSQL_RES *mysql_res;
@@ -937,7 +937,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
       else
-	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Stats.CountType],
+	 Box_BoxBegin (NULL,Txt_STAT_COUNT_TYPE[Stats.CountType],
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
@@ -1323,7 +1323,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    extern const char *Txt_ID;
    extern const char *Txt_Name;
    extern const char *Txt_Role;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1343,12 +1343,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH      (Txt_No_INDEX                       ,HTM_HEAD_RIGHT );
-      HTM_TH      (Txt_Photo                          ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_ID                             ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Name                           ,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Role                           ,HTM_HEAD_CENTER);
-      HTM_TH_Span (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  ,1,2,NULL);
+      HTM_TH      (Txt_No_INDEX                  ,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Photo                     ,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_ID                        ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Name                      ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Role                      ,HTM_HEAD_CENTER);
+      HTM_TH_Span (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  ,1,2,NULL);
    HTM_TR_End ();
 
    /***** Write rows *****/
@@ -1443,8 +1443,8 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
   {
    extern const char *Txt_Date;
    extern const char *Txt_Day;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
-   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_DAYS[7];
    unsigned NumHit;
    struct Dat_Date ReadDate;
    struct Dat_Date LastDate;
@@ -1461,9 +1461,9 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Date                           ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Day                            ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Date                      ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Day                       ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -1511,7 +1511,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	                  NumDayWeek == 6 ? "LOG_R" :
 					    "LOG",
 			  The_GetSuffix ());
-	       HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	       HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
 	    HTM_TD_End ();
 
 	    /* Draw bar proportional to number of hits */
@@ -1555,7 +1555,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 	               NumDayWeek == 6 ? "LOG_R" :
 				         "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
 	 HTM_TD_End ();
 
 	 /* Draw bar proportional to number of hits */
@@ -1585,8 +1585,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
    extern const char *Txt_Day;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
-   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_DAYS[7];
    Sta_ColorType_t ColorType;
    unsigned ColorTypeUnsigned;
    Sta_ColorType_t SelectedColorType;
@@ -1660,9 +1660,9 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_Date                                  ,HTM_HEAD_CENTER,3, 1,NULL);
-      HTM_TH_Span (Txt_Day                                   ,HTM_HEAD_LEFT  ,3, 1,NULL);
-      HTM_TH_Span (Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType],HTM_HEAD_LEFT  ,1,24,NULL);
+      HTM_TH_Span (Txt_Date                             ,HTM_HEAD_CENTER,3, 1,NULL);
+      HTM_TH_Span (Txt_Day                              ,HTM_HEAD_LEFT  ,3, 1,NULL);
+      HTM_TH_Span (Txt_STAT_COUNT_TYPE[Stats->CountType],HTM_HEAD_LEFT  ,1,24,NULL);
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
@@ -1740,7 +1740,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	                     NumDayWeek == 6 ? "LOG_R" :
 					       "LOG",
 			     The_GetSuffix ());
-		  HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+		  HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
 	       HTM_TD_End ();
 
 	       /* Draw a cell with the color proportional to the number of clicks */
@@ -1794,7 +1794,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
 	 HTM_TD_End ();
 
 	 /* Draw the color proporcional al number of clicks */
@@ -1836,7 +1836,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	               NumDayWeek == 6 ? "LOG_R" :
 					 "LOG",
 		       The_GetSuffix ());
-	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS[NumDayWeek]);
 	 HTM_TD_End ();
 
 	 /* Draw the color proportional to number of clicks */
@@ -2052,7 +2052,7 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
                                     MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Week;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Dat_Date ReadDate;
    struct Dat_Date LastDate;
@@ -2068,8 +2068,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Week                           ,HTM_HEAD_LEFT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Week                      ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per week *****/
@@ -2152,7 +2152,7 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
                                      MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Month;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Dat_Date ReadDate;
    struct Dat_Date LastDate;
@@ -2167,8 +2167,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Month                          ,HTM_HEAD_LEFT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Month                     ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per month *****/
@@ -2251,7 +2251,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
                                     MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Year;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Dat_Date ReadDate;
    struct Dat_Date LastDate;
@@ -2266,8 +2266,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Year                           ,HTM_HEAD_LEFT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Year                      ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per year *****/
@@ -2684,7 +2684,7 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Action;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
@@ -2692,8 +2692,8 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Action                         ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT );
+      HTM_TH (Txt_Action                    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -2737,7 +2737,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Plugin;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
@@ -2745,8 +2745,8 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Plugin                         ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT );
+      HTM_TH (Txt_Plugin                    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per plugin *****/
@@ -2791,7 +2791,7 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
                                           MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Function;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
@@ -2799,8 +2799,8 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Function                       ,HTM_HEAD_LEFT);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Function                  ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per function *****/
@@ -2842,7 +2842,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Banner;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    double NumClicks;
    double MaxClicks = 0.0;
@@ -2852,8 +2852,8 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_Banner                         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Banner                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of clicks per banner *****/
@@ -2914,7 +2914,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Country;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
    struct Sta_Hits Hits;
@@ -2923,9 +2923,9 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Country                        ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Country                   ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per country *****/
@@ -3002,7 +3002,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Institution;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
    struct Sta_Hits Hits;
@@ -3011,9 +3011,9 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Institution                    ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Institution               ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per institution *****/
@@ -3093,7 +3093,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Center;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
    struct Sta_Hits Hits;
@@ -3102,9 +3102,9 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Center                         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Center                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per center *****/
@@ -3184,7 +3184,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
    struct Sta_Hits Hits;
@@ -3193,9 +3193,9 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Degree                         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Degree                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per degree *****/
@@ -3277,7 +3277,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
+   extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned NumHit;
    unsigned Ranking;
@@ -3288,11 +3288,11 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Degree                         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Course                         ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Degree                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Year_OF_A_DEGREE          ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Course                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per course *****/

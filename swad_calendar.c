@@ -118,7 +118,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
                                       void (*FuncParams) (void *Args),void *Args)
   {
    extern const char *Txt_First_day_of_the_week_X;
-   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_DAYS[7];
    unsigned FirstDayOfWeek;
    char *Title;
    char Icon[32 + 1];
@@ -136,7 +136,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 		     FuncParams (Args);
 		  snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
 		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
-				Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+				Txt_DAYS[FirstDayOfWeek]) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Ico_PutSettingIconLink (Icon,Ico_BLACK,Title);
 		  free (Title);
@@ -341,7 +341,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week_X;
-   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_DAYS[7];
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    unsigned FirstDayOfWeek;
@@ -393,7 +393,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 				FirstDayOfWeek) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
-		                Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+		                Txt_DAYS[FirstDayOfWeek]) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Ico_PutIcon (Icon,Ico_BLACK,Title,"ICOx20");
 		  free (Title);
