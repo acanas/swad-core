@@ -3324,7 +3324,9 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 	"Antes de criar uma nova conta,"
 	" verifique se voc&ecirc; j&aacute; foi registrado/a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yeni bir hesap olu&scedil;turmadan &ouml;nce,"
+	" &ouml;nceden kay&inodot;tl&inodot; olup"
+	" olmad&inodot;&gbreve;&inodot;n&inodot;z&inodot; kontrol edin.";
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
@@ -5012,7 +5014,7 @@ const char *Txt_Check =
 #elif L==9	// pt
 	"Verificar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kontrol";
 #endif
 
 const char *Txt_Check_another_ID =
@@ -5035,7 +5037,7 @@ const char *Txt_Check_another_ID =
 #elif L==9	// pt
 	"Verificar outra ID?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Ba&scedil;ka bir kimli&gbreve;i kontrol et?";
 #endif
 
 const char *Txt_Check_marks_in_the_file =
@@ -5288,7 +5290,7 @@ const char *Txt_Columns =
 #elif L==9	// pt
 	"Colunas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"S&uuml;tunlar";
 #endif
 
 const char *Txt_columns =
@@ -5311,7 +5313,7 @@ const char *Txt_columns =
 #elif L==9	// pt
 	"colunas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"S&uuml;tunlar";
 #endif
 
 const char *Txt_Comment =	// As a verb
@@ -5770,7 +5772,7 @@ const char *Txt_Cookies =
 #elif L==9	// pt
 	"Cookies";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Ccedil;erezleri";
 #endif
 
 const char *Txt_Copy =
@@ -8378,7 +8380,7 @@ const char *Txt_Dates =
 #elif L==9	// pt
 	"Datas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tarihleri";
 #endif
 
 const char *Txt_Day =
@@ -11042,11 +11044,13 @@ const char *Txt_Do_you_think_you_are_one_of_these_users =
 #elif L==7	// it
 	"Pensi che sei uno di questi utenti?";
 #elif L==8	// pl
-	"My&sacute;lisz, &zdot;e jeste&sacute; jednym z tych u&zdot;ytkownik&oacute;w?";
+	"My&sacute;lisz, &zdot;e jeste&sacute;"
+	" jednym z tych u&zdot;ytkownik&oacute;w?";
 #elif L==9	// pt
 	"Voc&ecirc; acha que voc&ecirc; &eacute; um desses usu&aacute;rios?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bu kullan&inodot;c&inodot;lardan biri oldu&gbreve;unuzu"
+	" d&uuml;&scedil;&uuml;n&uuml;yor musunuz?";
 #endif
 
 const char *Txt_Do_you_think_you_are_this_user =
@@ -11069,7 +11073,8 @@ const char *Txt_Do_you_think_you_are_this_user =
 #elif L==9	// pt
 	"Voc&ecirc; acha que voc&ecirc; &eacute; deste usu&aacute;rio?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bu kullan&inodot;c&inodot; oldu&gbreve;unuzu"
+	" d&uuml;&scedil;&uuml;n&uuml;yor musunuz?";
 #endif
 
 const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet =
@@ -17619,7 +17624,7 @@ const char *Txt_Icons =
 #elif L==9	// pt
 	"&Iacute;cones";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Simgeler";
 #endif
 
 const char *Txt_ID =
@@ -17642,7 +17647,7 @@ const char *Txt_ID =
 #elif L==9	// pt
 	"N.&ordm; identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kimlik (kimlik numaras&inodot;/pasaport)";
 #endif
 
 const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -17975,7 +17980,10 @@ const char *Txt_If_you_think_you_may_have_been_registered_ =
 	" verifique-o escrevendo uma das suas poss&iacute;veis IDs"
 	" (identifica&ccedil;&atilde;o, passaporte, etc.).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bir &ouml;&gbreve;retmen veya y&ouml;netici taraf&inodot;ndan"
+	" kay&inodot;tl&inodot; olabilece&gbreve;inizi d&uuml;&scedil;&uuml;n&uuml;yorsan&inodot;z,"
+	" olas&inodot; kimliklerinizden (kimlik, pasaport vb.)"
+	" birini yazarak kontrol edin.";
 #endif
 
 const char *Txt_Image =
@@ -21245,7 +21253,7 @@ const char *Txt_Menu =
 #elif L==9	// pt
 	"Menu";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Men&uuml;";
 #endif
 
 const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
@@ -26014,7 +26022,7 @@ const char *Txt_months =
 #elif L==9	// pt
 	"meses";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"aylar";
 #endif
 
 const char *Txt_MONTHS_SMALL[12] =
@@ -26038,7 +26046,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"janeiro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ocak"
 #endif
 	,
 #if   L==1	// ca
@@ -26060,7 +26068,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"fevereiro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Scedil;ubat"
 #endif
 	,
 #if   L==1	// ca
@@ -26082,7 +26090,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"mar&ccedil;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mart"
 #endif
 	,
 #if   L==1	// ca
@@ -26104,7 +26112,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"abril"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Nisan"
 #endif
 	,
 #if   L==1	// ca
@@ -26126,7 +26134,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"maio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"May&inodot;s"
 #endif
 	,
 #if   L==1	// ca
@@ -26148,7 +26156,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"junho"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Haziran"
 #endif
 	,
 #if   L==1	// ca
@@ -26170,7 +26178,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"julho"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Temmuz"
 #endif
 	,
 #if   L==1	// ca
@@ -26192,7 +26200,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"agosto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"A&gbreve;ustos"
 #endif
 	,
 #if   L==1	// ca
@@ -26214,7 +26222,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"setembro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Eyl&uuml;l"
 #endif
 	,
 #if   L==1	// ca
@@ -26236,7 +26244,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"outubro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ekim"
 #endif
 	,
 #if   L==1	// ca
@@ -26258,7 +26266,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"novembro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kas&inodot;m"
 #endif
 	,
 #if   L==1	// ca
@@ -26280,7 +26288,7 @@ const char *Txt_MONTHS_SMALL[12] =
 #elif L==9	// pt
 	"dezembro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Aral&inodot;k"
 #endif
 	};
 
@@ -26305,7 +26313,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"jan"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Oca"
 #endif
 	,
 #if   L==1	// ca
@@ -26327,7 +26335,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"fev"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Scedil;ub"
 #endif
 	,
 #if   L==1	// ca
@@ -26349,7 +26357,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"mar"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mar"
 #endif
 	,
 #if   L==1	// ca
@@ -26371,7 +26379,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"abr"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Nis"
 #endif
 	,
 #if   L==1	// ca
@@ -26393,7 +26401,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"mai"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"May"
 #endif
 	,
 #if   L==1	// ca
@@ -26415,7 +26423,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"jun"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Haz"
 #endif
 	,
 #if   L==1	// ca
@@ -26437,7 +26445,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"jul"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tem"
 #endif
 	,
 #if   L==1	// ca
@@ -26459,7 +26467,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"ago"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"A&gbreve;u"
 #endif
 	,
 #if   L==1	// ca
@@ -26481,7 +26489,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"set"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Eyl"
 #endif
 	,
 #if   L==1	// ca
@@ -26503,7 +26511,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"out"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Eki"
 #endif
 	,
 #if   L==1	// ca
@@ -26525,7 +26533,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"nov"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kas"
 #endif
 	,
 #if   L==1	// ca
@@ -26547,7 +26555,7 @@ const char *Txt_MONTHS_SMALL_SHORT[12] =
 #elif L==9	// pt
 	"dez"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ara"
 #endif
 	};
 
@@ -28411,7 +28419,7 @@ const char *Txt_Nickname =
 #elif L==9	// pt
 	"Alcunha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Takma ad";
 #endif
 
 const char *Txt_Nickname_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -30164,7 +30172,7 @@ const char *Txt_Notifications =
 #elif L==9	// pt
 	"Notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bildirimler";
 #endif
 
 const char *Txt_notifications =
@@ -30187,7 +30195,7 @@ const char *Txt_notifications =
 #elif L==9	// pt
 	"notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"bildirimler";
 #endif
 
 const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
@@ -33845,7 +33853,7 @@ const char *Txt_Please_enter_your_ID =
 #elif L==9	// pt
 	"Por favor, digite n&ordm; de identifica&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"L&uuml;tfen kimli&gbreve;inizi girin.";
 #endif
 
 const char *Txt_Please_fill_in_your_ID =
@@ -34390,7 +34398,7 @@ const char *Txt_Privacy =
 #elif L==9	// pt
 	"Privacidade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mahremiyet";
 #endif
 
 const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
@@ -46661,7 +46669,7 @@ const char *Txt_Skip_this_step =
 #elif L==9	// pt
 	"Pule esta etapa";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Bu ad&inodot;m&inodot; atla";
 #endif
 
 const char *Txt_Sort_degrees_by =
@@ -48662,7 +48670,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Datas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tarihleri"
 #endif
 	,
 	[Fig_ICON_SETS] =
@@ -48685,7 +48693,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"&Iacute;cones"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Simgeler"
 #endif
 	,
 	[Fig_MENUS] =
@@ -48708,7 +48716,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Menu"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Men&uuml;"
 #endif
 	,
 	[Fig_THEMES] =
@@ -48731,7 +48739,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Skin"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tema"
 #endif
 	,
 	[Fig_SIDE_COLUMNS] =
@@ -48754,7 +48762,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Colunas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"S&uuml;tunlar"
 #endif
 	,
 	[Fig_PHOTO_SHAPES] =
@@ -48777,7 +48785,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Fotos de utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kullan&inodot;c&inodot; foto&gbreve;raflar&inodot;"
 #endif
 	,
 	[Fig_PRIVACY] =
@@ -48800,7 +48808,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Privacidade"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mahremiyet"
 #endif
 	,
 	[Fig_COOKIES] =
@@ -48823,7 +48831,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Cookies"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Ccedil;erezleri"
 #endif
 	};
 
@@ -55960,7 +55968,7 @@ const char *Txt_Theme_SKIN =
 #elif L==9	// pt
 	"Skin";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tema";
 #endif
 
 const char *Txt_There_are_more_than_one_table_in_the_file_of_marks =
@@ -56416,7 +56424,8 @@ const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning
 	"N&atilde;o existe nenhuma conta vazio (ainda n&atilde;o utilizado)"
 	" associado ao seu ID <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kimli&gbreve;iniz <strong>%s</strong> ile ili&scedil;kili bo&scedil;"
+	" (hen&uuml;z kullan&inodot;lmam&inodot;&scedil;) hesap yok.";
 #endif
 
 const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
@@ -60395,7 +60404,7 @@ const char *Txt_User_photos =
 #elif L==9	// pt
 	"Fotos de utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kullan&inodot;c&inodot; foto&gbreve;raflar&inodot;";
 #endif
 
 const char *Txt_Users =
