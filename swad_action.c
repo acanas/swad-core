@@ -3917,20 +3917,6 @@ const char *Act_GetTitleAction (Act_Action_t Action)
   }
 
 /*****************************************************************************/
-/****************** Get the subtitle associated to an action *****************/
-/*****************************************************************************/
-
-const char *Act_GetSubtitleAction (Act_Action_t Action)
-  {
-   extern const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
-
-   if (Action < 0 || Action >= Act_NUM_ACTIONS)
-      return NULL;
-
-   return Txt_MENU_SUBTITLE[Act_GetTab (Action)][Act_GetIndexInMenu (Action)];
-  }
-
-/*****************************************************************************/
 /********************* Get text for action from database *********************/
 /*****************************************************************************/
 

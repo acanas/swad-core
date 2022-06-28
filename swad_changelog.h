@@ -606,11 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.101 (2022-06-28)"
+#define Log_PLATFORM_VERSION	"SWAD 21.102 (2022-06-28)"
 #define CSS_FILE		"swad21.100.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 21.101:   Jun 28, 2022  Preparation for Turkish translation.. (331564 lines)
+	Version 21.102:   Jun 28, 2022  Subtitles in menus is got from text of actions. (329462 lines)
+	Version 21.101:   Jun 28, 2022  Preparation for Turkish translation. (331564 lines)
 	Version 21.100.1: Jun 24, 2022  Some messages translated to Turkish. (331273 lines)
 	Version 21.100:   Jun 23, 2022  Changes in calendar.
 					Some messages translated. (331107 lines)
