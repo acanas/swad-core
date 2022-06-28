@@ -858,7 +858,8 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod)
   {
-   extern const char *Txt_Remove;
+   extern const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
+   extern const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
 
    /***** Form to remove publication *****/
    /* Begin form */
@@ -866,7 +867,9 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
       TmlNot_PutHiddenParamNotCod (NotCod);
 
       /* Icon to remove */
-      Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
+      Ico_PutIconLink ("trash.svg",Ico_RED,
+                       Act_GetActionText (Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_NOTE] :
+                		                                             TmlFrm_ActionGbl[TmlFrm_REQ_REM_NOTE]));
 
    /* End form */
    TmlFrm_EndForm ();

@@ -402,10 +402,8 @@ void Inf_ShowInfo (void)
 
 static void Inf_PutButtonToEditInfo (void)
   {
-   extern const char *Txt_Edit;
-
    Frm_BeginForm (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]);
-      Btn_PutConfirmButton (Txt_Edit);
+      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]));
    Frm_EndForm ();
   }
 
@@ -1026,10 +1024,8 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
 
 void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc)
   {
-   extern const char *Txt_Edit;
-
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Btn_PutConfirmButton (Txt_Edit);
+      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]));
    Frm_EndForm ();
   }
 

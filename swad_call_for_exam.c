@@ -404,7 +404,6 @@ void Cfe_PrintCallForExam (void)
 void Cfe_ReqRemoveCallForExam (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam;
-   extern const char *Txt_Remove;
    struct Cfe_CallsForExams CallsForExams;
    long ExaCod;
 
@@ -429,7 +428,7 @@ void Cfe_ReqRemoveCallForExam (void)
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemCfe,NULL,NULL,
                             Cfe_PutParamExaCodToEdit,&CallsForExams.ExaCod,
-			    Btn_REMOVE_BUTTON,Txt_Remove);
+			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemCfe));
   }
 
 /*****************************************************************************/

@@ -254,7 +254,6 @@ void Not_RevealHiddenNotice (void)
 void Not_RequestRemNotice (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_notice;
-   extern const char *Txt_Remove;
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
@@ -270,7 +269,7 @@ void Not_RequestRemNotice (void)
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,
                             Not_PutParams,&NotCod,
-			    Btn_REMOVE_BUTTON,Txt_Remove);
+			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,

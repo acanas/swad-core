@@ -543,11 +543,11 @@ static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg)
 
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView)
   {
-   extern const char *Txt_Upload_file_or_create_folder;
    extern const char *Txt_Folder;
+   Act_Action_t NextAction;
    bool ICanSendFiles = !Asg->Hidden &&			// It's visible (not hidden)
-                        Asg->Open &&			// It's open (inside dates)
-                        Asg->IBelongToCrsOrGrps;	// I belong to course or groups
+                         Asg->Open &&			// It's open (inside dates)
+                         Asg->IBelongToCrsOrGrps;	// I belong to course or groups
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
@@ -559,7 +559,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
         {
 	 case Rol_STD:
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;	// User assignments
-	    Frm_BeginForm (ActFrmCreAsgUsr);
+	    NextAction = ActFrmCreAsgUsr;
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
@@ -568,12 +568,14 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-	    Frm_BeginForm (ActFrmCreAsgCrs);
+	    NextAction = ActFrmCreAsgCrs;
 	    break;
 	 default:
             Err_WrongRoleExit ();
+            NextAction = ActUnk;
 	    break;
         }
+      Frm_BeginForm (NextAction);
 
 	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
@@ -582,7 +584,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,
-			  Txt_Upload_file_or_create_folder);
+			  Act_GetActionText (NextAction));
 
       Frm_EndForm ();
 

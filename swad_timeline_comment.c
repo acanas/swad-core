@@ -692,7 +692,8 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 	                                long PubCod)
   {
-   extern const char *Txt_Remove;
+   extern const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
+   extern const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
 
    /***** Form to remove publication *****/
    /* Begin form */
@@ -700,7 +701,9 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
       TmlPub_PutHiddenParamPubCod (PubCod);
 
       /* Icon to remove */
-      Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
+      Ico_PutIconLink ("trash.svg",Ico_RED,
+                       Act_GetActionText (Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_COMM] :
+                		                                             TmlFrm_ActionGbl[TmlFrm_REQ_REM_COMM]));
 
    /* End form */
    TmlFrm_EndForm ();

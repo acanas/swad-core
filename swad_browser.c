@@ -3625,9 +3625,6 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
 
 static void Brw_PutButtonToShowEdit (void)
   {
-   extern const char *Txt_View;
-   extern const char *Txt_Edit;
-
    switch (Gbl.FileBrowser.IconViewEdit)
      {
       case Brw_ICON_NONE:
@@ -3637,7 +3634,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Frm_BeginForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
 	       Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	       Btn_PutConfirmButton (Txt_View);
+	       Btn_PutConfirmButton (Act_GetActionText (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]));
             Frm_EndForm ();
            }
 	 break;
@@ -3646,7 +3643,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Frm_BeginForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
 	       Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	       Btn_PutConfirmButton (Txt_Edit);
+	       Btn_PutConfirmButton (Act_GetActionText (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]));
             Frm_EndForm ();
            }
 	 break;
@@ -10200,7 +10197,6 @@ void Brw_AskRemoveOldFiles (void)
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
    extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
-   extern const char *Txt_Remove;
    unsigned Months;
 
    /***** Get parameters related to file browser *****/
@@ -10234,7 +10230,7 @@ void Brw_AskRemoveOldFiles (void)
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Remove);
+      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Act_GetActionText (ActRemOldBrf));
 
    /***** End form *****/
    Frm_EndForm ();

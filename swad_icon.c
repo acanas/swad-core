@@ -244,125 +244,103 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Remove;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "trash.svg",Ico_RED,
-				  Txt_Remove);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 				  void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Edit;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "pen.svg",Ico_BLACK,
-				  Txt_Edit);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
                                        void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Files;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "folder-open.svg",Ico_BLACK,
-				  Txt_Files);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToView (Act_Action_t NextAction,
                                   void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_View;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "list.svg",Ico_BLACK,
-				  Txt_View);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
                                        void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Configure;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "cog.svg",Ico_BLACK,
-				  Txt_Configure);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Hide;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "eye.svg",Ico_GREEN,
-				  Txt_Hide);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Show;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "eye-slash.svg",Ico_RED,
-				  Txt_Show);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Print;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "print.svg",Ico_BLACK,
-				  Txt_Print);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
                                   void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Copy;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "copy.svg",Ico_BLACK,
-				  Txt_Copy);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Paste;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "paste.svg",Ico_BLACK,
-				  Txt_Paste);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
                                             void (*FuncParams) (void *Args),void *Args,
                                             bool Open)
   {
-   extern const char *Txt_Upload_file_or_create_folder;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  Open ? "folder-open-yellow-plus.png" :
 				  	 "folder-yellow-plus.png",
 				  Ico_UNCHANGED,
-				  Txt_Upload_file_or_create_folder);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,

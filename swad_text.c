@@ -5405,29 +5405,6 @@ const char *Txt_Comments =
 	"Comments";	// Çeviri lazim!
 #endif
 
-const char *Txt_Configure =
-#if   L==1	// ca
-	"Configurar";
-#elif L==2	// de
-	"Konfigurieren";
-#elif L==3	// en
-	"Configure";
-#elif L==4	// es
-	"Configurar";
-#elif L==5	// fr
-	"Configurer";
-#elif L==6	// gn
-	"Configurar";	// Okoteve traducción
-#elif L==7	// it
-	"Configurare";
-#elif L==8	// pl
-	"Konfiguracja";
-#elif L==9	// pt
-	"Configurar";
-#elif L==10	// tr
-	"Configure";	// Çeviri lazim!
-#endif
-
 const char *Txt_Configure_projects =
 #if   L==1	// ca
 	"Configurar projectes";
@@ -5798,29 +5775,6 @@ const char *Txt_Cookies =
 	"Cookies";
 #elif L==10	// tr
 	"&Ccedil;erezleri";
-#endif
-
-const char *Txt_Copy =
-#if   L==1	// ca
-	"Copiar";
-#elif L==2	// de
-	"Kopieren";
-#elif L==3	// en
-	"Copy";
-#elif L==4	// es
-	"Copiar";
-#elif L==5	// fr
-	"Copier";
-#elif L==6	// gn
-	"Ekopia";
-#elif L==7	// it
-	"Copiare";
-#elif L==8	// pl
-	"Kopia";
-#elif L==9	// pt
-	"Copiar";
-#elif L==10	// tr
-	"Copy";	// Çeviri lazim!
 #endif
 
 const char *Txt_Copy_not_allowed =
@@ -11638,29 +11592,6 @@ const char *Txt_Duplicate_USERS =
 	"Duplicates";	// Çeviri lazim!
 #endif
 
-const char *Txt_Edit =
-#if   L==1	// ca
-	"Editar";
-#elif L==2	// de
-	"Bearbeiten";
-#elif L==3	// en
-	"Edit";
-#elif L==4	// es
-	"Editar";
-#elif L==5	// fr
-	"&Eacute;diter";
-#elif L==6	// gn
-	"Jehaijey";
-#elif L==7	// it
-	"Editare";
-#elif L==8	// pl
-	"Edytuj";
-#elif L==9	// pt
-	"Editar";
-#elif L==10	// tr
-	"Edit";	// Çeviri lazim!
-#endif
-
 const char *Txt_Edit_assignment =
 #if   L==1	// ca
 	"Editar activitat";
@@ -17076,29 +17007,6 @@ const char *Txt_Hidden_survey =
 	"Inqu&eacute;rito oculto";
 #elif L==10	// tr
 	"Hidden survey";	// Çeviri lazim!
-#endif
-
-const char *Txt_Hide =
-#if   L==1	// ca
-	"Amagar";
-#elif L==2	// de
-	"Ausblenden";
-#elif L==3	// en
-	"Hide";
-#elif L==4	// es
-	"Ocultar";
-#elif L==5	// fr
-	"Masquer";
-#elif L==6	// gn
-	"Ocultar";	// Okoteve traducción
-#elif L==7	// it
-	"Nascondi";
-#elif L==8	// pl
-	"Ukryj";
-#elif L==9	// pt
-	"Ocultar";
-#elif L==10	// tr
-	"Hide";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hide_left_column =
@@ -28476,7 +28384,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos favoritos &agrave;s minhos posts sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New favourite to my social posts"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_SHARE] =
@@ -35151,29 +35059,6 @@ const char *Txt_Removal_not_allowed =
 	"Removal not allowed";			// Çeviri lazim!
 #endif
 
-const char *Txt_Remove =
-#if   L==1	// ca
-	"Eliminar";
-#elif L==2	// de
-	"Entfernen";
-#elif L==3	// en
-	"Remove";
-#elif L==4	// es
-	"Eliminar";
-#elif L==5	// fr
-	"Supprimer";
-#elif L==6	// gn
-	"Mbogue";
-#elif L==7	// it
-	"Rimuovere";
-#elif L==8	// pl
-	"Usu&nacute;";
-#elif L==9	// pt
-	"Remover";
-#elif L==10	// tr
-	"Remove";	// Çeviri lazim!
-#endif
-
 const char *Txt_Remove_account =
 #if   L==1	// ca
 	"Eliminar compte";
@@ -38666,7 +38551,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
@@ -38781,7 +38666,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superuser"		// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
@@ -38968,7 +38853,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_FEMALE] =
@@ -38991,7 +38876,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidadas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_MALE] =
@@ -39014,7 +38899,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_ALL] =
@@ -39037,7 +38922,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_UNKNOWN] =
@@ -39060,7 +38945,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_FEMALE] =
@@ -39083,7 +38968,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_MALE] =
@@ -39106,7 +38991,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_ALL] =
@@ -39129,7 +39014,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_UNKNOWN] =
@@ -39244,7 +39129,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_FEMALE] =
@@ -39267,7 +39152,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professoras n&atilde;o editoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_MALE] =
@@ -39290,7 +39175,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_ALL] =
@@ -39313,7 +39198,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_UNKNOWN] =
@@ -39428,7 +39313,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
@@ -39451,7 +39336,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_MALE] =
@@ -39474,7 +39359,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_ALL] =
@@ -39497,7 +39382,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
@@ -39520,7 +39405,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
@@ -39543,7 +39428,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
@@ -39566,7 +39451,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
@@ -39589,7 +39474,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
@@ -39612,7 +39497,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_FEMALE] =
@@ -39635,7 +39520,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_MALE] =
@@ -39658,7 +39543,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_ALL] =
@@ -39681,7 +39566,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
@@ -39704,7 +39589,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
@@ -39727,7 +39612,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_MALE] =
@@ -39750,7 +39635,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_ALL] =
@@ -39773,7 +39658,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superusers"	// Çeviri lazim!
 #endif
 	};
 
@@ -39799,7 +39684,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Desc."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unkn."	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST] =
@@ -39822,7 +39707,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Conv."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Gues."	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR] =
@@ -39845,7 +39730,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Util."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD] =
@@ -39868,7 +39753,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Estu."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Stud."	// Çeviri lazim!
 #endif
 	,
 	[Rol_NET] =
@@ -39891,7 +39776,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Prof.n.e."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"N.e.teac."	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH] =
@@ -39914,7 +39799,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Prof."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teac."	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM] =
@@ -39937,7 +39822,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Admi."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admi."	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM] =
@@ -39960,7 +39845,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Admi."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admi."	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM] =
@@ -39983,7 +39868,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Admi."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admi."	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM] =
@@ -40006,7 +39891,7 @@ const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Supe."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Supe."	// Çeviri lazim!
 #endif
 	};
 
@@ -40032,7 +39917,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_FEMALE] =
@@ -40055,7 +39940,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_MALE] =
@@ -40078,7 +39963,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_ALL] =
@@ -40101,7 +39986,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_UNKNOWN] =
@@ -40124,7 +40009,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_FEMALE] =
@@ -40147,7 +40032,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidadas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_MALE] =
@@ -40170,7 +40055,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_ALL] =
@@ -40193,7 +40078,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guests"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_UNKNOWN] =
@@ -40216,7 +40101,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_FEMALE] =
@@ -40239,7 +40124,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_MALE] =
@@ -40262,7 +40147,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_ALL] =
@@ -40285,7 +40170,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_UNKNOWN] =
@@ -40308,7 +40193,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_FEMALE] =
@@ -40331,7 +40216,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_MALE] =
@@ -40354,7 +40239,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_ALL] =
@@ -40377,7 +40262,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_UNKNOWN] =
@@ -40400,7 +40285,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_FEMALE] =
@@ -40423,7 +40308,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professoras n&atilde;o editoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_MALE] =
@@ -40446,7 +40331,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_ALL] =
@@ -40469,7 +40354,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_UNKNOWN] =
@@ -40492,7 +40377,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teachers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -40515,7 +40400,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teachers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -40538,7 +40423,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teachers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -40561,7 +40446,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teachers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
@@ -40584,7 +40469,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
@@ -40607,7 +40492,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_MALE] =
@@ -40630,7 +40515,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_ALL] =
@@ -40653,7 +40538,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
@@ -40676,7 +40561,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
@@ -40699,7 +40584,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
@@ -40722,7 +40607,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
@@ -40745,7 +40630,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
@@ -40768,7 +40653,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_FEMALE] =
@@ -40791,7 +40676,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_MALE] =
@@ -40814,7 +40699,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_ALL] =
@@ -40837,7 +40722,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"administradores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
@@ -40852,20 +40737,20 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"superutilisateurs"
 #elif L==6	// gn
-	"superusuarios"		// Okoteve traducción
+	"superusuarios"	// Okoteve traducción
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"		// Potrzebujesz tlumaczenie
+	"superusers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
 #if   L==1	// ca
-	"superusuarias"		// Necessita traducció
+	"superusuarias"	// Necessita traducció
 #elif L==2	// de
 	"Superuser"
 #elif L==3	// en
@@ -40875,15 +40760,15 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"superutilisateuses"
 #elif L==6	// gn
-	"superusuarias"		// Okoteve traducción
+	"superusuarias"	// Okoteve traducción
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"		// Potrzebujesz tlumaczenie
+	"superusers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_MALE] =
@@ -40898,15 +40783,15 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"superutilisateurs"
 #elif L==6	// gn
-	"superusuarios"		// Okoteve traducción
+	"superusuarios"	// Okoteve traducción
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"		// Potrzebujesz tlumaczenie
+	"superusers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superusers"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_ALL] =
@@ -40921,15 +40806,15 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"superutilisateurs"
 #elif L==6	// gn
-	"superusuarios"		// Okoteve traducción
+	"superusuarios"	// Okoteve traducción
 #elif L==7	// it
 	"superutenti"
 #elif L==8	// pl
-	"superusers"		// Potrzebujesz tlumaczenie
+	"superusers"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"superutilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superusers"	// Çeviri lazim!
 #endif
 	};
 
@@ -41001,7 +40886,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por edif&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by building"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_FLOOR] =
@@ -41024,7 +40909,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por andar"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by floor"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_TYPE] =
@@ -41047,7 +40932,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por tipo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by type"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_SHRT_NAME] =
@@ -41070,7 +40955,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por nome abreviado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by short name"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_FULL_NAME] =
@@ -41093,7 +40978,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por nome completo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by full name"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_CAPACITY] =
@@ -41108,7 +40993,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==5	// fr
 	"Trier par nombre de places"
 #elif L==6	// gn
-	"Ordenar por aforo"	// Okoteve traducción
+	"Ordenar por aforo"		// Okoteve traducción
 #elif L==7	// it
 	"Ordina per capacit&agrave; di posti"
 #elif L==8	// pl
@@ -41116,7 +41001,7 @@ const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Ordenar por capacidade"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by seating capacity"	// Çeviri lazim!
 #endif
   };
 
@@ -41142,7 +41027,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Edif&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Building"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_FLOOR] =
@@ -41165,7 +41050,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Andar"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Floor"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_TYPE] =
@@ -41188,7 +41073,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Tipo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Type"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_SHRT_NAME] =
@@ -41211,7 +41096,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome abreviado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Short name"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_FULL_NAME] =
@@ -41234,7 +41119,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome completo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Full name"		// Çeviri lazim!
 #endif
 	,
 	[Roo_ORDER_BY_CAPACITY] =
@@ -41249,7 +41134,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==5	// fr
 	"Capacit&eacute;"
 #elif L==6	// gn
-	"Aforo"				// Okoteve traducción
+	"Aforo"		// Okoteve traducción
 #elif L==7	// it
 	"Capacit&agrave;"
 #elif L==8	// pl
@@ -41257,7 +41142,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Capacidade"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Capacity"	// Çeviri lazim!
 #endif
 	};
 
@@ -41283,7 +41168,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No type"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ADMINISTRATION] =
@@ -41306,7 +41191,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Administration/Management"	// Çeviri lazim!
 #endif
 	,
 	[Roo_AUDITORIUM] =
@@ -41321,7 +41206,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Auditorio"			// Okoteve traducción
+	"Auditorio"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41329,7 +41214,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Auditorium"	// Çeviri lazim!
 #endif
 	,
 	[Roo_CAFETERIA] =
@@ -41344,7 +41229,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Cafeter&iacute;a"		// Okoteve traducción
+	"Cafeter&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41352,7 +41237,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Cafeteria"		// Çeviri lazim!
 #endif
 	,
 	[Roo_CANTEEN] =
@@ -41367,7 +41252,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Comedor"			// Okoteve traducción
+	"Comedor"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41375,7 +41260,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Canteen"	// Çeviri lazim!
 #endif
 	,
 	[Roo_CLASSROOM] =
@@ -41390,7 +41275,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Aula"				// Okoteve traducción
+	"Aula"		// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41398,7 +41283,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Classroom"	// Çeviri lazim!
 #endif
 	,
 	[Roo_CONCIERGE] =
@@ -41421,7 +41306,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Concierge"				// Çeviri lazim!
 #endif
 	,
 	[Roo_CORRIDOR] =
@@ -41436,7 +41321,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Pasillo"			// Okoteve traducción
+	"Pasillo"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41444,7 +41329,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Corridor"	// Çeviri lazim!
 #endif
 	,
 	[Roo_GYM] =
@@ -41459,7 +41344,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Gimnasio"			// Okoteve traducción
+	"Gimnasio"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41467,7 +41352,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Gym"		// Çeviri lazim!
 #endif
 	,
 	[Roo_HALL] =
@@ -41482,7 +41367,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Vest&iacute;bulo"		// Okoteve traducción
+	"Vest&iacute;bulo"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41490,7 +41375,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hall"			// Çeviri lazim!
 #endif
 	,
 	[Roo_KINDERGARTEN] =
@@ -41505,7 +41390,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Guarder&iacute;a"		// Okoteve traducción
+	"Guarder&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41513,7 +41398,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kindergarten"		// Çeviri lazim!
 #endif
 	,
 	[Roo_LABORATORY] =
@@ -41528,7 +41413,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Laboratorio"			// Okoteve traducción
+	"Laboratorio"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41536,7 +41421,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Laboratory"	// Çeviri lazim!
 #endif
 	,
 	[Roo_LIBRARY] =
@@ -41551,7 +41436,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Biblioteca"			// Okoteve traducción
+	"Biblioteca"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41559,7 +41444,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Library"	// Çeviri lazim!
 #endif
 	,
 	[Roo_OFFICE] =
@@ -41574,7 +41459,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Despacho/Oficina"		// Okoteve traducción
+	"Despacho/Oficina"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41582,7 +41467,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Office"		// Çeviri lazim!
 #endif
 	,
 	[Roo_OUTDOORS] =
@@ -41597,7 +41482,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Exteriores"			// Okoteve traducción
+	"Exteriores"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41605,7 +41490,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Outdoors"	// Çeviri lazim!
 #endif
 	,
 	[Roo_PARKING] =
@@ -41620,7 +41505,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Aparcamiento"			// Okoteve traducción
+	"Aparcamiento"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41628,7 +41513,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Parking"	// Çeviri lazim!
 #endif
 	,
 	[Roo_PAVILION] =
@@ -41643,7 +41528,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Pabell&oacute;n"			// Okoteve traducción
+	"Pabell&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41651,7 +41536,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Pavilion	"	// Çeviri lazim!
 #endif
 	,
 	[Roo_ROOM] =
@@ -41674,7 +41559,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	"Sala"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Room"	// Çeviri lazim!
 #endif
 	,
 	[Roo_SECRETARIAT] =
@@ -41689,7 +41574,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Secretar&iacute;a"		// Okoteve traducción
+	"Secretar&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41697,7 +41582,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Secretariat"		// Çeviri lazim!
 #endif
 	,
 	[Roo_SEMINAR] =
@@ -41712,7 +41597,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Seminario"			// Okoteve traducción
+	"Seminario"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41720,7 +41605,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Seminar"	// Çeviri lazim!
 #endif
 	,
 	[Roo_SHOP] =
@@ -41735,7 +41620,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Tienda"			// Okoteve traducción
+	"Tienda"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41743,7 +41628,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Shop"		// Çeviri lazim!
 #endif
 	,
 	[Roo_STORE] =
@@ -41758,7 +41643,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Almac&eacute;n"		// Okoteve traducción
+	"Almac&eacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41766,7 +41651,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Store"			// Çeviri lazim!
 #endif
 	,
 	[Roo_TOILETS] =
@@ -41781,7 +41666,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Aseos"				// Okoteve traducción
+	"Aseos"		// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41789,7 +41674,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Toilets"	// Çeviri lazim!
 #endif
 	,
 	[Roo_VIRTUAL] =
@@ -41804,7 +41689,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Virtual"			// Okoteve traducción
+	"Virtual"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41812,7 +41697,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Virtual"	// Çeviri lazim!
 #endif
 	,
 	[Roo_YARD] =
@@ -41827,7 +41712,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Patio/Jard&iacute;n"		// Okoteve traducción
+	"Patio/Jard&iacute;n"	// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl
@@ -41835,7 +41720,7 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==9	// pt
 	""
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Yard"			// Çeviri lazim!
 #endif
 	};
 
@@ -41909,7 +41794,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_MRK_CRS] =
@@ -41928,11 +41813,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"risultati"
 #elif L==8	// pl
-	"marks"		// Potrzebujesz tlumaczenie
+	"marks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"marks"			// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_CRS] =
@@ -41955,7 +41840,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_SHR_CRS] =
@@ -41970,15 +41855,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"partages"
 #elif L==6	// gn
-	"compartidos"			// Okoteve traducción
+	"compartidos"	// Okoteve traducción
 #elif L==7	// it
 	"condivisi"
 #elif L==8	// pl
-	"shared"			// Potrzebujesz tlumaczenie
+	"shared"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"comum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"shared"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_SHR_GRP] =
@@ -41993,15 +41878,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"partages"
 #elif L==6	// gn
-	"compartidos"			// Okoteve traducción
+	"compartidos"	// Okoteve traducción
 #elif L==7	// it
 	"condivisi"
 #elif L==8	// pl
-	"shared"			// Potrzebujesz tlumaczenie
+	"shared"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"comum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"shared"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_WRK_USR] =
@@ -42020,11 +41905,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"lavori"
 #elif L==8	// pl
-	"homework"		// Potrzebujesz tlumaczenie
+	"homework"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"trabalhos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"homework"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_WRK_CRS] =
@@ -42043,11 +41928,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"lavori"
 #elif L==8	// pl
-	"homework"		// Potrzebujesz tlumaczenie
+	"homework"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"trabalhos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"homework"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_MRK_CRS] =
@@ -42070,7 +41955,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"marks"			// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_BRF_USR] =
@@ -42085,15 +41970,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"porte-documents"
 #elif L==6	// gn
-	"maletin"		// Okoteve traducción
+	"maletin"	// Okoteve traducción
 #elif L==7	// it
 	"cartella"
 #elif L==8	// pl
-	"briefcase"		// Potrzebujesz tlumaczenie
+	"briefcase"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"pasta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"briefcase"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_DOC_GRP] =
@@ -42116,7 +42001,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_GRP] =
@@ -42139,7 +42024,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_MRK_GRP] =
@@ -42162,7 +42047,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"marks"			// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_MRK_GRP] =
@@ -42181,11 +42066,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"risultati"
 #elif L==8	// pl
-	"marks"		// Potrzebujesz tlumaczenie
+	"marks"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"marks"			// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_ASG_USR] =
@@ -42204,11 +42089,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"attivit&agrave;"
 #elif L==8	// pl
-	"assignments"		// Potrzebujesz tlumaczenie
+	"assignments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"atividades"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"assignments"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_ASG_CRS] =
@@ -42227,11 +42112,11 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==7	// it
 	"attivit&agrave;"
 #elif L==8	// pl
-	"assignments"		// Potrzebujesz tlumaczenie
+	"assignments"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"atividades"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"assignments"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_DOC_DEG] =
@@ -42254,7 +42139,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_DEG] =
@@ -42277,7 +42162,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_DOC_CTR] =
@@ -42300,7 +42185,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_CTR] =
@@ -42323,7 +42208,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_SHOW_DOC_INS] =
@@ -42346,7 +42231,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_INS] =
@@ -42369,7 +42254,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_SHR_DEG] =
@@ -42384,15 +42269,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"partages"
 #elif L==6	// gn
-	"compartidos"			// Okoteve traducción
+	"compartidos"	// Okoteve traducción
 #elif L==7	// it
 	"condivisi"
 #elif L==8	// pl
-	"shared"			// Potrzebujesz tlumaczenie
+	"shared"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"comum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"shared"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_SHR_CTR] =
@@ -42407,15 +42292,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"partages"
 #elif L==6	// gn
-	"compartidos"			// Okoteve traducción
+	"compartidos"	// Okoteve traducción
 #elif L==7	// it
 	"condivisi"
 #elif L==8	// pl
-	"shared"			// Potrzebujesz tlumaczenie
+	"shared"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"comum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"shared"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_SHR_INS] =
@@ -42430,15 +42315,15 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==5	// fr
 	"partages"
 #elif L==6	// gn
-	"compartidos"			// Okoteve traducción
+	"compartidos"	// Okoteve traducción
 #elif L==7	// it
 	"condivisi"
 #elif L==8	// pl
-	"shared"			// Potrzebujesz tlumaczenie
+	"shared"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"comum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"shared"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_TCH_CRS] =
@@ -42461,7 +42346,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"privados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"private"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_TCH_GRP] =
@@ -42484,7 +42369,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"privados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"private"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_DOC_PRJ] =
@@ -42507,7 +42392,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"documents"	// Çeviri lazim!
 #endif
 	,
 	[Brw_ADMI_ASS_PRJ] =
@@ -42530,7 +42415,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"avaliacao"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"assessment"	// Çeviri lazim!
 #endif
 	};
 
@@ -47962,25 +47847,25 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	,
 	[TabMsg] =
 #if   L==1	// ca
-	"Missatges"
+	"Comunicaci&oacute;"
 #elif L==2	// de
-	"Nachrichten"
+	"Kommunikation"
 #elif L==3	// en
-	"Messages"
+	"Communication"
 #elif L==4	// es
 	"Comunicaci&oacute;n"
 #elif L==5	// fr
-	"Messages"
+	"Communication"
 #elif L==6	// gn
-	"Marandu"
+	"Mombe'u"
 #elif L==7	// it
-	"Messaggi"
+	"Comunicazione"
 #elif L==8	// pl
-	"Wiadomo&sacute;ci"
+	"Komunikacja"
 #elif L==9	// pt
-	"Mensagens"
+	"Comunica&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Mesajlar"
+	"&Idot;leti&scedil;im"
 #endif
 	,
 	[TabAna] =
@@ -58003,29 +57888,6 @@ const char *Txt_Upload_file =
 	"Upload file";		// Çeviri lazim!
 #endif
 
-const char *Txt_Upload_file_or_create_folder =
-#if   L==1	// ca
-	"Afegir arxius o crear carpeta";
-#elif L==2	// de
-	"Datei uploaden oder Verzeichnis erstellen";
-#elif L==3	// en
-	"Upload files or create folder";
-#elif L==4	// es
-	"A&ntilde;adir archivos o crear carpeta";
-#elif L==5	// fr
-	"Charger fichiers ou cr&eacute;er r&eacute;pertoire";
-#elif L==6	// gn
-	"A&ntilde;adir archivos o crear carpeta";	// Okoteve traducción
-#elif L==7	// it
-	"Caricare file o creare cartella";
-#elif L==8	// pl
-	"Prze&sacute;lij pliki lub utw&oacute;rz folder";
-#elif L==9	// pt
-	"Fazer upload de arquivos ou criar diret&oacute;rio";
-#elif L==10	// tr
-	"Upload files or create folder";		// Çeviri lazim!
-#endif
-
 const char *Txt_Upload_files =
 #if   L==1	// ca
 	"Enviar arxius";
@@ -59091,29 +58953,6 @@ const char *Txt_valid_score =
 	"pontua&ccedil;&atilde;o v&aacute;lida";
 #elif L==10	// tr
 	"valid score";				// Çeviri lazim!
-#endif
-
-const char *Txt_View =
-#if   L==1	// ca
-	"Veure";
-#elif L==2	// de
-	"Anzeigen";
-#elif L==3	// en
-	"View";
-#elif L==4	// es
-	"Ver";
-#elif L==5	// fr
-	"Voir";
-#elif L==6	// gn
-	"Ver";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi";
-#elif L==8	// pl
-	"Wy&sacute;wietl";
-#elif L==9	// pt
-	"Ver";
-#elif L==10	// tr
-	"View";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_all_recipients =

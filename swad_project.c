@@ -2039,7 +2039,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    ;
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_Remove;
    extern const char *Txt_Add_USERS;
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
    static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
@@ -2163,7 +2162,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
 							     Prj_PutCurrentParams,Projects,
 							     "trash.svg",Ico_RED,
-							     Txt_Remove);
+							     Act_GetActionText (ActionReqRemUsr[RoleInPrj]));
 			   HTM_TD_End ();
 			  }
 

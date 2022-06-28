@@ -377,14 +377,12 @@ void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
                             TmlFrm_Action_t Action,
                             void (*FuncParams) (void *Args))
   {
-   extern const char *Txt_Remove;
-
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Ale_ShowAlertAndButton2 (TmlFrm_ActionUsr[Action],"timeline",NULL,
 			       FuncParams,Timeline,
-			       Btn_REMOVE_BUTTON,Txt_Remove);
+			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionUsr[Action]));
    else
       Ale_ShowAlertAndButton2 (TmlFrm_ActionGbl[Action],NULL,NULL,
 			       FuncParams,Timeline,
-			       Btn_REMOVE_BUTTON,Txt_Remove);
+			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionGbl[Action]));
   }
