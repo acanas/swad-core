@@ -245,7 +245,8 @@ void Mnu_WriteMenuThisTab (void)
 	      {
 	       IsTheSelectedAction = (NumAct == Act_GetSuperAction (Gbl.Action.Act));
 
-	       Title = Act_GetSubtitleAction (NumAct);
+	       // Title = Act_GetSubtitleAction (NumAct);
+	       Title = Act_GetActionText (NumAct);
 
 	       /***** Begin option *****/
 	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM %s\"",

@@ -57,7 +57,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Qualquer a&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Any action"			// Çeviri lazim!
 #endif
 	,
 	[ActUnk] =
@@ -80,7 +80,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"A&ccedil;&atilde;o desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown action"		// Çeviri lazim!
 #endif
 	,
 	[ActMnu] =
@@ -103,7 +103,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar menu"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show menu"		// Çeviri lazim!
 #endif
 	,
 	[ActRefCon] =
@@ -126,7 +126,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Atualizar notifica&ccedil;&otilde;es e conectados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Refresh notifications and connected"	// Çeviri lazim!
 #endif
 	,
 	[ActWebSvc] =
@@ -149,7 +149,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Servi&ccedil;o da Web (fun&ccedil;&atilde;o de API)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Web service (API function)"		// Çeviri lazim!
 #endif
 	,
 	[ActFrmLogIn] =
@@ -172,7 +172,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Landing page"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Landing page"			// Çeviri lazim!
 #endif
 	,
 	[ActReqSch] =
@@ -195,7 +195,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Solicitar pesquisa"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Request search"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeGblTL] =
@@ -218,7 +218,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar timeline global"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeSocPrf] =
@@ -241,7 +241,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Sugerir lista de usu&aacute;rios a seguir"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Suggest list of users to follow"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeCal] =
@@ -264,7 +264,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar calend&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show calendar"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeNtf] =
@@ -287,7 +287,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar notifica&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show notifications"		// Çeviri lazim!
 #endif
 	,
 	[ActLogIn] =
@@ -310,7 +310,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Autenticar usu&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Authenticate user"	// Çeviri lazim!
 #endif
 	,
 	[ActLogInNew] =
@@ -333,7 +333,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Authenticate user in empty account"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Authenticate user in empty account"		// Çeviri lazim!
 #endif
 	,
 	[ActLogInLan] =
@@ -356,7 +356,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Change language after authentication"	// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Change language after authentication"	// Çeviri lazim!
 #endif
 	,
 	[ActAnnSee] =
@@ -379,7 +379,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mark announcement as seen"	// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mark announcement as seen"	// Çeviri lazim!
 #endif
 	,
 	[ActReqSndNewPwd] =
@@ -402,7 +402,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Request to send a new password"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Request to send a new password"			// Çeviri lazim!
 #endif
 	,
 	[ActSndNewPwd] =
@@ -425,7 +425,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Send new password"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Send new password"			// Çeviri lazim!
 #endif
 	,
 	[ActLogOut] =
@@ -448,7 +448,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Close session"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Close session"		// Çeviri lazim!
 #endif
 	,
 	[ActSch] =
@@ -471,7 +471,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Search"	// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Search"	// Çeviri lazim!
 #endif
 	,
 	[ActRefNewPubGblTL] =
@@ -494,7 +494,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Refresh global timeline (new publications)"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Refresh global timeline (new publications)"		// Çeviri lazim!
 #endif
 	,
 	[ActRefOldPubGblTL] =
@@ -517,7 +517,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show previous publications in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show previous publications in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvPstGblTL] =
@@ -540,7 +540,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Create post in global timeline"	// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Create post in global timeline"	// Çeviri lazim!
 #endif
 	,
 	[ActRcvComGblTL] =
@@ -563,7 +563,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Create comment in global timeline"	// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Create comment in global timeline"	// Çeviri lazim!
 #endif
 	,
 	[ActShoHidComGblTL] =
@@ -586,7 +586,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show hidden comments in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show hidden comments in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActAllShaNotGblTL] =
@@ -609,7 +609,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who shared a publication in global timeline"				// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who shared a publication in global timeline"				// Çeviri lazim!
 #endif
 	,
 	[ActAllFavNotGblTL] =
@@ -632,7 +632,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who favourited a publication in global timeline"						// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who favourited a publication in global timeline"						// Çeviri lazim!
 #endif
 	,
 	[ActAllFavComGblTL] =
@@ -655,7 +655,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who favourited a comment in global timeline"					// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who favourited a comment in global timeline"					// Çeviri lazim!
 #endif
 	,
 	[ActShaNotGblTL] =
@@ -678,7 +678,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Share a publication in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Share a publication in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActUnsNotGblTL] =
@@ -701,7 +701,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Unshare a publication in global timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unshare a publication in global timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActFavNotGblTL] =
@@ -724,7 +724,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Favourite a publication in global timeline"				// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Favourite a publication in global timeline"				// Çeviri lazim!
 #endif
 	,
 	[ActUnfNotGblTL] =
@@ -747,7 +747,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Unfavourite a publication in global timeline"					// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unfavourite a publication in global timeline"					// Çeviri lazim!
 #endif
 	,
 	[ActFavComGblTL] =
@@ -770,7 +770,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Favourite a comment in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Favourite a comment in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActUnfComGblTL] =
@@ -793,7 +793,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Unfavourite a comment in global timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unfavourite a comment in global timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPubGblTL] =
@@ -816,7 +816,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Request deletion of a publication in global timeline"				// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Request deletion of a publication in global timeline"				// Çeviri lazim!
 #endif
 	,
 	[ActRemPubGblTL] =
@@ -839,7 +839,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Delete a publication in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Delete a publication in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActReqRemComGblTL] =
@@ -862,7 +862,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Request deletion of a comment in global timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Request deletion of a comment in global timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActRemComGblTL] =
@@ -885,7 +885,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Delete a comment in global timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Delete a comment in global timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActReqOthPubPrf] =
@@ -908,7 +908,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Request to show public user profile"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Request to show public user profile"		// Çeviri lazim!
 #endif
 	,
 	[ActRefOldPubUsrTL] =
@@ -931,7 +931,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show previous publications in user timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show previous publications in user timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActRcvPstUsrTL] =
@@ -954,7 +954,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Create post in user timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Create post in user timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActRcvComUsrTL] =
@@ -977,7 +977,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Create comment in user timeline"		// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Create comment in user timeline"		// Çeviri lazim!
 #endif
 	,
 	[ActShoHidComUsrTL] =
@@ -1000,7 +1000,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show hidden comments in user timeline"			// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show hidden comments in user timeline"			// Çeviri lazim!
 #endif
 	,
 	[ActAllShaNotUsrTL] =
@@ -1023,7 +1023,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who shared a publication in user timeline"					// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who shared a publication in user timeline"					// Çeviri lazim!
 #endif
 	,
 	[ActAllFavNotUsrTL] =
@@ -1046,7 +1046,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who favourited a publication in user timeline"						// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who favourited a publication in user timeline"						// Çeviri lazim!
 #endif
 	,
 	[ActAllFavComUsrTL] =
@@ -1069,7 +1069,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Show who favourited a comment in user timeline"					// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Show who favourited a comment in user timeline"					// Çeviri lazim!
 #endif
 	,
 	[ActShaNotUsrTL] =
@@ -1092,7 +1092,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Share a publication in user timeline"				// Precisa de tradução
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Share a publication in user timeline"				// Çeviri lazim!
 #endif
 	,
 	[ActUnsNotUsrTL] =

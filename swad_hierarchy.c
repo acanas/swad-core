@@ -447,11 +447,11 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
 	{
 	 HTM_DIV_Begin ("id=\"big_full_name\"");
-	    HTM_Txt (	(Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
+	    HTM_Txt ( (Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
 		     ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.FullName :
 		     ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.FullName :
 		     ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.FullName :
-							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
+							    Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
 	 HTM_DIV_End ();
 
 	 HTM_DIV_Begin ("class=\"NOT_SHOWN\"");

@@ -230,7 +230,9 @@ const char *Txt_A_face_marked_in_green_has_been_detected_ =
 	" eo fundo &eacute; claro o suficiente.<br />"
 	"Clique nele para confirmar a atualiza&ccedil;&atilde;o da imagem.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A face (marked in green) has been detected in front position"
+	" and the background is light enough.<br />"
+	"Click on it to confirm the update of the picture.";						// Çeviri lazim!
 #endif
 
 const char *Txt_A_face_marked_in_red_has_been_detected_ =
@@ -262,7 +264,8 @@ const char *Txt_A_face_marked_in_red_has_been_detected_ =
 	"Um rosto (marcado em vermelho) foi detectado em posi&ccedil;&atilde;o frontal,"
 	" mas o plano de fundo &eacute; demasiado escuro.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A face (marked in red) has been detected in front position,"
+	" but the background is too dark.";	// Çeviri lazim!
 #endif
 
 const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address =	// Warning: it is very important to include %s in the following sentences
@@ -303,7 +306,9 @@ const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_addre
 	" para o endere&ccedil;o de email <strong>%s</strong>"
 	" para confirmar esse endere&ccedil;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A message has been sent"
+	" to email address <strong>%s</strong>"
+	" to confirm that address.";			// Çeviri lazim!
 #endif
 
 const char *Txt_A_question_has_been_added =
@@ -326,7 +331,7 @@ const char *Txt_A_question_has_been_added =
 #elif L==9	// pt
 	"Uma pergunta foi adicionada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A question has been added.";		// Çeviri lazim!
 #endif
 
 const char *Txt_X_questions_have_been_added =	// Warning: it is very important to include %u in the following sentences
@@ -349,7 +354,7 @@ const char *Txt_X_questions_have_been_added =	// Warning: it is very important t
 #elif L==9	// pt
 	"%u perguntas foram adicionadas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u questions have been added.";	// Çeviri lazim!
 #endif
 
 const char *Txt_A_student_can_belong_to_several_groups =
@@ -372,7 +377,7 @@ const char *Txt_A_student_can_belong_to_several_groups =
 #elif L==9	// pt
 	"Um estudante pode pertencer a v&aacute;rios grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A student can belong to several groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_A_student_can_only_belong_to_one_group =
@@ -395,7 +400,7 @@ const char *Txt_A_student_can_only_belong_to_one_group =
 #elif L==9	// pt
 	"Um estudante pode pertencer a um grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A student can only belong to one group";		// Çeviri lazim!
 #endif
 
 const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -435,7 +440,7 @@ const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_
 	" como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>."
 	" &iquest;Confirma la inscripci&oacute;n"
-	" o prefiere ser eliminado/a de la asignatura?";		// Okoteve traducción
+	" o prefiere ser eliminado/a de la asignatura?";	// Okoteve traducción
 #elif L==7	// it
 	"Un insegnante o amministratore ti a registrato"
 	" come <strong>%s</strong>"
@@ -455,7 +460,11 @@ const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_
 	" Voc&ecirc; quer para confirmar a inscri&ccedil;&atilde;o"
 	" ou voc&ecirc; prefere para ser removido/a da disciplina?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A teacher or an administrator has enroled you"
+	" as a <strong>%s</strong>"
+	" into the course <strong>%s</strong>."
+	" Do you want to confirm the enrolment"
+	" or do you prefer to be removed from the course?";	// Çeviri lazim!
 #endif
 
 const char *Txt_A_user_can_not_have_more_than_X_IDs =	// Warning: it is very important to include %u in the following sentences
@@ -478,7 +487,7 @@ const char *Txt_A_user_can_not_have_more_than_X_IDs =	// Warning: it is very imp
 #elif L==9	// pt
 	"Um usu&aacute;rio n&atilde;o pode ter mais de %u n&ordm;s. identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"A user can not have more than %u IDs.";				// Çeviri lazim!
 #endif
 
 const char *Txt_About_X =	// Warning: it is very important to include %s in the following sentences
@@ -524,7 +533,7 @@ const char *Txt_Absent =
 #elif L==9	// pt
 	"Assente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Absent";	// Çeviri lazim!
 #endif
 
 const char *Txt_Absents =
@@ -547,7 +556,7 @@ const char *Txt_Absents =
 #elif L==9	// pt
 	"Assentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Absents";	// Çeviri lazim!
 #endif
 
 const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites =
@@ -579,7 +588,8 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	"Aceite cookies de terceiros"
 	" para visualizar conte&uacute;do multimídia de outros sites";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Accept third-party cookies"
+	" to view multimedia content from other websites";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center =
@@ -602,7 +612,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_cent
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos administradores do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by administrators of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree =
@@ -634,7 +644,8 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degr
 	"acess&iacute;vel para leitura e escrita"
 	" pelos administradores do grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing"
+	" by administrators of the degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution =
@@ -657,7 +668,7 @@ const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_inst
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos administradores da institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by administrators of the institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_project_members =
@@ -680,7 +691,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_members =
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita por membros do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by project members";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators =
@@ -703,7 +714,7 @@ const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluat
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita por tutores e avaliadores do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by project tutors and evaluators";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center =
@@ -726,7 +737,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos estudantes e professores do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by students and teachers of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course =
@@ -749,7 +760,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos estudantes e professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by students and teachers of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree =
@@ -781,7 +792,8 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 	"acess&iacute;vel para leitura e escrita"
 	" pelos estudantes e professores do grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing"
+	" by students and teachers of the degree";			// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution =
@@ -804,7 +816,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_t
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos estudantes e professores da institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by students and teachers of the institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course =
@@ -827,7 +839,7 @@ const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos estudantes do grupo e professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by students of the group and teachers of the course";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
@@ -850,7 +862,7 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita pelos professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by teachers of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course =
@@ -865,7 +877,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 #elif L==5	// fr
 	"accessible en lecture et en &eacute;criture par vous et par les &eacute;tudiants et les enseignants de la mati&egrave;re";
 #elif L==6	// gn
-	"accesible para lectura por usted y los profesores de la asignatura";	// Okoteve traducción
+	"accesible para lectura por usted y los profesores de la asignatura";		// Okoteve traducción
 #elif L==7	// it
 	"accessibile per la lettura e la scrittura per te e i professori del corso";
 #elif L==8	// pl
@@ -873,7 +885,7 @@ const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_th
 #elif L==9	// pt
 	"acess&iacute;vel para leitura e escrita por voc&ecirc; e os professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible for reading and writing by you and the teachers of the course";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course =
@@ -896,7 +908,7 @@ const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_cours
 #elif L==9	// pt
 	"acess&iacute;vel apenas para leitura por voc&ecirc; e os professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading by you and the teachers of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center =
@@ -919,7 +931,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 #elif L==9	// pt
 	"acess&iacute;vel apenas para leitura pelos estudantes e professores do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading by students and teachers of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course =
@@ -942,7 +954,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cour
 #elif L==9	// pt
 	"acess&iacute;vel apenas para leitura pelos estudantes e professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading by students and teachers of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree =
@@ -974,7 +986,8 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degr
 	"acess&iacute;vel apenas para leitura"
 	" pelos estudantes e professores do grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading"
+	" by students and teachers of the degree";			// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution =
@@ -997,7 +1010,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_inst
 #elif L==9	// pt
 	"acess&iacute;vel apenas para leitura pelos estudantes e professores da institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading by students and teachers of the institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course =
@@ -1020,7 +1033,7 @@ const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teacher
 #elif L==9	// pt
 	"acess&iacute;vel apenas para leitura pelos estudantes do grupo e professores da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"accessible only for reading by students of the group and teachers of the course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Action =
@@ -1066,7 +1079,7 @@ const char *Txt_Add_questions =
 #elif L==9	// pt
 	"Adicionar perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Add questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Add_this_ID =
@@ -1089,7 +1102,7 @@ const char *Txt_Add_this_ID =
 #elif L==9	// pt
 	"Adicionar este n&ordm; identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Add this ID";			// Çeviri lazim!
 #endif
 
 const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
@@ -1112,7 +1125,7 @@ const char *Txt_Add_USERS =	// Warning: it is very important to include %s in th
 #elif L==9	// pt
 	"Adicionar %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Add %s";		// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_me =
@@ -1135,7 +1148,7 @@ const char *Txt_Administer_me =
 #elif L==9	// pt
 	"Gerenciar me";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer me";	// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_multiple_students =
@@ -1158,7 +1171,7 @@ const char *Txt_Administer_multiple_students =
 #elif L==9	// pt
 	"Gerenciar v&aacute;rios estudantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer multiple students";		// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_multiple_non_editing_teachers =
@@ -1181,7 +1194,7 @@ const char *Txt_Administer_multiple_non_editing_teachers =
 #elif L==9	// pt
 	"Gerenciar v&aacute;rios professores n&atilde;o editores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer multiple non-editing teachers";	// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_multiple_teachers =
@@ -1204,7 +1217,7 @@ const char *Txt_Administer_multiple_teachers =
 #elif L==9	// pt
 	"Gerenciar v&aacute;rios professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer multiple teachers";		// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_one_user =
@@ -1227,7 +1240,7 @@ const char *Txt_Administer_one_user =
 #elif L==9	// pt
 	"Gerenciar um utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer one user";		// Çeviri lazim!
 #endif
 
 const char *Txt_Administer_user =
@@ -1250,7 +1263,7 @@ const char *Txt_Administer_user =
 #elif L==9	// pt
 	"Gerenciar utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Administer user";	// Çeviri lazim!
 #endif
 
 const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
@@ -1275,7 +1288,7 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos passados e presentes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Past and present events"	// Çeviri lazim!
 #endif
 	,
 	// Agd_FUTURE_EVENTS
@@ -1298,7 +1311,7 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos atuais e futuros"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Current and future events"	// Çeviri lazim!
 #endif
 	};
 
@@ -1324,7 +1337,7 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos privados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Private events"	// Çeviri lazim!
 #endif
 	,
 	// Agd_PUBLIC_EVENTS
@@ -1347,7 +1360,7 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos p&uacute;blicos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public events"			// Çeviri lazim!
 #endif
 	};
 
@@ -1373,7 +1386,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos ocultos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hidden events"		// Çeviri lazim!
 #endif
 	,
 	// Agd_VISIBL_EVENTS
@@ -1396,7 +1409,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos vis&iacute;veis"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible events"	// Çeviri lazim!
 #endif
 	};
 
@@ -1420,7 +1433,7 @@ const char *Txt_all =
 #elif L==9	// pt
 	"tudo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"all";	// Çeviri lazim!
 #endif
 
 const char *Txt_all_degrees =
@@ -1443,7 +1456,7 @@ const char *Txt_all_degrees =
 #elif L==9	// pt
 	"todos os graus";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"all degrees";			// Çeviri lazim!
 #endif
 
 const char *Txt_all_files_inside_the_root_folder =
@@ -1466,7 +1479,7 @@ const char *Txt_all_files_inside_the_root_folder =
 #elif L==9	// pt
 	"todos os arquivos dentro do diret&oacute;rio raiz";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"all files inside the root folder";			// Çeviri lazim!
 #endif
 
 const char *Txt_All_groups =
@@ -1489,7 +1502,7 @@ const char *Txt_All_groups =
 #elif L==9	// pt
 	"Todos os grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"All groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_All_places =
@@ -1512,7 +1525,7 @@ const char *Txt_All_places =
 #elif L==9	// pt
 	"Todas as localiza&ccedil;oes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"All places";		// Çeviri lazim!
 #endif
 
 const char *Txt_All_questions =
@@ -1535,7 +1548,7 @@ const char *Txt_All_questions =
 #elif L==9	// pt
 	"Todas as perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"All questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_All_tags =		// Tags used in test
@@ -1558,7 +1571,7 @@ const char *Txt_All_tags =		// Tags used in test
 #elif L==9	// pt
 	"Todos os descritores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"All tags";			// Çeviri lazim!
 #endif
 
 const char *Txt_All_types_of_answers =		// Answers of a test
@@ -1581,7 +1594,7 @@ const char *Txt_All_types_of_answers =		// Answers of a test
 #elif L==9	// pt
 	"Todos os tipos de respostas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"All types of answers";			// Çeviri lazim!
 #endif
 
 const char *Txt_Allow_teachers_to_consult_this_test =
@@ -1604,7 +1617,7 @@ const char *Txt_Allow_teachers_to_consult_this_test =
 #elif L==9	// pt
 	"Permitir que os professores de consultar este teste";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Allow teachers to consult this test";			// Çeviri lazim!
 #endif
 
 const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
@@ -1627,7 +1640,7 @@ const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
 #elif L==9	// pt
 	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Alphabetic<br />code<br />ISO 3166-1";			// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1650,7 +1663,7 @@ const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very
 #elif L==9	// pt
 	"J&aacute; existe um jogo com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed a game with the title <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -1673,7 +1686,7 @@ const char *Txt_Already_existed_a_project_with_the_folder_X =	// Warning: it is 
 #elif L==9	// pt
 	"J&aacute; existe um projeto com o diret&oacute;rio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is already a project with folder <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1696,7 +1709,7 @@ const char *Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X
 #elif L==9	// pt
 	"J&aacute; existia um conjunto de perguntas neste exame com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed a set of questions in this exam with the title <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1719,7 +1732,7 @@ const char *Txt_Already_existed_a_survey_with_the_title_X =	// Warning: it is ve
 #elif L==9	// pt
 	"J&aacute; existe um inqu&eacute;rito com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed a survey with the title <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -1742,7 +1755,7 @@ const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it
 #elif L==9	// pt
 	"J&aacute; existe uma atividade com o diret&oacute;rio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is already an assignment with folder <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_an_assignment_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1765,7 +1778,7 @@ const char *Txt_Already_existed_an_assignment_with_the_title_X =	// Warning: it 
 #elif L==9	// pt
 	"J&aacute; existe uma atividade com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed an assignment with the title <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1788,7 +1801,7 @@ const char *Txt_Already_existed_an_event_with_the_title_X =	// Warning: it is ve
 #elif L==9	// pt
 	"J&aacute; existe um evento com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed an event with the title <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Already_existed_an_exam_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
@@ -1811,7 +1824,7 @@ const char *Txt_Already_existed_an_exam_with_the_title_X =	// Warning: it is ver
 #elif L==9	// pt
 	"J&aacute; existe um exame com o t&iacute;tulo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Already existed an exam with the title <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Altitude =
@@ -1834,7 +1847,7 @@ const char *Txt_Altitude =
 #elif L==9	// pt
 	"Altitude";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Altitude";	// Çeviri lazim!
 #endif
 
 const char *Txt_and =
@@ -1857,7 +1870,7 @@ const char *Txt_and =
 #elif L==9	// pt
 	"e";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"and";	// Çeviri lazim!
 #endif
 
 const char *Txt_and_X_other_recipients =	// Warning: it is very important to include %u in the following sentences
@@ -1880,7 +1893,7 @@ const char *Txt_and_X_other_recipients =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"&hellip;e %u outros destinat&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&hellip;and %u other recipients";	// Çeviri lazim!
 #endif
 
 const char *Txt_Announcements =
@@ -1926,7 +1939,7 @@ const char *Txt_Another_building =
 #elif L==9	// pt
 	"Outro edif&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another building";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_center =
@@ -1941,7 +1954,7 @@ const char *Txt_Another_center =
 #elif L==5	// fr
 	"Un autre center";
 #elif L==6	// gn
-	"Otro centro";	// Okoteve traducción
+	"Otro centro";		// Okoteve traducción
 #elif L==7	// it
 	"Un altro centro";
 #elif L==8	// pl
@@ -1949,7 +1962,7 @@ const char *Txt_Another_center =
 #elif L==9	// pt
 	"Outro centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_room =
@@ -1972,7 +1985,7 @@ const char *Txt_Another_room =
 #elif L==9	// pt
 	"Outra sala";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another room";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_country =
@@ -1995,7 +2008,7 @@ const char *Txt_Another_country =
 #elif L==9	// pt
 	"Outro pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another country";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_department =
@@ -2018,7 +2031,7 @@ const char *Txt_Another_department =
 #elif L==9	// pt
 	"Outro departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another department";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_ID =
@@ -2033,7 +2046,7 @@ const char *Txt_Another_ID =
 #elif L==5	// fr
 	"Un autre num&eacute;ro d'identit&eacute;";
 #elif L==6	// gn
-	"Otro ID";		// Okoteve traducción
+	"Otro ID";	// Okoteve traducción
 #elif L==7	// it
 	"Un'altra carta d'identit&agrave;";
 #elif L==8	// pl
@@ -2041,7 +2054,7 @@ const char *Txt_Another_ID =
 #elif L==9	// pt
 	"Outro n&ordm; de identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another ID";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_institution =
@@ -2064,7 +2077,7 @@ const char *Txt_Another_institution =
 #elif L==9	// pt
 	"Outra institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_Another_place =
@@ -2079,7 +2092,7 @@ const char *Txt_Another_place =
 #elif L==5	// fr
 	"Un autre emplacement";
 #elif L==6	// gn
-	"Otro lugar";	// Okoteve traducción
+	"Otro lugar";		// Okoteve traducción
 #elif L==7	// it
 	"Un'altra localit&grave;";
 #elif L==8	// pl
@@ -2087,7 +2100,7 @@ const char *Txt_Another_place =
 #elif L==9	// pt
 	"Outra localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another place";	// Çeviri lazim!
 #endif
 
 const char *Txt_Another_user_s_profile =
@@ -2110,7 +2123,7 @@ const char *Txt_Another_user_s_profile =
 #elif L==9	// pt
 	"Perfil de outro usu&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Another user's profile";	// Çeviri lazim!
 #endif
 
 const char *Txt_Announcement_created =
@@ -2133,7 +2146,7 @@ const char *Txt_Announcement_created =
 #elif L==9	// pt
 	"An&uacute;ncio criado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Announcement created.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Announcement_removed =
@@ -2148,7 +2161,7 @@ const char *Txt_Announcement_removed =
 #elif L==5	// fr
 	"Annonce supprim&eacute;.";
 #elif L==6	// gn
-	"Anuncio eliminado.";	// Okoteve traducción
+	"Anuncio eliminado.";		// Okoteve traducción
 #elif L==7	// it
 	"Annuncio rimosso.";
 #elif L==8	// pl
@@ -2156,7 +2169,7 @@ const char *Txt_Announcement_removed =
 #elif L==9	// pt
 	"An&uacute;ncio removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Announcement removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Answer_survey =
@@ -2179,7 +2192,7 @@ const char *Txt_Answer_survey =
 #elif L==9	// pt
 	"Responder inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Answer survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Answers =		// Answers of test
@@ -2202,7 +2215,7 @@ const char *Txt_Answers =		// Answers of test
 #elif L==9	// pt
 	"Respostas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Answers";	// Çeviri lazim!
 #endif
 
 const char *Txt_ANSWERS_blank =
@@ -2225,7 +2238,7 @@ const char *Txt_ANSWERS_blank =
 #elif L==9	// pt
 	"em&nbsp;branco";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"blank";		// Çeviri lazim!
 #endif
 
 const char *Txt_ANSWERS_correct =
@@ -2248,7 +2261,7 @@ const char *Txt_ANSWERS_correct =
 #elif L==9	// pt
 	"corretas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"correct";	// Çeviri lazim!
 #endif
 
 const char *Txt_ANSWERS_non_blank =
@@ -2271,7 +2284,7 @@ const char *Txt_ANSWERS_non_blank =
 #elif L==9	// pt
 	"respondidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"non-blank";	// Çeviri lazim!
 #endif
 
 const char *Txt_ANSWERS_wrong =
@@ -2294,7 +2307,7 @@ const char *Txt_ANSWERS_wrong =
 #elif L==9	// pt
 	"erradas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"wrong";		// Çeviri lazim!
 #endif
 
 const char *Txt_Any_action =
@@ -2317,7 +2330,7 @@ const char *Txt_Any_action =
 #elif L==9	// pt
 	"Qualquer a&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Any action";			// Çeviri lazim!
 #endif
 
 const char *Txt_any_course =
@@ -2340,7 +2353,7 @@ const char *Txt_any_course =
 #elif L==9	// pt
 	"qualquer disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"any course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Any_department =
@@ -2363,7 +2376,7 @@ const char *Txt_Any_department =
 #elif L==9	// pt
 	"Qualquer departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Any department";		// Çeviri lazim!
 #endif
 
 const char *Txt_Any_type_of_degree =
@@ -2372,7 +2385,7 @@ const char *Txt_Any_type_of_degree =
 #elif L==2	// de
 	"Alle Abschlussart";
 #elif L==3	// en
-	"grau";
+	"Any type of degree";
 #elif L==4	// es
 	"Cualquier tipo de titulaci&oacute;n";
 #elif L==5	// fr
@@ -2386,7 +2399,7 @@ const char *Txt_Any_type_of_degree =
 #elif L==9	// pt
 	"Qualquer tipo de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Any type of degree";			// Çeviri lazim!
 #endif
 
 const char *Txt_any_user =
@@ -2409,7 +2422,7 @@ const char *Txt_any_user =
 #elif L==9	// pt
 	"qualquer utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"any user";		// Çeviri lazim!
 #endif
 
 const char *Txt_Application_key =
@@ -2432,7 +2445,7 @@ const char *Txt_Application_key =
 #elif L==9	// pt
 	"Chave de aplica&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Application key";		// Çeviri lazim!
 #endif
 
 const char *Txt_Assessment_criteria =
@@ -2455,7 +2468,7 @@ const char *Txt_Assessment_criteria =
 #elif L==9	// pt
 	"Crit&eacute;rios de avalia&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assessment criteria";			// Çeviri lazim!
 #endif
 
 const char *Txt_Assigned_QUESTION =
@@ -2478,7 +2491,7 @@ const char *Txt_Assigned_QUESTION =
 #elif L==9	// pt
 	"Atribu&iacute;do?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assigned?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Assignment =
@@ -2501,7 +2514,7 @@ const char *Txt_Assignment =
 #elif L==9	// pt
 	"Atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assignment";	// Çeviri lazim!
 #endif
 
 const char *Txt_Assignment_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -2524,7 +2537,7 @@ const char *Txt_Assignment_X_removed =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Atividade <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assignment <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Assignments =
@@ -2570,7 +2583,7 @@ const char *Txt_Assignments_and_other_works =
 #elif L==9	// pt
 	"Atividades e outros trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assignments and other works";		// Çeviri lazim!
 #endif
 
 const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
@@ -2595,7 +2608,7 @@ const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Classificar por data de in&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by start date"		// Çeviri lazim!
 #endif
 	,
 	[Dat_END_TIME] =
@@ -2618,7 +2631,7 @@ const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Classificar por data de t&eacute;rmino"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by end date"				// Çeviri lazim!
 #endif
 	};
 
@@ -2644,7 +2657,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Start"	// Çeviri lazim!
 #endif
 	,
 	[Dat_END_TIME] =
@@ -2667,7 +2680,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"End"	// Çeviri lazim!
 #endif
 	};
 
@@ -2691,7 +2704,7 @@ const char *Txt_Assignments_area =
 #elif L==9	// pt
 	"Zona de atividades";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Assignments area";	// Çeviri lazim!
 #endif
 
 const char *Txt_assignments_area =
@@ -2714,7 +2727,7 @@ const char *Txt_assignments_area =
 #elif L==9	// pt
 	"zona de atividades";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"assignments area";	// Çeviri lazim!
 #endif
 
 const char *Txt_Attendance =	// Number of times a students has attended to face-to-face class
@@ -2760,7 +2773,7 @@ const char *Txt_Attendance_list =
 #elif L==9	// pt
 	"Lista assiduidade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Attendance list";	// Çeviri lazim!
 #endif
 
 const char *Txt_Availability =
@@ -2783,7 +2796,7 @@ const char *Txt_Availability =
 #elif L==9	// pt
 	"Disponibilidade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Availability";		// Çeviri lazim!
 #endif
 
 const char *Txt_average =
@@ -2806,7 +2819,7 @@ const char *Txt_average =
 #elif L==9	// pt
 	"m&eacute;dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"average";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
@@ -2829,7 +2842,7 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de atividades<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of assignments<br />per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_exams_BR_per_course =
@@ -2852,7 +2865,7 @@ const char *Txt_Average_number_BR_of_exams_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de exames<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of exams<br />per course";			// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_games_BR_per_course =
@@ -2875,7 +2888,7 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de jogos<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of games<br />per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_items_BR_per_course =
@@ -2898,7 +2911,7 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de itens<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of items<br />per course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_projects_BR_per_course =
@@ -2921,7 +2934,7 @@ const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de projetos<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of projects<br />per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_questions_BR_per_survey =
@@ -2944,7 +2957,7 @@ const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de perguntas<br />por inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of questions<br />per survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
@@ -2967,7 +2980,7 @@ const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average<br />number<br />of test<br />questions<br />per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_BR_of_surveys_BR_per_course =
@@ -2990,7 +3003,7 @@ const char *Txt_Average_number_BR_of_surveys_BR_per_course =
 #elif L==9	// pt
 	"N.&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number<br />of surveys<br />per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
@@ -3013,7 +3026,7 @@ const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
 #elif L==9	// pt
 	"N.&ordm; medio de disciplinas em que cada utilizador pertence";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number of courses to which a user belongs";			// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded =
@@ -3036,7 +3049,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_
 #elif L==9	// pt
 	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average<br />number of<br />times that<br />a question<br />has been<br />responded";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course =
@@ -3059,7 +3072,7 @@ const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_
 #elif L==9	// pt
 	"N.&ordm; m&eacute;dio<br />de vezes<br />que uma<br />pergunta<br />foi respondida<br />por disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average<br />number of<br />times that<br />questions<br />have been<br />responded<br />per course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_number_of_users_belonging_to_a_course =
@@ -3082,7 +3095,7 @@ const char *Txt_Average_number_of_users_belonging_to_a_course =
 #elif L==9	// pt
 	"N.&ordm; medio de utilizadores que pertencem a uma disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average number of users belonging to a course";		// Çeviri lazim!
 #endif
 
 const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
@@ -3099,7 +3112,7 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #elif L==5	// fr
 	"m&eacute;dian de toutes les photos"
 #elif L==6	// gn
-	"mediana de todas las fotos"			// Okoteve traducción
+	"mediana de todas las fotos"	// Okoteve traducción
 #elif L==7	// it
 	"mediana di tutte le foto"
 #elif L==8	// pl
@@ -3107,7 +3120,7 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #elif L==9	// pt
 	"mediana de todas as fotos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"median of all photos"		// Çeviri lazim!
 #endif
 	,
  	[Pho_PHOTO_AVERAGE_ALL] =
@@ -3130,7 +3143,7 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #elif L==9	// pt
 	"m&eacute;dia aritm&eacute;tica de todas as fotos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"arithmetic mean of all photos"			// Çeviri lazim!
 #endif
 	};
 
@@ -3154,7 +3167,7 @@ const char *Txt_Average_BR_score_BR_per_question =
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o<br />m&eacute;dia por<br />pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average<br />score<br />per question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Average_type =
@@ -3177,7 +3190,7 @@ const char *Txt_Average_type =
 #elif L==9	// pt
 	"Tipo de m&eacute;dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Average type";		// Çeviri lazim!
 #endif
 
 const char *Txt_Banned_users =
@@ -3200,7 +3213,7 @@ const char *Txt_Banned_users =
 #elif L==9	// pt
 	"Usu&aacute;rios banidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Banned users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Banner =
@@ -3223,7 +3236,7 @@ const char *Txt_Banner =
 #elif L==9	// pt
 	"Banner";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Banner";	// Çeviri lazim!
 #endif
 
 const char *Txt_Banner_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -3246,7 +3259,7 @@ const char *Txt_Banner_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Banner <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Banner <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Banners =
@@ -3269,7 +3282,7 @@ const char *Txt_Banners =
 #elif L==9	// pt
 	"Banners";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Banners";	// Çeviri lazim!
 #endif
 
 const char *Txt_Basic_public_profile =
@@ -3292,7 +3305,7 @@ const char *Txt_Basic_public_profile =
 #elif L==9	// pt
 	"Perfil p&uacute;blico b&aacute;sico";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Basic public profile";			// Çeviri lazim!
 #endif
 
 const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered =
@@ -3347,7 +3360,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	" vous devez cr&eacute;er votre surnom.";
 #elif L==6	// gn
 	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe crear su apodo.";			// Okoteve traducción
+	" debe crear su apodo.";		// Okoteve traducción
 #elif L==7	// it
 	"Prima di scegliere qualsiasi altra opzione"
 	" devi creare il tuo soprannome.";
@@ -3358,7 +3371,8 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	" voc&ecirc; deve criar sua alcunha.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Before going to any other option"
+	" you must create your nickname.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
@@ -3379,7 +3393,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	" vous devez cr&eacute;er votre mot de passe.";
 #elif L==6	// gn
 	"Antes de acceder a cualquier otra opci&oacute;n"
-	" debe crear su contrase&ntilde;a.";		// Okoteve traducción
+	" debe crear su contrase&ntilde;a.";	// Okoteve traducción
 #elif L==7	// it
 	"Prima di scegliere qualsiasi altra opzione"
 	" devi creare una password.";
@@ -3390,7 +3404,8 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve criar sua senha.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Before going to any other option"
+	" you must create your password.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address =
@@ -3422,7 +3437,8 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_add
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve preencher seu endere&ccedil;o de email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Before going to any other option"
+	" you must fill in your email address.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -3445,7 +3461,7 @@ const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is ver
 #elif L==9	// pt
 	"Pasta de <strong>%s</strong> foi removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Briefcase of <strong>%s</strong> has been removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Briefcases =
@@ -3468,7 +3484,7 @@ const char *Txt_Briefcases =
 #elif L==9	// pt
 	"Pasta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Briefcases";	// Çeviri lazim!
 #endif
 
 const char *Txt_Building =
@@ -3491,7 +3507,7 @@ const char *Txt_Building =
 #elif L==9	// pt
 	"Edif&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Building";	// Çeviri lazim!
 #endif
 
 const char *Txt_Building_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -3506,7 +3522,7 @@ const char *Txt_Building_X_removed =	// Warning: it is very important to include
 #elif L==5	// fr
 	"B&acirc;timent <strong>%s</strong> supprim&eacute;.";
 #elif L==6	// gn
-	"Edificio <strong>%s</strong> eliminado.";		// Okoteve traducción
+	"Edificio <strong>%s</strong> eliminado.";	// Okoteve traducción
 #elif L==7	// it
 	"Edificio <strong>%s</strong> rimosso.";
 #elif L==8	// pl
@@ -3514,7 +3530,7 @@ const char *Txt_Building_X_removed =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Edif&iacute;cio <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Building <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS] =
@@ -3539,7 +3555,7 @@ const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por nome abreviado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by short name"		// Çeviri lazim!
 #endif
 	,
 	[Bld_ORDER_BY_FULL_NAME] =
@@ -3562,7 +3578,7 @@ const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por nome completo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by full name"		// Çeviri lazim!
 #endif
 	,
 	[Bld_ORDER_BY_LOCATION] =
@@ -3585,7 +3601,7 @@ const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by location"		// Çeviri lazim!
 #endif
   };
 
@@ -3611,7 +3627,7 @@ const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome abreviado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Short name"	// Çeviri lazim!
 #endif
 	,
 	[Bld_ORDER_BY_FULL_NAME] =
@@ -3634,7 +3650,7 @@ const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome completo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Full name"		// Çeviri lazim!
 #endif
 	,
 	[Bld_ORDER_BY_LOCATION] =
@@ -3657,7 +3673,7 @@ const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Location"	// Çeviri lazim!
 #endif
 	};
 
@@ -3704,7 +3720,7 @@ const char *Txt_Calculate =
 #elif L==9	// pt
 	"Calcular";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Calculate";	// Çeviri lazim!
 #endif
 
 const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =	// Warning: should end in space
@@ -3727,7 +3743,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =	// Warning: should end
 #elif L==9	// pt
 	"Calcular a foto m&eacute;dia de ";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Calculate average photo of ";			// Çeviri lazim!
 #endif
 
 const char *Txt_Calendar =
@@ -3773,7 +3789,7 @@ const char *Txt_CALL_FOR_EXAM =
 #elif L==9	// pt
 	"CHAMADA DE EXAME";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"CALL FOR EXAM";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Approximate_duration =
@@ -3796,7 +3812,7 @@ const char *Txt_CALL_FOR_EXAM_Approximate_duration =
 #elif L==9	// pt
 	"Dura&ccedil;&atilde;o aproximada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Approximate duration";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Course =
@@ -3819,7 +3835,7 @@ const char *Txt_CALL_FOR_EXAM_Course =
 #elif L==9	// pt
 	"Disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kurs";
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Documentation_required =
@@ -3842,7 +3858,7 @@ const char *Txt_CALL_FOR_EXAM_Documentation_required =
 #elif L==9	// pt
 	"Documenta&ccedil;&atilde;o necess&aacute;ria";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ID required";			// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Exam_date =
@@ -3865,7 +3881,7 @@ const char *Txt_CALL_FOR_EXAM_Exam_date =
 #elif L==9	// pt
 	"Exame data";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Exam date";	// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Material_allowed =
@@ -3888,7 +3904,7 @@ const char *Txt_CALL_FOR_EXAM_Material_allowed =
 #elif L==9	// pt
 	"Material autorizado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Material allowed";	// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Material_required =
@@ -3911,7 +3927,7 @@ const char *Txt_CALL_FOR_EXAM_Material_required =
 #elif L==9	// pt
 	"Material obrigat&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Material required";	// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Mode =
@@ -3934,7 +3950,7 @@ const char *Txt_CALL_FOR_EXAM_Mode =
 #elif L==9	// pt
 	"Modalidade<br />(escrita, oral,&hellip;)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mode<br />(written, oral,&hellip;)";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Other_information =
@@ -3957,7 +3973,7 @@ const char *Txt_CALL_FOR_EXAM_Other_information =
 #elif L==9	// pt
 	"Outras informa&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other information";	// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Place_of_exam =
@@ -3980,7 +3996,7 @@ const char *Txt_CALL_FOR_EXAM_Place_of_exam =
 #elif L==9	// pt
 	"Local do exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Place of exam";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Session =
@@ -4003,7 +4019,7 @@ const char *Txt_CALL_FOR_EXAM_Session =
 #elif L==9	// pt
 	"Per&iacute;odo<br />(junho, setembro,&hellip;)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Session<br />(june, september,&hellip;)";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Start_time =
@@ -4026,7 +4042,7 @@ const char *Txt_CALL_FOR_EXAM_Start_time =
 #elif L==9	// pt
 	"Hora de in&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Start time";		// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Structure_of_the_exam =
@@ -4049,7 +4065,7 @@ const char *Txt_CALL_FOR_EXAM_Structure_of_the_exam =
 #elif L==9	// pt
 	"Estrutura do exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Structure of the exam";	// Çeviri lazim!
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Year_or_semester =	// 1, 2, 3..., not 1984, 2038...
@@ -4072,7 +4088,7 @@ const char *Txt_CALL_FOR_EXAM_Year_or_semester =	// 1, 2, 3..., not 1984, 2038..
 #elif L==9	// pt
 	"Ano ou semestre";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Year or semester";		// Çeviri lazim!
 #endif
 
 const char *Txt_Call_for_exam_removed =
@@ -4095,7 +4111,7 @@ const char *Txt_Call_for_exam_removed =
 #elif L==9	// pt
 	"Chamada para exame removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Call for exam removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Call_the_roll =
@@ -4110,7 +4126,7 @@ const char *Txt_Call_the_roll =
 #elif L==5	// fr
 	"Faire l'appel";
 #elif L==6	// gn
-	"Pasar lista";	// Okoteve traducción
+	"Pasar lista";		// Okoteve traducción
 #elif L==7	// it
 	"Appello";
 #elif L==8	// pl
@@ -4118,7 +4134,7 @@ const char *Txt_Call_the_roll =
 #elif L==9	// pt
 	"Lista de presen&ccedil;a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Call the roll";	// Çeviri lazim!
 #endif
 
 const char *Txt_Calls_for_exams =
@@ -4141,7 +4157,7 @@ const char *Txt_Calls_for_exams =
 #elif L==9	// pt
 	"Chamadas para exames";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Calls for exams";			// Çeviri lazim!
 #endif
 
 const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -4173,7 +4189,8 @@ const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quo
 	"N&atilde;o &eacute; poss&iacute;vel criar o diret&oacute;rio <strong>%s</strong>"
 	" porque iria exceder a cota de disco.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cannot create the folder <strong>%s</strong>"
+	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -4205,7 +4222,8 @@ const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or
 	"N&atilde;o &eacute; poss&iacute;vel criar o diret&oacute;rio <strong>%s</strong>"
 	" porque j&aacute; existe um diret&oacute;rio ou um arquivo com esse nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cannot create the folder <strong>%s</strong>"
+	" because there is already a folder or a file with that name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -4237,7 +4255,8 @@ const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota
 	"N&atilde;o &eacute; poss&iacute;vel criar a liga&ccedil;&atilde;o <strong>%s</strong>"
 	" porque iria exceder a cota de disco.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cannot create the link <strong>%s</strong>"
+	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -4269,7 +4288,8 @@ const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a
 	"N&atilde;o &eacute; poss&iacute;vel criar a liga&ccedil;&atilde;o <strong>%s</strong>"
 	" porque j&aacute; existe um diret&oacute;rio ou uma liga&ccedil;&atilde;o com esse nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cannot create the link <strong>%s</strong>"
+	" because there is already a folder or a link with that name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Can_not_rename_a_folder_of_assignment =
@@ -4292,7 +4312,7 @@ const char *Txt_Can_not_rename_a_folder_of_assignment =
 #elif L==9	// pt
 	"N&atilde;o &eacute; poss&iacute;vel renomear um diret&oacute;rio de actividade.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cannot rename a folder of assignment.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Capacity_OF_A_ROOM =
@@ -4307,7 +4327,7 @@ const char *Txt_Capacity_OF_A_ROOM =
 #elif L==5	// fr
 	"Capacit&eacute;";
 #elif L==6	// gn
-	"Aforo";				// Okoteve traducción
+	"Aforo";	// Okoteve traducción
 #elif L==7	// it
 	"Capacit&agrave;";
 #elif L==8	// pl
@@ -4315,7 +4335,7 @@ const char *Txt_Capacity_OF_A_ROOM =
 #elif L==9	// pt
 	"Capacidade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Capacity";	// Çeviri lazim!
 #endif
 
 const char *Txt_Center =
@@ -4338,7 +4358,7 @@ const char *Txt_Center =
 #elif L==9	// pt
 	"Centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Merkez";
 #endif
 
 const char *Txt_center =
@@ -4361,7 +4381,7 @@ const char *Txt_center =
 #elif L==9	// pt
 	"centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"merkez";
 #endif
 
 const char *Txt_Center_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -4384,7 +4404,7 @@ const char *Txt_Center_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Centro <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Center <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
@@ -4401,7 +4421,7 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==5	// fr
 	"Inconnu"
 #elif L==6	// gn
-	"Desconocido"			// Okoteve traducción
+	"Desconocido"	// Okoteve traducción
 #elif L==7	// it
 	"Sconosciuto"
 #elif L==8	// pl
@@ -4409,7 +4429,7 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
  	[Hie_STATUS_ACTIVE] =
@@ -4432,7 +4452,7 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Ativo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Active"	// Çeviri lazim!
 #endif
 	,
  	[Hie_STATUS_PENDING] =
@@ -4455,7 +4475,7 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Novo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New"	// Çeviri lazim!
 #endif
 	,
  	[Hie_STATUS_REMOVED] =
@@ -4478,7 +4498,7 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Suprimido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Removed"	// Çeviri lazim!
 #endif
 	};
 
@@ -4525,7 +4545,7 @@ const char *Txt_Centers_ABBREVIATION =
 #elif L==9	// pt
 	"Cent.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Merk.";
 #endif
 
 const char *Txt_centers =
@@ -4548,7 +4568,7 @@ const char *Txt_centers =
 #elif L==9	// pt
 	"centros";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"merkezler";
 #endif
 
 const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
@@ -4573,7 +4593,7 @@ const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by center"	// Çeviri lazim!
 #endif
 	,
  	[Ctr_ORDER_BY_NUM_USRS] =
@@ -4596,7 +4616,7 @@ const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of users"			// Çeviri lazim!
 #endif
 	};
 
@@ -4620,7 +4640,7 @@ const char *Txt_Centers_of_INSTITUTION_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Centros de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Centers of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
@@ -4645,7 +4665,7 @@ const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
 #elif L==9	// pt
 	"Centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Merkez"
 #endif
 	,
  	[Ctr_ORDER_BY_NUM_USRS] =
@@ -4668,7 +4688,7 @@ const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
 #elif L==9	// pt
 	"Utilizadores do centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users of the center"	// Çeviri lazim!
 #endif
 	};
 
@@ -4692,7 +4712,7 @@ const char *Txt_Centers_with_map =
 #elif L==9	// pt
 	"Centros com mapa";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Centers with map";	// Çeviri lazim!
 #endif
 
 const char *Txt_Centers_with_pending_degrees =
@@ -4715,7 +4735,7 @@ const char *Txt_Centers_with_pending_degrees =
 #elif L==9	// pt
 	"Centros com graus pendentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Centers with pending degrees";				// Çeviri lazim!
 #endif
 
 const char *Txt_Change_account =
@@ -4738,7 +4758,7 @@ const char *Txt_Change_account =
 #elif L==9	// pt
 	"Alterar conta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change account";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_email =
@@ -4761,7 +4781,7 @@ const char *Txt_Change_email =
 #elif L==9	// pt
 	"Alterar email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change email";		// Çeviri lazim!
 #endif
 
 const char *Txt_Change_IDs =
@@ -4776,7 +4796,7 @@ const char *Txt_Change_IDs =
 #elif L==5	// fr
 	"Changer IDs";
 #elif L==6	// gn
-	"Cambiar ID";		// Okoteve traducción
+	"Cambiar ID";	// Okoteve traducción
 #elif L==7	// it
 	"Cambiare ID";
 #elif L==8	// pl
@@ -4784,7 +4804,7 @@ const char *Txt_Change_IDs =
 #elif L==9	// pt
 	"Alterar n&ordm;s. identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change IDs";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_image_video =
@@ -4807,7 +4827,7 @@ const char *Txt_Change_image_video =
 #elif L==9	// pt
 	"Alterar imagem / v&iacute;deo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change image / video";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_logo =
@@ -4830,7 +4850,7 @@ const char *Txt_Change_logo =
 #elif L==9	// pt
 	"Alterar logotipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change logo";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_my_groups =
@@ -4853,7 +4873,7 @@ const char *Txt_Change_my_groups =
 #elif L==9	// pt
 	"Alterar meus grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change my groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_nickname =
@@ -4876,7 +4896,7 @@ const char *Txt_Change_nickname =
 #elif L==9	// pt
 	"Alterar alcunha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change nickname";	// Çeviri lazim!
 #endif
 
 const char *Txt_Change_password =
@@ -4914,7 +4934,7 @@ const char *Txt_Change_photo =
 #elif L==5	// fr
 	"Changer photo";
 #elif L==6	// gn
-	"Cambiar foto";		// Okoteve traducción
+	"Cambiar foto";	// Okoteve traducción
 #elif L==7	// it
 	"Cambiare foto";
 #elif L==8	// pl
@@ -4922,7 +4942,7 @@ const char *Txt_Change_photo =
 #elif L==9	// pt
 	"Alterar foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Change photo";	// Çeviri lazim!
 #endif
 
 const char *Txt_CHAT_Room =
@@ -4945,7 +4965,7 @@ const char *Txt_CHAT_Room =
 #elif L==9	// pt
 	"Room";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Room";	// Çeviri lazim!
 #endif
 
 const char *Txt_CHAT_Room_code =
@@ -4968,7 +4988,7 @@ const char *Txt_CHAT_Room_code =
 #elif L==9	// pt
 	"C&oacute;digo de room";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Room code";			// Çeviri lazim!
 #endif
 
 const char *Txt_Chat_rooms =
@@ -4991,7 +5011,7 @@ const char *Txt_Chat_rooms =
 #elif L==9	// pt
 	"Chat rooms";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Chat rooms";		// Çeviri lazim!
 #endif
 
 const char *Txt_Check =
@@ -5060,7 +5080,7 @@ const char *Txt_Check_marks_in_the_file =
 #elif L==9	// pt
 	"Verifique as notas no arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Check marks in the file";			// Çeviri lazim!
 #endif
 
 const char *Txt_Click =
@@ -5075,7 +5095,7 @@ const char *Txt_Click =
 #elif L==5	// fr
 	"Clic";
 #elif L==6	// gn
-	"Clic";	// Okoteve traducción
+	"Clic";		// Okoteve traducción
 #elif L==7	// it
 	"Clic";
 #elif L==8	// pl
@@ -5083,7 +5103,7 @@ const char *Txt_Click =
 #elif L==9	// pt
 	"Clique";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Click";	// Çeviri lazim!
 #endif
 
 const char *Txt_Clicks =
@@ -5106,7 +5126,7 @@ const char *Txt_Clicks =
 #elif L==9	// pt
 	"Cliques";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Clicks";	// Çeviri lazim!
 #endif
 
 const char *Txt_clicks =
@@ -5129,7 +5149,7 @@ const char *Txt_clicks =
 #elif L==9	// pt
 	"cliques";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"clicks";	// Çeviri lazim!
 #endif
 
 const char *Txt_Clicks_per_day =
@@ -5152,7 +5172,7 @@ const char *Txt_Clicks_per_day =
 #elif L==9	// pt
 	"Cliques por dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Clicks per day";	// Çeviri lazim!
 #endif
 
 const char *Txt_Close =
@@ -5175,7 +5195,7 @@ const char *Txt_Close =
 #elif L==9	// pt
 	"Fechar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Close";	// Çeviri lazim!
 #endif
 
 const char *Txt_Closed_survey =
@@ -5190,7 +5210,7 @@ const char *Txt_Closed_survey =
 #elif L==5	// fr
 	"Sondage ferm&eacute;";
 #elif L==6	// gn
-	"Encuesta cerrada";		// Okoteve traducción
+	"Encuesta cerrada";	// Okoteve traducción
 #elif L==7	// it
 	"Sondaggio chiuso";
 #elif L==8	// pl
@@ -5198,7 +5218,7 @@ const char *Txt_Closed_survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito fechado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Closed survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Code =
@@ -5221,7 +5241,7 @@ const char *Txt_Code =
 #elif L==9	// pt
 	"C&oacute;d.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Code";	// Çeviri lazim!
 #endif
 
 const char *Txt_Color_of_the_graphic =
@@ -5244,7 +5264,7 @@ const char *Txt_Color_of_the_graphic =
 #elif L==9	// pt
 	"Cor do gr&aacute;fico";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Color of the graphic";		// Çeviri lazim!
 #endif
 
 const char *Txt_column =
@@ -5267,7 +5287,7 @@ const char *Txt_column =
 #elif L==9	// pt
 	"coluna";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"column";	// Çeviri lazim!
 #endif
 
 const char *Txt_Columns =
@@ -5336,7 +5356,7 @@ const char *Txt_Comment =	// As a verb
 #elif L==9	// pt
 	"Comentar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Comment";	// Çeviri lazim!
 #endif
 
 const char *Txt_Comment_removed =
@@ -5351,7 +5371,7 @@ const char *Txt_Comment_removed =
 #elif L==5	// fr
 	"Commentaire supprim&eacute;.";
 #elif L==6	// gn
-	"Comentario eliminado.";		// Okoteve traducción
+	"Comentario eliminado.";	// Okoteve traducción
 #elif L==7	// it
 	"Commento rimosso.";
 #elif L==8	// pl
@@ -5359,7 +5379,7 @@ const char *Txt_Comment_removed =
 #elif L==9	// pt
 	"Coment&aacute;rio removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Comment removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Comments =
@@ -5382,7 +5402,7 @@ const char *Txt_Comments =
 #elif L==9	// pt
 	"Coment&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Comments";	// Çeviri lazim!
 #endif
 
 const char *Txt_Configure =
@@ -5405,7 +5425,7 @@ const char *Txt_Configure =
 #elif L==9	// pt
 	"Configurar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Configure";	// Çeviri lazim!
 #endif
 
 const char *Txt_Configure_projects =
@@ -5428,7 +5448,7 @@ const char *Txt_Configure_projects =
 #elif L==9	// pt
 	"Configurar projetos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Configure projects";	// Çeviri lazim!
 #endif
 
 const char *Txt_Configure_tests =
@@ -5451,7 +5471,7 @@ const char *Txt_Configure_tests =
 #elif L==9	// pt
 	"Configurar testes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Configure tests";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirm =
@@ -5474,7 +5494,7 @@ const char *Txt_Confirm =
 #elif L==9	// pt
 	"Confirmar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Confirm";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirm_email =
@@ -5497,7 +5517,7 @@ const char *Txt_Confirm_email =
 #elif L==9	// pt
 	"Confirmar email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Confirm email";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirm_ID =
@@ -5520,7 +5540,7 @@ const char *Txt_Confirm_ID =
 #elif L==9	// pt
 	"Confirmar ID";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Confirm ID";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirm_my_enrolment =
@@ -5543,7 +5563,7 @@ const char *Txt_Confirm_my_enrolment =
 #elif L==9	// pt
 	"Confirmar o meu registo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Confirm my enrolment";			// Çeviri lazim!
 #endif
 
 const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
@@ -5611,7 +5631,12 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" voc&ecirc; pode cri&aacute;-lo antes de solicitar a inscri&ccedil;&atilde;o do mesmo"
 	" (o mesmo se aplica &agrave;s institui&ccedil;&otilde;es, centros e graus).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Congratulations! You have created your account <strong>@%s</strong>."
+	" Now %s will request you some data to complete your profile."
+	" Then you will be able to apply for enrolment in courses."
+	" If a course does not exist,"
+	" you can create it before applying for enrolment in it"
+	" (the same applies to institutions, centers and degrees).";	// Çeviri lazim!
 #endif
 
 const char *Txt_connected_PLURAL =
@@ -5634,7 +5659,7 @@ const char *Txt_connected_PLURAL =
 #elif L==9	// pt
 	"conectados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"connected";	// Çeviri lazim!
 #endif
 
 const char *Txt_connected_SINGULAR =
@@ -5657,7 +5682,7 @@ const char *Txt_connected_SINGULAR =
 #elif L==9	// pt
 	"conectado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"connected";	// Çeviri lazim!
 #endif
 
 const char *Txt_Connected_users =
@@ -5680,7 +5705,7 @@ const char *Txt_Connected_users =
 #elif L==9	// pt
 	"Utilizadores conectados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Connected users";	// Çeviri lazim!
 #endif
 
 const char *Txt_Continue =
@@ -5703,7 +5728,7 @@ const char *Txt_Continue =
 #elif L==9	// pt
 	"Continuar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Continue";	// Çeviri lazim!
 #endif
 
 const char *Txt_Contract =	// As a verb
@@ -5726,7 +5751,7 @@ const char *Txt_Contract =	// As a verb
 #elif L==9	// pt
 	"Contrair";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Contract";	// Çeviri lazim!
 #endif
 
 const char *Txt_Control_of_class_attendance =
@@ -5749,7 +5774,7 @@ const char *Txt_Control_of_class_attendance =
 #elif L==9	// pt
 	"Controlo de assiduidade de classe";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Control of class attendance";		// Çeviri lazim!
 #endif
 
 const char *Txt_Cookies =
@@ -5795,7 +5820,7 @@ const char *Txt_Copy =
 #elif L==9	// pt
 	"Copiar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Copy";	// Çeviri lazim!
 #endif
 
 const char *Txt_Copy_not_allowed =
@@ -5818,7 +5843,7 @@ const char *Txt_Copy_not_allowed =
 #elif L==9	// pt
 	"Copia n&atilde;o permitida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Copy not allowed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Copy_source =
@@ -5841,7 +5866,7 @@ const char *Txt_Copy_source =
 #elif L==9	// pt
 	"Origem da copia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Copy source";		// Çeviri lazim!
 #endif
 
 const char *Txt_Could_not_detect_any_face_in_front_position_ =
@@ -5864,7 +5889,7 @@ const char *Txt_Could_not_detect_any_face_in_front_position_ =
 #elif L==9	// pt
 	"N&atilde;o foi poss&iacute;vel detectar nenhum rosto na posi&ccedil;&atilde;o frontal.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Could not detect any face in front position.";				// Çeviri lazim!
 #endif
 
 const char *Txt_Countdown =
@@ -5887,7 +5912,7 @@ const char *Txt_Countdown =
 #elif L==9	// pt
 	"Contagem regressiva";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Countdown";		// Çeviri lazim!
 #endif
 
 const char *Txt_Countries =
@@ -5910,7 +5935,7 @@ const char *Txt_Countries =
 #elif L==9	// pt
 	"Pa&iacute;ses";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Countries";	// Çeviri lazim!
 #endif
 
 const char *Txt_countries =
@@ -5933,7 +5958,7 @@ const char *Txt_countries =
 #elif L==9	// pt
 	"pa&iacute;ses";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"countries";	// Çeviri lazim!
 #endif
 
 const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
@@ -5958,7 +5983,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por pa&iacute;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by country"		// Çeviri lazim!
 #endif
 	,
 	[Cty_ORDER_BY_NUM_USRS] =
@@ -5981,7 +6006,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of users"			// Çeviri lazim!
 #endif
 	};
 
@@ -6005,7 +6030,7 @@ const char *Txt_Countries_with_pending_institutions =
 #elif L==9	// pt
 	"Pa&iacute;ses com institu&ccedil;&otilde;es pendentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Countries with pending institutions";				// Çeviri lazim!
 #endif
 
 const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
@@ -6030,7 +6055,7 @@ const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
 #elif L==9	// pt
 	"Pa&iacute;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&Uuml;lke"
 #endif
 	,
 	[Cty_ORDER_BY_NUM_USRS] =
@@ -6053,7 +6078,7 @@ const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
 #elif L==9	// pt
 	"Utilizadores do pa&iacute;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users of the country"		// Çeviri lazim!
 #endif
 	};
 
@@ -6077,7 +6102,7 @@ const char *Txt_Country =
 #elif L==9	// pt
 	"Pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&Uuml;lke";
 #endif
 
 const char *Txt_country =
@@ -6100,7 +6125,7 @@ const char *Txt_country =
 #elif L==9	// pt
 	"pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&uuml;lke";
 #endif
 
 const char *Txt_Country_unspecified =
@@ -6123,7 +6148,7 @@ const char *Txt_Country_unspecified =
 #elif L==9	// pt
 	"Pa&iacute;s indeterminado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Country unspecified";		// Çeviri lazim!
 #endif
 
 const char *Txt_Country_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -6146,7 +6171,7 @@ const char *Txt_Country_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Pa&iacute;s <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Country <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Course =
@@ -6169,7 +6194,7 @@ const char *Txt_Course =
 #elif L==9	// pt
 	"Disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kurs";
 #endif
 
 const char *Txt_course =
@@ -6192,7 +6217,7 @@ const char *Txt_course =
 #elif L==9	// pt
 	"disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"kurs";
 #endif
 
 const char *Txt_Course_program =
@@ -6215,7 +6240,7 @@ const char *Txt_Course_program =
 #elif L==9	// pt
 	"Programa da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Course program";		// Çeviri lazim!
 #endif
 
 const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
@@ -6240,7 +6265,7 @@ const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_ACTIVE] =
@@ -6263,7 +6288,7 @@ const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Ativa"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Active"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_PENDING] =
@@ -6286,7 +6311,7 @@ const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Nova"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_REMOVED] =
@@ -6309,7 +6334,7 @@ const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Suprimida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Removed"	// Çeviri lazim!
 #endif
 	};
 
@@ -6333,7 +6358,7 @@ const char *Txt_COURSE_With_users =
 #elif L==9	// pt
 	"Com utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"With users";	// Çeviri lazim!
 #endif
 
 const char *Txt_COURSE_Without_users =
@@ -6348,7 +6373,7 @@ const char *Txt_COURSE_Without_users =
 #elif L==5	// fr
 	"Sans utilisateurs";
 #elif L==6	// gn
-	"Sin usuarios";	// Okoteve traducción
+	"Sin usuarios";		// Okoteve traducción
 #elif L==7	// it
 	"Senza utenti";
 #elif L==8	// pl
@@ -6356,7 +6381,7 @@ const char *Txt_COURSE_Without_users =
 #elif L==9	// pt
 	"Sem utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Without users";	// Çeviri lazim!
 #endif
 
 const char *Txt_Course_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -6379,7 +6404,7 @@ const char *Txt_Course_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Disciplina <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Course <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Courses =
@@ -6425,7 +6450,7 @@ const char *Txt_Courses_ABBREVIATION =
 #elif L==9	// pt
 	"Disc.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Ders.";
 #endif
 
 const char *Txt_courses =
@@ -6448,7 +6473,7 @@ const char *Txt_courses =
 #elif L==9	// pt
 	"disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"dersler";
 #endif
 
 const char *Txt_courses_ABBREVIATION =
@@ -6471,7 +6496,7 @@ const char *Txt_courses_ABBREVIATION =
 #elif L==9	// pt
 	"disc.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ders.";
 #endif
 
 const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very important to include %u in the following sentences
@@ -6494,7 +6519,7 @@ const char *Txt_X_courses_have_been_eliminated =	// Warning: it is very importan
 #elif L==9	// pt
 	"%u disciplina(s) foram eliminadas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u course(s) have been eliminated.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to include %s in the following sentences
@@ -6517,7 +6542,7 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Disciplinas de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Courses of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_account =
@@ -6555,7 +6580,7 @@ const char *Txt_Create_announcement =
 #elif L==5	// fr
 	"Cr&eacute;er annonce";
 #elif L==6	// gn
-	"Crear anuncio";		// Okoteve traducción
+	"Crear anuncio";	// Okoteve traducción
 #elif L==7	// it
 	"Crea annuncio";
 #elif L==8	// pl
@@ -6563,7 +6588,7 @@ const char *Txt_Create_announcement =
 #elif L==9	// pt
 	"Criar an&uacute;ncio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create announcement";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_another_center =
@@ -6578,7 +6603,7 @@ const char *Txt_Create_another_center =
 #elif L==5	// fr
 	"Cr&eacute;er un autre center";
 #elif L==6	// gn
-	"Crear otro centro";	// Okoteve traducción
+	"Crear otro centro";		// Okoteve traducción
 #elif L==7	// it
 	"Crea un altro centro";
 #elif L==8	// pl
@@ -6586,7 +6611,7 @@ const char *Txt_Create_another_center =
 #elif L==9	// pt
 	"Criar outro centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create another center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_another_course =
@@ -6609,7 +6634,7 @@ const char *Txt_Create_another_course =
 #elif L==9	// pt
 	"Criar outra disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create another course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_another_degree =
@@ -6632,7 +6657,7 @@ const char *Txt_Create_another_degree =
 #elif L==9	// pt
 	"Criar outro grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create another degree";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_another_institution =
@@ -6655,7 +6680,7 @@ const char *Txt_Create_another_institution =
 #elif L==9	// pt
 	"Criar outra institu&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create another institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_another_type_of_degree =
@@ -6678,7 +6703,7 @@ const char *Txt_Create_another_type_of_degree =
 #elif L==9	// pt
 	"Criar outro tipo de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create another type of degree";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_assignment =
@@ -6701,7 +6726,7 @@ const char *Txt_Create_assignment =
 #elif L==9	// pt
 	"Criar atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create assignment";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_banner =
@@ -6716,7 +6741,7 @@ const char *Txt_Create_banner =
 #elif L==5	// fr
 	"Cr&eacute;er banni&eacute;re";
 #elif L==6	// gn
-	"Crear banner";	// Okoteve traducción
+	"Crear banner";		// Okoteve traducción
 #elif L==7	// it
 	"Crea banner";
 #elif L==8	// pl
@@ -6724,7 +6749,7 @@ const char *Txt_Create_banner =
 #elif L==9	// pt
 	"Criar banner";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create banner";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_building =
@@ -6747,7 +6772,7 @@ const char *Txt_Create_building =
 #elif L==9	// pt
 	"Criar edif&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create building";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_center =
@@ -6770,7 +6795,7 @@ const char *Txt_Create_center =
 #elif L==9	// pt
 	"Criar centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_country =
@@ -6793,7 +6818,7 @@ const char *Txt_Create_country =
 #elif L==9	// pt
 	"Criar pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create country";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_course =
@@ -6816,7 +6841,7 @@ const char *Txt_Create_course =
 #elif L==9	// pt
 	"Criar disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_degree =
@@ -6839,7 +6864,7 @@ const char *Txt_Create_degree =
 #elif L==9	// pt
 	"Criar grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_department =
@@ -6862,7 +6887,7 @@ const char *Txt_Create_department =
 #elif L==9	// pt
 	"Criar departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create department";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_email_domain =
@@ -6885,7 +6910,7 @@ const char *Txt_Create_email_domain =
 #elif L==9	// pt
 	"Criar dom&iacute;nio de email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create email domain";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_email_message =
@@ -6908,7 +6933,7 @@ const char *Txt_Create_email_message =
 #elif L==9	// pt
 	"Criar uma mensagem de email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create email message";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_event =
@@ -6931,7 +6956,7 @@ const char *Txt_Create_event =
 #elif L==9	// pt
 	"Criar evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create event";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_exam =
@@ -6954,7 +6979,7 @@ const char *Txt_Create_exam =
 #elif L==9	// pt
 	"Criar exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create exam";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_folder =
@@ -6977,7 +7002,7 @@ const char *Txt_Create_folder =
 #elif L==9	// pt
 	"Criar diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create folder";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_game =
@@ -7000,7 +7025,7 @@ const char *Txt_Create_game =
 #elif L==9	// pt
 	"Criar jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create game";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_group =
@@ -7023,7 +7048,7 @@ const char *Txt_Create_group =
 #elif L==9	// pt
 	"Criar grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create group";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_holiday =
@@ -7046,7 +7071,7 @@ const char *Txt_Create_holiday =
 #elif L==9	// pt
 	"Criar f&eacute;ria";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create holiday";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_institution =
@@ -7069,7 +7094,7 @@ const char *Txt_Create_institution =
 #elif L==9	// pt
 	"Criar institu&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_item =
@@ -7092,7 +7117,7 @@ const char *Txt_Create_item =
 #elif L==9	// pt
 	"Criar item";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create item";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_link =
@@ -7115,7 +7140,7 @@ const char *Txt_Create_link =
 #elif L==9	// pt
 	"Criar liga&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create link";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_notice =
@@ -7138,7 +7163,7 @@ const char *Txt_Create_notice =
 #elif L==9	// pt
 	"Criar aviso";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create notice";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_BR_notification =
@@ -7161,7 +7186,7 @@ const char *Txt_Create_BR_notification =
 #elif L==9	// pt
 	"Criar<br />notifica&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create<br />notification";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_password =
@@ -7207,7 +7232,7 @@ const char *Txt_Create_place =
 #elif L==9	// pt
 	"Criar localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create place";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_plugin =
@@ -7230,7 +7255,7 @@ const char *Txt_Create_plugin =
 #elif L==9	// pt
 	"Criar plugin";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create plugin";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_project =
@@ -7253,7 +7278,7 @@ const char *Txt_Create_project =
 #elif L==9	// pt
 	"Criar projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create project";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_question =
@@ -7276,7 +7301,7 @@ const char *Txt_Create_question =
 #elif L==9	// pt
 	"Criar pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_record_field =
@@ -7299,7 +7324,7 @@ const char *Txt_Create_record_field =
 #elif L==9	// pt
 	"Criar campo de cart&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create record field";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_room =
@@ -7322,7 +7347,7 @@ const char *Txt_Create_room =
 #elif L==9	// pt
 	"Criar sala";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create room";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_set_of_questions =
@@ -7345,7 +7370,7 @@ const char *Txt_Create_set_of_questions =
 #elif L==9	// pt
 	"Criar conjunto de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create set of questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_session =
@@ -7368,7 +7393,7 @@ const char *Txt_Create_session =
 #elif L==9	// pt
 	"Criar sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create session";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_survey =
@@ -7391,7 +7416,7 @@ const char *Txt_Create_survey =
 #elif L==9	// pt
 	"Criar inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_type_of_degree =
@@ -7414,7 +7439,7 @@ const char *Txt_Create_type_of_degree =
 #elif L==9	// pt
 	"Criar tipo de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create type of degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_type_of_group =
@@ -7437,7 +7462,7 @@ const char *Txt_Create_type_of_group =
 #elif L==9	// pt
 	"Criar tipo de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create type of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_ZIP_file =
@@ -7460,7 +7485,7 @@ const char *Txt_Create_ZIP_file =
 #elif L==9	// pt
 	"Criar arquivo ZIP";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Create ZIP file";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_assignment_X =	// Warning: it is very important to include %s in the following sentences
@@ -7483,7 +7508,7 @@ const char *Txt_Created_new_assignment_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Criada nova atividade <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new assignment <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_banner_X =	// Warning: it is very important to include %s in the following sentences
@@ -7506,7 +7531,7 @@ const char *Txt_Created_new_banner_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo banner <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new banner <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_building_X =	// Warning: it is very important to include %s in the following sentences
@@ -7529,7 +7554,7 @@ const char *Txt_Created_new_building_X =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"Criado novo edif&iacute;cio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new building <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_call_for_exam =
@@ -7552,7 +7577,7 @@ const char *Txt_Created_new_call_for_exam =
 #elif L==9	// pt
 	"Criado nova chamada para exame.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new call for exam.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -7575,7 +7600,7 @@ const char *Txt_Created_new_center_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo centro <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new center <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_country_X =	// Warning: it is very important to include %s in the following sentences
@@ -7598,7 +7623,7 @@ const char *Txt_Created_new_country_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado novo pa&iacute;s <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new country <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -7621,7 +7646,7 @@ const char *Txt_Created_new_course_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criada nova disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new course <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -7644,7 +7669,7 @@ const char *Txt_Created_new_degree_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criada novo grau <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new degree <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_department_X =	// Warning: it is very important to include %s in the following sentences
@@ -7667,7 +7692,7 @@ const char *Txt_Created_new_department_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Criado novo departamento <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new department <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_email_domain_X =	// Warning: it is very important to include %s in the following sentences
@@ -7690,7 +7715,7 @@ const char *Txt_Created_new_email_domain_X =	// Warning: it is very important to
 #elif L==9	// pt
 	"Criado novo dom&iacute;nio de email <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new email domain <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_event_X =	// Warning: it is very important to include %s in the following sentences
@@ -7713,7 +7738,7 @@ const char *Txt_Created_new_event_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado novo evento <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new event <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_exam_X =	// Warning: it is very important to include %s in the following sentences
@@ -7736,7 +7761,7 @@ const char *Txt_Created_new_exam_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado novo exame <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new exam <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -7759,7 +7784,7 @@ const char *Txt_Created_new_game_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado novo jogo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new game <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -7782,7 +7807,7 @@ const char *Txt_Created_new_group_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado novo grupo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new group <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_holiday_X =	// Warning: it is very important to include %s in the following sentences
@@ -7805,7 +7830,7 @@ const char *Txt_Created_new_holiday_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado nova f&eacute;ria <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new holiday <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_institution_X =	// Warning: it is very important to include %s in the following sentences
@@ -7828,7 +7853,7 @@ const char *Txt_Created_new_institution_X =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Criada nova institu&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new institution <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_link_X =	// Warning: it is very important to include %s in the following sentences
@@ -7851,7 +7876,7 @@ const char *Txt_Created_new_link_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado nova liga&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new link <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_place_X =	// Warning: it is very important to include %s in the following sentences
@@ -7874,7 +7899,7 @@ const char *Txt_Created_new_place_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado nova localiza&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new place <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_plugin_X =	// Warning: it is very important to include %s in the following sentences
@@ -7897,7 +7922,7 @@ const char *Txt_Created_new_plugin_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo plugin <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new plugin <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_project_X =	// Warning: it is very important to include %s in the following sentences
@@ -7920,7 +7945,7 @@ const char *Txt_Created_new_project_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado novo projeto <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new project <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_record_field_X =	// Warning: it is very important to include %s in the following sentences
@@ -7943,7 +7968,7 @@ const char *Txt_Created_new_record_field_X =	// Warning: it is very important to
 #elif L==9	// pt
 	"Criado novo campo de cart&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new record field <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_room_X =	// Warning: it is very important to include %s in the following sentences
@@ -7966,7 +7991,7 @@ const char *Txt_Created_new_room_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criada nova sala <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new room <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
@@ -7989,7 +8014,7 @@ const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very importan
 #elif L==9	// pt
 	"Criado novo conjunto de perguntas <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new set of questions <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -8012,7 +8037,7 @@ const char *Txt_Created_new_survey_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo inqu&eacute;rito <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new survey <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -8035,7 +8060,7 @@ const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important 
 #elif L==9	// pt
 	"Criado novo tipo de grau <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new type of degree <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Created_new_type_of_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -8058,7 +8083,7 @@ const char *Txt_Created_new_type_of_group_X =	// Warning: it is very important t
 #elif L==9	// pt
 	"Criado novo tipo de grupo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created new type of group <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Created_tables_in_the_database_that_did_not_exist =
@@ -8081,7 +8106,7 @@ const char *Txt_Created_tables_in_the_database_that_did_not_exist =
 #elif L==9	// pt
 	"Criadas tabelas no banco de dados que n&atilde;o existiam.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Created tables in the database that did not exist.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Creating_database_tables_if_they_do_not_exist =
@@ -8104,7 +8129,7 @@ const char *Txt_Creating_database_tables_if_they_do_not_exist =
 #elif L==9	// pt
 	"Criando tabelas da base de dados, se elas n&atilde;o existirem&hellip;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Creating database tables if they do not exist&hellip;";	// Çeviri lazim!
 #endif
 
 const char *Txt_Current_email =
@@ -8127,7 +8152,7 @@ const char *Txt_Current_email =
 #elif L==9	// pt
 	"Email atual";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Current email";	// Çeviri lazim!
 #endif
 
 const char *Txt_Current_image_video =
@@ -8150,7 +8175,7 @@ const char *Txt_Current_image_video =
 #elif L==9	// pt
 	"Imagem / v&iacute;deo atual";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Current image / video";	// Çeviri lazim!
 #endif
 
 const char *Txt_Current_nickname =
@@ -8165,7 +8190,7 @@ const char *Txt_Current_nickname =
 #elif L==5	// fr
 	"Surnom actuel";
 #elif L==6	// gn
-	"Apodo actual";	// Okoteve traducción
+	"Apodo actual";		// Okoteve traducción
 #elif L==7	// it
 	"Nome utente corrente";
 #elif L==8	// pl
@@ -8173,7 +8198,7 @@ const char *Txt_Current_nickname =
 #elif L==9	// pt
 	"Alcunha atual";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Current nickname";	// Çeviri lazim!
 #endif
 
 const char *Txt_Current_password =
@@ -8219,7 +8244,7 @@ const char *Txt_Cut =	// First part of "Cut-Paste"
 #elif L==9	// pt
 	"Cortar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Cut";	// Çeviri lazim!
 #endif
 
 const char *Txt_Data =	// Project data
@@ -8242,7 +8267,7 @@ const char *Txt_Data =	// Project data
 #elif L==9	// pt
 	"Dados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Data";		// Çeviri lazim!
 #endif
 
 const char *Txt_DATA_PROTECTION_POLICY =
@@ -8265,7 +8290,7 @@ const char *Txt_DATA_PROTECTION_POLICY =
 #elif L==9	// pt
 	"Pol&iacute;tica de prote&ccedil;&atilde;o de dados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Data protection policy";				// Çeviri lazim!
 #endif
 
 const char *Txt_Date =
@@ -8288,7 +8313,7 @@ const char *Txt_Date =
 #elif L==9	// pt
 	"Data";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Date";	// Çeviri lazim!
 #endif
 
 const char *Txt_Date_and_time =
@@ -8303,7 +8328,7 @@ const char *Txt_Date_and_time =
 #elif L==5	// fr
 	"Date et heure";
 #elif L==6	// gn
-	"Fecha y hora";	// Okoteve traducción
+	"Fecha y hora";		// Okoteve traducción
 #elif L==7	// it
 	"Data e ora";
 #elif L==8	// pl
@@ -8311,7 +8336,7 @@ const char *Txt_Date_and_time =
 #elif L==9	// pt
 	"Data e hora";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Date and time";	// Çeviri lazim!
 #endif
 
 const char *Txt_Date_of_birth =
@@ -8334,7 +8359,7 @@ const char *Txt_Date_of_birth =
 #elif L==9	// pt
 	"Data nascimento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Date of birth";	// Çeviri lazim!
 #endif
 
 const char *Txt_Date_of_creation =
@@ -8357,7 +8382,7 @@ const char *Txt_Date_of_creation =
 #elif L==9	// pt
 	"Data da cria&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Date of creation";		// Çeviri lazim!
 #endif
 
 const char *Txt_Dates =
@@ -8403,7 +8428,7 @@ const char *Txt_Day =
 #elif L==9	// pt
 	"Dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Day";	// Çeviri lazim!
 #endif
 
 const char *Txt_day =
@@ -8426,7 +8451,7 @@ const char *Txt_day =
 #elif L==9	// pt
 	"dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"day";	// Çeviri lazim!
 #endif
 
 const char *Txt_days =
@@ -8449,7 +8474,7 @@ const char *Txt_days =
 #elif L==9	// pt
 	"dias";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"days";	// Çeviri lazim!
 #endif
 
 const char *Txt_DAYS[7] =
@@ -8786,7 +8811,7 @@ const char *Txt_Decrease_level_of_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Diminuir o n&iacute;vel de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Decrease level of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_default =
@@ -8809,7 +8834,7 @@ const char *Txt_default =
 #elif L==9	// pt
 	"padr&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"default";	// Çeviri lazim!
 #endif
 
 const char *Txt_Degree =
@@ -8832,7 +8857,7 @@ const char *Txt_Degree =
 #elif L==9	// pt
 	"Grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Derece";
 #endif
 
 const char *Txt_degree =
@@ -8855,7 +8880,7 @@ const char *Txt_degree =
 #elif L==9	// pt
 	"grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"derece";
 #endif
 
 const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
@@ -8872,7 +8897,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==5	// fr
 	"Inconnu"
 #elif L==6	// gn
-	"Desconocido"			// Okoteve traducción
+	"Desconocido"	// Okoteve traducción
 #elif L==7	// it
 	"Sconosciuto"
 #elif L==8	// pl
@@ -8880,7 +8905,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_ACTIVE] =
@@ -8903,7 +8928,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Ativa"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Active"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_PENDING] =
@@ -8926,7 +8951,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Nova"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_REMOVED] =
@@ -8949,7 +8974,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Suprimida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Removed"	// Çeviri lazim!
 #endif
 	};
 
@@ -8975,7 +9000,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por tipo de grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by type of degree"		// Çeviri lazim!
 #endif
 	,
 	[DegTyp_ORDER_BY_NUM_DEGREES] =
@@ -8998,7 +9023,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de graus"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of degrees"		// Çeviri lazim!
 #endif
 	};
 
@@ -9024,7 +9049,7 @@ const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS] =
 #elif L==9	// pt
 	"Tipos de grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Types of degree"	// Çeviri lazim!
 #endif
 	,
 	[DegTyp_ORDER_BY_NUM_DEGREES] =
@@ -9071,7 +9096,7 @@ const char *Txt_DEGREE_With_courses =
 #elif L==9	// pt
 	"Com disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"With courses";		// Çeviri lazim!
 #endif
 
 const char *Txt_DEGREE_Without_courses =
@@ -9094,7 +9119,7 @@ const char *Txt_DEGREE_Without_courses =
 #elif L==9	// pt
 	"Sem disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Without courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_Degree_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -9117,7 +9142,7 @@ const char *Txt_Degree_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Grau <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Degree <strong>%s</strong> removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Degrees =
@@ -9163,7 +9188,7 @@ const char *Txt_Degrees_ABBREVIATION =
 #elif L==9	// pt
 	"Titul.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Derece";
 #endif
 
 const char *Txt_degrees =
@@ -9186,7 +9211,7 @@ const char *Txt_degrees =
 #elif L==9	// pt
 	"graus";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"derece";
 #endif
 
 const char *Txt_Degrees_of_CENTER_X =	// Warning: it is very important to include %s in the following sentences
@@ -9209,7 +9234,7 @@ const char *Txt_Degrees_of_CENTER_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Graus de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Degrees of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Degrees_with_pending_courses =
@@ -9232,7 +9257,7 @@ const char *Txt_Degrees_with_pending_courses =
 #elif L==9	// pt
 	"Graus com disciplinas pendentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Degrees with pending courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_Delete_messages_received =
@@ -9255,7 +9280,7 @@ const char *Txt_Delete_messages_received =
 #elif L==9	// pt
 	"Eliminar mensagens recebidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Delete messages received";	// Çeviri lazim!
 #endif
 
 const char *Txt_Delete_messages_sent =
@@ -9278,7 +9303,7 @@ const char *Txt_Delete_messages_sent =
 #elif L==9	// pt
 	"Eliminar mensagens enviadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Delete messages sent";		// Çeviri lazim!
 #endif
 
 const char *Txt_Delete_my_answer =
@@ -9301,7 +9326,7 @@ const char *Txt_Delete_my_answer =
 #elif L==9	// pt
 	"Excluir minha resposta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Delete my answer";		// Çeviri lazim!
 #endif
 
 const char *Txt_Department =
@@ -9324,7 +9349,7 @@ const char *Txt_Department =
 #elif L==9	// pt
 	"Departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Department";	// Çeviri lazim!
 #endif
 
 const char *Txt_Department_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -9347,7 +9372,7 @@ const char *Txt_Department_X_removed =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Departamento <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Department <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Department_unspecified =
@@ -9370,7 +9395,7 @@ const char *Txt_Department_unspecified =
 #elif L==9	// pt
 	"Departamento indeterminado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Department unspecified";	// Çeviri lazim!
 #endif
 
 const char *Txt_Departments =
@@ -9416,7 +9441,7 @@ const char *Txt_Departments_of_INSTITUTION_X =	// Warning: it is very important 
 #elif L==9	// pt
 	"Departamentos de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Departments of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Departments_ABBREVIATION =
@@ -9439,7 +9464,7 @@ const char *Txt_Departments_ABBREVIATION =
 #elif L==9	// pt
 	"Depar.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Depar";	// Çeviri lazim!
 #endif
 
 const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
@@ -9464,7 +9489,7 @@ const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por departamento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by department"		// Çeviri lazim!
 #endif
 	,
 	[Dpt_ORDER_BY_NUM_TCHS] =
@@ -9487,7 +9512,7 @@ const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of teachers"		// Çeviri lazim!
 #endif
 	};
 
@@ -9513,7 +9538,7 @@ const char *Txt_DEPARTMENTS_ORDER[Dpt_NUM_ORDERS] =
 #elif L==9	// pt
 	"Departamento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Department"	// Çeviri lazim!
 #endif
 	,
 	[Dpt_ORDER_BY_NUM_TCHS] =
@@ -9560,7 +9585,7 @@ const char *Txt_Description =
 #elif L==9	// pt
 	"Descri&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Description";		// Çeviri lazim!
 #endif
 
 const char *Txt_Design =
@@ -9583,7 +9608,7 @@ const char *Txt_Design =
 #elif L==9	// pt
 	"Design";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Design";	// Çeviri lazim!
 #endif
 
 const char *Txt_Details =
@@ -9606,7 +9631,7 @@ const char *Txt_Details =
 #elif L==9	// pt
 	"Detalhes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Details";	// Çeviri lazim!
 #endif
 
 const char *Txt_Disclaimer_the_files_hosted_here_ =	// Warning: it is very important to include two %s in the following sentences
@@ -9691,7 +9716,14 @@ const char *Txt_Disclaimer_the_files_hosted_here_ =	// Warning: it is very impor
 	" cujo conte&uacute;do perten&ccedil;a a voc&ecirc;"
 	" ou que viole a lei, entre em contato com %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Disclaimer: the files hosted here,"
+	" unless otherwise noted,"
+	" are subject to intellectual property rights"
+	" and their ownership belongs to the users who have uploaded them."
+	" %s is not responsible for the information contained in those files."
+	" If you think convenient to remove any file"
+	" whose contents belongs to you"
+	" or that violates the law, you can contact %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Display_photos =
@@ -9714,7 +9746,7 @@ const char *Txt_Display_photos =
 #elif L==9	// pt
 	"Incluir fotos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Display photos";	// Çeviri lazim!
 #endif
 
 const char *Txt_distributed_by =
@@ -9737,7 +9769,7 @@ const char *Txt_distributed_by =
 #elif L==9	// pt
 	"distribu&iacute;do por";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"distributed by";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_not_show_again =
@@ -9760,7 +9792,7 @@ const char *Txt_Do_not_show_again =
 #elif L==9	// pt
 	"N&atilde;o mostrar novamente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do not show again";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -9781,7 +9813,7 @@ const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X =	// W
 	" de <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea dejar de ser administrador/a"
-	" de <strong>%s</strong>?";		// Okoteve traducción
+	" de <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuole realmente essere rimosso come amministratore"
 	" de <strong>%s</strong>?";
@@ -9792,7 +9824,8 @@ const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X =	// W
 	"Voc&ecirc; realmente quer ser removido/a como administrador/a"
 	" de <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to be removed as an administrator"
+	" of <strong>%s</strong>?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -9824,7 +9857,8 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 	"Voc&ecirc; realmente quer ser removido/a da disciplina <strong>%s</strong>"
 	" (removendo seus trabalhos, inscri&ccedil;&atilde;o em grupos, etc.)?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to be removed from the course <strong>%s</strong>"
+	" (removing your works, enrolment in groups, etc.)?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -9845,7 +9879,7 @@ const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y =	// 
 	" en tant que %sdu projet <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea ser eliminado"
-	" como %s del proyecto <strong>%s</strong>?";	// Okoteve traducción
+	" como %s del proyecto <strong>%s</strong>?";		// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere"
 	" come %s dal progetto <strong>%s</strong>?";
@@ -9856,7 +9890,8 @@ const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y =	// 
 	"Voc&ecirc; realmente quer ser removido"
 	" como %s do projeto <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to be removed"
+	" as a %s from the project <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
@@ -9879,7 +9914,7 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer eliminar completamente o seguinte usu&aacute;rio/a?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to completely eliminate the following user?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
@@ -9902,7 +9937,7 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer eliminar completamente sua conta de usu&aacute;rio?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to completely eliminate your user account?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -9925,7 +9960,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_f
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens recebidas de %s de %s?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete all messages received from %s from %s?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -9957,7 +9992,8 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_f
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens"
 	" recebidas de %s de %s relacionadas com <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete all messages"
+	" received from %s from %s related to <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -9980,7 +10016,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_CO
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens enviadas para %s de %s?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete all messages sent to %s from %s?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -10003,7 +10039,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_CO
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens enviadas para %s de %s relacionadas com <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete all messages sent to %s from %s related to <strong>%s</strong>?";				// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -10026,7 +10062,7 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar as mensagens n&atilde;o lidas recebidas de %s de %s?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete the unread messages received from %s from %s?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -10058,7 +10094,8 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 	"Voc&ecirc; realmente deseja eliminar as mensagens n&atilde;o lidas"
 	" recebidas de %s de %s relacionadas com <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to delete the unread messages"
+	" received from %s from %s related to <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -10079,7 +10116,7 @@ const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administ
 	" en tant qu'administrateur de <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea inscribir el siguiente usuario/a"
-	" como administrador/a de <strong>%s</strong>?";		// Okoteve traducción
+	" como administrador/a de <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente registrare il seguente utente"
 	" come amministratore de <strong>%s</strong>?";
@@ -10090,7 +10127,8 @@ const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administ
 	"Voc&ecirc; realmente deseja registrar o seguinte usu&aacute;rio/a"
 	" como administrador/a de <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to register the following user"
+	" as an administrator of <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_ =	// Warning: it is very important to include three %s in the following sentences
@@ -10117,7 +10155,7 @@ const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_ =	// Warning
 #elif L==6	// gn
 	"&iexcl;Realmente desea rechazar la solicitud de inscripci&oacute;n"
 	" de <strong>%s</strong> como <strong>%s</strong>"
-	" en la asignatura <strong>%s</strong>?";		// Okoteve traducción
+	" en la asignatura <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi davvero rifiutare la richiesta di iscrizione"
 	" di <strong>%s</strong> come <strong>%s</strong>"
@@ -10131,7 +10169,9 @@ const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_ =	// Warning
 	" de <strong>%s</strong> como <strong>%s</strong>"
 	" na disciplina <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to reject the enrolment request"
+	" from <strong>%s</strong> as <strong>%s</strong>"
+	" in the course <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =	// Warning: it is very important to include %u and %s in the following sentences
@@ -10199,7 +10239,12 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" suos cart&otilde;es para esta disciplina,"
 	" e sua inscri&ccedil;&atilde;o em grupos desta disciplina.</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
+	"Although students' data will not be removed in other courses,"
+	" they will no longer enroled in this course,"
+	" and also <strong>all works submitted by them in this course,"
+	" their record cards for this course,"
+	" and their enrolment in groups of this course will be removed.</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it is very important to include %s in the following sentences
@@ -10222,7 +10267,7 @@ const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it i
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a atividade <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the assignment <strong>%s</strong>?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
@@ -10245,7 +10290,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the entire thread?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: it is very important to include %s in the following sentences
@@ -10268,7 +10313,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the entire thread <strong>%s</strong>?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is very important to include %s in the following sentences
@@ -10291,7 +10336,7 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o evento <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the event <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very important to include %s in the following sentences
@@ -10314,7 +10359,7 @@ const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o exame <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the exam <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_ =	// Warning: it is very important to include two %s and one %u in the following sentences
@@ -10355,7 +10400,9 @@ const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z
 	" dos cart&otilde;es de <strong>%s</strong>"
 	" (este campo &eacute; preenchido nos cart&otilde;es de %u estudante(s))?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the field <strong>%s</strong>"
+	" from the records of <strong>%s</strong>"
+	" (this field is filled in the records of %u student(s))?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
@@ -10378,7 +10425,7 @@ const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is 
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -10410,7 +10457,8 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	"Voc&ecirc; realmente deseja remover"
 	" o diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove"
+	" the folder <strong>%s</strong> and all its contents?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam =
@@ -10425,7 +10473,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam =
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer la convocation &agrave; un examen suivante?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";		// Okoteve traducción
+	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente appello d'esame?";
 #elif L==8	// pl
@@ -10433,7 +10481,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a seguinte chamada para exame?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following call for exam?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_notice =
@@ -10456,7 +10504,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte aviso?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following notice?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_comment =
@@ -10471,7 +10519,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer le commentaire suivant?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar el siguiente comentario?";		// Okoteve traducción
+	"&iquest;Realmente desea eliminar el siguiente comentario?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente commento?";
 #elif L==8	// pl
@@ -10479,7 +10527,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte coment&aacute;rio?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following comment?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_post =
@@ -10494,7 +10542,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer le post suivant?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar la siguiente publicaci&oacute;n?";		// Okoteve traducción
+	"&iquest;Realmente desea eliminar la siguiente publicaci&oacute;n?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente post?";
 #elif L==8	// pl
@@ -10502,7 +10550,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte post?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following post?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -10523,7 +10571,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	" com a administrador de <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a de <strong>%s</strong>?";		// Okoteve traducción
+	" como administrador/a de <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente utente"
 	" come amministratore de <strong>%s</strong>?";
@@ -10534,7 +10582,8 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	"Voc&ecirc; realmente deseja remover o seguinte usu&aacute;rio"
 	" como administrador de <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following user"
+	" as an administrator of <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -10566,7 +10615,8 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio da disciplina <strong>%s</strong>"
 	" (removendo seus trabalhos, inscri&ccedil;&atilde;o em grupos, etc.)?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following user from the course <strong>%s</strong>"
+	" (removing her/his works, enrolment in groups, etc.)?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -10587,7 +10637,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_
 	" en tant que %s du projet <strong>%s</strong>?";
 #elif L==6	// gn
 	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como %s del proyecto <strong>%s</strong>?";	// Okoteve traducción
+	" como %s del proyecto <strong>%s</strong>?";		// Okoteve traducción
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente utente"
 	" como %s dal progetto <strong>%s</strong>?";
@@ -10598,7 +10648,8 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_
 	"Voc&ecirc; deseja realmente remover o seguinte usu&aacute;rio"
 	" como %s do projeto <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the following user"
+	" as a %s from the project <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -10621,7 +10672,7 @@ const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the game <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -10644,7 +10695,7 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the group <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning: it is very important to include %s in the following sentences
@@ -10676,7 +10727,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning
 	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?<br />"
 	"Ao fazer isso, voc&ecirc; remover&aacute; um estudante desse grupo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the group <strong>%s</strong>?<br />"
+	"Doing so will remove one student from that group.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warning: it is very important to include %s and %u in the following sentences
@@ -10708,7 +10760,8 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?<br />"
 	"Ao fazer isso, voc&ecirc; remover&aacute; %u estudantes desse grupo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the group <strong>%s</strong>?<br />"
+	"Doing so will remove %u students from that group.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very important to include %s in the following sentences
@@ -10731,7 +10784,7 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o item <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the item <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
@@ -10754,7 +10807,7 @@ const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the match <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -10777,7 +10830,7 @@ const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is 
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover la foto de <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the photo of <strong>%s</strong>?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is very important to include %s in the following sentences
@@ -10800,7 +10853,7 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o projeto <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the project <strong>%s</strong>?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
@@ -10823,7 +10876,7 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a pergunta <strong>%ld</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the question <strong>%ld</strong>?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
@@ -10846,7 +10899,7 @@ const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
 #elif L==9	// pt
        "Voc&ecirc; realmente deseja remover as perguntas selecionadas?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the selected questions?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_session_X =	// Warning: it is very important to include %s in the following sentences
@@ -10869,7 +10922,7 @@ const char *Txt_Do_you_really_want_to_remove_the_session_X =	// Warning: it is v
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a sess&atilde;o <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the session <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
@@ -10892,7 +10945,7 @@ const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o conjunto de perguntas <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the set of questions <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -10915,7 +10968,7 @@ const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is ve
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o inqu&eacute;rito <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the survey <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_ =	// Warning: it is very important to include %s in the following sentences
@@ -10947,7 +11000,8 @@ const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_ =	// W
 	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br />"
 	"Isso tamb&eacute;m remover&aacute; um grupo desse tipo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
+	"Doing so will also remove one group of that type.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_ =	// Warning: it is very important to include %s and %u in the following sentences
@@ -10979,7 +11033,8 @@ const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_ =	// 
 	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br />"
 	"Isso tamb&eacute;m remover&aacute; %u grupos desse tipo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
+	"Doing so will also remove %u groups of that type.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_your_photo =
@@ -11002,7 +11057,7 @@ const char *Txt_Do_you_really_want_to_remove_your_photo =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a sua foto?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to remove your photo?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -11025,7 +11080,7 @@ const char *Txt_Do_you_really_want_to_reset_the_survey_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja reiniciar o inqu&eacute;rito <strong>%s</strong>?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you really want to reset the survey <strong>%s</strong>?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_think_you_are_one_of_these_users =
@@ -11097,7 +11152,7 @@ const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_y
 #elif L==9	// pt
 	"Voc&ecirc; quer seguir o usu&aacute;rio selecionado que voc&ecirc; n&atilde;o segue ainda?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to follow the selected user whom you do not follow yet?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet =	// Warning: it is very important to include %u in the following sentences
@@ -11120,7 +11175,7 @@ const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follo
 #elif L==9	// pt
 	"Voc&ecirc; quer seguir os %u usu&aacute;rios selecionados que voc&ecirc; n&atilde;o segue ainda?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to follow the %u selected users whom you do not follow yet?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
@@ -11143,7 +11198,7 @@ const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// 
 #elif L==9	// pt
 	"Voc&ecirc; quer bloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to lock the editing of the %u selected projects?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow =
@@ -11166,7 +11221,7 @@ const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow 
 #elif L==9	// pt
 	"Voc&ecirc; quer parar de seguir o usu&aacute;rio selecionado que voc&ecirc; segue?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to stop following the selected user whom you follow?";	// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow =	// Warning: it is very important to include %u in the following sentences
@@ -11189,7 +11244,7 @@ const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_foll
 #elif L==9	// pt
 	"Voc&ecirc; quer parar de seguir os %u usu&aacute;rios selecionados que voc&ecirc; segue?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to stop following the %u selected users whom you follow";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
@@ -11212,7 +11267,7 @@ const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	/
 #elif L==9	// pt
 	"Voc&ecirc; quer desbloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Do you want to unlock the editing of the %u selected projects?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Document =
@@ -11235,7 +11290,7 @@ const char *Txt_Document =
 #elif L==9	// pt
 	"Documento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Document";	// Çeviri lazim!
 #endif
 
 const char *Txt_document_in_my_courses =
@@ -11258,7 +11313,7 @@ const char *Txt_document_in_my_courses =
 #elif L==9	// pt
 	"documento em minha disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"document in my courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_Documents =
@@ -11304,7 +11359,7 @@ const char *Txt_document_from_me =
 #elif L==9	// pt
 	"documento de mim";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"document from me";	// Çeviri lazim!
 #endif
 
 const char *Txt_documents_from_me =
@@ -11327,7 +11382,7 @@ const char *Txt_documents_from_me =
 #elif L==9	// pt
 	"documentos de mim";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"documents from me";		// Çeviri lazim!
 #endif
 
 const char *Txt_documents_in_my_courses =
@@ -11350,7 +11405,7 @@ const char *Txt_documents_in_my_courses =
 #elif L==9	// pt
 	"documentos em minha disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"documents in my courses";		// Çeviri lazim!
 #endif
 
 const char *Txt_Documents_area =
@@ -11373,7 +11428,7 @@ const char *Txt_Documents_area =
 #elif L==9	// pt
 	"Zona de documentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Documents area";	// Çeviri lazim!
 #endif
 
 const char *Txt_Documents_management_area =
@@ -11396,7 +11451,7 @@ const char *Txt_Documents_management_area =
 #elif L==9	// pt
 	"Zona de gest&atilde;o de documentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Documents management area";			// Çeviri lazim!
 #endif
 
 const char *Txt_documents_management_area =
@@ -11419,7 +11474,7 @@ const char *Txt_documents_management_area =
 #elif L==9	// pt
 	"zona de gest&atilde;o de documentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"documents management area";			// Çeviri lazim!
 #endif
 
 const char *Txt_Domains =
@@ -11442,7 +11497,7 @@ const char *Txt_Domains =
 #elif L==9	// pt
 	"Dom&iacute;nios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Domains";	// Çeviri lazim!
 #endif
 
 const char *Txt_Done =
@@ -11465,7 +11520,7 @@ const char *Txt_Done =
 #elif L==9	// pt
 	"Feito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Done";		// Çeviri lazim!
 #endif
 
 const char *Txt_Download =	// As a verb
@@ -11488,7 +11543,7 @@ const char *Txt_Download =	// As a verb
 #elif L==9	// pt
 	"Baixar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Download";	// Çeviri lazim!
 #endif
 
 const char *Txt_download =	// As a noun
@@ -11511,7 +11566,7 @@ const char *Txt_download =	// As a noun
 #elif L==9	// pt
 	"download";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"download";	// Çeviri lazim!
 #endif
 
 const char *Txt_Downloads =	// As a noun
@@ -11534,7 +11589,7 @@ const char *Txt_Downloads =	// As a noun
 #elif L==9	// pt
 	"Downloads";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Downloads";	// Çeviri lazim!
 #endif
 
 const char *Txt_downloads =	// As a noun
@@ -11557,7 +11612,7 @@ const char *Txt_downloads =	// As a noun
 #elif L==9	// pt
 	"downloads";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"downloads";	// Çeviri lazim!
 #endif
 
 const char *Txt_Duplicate_USERS =
@@ -11580,7 +11635,7 @@ const char *Txt_Duplicate_USERS =
 #elif L==9	// pt
 	"Duplicados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Duplicates";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit =
@@ -11603,7 +11658,7 @@ const char *Txt_Edit =
 #elif L==9	// pt
 	"Editar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_assignment =
@@ -11626,7 +11681,7 @@ const char *Txt_Edit_assignment =
 #elif L==9	// pt
 	"Editar atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit assignment";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_event =
@@ -11649,7 +11704,7 @@ const char *Txt_Edit_event =
 #elif L==9	// pt
 	"Editar evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit event";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_exam =
@@ -11672,7 +11727,7 @@ const char *Txt_Edit_exam =
 #elif L==9	// pt
 	"Editar exam";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Editar exam";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_game =
@@ -11695,7 +11750,7 @@ const char *Txt_Edit_game =
 #elif L==9	// pt
 	"Editar jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit game";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_item =
@@ -11718,7 +11773,7 @@ const char *Txt_Edit_item =
 #elif L==9	// pt
 	"Editar item";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit item";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_my_personal_data =
@@ -11733,7 +11788,7 @@ const char *Txt_Edit_my_personal_data =
 #elif L==5	// fr
 	"&Eacute;diter mes donn&eacute;es personnelles";
 #elif L==6	// gn
-	"Editar mis datos personales";		// Okoteve traducción
+	"Editar mis datos personales";	// Okoteve traducción
 #elif L==7	// it
 	"Editare i miei dati personali";
 #elif L==8	// pl
@@ -11741,7 +11796,7 @@ const char *Txt_Edit_my_personal_data =
 #elif L==9	// pt
 	"Editar os meus dados pessoais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit my personal data";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_plain_text =
@@ -11764,7 +11819,7 @@ const char *Txt_Edit_plain_text =
 #elif L==9	// pt
 	"Editar texto simples";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit plain text";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_project =
@@ -11787,7 +11842,7 @@ const char *Txt_Edit_project =
 #elif L==9	// pt
 	"Editar projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit project";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_record_fields =
@@ -11810,7 +11865,7 @@ const char *Txt_Edit_record_fields =
 #elif L==9	// pt
 	"Editar campos cart&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit record fields";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_set_of_questions =
@@ -11833,7 +11888,7 @@ const char *Txt_Edit_set_of_questions =
 #elif L==9	// pt
 	"Editar conjunto de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit set of questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_survey =
@@ -11856,7 +11911,7 @@ const char *Txt_Edit_survey =
 #elif L==9	// pt
 	"Editar inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit survey";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_rich_text =
@@ -11879,7 +11934,7 @@ const char *Txt_Edit_rich_text =
 #elif L==9	// pt
 	"Editar texto rico";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit rich text";		// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_tags =
@@ -11902,7 +11957,7 @@ const char *Txt_Edit_tags =
 #elif L==9	// pt
 	"Editar descritores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Edit tags";		// Çeviri lazim!
 #endif
 
 const char *Txt_Editable =
@@ -11917,7 +11972,7 @@ const char *Txt_Editable =
 #elif L==5	// fr
 	"&Eacute;ditables";
 #elif L==6	// gn
-	"Editables";		// Okoteve traducción
+	"Editables";	// Okoteve traducción
 #elif L==7	// it
 	"Modificabili";
 #elif L==8	// pl
@@ -11925,7 +11980,7 @@ const char *Txt_Editable =
 #elif L==9	// pt
 	"Edit&aacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Editable";	// Çeviri lazim!
 #endif
 
 const char *Txt_Editable_by_non_editing_teachers =
@@ -11948,7 +12003,7 @@ const char *Txt_Editable_by_non_editing_teachers =
 #elif L==9	// pt
 	"Edit&aacute;veis por professores n&atilde;o editores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Editable by non-editing teachers";		// Çeviri lazim!
 #endif
 
 const char *Txt_eg_A_B =
@@ -11971,7 +12026,7 @@ const char *Txt_eg_A_B =
 #elif L==9	// pt
 	"ex.: A, B,&hellip;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"e.g., A, B,&hellip;";		// Çeviri lazim!
 #endif
 
 const char *Txt_eg_Lectures_Practicals =
@@ -11994,7 +12049,7 @@ const char *Txt_eg_Lectures_Practicals =
 #elif L==9	// pt
 	"ex.: Teoria, Pr&aacute;tica,&hellip;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"e.g., Lectures, Practicals,&hellip;";			// Çeviri lazim!
 #endif
 
 const char *Txt_ELAPSED_TIME =
@@ -12017,7 +12072,7 @@ const char *Txt_ELAPSED_TIME =
 #elif L==9	// pt
 	"Atr&aacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Ago";	// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate =
@@ -12040,7 +12095,7 @@ const char *Txt_Eliminate =
 #elif L==9	// pt
 	"Eliminar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate";	// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2 =
@@ -12063,7 +12118,7 @@ const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2 =
 #elif L==9	// pt
 	"Eliminar todas as disciplinas sem usu&aacute;rios e sem acessos nos &uacute;ltimos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate all courses without users and without accesses in the last";			// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2 =
@@ -12078,7 +12133,7 @@ const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2 =
 #elif L==5	// fr
 	"derniers mois.";
 #elif L==6	// gn
-	"meses.";		// Okoteve traducción
+	"meses.";	// Okoteve traducción
 #elif L==7	// it
 	"mesi.";
 #elif L==8	// pl
@@ -12086,7 +12141,7 @@ const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2 =
 #elif L==9	// pt
 	"meses.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"months.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2 =
@@ -12113,7 +12168,7 @@ const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF
 #elif L==6	// gn
 	"Eliminar todos los usuarios"
 	" que no est&eacute;n inscritos en ninguna asignatura"
-	" y que lleven m&aacute;s de";				// Okoteve traducción
+	" y que lleven m&aacute;s de";	// Okoteve traducción
 #elif L==7	// it
 	"Rimuovere tutti gli utenti"
 	" che non sono registrati ad alcun corso"
@@ -12127,7 +12182,9 @@ const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF
 	" que n&atilde,o est&atilde;o matriculados em nenhuma disciplina"
 	" e com mais de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate all users"
+	" who are not enroled on any courses"
+	" and with more than";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2 =	// Warning: it is very important to include %s in the following sentences
@@ -12142,7 +12199,7 @@ const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF
 #elif L==5	// fr
 	"mois sans acc&egrave;s &agrave; %s.";
 #elif L==6	// gn
-	"meses sin acceder a %s.";		// Okoteve traducción
+	"meses sin acceder a %s.";	// Okoteve traducción
 #elif L==7	// it
 	"mesi senza accedere a %s.";
 #elif L==8	// pl
@@ -12150,7 +12207,7 @@ const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF
 #elif L==9	// pt
 	"meses sem acesso a %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"months without access to %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1 =
@@ -12182,7 +12239,8 @@ const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1 =
 	"Eliminar da plataforma"
 	" os utilizadores que est&atilde;o na lista";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate from the platform"
+	" the users indicated on step 1";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_old_courses =
@@ -12205,7 +12263,7 @@ const char *Txt_Eliminate_old_courses =
 #elif L==9	// pt
 	"Eliminar antigas disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate old courses";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_old_users =
@@ -12228,7 +12286,7 @@ const char *Txt_Eliminate_old_users =
 #elif L==9	// pt
 	"Eliminar antigos utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate old users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access =	// Warning: it is very important to include %lu and %u in the following sentences
@@ -12260,7 +12318,8 @@ const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months
 	"Eliminando %lu disciplina(s) sem usu&aacute;rios"
 	" e com mais de %u meses sem acesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminating %lu course(s) without users"
+	" and with more than %u months without access.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_my_user_account =
@@ -12275,7 +12334,7 @@ const char *Txt_Eliminate_my_user_account =
 #elif L==5	// fr
 	"Supprimer mon compte d'utilisateur";
 #elif L==6	// gn
-	"Eliminar mi cuenta de usuario/a";		// Okoteve traducción
+	"Eliminar mi cuenta de usuario/a";	// Okoteve traducción
 #elif L==7	// it
 	"Rimuovere il mio account utente";
 #elif L==8	// pl
@@ -12283,7 +12342,7 @@ const char *Txt_Eliminate_my_user_account =
 #elif L==9	// pt
 	"Remover minha conta de usu&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate my user account";		// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminate_user_account =
@@ -12298,7 +12357,7 @@ const char *Txt_Eliminate_user_account =
 #elif L==5	// fr
 	"Supprimer compte d'utilisateur";
 #elif L==6	// gn
-	"Eliminar cuenta de usuario/a";		// Okoteve traducción
+	"Eliminar cuenta de usuario/a";	// Okoteve traducción
 #elif L==7	// it
 	"Rimuovere account utente";
 #elif L==8	// pl
@@ -12306,7 +12365,7 @@ const char *Txt_Eliminate_user_account =
 #elif L==9	// pt
 	"Remover conta de usu&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminate user account";	// Çeviri lazim!
 #endif
 
 const char *Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z =	// Warning: it is very important to include %lu, %u and %s in the following sentences
@@ -12338,7 +12397,8 @@ const char *Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_
 	"Eliminando %lu usu&aacute;rio(s) que n&atilde;o estavam matriculados em nenhuma disciplina"
 	" e com mais de %u meses sem acesso a %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Eliminating %lu user(s) who were not enroled in any course"
+	" and with more than %u months without access to %s.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Email =
@@ -12384,7 +12444,7 @@ const char *Txt_Email_addresses =
 #elif L==9	// pt
 	"Endere&ccedil;os de email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email addresses";		// Çeviri lazim!
 #endif
 
 const char *Txt_Email_domain_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -12407,7 +12467,7 @@ const char *Txt_Email_domain_X_removed =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"Dom&iacute;nio de email <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email domain <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Email_domains_allowed_for_notifications =
@@ -12430,7 +12490,7 @@ const char *Txt_Email_domains_allowed_for_notifications =
 #elif L==9	// pt
 	"Dom&iacute;nios de email permitidos para notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email domains allowed for notifications";		// Çeviri lazim!
 #endif
 
 const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
@@ -12455,7 +12515,7 @@ const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por dom&iacute;nio de email"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by email domain"		// Çeviri lazim!
 #endif
 	,
 	[Mai_ORDER_BY_INFO] =
@@ -12478,7 +12538,7 @@ const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por informa&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by information"			// Çeviri lazim!
 #endif
 	,
 	[Mai_ORDER_BY_USERS] =
@@ -12501,7 +12561,7 @@ const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of users"			// Çeviri lazim!
 #endif
 	};
 
@@ -12527,7 +12587,7 @@ const char *Txt_EMAIL_DOMAIN_ORDER[Mai_NUM_ORDERS] =
 #elif L==9	// pt
 	"Dom&iacute;nio de email"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Email domain"		// Çeviri lazim!
 #endif
 	,
 	[Mai_ORDER_BY_INFO] =
@@ -12573,7 +12633,7 @@ const char *Txt_EMAIL_DOMAIN_ORDER[Mai_NUM_ORDERS] =
 #elif L==9	// pt
 	"Utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"		// Çeviri lazim!
 #endif
 	};
 
@@ -12597,7 +12657,7 @@ const char *Txt_Email_X_confirmed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Email %s confirmado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email %s confirmed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Email_X_has_already_been_confirmed_before =	// Warning: it is very important to include %s in the following sentences
@@ -12629,7 +12689,8 @@ const char *Txt_Email_X_has_already_been_confirmed_before =	// Warning: it is ve
 	"Email <strong>%s</strong>"
 	" j&aacute; foi confirmado antes.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email <strong>%s</strong>"
+	" has already been confirmed before.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Email_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -12652,7 +12713,7 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Email <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Email <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_End_date =
@@ -12675,7 +12736,7 @@ const char *Txt_End_date =
 #elif L==9	// pt
 	"Data final";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"End date";	// Çeviri lazim!
 #endif
 
 const char *Txt_Enrol_in_groups =
@@ -12698,7 +12759,7 @@ const char *Txt_Enrol_in_groups =
 #elif L==9	// pt
 	"Inscreva-me em grupos ";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrol in groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment =
@@ -12721,7 +12782,7 @@ const char *Txt_Enrolment =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrolment";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment_confirmed =
@@ -12744,7 +12805,7 @@ const char *Txt_Enrolment_confirmed =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o confirmada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrolment confirmed";			// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment_of_X_rejected =	// Warning: it is very important to include %s in the following sentences
@@ -12767,7 +12828,7 @@ const char *Txt_Enrolment_of_X_rejected =	// Warning: it is very important to in
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o de <strong>%s</strong> rejeitada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrolment of <strong>%s</strong> rejected.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment_not_confirmed =
@@ -12790,7 +12851,7 @@ const char *Txt_Enrolment_not_confirmed =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o n&atilde;o confirmada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrolment not confirmed";				// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment_requests =
@@ -12813,7 +12874,7 @@ const char *Txt_Enrolment_requests =
 #elif L==9	// pt
 	"Pedidos de inscri&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enrolment requests";			// Çeviri lazim!
 #endif
 
 const char *Txt_Enter_a_new_item_here =
@@ -12836,7 +12897,7 @@ const char *Txt_Enter_a_new_item_here =
 #elif L==9	// pt
 	"Escreva aqui uma nova rubrica";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enter a new item here";			// Çeviri lazim!
 #endif
 
 const char *Txt_Enter_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -12859,7 +12920,7 @@ const char *Txt_Enter_from_X =	// Warning: it is very important to include %s in
 #elif L==9	// pt
 	"Digite partir %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Enter from %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Equation_centered =
@@ -12882,7 +12943,7 @@ const char *Txt_Equation_centered =
 #elif L==9	// pt
 	"equa&ccedil;&atilde;o centrado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Equation centered";		// Çeviri lazim!
 #endif
 
 const char *Txt_Error_getting_data_from_a_recipient =
@@ -12905,7 +12966,7 @@ const char *Txt_Error_getting_data_from_a_recipient =
 #elif L==9	// pt
 	"Erro ao obter dados de um destinat&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Error getting data from a recipient.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Error_sending_or_processing_image_video =
@@ -12928,7 +12989,7 @@ const char *Txt_Error_sending_or_processing_image_video =
 #elif L==9	// pt
 	"Erro ao enviar ou processar imagem / v&iacute;deo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Error sending or processing image / video.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Event =
@@ -12951,7 +13012,7 @@ const char *Txt_Event =
 #elif L==9	// pt
 	"Evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event";	// Çeviri lazim!
 #endif
 
 const char *Txt_Event_X_is_now_private =	// Warning: it is very important to include %s in the following sentences
@@ -12974,7 +13035,7 @@ const char *Txt_Event_X_is_now_private =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"O evento <strong>%s</strong> &eacute; agora privado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event <strong>%s</strong> is now private.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it is very important to include %s in the following sentences
@@ -13006,7 +13067,8 @@ const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it
 	"O evento <strong>%s</strong> &eacute; agora vis&iacute;vel"
 	" para os usu&aacute;rios de as suas disciplinas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event <strong>%s</strong> is now visible"
+	" to users of your courses.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses =
@@ -13029,7 +13091,7 @@ const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_cour
 #elif L==9	// pt
 	"Evento privat, clique para torn&aacute;-lo vis&iacute;vel para os usu&aacute;rios de as suas disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event private, click to make it visible to the users of your courses";			// Çeviri lazim!
 #endif
 
 const char *Txt_Event_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -13052,7 +13114,7 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Evento <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private =
@@ -13075,7 +13137,7 @@ const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_priv
 #elif L==9	// pt
 	"Evento vis&iacute;vel para os usu&aacute;rios de as suas disciplinas, clique para torn&aacute;-lo privat";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Event visible to the users of your courses, click to make it private";			// Çeviri lazim!
 #endif
 
 const char *Txt_Events =
@@ -13098,7 +13160,7 @@ const char *Txt_Events =
 #elif L==9	// pt
 	"Eventos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Events";	// Çeviri lazim!
 #endif
 
 const char *Txt_Exam =
@@ -13121,7 +13183,7 @@ const char *Txt_Exam =
 #elif L==9	// pt
 	"Exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Exam";	// Çeviri lazim!
 #endif
 
 const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
@@ -13146,7 +13208,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==9	// pt
 	"A&ccedil;&atilde;o desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown action"		// Çeviri lazim!
 #endif
 	,
 	[ExaLog_START_EXAM] =
@@ -13169,7 +13231,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Iniciou o exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Started the exam"		// Çeviri lazim!
 #endif
 	,
 	[ExaLog_RESUME_EXAM] =
@@ -13192,7 +13254,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Retomou o exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Resumed the exam"		// Çeviri lazim!
 #endif
 	,
 	[ExaLog_ANSWER_QUESTION] =
@@ -13215,7 +13277,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Respondeu a uma pergunta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Answer exam question"		// Çeviri lazim!
 #endif
 	,
 	[ExaLog_FINISH_EXAM] =
@@ -13238,7 +13300,7 @@ const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Terminou o exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Finished the exam"	// Çeviri lazim!
 #endif
 	};
 
@@ -13262,7 +13324,7 @@ const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in th
 #elif L==9	// pt
 	"Exame de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Exam of %s";		// Çeviri lazim!
 #endif
 
 const char *Txt_EXAM_Open =
@@ -13285,7 +13347,7 @@ const char *Txt_EXAM_Open =
 #elif L==9	// pt
 	"Aberta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Open";		// Çeviri lazim!
 #endif
 
 const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -13308,7 +13370,7 @@ const char *Txt_Exam_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Exame <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Exam <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Exams =
@@ -13356,7 +13418,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Start"	// Çeviri lazim!
 #endif
 	,
 	[Exa_ORDER_BY_END_DATE] =
@@ -13379,7 +13441,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"End"	// Çeviri lazim!
 #endif
 	,
 	[Exa_ORDER_BY_TITLE] =
@@ -13402,7 +13464,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==9	// pt
 	"Exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Exam"	// Çeviri lazim!
 #endif
 	};
 
@@ -13428,7 +13490,7 @@ const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data de in&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by start date"		// Çeviri lazim!
 #endif
 	,
 	[Exa_ORDER_BY_END_DATE] =
@@ -13451,7 +13513,7 @@ const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data de t&eacute;rmino"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by end date"				// Çeviri lazim!
 #endif
 	,
 	[Exa_ORDER_BY_TITLE] =
@@ -13474,7 +13536,7 @@ const char *Txt_EXAMS_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por t&iacute;tulo do exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by exam title"			// Çeviri lazim!
 #endif
 	};
 
@@ -13498,7 +13560,7 @@ const char *Txt_Existing_question =
 #elif L==9	// pt
 	"Pergunta existente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Existing question";		// Çeviri lazim!
 #endif
 
 const char *Txt_Expand =
@@ -13521,7 +13583,7 @@ const char *Txt_Expand =
 #elif L==9	// pt
 	"Expandir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Expand";	// Çeviri lazim!
 #endif
 
 const char *Txt_Export_questions =
@@ -13544,7 +13606,7 @@ const char *Txt_Export_questions =
 #elif L==9	// pt
 	"Exportar perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Export questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Extended_public_profile =
@@ -13567,7 +13629,7 @@ const char *Txt_Extended_public_profile =
 #elif L==9	// pt
 	"Perfil p&uacute;blico estendido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Extended public profile";		// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_ =	// Warning: it is very important to include two %u in the following sentences
@@ -13617,7 +13679,10 @@ const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_ =	// Warning: 
 	"%u com o fundo muito escuro (marcado em vermelho).<br />"
 	"Se voc&ecirc; quiser escolher o rosto marcado em verde, clique nele.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u faces have been detected in front position:<br />"
+	"1 with the background light enough (marked in green).<br />"
+	"%u with the background too dark (marked in red).<br />"
+	"If you want to choose the face marked in green, click on it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: it is very important to include three %u in the following sentences
@@ -13667,7 +13732,10 @@ const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_ =	// Warning: 
 	"%u com o fundo muito escuro (marcado em vermelho).<br />"
 	"Se voc&ecirc; quiser escolher um dos rostos marcados em verde, clique nele.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u faces have been detected in front position:<br />"
+	"%u with the background light enough (marked in green),<br />"
+	"%u with the background too dark (marked in red).<br />"
+	"If you want to choose one of the faces marked in green, click on it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
@@ -13708,7 +13776,9 @@ const char *Txt_X_faces_marked_in_green_have_been_detected_ =	// Warning: it is 
 	" e com fundo suficientemente claro.<br />"
 	"Se voc&ecirc; quer escolher um daqueles rostos, clique sobre ele.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u faces (marked in green) have been detected in front position,"
+	" and the background is light enough.<br />"
+	"If you want to choose one of those faces, click on it.";	// Çeviri lazim!
 #endif
 
 const char *Txt_X_faces_marked_in_red_have_been_detected_ =	// Warning: it is very important to include %u in the following sentences
@@ -13740,7 +13810,8 @@ const char *Txt_X_faces_marked_in_red_have_been_detected_ =	// Warning: it is ve
 	"%u rostos foram detectados (mostrados em vermelho) na posi&ccedil;&atilde;o frontal,"
 	" mas o fundo &eacute; muito escuro.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u faces (marked in red) have been detected in front position,"
+	" but the background is too dark.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Faces_detected =
@@ -13763,7 +13834,7 @@ const char *Txt_Faces_detected =
 #elif L==9	// pt
 	"Rostos detectados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Faces detected";		// Çeviri lazim!
 #endif
 
 const char *Txt_Failed_email_confirmation_key =
@@ -13786,7 +13857,7 @@ const char *Txt_Failed_email_confirmation_key =
 #elif L==9	// pt
 	"Erro na chave de confirma&ccedil;&atilde;o de email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Failed email confirmation key.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Feedback =
@@ -13809,7 +13880,7 @@ const char *Txt_Feedback =
 #elif L==9	// pt
 	"Feedback";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Feedback";			// Çeviri lazim!
 #endif
 
 const char *Txt_Field_BR_name =
@@ -13832,7 +13903,7 @@ const char *Txt_Field_BR_name =
 #elif L==9	// pt
 	"Nome<br />do campo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Field<br />name";		// Çeviri lazim!
 #endif
 
 const char *Txt_Figures =
@@ -13878,7 +13949,7 @@ const char *Txt_File =
 #elif L==9	// pt
 	"Arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File";	// Çeviri lazim!
 #endif
 
 const char *Txt_file =
@@ -13901,7 +13972,7 @@ const char *Txt_file =
 #elif L==9	// pt
 	"arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"file";	// Çeviri lazim!
 #endif
 
 const char *Txt_X_file =	// Warning: it is very important to include %s in the following sentences
@@ -13924,7 +13995,7 @@ const char *Txt_X_file =	// Warning: it is very important to include %s in the f
 #elif L==9	// pt
 	"Arquivo %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s file";	// Çeviri lazim!
 #endif
 
 const char *Txt_File_not_found =
@@ -13947,7 +14018,7 @@ const char *Txt_File_not_found =
 #elif L==9	// pt
 	"Arquivo n&atilde;o encontrado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File not found";		// Çeviri lazim!
 #endif
 
 const char *Txt_FILE_uncompressed =
@@ -13970,7 +14041,7 @@ const char *Txt_FILE_uncompressed =
 #elif L==9	// pt
 	"descompactado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"uncrompressed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Filename =
@@ -13993,7 +14064,7 @@ const char *Txt_Filename =
 #elif L==9	// pt
 	"Nome do arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Filename";		// Çeviri lazim!
 #endif
 
 const char *Txt_file_folder =
@@ -14016,7 +14087,7 @@ const char *Txt_file_folder =
 #elif L==9	// pt
 	"arquivo/diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"file/folder";		// Çeviri lazim!
 #endif
 
 const char *Txt_FILE_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -14039,7 +14110,7 @@ const char *Txt_FILE_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"<strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_File_size =
@@ -14062,7 +14133,7 @@ const char *Txt_File_size =
 #elif L==9	// pt
 	"Tamanho do arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File size";			// Çeviri lazim!
 #endif
 
 const char *Txt_File_with_the_logo =
@@ -14085,7 +14156,7 @@ const char *Txt_File_with_the_logo =
 #elif L==9	// pt
 	"Arquivo com o logotipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File with the logo";	// Çeviri lazim!
 #endif
 
 const char *Txt_File_with_the_photo =
@@ -14108,7 +14179,7 @@ const char *Txt_File_with_the_photo =
 #elif L==9	// pt
 	"Arquivo com a foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File with the photo";	// Çeviri lazim!
 #endif
 
 const char *Txt_File_zone =
@@ -14131,7 +14202,7 @@ const char *Txt_File_zone =
 #elif L==9	// pt
 	"Zona de arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zone";		// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones =
@@ -14154,7 +14225,7 @@ const char *Txt_File_zones =
 #elif L==9	// pt
 	"Zonas de arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones";		// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones_disabled =
@@ -14177,7 +14248,7 @@ const char *Txt_File_zones_disabled =
 #elif L==9	// pt
 	"Zonas de arquivos desativadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones disabled";			// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones_of_the_group_X_are_now_disabled =	// Warning: it is very important to include %s in the following sentences
@@ -14200,7 +14271,7 @@ const char *Txt_File_zones_of_the_group_X_are_now_disabled =	// Warning: it is v
 #elif L==9	// pt
 	"As zonas de arquivos do grupo %s est&atilde;o agora desativadas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones of the group %s are now disabled.";				// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones_of_the_group_X_are_now_enabled =	// Warning: it is very important to include %s in the following sentences
@@ -14223,7 +14294,7 @@ const char *Txt_File_zones_of_the_group_X_are_now_enabled =	// Warning: it is ve
 #elif L==9	// pt
 	"As zonas de arquivos do grupo %s est&atilde;o agora ativadas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones of the group %s are now enabled.";				// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them =	// Warning: it is very important to include %s in the following sentences
@@ -14246,7 +14317,7 @@ const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them =	// War
 #elif L==9	// pt
 	"Zonas de arquivos do grupo %s ativadas, clique para desativ&aacute;-las";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones of the group %s enabled, click to disable them";			// Çeviri lazim!
 #endif
 
 const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them =	// Warning: it is very important to include %s in the following sentences
@@ -14269,7 +14340,7 @@ const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them =	// War
 #elif L==9	// pt
 	"Zonas de arquivos do grupo %s desativadas, clique para ativ&aacute;-las";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File zones of the group %s disabled, click to enable them";			// Çeviri lazim!
 #endif
 
 const char *Txt_Files =
@@ -14292,7 +14363,7 @@ const char *Txt_Files =
 #elif L==9	// pt
 	"Arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files";	// Çeviri lazim!
 #endif
 
 const char *Txt_files =
@@ -14315,7 +14386,7 @@ const char *Txt_files =
 #elif L==9	// pt
 	"arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"files";	// Çeviri lazim!
 #endif
 
 const char *Txt_Files_assignments =
@@ -14338,7 +14409,7 @@ const char *Txt_Files_assignments =
 #elif L==9	// pt
 	"Arquivos atividades";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files assignments";	// Çeviri lazim!
 #endif
 
 const char *Txt_Files_copied =
@@ -14361,7 +14432,7 @@ const char *Txt_Files_copied =
 #elif L==9	// pt
 	"Arquivos copiados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files copied";		// Çeviri lazim!
 #endif
 
 const char *Txt_Files_uploaded =
@@ -14384,7 +14455,7 @@ const char *Txt_Files_uploaded =
 #elif L==9	// pt
 	"Arquivos enviados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files uploaded";	// Çeviri lazim!
 #endif
 
 const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
@@ -14475,7 +14546,15 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" seguida pela linha com suas notas,"
 	" e linhas de rodap&eacute;.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files of marks must contain a table in <strong>HTML format</strong> without pictures."
+	" Each HTML file may be generated, for example, from a spreadsheet,"
+	" by selecting the desired portion of the table and saving it as web page.<br />"
+	" A table can have <strong>multiple header and footer rows</strong>."
+	" Between them it should be <strong>a single row for each student</strong>,"
+	" with any number of columns, <strong>the first column containing the student's ID</strong>.<br />"
+	" A student will see a table with header rows,"
+	" followed by the row with his/her marks,"
+	" and footer rows.";				// Çeviri lazim!
 #endif
 
 const char *Txt_Files_removed =
@@ -14498,7 +14577,7 @@ const char *Txt_Files_removed =
 #elif L==9	// pt
 	"Arquivos removidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files removed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Files_works =
@@ -14521,7 +14600,7 @@ const char *Txt_Files_works =
 #elif L==9	// pt
 	"Arquivos trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Files homework";	// Çeviri lazim!
 #endif
 
 const char *Txt_Filter =	// As a noun
@@ -14544,7 +14623,7 @@ const char *Txt_Filter =	// As a noun
 #elif L==9	// pt
 	"Filtro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Filter";	// Çeviri lazim!
 #endif
 
 const char *Txt_First_day_of_the_week_X =	// Warning: it is very important to include %s in the following sentences
@@ -14590,7 +14669,7 @@ const char *Txt_First_name =
 #elif L==9	// pt
 	"Nome";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"First name";	// Çeviri lazim!
 #endif
 
 const char *Txt_Floor =
@@ -14613,7 +14692,7 @@ const char *Txt_Floor =
 #elif L==9	// pt
 	"Andar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Floor";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folder =
@@ -14636,7 +14715,7 @@ const char *Txt_Folder =
 #elif L==9	// pt
 	"Diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folder";	// Çeviri lazim!
 #endif
 
 const char *Txt_folder =
@@ -14659,7 +14738,7 @@ const char *Txt_folder =
 #elif L==9	// pt
 	"diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"folder";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very important to include %s in the following sentences
@@ -14682,7 +14761,7 @@ const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very i
 #elif L==9	// pt
 	"Diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do removidos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folder <strong>%s</strong> and all its contents removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folder_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -14705,7 +14784,7 @@ const char *Txt_Folder_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Diret&oacute;rio <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folder <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folders =
@@ -14728,7 +14807,7 @@ const char *Txt_Folders =
 #elif L==9	// pt
 	"Diret&oacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folders";	// Çeviri lazim!
 #endif
 
 const char *Txt_folders =
@@ -14751,7 +14830,7 @@ const char *Txt_folders =
 #elif L==9	// pt
 	"diret&oacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"folders";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folders_copied =
@@ -14774,7 +14853,7 @@ const char *Txt_Folders_copied =
 #elif L==9	// pt
 	"Diret&oacute;rios copiados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folders copied";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folders_renamed =
@@ -14797,7 +14876,7 @@ const char *Txt_Folders_renamed =
 #elif L==9	// pt
 	"Diret&oacute;rios renomeados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folders renamed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folders_removed =
@@ -14820,7 +14899,7 @@ const char *Txt_Folders_removed =
 #elif L==9	// pt
 	"Diret&oacute;rios removidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folders removed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Folders_not_renamed =
@@ -14843,7 +14922,7 @@ const char *Txt_Folders_not_renamed =
 #elif L==9	// pt
 	"Diret&oacute;rios n&atilde;o renomeados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Folders not renamed";		// Çeviri lazim!
 #endif
 
 const char *Txt_Follow =
@@ -14866,7 +14945,7 @@ const char *Txt_Follow =
 #elif L==9	// pt
 	"Seguir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Follow";	// Çeviri lazim!
 #endif
 
 const char *Txt_FollowPerFollow[2] =
@@ -14890,7 +14969,7 @@ const char *Txt_FollowPerFollow[2] =
 #elif L==9	// pt
 	"M&eacute;dia por seguidos por seguidor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Average followed per follower"			// Çeviri lazim!
 #endif
       ,
 #if   L==1	// ca
@@ -14912,7 +14991,7 @@ const char *Txt_FollowPerFollow[2] =
 #elif L==9	// pt
 	"M&eacute;dia por seguidores por seguido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Average followers per followed"		// Çeviri lazim!
 #endif
       };
 
@@ -14936,7 +15015,7 @@ const char *Txt_Followed =
 #elif L==9	// pt
 	"Seguidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Followed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Followers =
@@ -14959,7 +15038,7 @@ const char *Txt_Followers =
 #elif L==9	// pt
 	"Seguidores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Followers";	// Çeviri lazim!
 #endif
 
 const char *Txt_Following =
@@ -14982,7 +15061,7 @@ const char *Txt_Following =
 #elif L==9	// pt
 	"Seguinte";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Following";	// Çeviri lazim!
 #endif
 
 const char *Txt_Following_unfollow =
@@ -15005,7 +15084,7 @@ const char *Txt_Following_unfollow =
 #elif L==9	// pt
 	"Seguinte, deixar de seguir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Following, unfollow";		// Çeviri lazim!
 #endif
 
 const char *Txt_FOLLOWS_YOU =
@@ -15028,7 +15107,7 @@ const char *Txt_FOLLOWS_YOU =
 #elif L==9	// pt
 	"SEGUE VOC&Ecirc;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"FOLLOWS YOU";	// Çeviri lazim!
 #endif
 
 const char *Txt_For_security_enter_your_password =
@@ -15051,7 +15130,7 @@ const char *Txt_For_security_enter_your_password =
 #elif L==9	// pt
 	"Por seguran&ccedil;a, digite a sua senha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"For security, enter your password";				// Çeviri lazim!
 #endif
 
 const char *Txt_Force_students_to_read_this_information =
@@ -15074,7 +15153,7 @@ const char *Txt_Force_students_to_read_this_information =
 #elif L==9	// pt
 	"For&ccedil;ar os estudantes a ler esta informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Force students to read this information";			// Çeviri lazim!
 #endif
 
 const char *Txt_Forgotten_password =
@@ -15120,7 +15199,7 @@ const char *Txt_Format =
 #elif L==9	// pt
 	"Formato";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Format";	// Çeviri lazim!
 #endif
 
 const char *Txt_Forum =
@@ -15143,7 +15222,7 @@ const char *Txt_Forum =
 #elif L==9	// pt
 	"F&oacute;rum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Forum";	// Çeviri lazim!
 #endif
 
 const char *Txt_Forum_posts =
@@ -15166,7 +15245,7 @@ const char *Txt_Forum_posts =
 #elif L==9	// pt
 	"Posts de f&oacute;rum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Forum posts";		// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_post =
@@ -15189,7 +15268,7 @@ const char *Txt_FORUM_post =
 #elif L==9	// pt
 	"post";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"post";	// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_posts =
@@ -15212,7 +15291,7 @@ const char *Txt_FORUM_posts =
 #elif L==9	// pt
 	"posts";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"posts";	// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
@@ -15235,7 +15314,7 @@ const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Post %u permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post %u allowed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
@@ -15258,7 +15337,7 @@ const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very im
 #elif L==9	// pt
 	"Post %u permitido. Clique para censur&aacute;-lo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post %u allowed. Click to ban it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_and_thread_removed =
@@ -15281,7 +15360,7 @@ const char *Txt_FORUM_Post_and_thread_removed =
 #elif L==9	// pt
 	"Post e discuss&atilde;o removidos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post and thread removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_banned =
@@ -15304,7 +15383,7 @@ const char *Txt_FORUM_Post_banned =
 #elif L==9	// pt
 	"Post n&atilde;o permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post banned.";			// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
@@ -15327,7 +15406,7 @@ const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Post %u n&atilde;o permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post %u banned.";		// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
@@ -15350,7 +15429,7 @@ const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very i
 #elif L==9	// pt
 	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post %u banned. Click to unban it.";	// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_sent =
@@ -15373,7 +15452,7 @@ const char *Txt_FORUM_Post_sent =
 #elif L==9	// pt
 	"Post enviado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post sent.";		// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_removed =
@@ -15388,7 +15467,7 @@ const char *Txt_FORUM_Post_removed =
 #elif L==5	// fr
 	"Message supprim&eacute;.";
 #elif L==6	// gn
-	"Comentario eliminado.";		// Okoteve traducción
+	"Comentario eliminado.";	// Okoteve traducción
 #elif L==7	// it
 	"Post rimosso.";
 #elif L==8	// pl
@@ -15396,7 +15475,7 @@ const char *Txt_FORUM_Post_removed =
 #elif L==9	// pt
 	"Post removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_unbanned =
@@ -15411,7 +15490,7 @@ const char *Txt_FORUM_Post_unbanned =
 #elif L==5	// fr
 	"Publication non bannie.";
 #elif L==6	// gn
-	"Comentario permitido";		// Okoteve traducción
+	"Comentario permitido";	// Okoteve traducción
 #elif L==7	// it
 	"Post autorizzato.";
 #elif L==8	// pl
@@ -15419,7 +15498,7 @@ const char *Txt_FORUM_Post_unbanned =
 #elif L==9	// pt
 	"Post permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post unbanned";	// Çeviri lazim!
 #endif
 
 const char *Txt_Forum_threads =
@@ -15442,7 +15521,7 @@ const char *Txt_Forum_threads =
 #elif L==9	// pt
 	"Discuss&otilde;es de f&oacute;rum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Forum threads";	// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
@@ -15467,7 +15546,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Classificar por data da primeira mensagem"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by date of first message"		// Çeviri lazim!
 #endif
 	,
 	[Dat_END_TIME] =
@@ -15490,7 +15569,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Classificar pela data da &uacute;ltima mensagem"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by date of the last message"		// Çeviri lazim!
 #endif
 	};
 
@@ -15516,7 +15595,7 @@ const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Primeira post"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"First post"		// Çeviri lazim!
 #endif
 	,
 	[Dat_END_TIME] =
@@ -15539,7 +15618,7 @@ const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"&Uacute;ltima post"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Last post"			// Çeviri lazim!
 #endif
 	};
 
@@ -15557,7 +15636,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 #elif L==5	// fr
 	"Forums de cet emplacement"
 #elif L==6	// gn
-	"Foros de este sitio"	// Okoteve traducción
+	"Foros de este sitio"		// Okoteve traducción
 #elif L==7	// it
 	"Forum di questo sito"
 #elif L==8	// pl
@@ -15565,7 +15644,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 #elif L==9	// pt
 	"F&oacute;runs deste site"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Forums of this location"	// Çeviri lazim!
 #endif
 	,
 	[For_ALL_MY_FORUMS] =
@@ -15588,7 +15667,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 #elif L==9	// pt
 	"Todos os meus f&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All my forums"		// Çeviri lazim!
 #endif
 	};
 
@@ -15635,7 +15714,7 @@ const char *Txt_Found_an_index_html_file =
 #elif L==9	// pt
 	"Um arquivo <em>index.htm/index.html</em> foi encontrado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Found an <em>index.htm/index.html</em> file.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the allocated space
@@ -15681,7 +15760,7 @@ const char *Txt_from =
 #elif L==9	// pt
 	"de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"from";	// Çeviri lazim!
 #endif
 
 const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
@@ -15722,7 +15801,9 @@ const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	//
 	" o n&uacute;mero de linhas de edi&ccedil;&atilde;o no campo <strong>%s</strong>"
 	" &eacute; <strong>%u</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"From now on"
+	" the number of editing lines of the field <strong>%s</strong>"
+	" is <strong>%u</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_from_this_course =
@@ -15745,7 +15826,7 @@ const char *Txt_from_this_course =
 #elif L==9	// pt
 	"desta disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"from this course";		// Çeviri lazim!
 #endif
 
 const char *Txt_From_this_time_you_can_receive_messages_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -15768,7 +15849,7 @@ const char *Txt_From_this_time_you_can_receive_messages_from_X =	// Warning: it 
 #elif L==9	// pt
 	"A partir deste momento, voc&ecirc; pode receber mensagens de %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"From this time, you can receive messages from %s.";		// Çeviri lazim!
 #endif
 
 const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -15791,7 +15872,7 @@ const char *Txt_From_this_time_you_will_not_receive_messages_from_X =	// Warning
 #elif L==9	// pt
 	"A partir deste momento, voc&ecirc; n&atilde;o receber&aacute; mensagens de %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"From this time, you will not receive messages from %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Full_name =
@@ -15814,7 +15895,7 @@ const char *Txt_Full_name =
 #elif L==9	// pt
 	"Nome completo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Full name";		// Çeviri lazim!
 #endif
 
 const char *Txt_Full_name_of_the_degree =
@@ -15837,7 +15918,7 @@ const char *Txt_Full_name_of_the_degree =
 #elif L==9	// pt
 	"Nome completo do grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Full name of the degree";			// Çeviri lazim!
 #endif
 
 const char *Txt_Full_name_of_the_center =
@@ -15860,7 +15941,7 @@ const char *Txt_Full_name_of_the_center =
 #elif L==9	// pt
 	"Nome completo do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Full name of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Full_name_of_the_course =
@@ -15883,7 +15964,7 @@ const char *Txt_Full_name_of_the_course =
 #elif L==9	// pt
 	"Nome completo da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Full name of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Full_name_of_the_institution =
@@ -15906,7 +15987,7 @@ const char *Txt_Full_name_of_the_institution =
 #elif L==9	// pt
 	"Nome completo da institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Full name of the institution";			// Çeviri lazim!
 #endif
 
 const char *Txt_Function =
@@ -15929,7 +16010,7 @@ const char *Txt_Function =
 #elif L==9	// pt
 	"Fun&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Function";		// Çeviri lazim!
 #endif
 
 const char *Txt_Game =
@@ -15952,7 +16033,7 @@ const char *Txt_Game =
 #elif L==9	// pt
 	"Jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Game";		// Çeviri lazim!
 #endif
 
 const char *Txt_Game_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -15975,7 +16056,7 @@ const char *Txt_Game_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Jogo <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Game <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Games =
@@ -16023,7 +16104,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Start"	// Çeviri lazim!
 #endif
 	,
 	[Gam_ORDER_BY_END_DATE] =
@@ -16046,7 +16127,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"End"	// Çeviri lazim!
 #endif
 	,
 	[Gam_ORDER_BY_TITLE] =
@@ -16061,7 +16142,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==5	// fr
 	"Jeu"
 #elif L==6	// gn
-	"Juego"		// Okoteve traducción
+	"Juego"	// Okoteve traducción
 #elif L==7	// it
 	"Gioco"
 #elif L==8	// pl
@@ -16069,7 +16150,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Jogo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Game"	// Çeviri lazim!
 #endif
 	};
 
@@ -16095,7 +16176,7 @@ const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data de in&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by start date"		// Çeviri lazim!
 #endif
 	,
 	[Gam_ORDER_BY_END_DATE] =
@@ -16118,7 +16199,7 @@ const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data de t&eacute;rmino"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by end date"				// Çeviri lazim!
 #endif
 	,
 	[Gam_ORDER_BY_TITLE] =
@@ -16141,7 +16222,7 @@ const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por t&iacute;tulo do jogo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by game title"			// Çeviri lazim!
 #endif
 	};
 
@@ -16165,7 +16246,7 @@ const char *Txt_General =
 #elif L==9	// pt
 	"Geral";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"General";	// Çeviri lazim!
 #endif
 
 const char *Txt_general_topics =
@@ -16188,7 +16269,7 @@ const char *Txt_general_topics =
 #elif L==9	// pt
 	"temas gerais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"general topics";	// Çeviri lazim!
 #endif
 
 const char *Txt_Generate_report =
@@ -16211,7 +16292,7 @@ const char *Txt_Generate_report =
 #elif L==9	// pt
 	"Gerar relat&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Generate report";	// Çeviri lazim!
 #endif
 
 const char *Txt_Generate_test =
@@ -16226,7 +16307,7 @@ const char *Txt_Generate_test =
 #elif L==5	// fr
 	"G&eacute;n&eacute;rer test";
 #elif L==6	// gn
-	"Generar test";	// Okoteve traducción
+	"Generar test";		// Okoteve traducción
 #elif L==7	// it
 	"Crea test";
 #elif L==8	// pl
@@ -16234,7 +16315,7 @@ const char *Txt_Generate_test =
 #elif L==9	// pt
 	"Gerar teste";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Generate test";	// Çeviri lazim!
 #endif
 
 const char *Txt_Get_a_new_password =
@@ -16280,7 +16361,7 @@ const char *Txt_Global_visits =
 #elif L==9	// pt
 	"Visitas globais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Global visits";	// Çeviri lazim!
 #endif
 
 const char *Txt_Go_back =
@@ -16303,7 +16384,7 @@ const char *Txt_Go_back =
 #elif L==9	// pt
 	"Voltar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go back";		// Çeviri lazim!
 #endif
 
 const char *Txt_Go_forward =
@@ -16326,7 +16407,7 @@ const char *Txt_Go_forward =
 #elif L==9	// pt
 	"Avan&ccedil;ar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go forward";	// Çeviri lazim!
 #endif
 
 const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the following sentences
@@ -16349,7 +16430,7 @@ const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the 
 #elif L==9	// pt
 	"Ir para %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go to %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Go_to_course_and_reply =
@@ -16364,7 +16445,7 @@ const char *Txt_Go_to_course_and_reply =
 #elif L==5	// fr
 	"Aller &agrave; la mati&egrave;re et r&eacute;pondre";
 #elif L==6	// gn
-	"Ir a asignatura y responder";		// Okoteve traducción
+	"Ir a asignatura y responder";	// Okoteve traducción
 #elif L==7	// it
 	"Vai a corso e rispondere";
 #elif L==8	// pl
@@ -16372,7 +16453,7 @@ const char *Txt_Go_to_course_and_reply =
 #elif L==9	// pt
 	"Ir para a disciplina e responder";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go to course and reply";	// Çeviri lazim!
 #endif
 
 const char *Txt_Go_to_course_and_reply_again =
@@ -16387,7 +16468,7 @@ const char *Txt_Go_to_course_and_reply_again =
 #elif L==5	// fr
 	"Aller &agrave; la mati&egrave;re et r&eacute;pondre &agrave; nouveau";
 #elif L==6	// gn
-	"Ir a asignatura y responder otra vez";		// Okoteve traducción
+	"Ir a asignatura y responder otra vez";	// Okoteve traducción
 #elif L==7	// it
 	"Vai a corso e rispondere nuovamente";
 #elif L==8	// pl
@@ -16395,7 +16476,7 @@ const char *Txt_Go_to_course_and_reply_again =
 #elif L==9	// pt
 	"Ir para a disciplina e responder novamente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go to course and reply again";		// Çeviri lazim!
 #endif
 
 const char *Txt_Go_to_one_of_my_courses =
@@ -16418,7 +16499,7 @@ const char *Txt_Go_to_one_of_my_courses =
 #elif L==9	// pt
 	"V&aacute; para uma das minha disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Go to one of my courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_Grade =
@@ -16433,7 +16514,7 @@ const char *Txt_Grade =
 #elif L==5	// fr
 	"Note";
 #elif L==6	// gn
-	"Nota";	// Okoteve traducción
+	"Nota";		// Okoteve traducción
 #elif L==7	// it
 	"Voto";
 #elif L==8	// pl
@@ -16441,7 +16522,7 @@ const char *Txt_Grade =
 #elif L==9	// pt
 	"Nota";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Grade";	// Çeviri lazim!
 #endif
 
 const char *Txt_Group =
@@ -16464,7 +16545,7 @@ const char *Txt_Group =
 #elif L==9	// pt
 	"Grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group";	// Çeviri lazim!
 #endif
 
 const char *Txt_group =
@@ -16487,7 +16568,7 @@ const char *Txt_group =
 #elif L==9	// pt
 	"grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Group_closed =
@@ -16510,7 +16591,7 @@ const char *Txt_Group_closed =
 #elif L==9	// pt
 	"Grupo fechado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group closed";		// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_closed =	// Warning: it is very important to include %s in the following sentences
@@ -16525,7 +16606,7 @@ const char *Txt_Group_X_closed =	// Warning: it is very important to include %s 
 #elif L==5	// fr
 	"Groupe %s ferm&eacute;";
 #elif L==6	// gn
-	"Grupo %s cerrado";		// Okoteve traducción
+	"Grupo %s cerrado";	// Okoteve traducción
 #elif L==7	// it
 	"Gruppo %s chiuso";
 #elif L==8	// pl
@@ -16533,7 +16614,7 @@ const char *Txt_Group_X_closed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Grupo %s fechado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group %s closed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very important to include %s in the following sentences
@@ -16556,7 +16637,7 @@ const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very importa
 #elif L==9	// pt
 	"Grupo %s fechado, clique para abri-lo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group %s closed, click to open it";		// Çeviri lazim!
 #endif
 
 const char *Txt_Group_name =
@@ -16579,7 +16660,7 @@ const char *Txt_Group_name =
 #elif L==9	// pt
 	"Nome do grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group name";		// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_open =	// Warning: it is very important to include %s in the following sentences
@@ -16594,7 +16675,7 @@ const char *Txt_Group_X_open =	// Warning: it is very important to include %s in
 #elif L==5	// fr
 	"Groupe %s ouvert";
 #elif L==6	// gn
-	"Grupo %s abierto";		// Okoteve traducción
+	"Grupo %s abierto";	// Okoteve traducción
 #elif L==7	// it
 	"Gruppo %s aperto";
 #elif L==8	// pl
@@ -16602,7 +16683,7 @@ const char *Txt_Group_X_open =	// Warning: it is very important to include %s in
 #elif L==9	// pt
 	"Grupo %s aberto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group %s open";	// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_open_click_to_close_it =	// Warning: it is very important to include %s in the following sentences
@@ -16625,7 +16706,7 @@ const char *Txt_Group_X_open_click_to_close_it =	// Warning: it is very importan
 #elif L==9	// pt
 	"Grupo %s aberto, clique para fech&aacute;-lo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group %s open, click to close it";		// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -16640,7 +16721,7 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 #elif L==5	// fr
 	"Groupe <strong>%s</strong> supprim&eacute;.";
 #elif L==6	// gn
-	"Grupo <strong>%s</strong> eliminado.";		// Okoteve traducción
+	"Grupo <strong>%s</strong> eliminado.";	// Okoteve traducción
 #elif L==7	// it
 	"Gruppo <strong>%s</strong> rimosso.";
 #elif L==8	// pl
@@ -16648,7 +16729,7 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Grupo <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Group <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_GROUP_WHICH_GROUPS[2] =
@@ -16672,7 +16753,7 @@ const char *Txt_GROUP_WHICH_GROUPS[2] =
 #elif L==9	// pt
 	"Apenas os meus grupos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Only my groups"	// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -16694,7 +16775,7 @@ const char *Txt_GROUP_WHICH_GROUPS[2] =
 #elif L==9	// pt
 	"Todos os grupos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All groups"		// Çeviri lazim!
 #endif
 	};
 
@@ -16733,7 +16814,7 @@ const char *Txt_Groups_OF_A_USER =	// Warning: it is very important to include %
 #elif L==5	// fr
 	"Groupes de %s";
 #elif L==6	// gn
-	"Grupos de %s";		// Okoteve traducción
+	"Grupos de %s";	// Okoteve traducción
 #elif L==7	// it
 	"Gruppi di %s";
 #elif L==8	// pl
@@ -16741,7 +16822,7 @@ const char *Txt_Groups_OF_A_USER =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Grupos de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_Guided_academic_assignments =
@@ -16764,7 +16845,7 @@ const char *Txt_Guided_academic_assignments =
 #elif L==9	// pt
 	"Atividades acad&eacute;micas guided";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Guided academic assignments";			// Çeviri lazim!
 #endif
 
 const char *Txt_Happy_birthday_X =	// Warning: it is very important to include %s in the following sentences
@@ -16787,7 +16868,7 @@ const char *Txt_Happy_birthday_X =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Feliz anivers&aacute;rio, %s!";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Happy birthday, %s!";			// Çeviri lazim!
 #endif
 
 const char *Txt_Help =
@@ -16810,7 +16891,7 @@ const char *Txt_Help =
 #elif L==9	// pt
 	"Ajuda";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Help";	// Çeviri lazim!
 #endif
 
 const char *Txt_HELP_email =
@@ -16833,7 +16914,7 @@ const char *Txt_HELP_email =
 #elif L==9	// pt
 	"Exemplo: silva@exemplomail.com";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Example: smith@examplemail.com";	// Çeviri lazim!
 #endif
 
 const char *Txt_HELP_nickname =
@@ -16856,7 +16937,7 @@ const char *Txt_HELP_nickname =
 #elif L==9	// pt
 	"Exemplo: @silva";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Example: @smith";	// Çeviri lazim!
 #endif
 
 const char *Txt_HELP_password =
@@ -16879,7 +16960,7 @@ const char *Txt_HELP_password =
 #elif L==9	// pt
 	"8 ou mais caracteres";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"8 or more characters";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hidden_MALE_PLURAL =
@@ -16902,7 +16983,7 @@ const char *Txt_Hidden_MALE_PLURAL =
 #elif L==9	// pt
 	"Ocultos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hidden";	// Çeviri lazim!
 #endif
 
 const char *Txt_hidden_document =
@@ -16925,7 +17006,7 @@ const char *Txt_hidden_document =
 #elif L==9	// pt
 	"documento oculto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"hidden document";	// Çeviri lazim!
 #endif
 
 const char *Txt_hidden_documents =
@@ -16948,7 +17029,7 @@ const char *Txt_hidden_documents =
 #elif L==9	// pt
 	"documentos ocultos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"hidden documents";	// Çeviri lazim!
 #endif
 
 const char *Txt_Hidden_results =
@@ -16971,7 +17052,7 @@ const char *Txt_Hidden_results =
 #elif L==9	// pt
 	"Resultados ocultos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hidden results";	// Çeviri lazim!
 #endif
 
 const char *Txt_Hidden_survey =
@@ -16994,7 +17075,7 @@ const char *Txt_Hidden_survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito oculto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hidden survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Hide =
@@ -17017,7 +17098,7 @@ const char *Txt_Hide =
 #elif L==9	// pt
 	"Ocultar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hide";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hide_left_column =
@@ -17040,7 +17121,7 @@ const char *Txt_Hide_left_column =
 #elif L==9	// pt
 	"Ocultar coluna da esquerda";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hide left column";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hide_message =
@@ -17063,7 +17144,7 @@ const char *Txt_Hide_message =
 #elif L==9	// pt
 	"Ocultar mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hide message";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hide_right_column =
@@ -17086,7 +17167,7 @@ const char *Txt_Hide_right_column =
 #elif L==9	// pt
 	"Ocultar coluna da direita";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hide right column";		// Çeviri lazim!
 #endif
 
 const char *Txt_historical_log =
@@ -17101,7 +17182,7 @@ const char *Txt_historical_log =
 #elif L==5	// fr
 	"journal historique";
 #elif L==6	// gn
-	"registro hist&oacute;rico";		// Okoteve traducción
+	"registro hist&oacute;rico";	// Okoteve traducción
 #elif L==7	// it
 	"registro storico";
 #elif L==8	// pl
@@ -17109,7 +17190,7 @@ const char *Txt_historical_log =
 #elif L==9	// pt
 	"log hist&oacute;rico";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"historical log";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hits =	// hits = visits, clicks, page views...
@@ -17124,7 +17205,7 @@ const char *Txt_Hits =	// hits = visits, clicks, page views...
 #elif L==5	// fr
 	"Visites";
 #elif L==6	// gn
-	"Accesos (clics)";		// Okoteve traducción
+	"Accesos (clics)";	// Okoteve traducción
 #elif L==7	// it
 	"Visite";
 #elif L==8	// pl
@@ -17132,7 +17213,7 @@ const char *Txt_Hits =	// hits = visits, clicks, page views...
 #elif L==9	// pt
 	"Visitas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hits";			// Çeviri lazim!
 #endif
 
 const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning: it is very important to include %s in the following sentences
@@ -17147,7 +17228,7 @@ const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning
 #elif L==5	// fr
 	"Visites (clics) en tant que %s";
 #elif L==6	// gn
-	"Accesos (clics) como %s";		// Okoteve traducción
+	"Accesos (clics) como %s";	// Okoteve traducción
 #elif L==7	// it
 	"Visite (scatti) come %s";
 #elif L==8	// pl
@@ -17155,7 +17236,7 @@ const char *Txt_Hits_as_a_USER =	// hits = visits, clicks, page views... Warning
 #elif L==9	// pt
 	"Visitas (cliques) como %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hits (clicks) as a %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Hits_per_action =	// hits = visits, clicks, page views...
@@ -17178,7 +17259,7 @@ const char *Txt_Hits_per_action =	// hits = visits, clicks, page views...
 #elif L==9	// pt
 	"Visitas (cliques) por a&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hits (clicks) per action";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hits_per_year =	// hits = visits, clicks, page views...
@@ -17201,7 +17282,7 @@ const char *Txt_Hits_per_year =	// hits = visits, clicks, page views...
 #elif L==9	// pt
 	"Visitas (cliques) por ano";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hits (clicks) per year";		// Çeviri lazim!
 #endif
 
 const char *Txt_Hits_without_course_selected =	// hits = visits, clicks, page views...
@@ -17216,7 +17297,7 @@ const char *Txt_Hits_without_course_selected =	// hits = visits, clicks, page vi
 #elif L==5	// fr
 	"Visites (clics) sans mati&egrave;re s&eacute;lectionn&eacute;e";
 #elif L==6	// gn
-	"Accesos (clics) sin asignatura seleccionada";		// Okoteve traducción
+	"Accesos (clics) sin asignatura seleccionada";	// Okoteve traducción
 #elif L==7	// it
 	"Visite (scatti) senza corso selezionato";
 #elif L==8	// pl
@@ -17224,7 +17305,7 @@ const char *Txt_Hits_without_course_selected =	// hits = visits, clicks, page vi
 #elif L==9	// pt
 	"Visitas (cliques) sem disciplina selecionada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Hits (clicks) without course selected";	// Çeviri lazim!
 #endif
 
 const char *Txt_Holiday =
@@ -17247,7 +17328,7 @@ const char *Txt_Holiday =
 #elif L==9	// pt
 	"F&eacute;ria";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Holiday";	// Çeviri lazim!
 #endif
 
 const char *Txt_Holiday_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -17270,7 +17351,7 @@ const char *Txt_Holiday_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Festividade <strong>%s</strong> eliminada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Holiday <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
@@ -17295,7 +17376,7 @@ const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
 #elif L==9	// pt
 	"Feriado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Holiday"	// Çeviri lazim!
 #endif
 	,
 	[Hld_NON_SCHOOL_PERIOD] =
@@ -17318,7 +17399,7 @@ const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
 #elif L==9	// pt
 	"Per&iacute;odo sem escola"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non school period"		// Çeviri lazim!
 #endif
 	};
 
@@ -17367,7 +17448,7 @@ const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by place"		// Çeviri lazim!
 #endif
 	,
 	[Hld_ORDER_BY_START_DATE] =
@@ -17390,7 +17471,7 @@ const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by date"		// Çeviri lazim!
 #endif
 	};
 
@@ -17416,7 +17497,7 @@ const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Place"	// Çeviri lazim!
 #endif
 	,
 	[Hld_ORDER_BY_START_DATE] =
@@ -17439,7 +17520,7 @@ const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Data de in&iacute;cio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Start date"	// Çeviri lazim!
 #endif
 	};
 
@@ -17463,7 +17544,7 @@ const char *Txt_Home_PAGE =
 #elif L==9	// pt
 	"Home";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Home";		// Çeviri lazim!
 #endif
 
 const char *Txt_hour =
@@ -17486,7 +17567,7 @@ const char *Txt_hour =
 #elif L==9	// pt
 	"hora";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"hour";	// Çeviri lazim!
 #endif
 
 const char *Txt_hours =
@@ -17509,7 +17590,7 @@ const char *Txt_hours =
 #elif L==9	// pt
 	"horas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"hours";	// Çeviri lazim!
 #endif
 
 const char *Txt_hours_ABBREVIATION =	// Abbreviation of "hours"
@@ -17532,7 +17613,7 @@ const char *Txt_hours_ABBREVIATION =	// Abbreviation of "hours"
 #elif L==9	// pt
 	"h";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"h";	// Çeviri lazim!
 #endif
 
 const char *Txt_I_have_read_this_information =
@@ -17555,7 +17636,7 @@ const char *Txt_I_have_read_this_information =
 #elif L==9	// pt
 	"Eu li esta informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"I have read this information";			// Çeviri lazim!
 #endif
 
 const char *Txt_I_understand_that_this_action_can_not_be_undone =
@@ -17570,7 +17651,7 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 #elif L==5	// fr
 	"Je comprends que cette action ne peut &ecirc;tre annul&eacute;e.";
 #elif L==6	// gn
-	"Entiendo que esta acci&oacute;n no se puede deshacer.";		// Okoteve traducción
+	"Entiendo que esta acci&oacute;n no se puede deshacer.";	// Okoteve traducción
 #elif L==7	// it
 	"Mi rendo conto che questa azione non pu&ograve; essere annullata.";
 #elif L==8	// pl
@@ -17578,7 +17659,7 @@ const char *Txt_I_understand_that_this_action_can_not_be_undone =
 #elif L==9	// pt
 	"Eu entendo que esta a&ccedil;&atilde;o n&atilde;o pode ser desfeita.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"I understand that this action can not be undone.";		// Çeviri lazim!
 #endif
 
 const char *Txt_I_have_finished =
@@ -17593,7 +17674,7 @@ const char *Txt_I_have_finished =
 #elif L==5	// fr
 	"J'ai fini";
 #elif L==6	// gn
-	"He terminado";	// Okoteve traducción
+	"He terminado";		// Okoteve traducción
 #elif L==7	// it
 	"Ho finito";
 #elif L==8	// pl
@@ -17601,7 +17682,7 @@ const char *Txt_I_have_finished =
 #elif L==9	// pt
 	"Acabei";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"I have finished";	// Çeviri lazim!
 #endif
 
 const char *Txt_Icons =
@@ -17662,7 +17743,7 @@ const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very importa
 #elif L==5	// fr
 	"L'ID %s avait d&eacute;j&agrave; &eacute;t&eacute; confirm&eacute;e.";
 #elif L==6	// gn
-	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";		// Okoteve traducción
+	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";	// Okoteve traducción
 #elif L==7	// it
 	"L'ID %s era gi&agrave; stato confermato.";
 #elif L==8	// pl
@@ -17670,7 +17751,7 @@ const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very importa
 #elif L==9	// pt
 	"O ID %s j&aacute; havia sido confirmada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ID %s had already been confirmed.";					// Çeviri lazim!
 #endif
 
 const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -17693,7 +17774,7 @@ const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"ID %s confirmado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ID %s confirmed";				// Çeviri lazim!
 #endif
 
 const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -17708,7 +17789,7 @@ const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include
 #elif L==5	// fr
 	"ID %s pas confirm&eacute;";
 #elif L==6	// gn
-	"ID (DNI/c&eacute;dula) %s no confirmado";		// Okoteve traducción
+	"ID (DNI/c&eacute;dula) %s no confirmado";	// Okoteve traducción
 #elif L==7	// it
 	"ID %s non confermato";
 #elif L==8	// pl
@@ -17716,7 +17797,7 @@ const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include
 #elif L==9	// pt
 	"ID %s n&atilde;o confirmado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ID %s not confirmed";				// Çeviri lazim!
 #endif
 
 const char *Txt_ID_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -17739,7 +17820,7 @@ const char *Txt_ID_X_removed =	// Warning: it is very important to include %s in
 #elif L==9	// pt
 	"Email <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ID <strong>%s</strong> removed.";				// Çeviri lazim!
 #endif
 
 const char *Txt_Identified_views =
@@ -17762,7 +17843,7 @@ const char *Txt_Identified_views =
 #elif L==9	// pt
 	"Acessos identificados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Identified views";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// Warning: it is very important to include %s in the following sentences
@@ -17794,7 +17875,8 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 	"Se este for um novo usu&aacute;rio em %s,"
 	" voc&ecirc; deve indicar seu ID.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If this is a new user in %s,"
+	" you should indicate her/his ID.";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them =
@@ -17826,7 +17908,8 @@ const char *Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_
 	"Se voc&ecirc; n&atilde;o consegue encontrar a sua institui&ccedil;&atilde;o, o seu centro,"
 	" o seu grau ou as suas disciplinas, voc&ecirc; pode cri&aacute;-los.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If you can not find your institution, your center,"
+	" your degree or your courses, you can create them.";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_have_an_Android_device_try_SWADroid =
@@ -17849,7 +17932,7 @@ const char *Txt_If_you_have_an_Android_device_try_SWADroid =
 #elif L==9	// pt
 	"Se voc&ecirc; tiver um dispositivo Android, tente SWADroid";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If you have an Android device, try SWADroid";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_have_forgotten_your_password_ =
@@ -17890,7 +17973,9 @@ const char *Txt_If_you_have_forgotten_your_password_ =
 	" uma nova ser&aacute; enviada"
 	" para o seu endere&ccedil;o de email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If you have forgotten your password,"
+	" a new one will be sent"
+	" to your email address.";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
@@ -17931,7 +18016,9 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	" bem como o endere&ccedil;o de email em seu cart&atilde;o est&aacute; correto,"
 	" voc&ecirc; receber&aacute; um email com uma nova senha.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If you have written your @nick, email or ID correctly,"
+	" and the email address on your record is correct,"
+	" you will receive an email with a new password.";		// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_think_you_may_have_been_registered_ =
@@ -18006,7 +18093,7 @@ const char *Txt_Image =
 #elif L==9	// pt
 	"Imagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Image";	// Çeviri lazim!
 #endif
 
 const char *Txt_Image_video =
@@ -18029,7 +18116,7 @@ const char *Txt_Image_video =
 #elif L==9	// pt
 	"Imagem / v&iacute;deo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Image / video";	// Çeviri lazim!
 #endif
 
 const char *Txt_Import_questions =
@@ -18052,7 +18139,7 @@ const char *Txt_Import_questions =
 #elif L==9	// pt
 	"Importar perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Import questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Imported_questions =
@@ -18075,7 +18162,7 @@ const char *Txt_Imported_questions =
 #elif L==9	// pt
 	"Perguntas importadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Imported questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
@@ -18098,7 +18185,7 @@ const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
 #elif L==9	// pt
 	"em";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"in";	// Çeviri lazim!
 #endif
 
 const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group =
@@ -18130,7 +18217,8 @@ const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_reg
 	"Em um tipo de grupo com inscri&ccedil;&atilde;o &uacute;nica,"
 	" os estudantes n&atilde;o podem ser registrados em mais de um grupo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"In a type of group with single enrolment,"
+	" students can not be registered in more than one group.";	// Çeviri lazim!
 #endif
 
 const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -18162,7 +18250,8 @@ const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_
 	"No ano/semestre <strong>%s</strong> do grau <strong>%s</strong>"
 	" j&aacute; existia uma disciplina com o nome <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"In the year/semester <strong>%s</strong> of the degree <strong>%s</strong>"
+	" already existed a course with the name <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Incomplete_timetable_for_lack_of_space =
@@ -18185,7 +18274,7 @@ const char *Txt_Incomplete_timetable_for_lack_of_space =
 #elif L==9	// pt
 	"Hor&aacute;rio incompleto por falta de espa&ccedil;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Incomplete timetable for lack of space.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Increase_level_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -18208,7 +18297,7 @@ const char *Txt_Increase_level_of_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Aumentar o n&iacute;vel de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Increase level of %s";		// Çeviri lazim!
 #endif
 
 const char *Txt_Indicators =
@@ -18254,7 +18343,7 @@ const char *Txt_Indicators_of_courses =
 #elif L==9	// pt
 	"Indicadores de disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Indicators of courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_Info =
@@ -18277,7 +18366,7 @@ const char *Txt_Info =
 #elif L==9	// pt
 	"Info";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Info";	// Çeviri lazim!
 #endif
 
 const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
@@ -18325,7 +18414,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 #elif L==9	// pt
 	"Guia de ensino"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teaching guide"	// Çeviri lazim!
 #endif
 	,
 	[Inf_LECTURES] =
@@ -18417,7 +18506,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 #elif L==9	// pt
 	"FAQ"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"SSS"
 #endif
 	,
 	[Inf_LINKS] =
@@ -18463,7 +18552,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 #elif L==9	// pt
 	"Sistema de avalia&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assessment system"		// Çeviri lazim!
 #endif
 	};
 
@@ -18489,7 +18578,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"N&atilde;o d&ecirc; nenhuma informa&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Do not give any information"		// Çeviri lazim!
 #endif
 	,
 	[Inf_EDITOR] =
@@ -18512,7 +18601,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Interno editor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Internal editor"	// Çeviri lazim!
 #endif
 	,
 	[Inf_PLAIN_TEXT] =
@@ -18535,7 +18624,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Texto plano"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Plain text"		// Çeviri lazim!
 #endif
 	,
 	[Inf_RICH_TEXT] =
@@ -18558,7 +18647,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Texto enriquecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Rich text"		// Çeviri lazim!
 #endif
 	,
 	[Inf_PAGE] =
@@ -18581,7 +18670,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"P&aacute;gina Web hospedada aqui"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Web page hosted here"			// Çeviri lazim!
 #endif
 	,
 	[Inf_URL] =
@@ -18604,7 +18693,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"P&aacute;gina Web hospedada em outro servidor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Web page hosted on another server"		// Çeviri lazim!
 #endif
 	};
 
@@ -18614,7 +18703,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 	NULL,
 	[Inf_EDITOR] =
 #if   L==1	// ca
-	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traducció
+	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"	// Necessita traducció
 #elif L==2	// de
 	"Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)"
 #elif L==3	// en
@@ -18624,7 +18713,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==5	// fr
 	"&eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)"
 #elif L==6	// gn
-	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Okoteve traducción
+	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"	// Okoteve traducción
 #elif L==7	// it
 	"editor interno, solo per programmi di teoria e di pratica"
 #elif L==8	// pl
@@ -18632,7 +18721,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"interno editor, apenas para programas de teoria y pr&aacute;tica"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"internal editor, only for syllabus (lectures and practicals)"			// Çeviri lazim!
 #endif
 	,
 	[Inf_PLAIN_TEXT] =
@@ -18647,7 +18736,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==5	// fr
 	"&eacute;diteur de texte simple"
 #elif L==6	// gn
-	"editor de texto sin formato"		// Okoteve traducción
+	"editor de texto sin formato"	// Okoteve traducción
 #elif L==7	// it
 	"editor di testo normale"
 #elif L==8	// pl
@@ -18655,7 +18744,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"editor de texto simples"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"plain text editor"		// Çeviri lazim!
 #endif
 	,
 	[Inf_RICH_TEXT] =
@@ -18678,7 +18767,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"editor de texto rico"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"rich text editor"		// Çeviri lazim!
 #endif
 	,
 	[Inf_PAGE] =
@@ -18701,7 +18790,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"send an HTML file, or a ZIP file containing a file index.html / index.htm and image files"					// Çeviri lazim!
 #endif
 	,
 	[Inf_URL] =
@@ -18724,7 +18813,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"introduza o endere&ccedil;o de uma p&aacute;gina Web que est&aacute; hospedada em outro servidor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"enter the address of a web page that is hosted on another server"					// Çeviri lazim!
 #endif
 	};
 
@@ -18750,7 +18839,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Sem informa&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No information"		// Çeviri lazim!
 #endif
 	,
 	[Inf_EDITOR] =
@@ -18773,7 +18862,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Interno editor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Internal editor"	// Çeviri lazim!
 #endif
 	,
 	[Inf_PLAIN_TEXT] =
@@ -18796,7 +18885,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Texto plano"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Plain text"		// Çeviri lazim!
 #endif
 	,
 	[Inf_RICH_TEXT] =
@@ -18819,7 +18908,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Texto enriquecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Rich text"		// Çeviri lazim!
 #endif
 	,
 	[Inf_PAGE] =
@@ -18842,7 +18931,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Interna p&aacute;gina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Internal page"		// Çeviri lazim!
 #endif
 	,
 	[Inf_URL] =
@@ -18865,7 +18954,7 @@ const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 #elif L==9	// pt
 	"Externa p&aacute;gina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"External page"		// Çeviri lazim!
 #endif
 	};
 
@@ -18889,7 +18978,7 @@ const char *Txt_Informants =
 #elif L==9	// pt
 	"Informantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Informants";	// Çeviri lazim!
 #endif
 
 const char *Txt_Inline_math =
@@ -18912,7 +19001,7 @@ const char *Txt_Inline_math =
 #elif L==9	// pt
 	"F&oacute;rmula";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Inline math";		// Çeviri lazim!
 #endif
 
 const char *Txt_Institution =
@@ -18935,7 +19024,7 @@ const char *Txt_Institution =
 #elif L==9	// pt
 	"Institu&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Kurum";
 #endif
 
 const char *Txt_institution =
@@ -18958,7 +19047,7 @@ const char *Txt_institution =
 #elif L==9	// pt
 	"institu&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"kurum";
 #endif
 
 const char *Txt_Institution_center_and_department =
@@ -18981,7 +19070,7 @@ const char *Txt_Institution_center_and_department =
 #elif L==9	// pt
 	"Institu&ccedil;&atilde;o, centro e departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institution, center and department";	// Çeviri lazim!
 #endif
 
 const char *Txt_Institution_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -19004,7 +19093,7 @@ const char *Txt_Institution_X_removed =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Institui&ccedil;&atilde;o <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institution <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 
@@ -19022,7 +19111,7 @@ const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==5	// fr
 	"Inconnu"
 #elif L==6	// gn
-	"Desconocido"			// Okoteve traducción
+	"Desconocido"	// Okoteve traducción
 #elif L==7	// it
 	"Sconosciuto"
 #elif L==8	// pl
@@ -19030,7 +19119,7 @@ const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_ACTIVE] =
@@ -19053,7 +19142,7 @@ const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Ativa"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Active"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_PENDING] =
@@ -19076,7 +19165,7 @@ const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Nova"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New"	// Çeviri lazim!
 #endif
 	,
 	[Hie_STATUS_REMOVED] =
@@ -19099,7 +19188,7 @@ const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Suprimida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Removed"	// Çeviri lazim!
 #endif
 	};
 
@@ -19123,7 +19212,7 @@ const char *Txt_Institutional_code =
 #elif L==9	// pt
 	"C&oacute;digo institutional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutional code";		// Çeviri lazim!
 #endif
 
 const char *Txt_Institutional_BR_code =
@@ -19146,7 +19235,7 @@ const char *Txt_Institutional_BR_code =
 #elif L==9	// pt
 	"C&oacute;digo<br />instituc.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institut.<br />code";		// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions =
@@ -19169,7 +19258,7 @@ const char *Txt_Institutions =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_ABBREVIATION =
@@ -19192,7 +19281,7 @@ const char *Txt_Institutions_ABBREVIATION =
 #elif L==9	// pt
 	"Instit.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Instit.";	// Çeviri lazim!
 #endif
 
 const char *Txt_institutions =
@@ -19215,7 +19304,7 @@ const char *Txt_institutions =
 #elif L==9	// pt
 	"institu&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"institutions";	// Çeviri lazim!
 #endif
 
 const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
@@ -19240,7 +19329,7 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por institui&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by institution"			// Çeviri lazim!
 #endif
 	,
 	[Ins_ORDER_BY_NUM_USRS] =
@@ -19263,7 +19352,7 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&ordm; de utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of users"			// Çeviri lazim!
 #endif
 	};
 
@@ -19287,7 +19376,7 @@ const char *Txt_Institutions_by_number_of_centers =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es por n&uacute;mero de centros";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions by number of centers";			// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_by_number_of_degrees =
@@ -19310,7 +19399,7 @@ const char *Txt_Institutions_by_number_of_degrees =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es por n&uacute;mero de graus";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions by number of degrees";				// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_by_number_of_courses =
@@ -19333,7 +19422,7 @@ const char *Txt_Institutions_by_number_of_courses =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es por n&uacute;mero de disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions by number of courses";				// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_by_number_of_users_in_courses =
@@ -19356,7 +19445,7 @@ const char *Txt_Institutions_by_number_of_users_in_courses =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es por n&uacute;mero de usu&aacute;rios em disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions by number of users in courses";				// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them =
@@ -19379,7 +19468,7 @@ const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es por n&uacute;mero de usu&aacute;rios que afirmam pertencer a elas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions by number of users who claim to belong to them";				// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
@@ -19402,7 +19491,7 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
@@ -19427,7 +19516,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 #elif L==9	// pt
 	"Institui&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Kurum"
 #endif
 	,
 	[Ins_ORDER_BY_NUM_USRS] =
@@ -19450,7 +19539,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 #elif L==9	// pt
 	"Utilizadores da institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users of the institution"		// Çeviri lazim!
 #endif
 	};
 
@@ -19474,7 +19563,7 @@ const char *Txt_Institutions_with_pending_centers =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es com centros pendentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions with pending centers";			// Çeviri lazim!
 #endif
 
 const char *Txt_Integer_number =
@@ -19497,7 +19586,7 @@ const char *Txt_Integer_number =
 #elif L==9	// pt
 	"N.&ordm; inteiro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Integer number";	// Çeviri lazim!
 #endif
 
 const char *Txt_Internal_code =
@@ -19520,7 +19609,7 @@ const char *Txt_Internal_code =
 #elif L==9	// pt
 	"C&oacute;digo interno";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Internal code";		// Çeviri lazim!
 #endif
 
 const char *Txt_Internationalization =
@@ -19566,7 +19655,7 @@ const char *Txt_Invalid_question =
 #elif L==9	// pt
 	"Pergunta cancelada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Invalid question";	// Çeviri lazim!
 #endif
 
 const char *Txt_IP =		// Internet Protocol address
@@ -19589,7 +19678,7 @@ const char *Txt_IP =		// Internet Protocol address
 #elif L==9	// pt
 	"IP";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"IP";	// Çeviri lazim!
 #endif
 
 const char *Txt_It_is_mandatory_to_choose_a_group =
@@ -19612,7 +19701,7 @@ const char *Txt_It_is_mandatory_to_choose_a_group =
 #elif L==9	// pt
 	"Escolher um grupo &eacute; obrigat&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"It is mandatory to choose a group";	// Çeviri lazim!
 #endif
 
 const char *Txt_It_is_optional_to_choose_a_group =
@@ -19635,7 +19724,7 @@ const char *Txt_It_is_optional_to_choose_a_group =
 #elif L==9	// pt
 	"Escolher um grupo &eacute; volunt&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"It is optional to choose a group";	// Çeviri lazim!
 #endif
 /*
 const char *Txt_Item =
@@ -19658,7 +19747,7 @@ const char *Txt_Item =
 #elif L==9	// pt
 	"Item";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Item";		// Çeviri lazim!
 #endif
 */
 const char *Txt_Item_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -19681,7 +19770,7 @@ const char *Txt_Item_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Item <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Item <strong>s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Its_me =
@@ -19704,7 +19793,7 @@ const char *Txt_Its_me =
 #elif L==9	// pt
 	"Sou eu!";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"It's me!";		// Çeviri lazim!
 #endif
 
 const char *Txt_Language =
@@ -19750,7 +19839,7 @@ const char *Txt_Last_clicks =
 #elif L==9	// pt
 	"&Uacute;ltimos cliques";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Last clicks";		// Çeviri lazim!
 #endif
 
 const char *Txt_Last_clicks_in_real_time =
@@ -19773,7 +19862,7 @@ const char *Txt_Last_clicks_in_real_time =
 #elif L==9	// pt
 	"&Uacute;ltimos cliques em tempo real";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Last clicks in real time";		// Çeviri lazim!
 #endif
 
 const char *Txt_Latitude =
@@ -19796,7 +19885,7 @@ const char *Txt_Latitude =
 #elif L==9	// pt
 	"Latitude";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Latitude";	// Çeviri lazim!
 #endif
 
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
@@ -19812,7 +19901,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==5	// fr
 	"Afficher la zone centrale uniquement"
 #elif L==6	// gn
-	"Solo zona central"	// Okoteve traducción
+	"Solo zona central"		// Okoteve traducción
 #elif L==7	// it
 	"Mostra solo la parte centrale"
 #elif L==8	// pl
@@ -19820,7 +19909,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==9	// pt
 	"Somente &aacute;rea central"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Display central area only"	// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -19842,7 +19931,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==9	// pt
 	"Coluna direita vis&iacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Display right column"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -19864,7 +19953,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==9	// pt
 	"Coluna esquerda vis&iacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Display left column"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -19886,7 +19975,7 @@ const char *Txt_LAYOUT_SIDE_COLUMNS[4] =
 #elif L==9	// pt
 	"Colunas esquerda e direita vis&iacute;veis"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Display left and right columns"	// Çeviri lazim!
 #endif
 	};
 
@@ -19910,7 +19999,7 @@ const char *Txt_level =
 #elif L==9	// pt
 	"n&iacute;vel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"level";	// Çeviri lazim!
 #endif
 
 const char *Txt_Levels =
@@ -19933,7 +20022,7 @@ const char *Txt_Levels =
 #elif L==9	// pt
 	"N&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Levels";	// Çeviri lazim!
 #endif
 
 const char *Txt_levels =
@@ -19956,7 +20045,7 @@ const char *Txt_levels =
 #elif L==9	// pt
 	"n&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"levels";	// Çeviri lazim!
 #endif
 
 const char *Txt_License =
@@ -19979,7 +20068,7 @@ const char *Txt_License =
 #elif L==9	// pt
 	"Licen&ccedil;a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"License";	// Çeviri lazim!
 #endif
 
 const char *Txt_LICENSES[Brw_NUM_LICENSES] =
@@ -19996,7 +20085,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==5	// fr
 	"inconnue / autre"
 #elif L==6	// gn
-	"desconocida / otra"			// Okoteve traducción
+	"desconocida / otra"	// Okoteve traducción
 #elif L==7	// it
 	"sconosciuta / altri"
 #elif L==8	// pl
@@ -20004,7 +20093,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"desconhecida / outra"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown / other"	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_ALL_RIGHTS_RESERVED] =
@@ -20027,7 +20116,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"Todos os direitos reservados"		// All Rights Reserved
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All rights reserved"			// All Rights Reserved	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY] =
@@ -20050,7 +20139,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o"		// CC Attribution License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution"			// CC Attribution License	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY_SA] =
@@ -20073,7 +20162,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o - Compartilha Igual"		// CC Attribution-ShareAlike License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution - Share Alike"					// CC Attribution-ShareAlike License	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY_ND] =
@@ -20096,7 +20185,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NoDerivs License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution - No Derivative Works"					// CC Attribution-NoDerivs License	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY_NC] =
@@ -20119,7 +20208,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial"	// CC Attribution-NonCommercial License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution - Noncommercial"			// CC Attribution-NonCommercial License	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY_NC_SA] =
@@ -20142,7 +20231,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Compartilha Igual"			// CC Attribution-NonCommercial-ShareAlike License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution - Noncommercial - Share Alike"						// CC Attribution-NonCommercial-ShareAlike License	// Çeviri lazim!
 #endif
 	,
 	[Brw_LICENSE_CC_BY_NC_ND] =
@@ -20165,7 +20254,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==9	// pt
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NonCommercial-NoDerivs License
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"CC Attribution - Noncommercial - No Derivative Works"						// CC Attribution-NonCommercial-NoDerivs License	// Çeviri lazim!
 #endif
 	};
 
@@ -20189,7 +20278,7 @@ const char *Txt_Link =
 #elif L==9	// pt
 	"Liga&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Link";		// Çeviri lazim!
 #endif
 
 const char *Txt_link =
@@ -20212,7 +20301,7 @@ const char *Txt_link =
 #elif L==9	// pt
 	"liga&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"link"	;	// Çeviri lazim!
 #endif
 
 const char *Txt_Link_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -20235,7 +20324,7 @@ const char *Txt_Link_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Liga&ccedil;&atilde;o <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Link <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Link_to_call_for_exam =
@@ -20258,7 +20347,7 @@ const char *Txt_Link_to_call_for_exam =
 #elif L==9	// pt
 	"Link para chamada para exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Link to call for exam";		// Çeviri lazim!
 #endif
 
 const char *Txt_List_of_detailed_clicks =
@@ -20273,7 +20362,7 @@ const char *Txt_List_of_detailed_clicks =
 #elif L==5	// fr
 	"Liste des clics d&eacute;taill&eacute;s";
 #elif L==6	// gn
-	"Listado de clics detallados";		// Okoteve traducción
+	"Listado de clics detallados";	// Okoteve traducción
 #elif L==7	// it
 	"Lista di scatti dettagliati";
 #elif L==8	// pl
@@ -20281,7 +20370,7 @@ const char *Txt_List_of_detailed_clicks =
 #elif L==9	// pt
 	"Lista de cliques detalhados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"List of detailed clicks";	// Çeviri lazim!
 #endif
 
 const char *Txt_List_of_nicks_emails_or_IDs =
@@ -20304,7 +20393,7 @@ const char *Txt_List_of_nicks_emails_or_IDs =
 #elif L==9	// pt
 	"Lista de @alcunhas, emails ou n&ordm;s. identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"List of @nicks, emails or IDs";			// Çeviri lazim!
 #endif
 
 const char *Txt_Links =
@@ -20350,7 +20439,7 @@ const char *Txt_Links_copied =
 #elif L==9	// pt
 	"Liga&ccedil;&otilde;es copiadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Links copied";		// Çeviri lazim!
 #endif
 
 const char *Txt_Links_removed =
@@ -20373,7 +20462,7 @@ const char *Txt_Links_removed =
 #elif L==9	// pt
 	"Liga&ccedil;&otilde;es removidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Links removed";	// Çeviri lazim!
 #endif
 
 const char *Txt_Location =
@@ -20396,7 +20485,7 @@ const char *Txt_Location =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Location";	// Çeviri lazim!
 #endif
 
 const char *Txt_Locations =
@@ -20419,7 +20508,7 @@ const char *Txt_Locations =
 #elif L==9	// pt
 	"Localiza&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Locations";	// Çeviri lazim!
 #endif
 
 const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
@@ -20444,7 +20533,7 @@ const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
 #elif L==9	// pt
 	"Edi&ccedil;&atilde;o bloqueada"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Locked edition"		// Çeviri lazim!
 #endif
 	,
 	[Prj_UNLOCKED] =
@@ -20467,7 +20556,7 @@ const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
 #elif L==9	// pt
 	"Edi&ccedil;&atilde;o permitida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Allowed edition"		// Çeviri lazim!
 #endif
    };
 
@@ -20491,7 +20580,7 @@ const char *Txt_Lock_editing =
 #elif L==9	// pt
 	"Bloquear edi&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Lock editing";	// Çeviri lazim!
 #endif
 
 const char *Txt_LOG_More_info =
@@ -20514,7 +20603,7 @@ const char *Txt_LOG_More_info =
 #elif L==9	// pt
 	"Mais informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"More info";		// Çeviri lazim!
 #endif
 
 const char *Txt_Log_in =
@@ -20560,7 +20649,7 @@ const char *Txt_Log_out =
 #elif L==9	// pt
 	"Fechar sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Log out";	// Çeviri lazim!
 #endif
 
 const char *Txt_logged[Usr_NUM_SEXS] =
@@ -20585,7 +20674,7 @@ const char *Txt_logged[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"logado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"logged"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -20608,7 +20697,7 @@ const char *Txt_logged[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"logada"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"logged"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -20631,7 +20720,7 @@ const char *Txt_logged[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"logado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"logged"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -20654,7 +20743,7 @@ const char *Txt_logged[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"logado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"logged"		// Çeviri lazim!
 #endif
 	};
 
@@ -20678,7 +20767,7 @@ const char *Txt_Logo =
 #elif L==9	// pt
 	"Logotipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Logo";	// Çeviri lazim!
 #endif
 
 const char *Txt_Longitude =
@@ -20701,7 +20790,7 @@ const char *Txt_Longitude =
 #elif L==9	// pt
 	"Longitude";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Longitude";	// Çeviri lazim!
 #endif
 
 const char *Txt_MAC_address =
@@ -20724,7 +20813,7 @@ const char *Txt_MAC_address =
 #elif L==9	// pt
 	"Endere&ccedil;o MAC";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"MAC address";		// Çeviri lazim!
 #endif
 
 const char *Txt_Mandatory_enrolment =		// (to a type of group)
@@ -20747,7 +20836,7 @@ const char *Txt_Mandatory_enrolment =		// (to a type of group)
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o obrigat&oacute;ria?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mandatory enrolment?";				// Çeviri lazim!
 #endif
 
 const char *Txt_Map =
@@ -20770,7 +20859,7 @@ const char *Txt_Map =
 #elif L==9	// pt
 	"Mapa";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Map";	// Çeviri lazim!
 #endif
 
 const char *Txt_Mark_all_NOTIFICATIONS_as_read =
@@ -20793,7 +20882,7 @@ const char *Txt_Mark_all_NOTIFICATIONS_as_read =
 #elif L==9	// pt
 	"Marcar todas como lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mark all as read";			// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Mark_as_favourite =
@@ -20816,7 +20905,7 @@ const char *Txt_TIMELINE_Mark_as_favourite =
 #elif L==9	// pt
 	"Marcar como favorito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Mark as favourite";	// Çeviri lazim!
 #endif
 
 const char *Txt_Marks_management_area =
@@ -20839,7 +20928,7 @@ const char *Txt_Marks_management_area =
 #elif L==9	// pt
 	"Zona de gest&atilde;o de notas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Marks management area";				// Çeviri lazim!
 #endif
 
 const char *Txt_marks_management_area =
@@ -20862,7 +20951,7 @@ const char *Txt_marks_management_area =
 #elif L==9	// pt
 	"zona de gest&atilde;o de notas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"marks management area";				// Çeviri lazim!
 #endif
 
 const char *Txt_Marks_area =
@@ -20885,7 +20974,7 @@ const char *Txt_Marks_area =
 #elif L==9	// pt
 	"Zona de notas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Marks area";			// Çeviri lazim!
 #endif
 
 const char *Txt_Match =		// of a game
@@ -20908,7 +20997,7 @@ const char *Txt_Match =		// of a game
 #elif L==9	// pt
 	"Jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Match";	// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_End =
@@ -20931,7 +21020,7 @@ const char *Txt_MATCH_End =
 #elif L==9	// pt
 	"Fim";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"End";	// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_Paused =
@@ -20954,7 +21043,7 @@ const char *Txt_MATCH_Paused =
 #elif L==9	// pt
 	"Pausado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Paused";	// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_QUESTION_Answered =
@@ -20977,7 +21066,7 @@ const char *Txt_MATCH_QUESTION_Answered =
 #elif L==9	// pt
 	"Respondida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Answered";	// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_QUESTION_Unanswered =
@@ -21000,7 +21089,7 @@ const char *Txt_MATCH_QUESTION_Unanswered =
 #elif L==9	// pt
 	"N&atilde;o respondida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unanswered";		// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_Start =
@@ -21023,7 +21112,7 @@ const char *Txt_MATCH_Start =
 #elif L==9	// pt
 	"In&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Start";	// Çeviri lazim!
 #endif
 
 const char *Txt_Match_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -21046,7 +21135,7 @@ const char *Txt_Match_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Jogo <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Match <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_MATCH_respond =
@@ -21069,7 +21158,7 @@ const char *Txt_MATCH_respond =
 #elif L==9	// pt
 	"respondem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"respond";	// Çeviri lazim!
 #endif
 
 const char *Txt_Matches =	// of a game
@@ -21092,7 +21181,7 @@ const char *Txt_Matches =	// of a game
 #elif L==9	// pt
 	"Partidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Matches";	// Çeviri lazim!
 #endif
 
 const char *Txt_Materials =
@@ -21115,7 +21204,7 @@ const char *Txt_Materials =
 #elif L==9	// pt
 	"Materiais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Materials";	// Çeviri lazim!
 #endif
 
 const char *Txt_Max_levels =
@@ -21138,7 +21227,7 @@ const char *Txt_Max_levels =
 #elif L==9	// pt
 	"M&aacute;x. n&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Max. levels";		// Çeviri lazim!
 #endif
 
 const char *Txt_Max_BR_students =
@@ -21161,7 +21250,7 @@ const char *Txt_Max_BR_students =
 #elif L==9	// pt
 	"M&aacute;x.<br />estu.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Max.<br />stud.";		// Çeviri lazim!
 #endif
 
 const char *Txt_maximum =
@@ -21184,7 +21273,7 @@ const char *Txt_maximum =
 #elif L==9	// pt
 	"m&aacute;ximo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"maximum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Maximum_grade =
@@ -21207,7 +21296,7 @@ const char *Txt_Maximum_grade =
 #elif L==9	// pt
 	"Nota m&aacute;xima";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Maximum grade";	// Çeviri lazim!
 #endif
 
 const char *Txt_Members =	// Project members
@@ -21230,7 +21319,7 @@ const char *Txt_Members =	// Project members
 #elif L==9	// pt
 	"Membros";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Members";	// Çeviri lazim!
 #endif
 
 const char *Txt_Menu =
@@ -21278,7 +21367,7 @@ const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
 #elif L==9	// pt
 	"Horizontal"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Horizontal"	// Çeviri lazim!
 #endif
 	,
 	[Mnu_MENU_VERTICAL] =
@@ -21301,7 +21390,7 @@ const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
 #elif L==9	// pt
 	"Vertical"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Vertical"	// Çeviri lazim!
 #endif
 	};
 
@@ -23376,7 +23465,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Papel nesta sess&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Role in this session"		// Çeviri lazim!
 #endif
 	,
 	//  1: ActReqSch
@@ -23399,7 +23488,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Procurar disciplinas, professores e documentos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Search subjects, teachers and documents"		// Çeviri lazim!
 #endif
 	,
 	//  2: ActSeeTmlGbl
@@ -23422,7 +23511,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Timeline of users I follow or all users"	// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeSocPrf
@@ -23445,7 +23534,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Perfis p&uacute;blicos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public profiles"			// Çeviri lazim!
 #endif
 	,
 	//  4: ActSeeCal
@@ -23460,7 +23549,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Calendrier"
 #elif L==6	// gn
-	"Calendario acad&eacute;mico"// Okoteve traducción
+	"Calendario acad&eacute;mico"	// Okoteve traducción
 #elif L==7	// it
 	"Calendario del corso"
 #elif L==8	// pl
@@ -23468,7 +23557,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Calend&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Academic calendar"		// Çeviri lazim!
 #endif
 	,
 	//  5: ActSeeNtf
@@ -23483,7 +23572,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Les &eacute;v&eacute;nements r&eacute;cents qui ont &eacute;t&eacute; ou seront avis&eacute;s"
 #elif L==6	// gn
-	"Eventos recientes que han sido o ser&aacute;n notificados"// Okoteve traducción
+	"Eventos recientes que han sido o ser&aacute;n notificados"	// Okoteve traducción
 #elif L==7	// it
 	"Recenti eventi che sono stati o saranno notificati"
 #elif L==8	// pl
@@ -23491,7 +23580,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Recent events that have been or will be notified"		// Çeviri lazim!
 #endif
 	,
 	NULL,	//  6
@@ -23524,7 +23613,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o sobre esta plataforma"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this platform"			// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeCty
@@ -23539,7 +23628,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Pays"
 #elif L==6	// gn
-	"Lista de pa&iacute;ses y del n&uacute;mero de usuarios de cada pais"// Okoteve traducción
+	"Lista de pa&iacute;ses y del n&uacute;mero de usuarios de cada pais"	// Okoteve traducción
 #elif L==7	// it
 	"Paesi"
 #elif L==8	// pl
@@ -23547,7 +23636,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Pa&iacute;ses"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Countries"								// Çeviri lazim!
 #endif
 	,
 	//  2: ActSeePen
@@ -23570,7 +23659,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Pending institutions, centers, degrees and courses"				// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeLnk
@@ -23585,7 +23674,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Liens institutionnels"
 #elif L==6	// gn
-	"Lista de enlaces institucionales"// Okoteve traducción
+	"Lista de enlaces institucionales"	// Okoteve traducción
 #elif L==7	// it
 	"Link istituzionali"
 #elif L==8	// pl
@@ -23593,7 +23682,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Liga&ccedil;&otilde;es institucionais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Institutional links list"		// Çeviri lazim!
 #endif
 	,
 	//  4: ActLstPlg
@@ -23608,7 +23697,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Liste de plugins"
 #elif L==6	// gn
-	"Lista de complementos (versi&oacute;n beta)"// Okoteve traducción
+	"Lista de complementos (versi&oacute;n beta)"	// Okoteve traducción
 #elif L==7	// it
 	"Lista di plugin"
 #elif L==8	// pl
@@ -23616,7 +23705,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Lista de plugins"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"List of plugins"				// Çeviri lazim!
 #endif
 	,
 	//  5: ActMtn
@@ -23639,7 +23728,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Instala&ccedil;&atilde;o e manuten&ccedil;&atilde;o da plataforma"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Platform set up and maintenance"			// Çeviri lazim!
 #endif
 	,
 	NULL,	//  6
@@ -23664,7 +23753,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information de cet pays"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre este pa&iacute;s"// Okoteve traducción
+	"Informaci&oacute;n sobre este pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
 	"Informazione di questo paese"
 #elif L==8	// pl
@@ -23672,7 +23761,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o deste pa&iacute;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this country"			// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeIns
@@ -23687,7 +23776,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"&Eacute;tablissement"
 #elif L==6	// gn
-	"Lista de instituciones (universidades, institutos&hellip;) de este pa&iacute;s"// Okoteve traducción
+	"Lista de instituciones (universidades, institutos&hellip;) de este pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
 	"Istituzioni"
 #elif L==8	// pl
@@ -23695,7 +23784,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"List of institutions of the current country"						// Çeviri lazim!
 #endif
 	,
 	NULL,	//  2
@@ -23724,7 +23813,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information de cet &eacute;tablissement"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre esta instituci&oacute;n"// Okoteve traducción
+	"Informaci&oacute;n sobre esta instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	"Informazione di questa istituzione"
 #elif L==8	// pl
@@ -23732,7 +23821,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o desta institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this institution"			// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeCtr
@@ -23787,7 +23876,8 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes ou sede da institui&ccedil;&atilde;o"
 	" onde cada um dos centros est&aacute; localizado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Places or headquarters of the institution"
+	" where each of the centers is located."	// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeDpt
@@ -23859,7 +23949,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information de cet center"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre este centro"// Okoteve traducción
+	"Informaci&oacute;n sobre este centro"	// Okoteve traducción
 #elif L==7	// it
 	"Informazione di questo centro"
 #elif L==8	// pl
@@ -23867,7 +23957,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o deste centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this center"		// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeDeg
@@ -23882,7 +23972,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"&Eacute;tudes"
 #elif L==6	// gn
-	"Lista de titulaciones (carreras, m&aacute;steres&hellip;) de este centro"// Okoteve traducción
+	"Lista de titulaciones (carreras, m&aacute;steres&hellip;) de este centro"	// Okoteve traducción
 #elif L==7	// it
 	"Lauree"
 #elif L==8	// pl
@@ -23890,7 +23980,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Graus"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"List of degrees of the current center"						// Çeviri lazim!
 #endif
 	,
 	//  2: ActSeeBld
@@ -23913,7 +24003,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Edif&iacute;cios do centro educacional"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Educational center buildings"		// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeRoo
@@ -23936,7 +24026,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Salas de aula, laborat&oacute;rios ou outros locais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Classrooms, laboratories or other places"	// Çeviri lazim!
 #endif
 	,
 	NULL,	//  4
@@ -23963,7 +24053,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information de cet &eacute;tude"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre esta titulaci&oacute;n"// Okoteve traducción
+	"Informaci&oacute;n sobre esta titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	"Informazione di questa laurea"
 #elif L==8	// pl
@@ -23971,7 +24061,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o sobre este grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this degree"				// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeCrs
@@ -23986,7 +24076,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Mati&egrave;res dans cet &eacute;tude"
 #elif L==6	// gn
-	"Lista de asignaturas de esta titulaci&oacute;n"// Okoteve traducción
+	"Lista de asignaturas de esta titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	"Corsi di questa laurea"
 #elif L==8	// pl
@@ -23994,7 +24084,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Disciplinas deste grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"List of courses of the current degree"			// Çeviri lazim!
 #endif
 	,
 	NULL,	//  2
@@ -24023,7 +24113,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information de cette mati&egrave;re"
 #elif L==6	// gn
-	"Informaci&oacute;n sobre esta asignatura"// Okoteve traducción
+	"Informaci&oacute;n sobre esta asignatura"	// Okoteve traducción
 #elif L==7	// it
 	"Informazione di questo corso"
 #elif L==8	// pl
@@ -24031,7 +24121,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o desta disciplina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Information on this course"			// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeePrg
@@ -24054,7 +24144,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Programa&ccedil;&atilde;o did&aacute;tica da disciplina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Didactic programming of the course"			// Çeviri lazim!
 #endif
 	,
 	//  2: ActSeeTchGui
@@ -24069,7 +24159,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Guide p&eacute;dagogique de la mati&egrave;re"
 #elif L==6	// gn
-	"Gu&iacute;a docente de la asignatura"// Okoteve traducción
+	"Gu&iacute;a docente de la asignatura"	// Okoteve traducción
 #elif L==7	// it
 	"Guida didattica del corso"
 #elif L==8	// pl
@@ -24077,7 +24167,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Guia de ensino"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teaching guide"			// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeSyl
@@ -24100,7 +24190,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Conte&uacute;do"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Topics"			// Çeviri lazim!
 #endif
 	,
 	//  4: ActSeeBib
@@ -24192,7 +24282,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Hor&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Class timetable"			// Çeviri lazim!
 #endif
 	,
 	NULL,	//  8
@@ -24218,7 +24308,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Syst&egrave;me d'&eacute;valuation"
 #elif L==6	// gn
 	"Sistema o criterios de evaluaci&oacute;n"
-	" del estudiante en esta asignatura"// Okoteve traducción
+	" del estudiante en esta asignatura"	// Okoteve traducción
 #elif L==7	// it
 	"Sistema di valutazione"
 #elif L==8	// pl
@@ -24226,7 +24316,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Sistema de avalia&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assessment system"			// Çeviri lazim!
 #endif
 	,
 	//  1: ActSeeAsg
@@ -24241,7 +24331,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Activit&eacute;s"
 #elif L==6	// gn
-	"Actividades obligatorias o recomendadas en esta asignatura"// Okoteve traducción
+	"Actividades obligatorias o recomendadas en esta asignatura"	// Okoteve traducción
 #elif L==7	// it
 	"Attivit&agrave;"
 #elif L==8	// pl
@@ -24249,7 +24339,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Atividades"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assignments"							// Çeviri lazim!
 #endif
 	,
 	//  2: ActSeePrj
@@ -24272,7 +24362,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Projetos (projetos de fim de grau, tese&hellip;)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Projects (end-of-degree projects, thesis&hellip;)"						// Çeviri lazim!
 #endif
 	,
 	//  3: ActSeeAllExaAnn
@@ -24287,7 +24377,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Convocations &agrave; examens"
 #elif L==6	// gn
-	"Listado de convocatorias de ex&aacute;menes de esta asignatura"// Okoteve traducción
+	"Listado de convocatorias de ex&aacute;menes de esta asignatura"	// Okoteve traducción
 #elif L==7	// it
 	"Appelli d'esame"
 #elif L==8	// pl
@@ -24295,7 +24385,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Chamadas para exames"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Calls for exams"							// Çeviri lazim!
 #endif
 	,
 	//  4: ActEdiTstQst
@@ -24318,7 +24408,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Banco de perguntas para testes, exames e jogos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Bank of questions for tests, exams and games"			// Çeviri lazim!
 #endif
 	,
 	//  5: ActReqTst
@@ -24387,7 +24477,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9	// pt
 	"Jogos (controlo remoto)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Games (remote control)"	// Çeviri lazim!
 #endif
 	,
 	//  8: ActSeeAllSvy
@@ -25447,7 +25537,7 @@ const char *Txt_message =
 #elif L==9	// pt
 	"mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"message";	// Çeviri lazim!
 #endif
 
 const char *Txt_Message_deleted =
@@ -25462,7 +25552,7 @@ const char *Txt_Message_deleted =
 #elif L==5	// fr
 	"Message supprim&eacute;.";
 #elif L==6	// gn
-	"Mensaje eliminado.";		// Okoteve traducción
+	"Mensaje eliminado.";	// Okoteve traducción
 #elif L==7	// it
 	"Messaggio rimosso.";
 #elif L==8	// pl
@@ -25470,7 +25560,7 @@ const char *Txt_Message_deleted =
 #elif L==9	// pt
 	"Mensagem removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Message deleted.";	// Çeviri lazim!
 #endif
 
 const char *Txt_message_not_sent_to_X =	// Warning: it is very important to include %s in the following sentences
@@ -25493,7 +25583,7 @@ const char *Txt_message_not_sent_to_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Mensagem n&atilde;o enviada para %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Message not sent to %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_message_sent_to_X_not_notified_by_email =	// Warning: it is very important to include %s in the following sentences
@@ -25516,7 +25606,7 @@ const char *Txt_message_sent_to_X_not_notified_by_email =	// Warning: it is very
 #elif L==9	// pt
 	"Mensagem enviada para %s (n&atilde;o notificada por email).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Message sent to %s (not notified by email).";		// Çeviri lazim!
 #endif
 
 const char *Txt_message_sent_to_X_notified_by_email =	// Warning: it is very important to include %s in the following sentences
@@ -25539,7 +25629,7 @@ const char *Txt_message_sent_to_X_notified_by_email =	// Warning: it is very imp
 #elif L==9	// pt
 	"Mensagem enviada para %s (notificada por email).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Message sent to %s (notified by email).";	// Çeviri lazim!
 #endif
 
 const char *Txt_Messages =
@@ -25585,7 +25675,7 @@ const char *Txt_messages =
 #elif L==9	// pt
 	"mensagens";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"messages";	// Çeviri lazim!
 #endif
 
 const char *Txt_X_messages_have_been_deleted =	// Warning: it is very important to include %u in the following sentences
@@ -25608,7 +25698,7 @@ const char *Txt_X_messages_have_been_deleted =	// Warning: it is very important 
 #elif L==9	// pt
 	"%u mensagens foram removidas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u messages have been deleted.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Messages_of_THE_USER_X_have_been_deleted =	// Warning: it is very important to include %s in the following sentences
@@ -25631,7 +25721,7 @@ const char *Txt_Messages_of_THE_USER_X_have_been_deleted =	// Warning: it is ver
 #elif L==9	// pt
 	"Mensagens de <strong>%s</strong> foram removidas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Messages of <strong>%s</strong> have been deleted.";		// Çeviri lazim!
 #endif
 
 const char *Txt_message_received =
@@ -25654,7 +25744,7 @@ const char *Txt_message_received =
 #elif L==9	// pt
 	"mensagem recebida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"message received";	// Çeviri lazim!
 #endif
 
 const char *Txt_messages_received =
@@ -25677,7 +25767,7 @@ const char *Txt_messages_received =
 #elif L==9	// pt
 	"mensagens recebidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"messages received";	// Çeviri lazim!
 #endif
 
 const char *Txt_Messages_received_from_A_COURSE =
@@ -25700,7 +25790,7 @@ const char *Txt_Messages_received_from_A_COURSE =
 #elif L==9	// pt
 	"Mensagens recebidas de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Messages received from";	// Çeviri lazim!
 #endif
 
 const char *Txt_message_sent =
@@ -25723,7 +25813,7 @@ const char *Txt_message_sent =
 #elif L==9	// pt
 	"mensagem enviada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"message sent";		// Çeviri lazim!
 #endif
 
 const char *Txt_messages_sent =
@@ -25746,7 +25836,7 @@ const char *Txt_messages_sent =
 #elif L==9	// pt
 	"mensagens enviadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"messages sent";	// Çeviri lazim!
 #endif
 
 const char *Txt_Messages_sent =
@@ -25769,7 +25859,7 @@ const char *Txt_Messages_sent =
 #elif L==9	// pt
 	"Mensagens enviadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Messages sent";	// Çeviri lazim!
 #endif
 
 const char *Txt_Messages_sent_by_teachers =
@@ -25792,7 +25882,7 @@ const char *Txt_Messages_sent_by_teachers =
 #elif L==9	// pt
 	"Mensagens enviadas por professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Messages sent by teachers";		// Çeviri lazim!
 #endif
 
 const char *Txt_Messages_sent_from_A_COURSE =
@@ -25815,7 +25905,7 @@ const char *Txt_Messages_sent_from_A_COURSE =
 #elif L==9	// pt
 	"Mensagens enviadas de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Messages sent from";		// Çeviri lazim!
 #endif
 
 const char *Txt_minimum =
@@ -25838,7 +25928,7 @@ const char *Txt_minimum =
 #elif L==9	// pt
 	"m&iacute;nimo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"minimum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
@@ -25861,7 +25951,7 @@ const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
 #elif L==9	// pt
 	"Tempo m&iacute;nimo (segundos)<br />por pergunta<br />entre dois testes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Minimum time (seconds)<br />per question<br />between two tests";		// Çeviri lazim!
 #endif
 
 const char *Txt_minute =
@@ -25884,7 +25974,7 @@ const char *Txt_minute =
 #elif L==9	// pt
 	"minuto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"minute";	// Çeviri lazim!
 #endif
 
 const char *Txt_minutes =
@@ -25907,7 +25997,7 @@ const char *Txt_minutes =
 #elif L==9	// pt
 	"minutos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"minutes";	// Çeviri lazim!
 #endif
 
 const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -25930,7 +26020,7 @@ const char *Txt_Modify_me_in_the_course_X =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Modificar me na disciplina <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Modify me in the course <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -25953,7 +26043,7 @@ const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important t
 #elif L==9	// pt
 	"Modificar utilizador na disciplina <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Modify user in the course <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Month =
@@ -25976,7 +26066,7 @@ const char *Txt_Month =
 #elif L==9	// pt
 	"M&ecirc;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Month";	// Çeviri lazim!
 #endif
 
 const char *Txt_month =
@@ -25999,7 +26089,7 @@ const char *Txt_month =
 #elif L==9	// pt
 	"m&ecirc;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"month";	// Çeviri lazim!
 #endif
 
 const char *Txt_months =
@@ -26571,7 +26661,7 @@ const char *Txt_Move_up_X =	// Warning: it is very important to include %s in th
 #elif L==5	// fr
 	"Monter %s";
 #elif L==6	// gn
-	"Subir %s";		// Okoteve traducción
+	"Subir %s";	// Okoteve traducción
 #elif L==7	// it
 	"Muovi su %s";
 #elif L==8	// pl
@@ -26579,7 +26669,7 @@ const char *Txt_Move_up_X =	// Warning: it is very important to include %s in th
 #elif L==9	// pt
 	"Mover %s para cima";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Move up %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Move_up_X_and_its_subsections =	// Warning: it is very important to include %s in the following sentences
@@ -26594,7 +26684,7 @@ const char *Txt_Move_up_X_and_its_subsections =	// Warning: it is very important
 #elif L==5	// fr
 	"Monter %s et ses sous-sections";
 #elif L==6	// gn
-	"Subir %s y sus subapartados";			// Okoteve traducción
+	"Subir %s y sus subapartados";		// Okoteve traducción
 #elif L==7	// it
 	"Muovi su %s e le sue sottosezioni";
 #elif L==8	// pl
@@ -26602,7 +26692,7 @@ const char *Txt_Move_up_X_and_its_subsections =	// Warning: it is very important
 #elif L==9	// pt
 	"Mover %s e suas subse&ccedil;&otilde;es para cima";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Move up %s and its subsections";	// Çeviri lazim!
 #endif
 
 const char *Txt_Move_down_X =	// Warning: it is very important to include %s in the following sentences
@@ -26617,7 +26707,7 @@ const char *Txt_Move_down_X =	// Warning: it is very important to include %s in 
 #elif L==5	// fr
 	"Descendre %s";
 #elif L==6	// gn
-	"Bajar %s";		// Okoteve traducción
+	"Bajar %s";	// Okoteve traducción
 #elif L==7	// it
 	"Muovi gi&ugrave; %s";
 #elif L==8	// pl
@@ -26625,7 +26715,7 @@ const char *Txt_Move_down_X =	// Warning: it is very important to include %s in 
 #elif L==9	// pt
 	"Mover %s para baixo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Move down %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very important to include %s in the following sentences
@@ -26640,7 +26730,7 @@ const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very importa
 #elif L==5	// fr
 	"Move down %s and its subsections";
 #elif L==6	// gn
-	"Descendre %s et ses sous-sections";			// Okoteve traducción
+	"Descendre %s et ses sous-sections";	// Okoteve traducción
 #elif L==7	// it
 	"Muovi gi&ugrave; %s e le sue sottosezioni";
 #elif L==8	// pl
@@ -26648,7 +26738,7 @@ const char *Txt_Move_down_X_and_its_subsections =	// Warning: it is very importa
 #elif L==9	// pt
 	"Mover %s e suas subse&ccedil;&otilde;es para baixo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Move down %s and its subsections";	// Çeviri lazim!
 #endif
 
 const char *Txt_Movement_not_allowed =
@@ -26671,7 +26761,7 @@ const char *Txt_Movement_not_allowed =
 #elif L==9	// pt
 	"Movimento n&atilde;o permitido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Move up not allowed	";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Content =	// of a post or message
@@ -26694,7 +26784,7 @@ const char *Txt_MSG_Content =	// of a post or message
 #elif L==9	// pt
 	"Conte&uacute;do";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Content";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Deleted_without_opening =
@@ -26717,7 +26807,7 @@ const char *Txt_MSG_Deleted_without_opening =
 #elif L==9	// pt
 	"Suprimida sem abrir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Deleted without opening";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_From =
@@ -26740,7 +26830,7 @@ const char *Txt_MSG_From =
 #elif L==9	// pt
 	"De";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"From";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_from =
@@ -26755,7 +26845,7 @@ const char *Txt_MSG_from =
 #elif L==5	// fr
 	"de";
 #elif L==6	// gn
-	"de";	// Okoteve traducción
+	"de";		// Okoteve traducción
 #elif L==7	// it
 	"da";
 #elif L==8	// pl
@@ -26763,7 +26853,7 @@ const char *Txt_MSG_from =
 #elif L==9	// pt
 	"de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"from";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_New =
@@ -26786,7 +26876,7 @@ const char *Txt_MSG_New =
 #elif L==9	// pt
 	"Nova";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Not_replied =
@@ -26809,7 +26899,7 @@ const char *Txt_MSG_Not_replied =
 #elif L==9	// pt
 	"N&atilde;o respondida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not replied";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Open =
@@ -26832,7 +26922,7 @@ const char *Txt_MSG_Open =
 #elif L==9	// pt
 	"Aberta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Open";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Open_and_deleted =
@@ -26855,7 +26945,7 @@ const char *Txt_MSG_Open_and_deleted =
 #elif L==9	// pt
 	"Aberta e suprimida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Open and deleted";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Replied =
@@ -26878,7 +26968,7 @@ const char *Txt_MSG_Replied =
 #elif L==9	// pt
 	"Respondida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Replied";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Sent =
@@ -26901,7 +26991,7 @@ const char *Txt_MSG_Sent =
 #elif L==9	// pt
 	"Enviada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sent";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Sent_and_deleted =
@@ -26924,7 +27014,7 @@ const char *Txt_MSG_Sent_and_deleted =
 #elif L==9	// pt
 	"Enviada e suprimida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sent and deleted";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Subject =
@@ -26947,7 +27037,7 @@ const char *Txt_MSG_Subject =
 #elif L==9	// pt
 	"Assunto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Subject";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_To =
@@ -26970,7 +27060,7 @@ const char *Txt_MSG_To =
 #elif L==9	// pt
 	"Para";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_Unopened =
@@ -26993,7 +27083,7 @@ const char *Txt_MSG_Unopened =
 #elif L==9	// pt
 	"Fechada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unopened";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSGS_Deleted =
@@ -27016,7 +27106,7 @@ const char *Txt_MSGS_Deleted =
 #elif L==9	// pt
 	"Suprimidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Deleted";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSGS_Not_deleted =
@@ -27039,7 +27129,7 @@ const char *Txt_MSGS_Not_deleted =
 #elif L==9	// pt
 	"N&atilde;o suprimidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not deleted";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSGS_Received =
@@ -27062,7 +27152,7 @@ const char *Txt_MSGS_Received =
 #elif L==9	// pt
 	"Recebidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Received";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSGS_Sent =
@@ -27085,7 +27175,7 @@ const char *Txt_MSGS_Sent =
 #elif L==9	// pt
 	"Enviadas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sent";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSGS_Write =
@@ -27108,7 +27198,7 @@ const char *Txt_MSGS_Write =
 #elif L==9	// pt
 	"Escrever";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Write";	// Çeviri lazim!
 #endif
 
 const char *Txt_Multimedia =
@@ -27131,7 +27221,7 @@ const char *Txt_Multimedia =
 #elif L==9	// pt
 	"Multim&eacute;dia";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Multimedia";	// Çeviri lazim!
 #endif
 
 const char *Txt_Multiple_enrolment =		// (to a type of group)
@@ -27154,7 +27244,7 @@ const char *Txt_Multiple_enrolment =		// (to a type of group)
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o m&uacute;ltiplas?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Multiple enrolment?";	// Çeviri lazim!
 #endif
 
 const char *Txt_My_agenda =
@@ -27177,7 +27267,7 @@ const char *Txt_My_agenda =
 #elif L==9	// pt
 	"Minha agenda";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My agenda";	// Çeviri lazim!
 #endif
 
 const char *Txt_My_courses =
@@ -27200,7 +27290,7 @@ const char *Txt_My_courses =
 #elif L==9	// pt
 	"As minha disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_my_documents =
@@ -27223,7 +27313,7 @@ const char *Txt_my_documents =
 #elif L==9	// pt
 	"meus documentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"my documents";		// Çeviri lazim!
 #endif
 
 const char *Txt_My_frequent_actions =
@@ -27246,7 +27336,7 @@ const char *Txt_My_frequent_actions =
 #elif L==9	// pt
 	"Minhas a&ccedil;&otilde;es freq&uuml;entes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My frequent actions";		// Çeviri lazim!
 #endif
 
 const char *Txt_My_groups =
@@ -27269,7 +27359,7 @@ const char *Txt_My_groups =
 #elif L==9	// pt
 	"Meus grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_My_public_profile =
@@ -27292,7 +27382,7 @@ const char *Txt_My_public_profile =
 #elif L==9	// pt
 	"Meu perfil p&uacute;blico";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My public profile";		// Çeviri lazim!
 #endif
 
 const char *Txt_My_views =
@@ -27315,7 +27405,7 @@ const char *Txt_My_views =
 #elif L==9	// pt
 	"Meus acessos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"My views";	// Çeviri lazim!
 #endif
 
 const char *Txt_Name =
@@ -27338,7 +27428,7 @@ const char *Txt_Name =
 #elif L==9	// pt
 	"Nome";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Name";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_assignment =
@@ -27361,7 +27451,7 @@ const char *Txt_New_assignment =
 #elif L==9	// pt
 	"Nova atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New assignment";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_announcement =
@@ -27384,7 +27474,7 @@ const char *Txt_New_announcement =
 #elif L==9	// pt
 	"Novo an&uacute;ncio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New announcement";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_call_FOR_EXAM =
@@ -27407,7 +27497,7 @@ const char *Txt_New_call_FOR_EXAM =
 #elif L==9	// pt
 	"Nova chamada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New call";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_banner =
@@ -27422,7 +27512,7 @@ const char *Txt_New_banner =
 #elif L==5	// fr
 	"Nouvelle banni&eacute;re";
 #elif L==6	// gn
-	"Nuevo banner";		// Okoteve traducción
+	"Nuevo banner";	// Okoteve traducción
 #elif L==7	// it
 	"Nuovo banner";
 #elif L==8	// pl
@@ -27430,7 +27520,7 @@ const char *Txt_New_banner =
 #elif L==9	// pt
 	"Novo banner";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New banner";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_building =
@@ -27453,7 +27543,7 @@ const char *Txt_New_building =
 #elif L==9	// pt
 	"Novo edif&iacute;cio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New building";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_center =
@@ -27476,7 +27566,7 @@ const char *Txt_New_center =
 #elif L==9	// pt
 	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New center (faculty, school, college, division, building...)";			// Çeviri lazim!
 #endif
 
 const char *Txt_New_country =
@@ -27499,7 +27589,7 @@ const char *Txt_New_country =
 #elif L==9	// pt
 	"Novo pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New country";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_course =
@@ -27522,7 +27612,7 @@ const char *Txt_New_course =
 #elif L==9	// pt
 	"Nova disciplina (disciplina, curso...)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New course (course, subject, discipline...)";			// Çeviri lazim!
 #endif
 
 const char *Txt_New_degree =
@@ -27545,7 +27635,7 @@ const char *Txt_New_degree =
 #elif L==9	// pt
 	"Novo grau (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New degree (career, diploma, degree, postgraduate, master, cycle, level...)";						// Çeviri lazim!
 #endif
 
 const char *Txt_New_department =
@@ -27568,7 +27658,7 @@ const char *Txt_New_department =
 #elif L==9	// pt
 	"Novo departamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New department";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_email =
@@ -27591,7 +27681,7 @@ const char *Txt_New_email =
 #elif L==9	// pt
 	"Novo email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New email";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_email_domain =
@@ -27614,7 +27704,7 @@ const char *Txt_New_email_domain =
 #elif L==9	// pt
 	"Novo dom&iacute;nio de email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New email domain";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_event =
@@ -27637,7 +27727,7 @@ const char *Txt_New_event =
 #elif L==9	// pt
 	"Novo evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New event";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_exam =
@@ -27660,7 +27750,7 @@ const char *Txt_New_exam =
 #elif L==9	// pt
 	"Novo exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New exam";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_FILE_OR_FOLDER =
@@ -27683,7 +27773,7 @@ const char *Txt_New_FILE_OR_FOLDER =
 #elif L==9	// pt
 	"Novo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_game =
@@ -27706,7 +27796,7 @@ const char *Txt_New_game =
 #elif L==9	// pt
 	"Novo jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New game";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_group =
@@ -27729,7 +27819,7 @@ const char *Txt_New_group =
 #elif L==9	// pt
 	"Novo grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New group";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_holiday =
@@ -27752,7 +27842,7 @@ const char *Txt_New_holiday =
 #elif L==9	// pt
 	"Nova f&eacute;ria";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New holiday";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_institution =
@@ -27775,7 +27865,7 @@ const char *Txt_New_institution =
 #elif L==9	// pt
 	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New institution (university, college, school, academy, organization, company...)";				// Çeviri lazim!
 #endif
 
 const char *Txt_New_item =
@@ -27798,7 +27888,7 @@ const char *Txt_New_item =
 #elif L==9	// pt
 	"Novo item";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New item";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_link =
@@ -27821,7 +27911,7 @@ const char *Txt_New_link =
 #elif L==9	// pt
 	"Nova liga&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New link";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_match =	// of a game
@@ -27844,7 +27934,7 @@ const char *Txt_New_match =	// of a game
 #elif L==9	// pt
 	"Novo jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New match";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_message =
@@ -27867,7 +27957,7 @@ const char *Txt_New_message =
 #elif L==9	// pt
 	"Nova mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New message";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_nickname =
@@ -27890,7 +27980,7 @@ const char *Txt_New_nickname =
 #elif L==9	// pt
 	"Nova alcunha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New nickname";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_notice =
@@ -27913,7 +28003,7 @@ const char *Txt_New_notice =
 #elif L==9	// pt
 	"Novo aviso";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New notice";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_on_PLATFORM_Sign_up =	// Warning: it is very important to include %s in the following sentences
@@ -27982,7 +28072,7 @@ const char *Txt_New_place =
 #elif L==9	// pt
 	"Nova localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New place";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_plugin =
@@ -28005,7 +28095,7 @@ const char *Txt_New_plugin =
 #elif L==9	// pt
 	"Novo plugin";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New plugin";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_post =
@@ -28028,7 +28118,7 @@ const char *Txt_New_post =
 #elif L==9	// pt
 	"Novo post";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New post";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_project =
@@ -28051,7 +28141,7 @@ const char *Txt_New_project =
 #elif L==9	// pt
 	"Novo projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New project";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_question =
@@ -28074,7 +28164,7 @@ const char *Txt_New_question =
 #elif L==9	// pt
 	"Nova pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New question";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_record_field =
@@ -28097,7 +28187,7 @@ const char *Txt_New_record_field =
 #elif L==9	// pt
 	"Novo campo de cart&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New record field";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_room =
@@ -28120,7 +28210,7 @@ const char *Txt_New_room =
 #elif L==9	// pt
 	"Nova sala";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New room";	// Çeviri lazim!
 #endif
 
 const char *Txt_New_session =
@@ -28143,7 +28233,7 @@ const char *Txt_New_session =
 #elif L==9	// pt
 	"Nova sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New session";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_set_of_questions =
@@ -28166,7 +28256,7 @@ const char *Txt_New_set_of_questions =
 #elif L==9	// pt
 	"Novo conjunto de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New set of questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_TIMELINE_comment =
@@ -28189,7 +28279,7 @@ const char *Txt_New_TIMELINE_comment =
 #elif L==9	// pt
 	"Novo coment&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New comment";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_TIMELINE_post =
@@ -28212,7 +28302,7 @@ const char *Txt_New_TIMELINE_post =
 #elif L==9	// pt
 	"Novo post";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New post";			// Çeviri lazim!
 #endif
 
 const char *Txt_New_survey =
@@ -28235,7 +28325,7 @@ const char *Txt_New_survey =
 #elif L==9	// pt
 	"Novo inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New survey";		// Çeviri lazim!
 #endif
 
 const char *Txt_new_tag =		// Tag used in test
@@ -28258,7 +28348,7 @@ const char *Txt_new_tag =		// Tag used in test
 #elif L==9	// pt
 	"novo descritor";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"new tag";		// Çeviri lazim!
 #endif
 
 const char *Txt_New_thread =
@@ -28281,7 +28371,7 @@ const char *Txt_New_thread =
 #elif L==9	// pt
 	"Nova discuss&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New thread";			// Çeviri lazim!
 #endif
 
 const char *Txt_New_type_of_degree =
@@ -28304,7 +28394,7 @@ const char *Txt_New_type_of_degree =
 #elif L==9	// pt
 	"Novo tipo de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New type of degree";			// Çeviri lazim!
 #endif
 
 const char *Txt_New_type_of_group =
@@ -28327,7 +28417,7 @@ const char *Txt_New_type_of_group =
 #elif L==9	// pt
 	"Novo tipo de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"New type of group";		// Çeviri lazim!
 #endif
 
 const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include %u in the following sentences
@@ -28350,7 +28440,7 @@ const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Feliz %u!";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Happy %u!";		// Çeviri lazim!
 #endif
 
 const char *Txt_nick_email_or_ID =
@@ -28373,7 +28463,7 @@ const char *Txt_nick_email_or_ID =
 #elif L==9	// pt
 	"@alcunha, email ou n&ordm; identif.";
 #elif L==10	// tr
-	"@nick, e-posta veya kimlik";	// Çeviri lazim!
+	"@nick, e-posta veya kimlik";
 #endif
 
 const char *Txt_nicks_emails_or_IDs_separated_by_commas =
@@ -28392,11 +28482,11 @@ const char *Txt_nicks_emails_or_IDs_separated_by_commas =
 #elif L==7	// it
 	"@nomi-utenti, email o numero carte d'identit&agrave; separati da virgole";
 #elif L==8	// pl
-	"@nicks, emails or IDs separated by commas";	// Potrzebujesz tlumaczenie
+	"@nicks, emails or IDs separated by commas";				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"@alcunhas, emails ou n&ordm;s. identif. separados por v&iacute;rgulas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"@nicks, emails or IDs separated by commas";				// Çeviri lazim!
 #endif
 
 const char *Txt_Nickname =
@@ -28442,7 +28532,7 @@ const char *Txt_Nickname_X_removed =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Alcunha <strong>@%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Nickname <strong>@%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_NO =
@@ -28465,7 +28555,7 @@ const char *Txt_NO =
 #elif L==9	// pt
 	"N&Atilde;O";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"NO";	// Çeviri lazim!
 #endif
 
 const char *Txt_No =
@@ -28488,7 +28578,7 @@ const char *Txt_No =
 #elif L==9	// pt
 	"N&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_announcements =
@@ -28511,7 +28601,7 @@ const char *Txt_No_announcements =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; an&uacute;ncios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No announcements";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_assigned_building =
@@ -28534,7 +28624,7 @@ const char *Txt_No_assigned_building =
 #elif L==9	// pt
 	"Nenhum edif&iacute;cio atribu&iacute;do";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No assigned building";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_assigned_room =
@@ -28557,7 +28647,7 @@ const char *Txt_No_assigned_room =
 #elif L==9	// pt
 	"Nenhuma sala atribu&iacute;da";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No assigned room";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_assignments =
@@ -28580,7 +28670,7 @@ const char *Txt_No_assignments =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; atividades.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No assignments.";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_banners =
@@ -28603,7 +28693,7 @@ const char *Txt_No_banners =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; banners.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No banners.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_calls_for_exams_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -28626,7 +28716,7 @@ const char *Txt_No_calls_for_exams_of_X =	// Warning: it is very important to in
 #elif L==9	// pt
 	"N&atilde;o chamadas para exame de <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No calls for exams of <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
@@ -28649,7 +28739,7 @@ const char *Txt_no_course_of_origin =	// Means: "message sent from any course"
 #elif L==9	// pt
 	"nenhuma disciplina de origem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"no course of origin";		// Çeviri lazim!
 #endif
 
 const char *Txt_no_course_selected =
@@ -28672,7 +28762,7 @@ const char *Txt_no_course_selected =
 #elif L==9	// pt
 	"nenhuma disciplina seleccionada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"no course selected";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_centers =
@@ -28695,7 +28785,7 @@ const char *Txt_No_centers =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; centros.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No centers.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_courses =
@@ -28718,7 +28808,7 @@ const char *Txt_No_courses =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; disciplinas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No courses.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_degrees =
@@ -28741,7 +28831,7 @@ const char *Txt_No_degrees =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; graus.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No degrees.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_enrolment_requests =
@@ -28764,7 +28854,7 @@ const char *Txt_No_enrolment_requests =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No enrolment requests.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_events =
@@ -28787,7 +28877,7 @@ const char *Txt_No_events =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; eventos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No events.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_exams =
@@ -28810,7 +28900,7 @@ const char *Txt_No_exams =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; exames.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No exams.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_file_index_html_found_within_the_ZIP_file =
@@ -28842,7 +28932,8 @@ const char *Txt_No_file_index_html_found_within_the_ZIP_file =
 	"Um arquivo <em>index.htm/index.html</em> n&atilde;o foi encontrado"
 	" dentro do arquivo <em>ZIP</em>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No file <em>index.htm/index.html</em> found"
+	" within the <em>ZIP</em> file.";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_games =
@@ -28865,7 +28956,7 @@ const char *Txt_No_games =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; jogos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No games.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -28888,7 +28979,7 @@ const char *Txt_No_groups_have_been_created_in_the_course_X =	// Warning: it is 
 #elif L==9	// pt
 	"Nenhum grupo foi criado na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No groups have been created in the course <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warning: it is very important to include %s in the following sentences
@@ -28929,7 +29020,9 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 	" Portanto, os usu&aacute;rios especificados"
 	" ser&atilde;o inscritos/removidos da disciplina.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No groups have been created in the course <strong>%s</strong>."
+	"Therefore, the specified users"
+	" will be enroled/removed in/from the course.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_holidays =
@@ -28952,7 +29045,7 @@ const char *Txt_No_holidays =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; feriados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No holidays.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_image_video =	// Without any image
@@ -28975,7 +29068,7 @@ const char *Txt_No_image_video =	// Without any image
 #elif L==9	// pt
 	"Sem imagem / v&iacute;deo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No image / video";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...
@@ -28998,7 +29091,7 @@ const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...
 #elif L==9	// pt
 	"N.&ordm;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_information =
@@ -29021,7 +29114,7 @@ const char *Txt_No_information =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; informa&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No information.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_institutions =
@@ -29044,7 +29137,7 @@ const char *Txt_No_institutions =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No institutions.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_links =
@@ -29067,7 +29160,7 @@ const char *Txt_No_links =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; liga&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No links.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_new_posts =
@@ -29090,7 +29183,7 @@ const char *Txt_No_new_posts =
 #elif L==9	// pt
 	"Sem posts novos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No new posts";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_notices =
@@ -29113,7 +29206,7 @@ const char *Txt_No_notices =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; avisos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No notices.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_projects =
@@ -29136,7 +29229,7 @@ const char *Txt_No_projects =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; projetos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No projects.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_questions_found_matching_your_search_criteria =
@@ -29159,7 +29252,7 @@ const char *Txt_No_questions_found_matching_your_search_criteria =
 #elif L==9	// pt
 	"N&atilde;o perguntas com os seus crit&eacute;rios de pesquisa selecionados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No questions found matching your search criteria.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_questions_have_been_added =
@@ -29174,7 +29267,7 @@ const char *Txt_No_questions_have_been_added =
 #elif L==5	// fr
 	"Aucune question n'a &eacute;t&eacute; ajout&eacute;e.";
 #elif L==6	// gn
-	"No se ha a&ntilde;adido ninguna pregunta.";		// Okoteve traducción
+	"No se ha a&ntilde;adido ninguna pregunta.";	// Okoteve traducción
 #elif L==7	// it
 	"Nessuna domanda &egrave; stata aggiunta.";
 #elif L==8	// pl
@@ -29182,7 +29275,7 @@ const char *Txt_No_questions_have_been_added =
 #elif L==9	// pt
 	"Nenhuma pergunta foi adicionada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No questions have been added.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_results =
@@ -29205,7 +29298,7 @@ const char *Txt_No_results =
 #elif L==9	// pt
 	"Nenhum resultado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No results.";			// Çeviri lazim!
 #endif
 
 const char *Txt_no_subject =
@@ -29228,7 +29321,7 @@ const char *Txt_no_subject =
 #elif L==9	// pt
 	"sem assunto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"no subject";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_surveys =
@@ -29251,7 +29344,7 @@ const char *Txt_No_surveys =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; inqu&eacute;ritos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No surveys.";		// Çeviri lazim!
 #endif
 
 const char *Txt_no_tags =		// Tags used in test
@@ -29274,7 +29367,7 @@ const char *Txt_no_tags =		// Tags used in test
 #elif L==9	// pt
 	"sem descritores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"no tags";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_teachers_or_students_found =
@@ -29297,7 +29390,7 @@ const char *Txt_No_teachers_or_students_found =
 #elif L==9	// pt
 	"Nenhum professor ou estudante encontrado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No teachers or students found.";	// Çeviri lazim!
 #endif
 
 const char *Txt_No_test_questions =
@@ -29320,7 +29413,7 @@ const char *Txt_No_test_questions =
 #elif L==9	// pt
 	"N&atilde;o existem perguntas de test.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No test questions.";		// Çeviri lazim!
 #endif
 
 const char *Txt_No_types_of_degree =
@@ -29343,7 +29436,7 @@ const char *Txt_No_types_of_degree =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; tipos de grau.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No types of degree.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_user_has_been_eliminated =
@@ -29366,7 +29459,7 @@ const char *Txt_No_user_has_been_eliminated =
 #elif L==9	// pt
 	"Nenhum usu&aacute;rio foi removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No user has been eliminated.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_user_has_been_enroled =
@@ -29389,7 +29482,7 @@ const char *Txt_No_user_has_been_enroled =
 #elif L==9	// pt
 	"Nenhum usu&aacute;rio se registrou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No user has been enroled.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_user_has_been_removed =
@@ -29412,7 +29505,7 @@ const char *Txt_No_user_has_been_removed =
 #elif L==9	// pt
 	"Nenhum usu&aacute;rio foi removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No user has been removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
@@ -29444,7 +29537,8 @@ const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
 	"Nenhum usu&aacute;rio a quem voc&ecirc; pode seguir."
 	" Tente novamente mais tarde.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No user to whom you can follow."
+	" Try again later.";				// Çeviri lazim!
 #endif
 
 const char *Txt_No_users_found[Rol_NUM_ROLES] =
@@ -29469,7 +29563,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum utilizador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No users found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST] =
@@ -29492,7 +29586,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum convidado encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No guests found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR] =
@@ -29515,7 +29609,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum utilizador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No users found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD] =
@@ -29538,7 +29632,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum estudante encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No students found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_NET] =
@@ -29561,7 +29655,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum professor n&atilde;o editor encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No non-editing teachers found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH] =
@@ -29584,7 +29678,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum professor encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No teachers found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM] =
@@ -29607,7 +29701,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum administrador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No administrators found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM] =
@@ -29630,7 +29724,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum administrador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No administrators found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM] =
@@ -29653,7 +29747,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum administrador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No administrators found."	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM] =
@@ -29676,7 +29770,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==9	// pt
 	"Nenhum superutilizador encontrado."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No superusers found."	// Çeviri lazim!
 #endif
 	};
 
@@ -29700,7 +29794,7 @@ const char *Txt_nobody_else_can_access_this_content =
 #elif L==9	// pt
 	"ningu&eacute;m mais pode acessar este conte&uacute;do";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"nobody else can access this content";			// Çeviri lazim!
 #endif
 
 const char *Txt_Not_applicable =
@@ -29723,7 +29817,7 @@ const char *Txt_Not_applicable =
 #elif L==9	// pt
 	"N&atilde;o aplic&aacute;vel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not applicable";	// Çeviri lazim!
 #endif
 
 const char *Txt_not_available =
@@ -29738,7 +29832,7 @@ const char *Txt_not_available =
 #elif L==5	// fr
 	"pas disponible";
 #elif L==6	// gn
-	"no disponible";		// Okoteve traducción
+	"no disponible";	// Okoteve traducción
 #elif L==7	// it
 	"non disponibile";
 #elif L==8	// pl
@@ -29746,7 +29840,7 @@ const char *Txt_not_available =
 #elif L==9	// pt
 	"n&atilde;o dispon&iacute;vel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"not available";	// Çeviri lazim!
 #endif
 
 const char *Txt_Not_duplicated =
@@ -29761,7 +29855,7 @@ const char *Txt_Not_duplicated =
 #elif L==5	// fr
 	"Pas dupliqu&eacute;";
 #elif L==6	// gn
-	"No es duplicado/a";		// Okoteve traducción
+	"No es duplicado/a";	// Okoteve traducción
 #elif L==7	// it
 	"Non duplicato";
 #elif L==8	// pl
@@ -29769,7 +29863,7 @@ const char *Txt_Not_duplicated =
 #elif L==9	// pt
 	"N&atilde;o duplicado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not duplicated";	// Çeviri lazim!
 #endif
 
 const char *Txt_Not_visible =
@@ -29792,7 +29886,7 @@ const char *Txt_Not_visible =
 #elif L==9	// pt
 	"N&atilde;o vis&iacute;vel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not visible";	// Çeviri lazim!
 #endif
 
 const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
@@ -29824,7 +29918,8 @@ const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 	"Nada foi colado porque a &aacute;rea de transfer&ecirc;ncia est&aacute; vazia."
 	" Tente copiar e colar novamente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Nothing has been pasted because the clipboard is empty."
+	" Try copy-paste again.";		// Çeviri lazim!
 #endif
 
 const char *Txt_NOTICE_Active_BR_notices =
@@ -29847,7 +29942,7 @@ const char *Txt_NOTICE_Active_BR_notices =
 #elif L==9	// pt
 	"Avisos<br />ativos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Active<br />notices";	// Çeviri lazim!
 #endif
 
 const char *Txt_NOTICE_Deleted_BR_notices =
@@ -29870,7 +29965,7 @@ const char *Txt_NOTICE_Deleted_BR_notices =
 #elif L==9	// pt
 	"Avisos<br />suprimidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Deleted<br />notices";		// Çeviri lazim!
 #endif
 
 const char *Txt_NOTICE_Obsolete_BR_notices =
@@ -29893,7 +29988,7 @@ const char *Txt_NOTICE_Obsolete_BR_notices =
 #elif L==9	// pt
 	"Avisos<br />obsoletos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Obsolete<br />notices";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notice =
@@ -29916,7 +30011,7 @@ const char *Txt_Notice =
 #elif L==9	// pt
 	"Aviso";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Notice";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notice_created =
@@ -29939,7 +30034,7 @@ const char *Txt_Notice_created =
 #elif L==9	// pt
 	"Aviso criado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Notice created.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notice_removed =
@@ -29962,7 +30057,7 @@ const char *Txt_Notice_removed =
 #elif L==9	// pt
 	"Aviso removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Notice removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notices =
@@ -30008,7 +30103,7 @@ const char *Txt_NOTIF_new_SINGULAR =
 #elif L==9	// pt
 	"nova";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"new";		// Çeviri lazim!
 #endif
 
 const char *Txt_NOTIF_new_PLURAL =
@@ -30031,7 +30126,7 @@ const char *Txt_NOTIF_new_PLURAL =
 #elif L==9	// pt
 	"novas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"new";		// Çeviri lazim!
 #endif
 
 const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
@@ -30056,7 +30151,7 @@ const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"N&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_STATUS_EMAIL_PENDING] =
@@ -30079,7 +30174,7 @@ const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Pendente"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Pending"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_STATUS_EMAIL_CANCELLED] =
@@ -30102,7 +30197,7 @@ const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Cancelado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Cancelled"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_STATUS_EMAIL_SENT] =
@@ -30125,7 +30220,7 @@ const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT] =
 #elif L==9	// pt
 	"Enviada"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sent"		// Çeviri lazim!
 #endif
 	};
 
@@ -30149,7 +30244,7 @@ const char *Txt_notification =
 #elif L==9	// pt
 	"notifica&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"notification";	// Çeviri lazim!
 #endif
 
 const char *Txt_Notifications =
@@ -30220,7 +30315,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Eventos desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown events"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_DOCUMENT_FILE] =
@@ -30243,7 +30338,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos arquivos de documento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New document files"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TEACHERS_FILE] =
@@ -30266,7 +30361,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos arquivos dos professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New teachers' files"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_SHARED_FILE] =
@@ -30289,7 +30384,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos arquivos compartilhado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New shared files"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ASSIGNMENT] =
@@ -30312,7 +30407,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas atividades"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New assignments"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_CALL_FOR_EXAM] =
@@ -30335,7 +30430,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas chamadas para exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New calls for exam"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_MARKS_FILE] =
@@ -30358,7 +30453,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos arquivos de notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New files with marks"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_STD] =
@@ -30381,7 +30476,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas inscri&ccedil;&otilde;es como estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New enrolments as a student"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_TCH] =
@@ -30404,7 +30499,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas inscri&ccedil;&otilde;es como professor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New enrolments as a teacher"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_REQUEST] =
@@ -30427,7 +30522,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos pedidos de inscri&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New enrolment requests"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_COMMENT] =
@@ -30450,7 +30545,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos coment&aacute;rio &agrave;s minhos posts sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New comments to my social posts"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_FAV] =
@@ -30496,7 +30591,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas partilhas de minhos posts sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New favourite to my social posts"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_MENTION] =
@@ -30519,7 +30614,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas men&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New mentions"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FOLLOWER] =
@@ -30542,7 +30637,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos seguidores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New followers"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FORUM_POST_COURSE] =
@@ -30565,7 +30660,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos posts em f&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New posts in course forums"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FORUM_REPLY] =
@@ -30588,7 +30683,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas respostas aos meus posts em f&oacute;runs"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New replies to my posts in forums"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_NOTICE] =
@@ -30611,7 +30706,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos avisos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New notices"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_MESSAGE] =
@@ -30634,7 +30729,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas mensagens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New messages"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_SURVEY] =
@@ -30657,7 +30752,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novos inqu&eacute;ritos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New surveys"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
@@ -30680,7 +30775,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New enrolments as a non-editing teacher"		// Çeviri lazim!
 #endif
 	};
 
@@ -30706,7 +30801,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Evento desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown event"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_DOCUMENT_FILE] =
@@ -30729,7 +30824,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Arquivo de documento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Document file"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TEACHERS_FILE] =
@@ -30752,7 +30847,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Arquivo dos professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teachers' file"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_SHARED_FILE] =
@@ -30775,7 +30870,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Arquivo compartilhado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Shared file"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ASSIGNMENT] =
@@ -30798,7 +30893,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Atividade"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assignment"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_CALL_FOR_EXAM] =
@@ -30821,7 +30916,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Chamada para exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Call for exam"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_MARKS_FILE] =
@@ -30844,7 +30939,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Arquivo de notas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"File with marks"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_STD] =
@@ -30867,7 +30962,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o como estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Enrolment as a student"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_TCH] =
@@ -30890,7 +30985,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o como professor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Enrolment as a teacher"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_REQUEST] =
@@ -30913,7 +31008,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Pedido de inscri&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Enrolment request"			// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_COMMENT] =
@@ -30936,7 +31031,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Coment&aacute;rio a um post sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Comment to social post"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_FAV] =
@@ -30959,7 +31054,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Post sociais marcado como favorito"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Social post marked as favourite"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_SHARE] =
@@ -30982,7 +31077,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Post sociais compartido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Social post shared"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_TML_MENTION] =
@@ -30997,7 +31092,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==5	// fr
 	"Mention"
 #elif L==6	// gn
-	"Menci&oacute;n"			// Okoteve traducción
+	"Menci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
 	"Menzione"
 #elif L==8	// pl
@@ -31005,7 +31100,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Men&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Mention"		// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FOLLOWER] =
@@ -31028,7 +31123,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Seguidor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Follower"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FORUM_POST_COURSE] =
@@ -31051,7 +31146,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Post em um f&oacute;rum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Post in a forum"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_FORUM_REPLY] =
@@ -31060,7 +31155,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==2	// de
 	"Antwort in einem Forum"
 #elif L==3	// en
-	"Response in a forum"
+	"Reply in a forum"
 #elif L==4	// es
 	"Respuesta en un foro"
 #elif L==5	// fr
@@ -31074,7 +31169,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Resposta em um f&oacute;rum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Reply in a forum"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_NOTICE] =
@@ -31097,7 +31192,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"An&uacute;ncio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Notice"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_MESSAGE] =
@@ -31120,7 +31215,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Mensagem"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Message"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_SURVEY] =
@@ -31143,7 +31238,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Inqu&eacute;rito"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Survey"	// Çeviri lazim!
 #endif
 	,
 	[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
@@ -31166,7 +31261,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Inscri&ccedil;&atilde;o como professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Enrolment as a non-editing teacher"			// Çeviri lazim!
 #endif
 	};
 
@@ -31182,7 +31277,7 @@ const char *Txt_Notify_me_BR_by_email =
 #elif L==5	// fr
 	"Avertissez-moi<br />par email";
 #elif L==6	// gn
-	"Avisarme<br />por correo";		// Okoteve traducción
+	"Avisarme<br />por correo";	// Okoteve traducción
 #elif L==7	// it
 	"Notificatami<br />via email";
 #elif L==8	// pl
@@ -31190,7 +31285,7 @@ const char *Txt_Notify_me_BR_by_email =
 #elif L==9	// pt
 	"Notifique-me<br />por email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Notify me<br />by email";	// Çeviri lazim!
 #endif
 
 const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -31213,7 +31308,7 @@ const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Wa
 #elif L==9	// pt
 	"Agora cada aluno pode pertencer a v&aacute;rios grupos do tipo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Now each student can belong to multiple groups of type <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -31236,7 +31331,7 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 #elif L==9	// pt
 	"Agora cada aluno s&oacute; pode pertencer a um grupo do tipo <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Now each student can only belong to a group of type <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_files =
@@ -31259,7 +31354,7 @@ const char *Txt_Number_of_files =
 #elif L==9	// pt
 	"N.&ordm; de arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of files";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_files_in_DOCUM_zones =
@@ -31282,7 +31377,7 @@ const char *Txt_Number_of_files_in_DOCUM_zones =
 #elif L==9	// pt
 	"N.&ordm; de arquivos em zonas de documentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of files in documents area";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_files_in_SHARE_zones =
@@ -31297,7 +31392,7 @@ const char *Txt_Number_of_files_in_SHARE_zones =
 #elif L==5	// fr
 	"Nombre de fichiers partag&eacute;s";
 #elif L==6	// gn
-	"N.&ordm; de archivos compartidos";		// Okoteve traducción
+	"N.&ordm; de archivos compartidos";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di file condivisi";
 #elif L==8	// pl
@@ -31305,7 +31400,7 @@ const char *Txt_Number_of_files_in_SHARE_zones =
 #elif L==9	// pt
 	"N.&ordm; de arquivos compartilhados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of shared files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_forums =
@@ -31328,7 +31423,7 @@ const char *Txt_Number_of_forums =
 #elif L==9	// pt
 	"N.&ordm; de f&oacute;runs";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"No. of forums";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_groups =
@@ -31351,7 +31446,7 @@ const char *Txt_Number_of_BR_groups =
 #elif L==9	// pt
 	"N.&ordm; de<br />grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_indicators =
@@ -31374,7 +31469,7 @@ const char *Txt_Number_of_indicators =
 #elif L==9	// pt
 	"N.&ordm; de indocadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of indicators";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_lines =
@@ -31397,7 +31492,7 @@ const char *Txt_Number_of_BR_lines =
 #elif L==9	// pt
 	"N.&ordm; de<br />linhas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />lines";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_BR_msgs =
@@ -31420,7 +31515,7 @@ const char *Txt_Number_BR_msgs =
 #elif L==9	// pt
 	"N.&ordm;<br />mens.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number<br />msgs.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts =
@@ -31443,7 +31538,7 @@ const char *Txt_Number_of_posts =
 #elif L==9	// pt
 	"N.&ordm; de posts";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of posts";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts_BR_per_forum =
@@ -31466,7 +31561,7 @@ const char *Txt_Number_of_posts_BR_per_forum =
 #elif L==9	// pt
 	"N.&ordm; de posts<br />por f&oacute;rum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of posts<br />per forum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts_BR_per_thread =
@@ -31489,7 +31584,7 @@ const char *Txt_Number_of_posts_BR_per_thread =
 #elif L==9	// pt
 	"N.&ordm; de posts<br />por discuss&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of posts<br />per thread";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_posts_BR_per_user =
@@ -31512,7 +31607,7 @@ const char *Txt_Number_of_posts_BR_per_user =
 #elif L==9	// pt
 	"N.&ordm; de posts<br />por utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of posts<br />per user";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_private_files =
@@ -31535,7 +31630,7 @@ const char *Txt_Number_of_private_files =
 #elif L==9	// pt
 	"N.&ordm; de arquivos privados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of private files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_program_items =
@@ -31558,7 +31653,7 @@ const char *Txt_Number_of_BR_program_items =
 #elif L==9	// pt
 	"N.&ordm; de<br />itens de programas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />program items";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_public_files =
@@ -31581,7 +31676,7 @@ const char *Txt_Number_of_public_files =
 #elif L==9	// pt
 	"N.&ordm; de arquivos p&uacute;blicos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of public files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_questions =
@@ -31604,7 +31699,7 @@ const char *Txt_Number_of_questions =
 #elif L==9	// pt
 	"N&uacute;mero de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_questions_to_show =
@@ -31627,7 +31722,7 @@ const char *Txt_Number_of_questions_to_show =
 #elif L==9	// pt
 	"N&uacute;mero de perguntas a mostrar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of questions to show";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
@@ -31650,7 +31745,7 @@ const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded =
 #elif L==9	// pt
 	"N.&ordm; de<br />vezes que<br />as perguntas<br />foram<br />respondidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />times that<br />questions<br />have been<br />responded";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_threads =
@@ -31673,7 +31768,7 @@ const char *Txt_Number_of_threads =
 #elif L==9	// pt
 	"N.&ordm; de discuss&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of threads";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_threads_BR_per_forum =
@@ -31696,7 +31791,7 @@ const char *Txt_Number_of_threads_BR_per_forum =
 #elif L==9	// pt
 	"N.&ordm; de discuss&otilde;es<br />por f&oacute;rum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of threads<br />per forum";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_assignments =
@@ -31719,7 +31814,7 @@ const char *Txt_Number_of_BR_assignments =
 #elif L==9	// pt
 	"N.&ordm; de<br />atividades";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />assignments";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
@@ -31742,7 +31837,7 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com atividades";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />assignments";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exams =
@@ -31765,7 +31860,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exams =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com exames";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />exams";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
@@ -31788,7 +31883,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />exportable<br />test<br />questions";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
@@ -31811,7 +31906,7 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com jogos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />games";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_program_items =
@@ -31834,7 +31929,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas com<br />itens de programas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />program items";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
@@ -31857,7 +31952,7 @@ const char *Txt_Number_of_BR_courses_with_BR_projects =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com projetos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />projects";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
@@ -31880,7 +31975,7 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses<br />with test<br />questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
@@ -31903,7 +31998,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />courses with<br />surveys";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_events =
@@ -31926,7 +32021,7 @@ const char *Txt_Number_of_events =
 #elif L==9	// pt
 	"N&uacute;mero de eventos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of events";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_events_per_user =
@@ -31941,7 +32036,7 @@ const char *Txt_Number_of_events_per_user =
 #elif L==5	// fr
 	"Nombre d'&eacute;v&eacute;nements par utilisateur";
 #elif L==6	// gn
-	"N.&ordm; de eventos por usuario";		// Okoteve traducción
+	"N.&ordm; de eventos por usuario";	// Okoteve traducción
 #elif L==7	// it
 	"Numero di eventi per utente";
 #elif L==8	// pl
@@ -31949,7 +32044,7 @@ const char *Txt_Number_of_events_per_user =
 #elif L==9	// pt
 	"N&uacute;mero de eventos por utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of events per user";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_emails =
@@ -31972,7 +32067,7 @@ const char *Txt_Number_of_emails =
 #elif L==9	// pt
 	"N&uacute;mero de emails";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of emails";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_exams =
@@ -31995,7 +32090,7 @@ const char *Txt_Number_of_BR_exams =
 #elif L==9	// pt
 	"N&uacute;mero de<br />exames";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />exams";			// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_games =
@@ -32018,7 +32113,7 @@ const char *Txt_Number_of_BR_games =
 #elif L==9	// pt
 	"N&uacute;mero de<br />jogos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />games";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_notifications =
@@ -32041,7 +32136,7 @@ const char *Txt_Number_of_BR_notifications =
 #elif L==9	// pt
 	"N&uacute;mero de<br />notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />notifications";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_projects =
@@ -32064,7 +32159,7 @@ const char *Txt_Number_of_BR_projects =
 #elif L==9	// pt
 	"N&uacute;mero de<br />projetos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />projects";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_students =
@@ -32087,7 +32182,7 @@ const char *Txt_Number_of_students =
 #elif L==9	// pt
 	"N.&ordm; de estudantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of students";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_BR_surveys =
@@ -32110,7 +32205,7 @@ const char *Txt_Number_of_BR_surveys =
 #elif L==9	// pt
 	"N.&ordm; de<br />inqu&eacute;ritos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of<br />surveys";	// Çeviri lazim!
 #endif
 
 const char *Txt_Number_BR_of_test_BR_questions =
@@ -32133,7 +32228,7 @@ const char *Txt_Number_BR_of_test_BR_questions =
 #elif L==9	// pt
 	"N.&ordm; de<br />perguntas<br />de test";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number<br />of test<br />questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_users =
@@ -32156,7 +32251,7 @@ const char *Txt_Number_of_users =
 #elif L==9	// pt
 	"N.&ordm; de utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Number of users";	// Çeviri lazim!
 #endif
 
 const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
@@ -32179,7 +32274,7 @@ const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
 #elif L==9	// pt
 	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Numeric<br />code<br />ISO 3166-1";	// Çeviri lazim!
 #endif
 
 const char *Txt_of_PART_OF_A_TOTAL =	// Example: transferred 2 of 3 files
@@ -32202,7 +32297,7 @@ const char *Txt_of_PART_OF_A_TOTAL =	// Example: transferred 2 of 3 files
 #elif L==9	// pt
 	"de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"of";	// Çeviri lazim!
 #endif
 
 const char *Txt_Office =
@@ -32225,7 +32320,7 @@ const char *Txt_Office =
 #elif L==9	// pt
 	"Gabinete";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Office";	// Çeviri lazim!
 #endif
 
 const char *Txt_One_message_has_been_deleted =
@@ -32240,7 +32335,7 @@ const char *Txt_One_message_has_been_deleted =
 #elif L==5	// fr
 	"Un message a &eacute;t&eacute; supprim&eacute;.";
 #elif L==6	// gn
-	"Se ha eliminado un mensaje.";			// Okoteve traducción
+	"Se ha eliminado un mensaje.";		// Okoteve traducción
 #elif L==7	// it
 	"Un messaggio &egrave; stato rimosso.";
 #elif L==8	// pl
@@ -32248,7 +32343,7 @@ const char *Txt_One_message_has_been_deleted =
 #elif L==9	// pt
 	"Uma mensagem foi removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"One message has been deleted.";	// Çeviri lazim!
 #endif
 
 const char *Txt_One_user_has_been_eliminated =
@@ -32263,7 +32358,7 @@ const char *Txt_One_user_has_been_eliminated =
 #elif L==5	// fr
 	"Un utilisateur a &eacute;t&eacute; &eacute;limin&eacute;.";
 #elif L==6	// gn
-	"Se ha eliminado un usuario.";			// Okoteve traducción
+	"Se ha eliminado un usuario.";		// Okoteve traducción
 #elif L==7	// it
 	"Un utente &egrave; stato rimosso.";
 #elif L==8	// pl
@@ -32271,7 +32366,7 @@ const char *Txt_One_user_has_been_eliminated =
 #elif L==9	// pt
 	"Um usu&aacute;rio foi removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"One user has been eliminated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_One_user_has_been_enroled =
@@ -32286,7 +32381,7 @@ const char *Txt_One_user_has_been_enroled =
 #elif L==5	// fr
 	"Un utilisateur a &eacute;t&eacute; inscrit.";
 #elif L==6	// gn
-	"Se ha inscrito un usuario.";		// Okoteve traducción
+	"Se ha inscrito un usuario.";	// Okoteve traducción
 #elif L==7	// it
 	"Un utente &egrave; stato registrato.";
 #elif L==8	// pl
@@ -32294,7 +32389,7 @@ const char *Txt_One_user_has_been_enroled =
 #elif L==9	// pt
 	"Um usu&aacute;rio se registrou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"One user has been enroled.";	// Çeviri lazim!
 #endif
 
 const char *Txt_One_user_has_been_removed =
@@ -32309,7 +32404,7 @@ const char *Txt_One_user_has_been_removed =
 #elif L==5	// fr
 	"Un utilisateur a &eacute;t&eacute; supprim&eacute;.";
 #elif L==6	// gn
-	"Se ha eliminado un usuario.";		// Okoteve traducción
+	"Se ha eliminado un usuario.";	// Okoteve traducción
 #elif L==7	// it
 	"Un utente &egrave; stato rimosso.";
 #elif L==8	// pl
@@ -32317,7 +32412,7 @@ const char *Txt_One_user_has_been_removed =
 #elif L==9	// pt
 	"Um usu&aacute;rio foi removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"One user has been removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Online_tutoring =
@@ -32340,7 +32435,7 @@ const char *Txt_Online_tutoring =
 #elif L==9	// pt
 	"Tutoria on-line";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Online tutoring";		// Çeviri lazim!
 #endif
 
 const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =	// Warning: it is very important to include %u in the following sentences
@@ -32363,7 +32458,7 @@ const char *Txt_Only_courses_with_more_than_X_clicks_are_shown =	// Warning: it 
 #elif L==9	// pt
 	"Somente disciplinas com mais de %u cliques s&atilde;o mostradas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Only courses with more than %u clicks are shown.";		// Çeviri lazim!
 #endif
 
 const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -32386,7 +32481,7 @@ const char *Txt_only_if_the_scope_is_X =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"somente se o &acirc;mbito &eacute; %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"only if the scope is %s";		// Çeviri lazim!
 #endif
 
 const char *Txt_only_students =
@@ -32409,7 +32504,7 @@ const char *Txt_only_students =
 #elif L==9	// pt
 	", apenas estudantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	", only students";	// Çeviri lazim!
 #endif
 
 const char *Txt_only_teachers =
@@ -32432,7 +32527,7 @@ const char *Txt_only_teachers =
 #elif L==9	// pt
 	", professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	", teachers";	// Çeviri lazim!
 #endif
 
 const char *Txt_only_unread_messages =
@@ -32455,7 +32550,7 @@ const char *Txt_only_unread_messages =
 #elif L==9	// pt
 	"apenas mensagens n&atilde;o lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"only unread messages";					// Çeviri lazim!
 #endif
 
 const char *Txt_open_document =
@@ -32478,7 +32573,7 @@ const char *Txt_open_document =
 #elif L==9	// pt
 	"documento aberto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"open document";	// Çeviri lazim!
 #endif
 
 const char *Txt_open_documents =
@@ -32501,7 +32596,7 @@ const char *Txt_open_documents =
 #elif L==9	// pt
 	"documentos abertos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"open documents";	// Çeviri lazim!
 #endif
 
 const char *Txt_Open_survey =
@@ -32524,7 +32619,7 @@ const char *Txt_Open_survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito aberta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Open survey";		// Çeviri lazim!
 #endif
 
 const char *Txt_Opening_of_groups =
@@ -32547,7 +32642,7 @@ const char *Txt_Opening_of_groups =
 #elif L==9	// pt
 	"Abertura de grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Opening of groups";	// Çeviri lazim!
 #endif
 
 const char *Txt_Option_under_development =
@@ -32562,7 +32657,7 @@ const char *Txt_Option_under_development =
 #elif L==5	// fr
 	"Option en cours de d&eacute;veloppement.";
 #elif L==6	// gn
-	"Opci&oacute;n en desarrollo.";			// Okoteve traducción
+	"Opci&oacute;n en desarrollo.";		// Okoteve traducción
 #elif L==7	// it
 	"Opzione in fase di sviluppo.";
 #elif L==8	// pl
@@ -32570,7 +32665,7 @@ const char *Txt_Option_under_development =
 #elif L==9	// pt
 	"Op&ccedil;&atilde;o em desenvolvimento.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Option under development.";		// Çeviri lazim!
 #endif
 
 const char *Txt_optional =
@@ -32585,7 +32680,7 @@ const char *Txt_optional =
 #elif L==5	// fr
 	"en option";
 #elif L==6	// gn
-	"opcional";			// Okoteve traducción
+	"opcional";	// Okoteve traducción
 #elif L==7	// it
 	"opzionale";
 #elif L==8	// pl
@@ -32593,7 +32688,7 @@ const char *Txt_optional =
 #elif L==9	// pt
 	"opcional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"optional";	// Çeviri lazim!
 #endif
 
 const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -32625,7 +32720,8 @@ const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: i
 	"&hellip;ou voc&ecirc; pode criar uma nova liga&ccedil;&atilde;o"
 	" dentro do diret&oacute;rio <strong>%s</strong>:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&hellip;or you can create a new link"
+	" inside the folder <strong>%s</strong>:";	// Çeviri lazim!
 #endif
 
 const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -32657,7 +32753,8 @@ const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X =	// Warning: it is 
 	"&hellip;ou voc&ecirc; pode fazer uma c&oacute;pia de arquivo"
 	" na diret&oacute;rio <strong>%s</strong>:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&hellip;or you can make a file copy"
+	" to the folder <strong>%s</strong>:";		// Çeviri lazim!
 #endif
 
 const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -32689,7 +32786,8 @@ const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X =	// Warning: it is
 	"&hellip;ou voc&ecirc; pode enviar um novo arquivo"
 	" para o diret&oacute;rio <strong>%s</strong>:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&hellip;or you can upload a new file"
+	" to the folder <strong>%s</strong>:";	// Çeviri lazim!
 #endif
 
 const char *Txt_or_you_can_upload_new_files_to_the_folder_X =	// Warning: it is very important to include %s in the following sentences
@@ -32721,7 +32819,8 @@ const char *Txt_or_you_can_upload_new_files_to_the_folder_X =	// Warning: it is 
 	"&hellip;ou voc&ecirc; pode enviar novos arquivos"
 	" para o diret&oacute;rio <strong>%s</strong>:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"&hellip;or you can upload new files"
+	" to the folder <strong>%s</strong>:";	// Çeviri lazim!
 #endif
 
 const char *Txt_Original_message =
@@ -32744,7 +32843,7 @@ const char *Txt_Original_message =
 #elif L==9	// pt
 	"Mensagem original";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Original message";	// Çeviri lazim!
 #endif
 
 const char *Txt_Other_actions =
@@ -32767,7 +32866,7 @@ const char *Txt_Other_actions =
 #elif L==9	// pt
 	"Outras a&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other actions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Other_countries =
@@ -32790,7 +32889,7 @@ const char *Txt_Other_countries =
 #elif L==9	// pt
 	"Outros pa&iacute;ses";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other countries";	// Çeviri lazim!
 #endif
 
 const char *Txt_Other_departments =
@@ -32813,7 +32912,7 @@ const char *Txt_Other_departments =
 #elif L==9	// pt
 	"Outros departamentos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other departments";	// Çeviri lazim!
 #endif
 
 const char *Txt_Other_emails =
@@ -32836,7 +32935,7 @@ const char *Txt_Other_emails =
 #elif L==9	// pt
 	"Outros emails";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other emails";		// Çeviri lazim!
 #endif
 
 const char *Txt_Other_nicknames =
@@ -32851,7 +32950,7 @@ const char *Txt_Other_nicknames =
 #elif L==5	// fr
 	"Autres surnoms";
 #elif L==6	// gn
-	"Otros apodos";	// Okoteve traducción
+	"Otros apodos";		// Okoteve traducción
 #elif L==7	// it
 	"Altri nomi utenti";
 #elif L==8	// pl
@@ -32859,7 +32958,7 @@ const char *Txt_Other_nicknames =
 #elif L==9	// pt
 	"Outras alcunhas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other nicknames";	// Çeviri lazim!
 #endif
 
 const char *Txt_Other_places =
@@ -32882,7 +32981,7 @@ const char *Txt_Other_places =
 #elif L==9	// pt
 	"Outras localiza&ccedil;oes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other places";		// Çeviri lazim!
 #endif
 
 const char *Txt_Other_recipients =
@@ -32905,7 +33004,7 @@ const char *Txt_Other_recipients =
 #elif L==9	// pt
 	"Outros destinat&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Other recipients";	// Çeviri lazim!
 #endif
 
 const char *Txt_page =
@@ -32928,7 +33027,7 @@ const char *Txt_page =
 #elif L==9	// pt
 	"p&aacute;g.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"page";	// Çeviri lazim!
 #endif
 
 const char *Txt_Page_X_of_Y =	// Warning: it is very important to include two %u in the following sentences
@@ -32951,7 +33050,7 @@ const char *Txt_Page_X_of_Y =	// Warning: it is very important to include two %u
 #elif L==9	// pt
 	"P&aacute;gina %u de %u";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Page %u of %u";		// Çeviri lazim!
 #endif
 
 const char *Txt_PAGE1_Page_generated_in =
@@ -32974,7 +33073,7 @@ const char *Txt_PAGE1_Page_generated_in =
 #elif L==9	// pt
 	"P&aacute;gina gerada em";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Page generated in";		// Çeviri lazim!
 #endif
 
 const char *Txt_PAGE2_and_sent_in =
@@ -32997,7 +33096,7 @@ const char *Txt_PAGE2_and_sent_in =
 #elif L==9	// pt
 	"e enviada em";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"and sent in";	// Çeviri lazim!
 #endif
 
 const char *Txt_PAGES_Previous =
@@ -33020,7 +33119,7 @@ const char *Txt_PAGES_Previous =
 #elif L==9	// pt
 	"Anteriores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Previous";	// Çeviri lazim!
 #endif
 
 const char *Txt_PAGES_Next =
@@ -33043,7 +33142,7 @@ const char *Txt_PAGES_Next =
 #elif L==9	// pt
 	"Seguintes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Next";		// Çeviri lazim!
 #endif
 
 const char *Txt_Password =
@@ -33112,7 +33211,7 @@ const char *Txt_Paste =
 #elif L==9	// pt
 	"Colar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Paste";	// Çeviri lazim!
 #endif
 
 const char *Txt_Pause =
@@ -33135,7 +33234,7 @@ const char *Txt_Pause =
 #elif L==9	// pt
 	"Pausar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Pause";		// Çeviri lazim!
 #endif
 
 const char *Txt_PERCENT_of_users =
@@ -33158,7 +33257,7 @@ const char *Txt_PERCENT_of_users =
 #elif L==9	// pt
 	"% de utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"% of users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Permalink =
@@ -33181,7 +33280,7 @@ const char *Txt_Permalink =
 #elif L==9	// pt
 	"Liga&ccedil;&atilde;o permanente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Permalink";	// Çeviri lazim!
 #endif
 
 const char *Txt_Personal_information =
@@ -33204,7 +33303,7 @@ const char *Txt_Personal_information =
 #elif L==9	// pt
 	"Informa&ccedil;&atilde;o pessoal";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Personal information";	// Çeviri lazim!
 #endif
 
 const char *Txt_Phone =
@@ -33227,7 +33326,7 @@ const char *Txt_Phone =
 #elif L==9	// pt
 	"Telefone";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Phone";	// Çeviri lazim!
 #endif
 
 const char *Txt_Photo =
@@ -33250,7 +33349,7 @@ const char *Txt_Photo =
 #elif L==9	// pt
 	"Foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Photo";	// Çeviri lazim!
 #endif
 
 const char *Txt_Photo_has_been_updated =
@@ -33273,7 +33372,7 @@ const char *Txt_Photo_has_been_updated =
 #elif L==9	// pt
 	"A fotografia foi atualizada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Photo has been updated.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -33296,7 +33395,7 @@ const char *Txt_Photo_of_THE_USER_X_has_been_removed =	// Warning: it is very im
 #elif L==9	// pt
 	"A foto de <strong>%s</strong> foi removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Photo of <strong>%s</strong> has been removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
@@ -33320,7 +33419,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==9	// pt
 	"Rosto selecionado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Face selected"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -33342,7 +33441,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==9	// pt
 	"Contraste e satura&ccedil;&atilde;o aprimorados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Contrast and saturation enhanced"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -33356,7 +33455,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==5	// fr
 	"Balance des blancs faite"
 #elif L==6	// gn
-	"Balance de blancos realizado"		// Okoteve traducción
+	"Balance de blancos realizado"	// Okoteve traducción
 #elif L==7	// it
 	"Bilanciamento di bianco realizzato"
 #elif L==8	// pl
@@ -33364,7 +33463,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #elif L==9	// pt
 	"Balan&ccedil;o de branco realizado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"White balance made"		// Çeviri lazim!
 #endif
 	};
 
@@ -33389,7 +33488,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==9	// pt
 	"C&iacute;rculo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Circle"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -33403,7 +33502,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==5	// fr
 	"Ellipse"
 #elif L==6	// gn
-	"Elipse"		// Okoteve traducción
+	"Elipse"	// Okoteve traducción
 #elif L==7	// it
 	"Ellisse"
 #elif L==8	// pl
@@ -33411,7 +33510,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==9	// pt
 	"Elipse"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ellipse"	// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -33425,7 +33524,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==5	// fr
 	"Ovale"
 #elif L==6	// gn
-	"&Oacute;valo"		// Okoteve traducción
+	"&Oacute;valo"	// Okoteve traducción
 #elif L==7	// it
 	"Ovale"
 #elif L==8	// pl
@@ -33433,7 +33532,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==9	// pt
 	"Ovalo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Oval"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -33455,7 +33554,7 @@ const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 #elif L==9	// pt
 	"Ret&acirc;ngulo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Rectangle"		// Çeviri lazim!
 #endif
 	};
 
@@ -33479,7 +33578,7 @@ const char *Txt_Photo_removed =
 #elif L==9	// pt
 	"Fotografia removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Photo removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_photos =
@@ -33502,7 +33601,7 @@ const char *Txt_photos =
 #elif L==9	// pt
 	"fotos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"photos";	// Çeviri lazim!
 #endif
 
 const char *Txt_XxY_pixels_or_higher =
@@ -33525,7 +33624,7 @@ const char *Txt_XxY_pixels_or_higher =
 #elif L==9	// pt
 	"pixels ou superior";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"pixels or higher";		// Çeviri lazim!
 #endif
 
 const char *Txt_Place =		// A particular spot or area
@@ -33548,7 +33647,7 @@ const char *Txt_Place =		// A particular spot or area
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Place";	// Çeviri lazim!
 #endif
 
 const char *Txt_Place_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -33571,7 +33670,7 @@ const char *Txt_Place_X_removed =	// Warning: it is very important to include %s
 #elif L==9	// pt
 	"Lugar <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Place <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Place_unspecified =
@@ -33594,7 +33693,7 @@ const char *Txt_Place_unspecified =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o indeterminada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Place unspecified";		// Çeviri lazim!
 #endif
 
 const char *Txt_Places =
@@ -33617,7 +33716,7 @@ const char *Txt_Places =
 #elif L==9	// pt
 	"Localiza&ccedil;oes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Places";	// Çeviri lazim!
 #endif
 
 const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
@@ -33642,7 +33741,7 @@ const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by place"		// Çeviri lazim!
 #endif
 	,
 	[Plc_ORDER_BY_NUM_CTRS] =
@@ -33665,7 +33764,7 @@ const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por n&uacute;mero de graus"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by no. of degrees"		// Çeviri lazim!
 #endif
 	};
 
@@ -33691,7 +33790,7 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 #elif L==9	// pt
 	"Localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Place"	// Çeviri lazim!
 #endif
 	,
 	[Plc_ORDER_BY_NUM_CTRS] =
@@ -33761,7 +33860,7 @@ const char *Txt_Play =	// To play a game match
 #elif L==9	// pt
 	"Jogar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Play";		// Çeviri lazim!
 #endif
 
 const char *Txt_Players =	// Match players
@@ -33784,7 +33883,7 @@ const char *Txt_Players =	// Match players
 #elif L==9	// pt
 	"Jogadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Players";	// Çeviri lazim!
 #endif
 
 const char *Txt_Please_check_your_email_address =
@@ -33830,7 +33929,7 @@ const char *Txt_Please_confirm_your_email_address =
 #elif L==9	// pt
 	"Por favor, confirme seu endere&ccedil;o de email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please confirm your email address.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Please_enter_your_ID =
@@ -33911,7 +34010,11 @@ const char *Txt_Please_fill_in_your_ID =
 	" pois facilita o processo de registro"
 	" de usu&aacute;rios nas disciplinas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please fill in your ID."
+	" It is an optional data,"
+	" but it is recommended that you fill it"
+	" because it facilitates the registration process"
+	" of users in the courses.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality =
@@ -33942,7 +34045,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_country_nationali
 	"Por favor, preencha o seu cart&atilde;o,"
 	" incluindo seu pa&iacute;s (nacionalidade).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please fill in your country (nationality).";	// Çeviri lazim!
 #endif
 
 const char *Txt_Please_fill_in_your_record_card_including_your_name =
@@ -33974,7 +34077,8 @@ const char *Txt_Please_fill_in_your_record_card_including_your_name =
 	"Por favor, preencha o cart&atilde;o,"
 	" incluindo seu nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please fill in your record card,"
+	" including your name.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Please_fill_in_your_record_card_including_your_sex =
@@ -33995,7 +34099,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	" y compris votre sexe.";
 #elif L==6	// gn
 	"Por favor, rellene su ficha,"
-	" incluyendo el sexo.";				// Okoteve traducción
+	" incluyendo el sexo.";		// Okoteve traducción
 #elif L==7	// it
 	"Per favore, compila la tua scheda,"
 	" compreso il sesso.";
@@ -34006,7 +34110,8 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	"Por favor, preencha o cart&atilde;o,"
 	" incluindo o seu sexo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please fill in your record card,"
+	" including your sex.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Please_check_your_privacy_settings =
@@ -34029,7 +34134,7 @@ const char *Txt_Please_check_your_privacy_settings =
 #elif L==9	// pt
 	"Por favor, verifique suas configura&ccedil;&otilde;es de privacidade.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please review your privacy settings.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Please_review_your_answers_before_submitting_the_exam =
@@ -34052,7 +34157,7 @@ const char *Txt_Please_review_your_answers_before_submitting_the_exam =
 #elif L==9	// pt
 	"Por favor, revise suas respostas antes de enviar o exame.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please review your answers before submitting the exam.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Please_select_the_country_of_your_institution =
@@ -34075,7 +34180,7 @@ const char *Txt_Please_select_the_country_of_your_institution =
 #elif L==9	// pt
 	"Por favor, selecione o pa&iacute;s da sua institui&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please, select the country of your institution.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Please_select_your_center =
@@ -34098,7 +34203,7 @@ const char *Txt_Please_select_your_center =
 #elif L==9	// pt
 	"Por favor, selecione seu centro.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please, select your center.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Please_select_your_department =
@@ -34121,7 +34226,7 @@ const char *Txt_Please_select_your_department =
 #elif L==9	// pt
 	"Por favor, selecione seu departamento.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please, select your department.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Please_select_your_institution =
@@ -34144,7 +34249,7 @@ const char *Txt_Please_select_your_institution =
 #elif L==9	// pt
 	"Por favor, selecione sua institui&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please, select your institution.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications =
@@ -34167,7 +34272,7 @@ const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_o
 #elif L==9	// pt
 	"Por favor, especifique se voc&ecirc; deseja baixar o banco de perguntas de outros aplicativos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please specify if you allow downloading the question bank from other applications.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Please_wait_ =
@@ -34190,7 +34295,7 @@ const char *Txt_Please_wait_ =
 #elif L==9	// pt
 	"Espere, por favor&hellip;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Please wait&hellip;";		// Çeviri lazim!
 #endif
 
 const char *Txt_Plugin =
@@ -34213,7 +34318,7 @@ const char *Txt_Plugin =
 #elif L==9	// pt
 	"Plugin";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Plugin";	// Çeviri lazim!
 #endif
 
 const char *Txt_Plugin_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -34236,7 +34341,7 @@ const char *Txt_Plugin_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Plugin <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Plugin <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Plugins =
@@ -34251,7 +34356,7 @@ const char *Txt_Plugins =
 #elif L==5	// fr
 	"Plugins";
 #elif L==6	// gn
-	"Complementos";		// Okoteve traducción
+	"Complementos";	// Okoteve traducción
 #elif L==7	// it
 	"Plugin";
 #elif L==8	// pl
@@ -34259,7 +34364,7 @@ const char *Txt_Plugins =
 #elif L==9	// pt
 	"Plugins";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Plugins";	// Çeviri lazim!
 #endif
 
 const char *Txt_Possibly_duplicate_users =
@@ -34282,7 +34387,7 @@ const char *Txt_Possibly_duplicate_users =
 #elif L==9	// pt
 	"Usu&aacute;rios possivelmente duplicados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Possibly duplicate users";		// Çeviri lazim!
 #endif
 
 
@@ -34306,7 +34411,7 @@ const char *Txt_Post =	// Publish (verb)
 #elif L==9	// pt
 	"Publicar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post";		// Çeviri lazim!
 #endif
 
 const char *Txt_Present =
@@ -34329,7 +34434,7 @@ const char *Txt_Present =
 #elif L==9	// pt
 	"Presente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Present";	// Çeviri lazim!
 #endif
 
 const char *Txt_Presents =
@@ -34352,7 +34457,7 @@ const char *Txt_Presents =
 #elif L==9	// pt
 	"Presentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Presents";	// Çeviri lazim!
 #endif
 
 const char *Txt_Print =
@@ -34375,7 +34480,7 @@ const char *Txt_Print =
 #elif L==9	// pt
 	"Imprimir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Print";	// Çeviri lazim!
 #endif
 
 const char *Txt_Privacy =
@@ -34423,7 +34528,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==9	// pt
 	"Desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	 [Pri_VISIBILITY_USER] =
@@ -34446,7 +34551,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==9	// pt
 	"Vis&iacute;vel por mim e meus professores / meus estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible by me and my teachers / my students"			// Çeviri lazim!
 #endif
 	,
 	 [Pri_VISIBILITY_COURSE] =
@@ -34469,7 +34574,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==9	// pt
 	"Vis&iacute;vel por usu&aacute;rios com quem compartilho disciplinas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible by users with whom I share courses"			// Çeviri lazim!
 #endif
 	,
 	 [Pri_VISIBILITY_SYSTEM] =
@@ -34492,7 +34597,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==9	// pt
 	"Vis&iacute;vel por qualquer usu&aacute;rio logado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible by any logged user"			// Çeviri lazim!
 #endif
 	,
 	 [Pri_VISIBILITY_WORLD] =
@@ -34515,7 +34620,7 @@ const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY] =
 #elif L==9	// pt
 	"Vis&iacute;vel em todo o mundo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible by everyone"		// Çeviri lazim!
 #endif
 	};
 
@@ -34539,7 +34644,7 @@ const char *Txt_Private_available_to_certain_users_identified =
 #elif L==9	// pt
 	"Privado, dispon&iacute;vel para alguns usu&aacute;rios identificados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Private, available to certain users identified";		// Çeviri lazim!
 #endif
 
 const char *Txt_project =
@@ -34562,7 +34667,7 @@ const char *Txt_project =
 #elif L==9	// pt
 	"projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"project";	// Çeviri lazim!
 #endif
 
 const char *Txt_Project_assessment =
@@ -34585,7 +34690,7 @@ const char *Txt_Project_assessment =
 #elif L==9	// pt
 	"Avalia&ccedil;&atilde;o do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Project assessment";		// Çeviri lazim!
 #endif
 
 const char *Txt_project_assessment =
@@ -34608,7 +34713,7 @@ const char *Txt_project_assessment =
 #elif L==9	// pt
 	"avalia&ccedil;&atilde;o do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"project assessment";			// Çeviri lazim!
 #endif
 
 const char *Txt_Project_documents =
@@ -34631,7 +34736,7 @@ const char *Txt_Project_documents =
 #elif L==9	// pt
 	"Documentos do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Project documents";		// Çeviri lazim!
 #endif
 
 const char *Txt_project_documents =
@@ -34654,7 +34759,7 @@ const char *Txt_project_documents =
 #elif L==9	// pt
 	"documentos do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"project documents";		// Çeviri lazim!
 #endif
 
 const char *Txt_Project_files =
@@ -34677,7 +34782,7 @@ const char *Txt_Project_files =
 #elif L==9	// pt
 	"Arquivos do projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Project files";		// Çeviri lazim!
 #endif
 
 const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
@@ -34702,7 +34807,7 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Data da cria&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Date of creation"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_END_TIME] =
@@ -34725,7 +34830,7 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"&Uacute;ltima edi&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Last edition"			// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_TITLE] =
@@ -34748,7 +34853,7 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"T&iacute;tulo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Title"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_DEPARTMENT] =
@@ -34771,7 +34876,7 @@ const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Departamento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Department"	// Çeviri lazim!
 #endif
 	};
 
@@ -34797,7 +34902,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data de cria&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by date of creation"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_END_TIME] =
@@ -34820,7 +34925,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por data da &uacute;ltima edi&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by date of last edition"				// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_TITLE] =
@@ -34843,7 +34948,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por t&iacute;tulo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by title"			// Çeviri lazim!
 #endif
 	,
 	[Prj_ORDER_DEPARTMENT] =
@@ -34866,7 +34971,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==9	// pt
 	"Classificar por departamento"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by department"		// Çeviri lazim!
 #endif
 	};
 
@@ -34890,7 +34995,7 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Projeto <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Project <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
@@ -34915,7 +35020,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD] =
@@ -34938,7 +35043,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Student"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT] =
@@ -34961,7 +35066,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Tutor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tutor"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL] =
@@ -34984,7 +35089,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Avaliador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Evaluator"	// Çeviri lazim!
 #endif
 	};
 
@@ -35010,7 +35115,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_UNK][Usr_SEX_FEMALE] =
@@ -35033,7 +35138,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_UNK][Usr_SEX_MALE] =
@@ -35056,7 +35161,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_UNK][Usr_SEX_ALL] =
@@ -35079,7 +35184,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD][Usr_SEX_UNKNOWN] =
@@ -35102,7 +35207,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD][Usr_SEX_FEMALE] =
@@ -35125,7 +35230,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD][Usr_SEX_MALE] =
@@ -35148,7 +35253,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD][Usr_SEX_ALL] =
@@ -35171,7 +35276,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT][Usr_SEX_UNKNOWN] =
@@ -35194,7 +35299,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"tutor"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT][Usr_SEX_FEMALE] =
@@ -35217,7 +35322,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"tutor"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT][Usr_SEX_MALE] =
@@ -35240,7 +35345,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"tutor"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT][Usr_SEX_ALL] =
@@ -35263,7 +35368,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"tutor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"tutor"		// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL][Usr_SEX_UNKNOWN] =
@@ -35286,7 +35391,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"evaluator"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL][Usr_SEX_FEMALE] =
@@ -35309,7 +35414,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"evaluator"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL][Usr_SEX_MALE] =
@@ -35332,7 +35437,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"evaluator"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL][Usr_SEX_ALL] =
@@ -35355,7 +35460,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS]
 #elif L==9	// pt
 	"avaliador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"evaluator"	// Çeviri lazim!
 #endif
 	};
 
@@ -35381,7 +35486,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD] =
@@ -35427,7 +35532,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Tutores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tutors"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL] =
@@ -35450,7 +35555,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Avaliadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Evaluators"	// Çeviri lazim!
 #endif
 	};
 
@@ -35476,7 +35581,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_STD] =
@@ -35499,7 +35604,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_TUT] =
@@ -35522,7 +35627,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"tutores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"tutors"	// Çeviri lazim!
 #endif
 	,
 	[Prj_ROLE_EVL] =
@@ -35545,7 +35650,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"avaliadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"evaluators"	// Çeviri lazim!
 #endif
 	};
 
@@ -35563,7 +35668,7 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 #elif L==5	// fr
 	"Projet nouveau"
 #elif L==6	// gn
-	"Proyecto nuevo"		// Okoteve traducción
+	"Proyecto nuevo"	// Okoteve traducción
 #elif L==7	// it
 	"Progetto nuovo"
 #elif L==8	// pl
@@ -35571,7 +35676,7 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 #elif L==9	// pt
 	"Projeto novo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"New project"		// Çeviri lazim!
 #endif
 	,
 	[Prj_PROPOSAL_MODIFIED] =
@@ -35594,7 +35699,7 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 #elif L==9	// pt
 	"Projeto proposto em chamadas anteriores, com modifica&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Project proposed in previous calls, with modifications"		// Çeviri lazim!
 #endif
 	,
 	[Prj_PROPOSAL_UNMODIFIED] =
@@ -35617,7 +35722,7 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 #elif L==9	// pt
 	"Projeto proposto em chamadas anteriores, sem modifica&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Project proposed in previous calls, without modifications"		// Çeviri lazim!
 #endif
 	};
 
@@ -35643,7 +35748,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 #elif L==9	// pt
 	"Projetos defeituosos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Faulty projects"	// Çeviri lazim!
 #endif
 	,
 	[Prj_FAULTLESS] =
@@ -35666,7 +35771,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 #elif L==9	// pt
 	"Projetos sem falhas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Faultless projects"	// Çeviri lazim!
 #endif
 	};
 
@@ -35692,7 +35797,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 #elif L==9	// pt
 	"Projetos atribu&iacute;dos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assigned projects"	// Çeviri lazim!
 #endif
 	,
 	[Prj_NONASSIG] =
@@ -35715,7 +35820,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 #elif L==9	// pt
 	"Projetos n&atilde;o atribu&iacute;dos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-assigned projects"		// Çeviri lazim!
 #endif
 	};
 
@@ -35741,7 +35846,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 #elif L==9	// pt
 	"Projeto atribu&iacute;do"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Assigned project"	// Çeviri lazim!
 #endif
 	,
 	[Prj_NONASSIG] =
@@ -35764,7 +35869,7 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 #elif L==9	// pt
 	"Projeto n&atilde;o atribu&iacute;do"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-assigned project"	// Çeviri lazim!
 #endif
 	};
 
@@ -35790,7 +35895,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
 #elif L==9	// pt
 	"Projetos ocultos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hidden projects"	// Çeviri lazim!
 #endif
 	,
 	[Prj_VISIBL] =
@@ -35813,7 +35918,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
 #elif L==9	// pt
 	"Projetos vis&iacute;veis"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible projects"	// Çeviri lazim!
 #endif
 	};
 
@@ -35837,7 +35942,7 @@ const char *Txt_Projects =
 #elif L==9	// pt
 	"Projetos (projetos de fim de grau, tese&hellip;)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Projects (end-of-degree projects, thesis&hellip;)";			// Çeviri lazim!
 #endif
 
 const char *Txt_Proposal =
@@ -35860,7 +35965,7 @@ const char *Txt_Proposal =
 #elif L==9	// pt
 	"Proposta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Proposal";	// Çeviri lazim!
 #endif
 
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences
@@ -35883,7 +35988,7 @@ const char *Txt_Public_agenda_USER =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Agenda p&uacute;blica de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s's public agenda";		// Çeviri lazim!
 #endif
 
 const char *Txt_public_FILES =
@@ -35906,7 +36011,7 @@ const char *Txt_public_FILES =
 #elif L==9	// pt
 	"p&uacute;blicos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"public";		// Çeviri lazim!
 #endif
 
 const char *Txt_Public_open_educational_resource_OER_for_everyone =
@@ -35929,7 +36034,7 @@ const char *Txt_Public_open_educational_resource_OER_for_everyone =
 #elif L==9	// pt
 	"P&uacute;blico, recurso educacional aberto (OER) para todos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Public, open educational resource for everyone";			// Çeviri lazim!
 #endif
 
 const char *Txt_Public_views =
@@ -35952,7 +36057,7 @@ const char *Txt_Public_views =
 #elif L==9	// pt
 	"Acessos p&uacute;blicos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Public views";			// Çeviri lazim!
 #endif
 
 const char *Txt_Publish_call_FOR_EXAM =
@@ -35975,7 +36080,7 @@ const char *Txt_Publish_call_FOR_EXAM =
 #elif L==9	// pt
 	"Publicar chamada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Publish call";			// Çeviri lazim!
 #endif
 
 const char *Txt_QR_code =
@@ -35998,7 +36103,7 @@ const char *Txt_QR_code =
 #elif L==9	// pt
 	"C&oacute;digo QR";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"QR code";		// Çeviri lazim!
 #endif
 
 const char *Txt_question =
@@ -36021,7 +36126,7 @@ const char *Txt_question =
 #elif L==9	// pt
 	"pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Question =
@@ -36044,7 +36149,7 @@ const char *Txt_Question =
 #elif L==9	// pt
 	"Pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Question_bank =
@@ -36067,7 +36172,7 @@ const char *Txt_Question_bank =
 #elif L==9	// pt
 	"Banco de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Question bank";	// Çeviri lazim!
 #endif
 
 const char *Txt_Question_code_X =	// Warning: it is very important to include %ld in the following sentences
@@ -36090,7 +36195,7 @@ const char *Txt_Question_code_X =	// Warning: it is very important to include %l
 #elif L==9	// pt
 	"Pergunta com c&oacute;digo %ld";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Code %ld";				// Çeviri lazim!
 #endif
 
 const char *Txt_Question_modified =
@@ -36113,7 +36218,7 @@ const char *Txt_Question_modified =
 #elif L==9	// pt
 	"Pergunta modificada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Question modified.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Question_removed =
@@ -36128,7 +36233,7 @@ const char *Txt_Question_removed =
 #elif L==5	// fr
 	"Question supprim&eacute;e.";
 #elif L==6	// gn
-	"Pregunta eliminada.";		// Okoteve traducción
+	"Pregunta eliminada.";	// Okoteve traducción
 #elif L==7	// it
 	"Domanda rimossa.";
 #elif L==8	// pl
@@ -36136,7 +36241,7 @@ const char *Txt_Question_removed =
 #elif L==9	// pt
 	"Pergunta removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Question removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_questions =
@@ -36159,7 +36264,7 @@ const char *Txt_questions =
 #elif L==9	// pt
 	"perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Questions =
@@ -36197,7 +36302,7 @@ const char *Txt_Questions_and_problems =
 #elif L==5	// fr
 	"Questions et probl&egrave;mes";
 #elif L==6	// gn
-	"Consultas y problemas";		// Okoteve traducción
+	"Consultas y problemas";	// Okoteve traducción
 #elif L==7	// it
 	"Domande e problemi";
 #elif L==8	// pl
@@ -36205,7 +36310,7 @@ const char *Txt_Questions_and_problems =
 #elif L==9	// pt
 	"Perguntas e problemas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Questions and problems";	// Çeviri lazim!
 #endif
 
 const char *Txt_QUESTIONS_invalid =
@@ -36228,7 +36333,7 @@ const char *Txt_QUESTIONS_invalid =
 #elif L==9	// pt
 	"canceladas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"invalid";	// Çeviri lazim!
 #endif
 
 const char *Txt_Questions_removed_X =	// Warning: it is very important to include %u in the following sentences
@@ -36243,7 +36348,7 @@ const char *Txt_Questions_removed_X =	// Warning: it is very important to includ
 #elif L==5	// fr
 	"Questions supprim&eacute;es: %u.";
 #elif L==6	// gn
-	"Preguntas eliminadas: %u.";		// Okoteve traducción
+	"Preguntas eliminadas: %u.";	// Okoteve traducción
 #elif L==7	// it
 	"Domande rimosse: %u.";
 #elif L==8	// pl
@@ -36251,7 +36356,7 @@ const char *Txt_Questions_removed_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Perguntas removidas: %u.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Questions removed: %u.";	// Çeviri lazim!
 #endif
 
 const char *Txt_QUESTIONS_valid =
@@ -36274,7 +36379,7 @@ const char *Txt_QUESTIONS_valid =
 #elif L==9	// pt
 	"v&aacute;lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"valid";		// Çeviri lazim!
 #endif
 
 const char *Txt_Quota_exceeded =
@@ -36297,7 +36402,7 @@ const char *Txt_Quota_exceeded =
 #elif L==9	// pt
 	"Quota excedida!";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Quota exceeded!";		// Çeviri lazim!
 #endif
 
 const char *Txt_ReaBRders =
@@ -36320,7 +36425,7 @@ const char *Txt_ReaBRders =
 #elif L==9	// pt
 	"Lei-<br />tores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Rea-<br />ders";	// Çeviri lazim!
 #endif
 
 const char *Txt_Real_number_between_A_and_B_1 =
@@ -36343,7 +36448,7 @@ const char *Txt_Real_number_between_A_and_B_1 =
 #elif L==9	// pt
 	"N.&ordm; real entre";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Real number between";	// Çeviri lazim!
 #endif
 
 const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
@@ -36366,7 +36471,7 @@ const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
 #elif L==9	// pt
 	" e";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	" and";	// Çeviri lazim!
 #endif
 
 const char *Txt_Recommended_aspect_ratio =
@@ -36389,7 +36494,7 @@ const char *Txt_Recommended_aspect_ratio =
 #elif L==9	// pt
 	"Propor&ccedil;&atilde;o recomendada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Recommended aspect ratio";			// Çeviri lazim!
 #endif
 
 const char *Txt_Recommended_resolution =
@@ -36412,7 +36517,7 @@ const char *Txt_Recommended_resolution =
 #elif L==9	// pt
 	"Resolu&ccedil;&atilde;o recomendada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Recommended resolution";		// Çeviri lazim!
 #endif
 
 const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
@@ -36435,12 +36540,12 @@ const char *Txt_Record_card_of_THE_USER_X_has_been_removed =	// Warning: it is v
 #elif L==9	// pt
 	"Cart&atilde;o de registro de <strong>%s</strong> foi removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Record card of <strong>%s</strong> has been removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_record_cards_per_page =
 #if   L==1	// ca
-	"fichas por p&aacute;gina";		// Necessita traducció
+	"fichas por p&aacute;gina";	// Necessita traducció
 #elif L==2	// de
 	"Karteikarten pro Seite";
 #elif L==3	// en
@@ -36450,7 +36555,7 @@ const char *Txt_record_cards_per_page =
 #elif L==5	// fr
 	"cartes par page";
 #elif L==6	// gn
-	"fichas por p&aacute;gina";		// Okoteve traducción
+	"fichas por p&aacute;gina";	// Okoteve traducción
 #elif L==7	// it
 	"scheda per pagina";
 #elif L==8	// pl
@@ -36458,7 +36563,7 @@ const char *Txt_record_cards_per_page =
 #elif L==9	// pt
 	"cart&otilde;es por p&aacute;gina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"record cards per page";	// Çeviri lazim!
 #endif
 
 const char *Txt_Record_field_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -36481,7 +36586,7 @@ const char *Txt_Record_field_X_removed =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"Campo de cart&atilde;o <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Record field <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
@@ -36506,7 +36611,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"Oculto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hidden"	// Çeviri lazim!
 #endif
 	,
 	[Rec_VISIBLE_FIELD] =
@@ -36529,7 +36634,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"Vis&iacute;vel, mas n&atilde;o edit&aacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible but not editable"	// Çeviri lazim!
 #endif
 	,
 	[Rec_EDITABLE_FIELD] =
@@ -36552,7 +36657,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"Vis&iacute;vel e edit&aacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Visible and editable"	// Çeviri lazim!
 #endif
 	};
 
@@ -36587,7 +36692,8 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	"De agora em diante,"
 	" os estudantes n&atilde;o podem ver o campo <strong>%s</strong> dos cart&otilde;es."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"From now on students"
+	" can not see the field <strong>%s</strong> of the records."	// Çeviri lazim!
 #endif
 	,
 	[Rec_VISIBLE_FIELD] =
@@ -36619,7 +36725,8 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	"De agora em diante,"
 	" os estudantes podem visualizar, mas n&atilde;o editar o campo <strong>%s</strong> dos cart&otilde;es."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"From now on students"
+	" can view but not edit the field <strong>%s</strong> of the records."		// Çeviri lazim!
 #endif
 	,
 	[Rec_EDITABLE_FIELD] =
@@ -36651,7 +36758,8 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warni
 	"De agora em diante,"
 	" os estudantes podem visualizar e editar o campo <strong>%s</strong> dos cart&otilde;es."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"From now on students"
+	" can view and edit the field <strong>%s</strong> of the records."	// Çeviri lazim!
 #endif
 	};
 
@@ -36677,7 +36785,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"oculto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"hidden"	// Çeviri lazim!
 #endif
 	,
 	[Rec_VISIBLE_FIELD] =
@@ -36700,7 +36808,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"vis&iacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"visible"	// Çeviri lazim!
 #endif
 	,
 	[Rec_EDITABLE_FIELD] =
@@ -36723,7 +36831,7 @@ const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY] =
 #elif L==9	// pt
 	"edit&aacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"editable"	// Çeviri lazim!
 #endif
 	};
 
@@ -36747,7 +36855,7 @@ const char *Txt_Record_fields =
 #elif L==9	// pt
 	"Campos de cart&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Record fields";	// Çeviri lazim!
 #endif
 
 const char *Txt_Recipients =
@@ -36770,7 +36878,7 @@ const char *Txt_Recipients =
 #elif L==9	// pt
 	"Destinat&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Recipients";		// Çeviri lazim!
 #endif
 
 const char *Txt_Register =
@@ -36793,7 +36901,7 @@ const char *Txt_Register =
 #elif L==9	// pt
 	"Registrar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_students =
@@ -36816,7 +36924,7 @@ const char *Txt_Register_students =
 #elif L==9	// pt
 	"Registrar estudantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register students";		// Çeviri lazim!
 #endif
 
 const char *Txt_Register_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
@@ -36839,7 +36947,7 @@ const char *Txt_Register_students_in_COURSE_X =	// Warning: it is very important
 #elif L==9	// pt
 	"Registrar estudantes em <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register students in <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_the_users_indicated_in_step_1 =
@@ -36862,13 +36970,13 @@ const char *Txt_Register_the_users_indicated_in_step_1 =
 #elif L==9	// pt
 	"Registrar os utilizadores que est&atilde;o na lista";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Add (register the users indicated in step 1)";				// Çeviri lazim!
 #endif
 
 const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated =
 #if   L==1	// ca
 	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";	// Necessita traducció
+	" y eliminar los <strong>no</strong> indicados)";		// Necessita traducció
 #elif L==2	// de
 	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste,"
 	" und Anmeldung Sie die Benutzer, die auf der Liste";
@@ -36883,7 +36991,7 @@ const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_
 	" et inscrire les utilisateurs qui sont sur la liste";
 #elif L==6	// gn
 	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";	// Okoteve traducción
+	" y eliminar los <strong>no</strong> indicados)";		// Okoteve traducción
 #elif L==7	// it
 	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista,"
 	" e registrare gli utenti che invece lo sono";
@@ -36894,7 +37002,8 @@ const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_
 	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista,"
 	" e registrar os utilizadores que est&atilde;o na lista";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update (register the users indicated in step 1"
+	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_teacher =
@@ -36917,7 +37026,7 @@ const char *Txt_Register_teacher =
 #elif L==9	// pt
 	"Registrar professor/a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register teacher";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
@@ -36940,7 +37049,7 @@ const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
 #elif L==9	// pt
 	"Registrar utilizador/a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register user";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_me_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -36963,7 +37072,7 @@ const char *Txt_Register_me_in_X =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Registrar me em <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register me in <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -36986,7 +37095,7 @@ const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important
 #elif L==9	// pt
 	"Registrar na disciplina <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register in the course <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Register_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -37018,7 +37127,8 @@ const char *Txt_Register_USER_as_an_administrator_of_the_center_X =	// Warning: 
 	"Registrar como administrador"
 	" do centro <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register as an administrator"
+	" of the center <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Register_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -37050,7 +37160,8 @@ const char *Txt_Register_USER_as_an_administrator_of_the_degree_X =	// Warning: 
 	"Registrar como administrador"
 	" do grau <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register as an administrator"
+	" of the degree <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
@@ -37082,7 +37193,8 @@ const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warn
 	"Registrar como administrador"
 	" da institui&ccedil;&atilde;o <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Register as an administrator"
+	" of the institution <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Reject =
@@ -37105,7 +37217,7 @@ const char *Txt_Reject =
 #elif L==9	// pt
 	"Rejeitar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reject";	// Çeviri lazim!
 #endif
 
 const char *Txt_Removal_not_allowed =
@@ -37128,7 +37240,7 @@ const char *Txt_Removal_not_allowed =
 #elif L==9	// pt
 	"Remo&ccedil;&atilde;o n&atilde;o permitida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Removal not allowed";			// Çeviri lazim!
 #endif
 
 const char *Txt_Remove =
@@ -37151,7 +37263,7 @@ const char *Txt_Remove =
 #elif L==9	// pt
 	"Remover";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_account =
@@ -37174,7 +37286,7 @@ const char *Txt_Remove_account =
 #elif L==9	// pt
 	"Remover conta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove account";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_all_students =
@@ -37197,7 +37309,7 @@ const char *Txt_Remove_all_students =
 #elif L==9	// pt
 	"Tirar todos estudantes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove all students";			// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_assignment =
@@ -37220,7 +37332,7 @@ const char *Txt_Remove_assignment =
 #elif L==9	// pt
 	"Remover atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove assignment";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_event =
@@ -37243,7 +37355,7 @@ const char *Txt_Remove_event =
 #elif L==9	// pt
 	"Remover evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove event";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_exam =
@@ -37266,7 +37378,7 @@ const char *Txt_Remove_exam =
 #elif L==9	// pt
 	"Remover exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove exam";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_file =
@@ -37289,7 +37401,7 @@ const char *Txt_Remove_file =
 #elif L==9	// pt
 	"Remover arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove file";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_files_older_than_PART_1_OF_2 =
@@ -37312,7 +37424,7 @@ const char *Txt_Remove_files_older_than_PART_1_OF_2 =
 #elif L==9	// pt
 	"Remover arquivos com mais de";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove files older than";			// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_files_older_than_PART_2_OF_2 =
@@ -37335,7 +37447,7 @@ const char *Txt_Remove_files_older_than_PART_2_OF_2 =
 #elif L==9	// pt
 	"meses.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"months.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_folder =
@@ -37358,7 +37470,7 @@ const char *Txt_Remove_folder =
 #elif L==9	// pt
 	"Remover diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove folder";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_game =
@@ -37381,7 +37493,7 @@ const char *Txt_Remove_game =
 #elif L==9	// pt
 	"Remover jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove folder";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_group =
@@ -37404,7 +37516,7 @@ const char *Txt_Remove_group =
 #elif L==9	// pt
 	"Remover grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_item =
@@ -37427,7 +37539,7 @@ const char *Txt_Remove_item =
 #elif L==9	// pt
 	"Remover item";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove item";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_link =
@@ -37450,7 +37562,7 @@ const char *Txt_Remove_link =
 #elif L==9	// pt
 	"Remover liga&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove link";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_logo =
@@ -37473,7 +37585,7 @@ const char *Txt_Remove_logo =
 #elif L==9	// pt
 	"Remover logotipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove logo";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_match =	// of a game
@@ -37496,7 +37608,7 @@ const char *Txt_Remove_match =	// of a game
 #elif L==9	// pt
 	"Remover jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove match";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me =
@@ -37519,7 +37631,7 @@ const char *Txt_Remove_me =
 #elif L==9	// pt
 	"Tirar me";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_as_an_administrator =
@@ -37542,7 +37654,7 @@ const char *Txt_Remove_me_as_an_administrator =
 #elif L==9	// pt
 	"Tirar me como administrador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me as an administrator";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -37574,7 +37686,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_center_X =	// Warning: it i
 	"Tirar me como administrador"
 	" do centro <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me as an administrator"
+	" of the center <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -37606,7 +37719,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_degree_X =	// Warning: it i
 	"Tirar me como administrador"
 	" do grau <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me as an administrator"
+	" of the degree <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
@@ -37638,7 +37752,8 @@ const char *Txt_Remove_me_as_an_administrator_of_the_institution_X =	// Warning:
 	"Tirar me como administrador"
 	" da institu&ccedil;&atilde;o <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me as an administrator"
+	" of the institution <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_from_this_course =
@@ -37661,7 +37776,7 @@ const char *Txt_Remove_me_from_this_course =
 #elif L==9	// pt
 	"Tirar me desta disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me from this course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
@@ -37684,7 +37799,7 @@ const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important t
 #elif L==9	// pt
 	"Tirar me de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove me from <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_old_files =
@@ -37707,7 +37822,7 @@ const char *Txt_Remove_old_files =
 #elif L==9	// pt
 	"Remover arquivos antigos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove old files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_photo =
@@ -37730,7 +37845,7 @@ const char *Txt_Remove_photo =
 #elif L==9	// pt
 	"Remover foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove photo";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_project =
@@ -37753,7 +37868,7 @@ const char *Txt_Remove_project =
 #elif L==9	// pt
 	"Remover projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove project";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_question =
@@ -37776,7 +37891,7 @@ const char *Txt_Remove_question =
 #elif L==9	// pt
 	"Remover pergunta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove question";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_questions =
@@ -37799,7 +37914,7 @@ const char *Txt_Remove_questions =
 #elif L==9	// pt
 	"Remover perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_record_field =
@@ -37822,7 +37937,7 @@ const char *Txt_Remove_record_field =
 #elif L==9	// pt
 	"Remover campo de cart&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove record field";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_session =
@@ -37845,7 +37960,7 @@ const char *Txt_Remove_session =
 #elif L==9	// pt
 	"Remover sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove session";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_set_of_questions =
@@ -37868,7 +37983,7 @@ const char *Txt_Remove_set_of_questions =
 #elif L==9	// pt
 	"Remover conjunto de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove set of questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_survey =
@@ -37891,7 +38006,7 @@ const char *Txt_Remove_survey =
 #elif L==9	// pt
 	"Remover inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_thread =
@@ -37914,7 +38029,7 @@ const char *Txt_Remove_thread =
 #elif L==9	// pt
 	"Remover discuss&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove thread";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_the_users_not_indicated_in_step_1 =
@@ -37937,7 +38052,7 @@ const char *Txt_Remove_the_users_not_indicated_in_step_1 =
 #elif L==9	// pt
 	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove the users <strong>not</strong> indicated in step 1";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_the_users_indicated_in_step_1 =
@@ -37960,7 +38075,7 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 #elif L==9	// pt
 	"Tirar os utilizadores que est&atilde;o na lista";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove the users indicated in step 1";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_type_of_group =
@@ -37983,7 +38098,7 @@ const char *Txt_Remove_type_of_group =
 #elif L==9	// pt
 	"Remover tipo de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove type of group";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_user_from_this_course =
@@ -38006,7 +38121,7 @@ const char *Txt_Remove_user_from_this_course =
 #elif L==9	// pt
 	"Tirar utilizador desta disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove user from this course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_from_this_project =	// Warning: it is very important to include %s in the following sentences
@@ -38029,7 +38144,7 @@ const char *Txt_Remove_USER_from_this_project =	// Warning: it is very important
 #elif L==9	// pt
 	"Tirar %s deste projeto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove %s from this project";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator =
@@ -38052,7 +38167,7 @@ const char *Txt_Remove_USER_as_an_administrator =
 #elif L==9	// pt
 	"Tirar como administrador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove as an administrator";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -38084,7 +38199,8 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_center_X =	// Warning: it
 	"Tirar como administrador"
 	" do centro <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove as an administrator"
+	" of the center <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -38116,7 +38232,8 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X =	// Warning: it
 	"Tirar como administrador"
 	" do grau <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove as an administrator"
+	" of the degree <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
@@ -38148,7 +38265,8 @@ const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X =	// Warnin
 	"Tirar como administrador"
 	" da institu&ccedil;&atilde;o <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove as an administrator"
+	" of the institution <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Remove_USER_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
@@ -38171,7 +38289,7 @@ const char *Txt_Remove_USER_from_THE_COURSE_X =	// Warning: it is very important
 #elif L==9	// pt
 	"Tirar de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Remove from <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Reply =
@@ -38194,7 +38312,7 @@ const char *Txt_Reply =
 #elif L==9	// pt
 	"Responder";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reply";	// Çeviri lazim!
 #endif
 
 const char *Txt_Reply_again =
@@ -38209,7 +38327,7 @@ const char *Txt_Reply_again =
 #elif L==5	// fr
 	"R&eacute;pondre &agrave; nouveau";
 #elif L==6	// gn
-	"Responder otra vez";		// Okoteve traducción
+	"Responder otra vez";	// Okoteve traducción
 #elif L==7	// it
 	"Rispondere nuovamente";
 #elif L==8	// pl
@@ -38217,7 +38335,7 @@ const char *Txt_Reply_again =
 #elif L==9	// pt
 	"Responder novamente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reply again";		// Çeviri lazim!
 #endif
 
 const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
@@ -38240,7 +38358,7 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 #elif L==9	// pt
 	"Mensagem de resposta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reply message";	// Çeviri lazim!
 #endif
 
 const char *Txt_Report =
@@ -38286,7 +38404,7 @@ const char *Txt_Report_of_use_of_PLATFORM =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Relat&oacute;rio de utiliza&ccedil;&atilde;o de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Report of use of %s";	// Çeviri lazim!
 #endif
 
 const char *Txt_Report_possible_duplicate_user =
@@ -38309,7 +38427,7 @@ const char *Txt_Report_possible_duplicate_user =
 #elif L==9	// pt
 	"Denunciar poss&iacute;vel usu&aacute;rio duplicado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Report possible duplicate user";		// Çeviri lazim!
 #endif
 
 const char *Txt_Requester =
@@ -38332,7 +38450,7 @@ const char *Txt_Requester =
 #elif L==9	// pt
 	"Requerente";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Requester";	// Çeviri lazim!
 #endif
 
 const char *Txt_Required_knowledge =
@@ -38355,7 +38473,7 @@ const char *Txt_Required_knowledge =
 #elif L==9	// pt
 	"Conhecimento necess&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Required knowledge";		// Çeviri lazim!
 #endif
 
 const char *Txt_Required_materials =
@@ -38378,7 +38496,7 @@ const char *Txt_Required_materials =
 #elif L==9	// pt
 	"Materiais necess&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Required materials";		// Çeviri lazim!
 #endif
 
 const char *Txt_Required_reading =
@@ -38401,7 +38519,7 @@ const char *Txt_Required_reading =
 #elif L==9	// pt
 	"Leitura obrigat&oacute;ria";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Required reading";	// Çeviri lazim!
 #endif
 
 const char *Txt_Reset =
@@ -38424,7 +38542,7 @@ const char *Txt_Reset =
 #elif L==9	// pt
 	"Reiniciar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reset";	// Çeviri lazim!
 #endif
 
 const char *Txt_Reset_survey =
@@ -38447,7 +38565,7 @@ const char *Txt_Reset_survey =
 #elif L==9	// pt
 	"Reiniciar inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Reset survey";			// Çeviri lazim!
 #endif
 
 const char *Txt_Result =
@@ -38470,7 +38588,7 @@ const char *Txt_Result =
 #elif L==9	// pt
 	"Resultado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Result";	// Çeviri lazim!
 #endif
 
 const char *Txt_Result_visibility =
@@ -38485,7 +38603,7 @@ const char *Txt_Result_visibility =
 #elif L==5	// fr
 	"Visibilit&eacute; des r&eacute;sultats";
 #elif L==6	// gn
-	"Visibilidad de resultados";		// Okoteve traducción
+	"Visibilidad de resultados";	// Okoteve traducción
 #elif L==7	// it
 	"Visibilit&agrave; dei risultati";
 #elif L==8	// pl
@@ -38493,7 +38611,7 @@ const char *Txt_Result_visibility =
 #elif L==9	// pt
 	"Visibilidade dos resultados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Result visibility";		// Çeviri lazim!
 #endif
 
 const char *Txt_Results =
@@ -38516,7 +38634,7 @@ const char *Txt_Results =
 #elif L==9	// pt
 	"Resultados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Results";	// Çeviri lazim!
 #endif
 
 const char *Txt_Results_of_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -38539,7 +38657,7 @@ const char *Txt_Results_of_game_X =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Resultados do jogo &quot;%s&quot;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Results of game &quot;%s&quot;";	// Çeviri lazim!
 #endif
 
 const char *Txt_Results_of_exam_X =	// Warning: it is very important to include %s in the following sentences
@@ -38562,7 +38680,7 @@ const char *Txt_Results_of_exam_X =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Resultados do exame &quot;%s&quot;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Results of exam &quot;%s&quot;";	// Çeviri lazim!
 #endif
 
 const char *Txt_Results_of_match_X =	// Warning: it is very important to include %s in the following sentences
@@ -38585,7 +38703,7 @@ const char *Txt_Results_of_match_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Resultados do jogo &quot;%s&quot;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Results of match &quot;%s&quot;";		// Çeviri lazim!
 #endif
 
 const char *Txt_Results_of_session_X =	// Warning: it is very important to include %s in the following sentences
@@ -38608,7 +38726,7 @@ const char *Txt_Results_of_session_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Resultados da sess&atilde;o &quot;%s&quot;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Results of session &quot;%s&quot;";			// Çeviri lazim!
 #endif
 
 const char *Txt_results_per_page =
@@ -38631,7 +38749,7 @@ const char *Txt_results_per_page =
 #elif L==9	// pt
 	"resultados por p&aacute;gina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"results per page";		// Çeviri lazim!
 #endif
 
 const char *Txt_Resume =
@@ -38654,7 +38772,7 @@ const char *Txt_Resume =
 #elif L==9	// pt
 	"Retomar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Resume";	// Çeviri lazim!
 #endif
 
 const char *Txt_Retype_new_password =
@@ -38700,7 +38818,7 @@ const char *Txt_Role =
 #elif L==9	// pt
 	"Papel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Role";	// Çeviri lazim!
 #endif
 
 const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
@@ -38725,7 +38843,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"identificados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"identified"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_ALL_USRS] =
@@ -38748,7 +38866,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"identificados ou desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"identified or unknown"		// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_INS_ADMINS] =
@@ -38771,7 +38889,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de institu&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators of institutions"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_CTR_ADMINS] =
@@ -38794,7 +38912,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de centros"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators of centers"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_DEG_ADMINS] =
@@ -38817,7 +38935,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"administradores de graus"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"administrators of degrees"		// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_TEACHERS] =
@@ -38840,7 +38958,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teachers"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_NON_EDITING_TEACHERS] =
@@ -38863,7 +38981,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"professores n&atilde;o editores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teachers"		// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_STUDENTS] =
@@ -38886,7 +39004,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"students"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_USERS] =
@@ -38909,7 +39027,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_GUESTS] =
@@ -38932,7 +39050,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"convidados (sem disciplinas)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guests (without courses)"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_UNKNOWN_USRS] =
@@ -38955,7 +39073,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Sta_ROLE_ME] =
@@ -38978,7 +39096,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"eu"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"me"	// Çeviri lazim!
 #endif
 	};
 
@@ -39004,7 +39122,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_FEMALE] =
@@ -39027,7 +39145,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_MALE] =
@@ -39050,7 +39168,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_ALL] =
@@ -39073,7 +39191,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_UNKNOWN] =
@@ -39096,7 +39214,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_FEMALE] =
@@ -39119,7 +39237,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidada"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_MALE] =
@@ -39142,7 +39260,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_ALL] =
@@ -39165,7 +39283,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Convidado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_UNKNOWN] =
@@ -39188,7 +39306,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_FEMALE] =
@@ -39211,7 +39329,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_MALE] =
@@ -39234,7 +39352,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_ALL] =
@@ -39257,7 +39375,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_UNKNOWN] =
@@ -39280,7 +39398,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_FEMALE] =
@@ -39303,7 +39421,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_MALE] =
@@ -39326,7 +39444,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_ALL] =
@@ -39349,7 +39467,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_UNKNOWN] =
@@ -39372,7 +39490,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_FEMALE] =
@@ -39395,7 +39513,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professora n&atilde;o editora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_MALE] =
@@ -39418,7 +39536,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor n&atilde;o editor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_ALL] =
@@ -39441,7 +39559,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_UNKNOWN] =
@@ -39464,7 +39582,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -39487,7 +39605,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -39510,7 +39628,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -39533,7 +39651,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
@@ -39556,7 +39674,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
@@ -39579,7 +39697,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_MALE] =
@@ -39602,7 +39720,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_ALL] =
@@ -39625,7 +39743,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
@@ -39648,7 +39766,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
@@ -39671,7 +39789,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
@@ -39694,7 +39812,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
@@ -39717,7 +39835,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_UNKNOWN] =
@@ -39740,7 +39858,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_FEMALE] =
@@ -39763,7 +39881,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_MALE] =
@@ -39786,7 +39904,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_ALL] =
@@ -39809,7 +39927,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
@@ -39832,7 +39950,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superuser"		// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_FEMALE] =
@@ -39855,7 +39973,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superuser"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_MALE] =
@@ -39878,7 +39996,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superuser"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_ALL] =
@@ -39893,7 +40011,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"Superutilisateur/se"
 #elif L==6	// gn
-	"Superusuario/a"		// Okoteve traducción
+	"Superusuario/a"	// Okoteve traducción
 #elif L==7	// it
 	"Superutente"
 #elif L==8	// pl
@@ -39901,7 +40019,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Superutilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Superuser"		// Çeviri lazim!
 #endif
 	};
 
@@ -39909,7 +40027,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	{
 	[Rol_UNK][Usr_SEX_UNKNOWN] =
 #if   L==1	// ca
-	"desconocido/a"		// Necessita traducció
+	"desconocido/a"	// Necessita traducció
 #elif L==2	// de
 	"Unbekannter/e"
 #elif L==3	// en
@@ -39919,7 +40037,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"inconnu/e"
 #elif L==6	// gn
-	"desconocido/a"		// Okoteve traducción
+	"desconocido/a"	// Okoteve traducción
 #elif L==7	// it
 	"sconosciuto/a"
 #elif L==8	// pl
@@ -39927,7 +40045,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_FEMALE] =
@@ -39950,7 +40068,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_MALE] =
@@ -39973,12 +40091,12 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_ALL] =
 #if   L==1	// ca
-	"desconocido/a"		// Necessita traducció
+	"desconocido/a"	// Necessita traducció
 #elif L==2	// de
 	"Unbekannter/e"
 #elif L==3	// en
@@ -39988,7 +40106,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"inconnu/e"
 #elif L==6	// gn
-	"desconocido/a"		// Okoteve traducción
+	"desconocido/a"	// Okoteve traducción
 #elif L==7	// it
 	"sconosciuto/a"
 #elif L==8	// pl
@@ -39996,7 +40114,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecido/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_UNKNOWN] =
@@ -40019,7 +40137,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_FEMALE] =
@@ -40042,7 +40160,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidada"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_MALE] =
@@ -40065,7 +40183,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidado"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_ALL] =
@@ -40088,7 +40206,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"convidado/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"guest"		// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_UNKNOWN] =
@@ -40111,7 +40229,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_FEMALE] =
@@ -40134,7 +40252,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_MALE] =
@@ -40157,7 +40275,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Rol_USR][Usr_SEX_ALL] =
@@ -40180,7 +40298,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_UNKNOWN] =
@@ -40203,7 +40321,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_FEMALE] =
@@ -40226,7 +40344,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_MALE] =
@@ -40249,7 +40367,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_STD][Usr_SEX_ALL] =
@@ -40272,7 +40390,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"estudante"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"student"	// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_UNKNOWN] =
@@ -40295,7 +40413,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_FEMALE] =
@@ -40318,7 +40436,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professora n&atilde;o editora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_MALE] =
@@ -40341,7 +40459,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor n&atilde;o editor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_NET][Usr_SEX_ALL] =
@@ -40364,7 +40482,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a n&atilde;o editor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"non-editing teacher"		// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_UNKNOWN] =
@@ -40387,7 +40505,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -40410,7 +40528,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -40433,7 +40551,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -40456,7 +40574,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professor/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"teacher"	// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
@@ -40479,7 +40597,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_FEMALE] =
@@ -40502,7 +40620,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_MALE] =
@@ -40525,7 +40643,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_ALL] =
@@ -40548,7 +40666,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. degree"			// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_UNKNOWN] =
@@ -40571,7 +40689,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_FEMALE] =
@@ -40594,7 +40712,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_MALE] =
@@ -40617,7 +40735,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. center"	// Çeviri lazim!
 #endif
 	,
 	[Rol_CTR_ADM][Usr_SEX_ALL] =
@@ -40663,7 +40781,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. center"			// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_FEMALE] =
@@ -40686,7 +40804,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_MALE] =
@@ -40709,7 +40827,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_INS_ADM][Usr_SEX_ALL] =
@@ -40732,7 +40850,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"admin. institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"admin. institution"		// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_UNKNOWN] =
@@ -40770,7 +40888,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"superutilisateuse"
 #elif L==6	// gn
-	"superusuaria"		// Okoteve traducción
+	"superusuaria"	// Okoteve traducción
 #elif L==7	// it
 	"superutente"
 #elif L==8	// pl
@@ -40778,7 +40896,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superuser"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_MALE] =
@@ -40801,7 +40919,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superuser"	// Çeviri lazim!
 #endif
 	,
 	[Rol_SYS_ADM][Usr_SEX_ALL] =
@@ -40824,7 +40942,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"superutilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"superuser"		// Çeviri lazim!
 #endif
 	};
 
@@ -40850,7 +40968,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_FEMALE] =
@@ -40873,7 +40991,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_MALE] =
@@ -40896,7 +41014,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_UNK][Usr_SEX_ALL] =
@@ -40919,7 +41037,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Rol_GST][Usr_SEX_UNKNOWN] =
@@ -42927,7 +43045,7 @@ const char *Txt_Room =
 #elif L==9	// pt
 	"Sala";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Room";	// Çeviri lazim!
 #endif
 
 const char *Txt_Room_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -42942,7 +43060,7 @@ const char *Txt_Room_X_removed =	// Warning: it is very important to include %s 
 #elif L==5	// fr
 	"Salle <strong>%s</strong> supprim&eacute;e.";
 #elif L==6	// gn
-	"Sala <strong>%s</strong> eliminada.";		// Okoteve traducción
+	"Sala <strong>%s</strong> eliminada.";	// Okoteve traducción
 #elif L==7	// it
 	"Aula <strong>%s</strong> rimossa.";
 #elif L==8	// pl
@@ -42950,7 +43068,7 @@ const char *Txt_Room_X_removed =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Sala <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Room <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS] =
@@ -43848,15 +43966,15 @@ const char *Txt_Rooms_with_users =
 #elif L==5	// fr
 	"Salles avec utilisateurs";
 #elif L==6	// gn
-	"Salas con usuarios";		// Okoteve traducción
+	"Salas con usuarios";	// Okoteve traducción
 #elif L==7	// it
 	"Rooms con utenti";
 #elif L==8	// pl
-	"Rooms with users";		// Potrzebujesz tlumaczenie
+	"Rooms with users";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Salas com usu&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Rooms with users";	// Çeviri lazim!
 #endif
 
 const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -44528,7 +44646,7 @@ const char *Txt_Save_as =
 #elif L==9	// pt
 	"Salvar como";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Save as";	// Çeviri lazim!
 #endif
 
 const char *Txt_Save_changes =
@@ -44551,7 +44669,7 @@ const char *Txt_Save_changes =
 #elif L==9	// pt
 	"Salvar altera&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Save changes";	// Çeviri lazim!
 #endif
 
 const char *Txt_Save_file_properties =
@@ -44574,7 +44692,7 @@ const char *Txt_Save_file_properties =
 #elif L==9	// pt
 	"Salvar as propriedades do arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Save file properties";			// Çeviri lazim!
 #endif
 
 const char *Txt_Scope =
@@ -44597,7 +44715,7 @@ const char *Txt_Scope =
 #elif L==9	// pt
 	"&Acirc;mbito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Scope";		// Çeviri lazim!
 #endif
 
 const char *Txt_Score =
@@ -44620,7 +44738,7 @@ const char *Txt_Score =
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Score";		// Çeviri lazim!
 #endif
 
 const char *Txt_Search =
@@ -44643,7 +44761,7 @@ const char *Txt_Search =
 #elif L==9	// pt
 	"Procurar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Arama";
 #endif
 
 const char *Txt_Search_courses =
@@ -44666,7 +44784,7 @@ const char *Txt_Search_courses =
 #elif L==9	// pt
 	"Procurar disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Search courses";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_full_notice =
@@ -44689,7 +44807,7 @@ const char *Txt_See_full_notice =
 #elif L==9	// pt
 	"Ver aviso completo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See full notice";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_less =
@@ -44712,7 +44830,7 @@ const char *Txt_See_less =
 #elif L==9	// pt
 	"Ver menos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See less";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_message =
@@ -44735,7 +44853,7 @@ const char *Txt_See_message =
 #elif L==9	// pt
 	"Ver mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See message";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_messages_received =
@@ -44758,7 +44876,7 @@ const char *Txt_See_messages_received =
 #elif L==9	// pt
 	"Ver mensagens recebidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See messages received";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_more =
@@ -44781,7 +44899,7 @@ const char *Txt_See_more =
 #elif L==9	// pt
 	"Ver mais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See more";		// Çeviri lazim!
 #endif
 
 const char *Txt_See_new_activity =
@@ -44804,7 +44922,7 @@ const char *Txt_See_new_activity =
 #elif L==9	// pt
 	"Ver nova atividade";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See new activity";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_notifications =
@@ -44827,7 +44945,7 @@ const char *Txt_See_notifications =
 #elif L==9	// pt
 	"Ver notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See notifications";	// Çeviri lazim!
 #endif
 
 const char *Txt_See_only_the_latest_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
@@ -44850,7 +44968,7 @@ const char *Txt_See_only_the_latest_X_COMMENTS =	// Warning: it is very importan
 #elif L==9	// pt
 	"Ver apenas os %u &uacute;ltimos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See only the %u latest";			// Çeviri lazim!
 #endif
 
 const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
@@ -44873,7 +44991,7 @@ const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important t
 #elif L==9	// pt
 	"Ver os %u anteriores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"See the previous %u";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_another_country =
@@ -44888,7 +45006,7 @@ const char *Txt_Select_another_country =
 #elif L==5	// fr
 	"S&eacute;lectionnez un autre pays";
 #elif L==6	// gn
-	"Seleccionar otro pa&iacute;s";		// Okoteve traducción
+	"Seleccionar otro pa&iacute;s";	// Okoteve traducción
 #elif L==7	// it
 	"Selezionare un altro paese";
 #elif L==8	// pl
@@ -44896,7 +45014,7 @@ const char *Txt_Select_another_country =
 #elif L==9	// pt
 	"Selecionar outro pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select another country";	// Çeviri lazim!
 #endif
 
 const char *Txt_Select_one_country =
@@ -44911,7 +45029,7 @@ const char *Txt_Select_one_country =
 #elif L==5	// fr
 	"S&eacute;lectionnez un pays";
 #elif L==6	// gn
-	"Seleccionar un pa&iacute;s";		// Okoteve traducción
+	"Seleccionar un pa&iacute;s";	// Okoteve traducción
 #elif L==7	// it
 	"Selezionare un paese";
 #elif L==8	// pl
@@ -44919,7 +45037,7 @@ const char *Txt_Select_one_country =
 #elif L==9	// pt
 	"Selecionar um pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select one country";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_another_center_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -44942,7 +45060,7 @@ const char *Txt_Select_or_create_another_center_in_X =	// Warning: it is very im
 #elif L==9	// pt
 	"Selecionar ou criar um outro centro da institu&ccedil;&atilde;o <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create another center in the institution <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
 const char *Txt_Select_create_course_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -44961,11 +45079,11 @@ const char *Txt_Select_create_course_in_X =	// Warning: it is very important to 
 #elif L==7	// it
 	"Selezionare/creare corso di <strong>%s</strong>";
 #elif L==8	// pl
-	"Select/create course in <strong>%s</strong>";	// Potrzebujesz tlumaczenie
+	"Select/create course in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Selecionar/criar disciplina de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select/create in <strong>%s</strong>";			// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_another_degree_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -44988,7 +45106,7 @@ const char *Txt_Select_or_create_another_degree_in_X =	// Warning: it is very im
 #elif L==9	// pt
 	"Selecionar ou criar outro grau de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create another degree in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_another_institution_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -45011,7 +45129,7 @@ const char *Txt_Select_or_create_another_institution_in_X =	// Warning: it is ve
 #elif L==9	// pt
 	"Selecionar ou criar outra institu&ccedil;&atilde;o de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create another institution in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -45034,7 +45152,7 @@ const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very import
 #elif L==9	// pt
 	"Selecionar ou criar um centro de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create one center in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_course_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -45057,7 +45175,7 @@ const char *Txt_Select_or_create_one_course_in_X =	// Warning: it is very import
 #elif L==9	// pt
 	"Selecionar ou criar uma disciplina de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create one course in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_degree_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -45080,7 +45198,7 @@ const char *Txt_Select_or_create_one_degree_in_X =	// Warning: it is very import
 #elif L==9	// pt
 	"Selecionar ou criar um grau de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create one degree in <strong>%s</strong>";			// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_institution_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -45103,7 +45221,7 @@ const char *Txt_Select_or_create_one_institution_in_X =	// Warning: it is very i
 #elif L==9	// pt
 	"Selecionar ou criar uma institu&ccedil;&atilde;o de <strong>%s</strong>";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select or create one institution in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here =
@@ -45135,7 +45253,8 @@ const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_her
 	"Selecione um ou mais arquivos de seu computador<br />"
 	"ou arrastar e soltar aqui";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select one or more files from your computer<br />"
+	"or drag and drop here";				// Çeviri lazim!
 #endif
 
 const char *Txt_Select_questions =
@@ -45158,7 +45277,7 @@ const char *Txt_Select_questions =
 #elif L==9	// pt
 	"Selecionar perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =
@@ -45216,7 +45335,11 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	"Se voc&ecirc; n&atilde;o selecionar nenhum grupo, os usu&aacute;rios ser&atilde;o inscritos na disciplina, mas n&atilde;o em grupos espec&iacute;ficos,"
 	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select the groups in/from which you want to register/remove users.<br />"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
+	" or removed from the selected groups but not from the course.<br />"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
+	" or removed from the course and from all groups.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_users =
@@ -45239,7 +45362,7 @@ const char *Txt_Select_users =
 #elif L==9	// pt
 	"Selecione usu&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Select users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences
@@ -45280,7 +45403,9 @@ const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is v
 	"&bull; Seguidos: %u<br />"
 	"&bull; N&atilde;o seguidos: %u";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Selected users: %u<br />"
+	"&bull; Followed: %u<br />"
+	"&bull; Not followed: %u";	// Çeviri lazim!
 #endif
 
 const char *Txt_Send =
@@ -45303,7 +45428,7 @@ const char *Txt_Send =
 #elif L==9	// pt
 	"Enviar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Send";	// Çeviri lazim!
 #endif
 
 const char *Txt_Send_message =
@@ -45326,7 +45451,7 @@ const char *Txt_Send_message =
 #elif L==9	// pt
 	"Enviar mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Send message";		// Çeviri lazim!
 #endif
 
 const char *Txt_Send_survey =
@@ -45349,7 +45474,7 @@ const char *Txt_Send_survey =
 #elif L==9	// pt
 	"Enviar inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Send survey";		// Çeviri lazim!
 #endif
 
 const char *Txt_Send_URL =
@@ -45364,7 +45489,7 @@ const char *Txt_Send_URL =
 #elif L==5	// fr
 	"Envoyer URL";
 #elif L==6	// gn
-	"Enviar URL";		// Okoteve traducción
+	"Enviar URL";	// Okoteve traducción
 #elif L==7	// it
 	"Invia URL";
 #elif L==8	// pl
@@ -45372,7 +45497,7 @@ const char *Txt_Send_URL =
 #elif L==9	// pt
 	"Enviar URL";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Send URL";	// Çeviri lazim!
 #endif
 
 const char *Txt_Sender_banned_click_to_unban_him =
@@ -45395,7 +45520,7 @@ const char *Txt_Sender_banned_click_to_unban_him =
 #elif L==9	// pt
 	"Remetente banido; clique para desbanir ela/ele";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sender banned; click to unban her/him";		// Çeviri lazim!
 #endif
 
 const char *Txt_Sender_permitted_click_to_ban_him =
@@ -45418,7 +45543,7 @@ const char *Txt_Sender_permitted_click_to_ban_him =
 #elif L==9	// pt
 	"Remetente permitido; clique para banir ela/ele";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sender permitted; click to ban her/him";		// Çeviri lazim!
 #endif
 
 const char *Txt_Session =
@@ -45464,7 +45589,7 @@ const char *Txt_session =
 #elif L==9	// pt
 	"sess&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"session";		// Çeviri lazim!
 #endif
 
 const char *Txt_Session_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -45487,7 +45612,7 @@ const char *Txt_Session_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Sess&atilde;o <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Session <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Sessions =
@@ -45510,7 +45635,7 @@ const char *Txt_Sessions =
 #elif L==9	// pt
 	"Sess&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sessions";	// Çeviri lazim!
 #endif
 
 const char *Txt_sessions =
@@ -45533,7 +45658,7 @@ const char *Txt_sessions =
 #elif L==9	// pt
 	"sess&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"sessions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Set_of_questions =
@@ -45556,7 +45681,7 @@ const char *Txt_Set_of_questions =
 #elif L==9	// pt
 	"Conjunto de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Set of questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Set_of_questions_removed =
@@ -45579,7 +45704,7 @@ const char *Txt_Set_of_questions_removed =
 #elif L==9	// pt
 	"Conjunto de perguntas removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Set of questions removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Set_password =
@@ -45625,7 +45750,7 @@ const char *Txt_Set_up =
 #elif L==9	// pt
 	"Instalar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Set up";	// Çeviri lazim!
 #endif
 
 const char *Txt_Sets_of_questions =
@@ -45648,7 +45773,7 @@ const char *Txt_Sets_of_questions =
 #elif L==9	// pt
 	"Conjuntos de perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sets of questions";		// Çeviri lazim!
 #endif
 
 const char *Txt_Settings =
@@ -45694,7 +45819,7 @@ const char *Txt_Sex =
 #elif L==9	// pt
 	"Sexo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sex";	// Çeviri lazim!
 #endif
 
 const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
@@ -45719,7 +45844,7 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -45742,7 +45867,7 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Mulheres"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Women"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -45765,7 +45890,7 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Homens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Men"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -45788,7 +45913,7 @@ const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Todos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All"	// Çeviri lazim!
 #endif
 	};
 
@@ -45814,7 +45939,7 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"desconhecidos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"unknown"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -45837,7 +45962,7 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"mulheres"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"women"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -45860,7 +45985,7 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"homens"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"men"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -45883,7 +46008,7 @@ const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"todos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"all"	// Çeviri lazim!
 #endif
 	};
 
@@ -45909,7 +46034,7 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -45932,7 +46057,7 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Mulher"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Woman"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -45955,7 +46080,7 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Homem"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Man"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -45978,7 +46103,7 @@ const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Todos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All"		// Çeviri lazim!
 #endif
 	};
 
@@ -46002,7 +46127,7 @@ const char *Txt_Shared_files_area =
 #elif L==9	// pt
 	"Zona comum";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Shared files area";		// Çeviri lazim!
 #endif
 
 const char *Txt_shared_files_area =
@@ -46025,7 +46150,7 @@ const char *Txt_shared_files_area =
 #elif L==9	// pt
 	"zona de arquivos compartilhados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"shared files area";		// Çeviri lazim!
 #endif
 
 const char *Txt_Short_name =
@@ -46048,7 +46173,7 @@ const char *Txt_Short_name =
 #elif L==9	// pt
 	"Nome abreviado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Short name";		// Çeviri lazim!
 #endif
 
 const char *Txt_Short_name_of_the_degree =
@@ -46071,7 +46196,7 @@ const char *Txt_Short_name_of_the_degree =
 #elif L==9	// pt
 	"Nome abreviado do grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Short name of the degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_Short_name_of_the_center =
@@ -46094,7 +46219,7 @@ const char *Txt_Short_name_of_the_center =
 #elif L==9	// pt
 	"Nome abreviado do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Short name of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Short_name_of_the_course =
@@ -46117,7 +46242,7 @@ const char *Txt_Short_name_of_the_course =
 #elif L==9	// pt
 	"Nome abreviado da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Short name of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Short_name_of_the_institution =
@@ -46140,7 +46265,7 @@ const char *Txt_Short_name_of_the_institution =
 #elif L==9	// pt
 	"Nome abreviado da institui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Short name of the institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_Shortcut =
@@ -46163,7 +46288,7 @@ const char *Txt_Shortcut =
 #elif L==9	// pt
 	"Acesso directo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Shortcut";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show =
@@ -46186,7 +46311,7 @@ const char *Txt_Show =
 #elif L==9	// pt
 	"Mostrar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_all_data_in_a_table =
@@ -46209,7 +46334,7 @@ const char *Txt_Show_all_data_in_a_table =
 #elif L==9	// pt
 	"Mostrar todos os dados em uma tabela";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show all data in a table";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_all_files =
@@ -46232,7 +46357,7 @@ const char *Txt_Show_all_files =
 #elif L==9	// pt
 	"Mostrar todos os arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show all files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_all_NOTIFICATIONS =
@@ -46255,7 +46380,7 @@ const char *Txt_Show_all_NOTIFICATIONS =
 #elif L==9	// pt
 	"Mostrar todas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show all";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_all_notifications =
@@ -46278,7 +46403,7 @@ const char *Txt_Show_all_notifications =
 #elif L==9	// pt
 	"Mostrar todas as notifica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show all notifications";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_agenda =
@@ -46301,7 +46426,7 @@ const char *Txt_Show_agenda =
 #elif L==9	// pt
 	"Mostrar agenda";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show agenda";	// Çeviri lazim!
 #endif
 
 const char *Txt_Show_anyway =
@@ -46324,7 +46449,7 @@ const char *Txt_Show_anyway =
 #elif L==9	// pt
 	"Mostrar de qualquer maneira";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show anyway";			// Çeviri lazim!
 #endif
 
 const char *Txt_Show_calendar =
@@ -46347,7 +46472,7 @@ const char *Txt_Show_calendar =
 #elif L==9	// pt
 	"Mostrar calend&aacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show calendar";	// Çeviri lazim!
 #endif
 
 const char *Txt_Show_hits =	// hits = visits, clicks, page views...
@@ -46370,7 +46495,7 @@ const char *Txt_Show_hits =	// hits = visits, clicks, page views...
 #elif L==9	// pt
 	"Mostrar visitas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show hits";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_more_details =
@@ -46393,7 +46518,7 @@ const char *Txt_Show_more_details =
 #elif L==9	// pt
 	"Mostrar mais detalhes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show more details";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_more_recipients =
@@ -46416,7 +46541,7 @@ const char *Txt_Show_more_recipients =
 #elif L==9	// pt
 	"Ver mais destinat&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show more recipients";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include %u in the following sentences
@@ -46439,7 +46564,7 @@ const char *Txt_Show_next_X_clicks =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Mostrar %u cliques subsequentes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show next %u clicks";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %u in the following sentences
@@ -46454,7 +46579,7 @@ const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to inc
 #elif L==5	// fr
 	"Afficher les %u clics pr&eacute;c&eacute;dents";
 #elif L==6	// gn
-	"Mostrar %u clics anteriores";		// Okoteve traducción
+	"Mostrar %u clics anteriores";	// Okoteve traducción
 #elif L==7	// it
 	"Mostra %u scatti precedenti";
 #elif L==8	// pl
@@ -46462,7 +46587,7 @@ const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"Mostrar %u cliques anteriores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show previous %u clicks";	// Çeviri lazim!
 #endif
 
 const char *Txt_Show_questions =
@@ -46485,7 +46610,7 @@ const char *Txt_Show_questions =
 #elif L==9	// pt
 	"Mostrar perguntas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Show_statistic =
@@ -46504,11 +46629,11 @@ const char *Txt_Show_statistic =
 #elif L==7	// it
 	"Visualizza statistica";
 #elif L==8	// pl
-	"Poka&zdot; statystyk&eogon;";		// Potrzebujesz tlumaczenie
+	"Poka&zdot; statystyk&eogon;";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mostrar estat&iacute;stica";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show statistic";		// Çeviri lazim!
 #endif
 
 const char *Txt_Show_tutoring_hours =
@@ -46531,7 +46656,7 @@ const char *Txt_Show_tutoring_hours =
 #elif L==9	// pt
 	"Mostrar hor&aacute;rios tutor";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Show tutoring hours";		// Çeviri lazim!
 #endif
 
 const char *Txt_Shuffle =
@@ -46554,7 +46679,7 @@ const char *Txt_Shuffle =
 #elif L==9	// pt
 	"Baralhar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Shuffle";	// Çeviri lazim!
 #endif
 
 const char *Txt_Sign_up =
@@ -46577,7 +46702,7 @@ const char *Txt_Sign_up =
 #elif L==9	// pt
 	"Solicitar inscri&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sign up";			// Çeviri lazim!
 #endif
 
 const char *Txt_Similar_users =
@@ -46600,7 +46725,7 @@ const char *Txt_Similar_users =
 #elif L==9	// pt
 	"Usu&aacute;rios similares";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Similar users";	// Çeviri lazim!
 #endif
 
 const char *Txt_Size =		// ...of a file zone
@@ -46623,7 +46748,7 @@ const char *Txt_Size =		// ...of a file zone
 #elif L==9	// pt
 	"Tamanho";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Size";			// Çeviri lazim!
 #endif
 
 const char *Txt_Size_of_photos =
@@ -46646,7 +46771,7 @@ const char *Txt_Size_of_photos =
 #elif L==9	// pt
 	"Tamanho das fotos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Size of photos";		// Çeviri lazim!
 #endif
 
 const char *Txt_Skip_this_step =
@@ -46692,7 +46817,7 @@ const char *Txt_Sort_degrees_by =
 #elif L==9	// pt
 	"Classificar graus por";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Sort degrees by";		// Çeviri lazim!
 #endif
 
 const char *Txt_Source_of_information =
@@ -46715,7 +46840,7 @@ const char *Txt_Source_of_information =
 #elif L==9	// pt
 	"Fonte de informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Source of information";	// Çeviri lazim!
 #endif
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
@@ -46740,7 +46865,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"detalhadamente cliques"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"detailed clicks"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_USR] =
@@ -46763,7 +46888,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_DAY] =
@@ -46786,7 +46911,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"day"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_DAY_AND_HOUR] =
@@ -46809,7 +46934,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia e hora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"day and hour"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_WEEK] =
@@ -46832,7 +46957,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"semana"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"week"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_MONTH] =
@@ -46855,7 +46980,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"m&ecirc;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"month"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_YEAR] =
@@ -46878,7 +47003,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"ano"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"year"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_HOUR] =
@@ -46901,7 +47026,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"hora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"hour"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_MINUTE] =
@@ -46924,7 +47049,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"minuto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"minute"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_ACTION] =
@@ -46947,7 +47072,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"a&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"action"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_DAY] =
@@ -46970,7 +47095,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"day"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_DAY_AND_HOUR] =
@@ -46993,7 +47118,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"dia e hora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"day and hour"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_WEEK] =
@@ -47016,7 +47141,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"semana"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"week"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_MONTH] =
@@ -47039,7 +47164,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"m&ecirc;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"month"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_YEAR] =
@@ -47062,7 +47187,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"ano"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"year"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_HOUR] =
@@ -47085,7 +47210,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"hora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"hour"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_MINUTE] =
@@ -47108,7 +47233,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"minuto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"minute"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_ACTION] =
@@ -47131,7 +47256,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"a&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"action"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_PLUGIN] =
@@ -47154,7 +47279,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"plugin"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"plugin"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_API_FUNCTION] =
@@ -47177,7 +47302,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"fun&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"function"		// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_BANNER] =
@@ -47200,7 +47325,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"banner"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"banner"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_COUNTRY] =
@@ -47223,7 +47348,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"pa&iacute;s"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"&uuml;lke"
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_INSTITUTION] =
@@ -47246,7 +47371,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"kurum"
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_CENTER] =
@@ -47269,7 +47394,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"centro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"merkez"
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_DEGREE] =
@@ -47292,7 +47417,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"derece"
 #endif
 	,
 	[Sta_CLICKS_GBL_PER_COURSE] =
@@ -47315,7 +47440,7 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 #elif L==9	// pt
 	"disciplina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"kurs"
 #endif
 	};
 
@@ -47341,7 +47466,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==9	// pt
 	"cor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"color"	// Çeviri lazim!
 #endif
 	,
 	[Sta_BLACK_TO_WHITE] =
@@ -47364,7 +47489,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==9	// pt
 	"do preto ao branco"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"black to white"	// Çeviri lazim!
 #endif
 	,
 	[Sta_WHITE_TO_BLACK] =
@@ -47387,7 +47512,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==9	// pt
 	"do branco ao preto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"white to black"	// Çeviri lazim!
 #endif
 	};
 
@@ -47405,7 +47530,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==5	// fr
 	"Documents&nbsp;(mat.)"
 #elif L==6	// gn
-	"Documentos&nbsp;(asg.)"		// Okoteve traducción
+	"Documentos&nbsp;(asg.)"	// Okoteve traducción
 #elif L==7	// it
 	"Documenti&nbsp;(crs.)"
 #elif L==8	// pl
@@ -47413,7 +47538,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Documentos&nbsp;(crs.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Documents&nbsp;(crs.)"		// Çeviri lazim!
 #endif
 	,
 	[1] =
@@ -47436,7 +47561,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Documentos&nbsp;(grp.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Documents&nbsp;(grp.)"		// Çeviri lazim!
 #endif
 	,
 	[2] =
@@ -47459,7 +47584,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Privadoss&nbsp;(crs.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Private&nbsp;(crs.)"	// Çeviri lazim!
 #endif
 	,
 	[3] =
@@ -47482,7 +47607,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Privadoss&nbsp;(grp.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Private&nbsp;(grp.)"	// Çeviri lazim!
 #endif
 	,
 	[4] =
@@ -47505,7 +47630,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Compartilhados&nbsp;(crs.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Shared&nbsp;(crs.)"		// Çeviri lazim!
 #endif
 	,
 	[5] =
@@ -47528,7 +47653,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Compartilhados&nbsp;(grp.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Shared&nbsp;(grp.)"		// Çeviri lazim!
 #endif
 	,
 	[6] =
@@ -47543,15 +47668,15 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==5	// fr
 	"Notes&nbsp;(mat.)"
 #elif L==6	// gn
-	"Calificaciones&nbsp;(asg.)"		// Okoteve traducción
+	"Calificaciones&nbsp;(asg.)"	// Okoteve traducción
 #elif L==7	// it
 	"Risultati&nbsp;(crs.)"
 #elif L==8	// pl
-	"Marks&nbsp;(crs.)"			// Potrzebujesz tlumaczenie
+	"Marks&nbsp;(crs.)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Notas&nbsp;(crs.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Marks&nbsp;(crs.)"		// Çeviri lazim!
 #endif
 	,
 	[7] =
@@ -47566,15 +47691,15 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==5	// fr
 	"Notes&nbsp;(grp.)"
 #elif L==6	// gn
-	"Calificaciones&nbsp;(grp.)"		// Okoteve traducción
+	"Calificaciones&nbsp;(grp.)"	// Okoteve traducción
 #elif L==7	// it
 	"Risultati&nbsp;(grp.)"
 #elif L==8	// pl
-	"Marks&nbsp;(grp.)"			// Potrzebujesz tlumaczenie
+	"Marks&nbsp;(grp.)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Notas&nbsp;(grp.)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Marks&nbsp;(grp.)"		// Çeviri lazim!
 #endif
 	,
 	[8] =
@@ -47643,7 +47768,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Total"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Total"		// Çeviri lazim!
 #endif
 	,
 	[11] =
@@ -47666,7 +47791,7 @@ const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES] =	// Use &nb
 #elif L==9	// pt
 	"Pasta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Briefcases"	// Çeviri lazim!
 #endif
 	};
 
@@ -47692,7 +47817,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==9	// pt
 	"proporcional ao n&uacute;mero de estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"proportional to the number of students"	// Çeviri lazim!
 #endif
 	,
 	[Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS] =
@@ -47715,7 +47840,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==9	// pt
 	"proporcional ao n&uacute;mero de estudantes com foto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"proportional to the number of students with photo"		// Çeviri lazim!
 #endif
 	,
 	[Pho_PROPORTIONAL_TO_PERCENT] =
@@ -47738,7 +47863,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==9	// pt
 	"proporcional ao porcentagem de estudantes com foto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"proportional to the percentage of students with photo"			// Çeviri lazim!
 #endif
 	,
 	[Pho_UNIQUE_SIZE] =
@@ -47761,7 +47886,7 @@ const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES] =
 #elif L==9	// pt
 	"mesmo para todos os graus"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"same for all degrees"			// Çeviri lazim!
 #endif
 	};
 
@@ -47787,7 +47912,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==9	// pt
 	"n&uacute;mero de estudantes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"number of students"		// Çeviri lazim!
 #endif
 	,
 	[Pho_PROPORTIONAL_TO_NUMBER_OF_PHOTOS] =
@@ -47810,7 +47935,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==9	// pt
 	"n&uacute;mero de estudantes com foto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"number of students with photo"			// Çeviri lazim!
 #endif
 	,
 	[Pho_PROPORTIONAL_TO_PERCENT] =
@@ -47833,7 +47958,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==9	// pt
 	"porcentagem de estudantes com foto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"percentage of students with photo"			// Çeviri lazim!
 #endif
 	,
 	[Pho_UNIQUE_SIZE] =
@@ -47856,7 +47981,7 @@ const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES] =
 #elif L==9	// pt
 	"nome do grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"degree name"			// Çeviri lazim!
 #endif
 	};
 
@@ -47882,7 +48007,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"N&uacute;mero total de cliques"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Total number of clicks"	// Çeviri lazim!
 #endif
 	,
 	[Sta_DISTINCT_USRS] =
@@ -47897,7 +48022,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==5	// fr
 	"Nombre des diff&eacute;rents utilisateurs"
 #elif L==6	// gn
-	"N.&ordm; de usuarios distintos"		// Okoteve traducción
+	"N.&ordm; de usuarios distintos"	// Okoteve traducción
 #elif L==7	// it
 	"Numero di utenti distinti"
 #elif L==8	// pl
@@ -47905,7 +48030,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"N&uacute;mero de utilizadores diferentes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Number of distinct users"		// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_PER_USR] =
@@ -47928,7 +48053,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"N&uacute;mero de cliques por utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Number of clicks per user"		// Çeviri lazim!
 #endif
 	,
 	[Sta_GENERATION_TIME] =
@@ -47951,7 +48076,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"Tempo para gerar p&aacute;gina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Time to generate page"				// Çeviri lazim!
 #endif
 	,
 	[Sta_SEND_TIME] =
@@ -47974,7 +48099,7 @@ const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"Tempo para enviar a p&aacute;gina"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Time to send page"				// Çeviri lazim!
 #endif
 	};
 
@@ -48000,7 +48125,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"n&uacute;mero total de cliques"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"total number of clicks"	// Çeviri lazim!
 #endif
 	,
 	[Sta_DISTINCT_USRS] =
@@ -48023,7 +48148,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"n&uacute;mero de utilizadores diferentes"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"number of distinct users"		// Çeviri lazim!
 #endif
 	,
  	[Sta_CLICKS_PER_USR] =
@@ -48038,7 +48163,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==5	// fr
 	"nombre de clics par utilisateur"
 #elif L==6	// gn
-	"n&ordm; de clics por usuario"		// Okoteve traducción
+	"n&ordm; de clics por usuario"	// Okoteve traducción
 #elif L==7	// it
 	"numero di scatti per utente"
 #elif L==8	// pl
@@ -48046,7 +48171,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"n&uacute;mero de cliques por utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"number of clicks per user"	// Çeviri lazim!
 #endif
 	,
 	[Sta_GENERATION_TIME] =
@@ -48069,7 +48194,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"tempo para gerar"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"time to generate"			// Çeviri lazim!
 #endif
 	,
 	[Sta_SEND_TIME] =
@@ -48092,7 +48217,7 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 #elif L==9	// pt
 	"Tempo para enviar"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"time to send"			// Çeviri lazim!
 #endif
 	};
 
@@ -48118,7 +48243,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users"	// Çeviri lazim!
 #endif
 	,
 	[Fig_USERS_RANKING] =
@@ -48141,7 +48266,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Posi&ccedil;&atilde;o"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Ranking"	// Çeviri lazim!
 #endif
 	,
 	[Fig_HIERARCHY] =
@@ -48164,7 +48289,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Hierarquia"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Hierarchy"	// Çeviri lazim!
 #endif
 	,
 	[Fig_INSTITS] =
@@ -48187,7 +48312,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Institutions"	// Çeviri lazim!
 #endif
 	,
 	[Fig_DEGREE_TYPES] =
@@ -48210,7 +48335,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Tipos de grau"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Types of degree"	// Çeviri lazim!
 #endif
 	,
 	[Fig_FOLDERS_AND_FILES] =
@@ -48225,7 +48350,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==5	// fr
 	"R&eacute;pertoires et fichiers"
 #elif L==6	// gn
-	"Carpetas y archivos"		// Okoteve traducción
+	"Carpetas y archivos"	// Okoteve traducción
 #elif L==7	// it
 	"Cartelle e file"
 #elif L==8	// pl
@@ -48233,7 +48358,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Diret&oacute;rios e arquivos"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Folders and files"	// Çeviri lazim!
 #endif
 	,
 	[Fig_OER] =
@@ -48256,7 +48381,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Recursos Educacionais Abertos (OER)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Open Educational Resources (OER)"	// Çeviri lazim!
 #endif
 	,
 	[Fig_COURSE_PROGRAMS] =
@@ -48440,7 +48565,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Timeline"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Timeline"	// Çeviri lazim!
 #endif
 	,
 	[Fig_FOLLOW] =
@@ -48463,7 +48588,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Seguidos / Seguidores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Followed / Followers"	// Çeviri lazim!
 #endif
 	,
 	[Fig_FORUMS] =
@@ -48509,7 +48634,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Notifica&ccedil;&otilde;es enviadas por email"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Notifications sent by email"		// Çeviri lazim!
 #endif
 	,
 	[Fig_NOTICES] =
@@ -48578,7 +48703,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Agendas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Agendas"	// Çeviri lazim!
 #endif
 	,
 	[Fig_SOCIAL_NETWORKS] =
@@ -48593,7 +48718,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==5	// fr
 	"Webs / r&eacute;seaux sociaux"
 #elif L==6	// gn
-	"Webs / redes sociales"	// Okoteve traducción
+	"Webs / redes sociales"		// Okoteve traducción
 #elif L==7	// it
 	"Webs / reti sociali"
 #elif L==8	// pl
@@ -48601,7 +48726,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==9	// pt
 	"Webs / redes sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Webs / social networks"	// Çeviri lazim!
 #endif
 	,
 	[Fig_LANGUAGES] =
@@ -48855,7 +48980,7 @@ const char *Txt_Start =	// As a verb
 #elif L==9	// pt
 	"Come&ccedil;ar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Start";	// Çeviri lazim!
 #endif
 
 const char *Txt_Statistic =
@@ -48878,7 +49003,7 @@ const char *Txt_Statistic =
 #elif L==9	// pt
 	"Estat&iacute;sticas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Statistic";	// Çeviri lazim!
 #endif
 
 const char *Txt_Statistics_of_all_visits =
@@ -48901,7 +49026,7 @@ const char *Txt_Statistics_of_all_visits =
 #elif L==9	// pt
 	"Estat&iacute;sticas de todas as visitas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Statistics of all visits";			// Çeviri lazim!
 #endif
 
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -48924,7 +49049,7 @@ const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very im
 #elif L==9	// pt
 	"Estat&iacute;sticas de visitas &agrave; disciplina %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Statistics of visits to the course %s";		// Çeviri lazim!
 #endif
 
 const char *Txt_Status =
@@ -48947,7 +49072,7 @@ const char *Txt_Status =
 #elif L==9	// pt
 	"Status";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Status";	// Çeviri lazim!
 #endif
 
 const char *Txt_Stay_connected_with_SWADroid =
@@ -48962,7 +49087,7 @@ const char *Txt_Stay_connected_with_SWADroid =
 #elif L==5	// fr
 	"Restez connect&eacute; avec <strong>SWADroid</strong>.";
 #elif L==6	// gn
-	"Siga conectado/a con <strong>SWADroid</strong>.";		// Okoteve traducción
+	"Siga conectado/a con <strong>SWADroid</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Resta in contatto con <strong>SWADroid</strong>.";
 #elif L==8	// pl
@@ -48970,7 +49095,7 @@ const char *Txt_Stay_connected_with_SWADroid =
 #elif L==9	// pt
 	"Fique ligado/a com <strong>SWADroid</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Stay connected with <strong>SWADroid</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Step_1_Provide_a_list_of_users =
@@ -48993,7 +49118,7 @@ const char *Txt_Step_1_Provide_a_list_of_users =
 #elif L==9	// pt
 	"Etapa 1: Forne&ccedil;a uma lista de usu&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Step 1: Provide a list of users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Step_2_Select_the_desired_action =
@@ -49016,7 +49141,7 @@ const char *Txt_Step_2_Select_the_desired_action =
 #elif L==9	// pt
 	"Etapa 2: Selecione a a&ccedil;&atilde;o desejada";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Step 2: Select the desired action";				// Çeviri lazim!
 #endif
 
 const char *Txt_Step_3_Optionally_select_groups =
@@ -49039,7 +49164,7 @@ const char *Txt_Step_3_Optionally_select_groups =
 #elif L==9	// pt
 	"Etapa 3: Opcionalmente, selecione grupos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Step 3: Optionally, select groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_Step_4_Confirm_the_enrolment_removing =
@@ -49062,7 +49187,7 @@ const char *Txt_Step_4_Confirm_the_enrolment_removing =
 #elif L==9	// pt
 	"Etapa 4: Confirmar a inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Step 4: Confirm the enrolment / removing";			// Çeviri lazim!
 #endif
 
 const char *Txt_Student_comment =
@@ -49085,7 +49210,7 @@ const char *Txt_Student_comment =
 #elif L==9	// pt
 	"Coment&aacute;rio do estudante";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Student's comment";		// Çeviri lazim!
 #endif
 
 const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
@@ -49108,7 +49233,7 @@ const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 #elif L==9	// pt
 	"estu.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"stud.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Student_record_card_in_this_course_has_been_updated =
@@ -49131,7 +49256,7 @@ const char *Txt_Student_record_card_in_this_course_has_been_updated =
 #elif L==9	// pt
 	"O cart&atilde;o do estudante nesta disciplina foi atualizado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Student record card in this course has been updated.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
@@ -49154,7 +49279,7 @@ const char *Txt_Students_are_no_longer_obliged_to_read_this_information =
 #elif L==9	// pt
 	"Os estudantes n&atilde;o precisam mais ler essas informa&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Students are no longer obliged to read this information.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Students_now_are_required_to_read_this_information =
@@ -49177,7 +49302,7 @@ const char *Txt_Students_now_are_required_to_read_this_information =
 #elif L==9	// pt
 	"Os estudantes agora precisam ler essas informa&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Students now are required to read this information.";				// Çeviri lazim!
 #endif
 
 const char *Txt_Surname_1 =
@@ -49200,7 +49325,7 @@ const char *Txt_Surname_1 =
 #elif L==9	// pt
 	"Primeiro apelido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Surname 1";	// Çeviri lazim!
 #endif
 
 const char *Txt_Surname_2 =
@@ -49223,7 +49348,7 @@ const char *Txt_Surname_2 =
 #elif L==9	// pt
 	"Segundo apelido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Surname 2";	// Çeviri lazim!
 #endif
 
 const char *Txt_Survey =
@@ -49246,7 +49371,7 @@ const char *Txt_Survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
@@ -49269,7 +49394,7 @@ const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
 #elif L==9	// pt
 	"Voc&ecirc; pertence ao &acirc;mbito do inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You belong to the scope of the survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey =
@@ -49292,7 +49417,7 @@ const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You don't belong to the scope of the survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_You_have_already_answered =
@@ -49315,7 +49440,7 @@ const char *Txt_SURVEY_You_have_already_answered =
 #elif L==9	// pt
 	"Voc&ecirc; j&aacute; respondeu";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have already answered";	// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_You_have_not_answered =
@@ -49338,7 +49463,7 @@ const char *Txt_SURVEY_You_have_not_answered =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o respondeu";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have not answered";	// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_Type_of_user_allowed =
@@ -49361,7 +49486,7 @@ const char *Txt_SURVEY_Type_of_user_allowed =
 #elif L==9	// pt
 	"Tipo de usu&aacute;rio permitido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of user allowed";		// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_Type_of_user_not_allowed =
@@ -49384,7 +49509,7 @@ const char *Txt_SURVEY_Type_of_user_not_allowed =
 #elif L==9	// pt
 	"Tipo de usu&aacute;rio n&atilde;o permitido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of user not allowed";		// Çeviri lazim!
 #endif
 
 const char *Txt_Survey_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -49407,7 +49532,7 @@ const char *Txt_Survey_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Inqu&eacute;rito <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Survey <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s in the following sentences
@@ -49430,7 +49555,7 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"Inqu&eacute;rito <strong>%s</strong> fixado em zero.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Survey <strong>%s</strong> reset.";		// Çeviri lazim!
 #endif
 
 const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
@@ -49455,7 +49580,7 @@ const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"&Uacute;nica escolha"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unique choice"			// Çeviri lazim!
 #endif
 	,
 	[Svy_ANS_MULTIPLE_CHOICE] =
@@ -49478,7 +49603,7 @@ const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"M&uacute;ltipla escolha"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Multiple choice"			// Çeviri lazim!
 #endif
 	};
 
@@ -49548,7 +49673,7 @@ const char *Txt_Syllabus_of_the_course =
 #elif L==9	// pt
 	"Programa da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Syllabus of the course";	// Çeviri lazim!
 #endif
 
 const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
@@ -49565,7 +49690,7 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #elif L==5	// fr
 	"Th&eacute;orie"
 #elif L==6	// gn
-	"Teor&iacute;a"		// Okoteve traducción
+	"Teor&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	"Teoria"
 #elif L==8	// pl
@@ -49573,7 +49698,7 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #elif L==9	// pt
 	"Teoria"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Lectures"	// Çeviri lazim!
 #endif
 	,
 	[Syl_PRACTICALS] =
@@ -49596,7 +49721,7 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #elif L==9	// pt
 	"Pr&aacute;tica"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Practicals"		// Çeviri lazim!
 #endif
 	};
 
@@ -49643,7 +49768,7 @@ const char *Txt_TABLE_Footer =
 #elif L==9	// pt
 	"P&eacute;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Footer";	// Çeviri lazim!
 #endif
 
 const char *Txt_TABLE_Header =
@@ -49666,7 +49791,7 @@ const char *Txt_TABLE_Header =
 #elif L==9	// pt
 	"Cabe&ccedil;alho";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Header";	// Çeviri lazim!
 #endif
 
 const char *Txt_Table_not_found_in_the_file_of_marks =
@@ -49689,7 +49814,7 @@ const char *Txt_Table_not_found_in_the_file_of_marks =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; tabela no arquivo de classifica&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Table not found in the file of marks.";			// Çeviri lazim!
 #endif
 
 const char *Txt_TABS_TXT[Tab_NUM_TABS] =
@@ -49832,7 +49957,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 #elif L==9	// pt
 	"Grau"
 #elif L==10	// tr
-	"Ba&scedil;l&inodot;k"	// Çeviri lazim!
+	"Derece"
 #endif
 	,
 	[TabCrs] =
@@ -50017,7 +50142,7 @@ const char *Txt_Tag_allowed =
 #elif L==9	// pt
 	"Descritor permitido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tag allowed";		// Çeviri lazim!
 #endif
 
 const char *Txt_Tag_X_allowed_Click_to_disable_it =	// Warning: it is very important to include %s in the following sentences
@@ -50040,7 +50165,7 @@ const char *Txt_Tag_X_allowed_Click_to_disable_it =	// Warning: it is very impor
 #elif L==9	// pt
 	"Descritor %s permitido. Clique para proibir.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tag %s allowed. Click to disable it.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Tag_not_allowed =
@@ -50063,7 +50188,7 @@ const char *Txt_Tag_not_allowed =
 #elif L==9	// pt
 	"Descritor n&atilde;o permitido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tag not allowed";		// Çeviri lazim!
 #endif
 
 const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very important to include %s in the following sentences
@@ -50086,7 +50211,7 @@ const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very imp
 #elif L==9	// pt
 	"Descritor %s n&atilde;o permitido. Clique para permitir.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tag %s not allowed. Click to allow it.";		// Çeviri lazim!
 #endif
 
 #if defined LOCALHOST_UBUNTU		// localhost (Ubuntu) *****************
@@ -50111,7 +50236,7 @@ const char *Txt_TAGLINE =
 #elif L==9
 	"plataforma educacional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"e&gbreve;itim platformu";
 #endif
 
 const char *Txt_TAGLINE_BR =
@@ -50134,7 +50259,7 @@ const char *Txt_TAGLINE_BR =
 #elif L==9
 	"plataforma<br />educacional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"e&gbreve;itim<br />platformu";
 #endif
 
 #elif defined OPENSWAD_ORG		// openswad.org ***********************
@@ -50151,7 +50276,7 @@ const char *Txt_TAGLINE =
 #elif L==5
 	"plate-forme &eacute;ducative";
 #elif L==6
-	"plataforma educativa";	// Okoteve traducción
+	"plataforma educativa";		// Okoteve traducción
 #elif L==7
 	"piattaforma educativa";
 #elif L==8
@@ -50159,7 +50284,7 @@ const char *Txt_TAGLINE =
 #elif L==9
 	"plataforma educacional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"social learning platform";	// Çeviri lazim!
 #endif
 
 const char *Txt_TAGLINE_BR =
@@ -50174,7 +50299,7 @@ const char *Txt_TAGLINE_BR =
 #elif L==5
 	"plate-forme<br />&eacute;ducative";
 #elif L==6
-	"plataforma<br />educativa";	// Okoteve traducción
+	"plataforma<br />educativa";		// Okoteve traducción
 #elif L==7
 	"piattaforma<br />educativa";
 #elif L==8
@@ -50182,7 +50307,7 @@ const char *Txt_TAGLINE_BR =
 #elif L==9
 	"plataforma<br />educacional";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"social learning<br />platform";	// Çeviri lazim!
 #endif
 
 #elif defined SWAD_UGR_ES		// swad.ugr.es ************************
@@ -50207,7 +50332,7 @@ const char *Txt_TAGLINE =
 #elif L==9
 	"plataforma de apoio ao ensino / UGR /";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"platform to support teaching / UGR /";		// Çeviri lazim!
 #endif
 
 const char *Txt_TAGLINE_BR =
@@ -50230,7 +50355,7 @@ const char *Txt_TAGLINE_BR =
 #elif L==9
 	"/ UGR / plataforma<br />de apoio ao ensino";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"/ UGR / platform to<br />support teaching";		// Çeviri lazim!
 #endif
 
 #elif defined SWADBERRY_UGR_ES		// swadberry.ugr.es *******************
@@ -50255,7 +50380,7 @@ const char *Txt_TAGLINE =
 #elif L==9
 	"plataforma de apoio ao ensino (Raspberry Pi)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"platform to support teaching (Raspberry Pi)";		// Çeviri lazim!
 #endif
 
 const char *Txt_TAGLINE_BR =
@@ -50278,7 +50403,7 @@ const char *Txt_TAGLINE_BR =
 #elif L==9
 	"plataforma de apoio<br />ao ensino (Raspberry Pi)";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"platform to support<br />teaching (Raspberry Pi)";		// Çeviri lazim!
 #endif
 
 #endif
@@ -50303,7 +50428,7 @@ const char *Txt_Tags =		// Tags used in test
 #elif L==9	// pt
 	"Descritores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Tags";		// Çeviri lazim!
 #endif
 
 const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
@@ -50349,7 +50474,7 @@ const char *Txt_Teachers_comment =
 #elif L==9	// pt
 	"Coment&aacute;rio dos professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Teachers' comment";		// Çeviri lazim!
 #endif
 
 const char *Txt_Teachers_files_area =
@@ -50372,7 +50497,7 @@ const char *Txt_Teachers_files_area =
 #elif L==9	// pt
 	"Zona de arquivos dos professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Teachers' files area";			// Çeviri lazim!
 #endif
 
 const char *Txt_teachers_files_area =
@@ -50395,7 +50520,7 @@ const char *Txt_teachers_files_area =
 #elif L==9	// pt
 	"zona de arquivos dos professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"teachers' files area";			// Çeviri lazim!
 #endif
 
 const char *Txt_Teaching_platform =
@@ -50418,7 +50543,7 @@ const char *Txt_Teaching_platform =
 #elif L==9	// pt
 	"Plataforma de ensino";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Teaching platform";	// Çeviri lazim!
 #endif
 
 const char *Txt_Temporary_private_storage_area =
@@ -50441,7 +50566,7 @@ const char *Txt_Temporary_private_storage_area =
 #elif L==9	// pt
 	"Zona privada de armazenamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Temporary private storage area";		// Çeviri lazim!
 #endif
 
 const char *Txt_temporary_private_storage_area =
@@ -50464,7 +50589,7 @@ const char *Txt_temporary_private_storage_area =
 #elif L==9	// pt
 	"zona privada de armazenamento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"temporary private storage area";		// Çeviri lazim!
 #endif
 
 const char *Txt_Test =
@@ -50487,7 +50612,7 @@ const char *Txt_Test =
 #elif L==9	// pt
 	"Teste";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Test";	// Çeviri lazim!
 #endif
 
 const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very important to include %u in the following sentences
@@ -50510,7 +50635,7 @@ const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very 
 #elif L==9	// pt
 	"Teste n&ordm; %u que voc&ecirc; faz nesta disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Test No. %u that you make in this course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Text =
@@ -50533,7 +50658,7 @@ const char *Txt_Text =
 #elif L==9	// pt
 	"Texto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Text";		// Çeviri lazim!
 #endif
 
 const char *Txt_TEXT_plain =
@@ -50556,7 +50681,7 @@ const char *Txt_TEXT_plain =
 #elif L==9	// pt
 	"plano";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"plain";	// Çeviri lazim!
 #endif
 
 const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
@@ -50579,7 +50704,7 @@ const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 #elif L==9	// pt
 	"Obrigado por relatar um possível usu&aacute;rio duplicado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thank you for reporting a possible duplicate user.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thanks_for_answering_the_survey =
@@ -50602,7 +50727,7 @@ const char *Txt_Thanks_for_answering_the_survey =
 #elif L==9	// pt
 	"Obrigado por responder o inqu&eacute;rito.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thanks for answering the survey.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_alphabetical_code_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -50625,7 +50750,7 @@ const char *Txt_The_alphabetical_code_X_already_exists =	// Warning: it is very 
 #elif L==9	// pt
 	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ISO 3166-1 alphabetical code %s already exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very important to include %s in the following sentences
@@ -50648,7 +50773,7 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 #elif L==9	// pt
 	"O c&oacute;digo alfab&eacute;tico ISO 3166-1 %s n&atilde;o est&aacute; correto.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ISO 3166-1 alphabetical code %s is not correct.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	// Warning: it is very important to include %ld in the following sentences
@@ -50680,7 +50805,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	/
 	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
 	" aparecer&atilde;o embaralhadas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The answers of the question with code <strong>%ld</strong>"
+	" will appear shuffled.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling =	// Warning: it is very important to include %ld in the following sentences
@@ -50712,7 +50838,8 @@ const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuf
 	"As respostas da pergunta com o c&oacute;digo <strong>%ld</strong>"
 	" aparecer&atilde;o sem embaralhar.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The answers of the question with code <strong>%ld</strong>"
+	" will appear without shuffling.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_assignment_has_been_modified =
@@ -50735,7 +50862,7 @@ const char *Txt_The_assignment_has_been_modified =
 #elif L==9	// pt
 	"A atividade foi modificada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The assignment has been modified.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_banner_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -50758,7 +50885,7 @@ const char *Txt_The_banner_X_already_exists =	// Warning: it is very important t
 #elif L==9	// pt
 	"O banner <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The banner <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -50781,7 +50908,7 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==9	// pt
 	"O banner <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The banner <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_building_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -50804,7 +50931,7 @@ const char *Txt_The_building_X_already_exists =	// Warning: it is very important
 #elif L==9	// pt
 	"O edif&iacute;cio <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The building <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -50827,7 +50954,7 @@ const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very im
 #elif L==9	// pt
 	"O edif&iacute;cio <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The building <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -50850,7 +50977,7 @@ const char *Txt_The_building_of_room_X_has_not_changed =	// Warning: it is very 
 #elif L==9	// pt
 	"O edif&iacute;cio da sala <strong>%s</strong> n&atilde;o mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The building of room <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -50873,7 +51000,7 @@ const char *Txt_The_building_of_room_X_is_now_Y =	// Warning: it is very importa
 #elif L==9	// pt
 	"O edif&iacute;cio da sala <strong>%s</strong> &eacute; agora <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The building of room <strong>%s</strong> is now <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_call_for_exam_has_been_successfully_updated =
@@ -50896,7 +51023,7 @@ const char *Txt_The_call_for_exam_has_been_successfully_updated =
 #elif L==9	// pt
 	"A chamada para exame foi atualizada com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The call for exam has been successfully updated.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -50919,7 +51046,7 @@ const char *Txt_The_capacity_of_room_X_has_not_changed =	// Warning: it is very 
 #elif L==9	// pt
 	"A capacidade da sala <strong>%s</strong> n&atilde;o mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The capacity of room <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
@@ -50942,7 +51069,7 @@ const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very importa
 #elif L==9	// pt
 	"A capacidade da sala <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The capacity of room <strong>%s</strong> is now <strong>%u</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_center_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -50965,7 +51092,7 @@ const char *Txt_The_center_X_already_exists =	// Warning: it is very important t
 #elif L==9	// pt
 	"O centro <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The center <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -50997,7 +51124,8 @@ const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: i
 	"O centro <strong>%s</strong> foi transferido"
 	" para a institui&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The center <strong>%s</strong> has been moved"
+	" to the institution <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51020,7 +51148,7 @@ const char *Txt_The_center_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==9	// pt
 	"O centro <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The center <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_configuration_of_the_projects_has_been_updated =
@@ -51043,7 +51171,7 @@ const char *Txt_The_configuration_of_the_projects_has_been_updated =
 #elif L==9	// pt
 	"A configura&ccedil;&atilde;o dos projetos foi atualizada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The configuration of the projects has been updated.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_contents_of_the_folder_are_too_big =
@@ -51066,7 +51194,7 @@ const char *Txt_The_contents_of_the_folder_are_too_big =
 #elif L==9	// pt
 	"O conte&uacute;do do diret&oacute;rio &eacute; muito grande.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The contents of the folder are too big.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_been_successful =
@@ -51089,7 +51217,7 @@ const char *Txt_The_copy_has_been_successful =
 #elif L==9	// pt
 	"A c&oacute;pia foi feita com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has been successful.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -51121,7 +51249,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
 	" porque ele excederia a cota de disco.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -51153,7 +51282,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_i
 	"A c&oacute;pia parou ao tentar colar a pasta <strong>%s</strong>"
 	" porque ele excederia a cota de disco.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
+	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -51185,7 +51315,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_
 	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
 	" porque ele excederia a cota de disco.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the link <strong>%s</strong>"
+	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -51217,7 +51348,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
 	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -51249,7 +51381,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_i
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
 	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
@@ -51281,7 +51414,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_
 	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
 	" porque ele excederia o n&uacute;mero m&aaxute;ximo permitido de n&iacute;veis.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the link <strong>%s</strong>"
+	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -51313,7 +51447,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_the
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
 	" porque j&aacute; existe um objeto com esse nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	" because there is already an object with that name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
@@ -51345,7 +51480,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_the
 	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
 	" porque j&aacute; existe um objeto com esse nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the link <strong>%s</strong>"
+	" because there is already an object with that name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -51377,7 +51513,8 @@ const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you
 	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
 	" porque voc&ecirc; n&atilde;o pode colar um arquivo aqui de um tipo diferente de HTML.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	" because you can not paste a file here of a type other than HTML.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_country_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51400,7 +51537,7 @@ const char *Txt_The_country_X_already_exists =	// Warning: it is very important 
 #elif L==9	// pt
 	"O pa&iacute;s <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The country <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51423,7 +51560,7 @@ const char *Txt_The_country_X_has_been_renamed_as_Y =	// Warning: it is very imp
 #elif L==9	// pt
 	"O pa&iacute;s <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The country <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51455,7 +51592,8 @@ const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: 
 	"The country of the institution <strong>%s</strong>"
 	" has changed to <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The country of the institution <strong>%s</strong>"
+	" has changed to <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_course_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51478,7 +51616,7 @@ const char *Txt_The_course_X_already_exists =	// Warning: it is very important t
 #elif L==9	// pt
 	"A disciplina <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The course <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51501,7 +51639,7 @@ const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very i
 #elif L==9	// pt
 	"A disciplina <strong>%s</strong> j&aacute; existe no ano/semestre %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The course <strong>%s</strong> already exists in year/semester %s.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51533,7 +51671,8 @@ const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is 
 	"A disciplina curso <strong>%s</strong> foi movida"
 	" para o grau <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The course <strong>%s</strong> has been moved"
+	" to the degree <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51565,7 +51704,8 @@ const char *Txt_The_course_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"A disciplina <strong>%s</strong>"
 	" foi renomeada como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The course <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51588,7 +51728,7 @@ const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is v
 #elif L==9	// pt
 	"A data do feriado <strong>%s</strong> mudou para <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning: it is very important to include %u in the following sentences
@@ -51611,7 +51751,7 @@ const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning
 #elif L==9	// pt
 	"O intervalo de datas deve ser menor ou igual a %u dias.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The date range must be less than or equal to %u days.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_date_time_of_opening_of_groups_has_changed =
@@ -51626,15 +51766,15 @@ const char *Txt_The_date_time_of_opening_of_groups_has_changed =
 #elif L==5	// fr
 	"La date/heure d'ouverture des groupes a chang&eacute;.";
 #elif L==6	// gn
-	"La fecha/hora de apertura ha cambiado.";	// Okoteve traducción
+	"La fecha/hora de apertura ha cambiado.";		// Okoteve traducción
 #elif L==7	// it
 	"La data/ora di apertura dei gruppi &egrave; cambiata.";
 #elif L==8	// pl
-	"The date/time of opening of groups has changed.";			// Potrzebujesz tlumaczenie
+	"The date/time of opening of groups has changed.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"A data/hora de abertura dos grupos foi alterada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The date/time of opening of groups has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51657,7 +51797,7 @@ const char *Txt_The_degree_X_already_exists =	// Warning: it is very important t
 #elif L==9	// pt
 	"O grau <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The degree <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51689,7 +51829,8 @@ const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is 
 	"O grau <strong>%s</strong> foi movido"
 	" para o centro <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The degree <strong>%s</strong> has been moved"
+	" to the center <strong>%s</strong>."	;	// Çeviri lazim!
 #endif
 
 const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51721,7 +51862,8 @@ const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O grau <strong>%s</strong>"
 	" foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The degree <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51744,7 +51886,7 @@ const char *Txt_The_department_X_already_exists =	// Warning: it is very importa
 #elif L==9	// pt
 	"O departamento <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The department <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51776,7 +51918,8 @@ const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very 
 	"O departamento <strong>%s</strong>"
 	" foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The department <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -51799,7 +51942,7 @@ const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very importan
 #elif L==9	// pt
 	"O email <strong>%s</strong> foi confirmado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email <strong>%s</strong> has been confirmed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -51831,7 +51974,8 @@ const char *Txt_The_email_address_entered_X_is_not_valid =	// Warning: it is ver
 	"O endere&ccedil;o de email inserido"
 	" <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email address entered"
+	" <strong>%s</strong> is not valid.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// Warning: it is very important to include %s in the following sentences
@@ -51863,7 +52007,8 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" foi registrado por outro usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email address <strong>%s</strong>"
+	" had been registered by another user.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
@@ -51895,7 +52040,8 @@ const char *Txt_The_email_address_X_has_been_registered_successfully =	// Warnin
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" foi registrado com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email address <strong>%s</strong>"
+	" has been registered successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warning: it is very important to include %s in the following sentences
@@ -51927,7 +52073,8 @@ const char *Txt_The_email_address_X_matches_one_previously_registered =	// Warni
 	"O endere&ccedil;o de email <strong>%s</strong>"
 	" corresponde a um registrado anteriormente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email address <strong>%s</strong>"
+	" matches one previously registered.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_domain_X_already_exists =
@@ -51942,7 +52089,7 @@ const char *Txt_The_email_domain_X_already_exists =
 #elif L==5	// fr
 	"Le domaine de messagerie existe d&eacute;j&grave;.";
 #elif L==6	// gn
-	"El dominio de correo ya existe.";		// Okoteve traducción
+	"El dominio de correo ya existe.";	// Okoteve traducción
 #elif L==7	// it
 	"Il campo mail gi&agrave; esiste.";
 #elif L==8	// pl
@@ -51950,7 +52097,7 @@ const char *Txt_The_email_domain_X_already_exists =
 #elif L==9	// pt
 	"O dom&iacute;nio de email j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email domain already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -51982,7 +52129,8 @@ const char *Txt_The_email_domain_X_has_been_renamed_as_Y =	// Warning: it is ver
 	"O dom&iacute;nio de email <strong>%s</strong>"
 	" foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email domain <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -52005,7 +52153,7 @@ const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very impo
 #elif L==9	// pt
 	"O dom&iacute;nio de email <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The email domain <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
@@ -52018,9 +52166,9 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory
 #elif L==4	// es
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";
 #elif L==5	// fr
-	"L'inscription des &eacute;tudiants dans les groupes de type <strong>%s</strong> est d&eacute;sormais obligatoire.";			// Besoin de traduction
+	"L'inscription des &eacute;tudiants dans les groupes de type <strong>%s</strong> est d&eacute;sormais obligatoire.";	// Besoin de traduction
 #elif L==6	// gn
-	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";	// Okoteve traducción
+	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";			// Okoteve traducción
 #elif L==7	// it
 	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora obbligatoria.";
 #elif L==8	// pl
@@ -52028,7 +52176,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory
 #elif L==9	// pt
 	"A inscri&ccedil;&atilde;o de alunos em grupos do tipo <strong>%s</strong> &eacute; agora obrigat&oacute;ria.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";					// Çeviri lazim!
 #endif
 
 const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
@@ -52051,7 +52199,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary
 #elif L==9	// pt
 	"A inscri&ccedil;&atilde;o de estudantes em grupos do tipo <strong>%s</strong> &eacute; agora volunt&aacute;ria.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_event_has_been_modified =
@@ -52074,7 +52222,7 @@ const char *Txt_The_event_has_been_modified =
 #elif L==9	// pt
 	"O evento foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The event has been modified.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_exam_has_been_modified =
@@ -52097,7 +52245,7 @@ const char *Txt_The_exam_has_been_modified =
 #elif L==9	// pt
 	"O exame foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The exam has been modified.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_could_not_be_processed_successfully =
@@ -52120,7 +52268,7 @@ const char *Txt_The_file_could_not_be_processed_successfully =
 #elif L==9	// pt
 	"O arquivo n&atilde;o p&ocirc;de ser processado com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file could not be processed successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y =	// Warning: it is very important to include %s in the following sentences
@@ -52152,7 +52300,8 @@ const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 	"O arquivo <strong>%s</strong> foi colocado"
 	" dentro do diret&oacute;rio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file <strong>%s</strong> has been placed"
+	" inside the folder <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_is_not_X =	// Warning: it is very important to include %s in the following sentences
@@ -52175,7 +52324,7 @@ const char *Txt_The_file_is_not_X =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"O arquivo n&atilde;o &eacute; <em>%s</em>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file is not <em>%s</em>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
@@ -52198,7 +52347,7 @@ const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
 #elif L==9	// pt
 	"O arquivo ou diret&oacute;rio n&atilde;o existe mais ou est&aacute; escondido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file or folder no longer exists or is now hidden.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP =	// Warning: it is very important to include %s in the following sentences
@@ -52221,7 +52370,7 @@ const char *Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP =	// Warning: it is
 #elif L==9	// pt
 	"O tipo de arquivo &eacute; %s e deve ser <em>HTML</em> ou <em>ZIP</em>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file type is %s and should be <em>HTML</em> or <em>ZIP</em>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_file_type_should_be_HTML_or_ZIP =
@@ -52244,7 +52393,7 @@ const char *Txt_The_file_type_should_be_HTML_or_ZIP =
 #elif L==9	// pt
 	"O tipo de arquivo deve ser <em>HTML</em> ou <em>ZIP</em>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The file type should be <em>HTML</em> or <em>ZIP</em>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_floor_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -52267,7 +52416,7 @@ const char *Txt_The_floor_of_room_X_has_not_changed =	// Warning: it is very imp
 #elif L==9	// pt
 	"O andar da sala <strong>%s</strong> n&atilde;o mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The floor of room <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_floor_of_room_X_is_now_Y =	// Warning: it is very important to include %s and %d in the following sentences
@@ -52290,7 +52439,7 @@ const char *Txt_The_floor_of_room_X_is_now_Y =	// Warning: it is very important 
 #elif L==9	// pt
 	"O andar da sala <strong>%s</strong> &eacute; agora <strong>%d</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The floor of room <strong>%s</strong> is now <strong>%d</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52313,7 +52462,7 @@ const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y =	// Warning: 
 #elif L==9	// pt
 	"O diret&oacute;rio <strong>%s</strong> foi criado dentro do diret&oacute;rio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The folder <strong>%s</strong> has been created inside the folder <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_folder_is_empty =
@@ -52336,7 +52485,7 @@ const char *Txt_The_folder_is_empty =
 #elif L==9	// pt
 	"O diret&oacute;rio est&aacute; vazio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The folder is empty.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_folder_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52359,7 +52508,7 @@ const char *Txt_The_folder_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==9	// pt
 	"A pasta <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The folder <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52391,7 +52540,8 @@ const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_fol
 	"O nome da pasta <strong>%s</strong> n&atilde;o foi alterado"
 	" porque j&aacute; existe uma pasta ou um arquivo com o nome <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The folder name <strong>%s</strong> has not changed"
+	" because there is already a folder or a file with the name <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_game_has_been_modified =
@@ -52414,7 +52564,7 @@ const char *Txt_The_game_has_been_modified =
 #elif L==9	// pt
 	"O jogo foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The game has been modified.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_group_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -52437,7 +52587,7 @@ const char *Txt_The_group_X_already_exists =	// Warning: it is very important to
 #elif L==9	// pt
 	"O grupo <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The group <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_group_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52469,7 +52619,8 @@ const char *Txt_The_group_X_has_been_renamed_as_Y =	// Warning: it is very impor
 	"O grupo <strong>%s</strong>"
 	" foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The group <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_group_X_is_now_closed =	// Warning: it is very important to include %s in the following sentences
@@ -52492,7 +52643,7 @@ const char *Txt_The_group_X_is_now_closed =	// Warning: it is very important to 
 #elif L==9	// pt
 	"O grupo <strong>%s</strong> est&aacute; agora fechado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The group <strong>%s</strong> is now closed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_group_X_is_now_open =	// Warning: it is very important to include %s in the following sentences
@@ -52515,7 +52666,7 @@ const char *Txt_The_group_X_is_now_open =	// Warning: it is very important to in
 #elif L==9	// pt
 	"O grupo <strong>%s</strong> est&aacute; agora aberto.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The group <strong>%s</strong> is now open.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_group_X_does_not_have_a_student_limit_now =	// Warning: it is very important to include %s in the following sentences
@@ -52538,7 +52689,7 @@ const char *Txt_The_group_X_does_not_have_a_student_limit_now =	// Warning: it i
 #elif L==9	// pt
 	"O grupo <strong>%s</strong> n&atilde;o tem limite de estudantes agora.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The group <strong>%s</strong> does not have a student limit now.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_groups_will_automatically_open =
@@ -52561,7 +52712,7 @@ const char *Txt_The_groups_will_automatically_open =
 #elif L==9	// pt
 	"Os grupos ser&atilde;o abertos automaticamente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The groups will automatically open.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_groups_will_not_automatically_open =
@@ -52584,7 +52735,7 @@ const char *Txt_The_groups_will_not_automatically_open =
 #elif L==9	// pt
 	"Os grupos n&atilde;o ser&atilde;o abertos automaticamente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The groups will not automatically open.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52616,7 +52767,8 @@ const char *Txt_The_holiday_X_has_been_renamed_as_Y =	// Warning: it is very imp
 	"O feriado <strong>%s</strong>"
 	" foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The holiday <strong>%s</strong>"
+	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_HTML_file_has_been_received_successfully =
@@ -52639,7 +52791,7 @@ const char *Txt_The_HTML_file_has_been_received_successfully =
 #elif L==9	// pt
 	"O arquivo <em>HTML</em> foi recebido com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The <em>HTML</em> file has been received successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
@@ -52670,7 +52822,8 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 	"O ID <strong>%s</strong>"
 	" foi confirmado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ID <strong>%s</strong>"
+	" has been confirmed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
@@ -52702,7 +52855,8 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 	"O ID <strong>%s</strong>"
 	" foi registrado com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ID <strong>%s</strong>"
+	" has been registered successfully.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -52734,7 +52888,8 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 	"O ID <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido."
 	" S&oacute; pode conter n&uacute;meros (pelo menos um) e letras.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ID <strong>%s</strong> is not valid."
+	" It can only contain numbers (at least one) and letters.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
@@ -52802,7 +52957,12 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 	" (eg., com ou sem letra),"
 	" escreva todas as vers&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ID is used in order to facilitate"
+	" enrolment in courses"
+	" and consulting marks."
+	" If there are multiple versions of the ID"
+	" (eg. with or without letter),"
+	" write out all versions.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
@@ -52825,7 +52985,7 @@ const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very
 #elif L==9	// pt
 	"O @nick, email ou ID <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Çeviri lazim!
 #endif
 
 const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very important to include %s in the following sentences
@@ -52857,7 +53017,8 @@ const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very im
 	"O ID <strong>%s</strong>"
 	" corresponde a um dos existentes.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ID <strong>%s</strong>"
+	" matches one of the existing.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_institution_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -52880,7 +53041,7 @@ const char *Txt_The_institution_X_already_exists =	// Warning: it is very import
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institution <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52903,7 +53064,7 @@ const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_institution_of_the_center_has_changed =
@@ -52926,7 +53087,7 @@ const char *Txt_The_institution_of_the_center_has_changed =
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o do centro mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institution of the center has changed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_institution_of_the_department_has_changed =
@@ -52949,7 +53110,7 @@ const char *Txt_The_institution_of_the_department_has_changed =
 #elif L==9	// pt
 	"A institui&ccedil;&atilde;o do departamento mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institution of the department has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -52981,7 +53142,8 @@ const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y =	// War
 	"O c&oacute;digo institucional da disciplina <strong>%s</strong>"
 	" mudou para <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institutional code of the course <strong>%s</strong>"
+	" has changed to <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_institutional_code_of_the_course_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -53004,7 +53166,7 @@ const char *Txt_The_institutional_code_of_the_course_X_has_not_changed =	// Warn
 #elif L==9	// pt
 	"O c&oacute;digo institucional da disciplina <strong>%s</strong> n&atilde;o mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The institutional code of the course <strong>%s</strong> has not changed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_integrated_editor_is_not_yet_available =
@@ -53027,7 +53189,7 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 #elif L==9	// pt
 	"O editor integrado ainda n&atilde;o est&aacute; dispon&iacute;vel.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The integrated editor is not yet available.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_link_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -53050,7 +53212,7 @@ const char *Txt_The_link_X_already_exists =	// Warning: it is very important to 
 #elif L==9	// pt
 	"O link <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The link <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y =	// Warning: it is very important to include %s in the following sentences
@@ -53082,7 +53244,8 @@ const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y =	// Warning: it 
 	"A liga&ccedil;&atilde;o <strong>%s</strong> foi colocado"
 	" dentro do diret&oacute;rio <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The link <strong>%s</strong> has been placed"
+	" inside the folder <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_link_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -53105,7 +53268,7 @@ const char *Txt_The_link_X_has_been_renamed_as_Y =	// Warning: it is very import
 #elif L==9	// pt
 	"O link <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The link <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed =	// Warning: it is very important to include %u in the following sentences
@@ -53128,7 +53291,7 @@ const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed =	// Warning:
 #elif L==9	// pt
 	"A lista de %u disciplinas &eacute; muito grande para ser exibida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The list of %u courses is too large to be displayed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: it is very important to include %u in the following sentences
@@ -53151,7 +53314,7 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 #elif L==9	// pt
 	"A lista de %u usu&aacute;rios &eacute; muito grande para ser exibida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The list of %u users is too large to be displayed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_location_of_the_building_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -53183,7 +53346,8 @@ const char *Txt_The_location_of_the_building_X_has_changed_to_Y =	// Warning: it
 	"A localiza&ccedil;&atilde;o do edif&iacute;cio <strong>%s</strong>"
 	" mudou para <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The location of the building <strong>%s</strong>"
+	" has changed to <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_location_of_the_building_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -53215,7 +53379,8 @@ const char *Txt_The_location_of_the_building_X_has_not_changed =	// Warning: it 
 	"A localiza&ccedil;&atilde;o do edif&iacute;cio <strong>%s</strong>"
 	" n&atilde;o foi alterada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The location of the building <strong>%s</strong>"
+	" has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit =
@@ -53247,7 +53412,8 @@ const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to
 	"O limite inferior de respostas corretas"
 	" deve ser menor ou igual ao limite superior.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The lower limit of correct answers"
+	" must be less than or equal to the upper limit.";		// Çeviri lazim!
 #endif
 
 const char *Txt_the_marks_of_a_student_chosen_at_random_ =
@@ -53274,12 +53440,13 @@ const char *Txt_the_marks_of_a_student_chosen_at_random_ =
 	" se si vede pi&uacute; di uno studente, significa che il numero di righe di intestazione o a pi&egrave; di pagina non &egrave; corretto";
 #elif L==8	// pl
 	"the marks of a student chosen at random from the course will be shown;<br />"
-	" if you see more than one student, it means that the number of header or footer rows is not correct";	// Potrzebujesz tlumaczenie
+	" if you see more than one student, it means that the number of header or footer rows is not correct";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"vai mostrar as notas de um estudante da disciplina escolhido ao acaso;<br />"
 	" se voc&ecirc; vir mais de um estudante, isso significa que o n&uacute;mero de cabe&ccedil;a ou p&eacute; linhas n&atilde;o est&aacute; correto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"the marks of a student chosen at random from the course will be shown;<br />"
+	" if you see more than one student, it means that the number of header or footer rows is not correct";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -53311,7 +53478,8 @@ const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// W
 	"O n&uacute;mero m&aacute;ximo de estudantes"
 	" no grupo <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The maximum number of students"
+	" in group <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y =	// Warning: it is very important to include %s and %u in the following sentences
@@ -53343,7 +53511,8 @@ const char *Txt_The_maximum_number_of_students_in_group_X_is_now_Y =	// Warning:
 	"O n&uacute;mero m&aacute;ximo de estudantes"
 	" no grupo <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The maximum number of students"
+	" in group <strong>%s</strong> is now <strong>%u</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_message_has_not_been_sent_to_any_recipient =
@@ -53366,7 +53535,7 @@ const char *Txt_The_message_has_not_been_sent_to_any_recipient =
 #elif L==9	// pt
 	"A mensagem n&atilde;o foi enviada para nenhum destinat&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The message has not been sent to any recipient.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_message_has_been_sent_to_1_recipient =
@@ -53389,7 +53558,7 @@ const char *Txt_The_message_has_been_sent_to_1_recipient =
 #elif L==9	// pt
 	"A mensagem foi enviada para 1 destinat&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The message has been sent to 1 recipient.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_message_has_been_sent_to_X_recipients =	// Warning: it is very important to include %u in the following sentences
@@ -53412,7 +53581,7 @@ const char *Txt_The_message_has_been_sent_to_X_recipients =	// Warning: it is ve
 #elif L==9	// pt
 	"A mensagem foi enviada para %u destinat&aacute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The message has been sent to %u recipients.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_name_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -53435,7 +53604,7 @@ const char *Txt_The_name_X_has_not_changed =	// Warning: it is very important to
 #elif L==9	// pt
 	"O nome <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The name <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_application_key_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53458,7 +53627,7 @@ const char *Txt_The_new_application_key_is_X =	// Warning: it is very important 
 #elif L==9	// pt
 	"A nova chave do aplicativo &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new application key is <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53481,7 +53650,7 @@ const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to in
 #elif L==9	// pt
 	"O novo endere&ccedil;o IP &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new IP address is <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53504,7 +53673,7 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"O novo logotipo &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new logo is <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_nickname_has_been_registered_successfully =
@@ -53527,7 +53696,7 @@ const char *Txt_The_nickname_has_been_registered_successfully =
 #elif L==9	// pt
 	"A alcunha foi registrada com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The nickname has been registered successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_nickname_is_not_valid_ =
@@ -53573,7 +53742,10 @@ const char *Txt_The_nickname_is_not_valid_ =
 	"Cada caractere ap&oacute;s inicial @ pode ser uma letra (a-z, A-Z),"
 	" um dígito (0-9) ou &quot;_&quot;.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The nickname is not valid.<br />"
+	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
+	"Each character after initial @ can be a letter (a-z, A-Z),"
+	" a digit (0-9) or &quot;_&quot;.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
@@ -53677,7 +53849,16 @@ const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 	" enviar uma mensagem para todos"
 	" ou enviar um arquivo com o texto para a &aacute;rea de documentos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The notice will appear as a yellow note"
+	" in the left of the page"
+	" and will be <strong>visible worldwide</strong>"
+	" (not just by users of the course).<br />"
+	"<strong>The message should be short</strong>."
+	" If you want to create a long notice"
+	" or a notice with exclusive access for students,"
+	" you can use the forum of the course,"
+	" send a message to all,"
+	" or upload a file with the text to the documents area.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_web_address_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53700,7 +53881,7 @@ const char *Txt_The_new_web_address_is_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"O novo endere&ccedil;o web &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new web address is <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_description_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53723,7 +53904,7 @@ const char *Txt_The_new_description_is_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"A nova descri&ccedil;&atilde;o &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new description is <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_image_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53746,7 +53927,7 @@ const char *Txt_The_new_image_is_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"A nova imagem &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new image is <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_new_URL_is_X =	// Warning: it is very important to include %s in the following sentences
@@ -53769,7 +53950,7 @@ const char *Txt_The_new_URL_is_X =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"O novo URL &eacute; <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The new URL is <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_nickname_had_been_registered_by_another_user =
@@ -53792,7 +53973,7 @@ const char *Txt_The_nickname_had_been_registered_by_another_user =
 #elif L==9	// pt
 	"A alcunha foi registrada por outro usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The nickname had been registered by another user.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_nickname_matches_the_one_you_had_previously_registered =
@@ -53815,7 +53996,7 @@ const char *Txt_The_nickname_matches_the_one_you_had_previously_registered =
 #elif L==9	// pt
 	"A alcunha corresponde &agrave;quela que voc&ecirc; registrou anteriormente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The nickname matches the one you had previously registered.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -53836,7 +54017,7 @@ const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_change
 	" dans le champ de carte <strong>%s</strong> n'a pas chang&eacute;.";
 #elif L==6	// gn
 	"El n&ordm; de l&iacute;neas de edici&oacute;n"
-	" del campo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
+	" del campo <strong>%s</strong> no ha cambiado.";		// Okoteve traducción
 #elif L==7	// it
 	"Il numero di linee editate"
 	" nel campo scheda <strong>%s</strong> non &egrave; cambiato.";
@@ -53847,7 +54028,8 @@ const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_change
 	"O n&uacute;mero de linhas de edi&ccedil;&atilde;o"
 	" no campo de cart&atilde;o <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The number of editing lines"
+	" in the record field <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_number_of_questions_must_be_in_the_interval_X =	// Warning: it is very important to include two %u in the following sentences
@@ -53870,7 +54052,7 @@ const char *Txt_The_number_of_questions_must_be_in_the_interval_X =	// Warning: 
 #elif L==9	// pt
 	"O n&uacute;mero de perguntas deve estar no intervalo [%u,%u].";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The number of questions must be in the interval [%u,%u].";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_number_of_rows_is_now_X =	// Warning: it is very important to include %u in the following sentences
@@ -53893,7 +54075,7 @@ const char *Txt_The_number_of_rows_is_now_X =	// Warning: it is very important t
 #elif L==9	// pt
 	"O n&uacute;mero de linhas agora &eacute; <strong>%u</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The number of rows is now <strong>%u</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very important to include %03lu in the following sentences
@@ -53916,7 +54098,7 @@ const char *Txt_The_numerical_code_X_already_exists =	// Warning: it is very imp
 #elif L==9	// pt
 	"O c&oacute;digo num&eacute;rico %03ld da ISO 3166-1 j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The ISO 3166-1 numerical code %03ld already exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_photo_no_longer_exists =
@@ -53939,7 +54121,7 @@ const char *Txt_The_photo_no_longer_exists =
 #elif L==9	// pt
 	"La foto n&atilde;o existe mais.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The photo no longer exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_post_no_longer_exists =
@@ -53962,7 +54144,7 @@ const char *Txt_The_post_no_longer_exists =
 #elif L==9	// pt
 	"A publica&ccedil;&atilde;o n&atilde;o existe mais.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The post no longer exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_password_can_not_consist_only_of_digits =
@@ -53994,7 +54176,8 @@ const char *Txt_The_password_can_not_consist_only_of_digits =
 	"A senha n&atilde;o pode consistir"
 	" apenas em d&iacute;gitos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The password can not consist"
+	" only of digits.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_password_can_not_contain_spaces =
@@ -54017,7 +54200,7 @@ const char *Txt_The_password_can_not_contain_spaces =
 #elif L==9	// pt
 	"A senha n&atilde;o pode conter espa&ccedil;os.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The password can not contain spaces.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_password_is_too_trivial_ =
@@ -54049,7 +54232,8 @@ const char *Txt_The_password_is_too_trivial_ =
 	"A senha &eacute; muito trivial."
 	" Use outro mais difícil de adivinhar.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The password is too trivial."
+	" Use other harder to guess.";				// Çeviri lazim!
 #endif
 
 const char *Txt_The_password_must_be_at_least_X_characters =	// Warning: it is very important to include %u in the following sentences
@@ -54072,7 +54256,7 @@ const char *Txt_The_password_must_be_at_least_X_characters =	// Warning: it is v
 #elif L==9	// pt
 	"A senha deve ter pelo menos %u caracteres.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The password must be at least %u characters.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_password_has_been_changed_successfully =
@@ -54095,7 +54279,7 @@ const char *Txt_The_password_has_been_changed_successfully =
 #elif L==9	// pt
 	"A senha foi alterada com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The password has been changed successfully.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_place_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54118,7 +54302,7 @@ const char *Txt_The_place_X_already_exists =	// Warning: it is very important to
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The place <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54141,7 +54325,7 @@ const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very impor
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The place <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_place_of_the_center_has_changed =
@@ -54164,7 +54348,7 @@ const char *Txt_The_place_of_the_center_has_changed =
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o do centro mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The place of the center has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54187,7 +54371,7 @@ const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y =	// Warning: it is 
 #elif L==9	// pt
 	"A localiza&ccedil;&atilde;o do feriado <strong>%s</strong> mudou para <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The place of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_plugin_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54210,7 +54394,7 @@ const char *Txt_The_plugin_X_already_exists =	// Warning: it is very important t
 #elif L==9	// pt
 	"O plugin <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The plugin <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_plugin_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54233,7 +54417,7 @@ const char *Txt_The_plugin_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==9	// pt
 	"O plugin <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The plugin <strong>%s</strong> has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_project_has_been_modified =
@@ -54256,7 +54440,7 @@ const char *Txt_The_project_has_been_modified =
 #elif L==9	// pt
 	"O projeto foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The project has been modified.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is very important to include %s in the following sentences
@@ -54279,7 +54463,7 @@ const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is ver
 #elif L==9	// pt
 	"As propriedades do arquivo %s foram salvas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The properties of file %s have been saved.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_record_field_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54302,7 +54486,7 @@ const char *Txt_The_record_field_X_already_exists =	// Warning: it is very impor
 #elif L==9	// pt
 	"O campo de cart&atilde;o <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The record field <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54325,7 +54509,7 @@ const char *Txt_The_record_field_X_has_been_renamed_as_Y =	// Warning: it is ver
 #elif L==9	// pt
 	"O campo de cart&atilde;o <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The record field <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_requested_group_changes_were_successful =
@@ -54348,7 +54532,7 @@ const char *Txt_The_requested_group_changes_were_successful =
 #elif L==9	// pt
 	"As altera&ccedil;&otilde;es do grupo solicitadas foram bem sucedidas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The requested group changes were successful.";				// Çeviri lazim!
 #endif
 
 const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B =	// Warning: it is very important to include four %s in the following sentences
@@ -54389,7 +54573,9 @@ const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B =
 	" na disciplina <strong>%s</strong>"
 	" mudou de %s para %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The role of <strong>%s</strong>"
+	" in the course <strong>%s</strong>"
+	" has changed from %s to %s.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_room_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54412,7 +54598,7 @@ const char *Txt_The_room_X_already_exists =	// Warning: it is very important to 
 #elif L==9	// pt
 	"A sala <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The room <strong>%s</strong> already exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it is very important to include %s in the following sentences
@@ -54427,7 +54613,7 @@ const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it
 #elif L==5	// fr
 	"La salle <strong>%s</strong> n'a plus de capacit&eacute; limit&eacute;e.";
 #elif L==6	// gn
-	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";	// Okoteve traducción
+	"La sala <strong>%s</strong> ya no tiene un aforo limitado.";		// Okoteve traducción
 #elif L==7	// it
 	"L'aula <strong>%s</strong> non ha una capacit&agrave; limitata ora.";
 #elif L==8	// pl
@@ -54435,7 +54621,7 @@ const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it
 #elif L==9	// pt
 	"A sala <strong>%s</strong> n&atilde;o tem capacidade limitada agora.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The room <strong>%s</strong> does not have a limited capacity now.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_room_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54458,7 +54644,7 @@ const char *Txt_The_room_X_has_been_renamed_as_Y =	// Warning: it is very import
 #elif L==9	// pt
 	"A sala <strong>%s</strong> foi renomeada como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The room <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_room_assigned_to_the_group_X_has_changed =
@@ -54481,7 +54667,7 @@ const char *Txt_The_room_assigned_to_the_group_X_has_changed =
 #elif L==9	// pt
 	"A sala atribu&iacute;da ao grupo <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The room assigned to the group <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it =	// Warning: it is very important to include %u and %s in the following sentences
@@ -54502,7 +54688,7 @@ const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_fr
 	" en ont &eacute;t&eacute; retir&eacute;s.";
 #elif L==6	// gn
 	"Se han eliminado los %u estudiantes que hab&iacute;a"
-	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
+	" en la asignatura <strong>%s</strong>.";				// Okoteve traducción
 #elif L==7	// it
 	"Gli %u studenti che appartengono"
 	" al corso <strong>%s</strong> sono stati rimossi da esso.";
@@ -54513,7 +54699,8 @@ const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_fr
 	"Os %u estudantes que pertenceram"
 	" &agrave; disciplina <strong>%s</strong> foram removidos dela.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The %u students who belonged"
+	" to the course <strong>%s</strong> have been removed from it.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_search_text_must_be_longer =
@@ -54536,7 +54723,7 @@ const char *Txt_The_search_text_must_be_longer =
 #elif L==9	// pt
 	"O texto de pesquisa deve ser mais longo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The search text must be longer.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_session_has_expired =
@@ -54559,7 +54746,7 @@ const char *Txt_The_session_has_expired =
 #elif L==9	// pt
 	"A sess&atilde;o expirou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The session has expired.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_set_of_questions_has_been_modified =
@@ -54582,7 +54769,7 @@ const char *Txt_The_set_of_questions_has_been_modified =
 #elif L==9	// pt
 	"O conjunto de perguntas foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The set of questions has been modified.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
@@ -54614,7 +54801,8 @@ const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning:
 	"O tamanho do arquivo"
 	" excede o m&aacute;ximo permitido (%s).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The size of the file"
+	" exceeds the maximum allowed (%s).";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_status_of_the_center_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54637,7 +54825,7 @@ const char *Txt_The_status_of_the_center_X_has_changed =	// Warning: it is very 
 #elif L==9	// pt
 	"O status do centro <strong>%s</strong> foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The status of the center <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_status_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54660,7 +54848,7 @@ const char *Txt_The_status_of_the_course_X_has_changed =	// Warning: it is very 
 #elif L==9	// pt
 	"O status do curso <strong>%s</strong> foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The status of the course <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_status_of_the_degree_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54683,7 +54871,7 @@ const char *Txt_The_status_of_the_degree_X_has_changed =	// Warning: it is very 
 #elif L==9	// pt
 	"O status do grau <strong>%s</strong> foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The status of the degree <strong>%s</strong> has changed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_status_of_the_institution_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54706,7 +54894,7 @@ const char *Txt_The_status_of_the_institution_X_has_changed =	// Warning: it is 
 #elif L==9	// pt
 	"O status da institui&ccedil;&atilde;o <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The status of the institution <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_survey_has_been_modified =
@@ -54729,7 +54917,7 @@ const char *Txt_The_survey_has_been_modified =
 #elif L==9	// pt
 	"O inqu&eacute;rito foi modificado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The survey has been modified.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54752,7 +54940,7 @@ const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very importa
 #elif L==9	// pt
 	"O descritor <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The tag <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_tag_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54775,7 +54963,7 @@ const char *Txt_The_tag_X_has_not_changed =	// Warning: it is very important to 
 #elif L==9	// pt
 	"O descritor <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The tag <strong>%s</strong> has not changed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_test_X_has_already_been_assessed_previously =	// Warning: it is very important to include %u in the following sentences
@@ -54798,7 +54986,7 @@ const char *Txt_The_test_X_has_already_been_assessed_previously =	// Warning: it
 #elif L==9	// pt
 	"O teste %u j&aacute; foi avaliado anteriormente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The test %u has already been assessed previously.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_test_configuration_has_been_updated =
@@ -54821,7 +55009,7 @@ const char *Txt_The_test_configuration_has_been_updated =
 #elif L==9	// pt
 	"A configura&ccedil;&atilde;o de teste foi atualizada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The test configuration has been updated.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_thread_is_already_in_this_forum =
@@ -54844,7 +55032,7 @@ const char *Txt_The_thread_is_already_in_this_forum =
 #elif L==9	// pt
 	"A discuss&atilde;o j&aacute; est&aacute; neste f&oacute;rum.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The thread is already in this forum.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_thread_X_is_already_in_this_forum =	// Warning: it is very important to include %s in the following sentences
@@ -54867,7 +55055,7 @@ const char *Txt_The_thread_X_is_already_in_this_forum =	// Warning: it is very i
 #elif L==9	// pt
 	"A discuss&atilde;o <strong>%s</strong> j&aacute; est&aacute; neste f&oacute;rum.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The thread <strong>%s</strong> is already in this forum.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_timetable_is_empty =
@@ -54890,7 +55078,7 @@ const char *Txt_The_timetable_is_empty =
 #elif L==9	// pt
 	"O hor&aacute;rio est&aacute; vazio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The timetable is empty.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54913,7 +55101,7 @@ const char *Txt_The_type_of_degree_X_already_exists =	// Warning: it is very imp
 #elif L==9	// pt
 	"O tipo de grau <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of degree <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -54936,7 +55124,7 @@ const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y =	// Warning: it is v
 #elif L==9	// pt
 	"O tipo de grau <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of degree <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_degree_of_the_degree_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -54959,7 +55147,7 @@ const char *Txt_The_type_of_degree_of_the_degree_X_has_changed =	// Warning: it 
 #elif L==9	// pt
 	"O tipo de grau do grau <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of degree of the degree <strong>%s</strong> has changed.";				// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_group_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -54982,7 +55170,7 @@ const char *Txt_The_type_of_group_X_already_exists =	// Warning: it is very impo
 #elif L==9	// pt
 	"O tipo de grupo <strong>%s</strong> j&aacute; existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of group <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_group_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55005,7 +55193,7 @@ const char *Txt_The_type_of_group_X_has_been_renamed_as_Y =	// Warning: it is ve
 #elif L==9	// pt
 	"O tipo de grupo <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of group <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_group_of_the_group_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55028,7 +55216,7 @@ const char *Txt_The_type_of_group_of_the_group_X_has_changed =	// Warning: it is
 #elif L==9	// pt
 	"O tipo de grupo do grupo <strong>%s</strong> foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of group of the group <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55051,7 +55239,7 @@ const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed =	/
 #elif L==9	// pt
 	"O tipo de inscri&ccedil;&atilde;o do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_room_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55074,7 +55262,7 @@ const char *Txt_The_type_of_room_X_has_not_changed =	// Warning: it is very impo
 #elif L==9	// pt
 	"O tipo da sala <strong>%s</strong> n&atilde;o mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of room <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_room_X_is_now_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55097,7 +55285,7 @@ const char *Txt_The_type_of_room_X_is_now_Y =	// Warning: it is very important t
 #elif L==9	// pt
 	"O tipo da sala <strong>%s</strong> &eacute; agora <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of room <strong>%s</strong> is now <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55120,7 +55308,7 @@ const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very i
 #elif L==9	// pt
 	"O tipo do feriado <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The type of the holiday <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_URL_X_has_been_updated =	// Warning: it is very important to include %s in the following sentences
@@ -55143,7 +55331,7 @@ const char *Txt_The_URL_X_has_been_updated =	// Warning: it is very important to
 #elif L==9	// pt
 	"O URL <strong>%s</strong> foi atualizado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The URL <strong>%s</strong> has been updated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_user_does_not_exist =
@@ -55166,7 +55354,7 @@ const char *Txt_The_user_does_not_exist =
 #elif L==9	// pt
 	"O utilizador n&atilde;o existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The user does not exist.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_user_does_not_exist_or_password_is_incorrect =
@@ -55198,7 +55386,8 @@ const char *Txt_The_user_does_not_exist_or_password_is_incorrect =
 	"O utilizador n&atilde;o existe"
 	" ou a senha est&aacute; incorreta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The user does not exist"
+	" or password is incorrect.";			// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_already_exists_in_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55221,7 +55410,7 @@ const char *Txt_THE_USER_X_already_exists_in_Y =	// Warning: it is very importan
 #elif L==9	// pt
 	"<strong>%s</strong> j&aacute; existe em %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> already exists in %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -55262,7 +55451,9 @@ const char *Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z =	// W
 	" mas <strong>n&atilde;o</strong> est&aacute; inscrito"
 	" na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> exists in %s,"
+	" but is <strong>not</strong> enroled"
+	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project =	// Warning: it is very important to include two %s in the following sentences
@@ -55294,7 +55485,8 @@ const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project =	// Warning: 
 	"<strong>%s</strong> foi matriculado/a"
 	" como %s no projeto.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been enroled"
+	" as a %s in the project.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55326,7 +55518,8 @@ const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: 
 	"<strong>%s</strong> foi inscrito"
 	" como administrador de <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been enroled"
+	" as administrator of <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55358,7 +55551,8 @@ const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y =	// Warning: it is 
 	"<strong>%s</strong> foi matriculado/a"
 	" na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been enroled"
+	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -55390,7 +55584,8 @@ const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z =	// Warnin
 	"<strong>%s</strong> foi inscrito"
 	" no grupo do tipo %s <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been enroled"
+	" in the group of type %s <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_as_administrator =	// Warning: it is very important to include %s in the following sentences
@@ -55413,7 +55608,7 @@ const char *Txt_THE_USER_X_has_been_removed_as_administrator =	// Warning: it is
 #elif L==9	// pt
 	"<strong>%s</strong> foi removido como administrador.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed as administrator.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55445,7 +55640,8 @@ const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y =	// Warning: 
 	"<strong>%s</strong> foi removido como administrador"
 	" de <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed as administrator"
+	" of <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses =	// Warning: it is very important to include %s in the following sentences
@@ -55468,7 +55664,7 @@ const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses =	// Warnin
 #elif L==9	// pt
 	"<strong>%s</strong> foi removido de todas as suas disciplinas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed from all her/his courses.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_not_been_removed_from_any_group =	// Warning: it is very important to include %s in the following sentences
@@ -55500,7 +55696,8 @@ const char *Txt_THE_USER_X_has_not_been_removed_from_any_group =	// Warning: it 
 	"<strong>%s</strong> n&atilde;o foi removido"
 	" de nenhum grupo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has not been removed"
+	" from any group.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_Y_groups =	// Warning: it is very important to include %s and %u in the following sentences
@@ -55523,7 +55720,7 @@ const char *Txt_THE_USER_X_has_been_removed_from_Y_groups =	// Warning: it is ve
 #elif L==9	// pt
 	"<strong>%s</strong> foi removido de %u grupos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed from %u groups.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_one_group =	// Warning: it is very important to include %s in the following sentences
@@ -55546,7 +55743,7 @@ const char *Txt_THE_USER_X_has_been_removed_from_one_group =	// Warning: it is v
 #elif L==9	// pt
 	"<strong>%s</strong> foi removido de um grupo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed from one group.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55578,7 +55775,8 @@ const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> foi removido"
 	" da disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed"
+	" from the course <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged =	// Warning: it is very important to include two %s in the following sentences
@@ -55610,7 +55808,8 @@ const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it
 	"<strong>%s</strong> foi removido"
 	" do grupo do tipo %s ao qual pertencia.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed"
+	" from the group of type %s to which it belonged.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z =	// Warning: it is very important to include three %s in the following sentences
@@ -55631,7 +55830,7 @@ const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z =	// Warni
 	" en tant que %s du projet <strong>%s</strong>.";
 #elif L==6	// gn
 	"<strong>%s</strong> ha sido eliminado/a"
-	" como %s del proyecto <strong>%s</strong>.";	// Okoteve traducción
+	" como %s del proyecto <strong>%s</strong>.";		// Okoteve traducción
 #elif L==7	// it
 	"<strong>%s</strong> &egrave; stato rimosso"
 	" come %s dal progetto <strong>%s</strong>.";
@@ -55642,7 +55841,8 @@ const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z =	// Warni
 	"<strong>%s</strong> foi removido"
 	" como %s do projeto <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> has been removed"
+	" as a %s from the project <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55665,7 +55865,7 @@ const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is 
 #elif L==9	// pt
 	"<strong>%s</strong> j&aacute; &eacute; um administrador de <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment =	// Warning: it is very important to include %s in the following sentences
@@ -55706,7 +55906,9 @@ const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrol
 	" na disciplina <strong>%s</strong>,"
 	" mas ainda n&atilde;o aceitou a inscri&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> is enroled"
+	" in the course <strong>%s</strong>,"
+	" but has not yet accepted the enrolment.";			// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55738,7 +55940,8 @@ const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it i
 	"<strong>%s</strong> est&aacute; inscrito/a"
 	" na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> is enroled"
+	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_user_is_new_not_yet_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -55761,7 +55964,7 @@ const char *Txt_The_user_is_new_not_yet_in_X =	// Warning: it is very important 
 #elif L==9	// pt
 	"O usu&aacute;rio &eacute; novo, ainda n&atilde;o existe o %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The user is new, not yet in %s.";			// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_is_not_an_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -55784,7 +55987,7 @@ const char *Txt_THE_USER_X_is_not_an_administrator_of_Y =	// Warning: it is very
 #elif L==9	// pt
 	"<strong>%s</strong> n&atilde;o &eacute; um administrador de <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> is not an administrator of <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks =	// Warning: it is very important to include %s in the following sentences
@@ -55807,7 +56010,7 @@ const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks =	// Warning: it is
 #elif L==9	// pt
 	"<strong>%s</strong> n&atilde;o &eacute; encontrado no arquivo de notas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong> is not found in the file of marks.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_visibility_of_the_record_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55830,7 +56033,7 @@ const char *Txt_The_visibility_of_the_record_field_X_has_not_changed =	// Warnin
 #elif L==9	// pt
 	"A visibilidade do campo de cart&atilde;o <strong>%s</strong> n&atilde;o foi alterada.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The visibility of the record field <strong>%s</strong> has not changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_whole_course =
@@ -55853,7 +56056,7 @@ const char *Txt_The_whole_course =
 #elif L==9	// pt
 	"Toda a disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The whole course";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to include %u in the following sentences
@@ -55868,7 +56071,7 @@ const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to 
 #elif L==5	// fr
 	"L'ann&eacute;e/semestre <strong>%u</strong> n'est pas autoris&eacute;.";
 #elif L==6	// gn
-	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";		// Okoteve traducción
+	"El a&ntilde;o/semestre <strong>%u</strong> no est&aacute; permitido.";	// Okoteve traducción
 #elif L==7	// it
 	"L'anno/semester <strong>%u</strong> non &egrave; consentito.";
 #elif L==8	// pl
@@ -55876,7 +56079,7 @@ const char *Txt_The_year_X_is_not_allowed =	// Warning: it is very important to 
 #elif L==9	// pt
 	"O ano/semestre <strong>%u</strong> n&atilde;o &eacute; permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The year/semester <strong>%u</strong> is not allowed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -55899,7 +56102,7 @@ const char *Txt_The_year_of_the_course_X_has_changed =	// Warning: it is very im
 #elif L==9	// pt
 	"O ano/semestre da disciplina <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The year/semester of the couse <strong>%s</strong> has changed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_ZIP_file_has_been_received_successfully =
@@ -55922,7 +56125,7 @@ const char *Txt_The_ZIP_file_has_been_received_successfully =
 #elif L==9	// pt
 	"O arquivo <em>ZIP</em> foi recebido com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The <em>ZIP</em> file has been received successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_ZIP_file_has_been_unzipped_successfully =
@@ -55945,7 +56148,7 @@ const char *Txt_The_ZIP_file_has_been_unzipped_successfully =
 #elif L==9	// pt
 	"O arquivo <em>ZIP</em> foi descompactado com sucesso.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The <em>ZIP</em> file has been unzipped successfully.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Theme_SKIN =
@@ -55991,7 +56194,7 @@ const char *Txt_There_are_more_than_one_table_in_the_file_of_marks =
 #elif L==9	// pt
 	"Existem mais de uma tabela no arquivo de notas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are more than one table in the file of marks.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email =	// Warning: it is very important to include %s in the following sentences
@@ -56023,7 +56226,8 @@ const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or
 	"H&aacute; mais de um usu&aacute;rio com o ID <strong>%s</strong>."
 	" Por favor, digite uma @alcunha ou um email.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are more than one user with the ID <strong>%s</strong>."
+	" Please type a @nick or email.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_new_posts =
@@ -56046,7 +56250,7 @@ const char *Txt_There_are_new_posts =
 #elif L==9	// pt
 	"H&aacute; novas posts";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are new posts";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_accesses_with_the_selected_search_criteria =
@@ -56069,7 +56273,7 @@ const char *Txt_There_are_no_accesses_with_the_selected_search_criteria =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; acessos com os crit&eacute;rios de pesquisa selecionados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no accesses with the selected search criteria.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_centers_with_requests_for_degrees_to_be_confirmed =
@@ -56110,7 +56314,9 @@ const char *Txt_There_are_no_centers_with_requests_for_degrees_to_be_confirmed =
 	" com solicita&ccedil;&otilde;es de graus"
 	" pendentes de confirma&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no centers"
+	" with requests for degrees"
+	" to be confirmed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed =
@@ -56151,7 +56357,9 @@ const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_conf
 	" com solicita&ccedil;&otilde;es de institui&ccedil;&otilde;es"
 	" pendentes de confirma&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no countries"
+	" with requests for institutions"
+	" to be confirmed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
@@ -56191,7 +56399,9 @@ const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed =
 	" com solicita&ccedil;&otilde;es de disciplinas"
 	" pendentes de confirma&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no degrees"
+	" with requests for courses"
+	" to be confirmed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed =
@@ -56231,7 +56441,9 @@ const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confir
 	" com solicita&ccedil;&otilde;es de centros"
 	" pendentes de confirma&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no institutions"
+	" with requests for centers"
+	" to be confirmed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -56254,7 +56466,7 @@ const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is v
 #elif L==9	// pt
 	"N&atilde;o h&atilde; campos de cart&atilde;o na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no record fields in the course <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -56277,7 +56489,7 @@ const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is 
 #elif L==9	// pt
 	"N&atilde;o h&aacute; tipos de grupo na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are no types of group in the course <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_are_X_users_with_the_ID_Y =	// Warning: it is very important to include %u and %s in the following sentences
@@ -56300,7 +56512,7 @@ const char *Txt_There_are_X_users_with_the_ID_Y =	// Warning: it is very importa
 #elif L==9	// pt
 	"Existem %u usu&aacute;rios com o ID <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There are %u users with the ID <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
 const char *Txt_There_has_been_no_change_in_groups =
@@ -56323,7 +56535,7 @@ const char *Txt_There_has_been_no_change_in_groups =
 #elif L==9	// pt
 	"Nenhuma altera&ccedil;&atilde;o de grupo foi feita.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There has been no change in groups.";			// Çeviri lazim!
 #endif
 
 const char *Txt_There_have_been_X_errors_in_sending_the_message =	// Warning: it is very important to include %u in the following sentences
@@ -56346,7 +56558,7 @@ const char *Txt_There_have_been_X_errors_in_sending_the_message =	// Warning: it
 #elif L==9	// pt
 	"Houve %u erros ao enviar a mensagem.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There have been %u errors in sending the message.";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very important to include %s in the following sentences
@@ -56369,7 +56581,7 @@ const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very importa
 #elif L==9	// pt
 	"J&aacute; existe um arquivo chamado <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is already a file named <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is very important to include %s in the following sentences
@@ -56392,7 +56604,7 @@ const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is 
 #elif L==9	// pt
 	"J&aacute; existe uma pasta n&atilde;o vazia chamada strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is already a non-empty folder named <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning: it is very important to include %s in the following sentences
@@ -56457,7 +56669,8 @@ const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed =
 	"N&atilde;o h&aacute; como saber quantos usu&aacute;rios distintos"
 	" n&atilde;o logados acessaram.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is no knowing how many users"
+	" not logged have accessed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important to include %s in the following sentences
@@ -56489,7 +56702,8 @@ const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important
 	"N&atilde;o h&aacute; usu&aacute;rio"
 	" com email <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is no user"
+	" with email <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is very important to include %s in the following sentences
@@ -56521,7 +56735,8 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 	"N&atilde;o h&aacute; usu&aacute;rio"
 	" com ID, alcunha ou email <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is no user"
+	" with ID, nick or email <strong>%s</strong>.";				// Çeviri lazim!
 #endif
 
 const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very important to include %s in the following sentences
@@ -56539,21 +56754,22 @@ const char *Txt_There_is_no_user_with_nickname_X =	// Warning: it is very import
 	" con el apodo <strong>%s</strong>.";
 #elif L==5	// fr
 	"There is no user"
-	" with nickname <strong>%s</strong>.";		// Besoin de traduction
+	" with nickname <strong>%s</strong>.";	// Besoin de traduction
 #elif L==6	// gn
 	"No existe ning&uacute;n usuario"
-	" con el apodo <strong>%s</strong>.";		// Okoteve traducción
+	" con el apodo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
 	"Non c'&egrave; alcun utente"
 	" con nome utente <strong>%s</strong>.";
 #elif L==8	// pl
 	"There is no user"
-	" with nickname <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	" with nickname <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"N&atilde;o h&aacute; usu&aacute;rio"
 	" com alcunha <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There is no user"
+	" with nickname <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
 const char *Txt_There_was_a_problem_sending_an_email_automatically =
@@ -56576,7 +56792,7 @@ const char *Txt_There_was_a_problem_sending_an_email_automatically =
 #elif L==9	// pt
 	"Ocorreu um problema ao enviar um email automaticamente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"There was a problem sending an email automatically.";			// Çeviri lazim!
 #endif
 
 const char *Txt_This_exam_has_no_questions =
@@ -56599,7 +56815,7 @@ const char *Txt_This_exam_has_no_questions =
 #elif L==9	// pt
 	"Este exame n&atilde;o tem perguntas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"This exam has no questions.";		// Çeviri lazim!
 #endif
 
 const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =
@@ -56622,7 +56838,7 @@ const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exis
 #elif L==9	// pt
 	"Este link permanecer&aacute; ativo enquanto existir a sua conta do usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"This link will remain active as long as your user's account exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums =
@@ -56654,7 +56870,8 @@ const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_
 	"Este post foi censurado,"
 	" provavelmente por n&atilde;o satisfazer as regras dos f&oacute;runs.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"This post has been banned,"
+	" probably for not satisfy the rules of the forums.";			// Çeviri lazim!
 #endif
 
 const char *Txt_This_survey_has_no_questions =
@@ -56677,7 +56894,7 @@ const char *Txt_This_survey_has_no_questions =
 #elif L==9	// pt
 	"Este inqu&eacute;rito n&atilde;o tem perguntas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"This survey has no questions.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Thread =
@@ -56700,7 +56917,7 @@ const char *Txt_Thread =
 #elif L==9	// pt
 	"Discuss&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread";		// Çeviri lazim!
 #endif
 
 const char *Txt_thread =
@@ -56723,7 +56940,7 @@ const char *Txt_thread =
 #elif L==9	// pt
 	"discuss&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"thread";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_marked_to_be_moved =
@@ -56746,7 +56963,7 @@ const char *Txt_Thread_marked_to_be_moved =
 #elif L==9	// pt
 	"Discuss&atilde;o marcada para ser movida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread marked to be moved.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_X_marked_to_be_moved =	// Warning: it is very important to include %s in the following sentences
@@ -56769,7 +56986,7 @@ const char *Txt_Thread_X_marked_to_be_moved =	// Warning: it is very important t
 #elif L==9	// pt
 	"Discuss&atilde;o <strong>%s</strong> marcada para ser movida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread <strong>%s</strong> marked to be moved.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
@@ -56792,7 +57009,7 @@ const char *Txt_Thread_moved_to_this_forum =	// Warning: it is very important to
 #elif L==9	// pt
 	"Discuss&atilde;o movida para este f&oacute;rum.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread moved to this forum.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_X_moved_to_this_forum =	// Warning: it is very important to include %s in the following sentences
@@ -56815,7 +57032,7 @@ const char *Txt_Thread_X_moved_to_this_forum =	// Warning: it is very important 
 #elif L==9	// pt
 	"Discuss&atilde;o <strong>%s</strong> movida para este f&oacute;rum.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread <strong>%s</strong> moved to this forum.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_removed =
@@ -56838,7 +57055,7 @@ const char *Txt_Thread_removed =
 #elif L==9	// pt
 	"Discuss&atilde;o removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -56861,7 +57078,7 @@ const char *Txt_Thread_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Discuss&atilde;o <strong>%s</strong> removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread <strong>%s</strong> removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Thread_with_posts_from_you =
@@ -56884,7 +57101,7 @@ const char *Txt_Thread_with_posts_from_you =
 #elif L==9	// pt
 	"Discuss&atilde;o com mensagens de voc&ecirc;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Thread with posts from you";			// Çeviri lazim!
 #endif
 
 const char *Txt_threads =
@@ -56907,7 +57124,7 @@ const char *Txt_threads =
 #elif L==9	// pt
 	"discuss&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"threads";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIME_Since =
@@ -56930,7 +57147,7 @@ const char *Txt_TIME_Since =
 #elif L==9	// pt
 	"Desde";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Since";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIME_until =
@@ -56953,7 +57170,7 @@ const char *Txt_TIME_until =
 #elif L==9	// pt
 	"at&eacute;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"until";	// Çeviri lazim!
 #endif
 
 const char *Txt_time =
@@ -56976,7 +57193,7 @@ const char *Txt_time =
 #elif L==9	// pt
 	"tempo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"time";		// Çeviri lazim!
 #endif
 
 const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
@@ -56999,7 +57216,7 @@ const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
 #elif L==9	// pt
 	"Fuso hor&aacute;rio utilizado no c&aacute;lculo dessas estat&iacute;sticas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Time zone used in the calculation of these statistics";		// Çeviri lazim!
 #endif
 
 const char *Txt_Timeline =
@@ -57022,7 +57239,7 @@ const char *Txt_Timeline =
 #elif L==9	// pt
 	"Timeline";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Timeline";	// Çeviri lazim!
 #endif
 
 const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
@@ -57045,7 +57262,7 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Timeline de %s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s timeline";		// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Favourite =
@@ -57068,7 +57285,7 @@ const char *Txt_TIMELINE_Favourite =
 #elif L==9	// pt
 	"Favorito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Favourite";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
@@ -57091,7 +57308,7 @@ const char *Txt_TIMELINE_Favourited_by_X_USERS =	// Warning: it is very importan
 #elif L==9	// pt
 	"Marcado como favorito por %u";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Favourited by %u";		// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Not_favourited_by_anyone =	// No favourited
@@ -57114,7 +57331,7 @@ const char *Txt_TIMELINE_Not_favourited_by_anyone =	// No favourited
 #elif L==9	// pt
 	"N&atilde;o marcado como favorito por qualquer pessoa";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not favourited by anyone";		// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Not_shared_by_anyone =	// No shared
@@ -57137,7 +57354,7 @@ const char *Txt_TIMELINE_Not_shared_by_anyone =	// No shared
 #elif L==9	// pt
 	"N&atilde;o compartilhado por qualquer pessoa";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Not shared by anyone";		// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
@@ -57162,7 +57379,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Evento desconhecido"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unknown event"		// Çeviri lazim!
 #endif
 	,
 	[TmlNot_INS_DOC_PUB_FILE] =
@@ -57185,7 +57402,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public document file (institution)"		// Çeviri lazim!
 #endif
 	,
 	[TmlNot_INS_SHA_PUB_FILE] =
@@ -57208,7 +57425,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public shared file (institution)"				// Çeviri lazim!
 #endif
 	,
 	[TmlNot_CTR_DOC_PUB_FILE] =
@@ -57231,7 +57448,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo de documento p&uacute;blico (centro)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public document file (center)"		// Çeviri lazim!
 #endif
 	,
 	[TmlNot_CTR_SHA_PUB_FILE] =
@@ -57254,7 +57471,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo compartilhado p&uacute;blico (centro)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public shared file (center)"			// Çeviri lazim!
 #endif
 	,
 	[TmlNot_DEG_DOC_PUB_FILE] =
@@ -57277,7 +57494,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo de documento p&uacute;blico (grau)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public document file (degree)"			// Çeviri lazim!
 #endif
 	,
 	[TmlNot_DEG_SHA_PUB_FILE] =
@@ -57300,7 +57517,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo compartilhado p&uacute;blico (grau)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public shared file (degree)"				// Çeviri lazim!
 #endif
 	,
 	[TmlNot_CRS_DOC_PUB_FILE] =
@@ -57323,7 +57540,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo de documento p&uacute;blico (disciplina)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public document file (course)"		// Çeviri lazim!
 #endif
 	,
 	[TmlNot_CRS_SHA_PUB_FILE] =
@@ -57346,7 +57563,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Public shared file (course)"				// Çeviri lazim!
 #endif
 	,
 	[TmlNot_CALL_FOR_EXAM] =
@@ -57369,7 +57586,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Chamada para exame"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Call for exam"			// Çeviri lazim!
 #endif
 	,
 	[TmlNot_POST] =
@@ -57392,7 +57609,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Post sociais"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Social post"		// Çeviri lazim!
 #endif
 	,
 	[TmlNot_FORUM_POST] =
@@ -57415,7 +57632,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Post em um f&oacute;rum"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Post in a forum"	// Çeviri lazim!
 #endif
 	,
 	[TmlNot_NOTICE] =
@@ -57438,7 +57655,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"An&uacute;ncio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Notice"	// Çeviri lazim!
 #endif
 	};
 
@@ -57467,7 +57684,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 #elif L==9	// pt
 	"comentou"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"has commented"	// Çeviri lazim!
 #endif
 	,
 	[Tml_TOP_MESSAGE_FAVED] =
@@ -57490,7 +57707,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 #elif L==9	// pt
 	"marcou como favorito"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"has marked as favourite"	// Çeviri lazim!
 #endif
 	,
 	[Tml_TOP_MESSAGE_SHARED] =
@@ -57513,7 +57730,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 #elif L==9	// pt
 	"compartilhou"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"has shared"	// Çeviri lazim!
 #endif
 	,
 	[Tml_TOP_MESSAGE_MENTIONED] =
@@ -57536,7 +57753,7 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 #elif L==9	// pt
 	"mencionou voc&ecirc;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"has mentioned you"	// Çeviri lazim!
 #endif
 	};
 
@@ -57560,7 +57777,7 @@ const char *Txt_TIMELINE_post =
 #elif L==9	// pt
 	"publica&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"post";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Post_removed =
@@ -57575,7 +57792,7 @@ const char *Txt_TIMELINE_Post_removed =
 #elif L==5	// fr
 	"Publication supprim&eacute;e.";
 #elif L==6	// gn
-	"Publicaci&oacute;n eliminada.";		// Okoteve traducción
+	"Publicaci&oacute;n eliminada.";	// Okoteve traducción
 #elif L==7	// it
 	"Pubblicazione rimossa.";
 #elif L==8	// pl
@@ -57583,7 +57800,7 @@ const char *Txt_TIMELINE_Post_removed =
 #elif L==9	// pt
 	"Publica&ccedil;&atilde;o removida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Post removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_posts =
@@ -57606,7 +57823,7 @@ const char *Txt_TIMELINE_posts =
 #elif L==9	// pt
 	"publica&ccedil;&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"posts";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
@@ -57631,7 +57848,7 @@ const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 #elif L==9	// pt
 	"Hor&aacute;rio"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Class timetable"			// Çeviri lazim!
 #endif
 	,
 	[Tmt_MY_TIMETABLE] =
@@ -57654,7 +57871,7 @@ const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 #elif L==9	// pt
 	"Hor&aacute;rio minha disciplinas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"My timetable"			// Çeviri lazim!
 #endif
 	,
 	[Tmt_TUTORING_TIMETABLE] =
@@ -57677,7 +57894,7 @@ const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 #elif L==9	// pt
 	"Hor&aacute;rio de tutor"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tutoring hours"		// Çeviri lazim!
 #endif
 	};
 
@@ -57701,7 +57918,7 @@ const char *Txt_TIMELINE_Share =
 #elif L==9	// pt
 	"Compartilhar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Share";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Shared =
@@ -57724,7 +57941,7 @@ const char *Txt_TIMELINE_Shared =
 #elif L==9	// pt
 	"Compartilhado";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Shared";	// Çeviri lazim!
 #endif
 
 const char *Txt_TIMELINE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
@@ -57747,7 +57964,7 @@ const char *Txt_TIMELINE_Shared_by_X_USERS =	// Warning: it is very important to
 #elif L==9	// pt
 	"Compartilhado por %u";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Shared by %u";		// Çeviri lazim!
 #endif
 
 const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
@@ -57764,7 +57981,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==5	// fr
 	"Pas de classe"
 #elif L==6	// gn
-	"Libre"			// Okoteve traducción
+	"Libre"		// Okoteve traducción
 #elif L==7	// it
 	"Libero"
 #elif L==8	// pl
@@ -57772,7 +57989,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==9	// pt
 	"Livre"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No class"	// Çeviri lazim!
 #endif
 	,
 	[Tmt_LECTURE] =
@@ -57787,7 +58004,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==5	// fr
 	"Th&eacute;orie"
 #elif L==6	// gn
-	"Teor&iacute;a"		// Okoteve traducción
+	"Teor&iacute;a"	// Okoteve traducción
 #elif L==7	// it
 	"Teoria"
 #elif L==8	// pl
@@ -57795,7 +58012,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==9	// pt
 	"Teoria"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Lectures"	// Çeviri lazim!
 #endif
 	,
 	[Tmt_PRACTICAL] =
@@ -57810,7 +58027,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==5	// fr
 	"Pratique"
 #elif L==6	// gn
-	"Pr&aacute;ct."		// Okoteve traducción
+	"Pr&aacute;ct."	// Okoteve traducción
 #elif L==7	// it
 	"Pratica"
 #elif L==8	// pl
@@ -57818,7 +58035,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==9	// pt
 	"Pr&aacute;ct."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Practicals"	// Çeviri lazim!
 #endif
 	,
 	[Tmt_TUTORING] =
@@ -57841,7 +58058,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES] =
 #elif L==9	// pt
 	"Tutoria"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Tutoring"		// Çeviri lazim!
 #endif
 	};
 
@@ -57865,7 +58082,7 @@ const char *Txt_Title =
 #elif L==9	// pt
 	"T&iacute;tulo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Title";	// Çeviri lazim!
 #endif
 
 const char *Txt_Title_attribution =
@@ -57888,7 +58105,7 @@ const char *Txt_Title_attribution =
 #elif L==9	// pt
 	"T&iacute;tulo/atribui&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Title/attribution";			// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center =
@@ -57920,7 +58137,8 @@ const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teacher
 	"Para remover um centro, voc&ecirc; deve primeiro remover"
 	" todos os graus e professores no centro.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a center, you must first remove"
+	" all degrees and teachers in the center.";				// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course =
@@ -57952,7 +58170,8 @@ const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course
 	"Para remover uma disciplina, voc&ecirc; deve primeiro remover"
 	" todos os usu&aacute;rios da disciplina.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a course, you must first remove"
+	" all users in the course.";				// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree =
@@ -57984,7 +58203,8 @@ const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degr
 	"Para remover um grau, voc&ecirc; deve primeiro remover"
 	" todas as disciplinas do grau.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a degree, you must first remove"
+	" all courses in the degree.";				// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department =
@@ -58016,7 +58236,8 @@ const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the
 	"Para remover um departamento, voc&ecirc; deve primeiro remover"
 	" todos os professores do departamento.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a department, you must first remove"
+	" all teachers in the department.";		// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place =
@@ -58048,7 +58269,8 @@ const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_plac
 	"Para remover uma localiza&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros da localiza&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a place, you must first remove"
+	" all centers of that place.";			// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type =
@@ -58089,7 +58311,9 @@ const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_
 	" voc&ecirc; deve primeiro remover"
 	" todos os graus desse tipo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove a type of degree,"
+	" you must first remove"
+	" all degrees of that type.";			// Çeviri lazim!
 #endif
 
 const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution =
@@ -58121,7 +58345,8 @@ const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_u
 	"Para remover uma institui&ccedil;&atilde;o, voc&ecirc; deve primeiro remover"
 	" todos os centros e usu&aacute;rios da institui&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To remove an institution, you must first remove"
+	" all centers and users in the institution.";				// Çeviri lazim!
 #endif
 
 const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	// Warning: it is very important to include three %s in the following sentences
@@ -58171,7 +58396,10 @@ const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	
 	" e adicionar <strong>https://%s</strong>"
 	" &agrave; lista de sites permitidos no painel de controle Java.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To use chat you must have installed the software"
+	" <a href=\"%s\" target=\"_blank\"><em>%s</em></a>"
+	" and add <strong>https://%s</strong>"
+	" to the list of allowed sites in the Java control panel.";		// Çeviri lazim!
 #endif
 
 const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings =
@@ -58198,7 +58426,7 @@ const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_acc
 #elif L==6	// gn
 	"Para ver contenido multimedia de otro sitio web"
 	" tiene que aceptar las cookies de terceros"
-	" en sus ajustes personales.";
+	" en sus ajustes personales.";	// Okoteve traducción
 #elif L==7	// it
 	"Per visualizzare i contenuti multimediali di un altro sito web"
 	" devi accettare i cookie di terze parti"
@@ -58212,7 +58440,9 @@ const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_acc
 	" voc&ecirc; precisa aceitar cookies de terceiros"
 	" nas suas configura&ccedil;&otilde;es pessoais.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"To watch multimedia content from another website"
+	" you have to accept third party cookies"
+	" in your personal settings.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Today =
@@ -58235,7 +58465,7 @@ const char *Txt_Today =
 #elif L==9	// pt
 	"Hoje";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Today";	// Çeviri lazim!
 #endif
 
 const char *Txt_Total =
@@ -58258,7 +58488,7 @@ const char *Txt_Total =
 #elif L==9	// pt
 	"Total";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Total";	// Çeviri lazim!
 #endif
 
 const char *Txt_total =
@@ -58281,7 +58511,7 @@ const char *Txt_total =
 #elif L==9	// pt
 	"total";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"total";	// Çeviri lazim!
 #endif
 
 const char *Txt_TST_Answer_given_by_the_teachers =
@@ -58304,7 +58534,7 @@ const char *Txt_TST_Answer_given_by_the_teachers =
 #elif L==9	// pt
 	"Resposta dada pelos professores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Answer given by the teachers";		// Çeviri lazim!
 #endif
 
 const char *Txt_TST_Answer_given_by_the_user =
@@ -58327,7 +58557,7 @@ const char *Txt_TST_Answer_given_by_the_user =
 #elif L==9	// pt
 	"Resposta dada pelo usu&aacute;rio/a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Answer given by the user";		// Çeviri lazim!
 #endif
 
 const char *Txt_TST_HIDDEN_VISIBLE[2] =
@@ -58352,7 +58582,7 @@ const char *Txt_TST_HIDDEN_VISIBLE[2] =
 #elif L==9	// pt
 	"oculto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"hidden"	// Çeviri lazim!
 #endif
 	,
 	[true] =
@@ -58375,7 +58605,7 @@ const char *Txt_TST_HIDDEN_VISIBLE[2] =
 #elif L==9	// pt
 	"vis&iacute;vel"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"visible"	// Çeviri lazim!
 #endif
 	};
 
@@ -58403,7 +58633,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 #elif L==9	// pt
 	"Banco de perguntas n&atilde;o dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Question bank not downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."	// Çeviri lazim!
 #endif
 	,
 	[TstCfg_PLUGGABLE_YES] =
@@ -58426,7 +58656,7 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 #elif L==9	// pt
 	"Banco de perguntas dispon&iacute;vel para download/vis&iacute;vel de outros aplicativos (SWADroid, iSWAD, TriSWADos)."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Question bank downloadable/visible from other applications (SWADroid, iSWAD, TriSWADos)."	// Çeviri lazim!
 #endif
 	};
 
@@ -58452,7 +58682,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"N.&ordm; inteiro"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Integer number"	// Çeviri lazim!
 #endif
 	,
 	[Qst_ANS_FLOAT] =
@@ -58475,7 +58705,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"N.&ordm; real"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Real number"	// Çeviri lazim!
 #endif
 	,
 	[Qst_ANS_TRUE_FALSE] =
@@ -58498,7 +58728,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"V/F"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"T/F"	// Çeviri lazim!
 #endif
 	,
 	[Qst_ANS_UNIQUE_CHOICE] =
@@ -58513,7 +58743,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==5	// fr
 	"Choix unique"
 #elif L==6	// gn
-	"Elecci&oacute;n &uacute;nica"		// Okoteve traducción
+	"Elecci&oacute;n &uacute;nica"	// Okoteve traducción
 #elif L==7	// it
 	"Scelta unica"
 #elif L==8	// pl
@@ -58521,7 +58751,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"&Uacute;nica escolha"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Unique choice"			// Çeviri lazim!
 #endif
 	,
 	[Qst_ANS_MULTIPLE_CHOICE] =
@@ -58544,7 +58774,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"M&uacute;ltipla escolha"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Multiple choice"			// Çeviri lazim!
 #endif
 	,
 	[Qst_ANS_TEXT] =
@@ -58567,7 +58797,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #elif L==9	// pt
 	"Texto"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Text"	// Çeviri lazim!
 #endif
 	};
 
@@ -58593,7 +58823,7 @@ const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"Classificar por formula&ccedil;&atilde;o da pergunta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by stem of the question"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_NUM_HITS] =
@@ -58612,11 +58842,11 @@ const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==7	// it
 	"Ordina per numero di volte che hai risposto alla domanda"
 #elif L==8	// pl
-	"Sort by number of times the question has been answered"		// Potrzebujesz tlumaczenie
+	"Sort by number of times the question has been answered"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Classificar por n&ordm; de vezes que a pergunta foi respondida"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by number of times the question has been answered"	// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE] =
@@ -58639,7 +58869,7 @@ const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by average score"			// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_NUM_HITS_NOT_BLANK] =
@@ -58666,12 +58896,13 @@ const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 	" alla domanda (non vuoto)"
 #elif L==8	// pl
 	"Sort by number of times the question"
-	" has been answered (excluding blank answers)"	// Potrzebujesz tlumaczenie
+	" has been answered (excluding blank answers)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Classificar por n&ordm; de vezes"
 	" que a pergunta foi respondida (n&atilde;o em branco)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by number of times the question"
+	" has been answered (excluding blank answers)"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
@@ -58690,11 +58921,11 @@ const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==7	// it
 	"Ordina per punteggio medio (non vuoto)"
 #elif L==8	// pl
-	"Sort by average score (excluding blank answers)"				// Potrzebujesz tlumaczenie
+	"Sort by average score (excluding blank answers)"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia (n&atilde;o em branco)"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Sort by average score (excluding blank answers)"			// Çeviri lazim!
 #endif
 	};
 
@@ -58720,12 +58951,12 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"Pergunta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Question"	// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_NUM_HITS] =
 #if   L==1	// ca
-	"N.&ordm;<br />resp."			// Necessita traducció
+	"N.&ordm;<br />resp."		// Necessita traducció
 #elif L==2	// de
 	"Anzahl<br />Antw."
 #elif L==3	// en
@@ -58735,7 +58966,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==5	// fr
 	"Nombre<br />r&eacute;p."
 #elif L==6	// gn
-	"N.&ordm;<br />resp."			// Okoteve traducción
+	"N.&ordm;<br />resp."		// Okoteve traducción
 #elif L==7	// it
 	"Num.<br />risp."
 #elif L==8	// pl
@@ -58743,7 +58974,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"N.&ordm;<br />resp."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No.<br />ans."			// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE] =
@@ -58766,12 +58997,12 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o<br />m&eacute;dia"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Average<br />score"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_NUM_HITS_NOT_BLANK] =
 #if   L==1	// ca
-	"N.&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traducció
+	"N.&ordm;<br />resp.<br />no en<br />blanco"	// Necessita traducció
 #elif L==2	// de
 	"Anzahl<br />Antw.<br />nicht<br />leer"
 #elif L==3	// en
@@ -58781,15 +59012,15 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==5	// fr
 	"Nombre<br />r&eacute;p.<br />non<br />vide"
 #elif L==6	// gn
-	"N.&ordm;<br />resp.<br />no en<br />blanco"		// Okoteve traducción
+	"N.&ordm;<br />resp.<br />no en<br />blanco"	// Okoteve traducción
 #elif L==7	// it
 	"Num.<br />risp.<br />non<br />vuoto"
 #elif L==8	// pl
-	"No.<br />ans.<br />not<br />blank"			// Potrzebujesz tlumaczenie
+	"No.<br />ans.<br />not<br />blank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"N.&ordm;<br />resp.<br />n&atilde;o em<br />branco"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"No.<br />ans.<br />not<br />blank"		// Çeviri lazim!
 #endif
 	,
 	[Qst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
@@ -58808,11 +59039,11 @@ const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 #elif L==7	// it
 	"Punteggio<br />medio<br />non<br />vuoto"
 #elif L==8	// pl
-	"Average<br />score<br />not<br />blank"			// Potrzebujesz tlumaczenie
+	"Average<br />score<br />not<br />blank"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o<br />m&eacute;dia<br />n&atilde;o em<br />branco"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Average<br />score<br />not<br />blank"		// Çeviri lazim!
 #endif
 	};
 
@@ -58838,7 +59069,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==9	// pt
 	"Texto de perguntas e respostas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Questions and answers text"		// Çeviri lazim!
 #endif
 	,
 	[TstVis_VISIBLE_FEEDBACK_TXT] =
@@ -58861,7 +59092,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==9	// pt
 	"Texto de feedback"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Feedback text"				// Çeviri lazim!
 #endif
 	,
 	[TstVis_VISIBLE_CORRECT_ANSWER] =
@@ -58884,7 +59115,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==9	// pt
 	"Respostas corretas"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Correct answers"	// Çeviri lazim!
 #endif
 	,
 	[TstVis_VISIBLE_EACH_QST_SCORE] =
@@ -58899,7 +59130,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==5	// fr
 	"Score de chaque question"
 #elif L==6	// gn
-	"Puntuaci&oacute;n de cada pregunta"			// Okoteve traducción
+	"Puntuaci&oacute;n de cada pregunta"	// Okoteve traducción
 #elif L==7	// it
 	"Punteggio di ogni domanda"
 #elif L==8	// pl
@@ -58907,7 +59138,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o de cada pergunta"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Score of each question"		// Çeviri lazim!
 #endif
 	,
 	[TstVis_VISIBLE_TOTAL_SCORE] =
@@ -58930,7 +59161,7 @@ const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY] =
 #elif L==9	// pt
 	"Pontua&ccedil;&atilde;o total"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Total score"			// Çeviri lazim!
 #endif
 	};
 
@@ -58955,7 +59186,7 @@ const char *Txt_TF_QST[2] =
 #elif L==9	// pt
 	"V"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"T"	// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca	// False
@@ -58977,7 +59208,7 @@ const char *Txt_TF_QST[2] =
 #elif L==9	// pt
 	"F"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"F"	// Çeviri lazim!
 #endif
 	};
 
@@ -59001,7 +59232,7 @@ const char *Txt_Type =
 #elif L==9	// pt
 	"Tipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type";	// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_BR_answers =		// Answers of a test
@@ -59024,7 +59255,7 @@ const char *Txt_Type_of_BR_answers =		// Answers of a test
 #elif L==9	// pt
 	"Tipo de<br />respostas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of<br />answers";		// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_degree =
@@ -59047,7 +59278,7 @@ const char *Txt_Type_of_degree =
 #elif L==9	// pt
 	"Tipo de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_degree_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -59070,7 +59301,7 @@ const char *Txt_Type_of_degree_X_removed =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Tipo de grau <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of degree <strong>%s</strong> removed.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_group =
@@ -59093,7 +59324,7 @@ const char *Txt_Type_of_group =
 #elif L==9	// pt
 	"Tipo de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Type_BR_of_group =
@@ -59116,7 +59347,7 @@ const char *Txt_Type_BR_of_group =
 #elif L==9	// pt
 	"Tipo<br />de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type<br />of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -59139,7 +59370,7 @@ const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to in
 #elif L==9	// pt
 	"Tipo de grupo <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type of group <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
@@ -59226,7 +59457,14 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" ser%atilde;o levadas em conta;"
 	" o resto do texto ser&aacute; ignorado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Type or paste a list"
+	" of @nicks, emails or IDs."
+	" The @nicks, emails or IDs"
+	" can be separated by arbitrary strings"
+	" (eg. names, places, etc.)."
+	" Only the words that seems @nicks, emails or IDs"
+	" will be taken into account;"
+	" the rest of the text will be ignored.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Types_of_degree =
@@ -59249,7 +59487,7 @@ const char *Txt_Types_of_degree =
 #elif L==9	// pt
 	"Tipos de grau";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Types of degree";	// Çeviri lazim!
 #endif
 
 const char *Txt_Types_of_answers =		// Answers of a test
@@ -59272,7 +59510,7 @@ const char *Txt_Types_of_answers =		// Answers of a test
 #elif L==9	// pt
 	"Tipos de respostas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Types of answers";	// Çeviri lazim!
 #endif
 
 const char *Txt_Types_of_group =
@@ -59295,7 +59533,7 @@ const char *Txt_Types_of_group =
 #elif L==9	// pt
 	"Tipos de grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Types of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Undo =
@@ -59318,7 +59556,7 @@ const char *Txt_Undo =
 #elif L==9	// pt
 	"Desfazer";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Undo";		// Çeviri lazim!
 #endif
 
 const char *Txt_Unfollow =
@@ -59341,7 +59579,7 @@ const char *Txt_Unfollow =
 #elif L==9	// pt
 	"Deixar de seguir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unfollow";		// Çeviri lazim!
 #endif
 
 const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
@@ -59374,7 +59612,7 @@ const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
 	"Desafortunadamente Firefox y Chrome ya no permiten ejecutar Java,"
 	" de modo que el chat no estar&aacute; disponible para estos navegadores"
 	" hasta que desarrollemos un nuevo chat con otra tecnolog&iacute;a."
-	" Sentimos las molestias.";	// Okoteve traducción
+	" Sentimos las molestias.";			// Okoteve traducción
 #elif L==7	// it
 	"Purtroppo Firefox e Chrome non consentono pi&ugrave; di eseguire Java,"
 	" quindi la chat non &egrave; disponibile per questi browser"
@@ -59391,7 +59629,10 @@ const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
 	" at&eacute; que desenvolver um novo chat com outra tecnologia."
 	" Desculpe o transtorno.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unfortunately Firefox and Chrome no longer allow Java to run,"
+	" so chat will not be available for these browsers"
+	" until we develop a new chat with another technology."
+	" We apologize for the inconveniences.";	// Çeviri lazim!
 #endif
 
 const char *Txt_unknown_assignment =
@@ -59414,7 +59655,7 @@ const char *Txt_unknown_assignment =
 #elif L==9	// pt
 	"atividade desconhecida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unknown assignment";		// Çeviri lazim!
 #endif
 
 const char *Txt_Unknown_or_without_photo =
@@ -59437,7 +59678,7 @@ const char *Txt_Unknown_or_without_photo =
 #elif L==9
 	"Desconhecido/a ou sem foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unknown or without photo";			// Çeviri lazim!
 #endif
 
 const char *Txt_Unknown_FORUM =
@@ -59460,7 +59701,7 @@ const char *Txt_Unknown_FORUM =
 #elif L==9	// pt
 	"Desconhecido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unknown";	// Çeviri lazim!
 #endif
 
 const char *Txt_unknown_recipient =
@@ -59483,7 +59724,7 @@ const char *Txt_unknown_recipient =
 #elif L==9	// pt
 	"destinat&aacute;rio desconhecido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unknown recipient";		// Çeviri lazim!
 #endif
 
 const char *Txt_unknown_recipients =
@@ -59506,7 +59747,7 @@ const char *Txt_unknown_recipients =
 #elif L==9	// pt
 	"destinat&aacute;rios desconhecidos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unknown recipients";		// Çeviri lazim!
 #endif
 
 const char *Txt_unknown_removed_course =
@@ -59529,7 +59770,7 @@ const char *Txt_unknown_removed_course =
 #elif L==9	// pt
 	"disciplina desconhecida / removida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unknown / removed course";		// Çeviri lazim!
 #endif
 
 const char *Txt_unknown_TIME =
@@ -59552,7 +59793,7 @@ const char *Txt_unknown_TIME =
 #elif L==9	// pt
 	"desconhecido";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unknown";	// Çeviri lazim!
 #endif
 
 const char *Txt_Unlock_editing =
@@ -59575,7 +59816,7 @@ const char *Txt_Unlock_editing =
 #elif L==9	// pt
 	"Desbloquear edi&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unlock editing";		// Çeviri lazim!
 #endif
 
 const char *Txt_unread_MESSAGE =
@@ -59598,7 +59839,7 @@ const char *Txt_unread_MESSAGE =
 #elif L==9	// pt
 	"n&atilde;o lida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unread";		// Çeviri lazim!
 #endif
 
 const char *Txt_unread_MESSAGES =
@@ -59621,7 +59862,7 @@ const char *Txt_unread_MESSAGES =
 #elif L==9	// pt
 	"n&atilde;o lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"unread";		// Çeviri lazim!
 #endif
 
 const char *Txt_Unread_BR_msgs =
@@ -59644,7 +59885,7 @@ const char *Txt_Unread_BR_msgs =
 #elif L==9	// pt
 	"N&atilde;o<br />lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Unread<br />msgs.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Update =
@@ -59667,7 +59908,7 @@ const char *Txt_Update =
 #elif L==9	// pt
 	"Atualizar";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update";	// Çeviri lazim!
 #endif
 
 const char *Txt_Update_attendance =
@@ -59690,7 +59931,7 @@ const char *Txt_Update_attendance =
 #elif L==9	// pt
 	"Atualizar presen&ccedil;a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update attendance";		// Çeviri lazim!
 #endif
 
 const char *Txt_Update_messages =
@@ -59713,7 +59954,7 @@ const char *Txt_Update_messages =
 #elif L==9	// pt
 	"Atualizar mensagens";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update messages";		// Çeviri lazim!
 #endif
 
 const char *Txt_Update_results =
@@ -59736,7 +59977,7 @@ const char *Txt_Update_results =
 #elif L==9	// pt
 	"Atualizar os resultados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update results";		// Çeviri lazim!
 #endif
 
 const char *Txt_Update_users =
@@ -59759,7 +60000,7 @@ const char *Txt_Update_users =
 #elif L==9	// pt
 	"Atualizar os utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Update users";		// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_link =
@@ -59782,7 +60023,7 @@ const char *Txt_UPLOAD_FILE_Invalid_link =
 #elif L==9	// pt
 	"Link n&atilde;o v&aacute;lido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Invalid link.";		// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_name =
@@ -59805,7 +60046,7 @@ const char *Txt_UPLOAD_FILE_Invalid_name =
 #elif L==9	// pt
 	"Nome n&atilde;o v&aacute;lido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Invalid name.";		// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to include %s in the following sentences
@@ -59828,7 +60069,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to
 #elif L==9	// pt
 	"<strong>%s</strong>: nome n&atilde;o v&aacute;lido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"<strong>%s</strong>: invalid name.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_file =
@@ -59851,7 +60092,7 @@ const char *Txt_Upload_file =
 #elif L==9	// pt
 	"Fazer upload de arquivo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload file";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_file_or_create_folder =
@@ -59874,7 +60115,7 @@ const char *Txt_Upload_file_or_create_folder =
 #elif L==9	// pt
 	"Fazer upload de arquivos ou criar diret&oacute;rio";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload files or create folder";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_files =
@@ -59897,7 +60138,7 @@ const char *Txt_Upload_files =
 #elif L==9	// pt
 	"Fazer upload de arquivos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload files";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_files_QUESTION =
@@ -59920,7 +60161,7 @@ const char *Txt_Upload_files_QUESTION =
 #elif L==9	// pt
 	"Fazer upload de arquivos?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload files?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_logo =
@@ -59935,7 +60176,7 @@ const char *Txt_Upload_logo =
 #elif L==5	// fr
 	"T&eacute;l&eacute;charger logo";
 #elif L==6	// gn
-	"Subir logo";		// Okoteve traducción
+	"Subir logo";	// Okoteve traducción
 #elif L==7	// it
 	"Caricare logo";
 #elif L==8	// pl
@@ -59943,7 +60184,7 @@ const char *Txt_Upload_logo =
 #elif L==9	// pt
 	"Fazer upload de logotipo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload logo";	// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_my_picture =
@@ -59958,7 +60199,7 @@ const char *Txt_Upload_my_picture =
 #elif L==5	// fr
 	"Ajouter ma photo";
 #elif L==6	// gn
-	"Subir mi fotograf&iacute;a";		// Okoteve traducción
+	"Subir mi fotograf&iacute;a";	// Okoteve traducción
 #elif L==7	// it
 	"Caricare una foto";
 #elif L==8	// pl
@@ -59966,7 +60207,7 @@ const char *Txt_Upload_my_picture =
 #elif L==9	// pt
 	"Carregar minha foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload my picture";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_photo =
@@ -59981,7 +60222,7 @@ const char *Txt_Upload_photo =
 #elif L==5	// fr
 	"T&eacute;l&eacute;charger photo";
 #elif L==6	// gn
-	"Subir foto";		// Okoteve traducción
+	"Subir foto";	// Okoteve traducción
 #elif L==7	// it
 	"Caricare foto";
 #elif L==8	// pl
@@ -59989,7 +60230,7 @@ const char *Txt_Upload_photo =
 #elif L==9	// pt
 	"Upload foto";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload photo";	// Çeviri lazim!
 #endif
 
 const char *Txt_Uploaded_by =
@@ -60012,7 +60253,7 @@ const char *Txt_Uploaded_by =
 #elif L==9	// pt
 	"Enviado por";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Uploaded by";	// Çeviri lazim!
 #endif
 
 const char *Txt_URL =		// Uniform Resource Locator
@@ -60035,7 +60276,7 @@ const char *Txt_URL =		// Uniform Resource Locator
 #elif L==9	// pt
 	"URL";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"URL";	// Çeviri lazim!
 #endif
 
 const char *Txt_Use_this_email =
@@ -60058,7 +60299,7 @@ const char *Txt_Use_this_email =
 #elif L==9	// pt
 	"Utilizar este email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Use this email";	// Çeviri lazim!
 #endif
 
 const char *Txt_Use_this_nickname =
@@ -60081,7 +60322,7 @@ const char *Txt_Use_this_nickname =
 #elif L==9	// pt
 	"Utilizar esta alcunha";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Use this nickname";	// Çeviri lazim!
 #endif
 
 const char *Txt_User[Usr_NUM_SEXS] =
@@ -60106,7 +60347,7 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -60129,7 +60370,7 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -60152,7 +60393,7 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -60175,7 +60416,7 @@ const char *Txt_User[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"User"	// Çeviri lazim!
 #endif
 	};
 
@@ -60201,7 +60442,7 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -60224,7 +60465,7 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadora"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -60247,7 +60488,7 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -60270,7 +60511,7 @@ const char *Txt_user[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizador/a"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"user"	// Çeviri lazim!
 #endif
 	};
 
@@ -60294,7 +60535,7 @@ const char *Txt_USER_comments =
 #elif L==9	// pt
 	"Coment&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Comments";		// Çeviri lazim!
 #endif
 
 const char *Txt_User_ID =
@@ -60317,7 +60558,7 @@ const char *Txt_User_ID =
 #elif L==9	// pt
 	"N.&ordm; de identif. do utilizador";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"User ID";					// Çeviri lazim!
 #endif
 
 const char *Txt_USER_in_COURSE =	// Warning: it is very important to include %s in the following sentences
@@ -60340,7 +60581,7 @@ const char *Txt_USER_in_COURSE =	// Warning: it is very important to include %s 
 #elif L==9	// pt
 	"%s em";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s in";	// Çeviri lazim!
 #endif
 
 const char *Txt_User_not_found_or_you_do_not_have_permission_ =
@@ -60381,7 +60622,9 @@ const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 	" ou voc&ecirc; n&atilde;o tem permiss&atilde;o"
 	" para realizar esta a&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"User not found"
+	" or you do not have permission"
+	" to perform this action.";	// Çeviri lazim!
 #endif
 
 const char *Txt_User_photos =
@@ -60427,7 +60670,7 @@ const char *Txt_Users =
 #elif L==9	// pt
 	"Utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users";	// Çeviri lazim!
 #endif
 
 const char *Txt_users[Usr_NUM_SEXS] =
@@ -60452,7 +60695,7 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -60475,7 +60718,7 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadoras"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"		// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -60498,7 +60741,7 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -60521,7 +60764,7 @@ const char *Txt_users[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"utilizadores"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"users"	// Çeviri lazim!
 #endif
 	};
 
@@ -60537,7 +60780,7 @@ const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important 
 #elif L==5	// fr
 	"%u utilisateur(s) ont &eacute;t&eacute; &eacute;limin&eacute;s.";
 #elif L==6	// gn
-	"Se ha(n) eliminado %u usuario(s).";		// Okoteve traducción
+	"Se ha(n) eliminado %u usuario(s).";	// Okoteve traducción
 #elif L==7	// it
 	"%u utenti sono stati rimossi.";
 #elif L==8	// pl
@@ -60545,7 +60788,7 @@ const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important 
 #elif L==9	// pt
 	"%u usu&aacute;rio(s) foram eliminados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u user(s) have been eliminated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Warning: it is very important to include %u in the following sentences
@@ -60577,7 +60820,8 @@ const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Wa
 	"%u usu&aacute;rios foram inscritos"
 	" (incluindo poss&iacute;veis repeti&ccedil;&otilde;es).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u users have been enroled"
+	" (including possible repetitions).";	// Çeviri lazim!
 #endif
 
 const char *Txt_X_users_have_been_removed =	// Warning: it is very important to include %u in the following sentences
@@ -60600,7 +60844,7 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 #elif L==9	// pt
 	"%u usu&aacute;rios foram removidos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u users have been removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Users_in_courses =
@@ -60623,7 +60867,7 @@ const char *Txt_Users_in_courses =
 #elif L==9	// pt
 	"Utilizadores em disciplinas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users in courses";			// Çeviri lazim!
 #endif
 
 const char *Txt_Users_of_the_center =
@@ -60646,7 +60890,7 @@ const char *Txt_Users_of_the_center =
 #elif L==9	// pt
 	"Utilizadores do centro";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users of the center";	// Çeviri lazim!
 #endif
 
 const char *Txt_Users_of_the_country =
@@ -60669,7 +60913,7 @@ const char *Txt_Users_of_the_country =
 #elif L==9	// pt
 	"Utilizadores do pa&iacute;s";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users of the country";		// Çeviri lazim!
 #endif
 
 const char *Txt_Users_of_the_institution =
@@ -60692,7 +60936,7 @@ const char *Txt_Users_of_the_institution =
 #elif L==9	// pt
 	"Utilizadores da institu&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users of the institution";		// Çeviri lazim!
 #endif
 
 const char *Txt_users_with_no_group =
@@ -60715,7 +60959,7 @@ const char *Txt_users_with_no_group =
 #elif L==9	// pt
 	"utilizadores com nenhum grupo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"users with no group";			// Çeviri lazim!
 #endif
 
 const char *Txt_X_users_who_have_accepted_and_who_have_email =	// Warning: it is very important to include %u in the following sentences
@@ -60747,7 +60991,8 @@ const char *Txt_X_users_who_have_accepted_and_who_have_email =	// Warning: it is
 	"%u utilizadores que aceitaram"
 	" e que t&ecirc;m email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u users who have accepted"
+	" and who have email";		// Çeviri lazim!
 #endif
 
 const char *Txt_X_users_who_have_email =	// Warning: it is very important to include %u in the following sentences
@@ -60770,7 +61015,7 @@ const char *Txt_X_users_who_have_email =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"%u utilizadores que t&ecirc;m email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%u users who have email";			// Çeviri lazim!
 #endif
 
 const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES] =
@@ -60798,7 +61043,7 @@ const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES] =
 #elif L==9	// pt
 	"Foto de formatura"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Class photo"	// Çeviri lazim!
 #endif
 	,
 	[Set_USR_LIST_AS_LISTING] =
@@ -60817,11 +61062,11 @@ const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES] =
 #elif L==7	// it
 	"Lista"
 #elif L==8	// pl
-	"List"		// Potrzebujesz tlumaczenie
+	"List"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Lista"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"List"	// Çeviri lazim!
 #endif
 	};
 
@@ -60845,7 +61090,7 @@ const char *Txt_Vacants =
 #elif L==9	// pt
 	"Desocupados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Vacants";	// Çeviri lazim!
 #endif
 
 const char *Txt_Valid_answers =
@@ -60868,7 +61113,7 @@ const char *Txt_Valid_answers =
 #elif L==9	// pt
 	"Respostas v&aacute;lidas";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Valid answers";		// Çeviri lazim!
 #endif
 
 const char *Txt_valid_grade =
@@ -60891,7 +61136,7 @@ const char *Txt_valid_grade =
 #elif L==9	// pt
 	"nota v&aacute;lida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"valid grade";		// Çeviri lazim!
 #endif
 
 const char *Txt_Valid_question =
@@ -60914,7 +61159,7 @@ const char *Txt_Valid_question =
 #elif L==9	// pt
 	"Pergunta v&aacute;lida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Valid question";		// Çeviri lazim!
 #endif
 
 const char *Txt_valid_score =
@@ -60937,7 +61182,7 @@ const char *Txt_valid_score =
 #elif L==9	// pt
 	"pontua&ccedil;&atilde;o v&aacute;lida";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"valid score";				// Çeviri lazim!
 #endif
 
 const char *Txt_View =
@@ -60960,7 +61205,7 @@ const char *Txt_View =
 #elif L==9	// pt
 	"Ver";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_all_recipients =
@@ -60983,7 +61228,7 @@ const char *Txt_View_all_recipients =
 #elif L==9	// pt
 	"Ver todos os estinat&aacute;rios";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View all recipients";		// Çeviri lazim!
 #endif
 
 const char *Txt_View_all_USERS =
@@ -61006,7 +61251,7 @@ const char *Txt_View_all_USERS =
 #elif L==9	// pt
 	"Ver todos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View all";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_attendance =
@@ -61029,7 +61274,7 @@ const char *Txt_View_attendance =
 #elif L==9	// pt
 	"Ver presen&ccedil;a";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View attendance";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_email_addresses =
@@ -61052,7 +61297,7 @@ const char *Txt_View_email_addresses =
 #elif L==9	// pt
 	"Ver endere&ccedil;os de email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View email addresses";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_event =
@@ -61067,15 +61312,15 @@ const char *Txt_View_event =
 #elif L==5	// fr
 	"Voir &eacute;v&eacute;nement";
 #elif L==6	// gn
-	"Ver evento";			// Okoteve traducción
+	"Ver evento";	// Okoteve traducción
 #elif L==7	// it
 	"Vedi evento";
 #elif L==8	// pl
-	"View event";			// Potrzebujesz tlumaczenie
+	"View event";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Ver evento";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View event";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_exam =
@@ -61098,7 +61343,7 @@ const char *Txt_View_exam =
 #elif L==9	// pt
 	"Ver exame";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View exam";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_exams =
@@ -61121,7 +61366,7 @@ const char *Txt_View_exams =
 #elif L==9	// pt
 	"Ver exames";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View exams";		// Çeviri lazim!
 #endif
 
 const char *Txt_View_game =
@@ -61136,7 +61381,7 @@ const char *Txt_View_game =
 #elif L==5	// fr
 	"Voir jeu";
 #elif L==6	// gn
-	"Ver juego";			// Okoteve traducción
+	"Ver juego";	// Okoteve traducción
 #elif L==7	// it
 	"Vedi gioco";
 #elif L==8	// pl
@@ -61144,7 +61389,7 @@ const char *Txt_View_game =
 #elif L==9	// pt
 	"Ver jogo";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View game";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_games =
@@ -61167,7 +61412,7 @@ const char *Txt_View_games =
 #elif L==9	// pt
 	"Ver jogos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View games";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_in_a_new_window =
@@ -61190,7 +61435,7 @@ const char *Txt_View_in_a_new_window =
 #elif L==9	// pt
 	"Ver em uma nova janela";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View in a new window";		// Çeviri lazim!
 #endif
 
 const char *Txt_View_my_answer =
@@ -61213,7 +61458,7 @@ const char *Txt_View_my_answer =
 #elif L==9	// pt
 	"Ver minha resposta";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View my answer";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_projects =
@@ -61236,7 +61481,7 @@ const char *Txt_View_projects =
 #elif L==9	// pt
 	"Ver projetos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View projects";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_record_and_office_hours =
@@ -61259,7 +61504,7 @@ const char *Txt_View_record_and_office_hours =
 #elif L==9	// pt
 	"Ver cart&atilde;o e hor&aacute;rio de tutor";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View record and tutoring hours";		// Çeviri lazim!
 #endif
 
 const char *Txt_View_record_for_this_course =
@@ -61282,7 +61527,7 @@ const char *Txt_View_record_for_this_course =
 #elif L==9	// pt
 	"Ver cart&atilde;o em disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View record for this course";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_records =
@@ -61305,7 +61550,7 @@ const char *Txt_View_records =
 #elif L==9	// pt
 	"Ver cart&otilde;es";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View records";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_results =
@@ -61328,7 +61573,7 @@ const char *Txt_View_results =
 #elif L==9	// pt
 	"Ver resultados";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View results";		// Çeviri lazim!
 #endif
 
 const char *Txt_View_survey =
@@ -61343,7 +61588,7 @@ const char *Txt_View_survey =
 #elif L==5	// fr
 	"Voir sondage";
 #elif L==6	// gn
-	"Ver encuesta";			// Okoteve traducción
+	"Ver encuesta";	// Okoteve traducción
 #elif L==7	// it
 	"Vedi sondaggio";
 #elif L==8	// pl
@@ -61351,7 +61596,7 @@ const char *Txt_View_survey =
 #elif L==9	// pt
 	"Ver inqu&eacute;rito";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_test =
@@ -61374,7 +61619,7 @@ const char *Txt_View_test =
 #elif L==9	// pt
 	"Ver teste";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View test";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_tests =
@@ -61397,7 +61642,7 @@ const char *Txt_View_tests =
 #elif L==9	// pt
 	"Ver testes";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View tests";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_homework =
@@ -61420,7 +61665,7 @@ const char *Txt_View_homework =
 #elif L==9	// pt
 	"Ver trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"View homework";	// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_by_BR_the_student =
@@ -61443,7 +61688,7 @@ const char *Txt_Visible_by_BR_the_student =
 #elif L==9	// pt
 	"Vis&iacute;vel pelo<br />estudante?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visible by<br />the student?";			// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_results =
@@ -61466,7 +61711,7 @@ const char *Txt_Visible_results =
 #elif L==9	// pt
 	"Resultados vis&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visible results";	// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_MALE_PLURAL =
@@ -61489,7 +61734,7 @@ const char *Txt_Visible_MALE_PLURAL =
 #elif L==9	// pt
 	"Vis&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visible";	// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_tests =
@@ -61512,7 +61757,7 @@ const char *Txt_Visible_tests =
 #elif L==9	// pt
 	"Testes vis&iacute;veis";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visible tests";	// Çeviri lazim!
 #endif
 
 const char *Txt_Visible_survey =
@@ -61535,7 +61780,7 @@ const char *Txt_Visible_survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito vis&iacute;vel";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visible survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Visits_to_course =
@@ -61558,7 +61803,7 @@ const char *Txt_Visits_to_course =
 #elif L==9	// pt
 	"Visitas disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Visits to course";	// Çeviri lazim!
 #endif
 
 const char *Txt_Web =
@@ -61581,7 +61826,7 @@ const char *Txt_Web =
 #elif L==9	// pt
 	"Web";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Web";	// Çeviri lazim!
 #endif
 
 const char *Txt_Web_browser =
@@ -61604,7 +61849,7 @@ const char *Txt_Web_browser =
 #elif L==9	// pt
 	"Navegador web";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Web browser";		// Çeviri lazim!
 #endif
 
 const char *Txt_Web_page =
@@ -61627,7 +61872,7 @@ const char *Txt_Web_page =
 #elif L==9	// pt
 	"P&aacute;gina Web";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Web page";		// Çeviri lazim!
 #endif
 
 const char *Txt_Web_page_of_the_course =
@@ -61650,7 +61895,7 @@ const char *Txt_Web_page_of_the_course =
 #elif L==9	// pt
 	"P&aacute;gina Web da disciplina";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Web page of the course";		// Çeviri lazim!
 #endif
 
 const char *Txt_Web_social_network =
@@ -61673,7 +61918,7 @@ const char *Txt_Web_social_network =
 #elif L==9	// pt
 	"Web / rede social";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Web / social network";	// Çeviri lazim!
 #endif
 
 const char *Txt_Webs_social_networks =
@@ -61696,7 +61941,7 @@ const char *Txt_Webs_social_networks =
 #elif L==9	// pt
 	"Webs / redes sociais";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Webs / social networks";	// Çeviri lazim!
 #endif
 
 const char *Txt_Week =
@@ -61719,7 +61964,7 @@ const char *Txt_Week =
 #elif L==9	// pt
 	"Semana";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Week";		// Çeviri lazim!
 #endif
 
 const char *Txt_What_would_you_like_to_do =
@@ -61742,7 +61987,7 @@ const char *Txt_What_would_you_like_to_do =
 #elif L==9	// pt
 	"O que voc&ecirc; faria?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"What would you like to do?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Where_s_USER =
@@ -61765,7 +62010,7 @@ const char *Txt_Where_s_USER =
 #elif L==9	// pt
 	"Onde est&aacute; %s?";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Where's %s";				// Çeviri lazim!
 #endif
 
 const char *Txt_WHO[Usr_NUM_WHO] =
@@ -61793,7 +62038,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Eu"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Me"	// Çeviri lazim!
 #endif
 	,
 	[Usr_WHO_SELECTED] =
@@ -61816,7 +62061,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Usu&aacute;rios selecionados"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Selected users"		// Çeviri lazim!
 #endif
 	,
 	[Usr_WHO_FOLLOWED] =
@@ -61839,7 +62084,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Usu&aacute;rios que estou seguindo"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"Users I'm following"	// Çeviri lazim!
 #endif
 	,
 	[Usr_WHO_ALL] =
@@ -61862,7 +62107,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Todos os usu&aacute;rios"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"All users"		// Çeviri lazim!
 #endif
 	};
 
@@ -61886,7 +62131,7 @@ const char *Txt_Who_to_follow =
 #elif L==9	// pt
 	"Quem seguir";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Who to follow";		// Çeviri lazim!
 #endif
 
 const char *Txt_With_ =	// Example: "With students"
@@ -61901,7 +62146,7 @@ const char *Txt_With_ =	// Example: "With students"
 #elif L==5	// fr
 	"Avec ";
 #elif L==6	// gn
-	"Con ";	// Okoteve traducción
+	"Con ";		// Okoteve traducción
 #elif L==7	// it
 	"Con ";
 #elif L==8	// pl
@@ -61909,7 +62154,7 @@ const char *Txt_With_ =	// Example: "With students"
 #elif L==9	// pt
 	"Com ";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"With ";	// Çeviri lazim!
 #endif
 
 const char *Txt_with_new_posts =
@@ -61928,11 +62173,11 @@ const char *Txt_with_new_posts =
 #elif L==7	// it
 	"con nuovi post";
 #elif L==8	// pl
-	"with new posts";	// Potrzebujesz tlumaczenie
+	"with new posts";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"com novas posts";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"with new posts";		// Çeviri lazim!
 #endif
 
 const char *Txt_works_ZIP_FILE_NAME =	// Name (without extension) of the ZIP file for works. Must be a valid filename in small letters!
@@ -61955,7 +62200,7 @@ const char *Txt_works_ZIP_FILE_NAME =	// Name (without extension) of the ZIP fil
 #elif L==9	// pt
 	"trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"homework";	// Çeviri lazim!
 #endif
 
 const char *Txt_Wording =	// Statement of a question
@@ -61978,7 +62223,7 @@ const char *Txt_Wording =	// Statement of a question
 #elif L==9	// pt
 	"Reda&ccedil;&atilde;o";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Wording";	// Çeviri lazim!
 #endif
 
 const char *Txt_Works_area =
@@ -62001,7 +62246,7 @@ const char *Txt_Works_area =
 #elif L==9	// pt
 	"Zona de trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Homework area";		// Çeviri lazim!
 #endif
 
 const char *Txt_works_area =
@@ -62024,7 +62269,7 @@ const char *Txt_works_area =
 #elif L==9	// pt
 	"zona de trabalhos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"homework area";	// Çeviri lazim!
 #endif
 
 const char *Txt_WriBRters =
@@ -62047,7 +62292,7 @@ const char *Txt_WriBRters =
 #elif L==9	// pt
 	"Escri-<br />tores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Wri-<br />ters";	// Çeviri lazim!
 #endif
 
 const char *Txt_Write_a_message =
@@ -62062,7 +62307,7 @@ const char *Txt_Write_a_message =
 #elif L==5	// fr
 	"&Eacute;crire un message";
 #elif L==6	// gn
-	"Escribir un mensaje";		// Okoteve traducción
+	"Escribir un mensaje";	// Okoteve traducción
 #elif L==7	// it
 	"Scrivi un messaggio";
 #elif L==8	// pl
@@ -62070,7 +62315,7 @@ const char *Txt_Write_a_message =
 #elif L==9	// pt
 	"Escrever uma mensagem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Write a message";	// Çeviri lazim!
 #endif
 
 const char *Txt_Wrong_file_type =
@@ -62085,7 +62330,7 @@ const char *Txt_Wrong_file_type =
 #elif L==5	// fr
 	"Mauvais type de fichier.";
 #elif L==6	// gn
-	"Tipo de archivo incorrecto.";		// Okoteve traducción
+	"Tipo de archivo incorrecto.";	// Okoteve traducción
 #elif L==7	// it
 	"Tipo di file sbagliato.";
 #elif L==8	// pl
@@ -62093,7 +62338,7 @@ const char *Txt_Wrong_file_type =
 #elif L==9	// pt
 	"Tipo de arquivo errado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Wrong file type.";		// Çeviri lazim!
 #endif
 
 const char *Txt_WWW =		// World Wide Web
@@ -62116,7 +62361,7 @@ const char *Txt_WWW =		// World Wide Web
 #elif L==9	// pt
 	"WWW";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"WWW";	// Çeviri lazim!
 #endif
 
 const char *Txt_XML_file =
@@ -62139,7 +62384,7 @@ const char *Txt_XML_file =
 #elif L==9	// pt
 	"Arquivo XML";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"XML file";	// Çeviri lazim!
 #endif
 
 const char *Txt_XML_file_content =
@@ -62162,7 +62407,7 @@ const char *Txt_XML_file_content =
 #elif L==9	// pt
 	"Conte&uacute;do do arquivo XML";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"XML file content";		// Çeviri lazim!
 #endif
 
 const char *Txt_Year =	// 1984, 2011...
@@ -62185,7 +62430,7 @@ const char *Txt_Year =	// 1984, 2011...
 #elif L==9	// pt
 	"Ano";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Year";	// Çeviri lazim!
 #endif
 
 const char *Txt_year =	// 1984, 2011...
@@ -62208,7 +62453,7 @@ const char *Txt_year =	// 1984, 2011...
 #elif L==9	// pt
 	"ano";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"year";	// Çeviri lazim!
 #endif
 
 const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...
@@ -62231,7 +62476,7 @@ const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...
 #elif L==9	// pt
 	"Ano ou semestre";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Year or semester";		// Çeviri lazim!
 #endif
 
 const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
@@ -62255,7 +62500,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"N.A."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"N.A."		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62277,7 +62522,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"1&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"1st"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62299,7 +62544,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"2&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"2nd"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62321,7 +62566,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"3&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"3rd"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62343,7 +62588,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"4&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"4th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62365,7 +62610,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"5&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"5th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62387,7 +62632,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"6&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"6th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62409,7 +62654,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"7&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"7th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62431,7 +62676,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"8&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"8th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62453,7 +62698,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"9&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"9th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62475,7 +62720,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"10&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"10th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62497,7 +62742,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"11&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"11th"		// Çeviri lazim!
 #endif
 	,
 #if   L==1	// ca
@@ -62519,7 +62764,7 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 #elif L==9	// pt
 	"12&ordm;"
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"12th"		// Çeviri lazim!
 #endif
 	};
 
@@ -62543,7 +62788,7 @@ const char *Txt_years =
 #elif L==9	// pt
 	"anos";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"years";	// Çeviri lazim!
 #endif
 
 const char *Txt_YES =
@@ -62566,7 +62811,7 @@ const char *Txt_YES =
 #elif L==9	// pt
 	"SIM";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"YES";	// Çeviri lazim!
 #endif
 
 const char *Txt_Yes =
@@ -62589,7 +62834,7 @@ const char *Txt_Yes =
 #elif L==9	// pt
 	"Sim";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yes";	// Çeviri lazim!
 #endif
 
 const char *Txt_Yesterday =
@@ -62612,7 +62857,7 @@ const char *Txt_Yesterday =
 #elif L==9	// pt
 	"Ontem";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Yesterday";	// Çeviri lazim!
 #endif
 
 const char *Txt_yet_unnamed =
@@ -62635,7 +62880,7 @@ const char *Txt_yet_unnamed =
 #elif L==9	// pt
 	"ainda sem nome";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"yet unnamed";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_already_answered_this_survey_before =
@@ -62658,7 +62903,7 @@ const char *Txt_You_already_answered_this_survey_before =
 #elif L==9	// pt
 	"Voc&ecirc; j&aacute; respondeu a esso inqu&eacute;rito antes.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You already answered this survey before.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to include two %s in the following sentences
@@ -62681,7 +62926,7 @@ const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to
 #elif L==9	// pt
 	"Agora voc&ecirc; est&aacute; %s como <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You are now %s as <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
@@ -62706,7 +62951,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"You are not enroled in any course."			// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_FEMALE] =
@@ -62729,7 +62974,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"You are not enroled in any course."			// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_MALE] =
@@ -62752,7 +62997,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"You are not enroled in any course."			// Çeviri lazim!
 #endif
 	,
 	[Usr_SEX_ALL] =
@@ -62775,7 +63020,7 @@ const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #elif L==10	// tr
-	""	// Çeviri lazim!
+	"You are not enroled in any course."			// Çeviri lazim!
 #endif
 	};
 
@@ -62808,7 +63053,8 @@ const char *Txt_You_can_create_a_new_folder_inside_the_folder_X =	// Warning: it
 	"Voc&ecirc; pode criar um novo diret&oacute;rio"
 	" dentro do diret&oacute;rio <strong>%s</strong>:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can create a new folder"
+	" inside the folder <strong>%s</strong>:";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_create_folders_files_or_links_here =
@@ -62831,7 +63077,7 @@ const char *Txt_You_can_not_create_folders_files_or_links_here =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar pastas, arquivos ou links aqui.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not create folders, files or links here.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_create_folders_here =
@@ -62854,7 +63100,7 @@ const char *Txt_You_can_not_create_folders_here =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar pastas aqui.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not create folders here.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_create_links_here =
@@ -62877,7 +63123,7 @@ const char *Txt_You_can_not_create_links_here =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode criar links aqui.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not create links here.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_delete_your_current_nickname =
@@ -62900,7 +63146,7 @@ const char *Txt_You_can_not_delete_your_current_nickname =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode excluir sua alcunha atual.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not delete your current nickname.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_delete_this_ID =
@@ -62923,7 +63169,7 @@ const char *Txt_You_can_not_delete_this_ID =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode excluir este ID.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not delete this ID.";				// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created =
@@ -62955,7 +63201,8 @@ const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_create
 	"Voc&ecirc; n&atilde;o pode desativar o upload de arquivos,"
 	" uma vez diret&oacute;rios foram criados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not disable file uploading"
+	" once folders have been created.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_leave_empty_intermediate_answers =
@@ -62978,7 +63225,7 @@ const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode deixar respostas intermedi&aacute;rias vazias.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not leave empty intermediate answers.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_leave_the_field_empty =
@@ -63001,7 +63248,7 @@ const char *Txt_You_can_not_leave_the_field_empty =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode deixar o campo vazio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not leave the field empty.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_paste_file_or_folder_here =
@@ -63024,7 +63271,7 @@ const char *Txt_You_can_not_paste_file_or_folder_here =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode colar arquivos ou pastas aqui.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not paste file or folder here.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_remove_this_file_or_link =
@@ -63039,7 +63286,7 @@ const char *Txt_You_can_not_remove_this_file_or_link =
 #elif L==5	// fr
 	"Vous ne pouvez pas supprimer ce fichier ou ce lien.";
 #elif L==6	// gn
-	"No puede eliminar este archivo o enlace.";		// Okoteve traducción
+	"No puede eliminar este archivo o enlace.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rimuovere questo file o link.";
 #elif L==8	// pl
@@ -63047,7 +63294,7 @@ const char *Txt_You_can_not_remove_this_file_or_link =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover este arquivo ou link.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not remove this file or link.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_remove_this_folder =
@@ -63062,7 +63309,7 @@ const char *Txt_You_can_not_remove_this_folder =
 #elif L==5	// fr
 	"Vous ne pouvez pas supprimer ce r&eacute;pertoire.";
 #elif L==6	// gn
-	"No puede eliminar esta carpeta.";		// Okoteve traducción
+	"No puede eliminar esta carpeta.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi rimuovere questa cartella.";
 #elif L==8	// pl
@@ -63070,7 +63317,7 @@ const char *Txt_You_can_not_remove_this_folder =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover esta pasta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ou can not remove this folder.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
@@ -63093,7 +63340,7 @@ const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode remover um pa&iacute;s com instituciones ou usu&aacute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not remove a country with institutions or users.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_rename_this_folder =
@@ -63116,7 +63363,7 @@ const char *Txt_You_can_not_rename_this_folder =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode renomear esta pasta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not rename this folder.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
@@ -63130,14 +63377,14 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"You can not send a message to so many recipients."
 	" Better use the forums.";
 #elif L==4	// es
-	"No puede enviar un mensaje a tantísimos destinatarios."
+	"No puede enviar un mensaje a tant&iacute;simos destinatarios."
 	" Es mejor usar los foros.";
 #elif L==5	// fr
 	"Vous ne pouvez pas envoyer un message &agrave; autant de destinataires."
 	" Mieux vaut utiliser les forums.";
 #elif L==6	// gn
-	"No puede enviar un mensaje a tantísimos destinatarios."
-	" Es mejor usar los foros.";		// Okoteve traducción
+	"No puede enviar un mensaje a tant&iacute;simos destinatarios."
+	" Es mejor usar los foros.";	// Okoteve traducción
 #elif L==7	// it
 	"Non puoi inviare un messaggio a così tanti destinatari."
 	" Meglio usare il forum.";
@@ -63148,7 +63395,8 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 	"Voc&ecirc; n&atilde;o pode enviar uma mensagem para tantos destinat&aacute;rios."
 	" Melhor usar os f&oacute;runs.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not send a message to so many recipients."
+	" Better use the forums.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_take_a_new_test_until =
@@ -63171,7 +63419,7 @@ const char *Txt_You_can_not_take_a_new_test_until =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode fazer um novo teste at&eacute;";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not take a new test until";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very important to include %u in the following sentences
@@ -63192,7 +63440,7 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" si vous n'envoyez pas votre photo.";
 #elif L==6	// gn
 	"Solo podr&aacute; realizar %u acciones m&aacute;s"
-	" si no env&iacute;a su fotograf&iacute;a.";		// Okoteve traducción
+	" si no env&iacute;a su fotograf&iacute;a.";	// Okoteve traducción
 #elif L==7	// it
 	"Puoi solo realizzare %u massime azioni"
 	" se non hai inviato la tua foto.";
@@ -63203,7 +63451,8 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	"Voc&ecirc; s&oacute; pode executar %u a&ccedil;&otilde;es adicionais"
 	" se n&atilde;o enviar sua foto.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can only perform %u further actions"
+	" if you don't send your photo.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include five %s in the following sentences
@@ -63230,7 +63479,7 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is
 #elif L==6	// gn
 	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
-	" y termina en uno de los dominios permitidos (%s &gt; %s &gt; %s).";				// Okoteve traducción
+	" y termina en uno de los dominios permitidos (%s &gt; %s &gt; %s).";	// Okoteve traducción
 #elif L==7	// it
 	"Puoi solo ricevere email di notifica"
 	" se la tua email &egrave; confermata (%s &gt; %s)"
@@ -63244,7 +63493,9 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is
 	" se o seu endere&ccedil;o de email est&aacute; confirmado (%s &gt; %s)"
 	" e termina em um dos dom&iacute;nios permitidos (%s &gt; %s &gt; %s).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can only receive email notifications"
+	" if your email address is confirmed (%s &gt; %s)"
+	" and ends in one of the allowed domains (%s &gt; %s &gt; %s).";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -63267,7 +63518,7 @@ const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning
 #elif L==9	// pt
 	"Voc&ecirc; pode se inscrever voluntariamente em um grupo do tipo %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can register voluntarily in one group of type %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -63299,7 +63550,8 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Voc&ecirc; pode se inscrever voluntariamente"
 	" em um ou mais grupos do tipo %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can register voluntarily"
+	" in one or more groups of type %s.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them =
@@ -63320,7 +63572,7 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolmen
 	" et demander votre inscription en eux.";
 #elif L==6	// gn
 	"Puede buscar asignaturas, seleccionarlas"
-	" y solicitar su inscripci&oacute;n en ellas.";		// Okoteve traducción"
+	" y solicitar su inscripci&oacute;n en ellas.";	// Okoteve traducción"
 #elif L==7	// it
 	"&Egrave; possibile cercare corsi, selezionarli"
 	" e richiedere l'iscrizione in loro.";
@@ -63331,7 +63583,8 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolmen
 	"Voc&ecirc; pode procurar por cursos, selecion&aacute;-los"
 	" e solicitar a sua inscri&ccedil;&atilde;o nos mesmos.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can search for courses, select them"
+	" and request your enrolment in them.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
@@ -63363,7 +63616,8 @@ const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_back
 	"Voc&ecirc; pode enviar um arquivo com uma imagem no formato <em>PNG</em>,"
 	" fundo transparente e tamanho %u&times;%u pixels.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can send a file with an image in <em>PNG</em> format,"
+	" transparent background and size %u&times;%u pixels.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
@@ -63390,7 +63644,7 @@ const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
 #elif L==6	// gn
 	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
 	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
-	" y con el fondo blanco o muy claro.";				// Okoteve traducción
+	" y con el fondo blanco o muy claro.";			// Okoteve traducción
 #elif L==7	// it
 	"&Egrave; possibile inviare un file in un'immagine con formato <em>JPEG</em>.<br />"
 	"L'immagine deve contenere almeno una faccia in posizione verticale e frontale,"
@@ -63404,7 +63658,9 @@ const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
 	"A imagem deve conter pelo menos um rosto na posi&ccedil;&atilde;o vertical e frontal,"
 	" eo fundo deve ser branco ou muito claro.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can send a file with an image in <em>JPEG</em> format.<br />"
+	"The image must contain at least one face in vertical and frontal position,"
+	" and the background must be white or very light.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_dont_follow_any_user =
@@ -63427,7 +63683,7 @@ const char *Txt_You_dont_follow_any_user =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o segue nenhum usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You don't follow any user.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_dont_have_access_to_the_exam =
@@ -63442,7 +63698,7 @@ const char *Txt_You_dont_have_access_to_the_exam =
 #elif L==5	// fr
 	"Vous n'avez pas acc&egrave;s à l'examen.";
 #elif L==6	// gn
-	"No tiene acceso al examen.";	// Okoteve traducción
+	"No tiene acceso al examen.";		// Okoteve traducción
 #elif L==7	// it
 	"Non hai accesso all'esame.";
 #elif L==8	// pl
@@ -63450,7 +63706,7 @@ const char *Txt_You_dont_have_access_to_the_exam =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o tem acesso ao exame.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You don't have access to the exam.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_dont_have_permission_to_perform_this_action =
@@ -63482,7 +63738,8 @@ const char *Txt_You_dont_have_permission_to_perform_this_action =
 	"Voc&ecirc; n&atilde;o tem permiss&atilde;o"
 	" para realizar esta a&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You don't have permission"
+	" to perform this action.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_confirmed_that_you_have_read_this_information =
@@ -63505,7 +63762,7 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 #elif L==9	// pt
 	"Voc&ecirc; confirmou que leu esta informa&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have confirmed that you have read this information.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -63537,7 +63794,8 @@ const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: 
 	"Voc&ecirc; confirmou sua inscri&ccedil;&atilde;o"
 	" na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have confirmed your enrolment"
+	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information =
@@ -63569,7 +63827,8 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 	"Voc&ecirc; eliminou a confirma&ccedil;&atilde;o"
 	" de que leu esta informa&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have eliminated the confirmation"
+	" that you have read this information.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_followed_one_user =
@@ -63592,7 +63851,7 @@ const char *Txt_You_have_followed_one_user =
 #elif L==9	// pt
 	"Voc&ecirc; seguiu um usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have followed one user.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_followed_X_users =	// Warning: it is very important to include %u in the following sentences
@@ -63615,7 +63874,7 @@ const char *Txt_You_have_followed_X_users =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Voc&ecirc; seguiu %u usu&aacute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have followed %u users.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_no_notifications =
@@ -63638,7 +63897,7 @@ const char *Txt_You_have_no_notifications =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o tem notifica&ccedil;&otilde;es.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have no notifications.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_no_unread_notifications =
@@ -63661,7 +63920,7 @@ const char *Txt_You_have_no_unread_notifications =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o tem notifica&ccedil;&otilde;es n&atilde;o lidas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have no unread notifications.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_not_banned_any_sender =
@@ -63684,7 +63943,7 @@ const char *Txt_You_have_not_banned_any_sender =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o baniu nenhum remetente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have not banned any sender.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_not_confirmed_the_action =
@@ -63707,7 +63966,7 @@ const char *Txt_You_have_not_confirmed_the_action =
 #elif L==9	// pt
 	"Voc&ecirc; ainda n&atilde;o confirmou a a&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have not confirmed the action.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_not_entered_your_password_correctly =
@@ -63730,7 +63989,7 @@ const char *Txt_You_have_not_entered_your_password_correctly =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o digitou sua senha corretamente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have not entered your password correctly.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_not_written_twice_the_same_new_password =
@@ -63753,7 +64012,7 @@ const char *Txt_You_have_not_written_twice_the_same_new_password =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o escreveu duas vezes a mesma nova senha.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have not written twice the same new password.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_stopped_following_one_user =
@@ -63776,7 +64035,7 @@ const char *Txt_You_have_stopped_following_one_user =
 #elif L==9	// pt
 	"Voc&ecirc; parou de seguir um usu&aacute;rio.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have stopped following one user.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very important to include %u in the following sentences
@@ -63799,7 +64058,7 @@ const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very impo
 #elif L==9	// pt
 	"Voc&ecirc; parou de seguir %u usu&aacute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have stopped following %u users.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -63822,7 +64081,7 @@ const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente pelo menos em um grupo do tipo %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have to register compulsorily at least in one group of type %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
@@ -63845,7 +64104,7 @@ const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Wa
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente em um grupo do tipo %s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You have to register compulsorily in one group of type %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
@@ -63868,7 +64127,7 @@ const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
 #elif L==9	// pt
 	"Voc&ecirc; deve inserir um valor inteiro como a resposta correta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must enter an integer value as the correct answer.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer =
@@ -63891,7 +64150,7 @@ const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_ans
 #elif L==9	// pt
 	"Voc&ecirc; deve inserir o intervalo de valores de ponto flutuante permitidos como resposta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must enter the range of floating point values allowed as answer.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_enter_your_nick_email_or_ID =
@@ -63914,7 +64173,7 @@ const char *Txt_You_must_enter_your_nick_email_or_ID =
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar seu @alcunha, email ou n&ordm; identif.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must enter your @nick, email or ID.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_mark_an_answer_as_correct =
@@ -63937,7 +64196,7 @@ const char *Txt_You_must_mark_an_answer_as_correct =
 #elif L==9	// pt
 	"Voc&ecirc; deve marcar uma resposta como correta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must mark an answer as correct.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_select_a_T_F_answer =
@@ -63960,7 +64219,7 @@ const char *Txt_You_must_select_a_T_F_answer =
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma resposta V ou F.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must select a T/F answer.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_select_one_ore_more_recipients =
@@ -63983,7 +64242,7 @@ const char *Txt_You_must_select_one_ore_more_recipients =
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais destinat&aacute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must select one or more recipients.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_select_one_ore_more_tags =
@@ -64006,7 +64265,7 @@ const char *Txt_You_must_select_one_ore_more_tags =
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma ou mais descritores.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must select one or more tags.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_select_one_ore_more_types_of_answer =
@@ -64029,7 +64288,7 @@ const char *Txt_You_must_select_one_ore_more_types_of_answer =
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais tipos de resposta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must select one or more types of answer.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_select_one_ore_more_users =
@@ -64052,7 +64311,7 @@ const char *Txt_You_must_select_one_ore_more_users =
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar um ou mais usu&acute;rios.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must select one or more users.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_send_your_photo_because_ =
@@ -64093,7 +64352,9 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" porque esgotou o n&uacute;mero de cliques"
 	" permitidos sem foto.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must send your photo,"
+	" because you have exhausted the number of clicks"
+	" allowed without photo.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_image_of_the_new_banner =
@@ -64108,7 +64369,7 @@ const char *Txt_You_must_specify_the_image_of_the_new_banner =
 #elif L==5	// fr
 	"Vous devez sp&eacute;cifier l'image de la nouvelle banni&egrave;re.";
 #elif L==6	// gn
-	"Debe especificar la imagen del nuevo banner.";	// Okoteve traducción
+	"Debe especificar la imagen del nuevo banner.";		// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare l'image del nuovo banner.";
 #elif L==8	// pl
@@ -64116,7 +64377,7 @@ const char *Txt_You_must_specify_the_image_of_the_new_banner =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar a imagem do novo banner.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the image of the new banner.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin =
@@ -64148,7 +64409,8 @@ const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP
 	"Voc&ecirc; deve especificar o logotipo, a chave do aplicativo,"
 	" o URL e o endere&ccedil;o IP do novo plugin.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the logo, the application key,"
+	" the URL and the IP address of the new plugin.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
@@ -64171,7 +64433,7 @@ const char *Txt_You_must_specify_the_numerical_code_of_the_new_country =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o c&oacute;digo num&eacute;rico ISO 3166-1 do novo pa&iacute;s.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the ISO 3166-1 numerical code of the new country.";			// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_name =
@@ -64194,7 +64456,7 @@ const char *Txt_You_must_specify_the_name =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name =
@@ -64209,7 +64471,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name =
 #elif L==5	// fr
 	"Vous devez sp&eacute;cifier le nom abr&eacute;g&eacute; et le nom complet.";
 #elif L==6	// gn
-	"Debe especificar el nombre breve y el nombre completo.";		// Okoteve traducción
+	"Debe especificar el nombre breve y el nombre completo.";	// Okoteve traducción
 #elif L==7	// it
 	"Devi specificare il nome breve e completo.";
 #elif L==8	// pl
@@ -64217,7 +64479,7 @@ const char *Txt_You_must_specify_the_short_name_and_the_full_name =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o nome abreviado e o nome completo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the short name and the full name.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_title =
@@ -64240,7 +64502,7 @@ const char *Txt_You_must_specify_the_title =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o t&iacute;tulo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the title.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_specify_the_web_address =
@@ -64263,7 +64525,7 @@ const char *Txt_You_must_specify_the_web_address =
 #elif L==9	// pt
 	"Voc&ecirc; deve especificar o endere&ccedil;o web.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the web address.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_type_at_least_one_tag_for_the_question =
@@ -64286,7 +64548,7 @@ const char *Txt_You_must_type_at_least_one_tag_for_the_question =
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos um descritor para a pergunta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must type at least one tag for the question.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_answer =
@@ -64309,7 +64571,7 @@ const char *Txt_You_must_type_at_least_the_first_answer =
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos a primeira resposta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must type at least the first answer.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_type_at_least_the_first_two_answers =
@@ -64332,7 +64594,7 @@ const char *Txt_You_must_type_at_least_the_first_two_answers =
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar pelo menos as duas primeiras respostas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must type at least the first two answers.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_type_the_question_stem =
@@ -64355,7 +64617,7 @@ const char *Txt_You_must_type_the_question_stem =
 #elif L==9	// pt
 	"Voc&ecirc; deve digitar a declara&ccedil;&atilde;o da pergunta.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must type the question stem.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
@@ -64387,7 +64649,8 @@ const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
 	"Voc&ecirc; precisa de um arquivo XML"
 	" contendo uma lista de perguntas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You need an XML file"
+	" containing a list of questions.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_should_read_the_following_information =
@@ -64410,7 +64673,7 @@ const char *Txt_You_should_read_the_following_information =
 #elif L==9	// pt
 	"Voc&ecirc; deve ler as seguintes informa&ccedil;&otilde;es:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You should read the following information:";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -64442,7 +64705,8 @@ const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it i
 	"Voc&ecirc; j&aacute; estava inscrito/a como <strong>%s</strong>"
 	" na disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You were already enroled as <strong>%s</strong>"
+	" in the course <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Your_comment_has_been_updated =
@@ -64457,7 +64721,7 @@ const char *Txt_Your_comment_has_been_updated =
 #elif L==5	// fr
 	"Votre commentaire a &eacute;t&eacute; mis &agrave; jour.";
 #elif L==6	// gn
-	"Su comentario ha sido actualizado.";		// Okoteve traducción
+	"Su comentario ha sido actualizado.";	// Okoteve traducción
 #elif L==7	// it
 	"Il tuo commento &egrave; stato aggiornato.";
 #elif L==8	// pl
@@ -64465,7 +64729,7 @@ const char *Txt_Your_comment_has_been_updated =
 #elif L==9	// pt
 	"O seu coment&aacute;rio foi atualizado.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your comment has been updated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Your_password_is_not_secure_enough =
@@ -64488,7 +64752,7 @@ const char *Txt_Your_password_is_not_secure_enough =
 #elif L==9	// pt
 	"Sua senha n&atilde;o &eacute; segura o suficiente.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your password is not secure enough.";			// Çeviri lazim!
 #endif
 
 const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_ =	// Warning: it is very important to include %u in the following sentences
@@ -64547,7 +64811,11 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 	" dígitos num&eacute;ricos, nem um nome ou apelido,"
 	" nem uma palavra conhecida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your password must be at least %u characters"
+	" and can not contain spaces."
+	" It's very important not to use only"
+	" numeric digits, or a name or surname,"
+	" or a known word.";				// Çeviri lazim!
 #endif
 
 const char *Txt_Your_personal_data_have_been_updated =
@@ -64570,7 +64838,7 @@ const char *Txt_Your_personal_data_have_been_updated =
 #elif L==9	// pt
 	"Seus dados pessoais foram atualizados.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your personal data have been updated.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Your_settings_about_notifications_have_changed =
@@ -64593,7 +64861,7 @@ const char *Txt_Your_settings_about_notifications_have_changed =
 #elif L==9	// pt
 	"Suas configura&ccedil;&otilde;es sobre notifica&ccedil;&otilde;es foram alteradas.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your settings about notifications have changed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_Your_record_card_in_this_course_has_been_updated =
@@ -64616,7 +64884,7 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 #elif L==9	// pt
 	"Seu cart&atilde;o nesta disciplina foi atualizado:";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your record card in this course has been updated:";	// Çeviri lazim!
 #endif
 
 const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
@@ -64666,7 +64934,10 @@ const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepte
 	" O pedido ser&aacute; analisado por um professor ou administrador."
 	" Voc&ecirc; ser&aacute; notificado quando o registro &eacute; aceito.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Your request for enrolment as <strong>%s</strong>"
+	" in the course <strong>%s</strong> has been accepted for processing."
+	" Your request will be reviewed by a teacher or administrator."
+	" You will be notified when registration is accepted.";						// Çeviri lazim!
 #endif
 
 const char *Txt_ZIP_file =
@@ -64689,5 +64960,5 @@ const char *Txt_ZIP_file =
 #elif L==9	// pt
 	"Arquivo ZIP";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"ZIP file";	// Çeviri lazim!
 #endif

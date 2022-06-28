@@ -96,7 +96,7 @@ const char *Txt_Country_NO_HTML =
 #elif L==9
 	"País";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Country";	// Çeviri lazim!
 #endif
 
 const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities like &egrave; here
@@ -119,7 +119,7 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 #elif L==9
 	"Confirmação do seu email";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Confirmation of your email";			// Çeviri lazim!
 #endif
 
 // The following variables are compilated together in all languages because they are used in emails...
@@ -319,7 +319,14 @@ const char *Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO
 	" Nesse caso, recomendamos que você verifique em %s"
 	" se você confirmou seu endereço de e-mail.\n\n";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"If you have just requested from %s"
+	" the confirmation of your email %s,"
+	" click on the following link"
+	" to confirm that direction:"
+	" %s/?act=%ld&key=%s\n\n"
+	"If it was not you, do not click on the link above!"
+	" In this case, we recommend that you check in %s"
+	" if you have confirmed your email address.\n\n";	// Çeviri lazim!
 #endif
 
 const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -365,7 +372,7 @@ const char *Txt_Institutions_NO_HTML =
 #elif L==9
 	"Instituções";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Institutions";	// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_From_NO_HTML[1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -870,7 +877,17 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	"Esta nova senha foi enviada apenas para o endereço de e-mail %s,"
 	" que está no seu cartão de registro.\n\n";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"The following password has been assigned to you to log in %s: %s\n"
+	"If you want to activate the new password,"
+	" you must enter %s with your ID/nickname/email"
+	" and this new password before %u days."
+	" Once you have logged in, you can change your password.\n"
+	"If you do not log in with this new password,"
+	" the old password will remain valid.\n"
+	"If you have received this message without having requested it,"
+	" is that someone who knows your ID, nickname or email has requested a new password sent to you.\n"
+	"This new password has been sent only to the email address %s,"
+	" which is on your record card.\n\n";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -893,7 +910,7 @@ const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML =	// Warning: it is ve
 #elif L==9
 	"%s: não foi possível criar arquivo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: could not create file.";			// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
@@ -916,7 +933,7 @@ const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML =
 #elif L==9
 	"Você não pode criar arquivos aqui.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You can not create files here.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
@@ -939,7 +956,7 @@ const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML =
 #elif L==9
 	"Você deve especificar o arquivo.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"You must specify the file.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -954,7 +971,7 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 #elif L==5
 	"%s: extension non autorisée.";
 #elif L==6
-	"%s: extensión no permitida.";		// Okoteve traducción
+	"%s: extensión no permitida.";	// Okoteve traducción
 #elif L==7
 	"%s: estensione non permessa.";
 #elif L==8
@@ -962,7 +979,7 @@ const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML =	// Warning: it is 
 #elif L==9
 	"%s: extensão não permitida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: extension not allowed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -985,7 +1002,7 @@ const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML =	// Warning: it is ve
 #elif L==9
 	"%s: o arquivo já existe.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: file already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
@@ -1017,7 +1034,8 @@ const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML =	// Warning: i
 	"Arquivo muito grande (máximo %lu MiB) /"
 	" outro problema de upload.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"File too large (maximum %lu MiB) /"
+	" another upload problem.";		// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1040,7 +1058,7 @@ const char *Txt_UPLOAD_FILE_Invalid_name_NO_HTML =	// Warning: it is very import
 #elif L==9
 	"Nome inválido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Invalid name.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1063,7 +1081,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name_NO_HTML =	// Warning: it is very impo
 #elif L==9
 	"%s: nome inválido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: invalid name.";		// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it is very important to include two %s in the following sentences
@@ -1086,7 +1104,7 @@ const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML =	// Warning: it i
 #elif L==9
 	"%s: Tipo MIME %s não permitido.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: MIME type %s not allowed.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1109,7 +1127,7 @@ const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML =	// Warning: it is very importan
 #elif L==9
 	"%s: não HTML.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: not HTML.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very important to include %s in the following sentences
@@ -1124,7 +1142,7 @@ const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very im
 #elif L==5
 	"%s: quota dépassé.";
 #elif L==6
-	"%s: cuota excedida.";		// Okoteve traducción
+	"%s: cuota excedida.";	// Okoteve traducción
 #elif L==7
 	"%s: quota superata.";
 #elif L==8
@@ -1132,7 +1150,7 @@ const char *Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML =	// Warning: it is very im
 #elif L==9
 	"5s: quota excedida.";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"%s: quota exceeded.";	// Çeviri lazim!
 #endif
 
 const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// Warning: it is very important to include %lu in the following sentences
@@ -1155,7 +1173,7 @@ const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// 
 #elif L==9
 	"Tempo de upload muito longo (máximo %lu minutos).";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Upload time too long (maximum %lu minutes).";			// Çeviri lazim!
 #endif
 
 const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
@@ -1238,5 +1256,5 @@ const char *Txt_Users_NO_HTML =
 #elif L==9
 	"Utilizadores";
 #elif L==10	// tr
-	"";	// Çeviri lazim!
+	"Users";	// Çeviri lazim!
 #endif
