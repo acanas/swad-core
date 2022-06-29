@@ -728,12 +728,10 @@ static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args)
 
 static void Cty_PutIconToViewCountries (void)
   {
-   extern const char *Txt_Countries;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,
                                   NULL,NULL,
                                   "globe-americas.svg",Ico_BLACK,
-                                  Txt_Countries);
+                                  Act_GetActionText (ActSeeCty));
   }
 
 /*****************************************************************************/
@@ -1901,15 +1899,13 @@ static void Cty_EditingCountryDestructor (void)
 
 static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   {
-   extern const char *Txt_Map;
-
    if (Cty_DB_CheckIfMapIsAvailable (Cty->CtyCod))
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
                                      Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
 				     "map-marker-alt.svg",Ico_BLACK,
-				     Txt_Map);
+				     Act_GetActionText (ActSeeCtyInf));
      }
   }
 

@@ -291,12 +291,10 @@ static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args)
 
 void Bld_PutIconToViewBuildings (void)
   {
-   extern const char *Txt_Buildings;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeBld,NULL,
                                   NULL,NULL,
                                   "building.svg",Ico_BLACK,
-                                  Txt_Buildings);
+                                  Act_GetActionText (ActSeeBld));
   }
 
 /*****************************************************************************/

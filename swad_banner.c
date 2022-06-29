@@ -387,12 +387,10 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
 
 void Ban_PutIconToViewBanners (void)
   {
-   extern const char *Txt_Banners;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeBan,NULL,
                                   NULL,NULL,
                                   "flag.svg",Ico_BLACK,
-                                  Txt_Banners);
+                                  Act_GetActionText (ActSeeBan));
   }
 
 /*****************************************************************************/

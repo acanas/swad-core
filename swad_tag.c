@@ -94,13 +94,10 @@ void Tag_FreeTagsList (struct Tag_Tags *Tags)
 
 void Tag_PutIconToEditTags (void)
   {
-   extern const char *Txt_Edit_tags;
-
-   /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActEdiTag,NULL,
                                   NULL,NULL,
 				  "tag.svg",Ico_BLACK,
-				  Txt_Edit_tags);
+				  Act_GetActionText (ActEdiTag));
   }
 
 /*****************************************************************************/

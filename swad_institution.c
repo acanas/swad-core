@@ -594,12 +594,10 @@ static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   extern const char *Txt_Institutions;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeIns,NULL,
                                   NULL,NULL,
 				  "university.svg",Ico_BLACK,
-				  Txt_Institutions);
+				  Act_GetActionText (ActSeeIns));
   }
 
 /*****************************************************************************/
@@ -1896,15 +1894,13 @@ static void Ins_EditingInstitutionDestructor (void)
 
 static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   {
-   extern const char *Txt_Map;
-
    if (Ctr_DB_CheckIfMapIsAvailableInIns (Ins->InsCod))
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
                                      Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
 				     "map-marker-alt.svg",Ico_BLACK,
-				     Txt_Map);
+				     Act_GetActionText (ActSeeInsInf));
      }
   }
 

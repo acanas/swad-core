@@ -2306,21 +2306,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Edit_my_personal_data;
-   extern const char *Txt_My_public_profile;
-   extern const char *Txt_Another_user_s_profile;
-   extern const char *Txt_View_record_for_this_course;
-   extern const char *Txt_View_record_and_office_hours;
-   extern const char *Txt_Show_agenda;
-   extern const char *Txt_Administer_user;
-   extern const char *Txt_Write_a_message;
-   extern const char *Txt_View_homework;
-   extern const char *Txt_View_tests;
-   extern const char *Txt_View_exams;
-   extern const char *Txt_View_games;
-   extern const char *Txt_View_attendance;
-   extern const char *Txt_Following_unfollow;
-   extern const char *Txt_Follow;
    bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
@@ -2353,14 +2338,13 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,
 					   NULL,NULL,
 					   "pen.svg",Ico_BLACK,
-					   Txt_Edit_my_personal_data);
+					   Act_GetActionText (ActReqEdiRecSha));
 	 if (ICanViewUsrProfile)
 	    /***** Button to view user's profile *****/
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "user.svg",Ico_BLACK,
-					   ItsMe ? Txt_My_public_profile :
-						   Txt_Another_user_s_profile);
+					   Act_GetActionText (ActSeeOthPubPrf));
 
 	 /***** Button to view user's record card *****/
 	 if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
@@ -2368,24 +2352,24 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK,
-					   Txt_View_record_for_this_course);
+					   Act_GetActionText (ActSeeRecOneStd));
 	 else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK,
-					   Txt_View_record_and_office_hours);
+					   Act_GetActionText (ActSeeRecOneTch));
 
 	 /***** Button to view user's agenda *****/
 	 if (ItsMe)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
 					   NULL,NULL,
 					   "calendar.svg",Ico_BLACK,
-					   Txt_Show_agenda);
+					   Act_GetActionText (ActSeeMyAgd));
 	 else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "calendar.svg",Ico_BLACK,
-					   Txt_Show_agenda);
+					   Act_GetActionText (ActSeeUsrAgd));
 
 	 /***** Button to admin user *****/
 	 if (ItsMe ||
@@ -2397,7 +2381,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "user-cog.svg",Ico_BLACK,
-					   Txt_Administer_user);
+					   Act_GetActionText (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs]));
 
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	   {
@@ -2412,17 +2396,17 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
 						    Rec_PutParamsMyTsts,NULL,
 						    "check.svg",Ico_BLACK,
-						    Txt_View_tests);
+						    Act_GetActionText (ActSeeMyTstResCrs));
 		     /* My exam results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
 						    Rec_PutParamsMyTsts,NULL,
 						    "file-signature.svg",Ico_BLACK,
-						    Txt_View_exams);
+						    Act_GetActionText (ActSeeMyExaResCrs));
 		     /* My match results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
 						    Rec_PutParamsMyTsts,NULL,
 						    "gamepad.svg",Ico_BLACK,
-						    Txt_View_games);
+						    Act_GetActionText (ActSeeMyMchResCrs));
 		    }
 		  else	// Not me
 		    {
@@ -2430,17 +2414,17 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
 						    Rec_PutParamsStdTsts,NULL,
 						    "check.svg",Ico_BLACK,
-						    Txt_View_tests);
+						    Act_GetActionText (ActSeeUsrTstResCrs));
 		     /* User's exam results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
 						    Rec_PutParamsStdTsts,NULL,
 						    "file-signature.svg",Ico_BLACK,
-						    Txt_View_exams);
+						    Act_GetActionText (ActSeeUsrExaResCrs));
 		     /* User's match results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
 						    Rec_PutParamsStdTsts,NULL,
 						    "gamepad.svg",Ico_BLACK,
-						    Txt_View_games);
+						    Act_GetActionText (ActSeeUsrMchResCrs));
 		    }
 		 }
 
@@ -2451,12 +2435,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
 						    NULL,NULL,
 						    "folder-open.svg",Ico_BLACK,
-						    Txt_View_homework);
+						    Act_GetActionText (ActAdmAsgWrkUsr));
 		  else	// Not me, I am not a student in current course
 		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
 						    Rec_PutParamsWorks,NULL,
 						    "folder-open.svg",Ico_BLACK,
-						    Txt_View_homework);
+						    Act_GetActionText (ActAdmAsgWrkCrs));
 		 }
 
 	       /***** Button to view student's attendance *****/
@@ -2466,12 +2450,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		     Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
 						    NULL,NULL,
 						    "calendar-check.svg",Ico_BLACK,
-						    Txt_View_attendance);
+						    Act_GetActionText (ActSeeLstMyAtt));
 		  else	// Not me
 		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
 						    Rec_PutParamsStudent,NULL,
 						    "calendar-check.svg",Ico_BLACK,
-						    Txt_View_attendance);
+						    Act_GetActionText (ActSeeLstUsrAtt));
 		 }
 	      }
 	   }
@@ -2487,7 +2471,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Rec_PutParamsMsgUsr,NULL,
 					   "envelope.svg",Ico_BLACK,
-					   Txt_Write_a_message);
+					   Act_GetActionText (ActReqMsgUsr));
 
 	 /***** Button to follow / unfollow *****/
 	 if (!ItsMe)	// Not me
@@ -2498,12 +2482,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
 					      Rec_PutParamUsrCodEncrypted,NULL,
 					      "user-check.svg",Ico_BLACK,
-					      Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
+					      Act_GetActionText (ActUnfUsr));	// Put button to unfollow, even if I can not view user's profile
 	    else if (ICanViewUsrProfile)
 	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
 					      Rec_PutParamUsrCodEncrypted,NULL,
 					      "user-plus.svg",Ico_BLACK,
-					      Txt_Follow);			// Put button to follow
+					      Act_GetActionText (ActFolUsr));			// Put button to follow
 	   }
 
 	 /***** Button to change user's photo *****/

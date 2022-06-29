@@ -138,7 +138,6 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
   {
-   extern const char *Txt_Show_statistic;
    struct Fig_Figures Figures;
 
    /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
@@ -151,7 +150,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutHiddenParamFigures,&Figures,
 				  "chart-pie.svg",Ico_BLACK,
-				  Txt_Show_statistic);
+				  Act_GetActionText (ActSeeUseGbl));
   }
 
 /*****************************************************************************/

@@ -148,11 +148,7 @@ void Ann_ShowAllAnnouncements (void)
 
 static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_New_announcement;
-
-   Ico_PutContextualIconToAdd (ActWriAnn,NULL,
-                               NULL,NULL,
-			       Txt_New_announcement);
+   Ico_PutContextualIconToAdd (ActWriAnn,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

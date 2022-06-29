@@ -322,12 +322,10 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 
 void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Calendar;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
 				  NULL,NULL,
 				  "calendar.svg",Ico_BLACK,
-				  Txt_Calendar);
+				  Act_GetActionText (ActSeeCal));
   }
 
 /*****************************************************************************/

@@ -2093,13 +2093,10 @@ void Usr_ShowFormsLogoutAndRole (void)
 
 static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Log_out;
-
-   /***** Put form to log out *****/
    Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
 				  NULL,NULL,
 				  "sign-out-alt.svg",Ico_RED,
-				  Txt_Log_out);
+				  Act_GetActionText (ActLogOut));
   }
 
 /*****************************************************************************/
@@ -5891,32 +5888,26 @@ static void Usr_PutIconToPrintTchs (void)
 
 static void Usr_PutIconToShowGstsAllData (void)
   {
-   extern const char *Txt_Show_all_data_in_a_table;
-
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
                                   Usr_ShowGstsAllDataParams,NULL,
 				  "table.svg",Ico_BLACK,
-				  Txt_Show_all_data_in_a_table);
+				  Act_GetActionText (ActLstGstAll));
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
   {
-   extern const char *Txt_Show_all_data_in_a_table;
-
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
                                   Usr_ShowStdsAllDataParams,NULL,
 			          "table.svg",Ico_BLACK,
-				  Txt_Show_all_data_in_a_table);
+				  Act_GetActionText (ActLstStdAll));
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
   {
-   extern const char *Txt_Show_all_data_in_a_table;
-
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
                                   Usr_ShowTchsAllDataParams,NULL,
 			          "table.svg",Ico_BLACK,
-				  Txt_Show_all_data_in_a_table);
+				  Act_GetActionText (ActLstTchAll));
   }
 
 static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args)

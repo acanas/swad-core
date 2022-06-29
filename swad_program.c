@@ -342,13 +342,10 @@ static void Prg_PutIconsListItems (__attribute__((unused)) void *Args)
 
 static void Prg_PutIconToCreateNewItem (void)
   {
-   extern const char *Txt_New_item;
    long ItmCod = -1L;
 
-   /***** Put form to create a new program item *****/
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
-                               Prg_PutParams,&ItmCod,
-			       Txt_New_item);
+                               Prg_PutParams,&ItmCod);
   }
 
 /*****************************************************************************/
@@ -737,14 +734,8 @@ static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
 static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 					  struct Prg_Item *Item)
   {
-   extern const char *Txt_New_item;
-   extern const char *Txt_Move_up_X;
-   extern const char *Txt_Move_down_X;
-   extern const char *Txt_Increase_level_of_X;
-   extern const char *Txt_Decrease_level_of_X;
    extern const char *Txt_Movement_not_allowed;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char *Title;
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.Index);
@@ -771,60 +762,43 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 
 	 /***** Put form to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
-	                             Prg_PutParams,&Item->Hierarchy.ItmCod,
-	                             Txt_New_item);
+	                             Prg_PutParams,&Item->Hierarchy.ItmCod);
 
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
-	   {
-	    if (asprintf (&Title,Txt_Move_up_X,StrItemIndex) < 0)
-	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-up.svg",Ico_BLACK,Title);
-	    free (Title);
-	   }
+					   "arrow-up.svg",Ico_BLACK,
+					   Act_GetActionText (ActUp_PrgItm));
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
-	   {
-	    if (asprintf (&Title,Txt_Move_down_X,StrItemIndex) < 0)
-	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-down.svg",Ico_BLACK,Title);
-	    free (Title);
-	   }
+					   "arrow-down.svg",Ico_BLACK,
+					   Act_GetActionText (ActDwnPrgItm));
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
-	   {
-	    if (asprintf (&Title,Txt_Increase_level_of_X,StrItemIndex) < 0)
-	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-left.svg",Ico_BLACK,Title);
-	    free (Title);
-	   }
+					   "arrow-left.svg",Ico_BLACK,
+					   Act_GetActionText (ActLftPrgItm));
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
-	   {
-	    if (asprintf (&Title,Txt_Decrease_level_of_X,StrItemIndex) < 0)
-	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-right.svg",Ico_BLACK,Title);
-	    free (Title);
-	   }
+					   "arrow-right.svg",Ico_BLACK,
+					   Act_GetActionText (ActRgtPrgItm));
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
 	 break;

@@ -253,12 +253,8 @@ static void ExaSes_PutIconsInListOfSessions (void *Exams)
 
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
   {
-   extern const char *Txt_New_session;
-
-   /***** Put form to create a new exam session *****/
    Ico_PutContextualIconToAdd (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID,
-                               Exa_PutParams,Exams,
-			       Txt_New_session);
+                               Exa_PutParams,Exams);
   }
 
 /*****************************************************************************/
@@ -641,8 +637,6 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
                                                    const struct ExaSes_Session *Session)
   {
-   extern const char *Txt_Results;
-
    /***** Is exam session result visible or hidden? *****/
    if (Session->ShowUsrResults)
      {
@@ -652,7 +646,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",Ico_BLACK,
-				     Txt_Results);
+				     Act_GetActionText (ActSeeMyExaResSes));
      }
    else
       /* Result is forbidden to me */
@@ -664,7 +658,6 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
   {
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
-   extern const char *Txt_Results;
 
    Exams->ExaCod = Session->ExaCod;
    Exams->SesCod = Session->SesCod;
@@ -674,7 +667,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",Ico_BLACK,
-				     Txt_Results);
+				     Act_GetActionText (ActSeeUsrExaResSes));
 
    /***** Check if visibility of session results can be changed *****/
    if (ExaSes_CheckIfVisibilityOfResultsCanBeChanged (Session))
@@ -684,12 +677,12 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 					ExaSes_PutParamsEdit,Exams,
 					"eye.svg",Ico_GREEN,
-					Txt_Visible_results);
+					Act_GetActionText (ActChgVisExaRes));
       else
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 					ExaSes_PutParamsEdit,Exams,
 					"eye-slash.svg",Ico_RED,
-					Txt_Hidden_results);
+					Act_GetActionText (ActChgVisExaRes));
      }
    else	// Don't put form
      {

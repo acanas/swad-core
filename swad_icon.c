@@ -232,13 +232,12 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
 /*****************************************************************************/
 
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
-				 void (*FuncParams) (void *Args),void *Args,
-				 const char *Txt)
+				 void (*FuncParams) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "plus.svg",Ico_BLACK,
-				  Txt);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
@@ -346,34 +345,28 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
                                          void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Results;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "trophy.svg",Ico_BLACK,
-				  Txt_Results);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
                                                 void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Attendance_list;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "tasks.svg",Ico_BLACK,
-				  Txt_Attendance_list);
+				  Act_GetActionText (NextAction));
   }
 
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
                                  void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *Txt_Create_ZIP_file;
-
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  "download.svg",Ico_BLACK,
-				  Txt_Create_ZIP_file);
+				  Act_GetActionText (NextAction));
   }
 
 /*****************************************************************************/

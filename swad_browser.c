@@ -4893,7 +4893,6 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *RowId,
                                        bool Hidden)
   {
-   extern const char *Txt_Expand;
    char JavaScriptFuncToExpandFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Begin container *****/
@@ -4910,7 +4909,8 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,Txt_Expand);
+      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,
+                       Act_GetActionText (Brw_ActExpandFolder[Gbl.FileBrowser.Type]));
    Frm_EndForm ();
 
    /***** End container *****/
@@ -4924,7 +4924,6 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
                                          bool Hidden)
   {
-   extern const char *Txt_Contract;
    char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Begin container *****/
@@ -4944,7 +4943,8 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,Txt_Contract);
+      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,
+                       Act_GetActionText (Brw_ActContractFolder[Gbl.FileBrowser.Type]));
    Frm_EndForm ();
 
    /***** End container *****/

@@ -695,11 +695,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconToCreateNewCallForExam (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_New_call_FOR_EXAM;
-
-   Ico_PutContextualIconToAdd (ActEdiCfe,NULL,
-			       NULL,NULL,
-			       Txt_New_call_FOR_EXAM);
+   Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

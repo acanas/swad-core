@@ -960,12 +960,10 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
 
 void Deg_PutIconToViewDegrees (void)
   {
-   extern const char *Txt_Degrees;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,
                                   NULL,NULL,
 				  "graduation-cap.svg",Ico_BLACK,
-				  Txt_Degrees);
+				  Act_GetActionText (ActSeeDeg));
   }
 
 /*****************************************************************************/

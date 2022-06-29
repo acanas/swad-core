@@ -833,13 +833,10 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
 static void For_PutIconNewPost (void *Forums)
   {
-   extern const char *Txt_New_post;
-
    if (Forums)
       Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_POST_SECTION_ID,
-				  For_PutAllHiddenParamsNewPost,Forums,
-				  Txt_New_post);
+				  For_PutAllHiddenParamsNewPost,Forums);
   }
 
 static void For_PutAllHiddenParamsNewPost (void *Forums)
@@ -2134,13 +2131,10 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 
 static void For_PutIconNewThread (void *Forums)
   {
-   extern const char *Txt_New_thread;
-
    if (Forums)
       Ico_PutContextualIconToAdd (For_ActionsSeeFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_THREAD_SECTION_ID,
-				  For_PutAllHiddenParamsNewThread,Forums,
-				  Txt_New_thread);
+				  For_PutAllHiddenParamsNewThread,Forums);
   }
 
 static void For_PutAllHiddenParamsNewThread (void *Forums)

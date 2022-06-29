@@ -571,13 +571,11 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Remove_account;
-
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
 				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED,
-				     Txt_Remove_account);
+				     Act_GetActionText (ActReqRemMyAcc));
   }
 
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
@@ -1115,7 +1113,6 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 
 void Acc_PutIconToChangeUsrAccount (void)
   {
-   extern const char *Txt_Change_account;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActFrmAccOth,
@@ -1135,11 +1132,11 @@ void Acc_PutIconToChangeUsrAccount (void)
       Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
                                      NULL,NULL,
 			             "at.svg",Ico_BLACK,
-			             Txt_Change_account);
+			             Act_GetActionText (ActFrmMyAcc));
    else	// Not me
       if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 	                                Rec_PutParamUsrCodEncrypted,NULL,
 	                                "at.svg",Ico_BLACK,
-				        Txt_Change_account);
+				        Act_GetActionText (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs]));
   }

@@ -1662,13 +1662,12 @@ void TstPrn_SelUsrsToViewUsrsPrints (void)
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
    extern const char *Txt_View_results;
 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrTstResCrs,
 				     NULL,NULL,
-				     Txt_Results,
+				     Act_GetActionText (ActSeeUsrTstResCrs),
 				     Hlp_ASSESSMENT_Tests_results,
 				     Txt_View_results,
 				     true);	// Put form with date range

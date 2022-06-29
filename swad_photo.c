@@ -170,11 +170,6 @@ bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
 
 void Pho_PutIconToChangeUsrPhoto (void)
   {
-   extern const char *Txt_Change_photo;
-   extern const char *Txt_Upload_photo;
-   bool PhotoExists;
-   char PhotoURL[PATH_MAX + 1];
-   const char *TitleText;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqOthPho,
@@ -192,24 +187,17 @@ void Pho_PutIconToChangeUsrPhoto (void)
    /***** Link for changing / uploading the photo *****/
    if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
      {
-      TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
-			                      Txt_Upload_photo;
       Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
                                      NULL,NULL,
 				     "camera.svg",Ico_BLACK,
-				     TitleText);
+				     Act_GetActionText (ActReqMyPho));
      }
    else	// Not me
       if (Pho_ICanChangeOtherUsrPhoto (Gbl.Record.UsrDat))
-	{
-	 PhotoExists = Pho_BuildLinkToPhoto (Gbl.Record.UsrDat,PhotoURL);
-	 TitleText = PhotoExists ? Txt_Change_photo :
-				   Txt_Upload_photo;
 	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 				        Rec_PutParamUsrCodEncrypted,NULL,
 	                                "camera.svg",Ico_BLACK,
-				        TitleText);
-	}
+				        Act_GetActionText (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs]));
   }
 
 /*****************************************************************************/
@@ -218,14 +206,11 @@ void Pho_PutIconToChangeUsrPhoto (void)
 
 static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Remove_photo;
-
-   /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
 				     NULL,NULL,
 				     "trash.svg",Ico_RED,
-				     Txt_Remove_photo);
+				     Act_GetActionText (ActReqRemMyPho));
   }
 
 /*****************************************************************************/
@@ -234,7 +219,6 @@ static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Arg
 
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Remove_photo;
    char PhotoURL[PATH_MAX + 1];
    bool PhotoExists;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -257,7 +241,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
 				     Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED,
-				     Txt_Remove_photo);
+				     Act_GetActionText (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]));
   }
 
 /*****************************************************************************/
@@ -296,7 +280,6 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
-   extern const char *Txt_Upload_photo;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {

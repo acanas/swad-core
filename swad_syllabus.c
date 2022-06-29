@@ -604,17 +604,10 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem)
   {
-   extern const char *Txt_Move_up_X_and_its_subsections;
-   extern const char *Txt_Move_up_X;
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_Move_down_X_and_its_subsections;
-   extern const char *Txt_Move_down_X;
-   extern const char *Txt_Increase_level_of_X;
-   extern const char *Txt_Decrease_level_of_X;
    static int LastLevel = 0;
    char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    struct MoveSubtrees Subtree;
-   char *Title;
 
    Subtree.ToGetUp.Ini   = Subtree.ToGetUp.End   = 0;
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
@@ -652,18 +645,13 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
 	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	       if (Subtree.MovAllowed)
-		 {
-		  if (asprintf (&Title,Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-										       Txt_Move_up_X,
-				StrItemCod) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 										     ActUp_IteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-up.svg",Ico_BLACK,Title);
-		  free (Title);
-		 }
+						 "arrow-up.svg",Ico_BLACK,
+						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
+										                        ActUp_IteSylPra));
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -673,18 +661,13 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
 	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	       if (Subtree.MovAllowed)
-		 {
-		  if (asprintf (&Title,Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-										       Txt_Move_down_X,
-				StrItemCod) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 										     ActDwnIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-down.svg",Ico_BLACK,Title);
-		  free (Title);
-		 }
+						 "arrow-down.svg",Ico_BLACK,
+						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
+									                                ActDwnIteSylPra));
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -693,16 +676,13 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    /***** Icon to increase the level of an item *****/
 	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	       if (Level > 1)
-		 {
-		  if (asprintf (&Title,Txt_Increase_level_of_X,StrItemCod) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 										     ActRgtIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-left.svg",Ico_BLACK,Title);
-		  free (Title);
-		 }
+						 "arrow-left.svg",Ico_BLACK,
+						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
+												        ActRgtIteSylPra));
 	       else
 		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -712,16 +692,13 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	       if (Level < LastLevel + 1 &&
 		   Level < Syl_MAX_LEVELS_SYLLABUS)
-		 {
-		  if (asprintf (&Title,Txt_Decrease_level_of_X,StrItemCod) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 										     ActLftIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-right.svg",Ico_BLACK,Title);
-		  free (Title);
-		 }
+						 "arrow-right.svg",Ico_BLACK,
+						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
+												        ActLftIteSylPra));
 	       else
 		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);

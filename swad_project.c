@@ -1108,13 +1108,8 @@ static void Prj_PutIconsListProjects (void *Projects)
 
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects)
   {
-   extern const char *Txt_New_project;
-
-   /***** Put form to create a new project *****/
    Projects->PrjCod = -1L;
-   Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,
-                               Prj_PutCurrentParams,Projects,
-			       Txt_New_project);
+   Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,Prj_PutCurrentParams,Projects);
   }
 
 /*****************************************************************************/
@@ -1138,12 +1133,10 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
 
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
   {
-   extern const char *Txt_Show_all_data_in_a_table;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
 			          "table.svg",Ico_BLACK,
-				  Txt_Show_all_data_in_a_table);
+			          Act_GetActionText (ActSeeTblAllPrj));
   }
 
 /*****************************************************************************/
@@ -2039,8 +2032,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    ;
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_Add_USERS;
-   extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
    static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
@@ -2069,7 +2060,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    unsigned NumUsrs;
    const char *ClassLabel;
    const char *ClassData;
-   char *Txt;
 
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
@@ -2193,12 +2183,8 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 		     HTM_TR_Begin (NULL);
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			   Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
-			   if (asprintf (&Txt,Txt_Add_USERS,
-			                 Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]) < 0)
-			      Err_NotEnoughMemoryExit ();
 			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
-						       Prj_PutCurrentParams,Projects,Txt);
-			   free (Txt);
+						       Prj_PutCurrentParams,Projects);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
@@ -3849,20 +3835,17 @@ static bool Prj_GetEditableFromForm (void)
 
 static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects)
   {
-   extern const char *Txt_Lock_editing;
-   extern const char *Txt_Unlock_editing;
-
    /***** Put icon to lock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
 			          "lock.svg",Ico_RED,
-				  Txt_Lock_editing);
+			          Act_GetActionText (ActReqLckAllPrj));
 
    /***** Put icon to unlock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
 			          "unlock.svg",Ico_GREEN,
-				  Txt_Unlock_editing);
+			          Act_GetActionText (ActReqUnlAllPrj));
   }
 
 /*****************************************************************************/

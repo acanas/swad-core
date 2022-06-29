@@ -466,11 +466,7 @@ static void Not_PutIconsListNotices (__attribute__((unused)) void *Args)
 
 static void Not_PutIconToAddNewNotice (void)
   {
-   extern const char *Txt_New_notice;
-
-   Ico_PutContextualIconToAdd (ActWriNot,NULL,
-                               NULL,NULL,
-			       Txt_New_notice);
+   Ico_PutContextualIconToAdd (ActWriNot,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -640,7 +636,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
 					   Not_PutParams,&NotCod,
 					   "ellipsis-h.svg",Ico_BLACK,
-					   Txt_See_full_notice);
+					   Act_GetActionText (ActSeeOneNot));
 	 HTM_DIV_End ();
 	}
       else

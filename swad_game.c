@@ -404,11 +404,8 @@ static void Gam_PutIconsListGames (void *Games)
 
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
   {
-   extern const char *Txt_New_game;
-
    Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,
-                               Gam_PutParamsToCreateNewGame,Games,
-			       Txt_New_game);
+                               Gam_PutParamsToCreateNewGame,Games);
   }
 
 /*****************************************************************************/
@@ -1688,8 +1685,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    extern const char *Txt_Code;
    extern const char *Txt_Tags;
    extern const char *Txt_Question;
-   extern const char *Txt_Move_up_X;
-   extern const char *Txt_Move_down_X;
    extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
@@ -1699,7 +1694,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
    char *Anchor = NULL;
-   char *Title;
 
    /***** Trivial check *****/
    if (!NumQsts)
@@ -1762,30 +1756,20 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
 	       /* Put icon to move up the question */
 	       if (ICanEditQuestions && QstInd > 1)
-		 {
-		  if (asprintf (&Title,Txt_Move_up_X,StrQstInd) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-up.svg",Ico_BLACK,
-						 Title);
-		  free (Title);
-		 }
+						 Act_GetActionText (ActUp_GamQst));
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the question */
 	       if (ICanEditQuestions && QstInd < MaxQstInd)
-		 {
-		  if (asprintf (&Title,Txt_Move_down_X,StrQstInd) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-down.svg",Ico_BLACK,
-						 Title);
-		  free (Title);
-		 }
+						 Act_GetActionText (ActDwnGamQst));
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -1821,12 +1805,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
 static void Gam_PutIconToAddNewQuestions (void *Games)
   {
-   extern const char *Txt_Add_questions;
-
-   /***** Put form to create a new question *****/
-   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,
-			       Gam_PutParams,Games,
-			       Txt_Add_questions);
+   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Gam_PutParams,Games);
   }
 
 /*****************************************************************************/

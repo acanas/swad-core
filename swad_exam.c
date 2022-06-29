@@ -365,11 +365,8 @@ static void Exa_PutIconsListExams (void *Exams)
 
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
   {
-   extern const char *Txt_New_exam;
-
    Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,
-                               Exa_PutParamsToCreateNewExam,Exams,
-			       Txt_New_exam);
+                               Exa_PutParamsToCreateNewExam,Exams);
   }
 
 /*****************************************************************************/

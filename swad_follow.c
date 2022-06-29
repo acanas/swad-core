@@ -265,12 +265,10 @@ static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args)
 
 static void Fol_PutIconToUpdateWhoToFollow (void)
   {
-   extern const char *Txt_Update;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeSocPrf,NULL,
                                   NULL,NULL,
 				  "recycle.svg",Ico_BLACK,
-				  Txt_Update);
+				  Act_GetActionText (ActSeeSocPrf));
   }
 
 /*****************************************************************************/

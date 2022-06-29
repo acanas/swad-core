@@ -268,12 +268,10 @@ static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args)
 
 void Lnk_PutIconToViewLinks (void)
   {
-   extern const char *Txt_Links;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,
                                   NULL,NULL,
 				  "link.svg",Ico_BLACK,
-				  Txt_Links);
+				  Act_GetActionText (ActSeeLnk));
   }
 
 /*****************************************************************************/

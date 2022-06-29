@@ -201,50 +201,21 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 
 void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
   {
-   extern const char *Txt_Change_logo;
-   extern const char *Txt_Upload_logo;
-   Act_Action_t Action;
-   long Cod;
-   const char *Folder;
-   char PathLogo[PATH_MAX + 1];
-   bool LogoExists;
-
-   /***** Set variables depending on scope *****/
-   switch (Scope)
+   static Act_Action_t Action[HieLvl_NUM_LEVELS] =
      {
-      case HieLvl_INS:
-	 Action = ActReqInsLog;
-	 Cod = Gbl.Hierarchy.Ins.InsCod;
-	 Folder = Cfg_FOLDER_INS;
-	 break;
-      case HieLvl_CTR:
-	 Action = ActReqCtrLog;
-	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
-	 Folder = Cfg_FOLDER_CTR;
-	 break;
-      case HieLvl_DEG:
-	 Action = ActReqDegLog;
-	 Cod = Gbl.Hierarchy.Deg.DegCod;
-	 Folder = Cfg_FOLDER_DEG;
-	 break;
-      default:
-	 return;	// Nothing to do
-     }
+      [HieLvl_UNK] = ActUnk,		// Unknown
+      [HieLvl_SYS] = ActUnk,		// System
+      [HieLvl_CTY] = ActUnk,		// Country
+      [HieLvl_INS] = ActReqInsLog,	// Institution
+      [HieLvl_CTR] = ActReqCtrLog,	// Center
+      [HieLvl_DEG] = ActReqDegLog,	// Degree
+      [HieLvl_CRS] = ActUnk,		// Course
+     };
 
-   /***** Check if logo exists *****/
-   snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
-	     (unsigned) (Cod % 100),
-	     (unsigned)  Cod,
-	     (unsigned)  Cod);
-   LogoExists = Fil_CheckIfPathExists (PathLogo);
-
-   /***** Link for changing / uploading the logo *****/
-   Lay_PutContextualLinkOnlyIcon (Action,NULL,
+   Lay_PutContextualLinkOnlyIcon (Action[Scope],NULL,
                                   NULL,NULL,
 				  "shield-alt.svg",Ico_BLACK,
-				  LogoExists ? Txt_Change_logo :
-					       Txt_Upload_logo);
+				  Act_GetActionText (Action[Scope]));
   }
 
 /*****************************************************************************/
@@ -344,13 +315,10 @@ static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args)
 
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
   {
-   extern const char *Txt_Remove_logo;
-
-   /***** Link to request the removal of the logo *****/
    Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,
                                   NULL,NULL,
 				  "trash.svg",Ico_RED,
-				  Txt_Remove_logo);
+				  Act_GetActionText (ActionRem));
   }
 
 /*****************************************************************************/

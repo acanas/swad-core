@@ -340,11 +340,8 @@ static void Svy_PutIconsListSurveys (void *Surveys)
 
 static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys)
   {
-   extern const char *Txt_New_survey;
-
    Ico_PutContextualIconToAdd (ActFrmNewSvy,NULL,
-                               Svy_PutParamsToCreateNewSvy,Surveys,
-			       Txt_New_survey);
+                               Svy_PutParamsToCreateNewSvy,Surveys);
   }
 
 /*****************************************************************************/
@@ -875,8 +872,6 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
 					 const struct Svy_Survey *Svy,
                                          const char *Anchor)
   {
-   extern const char *Txt_Reset;
-
    Surveys->SvyCod = Svy->SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
@@ -887,7 +882,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
    Lay_PutContextualLinkOnlyIcon (ActReqRstSvy,NULL,
                                   Svy_PutParams,Surveys,
 				  "recycle.svg",Ico_RED,
-				  Txt_Reset);
+				  Act_GetActionText (ActReqRstSvy));
 
    /***** Put form to hide/show survey *****/
    if (Svy->Status.Visible)
@@ -2935,12 +2930,7 @@ static void Svy_PutParamsToEditQuestion (void *Surveys)
 
 static void Svy_PutIconToAddNewQuestion (void *Surveys)
   {
-   extern const char *Txt_New_question;
-
-   /***** Put form to create a new question *****/
-   Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,
-			       Svy_PutParams,Surveys,
-			       Txt_New_question);
+   Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,Svy_PutParams,Surveys);
   }
 
 /*****************************************************************************/

@@ -362,12 +362,8 @@ static void Mch_PutIconsInListOfMatches (void *Games)
 
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games)
   {
-   extern const char *Txt_New_match;
-
-   /***** Put form to create a new match *****/
    Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,
-                               Gam_PutParams,Games,
-			       Txt_New_match);
+                               Gam_PutParams,Games);
   }
 
 /*****************************************************************************/
@@ -731,9 +727,6 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
 
 static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned NumQsts)
   {
-   extern const char *Txt_Play;
-   extern const char *Txt_Resume;
-
    HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
                  The_GetSuffix (),The_GetColorRows ());
 
@@ -752,8 +745,8 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 				     Mch_PutParamsPlay,&Match->MchCod,
 				     Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
 									"play.svg",Ico_BLACK,
-				     Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-									  Txt_Resume);
+				     Act_GetActionText (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+									                     ActResMch));
 
    HTM_TD_End ();
   }
@@ -788,8 +781,6 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
                                                const struct Mch_Match *Match)
   {
-   extern const char *Txt_Results;
-
    /***** Is match result visible or hidden? *****/
    if (Match->Status.ShowUsrResults)
      {
@@ -799,7 +790,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
 				     "trophy.svg",Ico_BLACK,
-				     Txt_Results);
+				     Act_GetActionText (ActSeeMyMchResMch));
      }
    else
       /* Result is forbidden to me */
@@ -811,7 +802,6 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
   {
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
-   extern const char *Txt_Results;
 
    Games->GamCod = Match->GamCod;
    Games->MchCod.Current = Match->MchCod;
@@ -821,7 +811,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
 				     "trophy.svg",Ico_BLACK,
-				     Txt_Results);
+				     Act_GetActionText (ActSeeUsrMchResMch));
 
    /***** Check if visibility of session results can be changed *****/
    if (Mch_CheckIfVisibilityOfResultsCanBeChanged (Match))
@@ -831,12 +821,12 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 					Mch_PutParamsEdit,Games,
 					"eye.svg",Ico_GREEN,
-					Txt_Visible_results);
+					Act_GetActionText (ActChgVisResMchUsr));
       else
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 					Mch_PutParamsEdit,Games,
 					"eye-slash.svg",Ico_RED,
-					Txt_Hidden_results);
+					Act_GetActionText (ActChgVisResMchUsr));
      }
    else
      {

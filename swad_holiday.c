@@ -250,12 +250,10 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
 
 void Hld_PutIconToSeeHlds (void)
   {
-   extern const char *Txt_Holidays;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,
                                   NULL,NULL,
 				  "calendar-day.svg",Ico_BLACK,
-				  Txt_Holidays);
+				  Act_GetActionText (ActSeeHld));
   }
 
 /*****************************************************************************/

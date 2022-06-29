@@ -692,13 +692,9 @@ static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod)
 
 static void Agd_PutIconToCreateNewEvent (void *Agenda)
   {
-   extern const char *Txt_New_event;
-
-   /***** Put form to create a new event *****/
    ((struct Agd_Agenda *) Agenda)->AgdCodToEdit = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
-			       Agd_PutCurrentParamsMyAgenda,Agenda,
-			       Txt_New_event);
+			       Agd_PutCurrentParamsMyAgenda,Agenda);
   }
 
 static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
@@ -721,17 +717,13 @@ static void Agd_PutIconToShowQR (void)
 
 static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
   {
-   extern const char *Txt_Another_user_s_profile;
-   extern const char *Txt_View_record_for_this_course;
-   extern const char *Txt_View_record_and_office_hours;
-
    /***** Button to view user's public profile *****/
    if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "user.svg",Ico_BLACK,
-			             Txt_Another_user_s_profile);
+			             Act_GetActionText (ActSeeOthPubPrf));
 
    /***** Button to view user's record card *****/
    if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
@@ -739,12 +731,12 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "address-card.svg",Ico_BLACK,
-			             Txt_View_record_for_this_course);
+			             Act_GetActionText (ActSeeRecOneStd));
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 			             Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "address-card.svg",Ico_BLACK,
-			             Txt_View_record_and_office_hours);
+			             Act_GetActionText (ActSeeRecOneTch));
   }
 
 /*****************************************************************************/

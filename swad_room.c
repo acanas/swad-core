@@ -475,12 +475,10 @@ static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args)
 
 void Roo_PutIconToViewRooms (void)
   {
-   extern const char *Txt_Rooms;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeRoo,NULL,
                                   NULL,NULL,
                                   "chalkboard-teacher.svg",Ico_BLACK,
-                                  Txt_Rooms);
+                                  Act_GetActionText (ActSeeRoo));
   }
 
 /*****************************************************************************/

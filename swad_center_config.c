@@ -276,8 +276,6 @@ static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
 
 static void CtrCfg_PutIconToChangePhoto (void)
   {
-   extern const char *Txt_Change_photo;
-   extern const char *Txt_Upload_photo;
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
 
@@ -291,8 +289,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
    Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,
                                   NULL,NULL,
 			          "camera.svg",Ico_BLACK,
-			          PhotoExists ? Txt_Change_photo :
-				                Txt_Upload_photo);
+			          Act_GetActionText (ActReqCtrPho));
   }
 
 /*****************************************************************************/

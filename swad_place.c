@@ -336,12 +336,10 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
 
 void Plc_PutIconToViewPlaces (void)
   {
-   extern const char *Txt_Places;
-
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
                                   Ins_PutParamCurrentInsCod,&Gbl.Hierarchy.Ins.InsCod,
 				  "map-marker-alt.svg",Ico_BLACK,
-				  Txt_Places);
+				  Act_GetActionText (ActSeePlc));
   }
 
 /*****************************************************************************/

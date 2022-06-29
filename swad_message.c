@@ -1693,9 +1693,6 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 
 static void Msg_PutIconsListMsgs (void *Messages)
   {
-   extern const char *Txt_MSGS_Sent;
-   extern const char *Txt_MSGS_Received;
-   extern const char *Txt_MSGS_Write;
    static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = ActUnk,
@@ -1713,7 +1710,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
 					   "marker.svg",Ico_BLACK,
-					   Txt_MSGS_Write);
+					   Act_GetActionText (ActReqMsgUsr));
 	    break;
 	 default:
 	    break;
@@ -1727,7 +1724,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRcvMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
 					   "inbox.svg",Ico_BLACK,
-					   Txt_MSGS_Received);
+					   Act_GetActionText (ActSeeRcvMsg));
 	    break;
 	 default:
 	    break;
@@ -1741,7 +1738,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeSntMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
 					   "share.svg",Ico_BLACK,
-					   Txt_MSGS_Sent);
+					   Act_GetActionText (ActSeeSntMsg));
 	    break;
 	 default:
 	    break;

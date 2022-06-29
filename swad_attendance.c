@@ -377,12 +377,8 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 
 static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events)
   {
-   extern const char *Txt_New_event;
-
-   /***** Put icon to create a new attendance event *****/
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
-			       Att_PutParamsToCreateNewAttEvent,Events,
-			       Txt_New_event);
+                               Att_PutParamsToCreateNewAttEvent,Events);
   }
 
 /*****************************************************************************/

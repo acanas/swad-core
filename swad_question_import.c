@@ -76,13 +76,10 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
 void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
   {
-   extern const char *Txt_Export_questions;
-
-   /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
                                   QstImp_PutParamsExportQsts,Questions,
 				  "file-import.svg",Ico_BLACK,
-				  Txt_Export_questions);
+				  Act_GetActionText (ActLstTstQst));
   }
 
 /*****************************************************************************/
@@ -120,13 +117,10 @@ bool QstImp_GetCreateXMLParamFromForm (void)
 
 void QstImp_PutIconToImportQuestions (void)
   {
-   extern const char *Txt_Import_questions;
-
-   /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActReqImpTstQst,NULL,
                                   NULL,NULL,
 				  "file-export.svg",Ico_BLACK,
-				  Txt_Import_questions);
+				  Act_GetActionText (ActReqImpTstQst));
   }
 
 /*****************************************************************************/

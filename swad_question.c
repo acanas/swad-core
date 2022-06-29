@@ -441,12 +441,8 @@ bool Qst_CheckIfICanEditQsts (void)
 
 void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_New_question;
-
    /***** Put icon to create a new test question *****/
-   Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
-			       NULL,NULL,
-			       Txt_New_question);
+   Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,NULL,NULL);
 
    /***** Put icon to edit tags *****/
    Tag_PutIconToEditTags ();
@@ -464,8 +460,6 @@ void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
 
 void Qst_PutIconsEditBankQsts (void *Questions)
   {
-   extern const char *Txt_New_question;
-
    /***** Put form to remove selected test questions *****/
    switch (Gbl.Action.Act)
      {
@@ -483,9 +477,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
 
    if (Gbl.Action.Act != ActEdiOneTstQst)
       /***** Put form to create a new test question *****/
-      Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,
-				  NULL,NULL,
-				  Txt_New_question);
+      Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,NULL,NULL);
 
    /***** Put icon to edit tags *****/
    Tag_PutIconToEditTags ();

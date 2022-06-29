@@ -1097,12 +1097,10 @@ static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
 
 static void Crs_PutIconToViewCourses (void)
   {
-   extern const char *Txt_Courses;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,
                                   NULL,NULL,
                                   "chalkboard-teacher.svg",Ico_BLACK,
-                                  Txt_Courses);
+                                  Act_GetActionText (ActSeeCrs));
   }
 
 /*****************************************************************************/
@@ -2191,13 +2189,10 @@ void Crs_ReqSelectOneOfMyCourses (void)
 
 static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Search_courses;
-
-   /***** Put form to search / select courses *****/
    Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
 				  Sch_PutLinkToSearchCoursesParams,NULL,
 				  "search.svg",Ico_BLACK,
-				  Txt_Search_courses);
+				  Act_GetActionText (ActReqSch));
   }
 
 /*****************************************************************************/
@@ -2229,14 +2224,11 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
 void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_My_courses;
-
    if (Gbl.Usrs.Me.Logged)		// I am logged
-      /***** Put icon with link *****/
       Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
 				     NULL,NULL,
 				     "sitemap.svg",Ico_BLACK,
-				     Txt_My_courses);
+				     Act_GetActionText (ActMyCrs));
   }
 
 /*****************************************************************************/

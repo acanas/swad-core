@@ -341,12 +341,7 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
 
 static void Grp_PutIconToCreateNewGroup (void)
   {
-   extern const char *Txt_New_group;
-
-   /***** Put form to create a new group *****/
-   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,
-                               NULL,NULL,
-			       Txt_New_group);
+   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1370,12 +1365,8 @@ static void Grp_PutIconToViewGroups (void)
 
 static void Grp_PutIconToCreateNewGroupType (void)
   {
-   extern const char *Txt_New_type_of_group;
-
-   /***** Put form to create a new type of group *****/
    Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,
-                               NULL,NULL,
-			       Txt_New_type_of_group);
+                               NULL,NULL);
   }
 
 /*****************************************************************************/

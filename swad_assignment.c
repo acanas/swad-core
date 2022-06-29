@@ -301,15 +301,10 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 
 static void Asg_PutIconToCreateNewAsg (void *Assignments)
   {
-   extern const char *Txt_New_assignment;
-
    if (Assignments)
      {
-      /***** Put form to create a new assignment *****/
       ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
-      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,
-				  Asg_PutParams,Assignments,
-				  Txt_New_assignment);
+      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutParams,Assignments);
      }
   }
 

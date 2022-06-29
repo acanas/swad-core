@@ -711,15 +711,12 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
                                                 bool ICanEditSets)
   {
    extern const char *Txt_Sets_of_questions;
-   extern const char *Txt_Move_up_X;
-   extern const char *Txt_Move_down_X;
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
    struct ExaSet_Set Set;
    MYSQL_ROW row;
    char *Anchor;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char *Title;
 
    /***** Trivial check *****/
    if (!NumSets)
@@ -783,30 +780,20 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
 	       /* Put icon to move up the question */
 	       if (ICanEditSets && Set.SetInd > 1)
-		 {
-		  if (asprintf (&Title,Txt_Move_up_X,StrSetInd) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-up.svg",Ico_BLACK,
-						 Title);
-		  free (Title);
-		 }
+						 Act_GetActionText (ActUp_ExaSet));
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the set */
 	       if (ICanEditSets && Set.SetInd < MaxSetInd)
-		 {
-		  if (asprintf (&Title,Txt_Move_down_X,StrSetInd) < 0)
-		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-down.svg",Ico_BLACK,
-						 Title);
-		  free (Title);
-		 }
+						 Act_GetActionText (ActDwnExaSet));
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -942,8 +929,6 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
                                                      MYSQL_RES *mysql_res,
 						     bool ICanEditQuestions)
   {
-   extern const char *Txt_Invalid_question;
-   extern const char *Txt_Valid_question;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Question;
@@ -955,11 +940,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       Act_Action_t NextAction;
       const char *Icon;
       Ico_Color_t Color;
-      const char **Title;
      } ValInv[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = {ActValSetQst,"times.svg",Ico_RED  ,&Txt_Invalid_question},	// Validate question (set it as valid question)
-      [Qst_VALID_QUESTION  ] = {ActInvSetQst,"check.svg",Ico_GREEN,&Txt_Valid_question  },	// Invalidated question (set it as canceled question)
+      [Qst_INVALID_QUESTION] = {ActValSetQst,"times.svg",Ico_RED  },	// Validate question (set it as valid question)
+      [Qst_VALID_QUESTION  ] = {ActInvSetQst,"check.svg",Ico_GREEN},	// Invalidated question (set it as canceled question)
      };
 
    /***** Begin table *****/
@@ -1004,11 +988,11 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to cancel the question */
-	       Lay_PutContextualLinkOnlyIcon ( ValInv[Question.Validity].NextAction,Anchor,
-					       ExaSet_PutParamsOneQst,Exams,
-					       ValInv[Question.Validity].Icon,
-					       ValInv[Question.Validity].Color,
-					      *ValInv[Question.Validity].Title);
+	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
+					      ExaSet_PutParamsOneQst,Exams,
+					      ValInv[Question.Validity].Icon,
+					      ValInv[Question.Validity].Color,
+					      Act_GetActionText (ValInv[Question.Validity].NextAction));
 
 	    HTM_TD_End ();
 
@@ -1825,12 +1809,8 @@ static void ExaSet_ExchangeSets (long ExaCod,
 
 static void ExaSet_PutIconToAddNewQuestions (void *Exams)
   {
-   extern const char *Txt_Add_questions;
-
-   /***** Put form to create a new question *****/
    Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
-			       ExaSet_PutParamsOneSet,Exams,
-			       Txt_Add_questions);
+			       ExaSet_PutParamsOneSet,Exams);
   }
 
 /*****************************************************************************/

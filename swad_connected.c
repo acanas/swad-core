@@ -134,12 +134,10 @@ void Con_ShowConnectedUsrs (void)
 
 static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
-   extern const char *Txt_Update;
-
    Lay_PutContextualLinkOnlyIcon (ActLstCon,NULL,
                                   Con_PutParamScope,NULL,
 				  "recycle.svg",Ico_BLACK,
-				  Txt_Update);
+				  Act_GetActionText (ActLstCon));
   }
 
 static void Con_PutParamScope (__attribute__((unused)) void *Args)

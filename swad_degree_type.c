@@ -301,12 +301,10 @@ static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Arg
 
 void DegTyp_PutIconToViewDegreeTypes (void)
   {
-   extern const char *Txt_Types_of_degree;
-
    Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,
                                   NULL,NULL,
 				  "sitemap.svg",Ico_BLACK,
-				  Txt_Types_of_degree);
+				  Act_GetActionText (ActSeeDegTyp));
   }
 
 /*****************************************************************************/
