@@ -866,8 +866,6 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_X_allowed;
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
-   extern const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it;
-   extern const char *Txt_FORUM_Post_X_banned_Click_to_unban_it;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
@@ -950,16 +948,12 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	       For_PutParamsForum (Forums);
-	       if (asprintf (&Title,Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-			                      Txt_FORUM_Post_X_banned_Click_to_unban_it,
-			     PstNum) < 0)
-		  Err_NotEnoughMemoryExit ();
 	       Ico_PutIconLink (Enabled ? "eye.svg" :
 					  "eye-slash.svg",
 				Enabled ? Ico_GREEN :
 					  Ico_RED,
-				Title);
-	       free (Title);
+				Act_GetActionText (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
+							     For_ActionsEnbPstFor[Forums->Forum.Type]));
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1732,7 +1726,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 					    Forum->Location,
 					    Forums->Thread.ToMove,
 					    -1L);
-	       Ico_PutIconPaste ();
+	       Ico_PutIconPaste (For_ActionsPasThrFor[Forum->Type]);
 	    Frm_EndForm ();
 	   }
 	}
@@ -2249,7 +2243,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 					       Forums->Forum.Location,
 					       Thr.ThrCod,
 					       -1L);
-		  Ico_PutIconCut ();
+		  Ico_PutIconCut (For_ActionsCutThrFor[Forums->Forum.Type]);
 	       Frm_EndForm ();
 	      }
 

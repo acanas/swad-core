@@ -1404,10 +1404,6 @@ static void Grp_WriteHeadingGroupTypes (void)
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
-   extern const char *Txt_Group_X_open_click_to_close_it;
-   extern const char *Txt_Group_X_closed_click_to_open_it;
-   extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
-   extern const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them;
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
    unsigned NumGrpTyp;
@@ -1417,7 +1413,6 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    struct GroupType *GrpTyp;
    struct GroupType *GrpTypAux;
    struct Group *Grp;
-   char *Title;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -1453,16 +1448,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     if (asprintf (&Title,Grp->Open ? Txt_Group_X_open_click_to_close_it :
-			                              Txt_Group_X_closed_click_to_open_it,
-			           Grp->GrpName) < 0)
-			Err_NotEnoughMemoryExit ();
 		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
 			                          "lock.svg",
 			              Grp->Open ? Ico_GREEN :
 			        	          Ico_RED,
-			              Title);
-		     free (Title);
+			              Act_GetActionText (Grp->Open ? ActCloGrp :
+						                     ActOpeGrp));
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1472,16 +1463,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     if (asprintf (&Title,Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
-			                                   Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
-			           Grp->GrpName) < 0)
-			Err_NotEnoughMemoryExit ();
 		     Ico_PutIconLink (Grp->FileZones ? "folder-open.svg" :
 			                               "folder.svg",
 			              Grp->FileZones ? Ico_GREEN :
 			        	               Ico_RED,
-			              Title);
-		     free (Title);
+			              Act_GetActionText (Grp->FileZones ? ActDisFilZonGrp :
+									  ActEnaFilZonGrp));
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

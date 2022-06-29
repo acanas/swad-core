@@ -771,7 +771,6 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				long ExaCod,	// <= 0 ==> any
 				const char *ExamsSelectedCommas)
   {
-   extern const char *Txt_Result;
    MYSQL_RES *mysql_res;
    struct UsrData *UsrDat;
    unsigned NumResults;
@@ -1049,14 +1048,17 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		     case Usr_ME:
 			Frm_BeginForm (ActSeeOneExaResMe);
 			   ExaSes_PutParamsEdit (Exams);
+		           Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+		                            Act_GetActionText (ActSeeOneExaResMe));
 			break;
 		     case Usr_OTHER:
 			Frm_BeginForm (ActSeeOneExaResOth);
 			   ExaSes_PutParamsEdit (Exams);
 			   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		           Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+		                            Act_GetActionText (ActSeeOneExaResOth));
 			break;
 		    }
-		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,Txt_Result);
 		  Frm_EndForm ();
 		 }
 	       else

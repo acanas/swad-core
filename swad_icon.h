@@ -107,8 +107,8 @@ void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const cha
 
 void Ico_PutIconRemovalNotAllowed (void);
 
-void Ico_PutIconCut (void);
-void Ico_PutIconPaste (void);
+void Ico_PutIconCut (Act_Action_t NextAction);
+void Ico_PutIconPaste (Act_Action_t NextAction);
 
 void Ico_PutIconNotVisible (void);
 

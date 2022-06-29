@@ -716,7 +716,6 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   long GamCod,	// <= 0 ==> any
 				   const char *GamesSelectedCommas)
   {
-   extern const char *Txt_Result;
    MYSQL_RES *mysql_res;
    struct UsrData *UsrDat;
    struct MchRes_ICanView ICanView;
@@ -906,14 +905,17 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 		  case Usr_ME:
 		     Frm_BeginForm (ActSeeOneMchResMe);
 			Mch_PutParamsEdit (Games);
+		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+		                         Act_GetActionText (ActSeeOneMchResMe));
 		     break;
 		  case Usr_OTHER:
 		     Frm_BeginForm (ActSeeOneMchResOth);
 			Mch_PutParamsEdit (Games);
 			Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+		                         Act_GetActionText (ActSeeOneMchResOth));
 		     break;
 		 }
-		  Ico_PutIconLink ("tasks.svg",Ico_BLACK,Txt_Result);
 	       Frm_EndForm ();
 	      }
 	    else

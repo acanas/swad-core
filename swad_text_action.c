@@ -1350,48 +1350,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActFolUsr] =
 #if   L==1	// ca
-	"Follow a user"		// Necessita traducció
+	"Follow user"		// Necessita traducció
 #elif L==2	// de
-	"Follow a user"		// Need Übersetzung
+	"Follow user"		// Need Übersetzung
 #elif L==3	// en
-	"Follow a user"
+	"Follow user"
 #elif L==4	// es
-	"Seguir a un usuario"
+	"Seguir usuario"
 #elif L==5	// fr
-	"Follow a user"		// Besoin de traduction
+	"Follow user"		// Besoin de traduction
 #elif L==6	// gn
-	"Seguir a un usuario"	// Okoteve traducción
+	"Seguir usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Follow a user"		// Bisogno di traduzione
+	"Follow user"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Follow a user"		// Potrzebujesz tlumaczenie
+	"Follow user"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Follow a user"		// Precisa de tradução
+	"Follow user"		// Precisa de tradução
 #elif L==10	// tr
-	"Follow a user"		// Çeviri lazim!
+	"Follow user"		// Çeviri lazim!
 #endif
 	,
 	[ActUnfUsr] =
 #if   L==1	// ca
-	"Unfollow a user"		// Necessita traducció
+	"Unfollow user"			// Necessita traducció
 #elif L==2	// de
-	"Unfollow a user"		// Need Übersetzung
+	"Unfollow user"			// Need Übersetzung
 #elif L==3	// en
-	"Unfollow a user"
+	"Unfollow user"
 #elif L==4	// es
-	"Dejar de seguir a un usuario"
+	"Dejar de seguir usuario"
 #elif L==5	// fr
-	"Unfollow a user"		// Besoin de traduction
+	"Unfollow user"			// Besoin de traduction
 #elif L==6	// gn
-	"Dejar de seguir a un usuario"	// Okoteve traducción
+	"Dejar de seguir usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Unfollow a user"		// Bisogno di traduzione
+	"Unfollow user"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Unfollow a user"		// Potrzebujesz tlumaczenie
+	"Unfollow user"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Unfollow a user"		// Precisa de tradução
+	"Unfollow user"			// Precisa de tradução
 #elif L==10	// tr
-	"Unfollow a user"		// Çeviri lazim!
+	"Unfollow user"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeFlg] =
@@ -24145,48 +24145,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActOpeGrp] =
 #if   L==1	// ca
-	"Open a group"		// Necessita traducció
+	"Open group"		// Necessita traducció
 #elif L==2	// de
-	"Open a group"		// Need Übersetzung
+	"Open group"		// Need Übersetzung
 #elif L==3	// en
-	"Open a group"
+	"Open group"
 #elif L==4	// es
-	"Abrir un grupo"
+	"Abrir grupo"
 #elif L==5	// fr
-	"Open a group"		// Besoin de traduction
+	"Open group"		// Besoin de traduction
 #elif L==6	// gn
-	"Abrir un grupo"	// Okoteve traducción
+	"Abrir grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Open a group"		// Bisogno di traduzione
+	"Open group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Open a group"		// Potrzebujesz tlumaczenie
+	"Open group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Open a group"		// Precisa de tradução
+	"Open group"		// Precisa de tradução
 #elif L==10	// tr
-	"Open a group"		// Çeviri lazim!
+	"Open group"		// Çeviri lazim!
 #endif
 	,
 	[ActCloGrp] =
 #if   L==1	// ca
-	"Close a group"		// Necessita traducció
+	"Close group"		// Necessita traducció
 #elif L==2	// de
-	"Close a group"		// Need Übersetzung
+	"Close group"		// Need Übersetzung
 #elif L==3	// en
-	"Close a group"
+	"Close group"
 #elif L==4	// es
-	"Cerrar un grupo"
+	"Cerrar grupo"
 #elif L==5	// fr
-	"Close a group"		// Besoin de traduction
+	"Close group"		// Besoin de traduction
 #elif L==6	// gn
-	"Cerrar un grupo"	// Okoteve traducción
+	"Cerrar grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Close a group"		// Bisogno di traduzione
+	"Close group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Close a group"		// Potrzebujesz tlumaczenie
+	"Close group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Close a group"		// Precisa de tradução
+	"Close group"		// Precisa de tradução
 #elif L==10	// tr
-	"Close a group"		// Çeviri lazim!
+	"Close group"		// Çeviri lazim!
 #endif
 	,
 	[ActEnaFilZonGrp] =

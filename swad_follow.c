@@ -316,8 +316,6 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
-   extern const char *Txt_Following_unfollow;
-   extern const char *Txt_Follow;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
@@ -362,8 +360,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
 				      IFollowUsr ? "user-check.svg" :
 						   "user-plus.svg",
-				      IFollowUsr ? Txt_Following_unfollow :
-						   Txt_Follow,
+				      Act_GetActionText (IFollowUsr ? ActUnfUsr :
+						                      ActFolUsr),
 				      "class=\"ICO_HIGHLIGHT ICO40x40\"");
 		  Frm_EndForm ();
 		 }
@@ -740,12 +738,10 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 
 static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   extern const char *Txt_Follow;
-
-   /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
+                       Act_GetActionText (ActFolUsr),
                        "class=\"FOLLOW_USR_ICO ICO16x16 ICO_%s_%s ICO_HIGHLIGHT\"",
                        Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
    Frm_EndForm ();
@@ -757,13 +753,10 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
 
 static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   extern const char *Txt_Unfollow;
-
-   /* Form to follow */
    Frm_BeginForm (ActUnfUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-		       Txt_Unfollow,
+		       Act_GetActionText (ActUnfUsr),
 		       "class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16\"");
    Frm_EndForm ();
   }

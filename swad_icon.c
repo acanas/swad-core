@@ -454,22 +454,18 @@ void Ico_PutIconRemovalNotAllowed (void)
 /*************************** Put an icon to cut ******************************/
 /*****************************************************************************/
 
-void Ico_PutIconCut (void)
+void Ico_PutIconCut (Act_Action_t NextAction)
   {
-   extern const char *Txt_Cut;
-
-   Ico_PutIconLink ("cut.svg",Ico_BLACK,Txt_Cut);
+   Ico_PutIconLink ("cut.svg",Ico_BLACK,Act_GetActionText (NextAction));
   }
 
 /*****************************************************************************/
 /************************** Put an icon to paste *****************************/
 /*****************************************************************************/
 
-void Ico_PutIconPaste (void)
+void Ico_PutIconPaste (Act_Action_t NextAction)
   {
-   extern const char *Txt_Paste;
-
-   Ico_PutIconLink ("paste.svg",Ico_BLACK,Txt_Paste);
+   Ico_PutIconLink ("paste.svg",Ico_BLACK,Act_GetActionText (NextAction));
   }
 
 /*****************************************************************************/

@@ -8086,29 +8086,6 @@ const char *Txt_Current_password =
 	"Mevcut &scedil;ifre";
 #endif
 
-const char *Txt_Cut =	// First part of "Cut-Paste"
-#if   L==1	// ca
-	"Tallar";
-#elif L==2	// de
-	"Ausschneiden";
-#elif L==3	// en
-	"Cut";
-#elif L==4	// es
-	"Cortar";
-#elif L==5	// fr
-	"Couper";
-#elif L==6	// gn
-	"Ikyt&itilde;";
-#elif L==7	// it
-	"Taglia";
-#elif L==8	// pl
-	"Wytnij";
-#elif L==9	// pt
-	"Cortar";
-#elif L==10	// tr
-	"Cut";	// Çeviri lazim!
-#endif
-
 const char *Txt_Data =	// Project data
 #if   L==1	// ca
 	"Dades";
@@ -13998,52 +13975,6 @@ const char *Txt_File_zones_of_the_group_X_are_now_enabled =	// Warning: it is ve
 	"File zones of the group %s are now enabled.";				// Çeviri lazim!
 #endif
 
-const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Zones d'arxius del grup %s habilitades, feu clic per desactivar-les";
-#elif L==2	// de
-	"Dateizonen der Gruppe %s aktiviert, klicken Sie, um sie zu deaktivieren";
-#elif L==3	// en
-	"File zones of the group %s enabled, click to disable them";
-#elif L==4	// es
-	"Zonas de archivos del grupo %s habilitadas; pulse para inhabilitarlas";
-#elif L==5	// fr
-	"Zones de fichiers du groupe %s activ&eacute;es, cliquez pour les d&eacute;sactiver";
-#elif L==6	// gn
-	"Zonas de archivos del grupo %s habilitadas; pulse para inhabilitarlas";	// Okoteve traducción
-#elif L==7	// it
-	"Aree file del gruppo %s abilitate, clicca per disabilitarle";
-#elif L==8	// pl
-	"Plik strefy grupy %s aktywny, kliknij, aby je wylaczyc";
-#elif L==9	// pt
-	"Zonas de arquivos do grupo %s ativadas, clique para desativ&aacute;-las";
-#elif L==10	// tr
-	"File zones of the group %s enabled, click to disable them";			// Çeviri lazim!
-#endif
-
-const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Zones d'arxius del grup %s estan desactivades, feu clic per activar-les";
-#elif L==2	// de
-	"Dateizonen der Gruppe %s deaktiviert, klicken Sie, um sie zu aktivieren";
-#elif L==3	// en
-	"File zones of the group %s disabled, click to enable them";
-#elif L==4	// es
-	"Zonas de archivos del grupo %s inhabilitadas; pulse para habilitarlas";
-#elif L==5	// fr
-	"Zones de fichiers du groupe %s désactiv&eacute;es, cliquez pour les activer";
-#elif L==6	// gn
-	"Zonas de archivos del grupo %s inhabilitadas; pulse para habilitarlas";	// Okoteve traducción
-#elif L==7	// it
-	"Aree file del gruppo %s disabilitate, clicca per abilitarle";
-#elif L==8	// pl
-	"Plik strefy grupy %s jes niedostepny, kliknij aby wlaczyc";
-#elif L==9	// pt
-	"Zonas de arquivos do grupo %s desativadas, clique para ativ&aacute;-las";
-#elif L==10	// tr
-	"File zones of the group %s disabled, click to enable them";			// Çeviri lazim!
-#endif
-
 const char *Txt_Files =
 #if   L==1	// ca
 	"Fitxers";
@@ -15018,29 +14949,6 @@ const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to inclu
 	"Post %u allowed.";		// Çeviri lazim!
 #endif
 
-const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentari %u perm&egrave;s. Premeu per censurar-lo.";
-#elif L==2	// de
-	"Beitrag %u erlaubt. Klicken Sie, um es zu verbieten.";
-#elif L==3	// en
-	"Post %u allowed. Click to ban it.";
-#elif L==4	// es
-	"Comentario %u permitido. Pulse para censurarlo.";
-#elif L==5	// fr
-	"Poste %u autoris&eacute;. Cliquez pour l'interdire.";
-#elif L==6	// gn
-	"Comentario %u permitido. Pulse para censurarlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u autorizzato. Clicca per censurarlo.";
-#elif L==8	// pl
-	"Post %u dozwolone. Kliknij, aby to zakazac.";
-#elif L==9	// pt
-	"Post %u permitido. Clique para censur&aacute;-lo.";
-#elif L==10	// tr
-	"Post %u allowed. Click to ban it.";			// Çeviri lazim!
-#endif
-
 const char *Txt_FORUM_Post_and_thread_removed =
 #if   L==1	// ca
 	"Comentari i discussi&oacute; eliminats.";
@@ -15108,29 +15016,6 @@ const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to includ
 	"Post %u n&atilde;o permitido.";
 #elif L==10	// tr
 	"Post %u banned.";		// Çeviri lazim!
-#endif
-
-const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentari %u no perm&egrave;s. Premeu per permetre-ho.";
-#elif L==2	// de
-	"Beitrag %u gesperrt. Klicken Sie hier, um die Sperre aufzuheben.";
-#elif L==3	// en
-	"Post %u banned. Click to unban it.";
-#elif L==4	// es
-	"Comentario %u no permitido. Pulse para permitirlo.";
-#elif L==5	// fr
-	"Message %u interdit. Cliquez pour le d&eacute;bannir.";
-#elif L==6	// gn
-	"Comentario %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u censurato. Clicca per autorizzarlo.";
-#elif L==8	// pl
-	"Post %u zakazany.Kliknij, aby to odbanowac.";
-#elif L==9	// pt
-	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
-#elif L==10	// tr
-	"Post %u banned. Click to unban it.";	// Çeviri lazim!
 #endif
 
 const char *Txt_FORUM_Post_sent =
@@ -16318,29 +16203,6 @@ const char *Txt_Group_X_closed =	// Warning: it is very important to include %s 
 	"Group %s closed";	// Çeviri lazim!
 #endif
 
-const char *Txt_Group_X_closed_click_to_open_it =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Grup %s tancat; feu clic per obrir-lo";
-#elif L==2	// de
-	"Gruppe %s geschlossen, klicke zum &Ouml;ffnen";
-#elif L==3	// en
-	"Group %s closed, click to open it";
-#elif L==4	// es
-	"Grupo %s cerrado; pulse para abrirlo";
-#elif L==5	// fr
-	"Groupe %s ferm&eacute;, cliquez pour l'ouvrir";
-#elif L==6	// gn
-	"Grupo %s cerrado; pulse para abrirlo";		// Okoteve traducción
-#elif L==7	// it
-	"Gruppo %s chiuso, clicca per aprirlo";
-#elif L==8	// pl
-	"Grupa %s zamknieta, kliknij zeby otworzyc";
-#elif L==9	// pt
-	"Grupo %s fechado, clique para abri-lo";
-#elif L==10	// tr
-	"Group %s closed, click to open it";		// Çeviri lazim!
-#endif
-
 const char *Txt_Group_name =
 #if   L==1	// ca
 	"Nom del grup";
@@ -16385,29 +16247,6 @@ const char *Txt_Group_X_open =	// Warning: it is very important to include %s in
 	"Grupo %s aberto";
 #elif L==10	// tr
 	"Group %s open";	// Çeviri lazim!
-#endif
-
-const char *Txt_Group_X_open_click_to_close_it =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Grup %s obert, feu clic per tancar-lo";
-#elif L==2	// de
-	"Gruppe %s &ouml;ffnen, klicken Sie, um es zu schlie&szlig;en";
-#elif L==3	// en
-	"Group %s open, click to close it";
-#elif L==4	// es
-	"Grupo %s abierto; pulse para cerrarlo";
-#elif L==5	// fr
-	"Groupe %s ouvert, cliquez pour le fermer";
-#elif L==6	// gn
-	"Grupo %s abierto; pulse para cerrarlo";	// Okoteve traducción
-#elif L==7	// it
-	"Gruppo %s aperto, clicca per chiuderlo";
-#elif L==8	// pl
-	"Grupa %s otwarta, kliknij zeby zamknac";
-#elif L==9	// pt
-	"Grupo %s aberto, clique para fech&aacute;-lo";
-#elif L==10	// tr
-	"Group %s open, click to close it";		// Çeviri lazim!
 #endif
 
 const char *Txt_Group_X_removed =	// Warning: it is very important to include %s in the following sentences
