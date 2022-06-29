@@ -744,9 +744,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 				     NULL,
 				     Mch_PutParamsPlay,&Match->MchCod,
 				     Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
-									"play.svg",Ico_BLACK,
-				     Act_GetActionText (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
-									                     ActResMch));
+									"play.svg",Ico_BLACK);
 
    HTM_TD_End ();
   }
@@ -789,8 +787,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
       Games->MchCod.Current = Match->MchCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
-				     "trophy.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeMyMchResMch));
+				     "trophy.svg",Ico_BLACK);
      }
    else
       /* Result is forbidden to me */
@@ -810,8 +807,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    if (Mch_CheckIfICanEditThisMatch (Match))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
-				     "trophy.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeUsrMchResMch));
+				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
    if (Mch_CheckIfVisibilityOfResultsCanBeChanged (Match))
@@ -820,13 +816,11 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
       if (Match->Status.ShowUsrResults)
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 					Mch_PutParamsEdit,Games,
-					"eye.svg",Ico_GREEN,
-					Act_GetActionText (ActChgVisResMchUsr));
+					"eye.svg",Ico_GREEN);
       else
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
 					Mch_PutParamsEdit,Games,
-					"eye-slash.svg",Ico_RED,
-					Act_GetActionText (ActChgVisResMchUsr));
+					"eye-slash.svg",Ico_RED);
      }
    else
      {

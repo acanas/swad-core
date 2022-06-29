@@ -267,8 +267,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeSocPrf,NULL,
                                   NULL,NULL,
-				  "recycle.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeSocPrf));
+				  "recycle.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

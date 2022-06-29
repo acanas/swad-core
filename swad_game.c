@@ -1758,8 +1758,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	       if (ICanEditQuestions && QstInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
-						 "arrow-up.svg",Ico_BLACK,
-						 Act_GetActionText (ActUp_GamQst));
+						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -1768,8 +1767,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	       if (ICanEditQuestions && QstInd < MaxQstInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
-						 "arrow-down.svg",Ico_BLACK,
-						 Act_GetActionText (ActDwnGamQst));
+						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);

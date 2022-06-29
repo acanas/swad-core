@@ -635,8 +635,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
 					   Not_PutParams,&NotCod,
-					   "ellipsis-h.svg",Ico_BLACK,
-					   Act_GetActionText (ActSeeOneNot));
+					   "ellipsis-h.svg",Ico_BLACK);
 	 HTM_DIV_End ();
 	}
       else

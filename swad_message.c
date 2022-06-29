@@ -1709,8 +1709,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_SENT:
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "marker.svg",Ico_BLACK,
-					   Act_GetActionText (ActReqMsgUsr));
+					   "marker.svg",Ico_BLACK);
 	    break;
 	 default:
 	    break;
@@ -1723,8 +1722,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_SENT:
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRcvMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "inbox.svg",Ico_BLACK,
-					   Act_GetActionText (ActSeeRcvMsg));
+					   "inbox.svg",Ico_BLACK);
 	    break;
 	 default:
 	    break;
@@ -1737,8 +1735,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_RECEIVED:
 	    Lay_PutContextualLinkOnlyIcon (ActSeeSntMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "share.svg",Ico_BLACK,
-					   Act_GetActionText (ActSeeSntMsg));
+					   "share.svg",Ico_BLACK);
 	    break;
 	 default:
 	    break;

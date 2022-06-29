@@ -1099,8 +1099,7 @@ static void Crs_PutIconToViewCourses (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,
                                   NULL,NULL,
-                                  "chalkboard-teacher.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeCrs));
+                                  "chalkboard-teacher.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -2191,8 +2190,7 @@ static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
 				  Sch_PutLinkToSearchCoursesParams,NULL,
-				  "search.svg",Ico_BLACK,
-				  Act_GetActionText (ActReqSch));
+				  "search.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -2227,8 +2225,7 @@ void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
    if (Gbl.Usrs.Me.Logged)		// I am logged
       Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
 				     NULL,NULL,
-				     "sitemap.svg",Ico_BLACK,
-				     Act_GetActionText (ActMyCrs));
+				     "sitemap.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

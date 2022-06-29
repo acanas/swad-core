@@ -303,8 +303,7 @@ void DegTyp_PutIconToViewDegreeTypes (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,
                                   NULL,NULL,
-				  "sitemap.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeDegTyp));
+				  "sitemap.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

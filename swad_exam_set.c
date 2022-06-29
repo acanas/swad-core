@@ -782,8 +782,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       if (ICanEditSets && Set.SetInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
-						 "arrow-up.svg",Ico_BLACK,
-						 Act_GetActionText (ActUp_ExaSet));
+						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -792,8 +791,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       if (ICanEditSets && Set.SetInd < MaxSetInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
-						 "arrow-down.svg",Ico_BLACK,
-						 Act_GetActionText (ActDwnExaSet));
+						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -991,8 +989,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
 					      ExaSet_PutParamsOneQst,Exams,
 					      ValInv[Question.Validity].Icon,
-					      ValInv[Question.Validity].Color,
-					      Act_GetActionText (ValInv[Question.Validity].NextAction));
+					      ValInv[Question.Validity].Color);
 
 	    HTM_TD_End ();
 

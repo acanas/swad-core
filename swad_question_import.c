@@ -78,8 +78,7 @@ void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
                                   QstImp_PutParamsExportQsts,Questions,
-				  "file-import.svg",Ico_BLACK,
-				  Act_GetActionText (ActLstTstQst));
+				  "file-import.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -119,8 +118,7 @@ void QstImp_PutIconToImportQuestions (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActReqImpTstQst,NULL,
                                   NULL,NULL,
-				  "file-export.svg",Ico_BLACK,
-				  Act_GetActionText (ActReqImpTstQst));
+				  "file-export.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

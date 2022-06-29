@@ -149,8 +149,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutHiddenParamFigures,&Figures,
-				  "chart-pie.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeUseGbl));
+				  "chart-pie.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

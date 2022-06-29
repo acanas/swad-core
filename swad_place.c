@@ -338,8 +338,7 @@ void Plc_PutIconToViewPlaces (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
                                   Ins_PutParamCurrentInsCod,&Gbl.Hierarchy.Ins.InsCod,
-				  "map-marker-alt.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeePlc));
+				  "map-marker-alt.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

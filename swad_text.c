@@ -12841,29 +12841,6 @@ const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it
 	" to users of your courses.";			// Çeviri lazim!
 #endif
 
-const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses =
-#if   L==1	// ca
-	"Esdeveniment privat; feu clic per fer-lo visible pels usuaris de les seves assignatures";
-#elif L==2	// de
-	"Ereignis privat; klicken Sie, um es f&uuml;r die Nutzer Ihrer Kurse sichtbar zu machen";
-#elif L==3	// en
-	"Event private, click to make it visible to the users of your courses";
-#elif L==4	// es
-	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";
-#elif L==5	// fr
-	"&Eacute;v&eacute;nement privat, cliquez pour le rendre visible aux utilisateurs de vos mati&egrave;res";
-#elif L==6	// gn
-	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";	// Okoteve traducción
-#elif L==7	// it
-	"Evento privato, fare clic per renderlo visibile agli utenti dei corsi";
-#elif L==8	// pl
-	"Event privat, kliknij aby by&lstrok; on widoczny dla u&zdot;ytkownik&oacute;w swoich kursach";
-#elif L==9	// pt
-	"Evento privat, clique para torn&aacute;-lo vis&iacute;vel para os usu&aacute;rios de as suas disciplinas";
-#elif L==10	// tr
-	"Event private, click to make it visible to the users of your courses";			// Çeviri lazim!
-#endif
-
 const char *Txt_Event_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Esdeveniment <strong>%s</strong> eliminat.";
@@ -12885,29 +12862,6 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 	"Evento <strong>%s</strong> removido.";
 #elif L==10	// tr
 	"Event <strong>%s</strong> removed.";	// Çeviri lazim!
-#endif
-
-const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private =
-#if   L==1	// ca
-	"Esdeveniment visible pels usuaris de les seves assignatures; feu clic per fer-lo privat";
-#elif L==2	// de
-	"Ereignis Nutzer Ihrer Kurse sichtbar zu machen; klicken Sie, um es f&uuml;r die privat";
-#elif L==3	// en
-	"Event visible to the users of your courses, click to make it private";
-#elif L==4	// es
-	"Evento visible por los usuarios de sus asignaturas; pulse para hacerlo privado";
-#elif L==5	// fr
-	"Event visible aux utilisateurs de vos mati&egrave;res, cliquez pour le rendre privat";
-#elif L==6	// gn
-	"Evento visible por los usuarios de sus asignaturas; pulse para hacerlo privado";	// Okoteve traducción
-#elif L==7	// it
-	"Evento visibile agli utenti dei corsi, fare clic per renderlo privato";
-#elif L==8	// pl
-	"Event widoczny dla u&zdot;ytkownik&oacute;w swoich kurs&oacute;w, kliknij, aby prywatne";
-#elif L==9	// pt
-	"Evento vis&iacute;vel para os usu&aacute;rios de as suas disciplinas, clique para torn&aacute;-lo privat";
-#elif L==10	// tr
-	"Event visible to the users of your courses, click to make it private";			// Çeviri lazim!
 #endif
 
 const char *Txt_Events =

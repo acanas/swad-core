@@ -270,8 +270,7 @@ void Lnk_PutIconToViewLinks (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,
                                   NULL,NULL,
-				  "link.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeLnk));
+				  "link.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

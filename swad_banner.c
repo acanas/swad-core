@@ -389,8 +389,7 @@ void Ban_PutIconToViewBanners (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeBan,NULL,
                                   NULL,NULL,
-                                  "flag.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeBan));
+                                  "flag.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

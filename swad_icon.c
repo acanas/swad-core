@@ -236,8 +236,7 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "plus.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "plus.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
@@ -245,8 +244,7 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "trash.svg",Ico_RED,
-				  Act_GetActionText (NextAction));
+				  "trash.svg",Ico_RED);
   }
 
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
@@ -254,8 +252,7 @@ void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "pen.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "pen.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
@@ -263,8 +260,7 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "folder-open.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "folder-open.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToView (Act_Action_t NextAction,
@@ -272,8 +268,7 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "list.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "list.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
@@ -281,8 +276,7 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "cog.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "cog.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
@@ -290,8 +284,7 @@ void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "eye.svg",Ico_GREEN,
-				  Act_GetActionText (NextAction));
+				  "eye.svg",Ico_GREEN);
   }
 
 void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
@@ -299,8 +292,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "eye-slash.svg",Ico_RED,
-				  Act_GetActionText (NextAction));
+				  "eye-slash.svg",Ico_RED);
   }
 
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
@@ -308,8 +300,7 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "print.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "print.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
@@ -317,8 +308,7 @@ void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "copy.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "copy.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
@@ -326,8 +316,7 @@ void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "paste.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "paste.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
@@ -338,8 +327,7 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
                                   FuncParams,Args,
 				  Open ? "folder-open-yellow-plus.png" :
 				  	 "folder-yellow-plus.png",
-				  Ico_UNCHANGED,
-				  Act_GetActionText (NextAction));
+				  Ico_UNCHANGED);
   }
 
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
@@ -347,8 +335,7 @@ void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anc
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "trophy.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "trophy.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
@@ -356,8 +343,7 @@ void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "tasks.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "tasks.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
@@ -365,8 +351,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "download.svg",Ico_BLACK,
-				  Act_GetActionText (NextAction));
+				  "download.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

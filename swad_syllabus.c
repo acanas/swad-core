@@ -649,9 +649,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActUp_IteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-up.svg",Ico_BLACK,
-						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-										                        ActUp_IteSylPra));
+						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -665,9 +663,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActDwnIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-down.svg",Ico_BLACK,
-						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-									                                ActDwnIteSylPra));
+						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -680,9 +676,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActRgtIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-left.svg",Ico_BLACK,
-						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-												        ActRgtIteSylPra));
+						 "arrow-left.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);
@@ -696,9 +690,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActLftIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-right.svg",Ico_BLACK,
-						 Act_GetActionText (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-												        ActLftIteSylPra));
+						 "arrow-right.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
 		                  Txt_Movement_not_allowed);

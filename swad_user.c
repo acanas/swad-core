@@ -2095,8 +2095,7 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
 				  NULL,NULL,
-				  "sign-out-alt.svg",Ico_RED,
-				  Act_GetActionText (ActLogOut));
+				  "sign-out-alt.svg",Ico_RED);
   }
 
 /*****************************************************************************/
@@ -5890,24 +5889,21 @@ static void Usr_PutIconToShowGstsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
                                   Usr_ShowGstsAllDataParams,NULL,
-				  "table.svg",Ico_BLACK,
-				  Act_GetActionText (ActLstGstAll));
+				  "table.svg",Ico_BLACK);
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
                                   Usr_ShowStdsAllDataParams,NULL,
-			          "table.svg",Ico_BLACK,
-				  Act_GetActionText (ActLstStdAll));
+			          "table.svg",Ico_BLACK);
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
                                   Usr_ShowTchsAllDataParams,NULL,
-			          "table.svg",Ico_BLACK,
-				  Act_GetActionText (ActLstTchAll));
+			          "table.svg",Ico_BLACK);
   }
 
 static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args)

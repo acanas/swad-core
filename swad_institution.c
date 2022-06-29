@@ -596,8 +596,7 @@ static void Ins_PutIconToViewInstitutions (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeIns,NULL,
                                   NULL,NULL,
-				  "university.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeIns));
+				  "university.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -1899,8 +1898,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
                                      Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
-				     "map-marker-alt.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeInsInf));
+				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
 

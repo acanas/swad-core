@@ -136,8 +136,7 @@ static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstCon,NULL,
                                   Con_PutParamScope,NULL,
-				  "recycle.svg",Ico_BLACK,
-				  Act_GetActionText (ActLstCon));
+				  "recycle.svg",Ico_BLACK);
   }
 
 static void Con_PutParamScope (__attribute__((unused)) void *Args)

@@ -189,15 +189,13 @@ void Pho_PutIconToChangeUsrPhoto (void)
      {
       Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
                                      NULL,NULL,
-				     "camera.svg",Ico_BLACK,
-				     Act_GetActionText (ActReqMyPho));
+				     "camera.svg",Ico_BLACK);
      }
    else	// Not me
       if (Pho_ICanChangeOtherUsrPhoto (Gbl.Record.UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 				        Rec_PutParamUsrCodEncrypted,NULL,
-	                                "camera.svg",Ico_BLACK,
-				        Act_GetActionText (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs]));
+	                                "camera.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -209,8 +207,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Arg
    if (Gbl.Usrs.Me.MyPhotoExists)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
 				     NULL,NULL,
-				     "trash.svg",Ico_RED,
-				     Act_GetActionText (ActReqRemMyPho));
+				     "trash.svg",Ico_RED);
   }
 
 /*****************************************************************************/
@@ -240,8 +237,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
    if (PhotoExists)
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
 				     Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-				     "trash.svg",Ico_RED,
-				     Act_GetActionText (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]));
+				     "trash.svg",Ico_RED);
   }
 
 /*****************************************************************************/

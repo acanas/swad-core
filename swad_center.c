@@ -503,8 +503,7 @@ void Ctr_PutIconToViewCenters (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeCtr,NULL,
                                   NULL,NULL,
-                                  "building.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeCtr));
+                                  "building.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -1926,8 +1925,7 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr)
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the center
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,
                                      Ctr_PutParamGoToCtr,&Ctr_EditingCtr->CtrCod,
-				     "map-marker-alt.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeCtrInf));
+				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
 

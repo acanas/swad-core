@@ -1178,8 +1178,7 @@ static void Lay_ShowRightColumn (void)
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,Ico_Color_t Color,
-				    const char *Title)
+				    const char *Icon,Ico_Color_t Color)
   {
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
@@ -1187,7 +1186,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon with link *****/
-      Ico_PutIconLink (Icon,Color,Title);
+      Ico_PutIconLink (Icon,Color,Act_GetActionText (NextAction));
 
    /***** End form *****/
    Frm_EndForm ();

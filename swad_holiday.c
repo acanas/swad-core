@@ -252,8 +252,7 @@ void Hld_PutIconToSeeHlds (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeHld,NULL,
                                   NULL,NULL,
-				  "calendar-day.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeHld));
+				  "calendar-day.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

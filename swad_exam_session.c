@@ -645,8 +645,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       Exams->SesCod = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
-				     "trophy.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeMyExaResSes));
+				     "trophy.svg",Ico_BLACK);
      }
    else
       /* Result is forbidden to me */
@@ -666,8 +665,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
-				     "trophy.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeUsrExaResSes));
+				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
    if (ExaSes_CheckIfVisibilityOfResultsCanBeChanged (Session))
@@ -676,13 +674,11 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       if (Session->ShowUsrResults)
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 					ExaSes_PutParamsEdit,Exams,
-					"eye.svg",Ico_GREEN,
-					Act_GetActionText (ActChgVisExaRes));
+					"eye.svg",Ico_GREEN);
       else
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
 					ExaSes_PutParamsEdit,Exams,
-					"eye-slash.svg",Ico_RED,
-					Act_GetActionText (ActChgVisExaRes));
+					"eye-slash.svg",Ico_RED);
      }
    else	// Don't put form
      {

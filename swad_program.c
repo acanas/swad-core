@@ -770,8 +770,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-up.svg",Ico_BLACK,
-					   Act_GetActionText (ActUp_PrgItm));
+					   "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
@@ -779,8 +778,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-down.svg",Ico_BLACK,
-					   Act_GetActionText (ActDwnPrgItm));
+					   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
@@ -788,8 +786,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-left.svg",Ico_BLACK,
-					   Act_GetActionText (ActLftPrgItm));
+					   "arrow-left.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
@@ -797,8 +794,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-right.svg",Ico_BLACK,
-					   Act_GetActionText (ActRgtPrgItm));
+					   "arrow-right.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
 	 break;

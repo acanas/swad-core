@@ -881,8 +881,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
    /***** Put form to reset survey *****/
    Lay_PutContextualLinkOnlyIcon (ActReqRstSvy,NULL,
                                   Svy_PutParams,Surveys,
-				  "recycle.svg",Ico_RED,
-				  Act_GetActionText (ActReqRstSvy));
+				  "recycle.svg",Ico_RED);
 
    /***** Put form to hide/show survey *****/
    if (Svy->Status.Visible)

@@ -730,8 +730,7 @@ static void Cty_PutIconToViewCountries (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,
                                   NULL,NULL,
-                                  "globe-americas.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeCty));
+                                  "globe-americas.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -1904,8 +1903,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
                                      Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
-				     "map-marker-alt.svg",Ico_BLACK,
-				     Act_GetActionText (ActSeeCtyInf));
+				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
 

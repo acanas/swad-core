@@ -962,8 +962,7 @@ void Deg_PutIconToViewDegrees (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,
                                   NULL,NULL,
-				  "graduation-cap.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeDeg));
+				  "graduation-cap.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

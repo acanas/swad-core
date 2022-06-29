@@ -324,8 +324,7 @@ void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
 				  NULL,NULL,
-				  "calendar.svg",Ico_BLACK,
-				  Act_GetActionText (ActSeeCal));
+				  "calendar.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

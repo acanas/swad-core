@@ -214,8 +214,7 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
 
    Lay_PutContextualLinkOnlyIcon (Action[Scope],NULL,
                                   NULL,NULL,
-				  "shield-alt.svg",Ico_BLACK,
-				  Act_GetActionText (Action[Scope]));
+				  "shield-alt.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -317,8 +316,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
   {
    Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,
                                   NULL,NULL,
-				  "trash.svg",Ico_RED,
-				  Act_GetActionText (ActionRem));
+				  "trash.svg",Ico_RED);
   }
 
 /*****************************************************************************/

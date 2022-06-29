@@ -51,8 +51,7 @@ void Lay_WriteEndOfPage (void);
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,Ico_Color_t Color,
-				    const char *Title);
+				    const char *Icon,Ico_Color_t Color);
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color,

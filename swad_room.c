@@ -477,8 +477,7 @@ void Roo_PutIconToViewRooms (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeRoo,NULL,
                                   NULL,NULL,
-                                  "chalkboard-teacher.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeRoo));
+                                  "chalkboard-teacher.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

@@ -96,8 +96,7 @@ void Tag_PutIconToEditTags (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActEdiTag,NULL,
                                   NULL,NULL,
-				  "tag.svg",Ico_BLACK,
-				  Act_GetActionText (ActEdiTag));
+				  "tag.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

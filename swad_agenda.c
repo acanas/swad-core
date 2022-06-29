@@ -722,21 +722,18 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "user.svg",Ico_BLACK,
-			             Act_GetActionText (ActSeeOthPubPrf));
+			             "user.svg",Ico_BLACK);
 
    /***** Button to view user's record card *****/
    if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
       /* View student's records: common record card and course record card */
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "address-card.svg",Ico_BLACK,
-			             Act_GetActionText (ActSeeRecOneStd));
+			             "address-card.svg",Ico_BLACK);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 			             Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "address-card.svg",Ico_BLACK,
-			             Act_GetActionText (ActSeeRecOneTch));
+			             "address-card.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -891,9 +888,6 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
-   extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
-   extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
-
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
@@ -916,13 +910,11 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    if (AgdEvent->Public)
       Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
 				     Agd_PutCurrentParamsMyAgenda,Agenda,
-			             "unlock.svg",Ico_GREEN,
-			             Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private);
+			             "unlock.svg",Ico_GREEN);
    else
       Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,
 	                             Agd_PutCurrentParamsMyAgenda,Agenda,
-			             "lock.svg",Ico_RED,
-			             Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses);
+			             "lock.svg",Ico_RED);
   }
 
 /*****************************************************************************/

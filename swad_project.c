@@ -1135,8 +1135,7 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "table.svg",Ico_BLACK,
-			          Act_GetActionText (ActSeeTblAllPrj));
+			          "table.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -2151,8 +2150,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
 							     Prj_PutCurrentParams,Projects,
-							     "trash.svg",Ico_RED,
-							     Act_GetActionText (ActionReqRemUsr[RoleInPrj]));
+							     "trash.svg",Ico_RED);
 			   HTM_TD_End ();
 			  }
 
@@ -3838,14 +3836,12 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects)
    /***** Put icon to lock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "lock.svg",Ico_RED,
-			          Act_GetActionText (ActReqLckAllPrj));
+			          "lock.svg",Ico_RED);
 
    /***** Put icon to unlock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "unlock.svg",Ico_GREEN,
-			          Act_GetActionText (ActReqUnlAllPrj));
+			          "unlock.svg",Ico_GREEN);
   }
 
 /*****************************************************************************/

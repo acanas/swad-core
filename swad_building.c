@@ -293,8 +293,7 @@ void Bld_PutIconToViewBuildings (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeBld,NULL,
                                   NULL,NULL,
-                                  "building.svg",Ico_BLACK,
-                                  Act_GetActionText (ActSeeBld));
+                                  "building.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

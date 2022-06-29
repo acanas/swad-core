@@ -276,20 +276,9 @@ static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
 
 static void CtrCfg_PutIconToChangePhoto (void)
   {
-   char PathPhoto[PATH_MAX + 1];
-   bool PhotoExists;
-
-   /***** Link to upload photo of center *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
-	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
-   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
    Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,
                                   NULL,NULL,
-			          "camera.svg",Ico_BLACK,
-			          Act_GetActionText (ActReqCtrPho));
+			          "camera.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -299,12 +288,12 @@ static void CtrCfg_PutIconToChangePhoto (void)
 static void CtrCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    HieLvl_CTR,				// Logo scope
-		    Gbl.Hierarchy.Ctr.CtrCod,		// Logo code
-                    Gbl.Hierarchy.Ctr.ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Ctr.FullName,		// Logo full name
-		    Gbl.Hierarchy.Ctr.WWW,		// Logo www
-		    Gbl.Hierarchy.Ctr.FullName);	// Text full name
+		 HieLvl_CTR,			// Logo scope
+		 Gbl.Hierarchy.Ctr.CtrCod,	// Logo code
+                 Gbl.Hierarchy.Ctr.ShrtName,	// Logo short name
+		 Gbl.Hierarchy.Ctr.FullName,	// Logo full name
+		 Gbl.Hierarchy.Ctr.WWW,		// Logo www
+		 Gbl.Hierarchy.Ctr.FullName);	// Text full name
   }
 
 /*****************************************************************************/

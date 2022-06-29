@@ -574,8 +574,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
 				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
-				     "trash.svg",Ico_RED,
-				     Act_GetActionText (ActReqRemMyAcc));
+				     "trash.svg",Ico_RED);
   }
 
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
@@ -1131,12 +1130,10 @@ void Acc_PutIconToChangeUsrAccount (void)
    if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
                                      NULL,NULL,
-			             "at.svg",Ico_BLACK,
-			             Act_GetActionText (ActFrmMyAcc));
+			             "at.svg",Ico_BLACK);
    else	// Not me
       if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 	                                Rec_PutParamUsrCodEncrypted,NULL,
-	                                "at.svg",Ico_BLACK,
-				        Act_GetActionText (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs]));
+	                                "at.svg",Ico_BLACK);
   }
