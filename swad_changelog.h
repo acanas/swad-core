@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.103.1 (2022-06-29)"
+#define Log_PLATFORM_VERSION	"SWAD 21.103.2 (2022-06-30)"
 #define CSS_FILE		"swad21.100.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 21.103.2: Jun 30, 2022  Preparation for Turkish translation. (328306 lines)
 	Version 21.103.1: Jun 29, 2022  Code refactoring in icons. (328305 lines)
 	Version 21.103:   Jun 29, 2022  Text in buttons got from text of actions.
 					Preparation for Turkish translation. (328476 lines)
