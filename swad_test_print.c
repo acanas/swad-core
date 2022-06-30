@@ -1843,7 +1843,6 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 
 static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   {
-   extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
    unsigned NumPrint;
@@ -2004,7 +2003,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
 		     TstPrn_PutParamPrnCod (Print.PrnCod);
-		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,Txt_View_test);
+		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+		                      Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+								            ActSeeOneTstResOth);
 		  Frm_EndForm ();
 		 }
 	       else

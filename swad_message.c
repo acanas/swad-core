@@ -155,8 +155,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
 static bool Msg_WriteCrsOrgMsg (long CrsCod);
 
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
-                                  bool ThisCrs,bool Replied,
+static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
                                   const struct UsrData *UsrDat);
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
                               struct UsrData *UsrDat,bool Deleted);
@@ -2130,7 +2129,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 		     if (Messages->TypeOfMessages == Msg_RECEIVED &&
 			 Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 			// Guests (users without courses) can read messages but not reply them
-			Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
+			Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,&UsrDat);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 
@@ -2415,15 +2414,9 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 /************************* Write form to reply a message *********************/
 /*****************************************************************************/
 
-static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
-                                  bool FromThisCrs,bool Replied,
+static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
                                   const struct UsrData *UsrDat)
   {
-   extern const char *Txt_Reply;
-   extern const char *Txt_Reply_again;
-   extern const char *Txt_Go_to_course_and_reply;
-   extern const char *Txt_Go_to_course_and_reply_again;
-
    /***** Begin form and parameters *****/
    if (FromThisCrs)
       Frm_BeginForm (ActReqMsgUsr);
@@ -2439,11 +2432,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
       Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
       /****** Link *****/
-      Ico_PutIconLink ("reply.svg",Ico_BLACK,
-		       FromThisCrs ? (Replied ? Txt_Reply_again :
-						Txt_Reply) :
-				     (Replied ? Txt_Go_to_course_and_reply_again :
-						Txt_Go_to_course_and_reply));
+      Ico_PutIconLink ("reply.svg",Ico_BLACK,ActReqMsgUsr);
 
    /****** End form *****/
    Frm_EndForm ();
@@ -2769,15 +2758,12 @@ static long Msg_GetParamMsgCod (void)
 static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
                                     struct UsrData *UsrDat)
   {
-   extern const char *Txt_Sender_permitted_click_to_ban_him;
-
    Frm_BeginForm (ActBanUsrMsg);
       Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 				Messages->CurrentPage);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutHiddenParamsMsgsFilters (Messages);
-	 Ico_PutIconLink ("unlock.svg",Ico_GREEN,
-	                  Txt_Sender_permitted_click_to_ban_him);
+	 Ico_PutIconLink ("unlock.svg",Ico_GREEN,ActBanUsrMsg);
    Frm_EndForm ();
   }
 
@@ -2788,15 +2774,12 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
 static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
                                       struct UsrData *UsrDat)
   {
-   extern const char *Txt_Sender_banned_click_to_unban_him;
-
    Frm_BeginForm (ActUnbUsrMsg);
       Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
 				Messages->CurrentPage);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutHiddenParamsMsgsFilters (Messages);
-	 Ico_PutIconLink ("lock.svg",Ico_RED,
-	                  Txt_Sender_banned_click_to_unban_him);
+	 Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrMsg);
    Frm_EndForm ();
   }
 
@@ -2889,7 +2872,6 @@ void Msg_ListBannedUsrs (void)
   {
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
-   extern const char *Txt_Sender_banned_click_to_unban_him;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2932,8 +2914,7 @@ void Msg_ListBannedUsrs (void)
 		  HTM_TD_Begin ("class=\"BM\"");
 		     Frm_BeginForm (ActUnbUsrLst);
 			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-			Ico_PutIconLink ("lock.svg",Ico_RED,
-			                 Txt_Sender_banned_click_to_unban_him);
+			Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrLst);
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 

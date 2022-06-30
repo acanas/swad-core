@@ -1186,7 +1186,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon with link *****/
-      Ico_PutIconLink (Icon,Color,Act_GetActionText (NextAction));
+      Ico_PutIconLink (Icon,Color,NextAction);
 
    /***** End form *****/
    Frm_EndForm ();

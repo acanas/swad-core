@@ -1336,11 +1336,8 @@ void Usr_FilterUsrBirthday (struct Dat_Date *Birthday)
 
 void Usr_PutFormLogIn (void)
   {
-   extern const char *Txt_Log_in;
-
-   /***** Link to log in form *****/
    Frm_BeginForm (ActFrmLogIn);
-      Ico_PutIconLink ("sign-in-alt.svg",Ico_WHITE,Txt_Log_in);
+      Ico_PutIconLink ("sign-in-alt.svg",Ico_WHITE,ActFrmLogIn);
    Frm_EndForm ();
   }
 
@@ -1403,11 +1400,8 @@ void Usr_WriteLoggedUsrHead (void)
 
 void Usr_PutFormLogOut (void)
   {
-   extern const char *Txt_Log_out;
-
-   /***** Link to log out form *****/
    Frm_BeginForm (ActLogOut);
-      Ico_PutIconLink ("sign-out-alt.svg",Ico_WHITE,Txt_Log_out);
+      Ico_PutIconLink ("sign-out-alt.svg",Ico_WHITE,ActLogOut);
    Frm_EndForm ();
   }
 

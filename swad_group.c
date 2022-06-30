@@ -1452,8 +1452,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			                          "lock.svg",
 			              Grp->Open ? Ico_GREEN :
 			        	          Ico_RED,
-			              Act_GetActionText (Grp->Open ? ActCloGrp :
-						                     ActOpeGrp));
+			              Grp->Open ? ActCloGrp :
+						  ActOpeGrp);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1467,8 +1467,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			                               "folder.svg",
 			              Grp->FileZones ? Ico_GREEN :
 			        	               Ico_RED,
-			              Act_GetActionText (Grp->FileZones ? ActDisFilZonGrp :
-									  ActEnaFilZonGrp));
+			              Grp->FileZones ? ActDisFilZonGrp :
+						       ActEnaFilZonGrp);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

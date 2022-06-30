@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,HieLvl_Level_t DefaultScope);
+static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultScope);
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
 static void Sch_GetParamSearch (void);
 static void Sch_SearchInDB (void);
@@ -89,14 +89,14 @@ void Sch_ReqSysSearch (void)
   {
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,HieLvl_SYS);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_SYS);
   }
 
 /*****************************************************************************/
 /****************** Put a form to search, including scope ********************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,HieLvl_Level_t DefaultScope)
+static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultScope)
   {
    extern const char *Hlp_START_Search;
    extern const char *Txt_Scope;
@@ -142,7 +142,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 		    Hlp_START_Search,Box_NOT_CLOSABLE);
 
 	 /***** Begin form *****/
-	 Frm_BeginForm (Action);
+	 Frm_BeginForm (ActSch);
 
 	    /***** Scope (whole platform, current country, current institution,
 			  current center, current degree or current course) *****/
@@ -269,10 +269,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
 
 void Sch_PutMagnifyingGlassButton (Ico_Color_t Color)
   {
-   extern const char *Txt_Search;
-
-   /***** Send button *****/
-   Ico_PutIconLink ("search.svg",Color,Txt_Search);
+   Ico_PutIconLink ("search.svg",Color,ActSch);
   }
 
 /*****************************************************************************/
@@ -332,7 +329,7 @@ void Sch_SysSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,HieLvl_SYS);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_SYS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();

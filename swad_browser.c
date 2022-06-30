@@ -4909,8 +4909,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,
-                       Act_GetActionText (Brw_ActExpandFolder[Gbl.FileBrowser.Type]));
+      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -4943,8 +4942,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,
-                       Act_GetActionText (Brw_ActContractFolder[Gbl.FileBrowser.Type]));
+      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,Brw_ActContractFolder[Gbl.FileBrowser.Type]);
    Frm_EndForm ();
 
    /***** End container *****/

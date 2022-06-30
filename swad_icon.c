@@ -370,13 +370,13 @@ void Ico_PutDivIcon (const char *DivClass,
 /****************** Show an icon with a link (without text) ******************/
 /*****************************************************************************/
 
-void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
+void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction)
   {
    if (Color == Ico_UNCHANGED)
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
 		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16\"");
    else
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
 		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
 		       Ico_GetPreffix (Color),The_GetSuffix ());
   }
@@ -456,7 +456,7 @@ void Ico_PutIconRemovalNotAllowed (void)
 
 void Ico_PutIconCut (Act_Action_t NextAction)
   {
-   Ico_PutIconLink ("cut.svg",Ico_BLACK,Act_GetActionText (NextAction));
+   Ico_PutIconLink ("cut.svg",Ico_BLACK,NextAction);
   }
 
 /*****************************************************************************/
@@ -465,7 +465,7 @@ void Ico_PutIconCut (Act_Action_t NextAction)
 
 void Ico_PutIconPaste (Act_Action_t NextAction)
   {
-   Ico_PutIconLink ("paste.svg",Ico_BLACK,Act_GetActionText (NextAction));
+   Ico_PutIconLink ("paste.svg",Ico_BLACK,NextAction);
   }
 
 /*****************************************************************************/

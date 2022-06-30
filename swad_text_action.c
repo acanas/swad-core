@@ -430,25 +430,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActLogOut] =
 #if   L==1	// ca
-	"Close session"		// Necessita traducció
+	"Tancar sessi&oacute;"
 #elif L==2	// de
-	"Close session"		// Need Übersetzung
+	"Abmelden"
 #elif L==3	// en
-	"Close session"
+	"Log out"
 #elif L==4	// es
 	"Cerrar sesi&oacute;n"
 #elif L==5	// fr
-	"Close session"		// Besoin de traduction
+	"Fermer session"
 #elif L==6	// gn
-	"Cerrar sesi&oacute;n"	// Okoteve traducción
+	"S&#7869;"
 #elif L==7	// it
-	"Close session"		// Bisogno di traduzione
+	"Chiudi sessione"
 #elif L==8	// pl
-	"Close session"		// Potrzebujesz tlumaczenie
+	"Wyloguj si&eogon;"
 #elif L==9	// pt
-	"Close session"		// Precisa de tradução
+	"Fechar sess&atilde;o"
 #elif L==10	// tr
-	"Close session"		// Çeviri lazim!
+	"Log out"	// Çeviri lazim!
 #endif
 	,
 	[ActSch] =
@@ -31206,71 +31206,71 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqMsgUsr] =
 #if   L==1	// ca
-	"Write message to other users"		// Necessita traducció
+	"Write message"		// Necessita traducció
 #elif L==2	// de
-	"Write message to other users"		// Need Übersetzung
+	"Write message"		// Need Übersetzung
 #elif L==3	// en
-	"Write message to other users"
+	"Write message"
 #elif L==4	// es
-	"Redactar mensaje a otros usuarios"
+	"Redactar mensaje"
 #elif L==5	// fr
-	"Write message to other users"		// Besoin de traduction
+	"Write message"		// Besoin de traduction
 #elif L==6	// gn
-	"Redactar mensaje a otros usuarios"	// Okoteve traducción
+	"Redactar mensaje"	// Okoteve traducción
 #elif L==7	// it
-	"Write message to other users"		// Bisogno di traduzione
+	"Write message"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Write message to other users"		// Potrzebujesz tlumaczenie
+	"Write message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Write message to other users"		// Precisa de tradução
+	"Write message"		// Precisa de tradução
 #elif L==10	// tr
-	"Write message to other users"		// Çeviri lazim!
+	"Write message"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeSntMsg] =
 #if   L==1	// ca
-	"See the messages sent"	// Necessita traducció
+	"See messages sent"	// Necessita traducció
 #elif L==2	// de
-	"See the messages sent"	// Need Übersetzung
+	"See messages sent"	// Need Übersetzung
 #elif L==3	// en
-	"See the messages sent"
+	"See messages sent"
 #elif L==4	// es
 	"Ver mensajes enviados"
 #elif L==5	// fr
-	"See the messages sent"	// Besoin de traduction
+	"See messages sent"	// Besoin de traduction
 #elif L==6	// gn
 	"Ver mensajes enviados"	// Okoteve traducción
 #elif L==7	// it
-	"See the messages sent"	// Bisogno di traduzione
+	"See messages sent"	// Bisogno di traduzione
 #elif L==8	// pl
-	"See the messages sent"	// Potrzebujesz tlumaczenie
+	"See messages sent"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See the messages sent"	// Precisa de tradução
+	"See messages sent"	// Precisa de tradução
 #elif L==10	// tr
-	"See the messages sent"	// Çeviri lazim!
+	"See messages sent"	// Çeviri lazim!
 #endif
 	,
 	[ActRcvMsgUsr] =
 #if   L==1	// ca
-	"Send message to other users"		// Necessita traducció
+	"Send message"		// Necessita traducció
 #elif L==2	// de
-	"Send message to other users"		// Need Übersetzung
+	"Send message"		// Need Übersetzung
 #elif L==3	// en
-	"Send message to other users"
+	"Send message"
 #elif L==4	// es
-	"Enviar un mensaje a otros usuarios"
+	"Enviar mensaje"
 #elif L==5	// fr
-	"Send message to other users"		// Besoin de traduction
+	"Send message"		// Besoin de traduction
 #elif L==6	// gn
-	"Enviar un mensaje a otros usuarios"	// Okoteve traducción
+	"Enviar mensaje"	// Okoteve traducción
 #elif L==7	// it
-	"Send message to other users"		// Bisogno di traduzione
+	"Send message"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Send message to other users"		// Potrzebujesz tlumaczenie
+	"Send message"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Send message to other users"		// Precisa de tradução
+	"Send message"		// Precisa de tradução
 #elif L==10	// tr
-	"Send message to other users"		// Çeviri lazim!
+	"Send message"		// Çeviri lazim!
 #endif
 	,
 	[ActReqDelAllSntMsg] =

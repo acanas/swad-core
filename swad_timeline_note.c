@@ -870,8 +870,8 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
-                       Act_GetActionText (Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_NOTE] :
-                		                                             TmlFrm_ActionGbl[TmlFrm_REQ_REM_NOTE]));
+                       Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_NOTE] :
+                		                          TmlFrm_ActionGbl[TmlFrm_REQ_REM_NOTE]);
 
    /* End form */
    TmlFrm_EndForm ();

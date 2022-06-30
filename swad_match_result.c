@@ -905,15 +905,13 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 		  case Usr_ME:
 		     Frm_BeginForm (ActSeeOneMchResMe);
 			Mch_PutParamsEdit (Games);
-		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,
-		                         Act_GetActionText (ActSeeOneMchResMe));
+		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
 		     break;
 		  case Usr_OTHER:
 		     Frm_BeginForm (ActSeeOneMchResOth);
 			Mch_PutParamsEdit (Games);
 			Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,
-		                         Act_GetActionText (ActSeeOneMchResOth));
+		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
 		     break;
 		 }
 	       Frm_EndForm ();

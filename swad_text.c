@@ -15996,52 +15996,6 @@ const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the 
 	"Go to %s";	// Çeviri lazim!
 #endif
 
-const char *Txt_Go_to_course_and_reply =
-#if   L==1	// ca
-	"Anar a assignatura i respondre";
-#elif L==2	// de
-	"Kurs einblenden und antworten";
-#elif L==3	// en
-	"Go to course and reply";
-#elif L==4	// es
-	"Ir a asignatura y responder";
-#elif L==5	// fr
-	"Aller &agrave; la mati&egrave;re et r&eacute;pondre";
-#elif L==6	// gn
-	"Ir a asignatura y responder";	// Okoteve traducción
-#elif L==7	// it
-	"Vai a corso e rispondere";
-#elif L==8	// pl
-	"Idz do kursu i odpowiedz";
-#elif L==9	// pt
-	"Ir para a disciplina e responder";
-#elif L==10	// tr
-	"Go to course and reply";	// Çeviri lazim!
-#endif
-
-const char *Txt_Go_to_course_and_reply_again =
-#if   L==1	// ca
-	"Anar a assignatura i respondre una altra vegada";
-#elif L==2	// de
-	"Kurs einblenden und erneut antworten";
-#elif L==3	// en
-	"Go to course and reply again";
-#elif L==4	// es
-	"Ir a asignatura y responder otra vez";
-#elif L==5	// fr
-	"Aller &agrave; la mati&egrave;re et r&eacute;pondre &agrave; nouveau";
-#elif L==6	// gn
-	"Ir a asignatura y responder otra vez";	// Okoteve traducción
-#elif L==7	// it
-	"Vai a corso e rispondere nuovamente";
-#elif L==8	// pl
-	"Idz do kursu i odpowiedz ponownie";
-#elif L==9	// pt
-	"Ir para a disciplina e responder novamente";
-#elif L==10	// tr
-	"Go to course and reply again";		// Çeviri lazim!
-#endif
-
 const char *Txt_Go_to_one_of_my_courses =
 #if   L==1	// ca
 	"Anar a una de les meves assignatures";
@@ -20098,29 +20052,6 @@ const char *Txt_Log_in =
 	"Entrar";
 #elif L==10	// tr
 	"Giri&scedil; yapmak";
-#endif
-
-const char *Txt_Log_out =
-#if   L==1	// ca
-	"Tancar sessi&oacute;";
-#elif L==2	// de
-	"Abmelden";
-#elif L==3	// en
-	"Log out";
-#elif L==4	// es
-	"Cerrar sesi&oacute;n";
-#elif L==5	// fr
-	"Fermer session";
-#elif L==6	// gn
-	"S&#7869;";
-#elif L==7	// it
-	"Chiudi sessione";
-#elif L==8	// pl
-	"Wyloguj si&eogon;";
-#elif L==9	// pt
-	"Fechar sess&atilde;o";
-#elif L==10	// tr
-	"Log out";	// Çeviri lazim!
 #endif
 
 const char *Txt_logged[Usr_NUM_SEXS] =
@@ -35441,52 +35372,6 @@ const char *Txt_Remove_USER_from_THE_COURSE_X =	// Warning: it is very important
 	"Remove from <strong>%s</strong>";	// Çeviri lazim!
 #endif
 
-const char *Txt_Reply =
-#if   L==1	// ca
-	"Respondre";
-#elif L==2	// de
-	"Antworten";
-#elif L==3	// en
-	"Reply";
-#elif L==4	// es
-	"Responder";
-#elif L==5	// fr
-	"R&eacute;pondre";
-#elif L==6	// gn
-	"Responder";	// Okoteve traducción
-#elif L==7	// it
-	"Rispondere";
-#elif L==8	// pl
-	"Odpowiedz";
-#elif L==9	// pt
-	"Responder";
-#elif L==10	// tr
-	"Reply";	// Çeviri lazim!
-#endif
-
-const char *Txt_Reply_again =
-#if   L==1	// ca
-	"Respondre de nou";
-#elif L==2	// de
-	"Antworten wieder";
-#elif L==3	// en
-	"Reply again";
-#elif L==4	// es
-	"Responder otra vez";
-#elif L==5	// fr
-	"R&eacute;pondre &agrave; nouveau";
-#elif L==6	// gn
-	"Responder otra vez";	// Okoteve traducción
-#elif L==7	// it
-	"Rispondere nuovamente";
-#elif L==8	// pl
-	"Odpowiedz ponownie";
-#elif L==9	// pt
-	"Responder novamente";
-#elif L==10	// tr
-	"Reply again";		// Çeviri lazim!
-#endif
-
 const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 #if   L==1	// ca
 	"Missatge de resposta";
@@ -42603,52 +42488,6 @@ const char *Txt_Send_URL =
 	"Send URL";	// Çeviri lazim!
 #endif
 
-const char *Txt_Sender_banned_click_to_unban_him =
-#if   L==1	// ca
-	"Remitent prohibit; feu clic per desbanbar-lo";
-#elif L==2	// de
-	"Absender gesperrt; klicken, um sie/ihn zu entsperren";
-#elif L==3	// en
-	"Sender banned; click to unban her/him";
-#elif L==4	// es
-	"Remitente bloqueado/a; pulse para desbloquearlo/a";
-#elif L==5	// fr
-	"Exp&eacute;diteur banni; cliquez pour le d&eacute;bannir";
-#elif L==6	// gn
-	"Remitente bloqueado/a; pulse para desbloquearlo/a";	// Okoteve traducción
-#elif L==7	// it
-	"Mittente vietato; fare clic per riattivarlo";
-#elif L==8	// pl
-	"Nadawca zbanowany; kliknij, aby odblokowa&cacute; j&aogon;/jego";
-#elif L==9	// pt
-	"Remetente banido; clique para desbanir ela/ele";
-#elif L==10	// tr
-	"Sender banned; click to unban her/him";		// Çeviri lazim!
-#endif
-
-const char *Txt_Sender_permitted_click_to_ban_him =
-#if   L==1	// ca
-	"Remitent perm&egrave;s; feu clic per prohibir-lo";
-#elif L==2	// de
-	"Absender erlaubt; klicken, um sie/ihn zu sperren";
-#elif L==3	// en
-	"Sender permitted; click to ban her/him";
-#elif L==4	// es
-	"Remitente permitido/a; pulse para bloquearlo/a";
-#elif L==5	// fr
-	"Exp&eacute;diteur autoris&eacute;; cliquez pour l'exclure";
-#elif L==6	// gn
-	"Remitente permitido/a; pulse para bloquearlo/a";	// Okoteve traducción
-#elif L==7	// it
-	"Mittente consentito; clicca per bannarla";
-#elif L==8	// pl
-	"Nadawca dozwolony; kliknij, aby zbanowa&cacute; j&aogon;/jego";
-#elif L==9	// pt
-	"Remetente permitido; clique para banir ela/ele";
-#elif L==10	// tr
-	"Sender permitted; click to ban her/him";		// Çeviri lazim!
-#endif
-
 const char *Txt_Session =
 #if   L==1	// ca
 	"Sessi&oacute;";
@@ -47225,29 +47064,6 @@ const char *Txt_Tag_allowed =
 	"Tag allowed";		// Çeviri lazim!
 #endif
 
-const char *Txt_Tag_X_allowed_Click_to_disable_it =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Descriptor %s perm&egrave;s. Premeu per prohibir-ho.";
-#elif L==2	// de
-	"Tag %s erlaubt. Klicken Sie, um es zu deaktivieren.";
-#elif L==3	// en
-	"Tag %s allowed. Click to disable it.";
-#elif L==4	// es
-	"Descriptor %s permitido. Pulse para prohibirlo.";
-#elif L==5	// fr
-	"Balise %s autoris&eacute;e. Cliquez pour le d&eacute;sactiver.";
-#elif L==6	// gn
-	"Descriptor %s permitido. Pulse para prohibirlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Etichetta %s autorizzata. Clicca per censurarla.";
-#elif L==8	// pl
-	"Tag %s dozwolony. Kliknij, aby go wy&lstrok;&aogon;czy&cacute;.";
-#elif L==9	// pt
-	"Descritor %s permitido. Clique para proibir.";
-#elif L==10	// tr
-	"Tag %s allowed. Click to disable it.";			// Çeviri lazim!
-#endif
-
 const char *Txt_Tag_not_allowed =
 #if   L==1	// ca
 	"Descriptor no perm&egrave;s";
@@ -47269,29 +47085,6 @@ const char *Txt_Tag_not_allowed =
 	"Descritor n&atilde;o permitido";
 #elif L==10	// tr
 	"Tag not allowed";		// Çeviri lazim!
-#endif
-
-const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Descriptor %s no perm&egrave;s. Premeu per permetre-ho.";
-#elif L==2	// de
-	"Tag %s nicht erlaubt. Klicken Sie, um es zuzulassen.";
-#elif L==3	// en
-	"Tag %s not allowed. Click to allow it.";
-#elif L==4	// es
-	"Descriptor %s no permitido. Pulse para permitirlo.";
-#elif L==5	// fr
-	"Balise %s non autoris&eacute;e. Cliquez pour l'autoriser.";
-#elif L==6	// gn
-	"Descriptor %s no permitido. Pulse para permitirlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Etichetta %s censurata. Clicca per autorizzarla.";
-#elif L==8	// pl
-	"Tag %s jest niedozwolony. Kliknij, aby na to zezwoli&cacute;.";
-#elif L==9	// pt
-	"Descritor %s n&atilde;o permitido. Clique para permitir.";
-#elif L==10	// tr
-	"Tag %s not allowed. Click to allow it.";		// Çeviri lazim!
 #endif
 
 #if defined LOCALHOST_UBUNTU		// localhost (Ubuntu) *****************
@@ -58447,29 +58240,6 @@ const char *Txt_View_survey =
 	"Ver inqu&eacute;rito";
 #elif L==10	// tr
 	"View survey";	// Çeviri lazim!
-#endif
-
-const char *Txt_View_test =
-#if   L==1	// ca
-	"Veure test";
-#elif L==2	// de
-	"Siehe Test";
-#elif L==3	// en
-	"View test";
-#elif L==4	// es
-	"Ver test";
-#elif L==5	// fr
-	"Voir test";
-#elif L==6	// gn
-	"Ver test";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi test";
-#elif L==8	// pl
-	"Wiadomo&sacute;ci test";
-#elif L==9	// pt
-	"Ver teste";
-#elif L==10	// tr
-	"View test";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_homework =

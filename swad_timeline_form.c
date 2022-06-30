@@ -227,7 +227,7 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
       Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
       free (OnSubmit);
 	 Ico_PutIconLink (Form->Icon,Form->Color,
-			  Act_GetActionText (TmlFrm_ActionUsr[Form->Action]));
+			  TmlFrm_ActionUsr[Form->Action]);
      }
    else
      {
@@ -241,7 +241,7 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
       Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
       free (OnSubmit);
 	 Ico_PutIconLink (Form->Icon,Form->Color,
-			  Act_GetActionText (TmlFrm_ActionGbl[Form->Action]));
+			  TmlFrm_ActionGbl[Form->Action]);
      }
    Frm_EndForm ();
   }

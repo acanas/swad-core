@@ -952,8 +952,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					  "eye-slash.svg",
 				Enabled ? Ico_GREEN :
 					  Ico_RED,
-				Act_GetActionText (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
-							     For_ActionsEnbPstFor[Forums->Forum.Type]));
+				Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
+					  For_ActionsEnbPstFor[Forums->Forum.Type]);
 	    Frm_EndForm ();
 	   }
 	 else

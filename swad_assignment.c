@@ -578,8 +578,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 		   sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
 	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,
-			  Act_GetActionText (NextAction));
+	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
       Frm_EndForm ();
 

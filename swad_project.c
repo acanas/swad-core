@@ -4010,7 +4010,6 @@ void Prj_UnloSelectedPrjsEdition (void)
 
 static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
   {
-   extern const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED];
    char *OnSubmit;
    /*
    +---------------------+
@@ -4036,7 +4035,7 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
    Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
       Ico_PutIconLink (Prj_LockUnlock[Prj->Locked].Icon,
                        Prj_LockUnlock[Prj->Locked].Color,
-                       Txt_LOCKED_UNLOCKED[Prj->Locked]);
+                       Prj_LockUnlock[Prj->Locked].Action);
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */

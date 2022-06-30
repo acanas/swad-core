@@ -702,8 +702,8 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
-                       Act_GetActionText (Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_COMM] :
-                		                                             TmlFrm_ActionGbl[TmlFrm_REQ_REM_COMM]));
+                       Gbl.Usrs.Other.UsrDat.UsrCod > 0 ? TmlFrm_ActionUsr[TmlFrm_REQ_REM_COMM] :
+                		                          TmlFrm_ActionGbl[TmlFrm_REQ_REM_COMM]);
 
    /* End form */
    TmlFrm_EndForm ();

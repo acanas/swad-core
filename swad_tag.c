@@ -53,8 +53,8 @@ extern struct Globals Gbl;
 
 static long Tag_GetParamTagCode (void);
 
-static void Tag_PutIconEnable (long TagCod,const char *TagTxt);
-static void Tag_PutIconDisable (long TagCod,const char *TagTxt);
+static void Tag_PutIconEnable (long TagCod);
+static void Tag_PutIconDisable (long TagCod);
 
 /*****************************************************************************/
 /********************************* Reset tags ********************************/
@@ -429,9 +429,9 @@ void Tag_ShowFormEditTags (void)
 
 	       /* Form to enable / disable this tag */
 	       if (row[2][0] == 'Y')	// Tag disabled
-		  Tag_PutIconEnable (TagCod,row[1]);
+		  Tag_PutIconEnable (TagCod);
 	       else
-		  Tag_PutIconDisable (TagCod,row[1]);
+		  Tag_PutIconDisable (TagCod);
 
 	       /* Form to rename this tag */
 	       HTM_TD_Begin ("class=\"LM\"");
@@ -462,18 +462,12 @@ void Tag_ShowFormEditTags (void)
 /******************* Put a link and an icon to enable a tag ******************/
 /*****************************************************************************/
 
-static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
+static void Tag_PutIconEnable (long TagCod)
   {
-   extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
-   char *Title;
-
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 if (asprintf (&Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,Title);
-	 free (Title);
+	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,ActEnaTag);
       Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -482,18 +476,12 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
 /****************** Put a link and an icon to disable a tag ******************/
 /*****************************************************************************/
 
-static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
+static void Tag_PutIconDisable (long TagCod)
   {
-   extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
-   char *Title;
-
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 if (asprintf (&Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Ico_PutIconLink ("eye.svg",Ico_GREEN,Title);
-	 free (Title);
+	 Ico_PutIconLink ("eye.svg",Ico_GREEN,ActDisTag);
       Frm_EndForm ();
    HTM_TD_End ();
   }
