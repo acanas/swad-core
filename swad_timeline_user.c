@@ -117,8 +117,8 @@ void TmlUsr_RemoveUsrContent (long UsrCod)
 /*****************************************************************************/
 
 static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
-                                               long Cod,long UsrCod,unsigned NumUsrs,
-				               TmlUsr_HowManyUsrs_t HowManyUsrs)
+                                              long Cod,long UsrCod,unsigned NumUsrs,
+				              TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
    static const TmlFrm_Action_t Action[TmlUsr_NUM_FAV_SHA] =
      {
@@ -132,6 +132,14 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
       [TmlUsr_FAV_UNF_COMM] = "PubCod=%ld",
       [TmlUsr_SHA_UNS_NOTE] = "NotCod=%ld",
      };
+   struct Tml_Form Form =
+     {
+      .Action      = Action[FavSha],
+      .ParamFormat = ParamFormat[FavSha],
+      .ParamCod    = Cod,
+      .Icon        = "ellipsis-h.svg",
+      .Color       = Ico_BLACK,
+     };
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
 
@@ -140,7 +148,7 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
       NumFirstUsrs =
       TmlUsr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
                                       HowManyUsrs == TmlUsr_SHOW_FEW_USRS ? TmlUsr_DEF_USRS_SHOWN :
-				                                             TmlUsr_MAX_USRS_SHOWN,
+				                                            TmlUsr_MAX_USRS_SHOWN,
                                       &mysql_res);
    else
       NumFirstUsrs = 0;
@@ -156,9 +164,7 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
       TmlUsr_ListSharersOrFavers (&mysql_res,NumUsrs,NumFirstUsrs);
       if (NumFirstUsrs < NumUsrs)		// Not all are shown
 	 /* Clickable ellipsis to show all users */
-	 TmlFrm_PutFormToSeeAllFaversSharers (Action[FavSha],
-					       ParamFormat[FavSha],Cod,
-					       HowManyUsrs);
+         TmlFrm_FormFavSha (&Form);
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/

@@ -41,8 +41,6 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define TmlFrm_ICON_ELLIPSIS	"ellipsis-h.svg"
-
 const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS] =
   {
    [TmlFrm_RECEIVE_POST] = ActRcvPstGblTL,
@@ -94,10 +92,6 @@ extern struct Globals Gbl;
 
 void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
   {
-   extern const char *Txt_TIMELINE_Mark_as_favourite;
-   extern const char *Txt_TIMELINE_Favourite;
-   extern const char *Txt_TIMELINE_Share;
-   extern const char *Txt_TIMELINE_Shared;
    struct Tml_Form Form[TmlUsr_NUM_FAV_SHA][2] =
      {
       [TmlUsr_FAV_UNF_NOTE] =
@@ -109,7 +103,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_BLACK,
-	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
@@ -118,7 +111,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_RED,
-	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
       [TmlUsr_FAV_UNF_COMM] =
@@ -130,7 +122,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_BLACK,
-	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
@@ -139,7 +130,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_RED,
-	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
       [TmlUsr_SHA_UNS_NOTE] =
@@ -151,7 +141,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlSha_ICON_SHARE,
 	    .Color       = Ico_BLACK,
-	    .Title       = Txt_TIMELINE_Share,
 	   },
 	 [true] = // I have shared ==> unshare
 	   {
@@ -160,7 +149,6 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	    .ParamCod    = Cod,
 	    .Icon        = TmlSha_ICON_SHARE,
 	    .Color       = Ico_GREEN,
-	    .Title       = Txt_TIMELINE_Shared,
 	   },
 	},
      };
@@ -198,45 +186,12 @@ void TmlFrm_EndForm (void)
   }
 
 /*****************************************************************************/
-/********************* Form to show all favers/sharers ***********************/
-/*****************************************************************************/
-
-void TmlFrm_PutFormToSeeAllFaversSharers (TmlFrm_Action_t Action,
-		                          const char *ParamFormat,long ParamCod,
-                                          TmlUsr_HowManyUsrs_t HowManyUsrs)
-  {
-   extern const char *Txt_View_all_USERS;
-   struct Tml_Form Form =
-     {
-      .Action      = Action,
-      .ParamFormat = ParamFormat,
-      .ParamCod    = ParamCod,
-      .Icon        = TmlFrm_ICON_ELLIPSIS,
-      .Color       = Ico_BLACK,
-      .Title       = Txt_View_all_USERS,
-     };
-
-   switch (HowManyUsrs)
-     {
-      case TmlUsr_SHOW_FEW_USRS:
-	 /***** Form and icon to view all users *****/
-	 TmlFrm_FormFavSha (&Form);
-	 break;
-      case TmlUsr_SHOW_ALL_USRS:
-	 /***** Disabled icon *****/
-         Ico_PutIconOff (TmlFrm_ICON_ELLIPSIS,Ico_BLACK,Txt_View_all_USERS);
-	 break;
-     }
-  }
-
-/*****************************************************************************/
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
 void TmlFrm_FormFavSha (const struct Tml_Form *Form)
   {
    char *OnSubmit;
-   const char *Anchor;
    char ParamStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Create parameter string *****/
@@ -269,7 +224,10 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Anchor = "timeline";
+      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+      free (OnSubmit);
+	 Ico_PutIconLink (Form->Icon,Form->Color,
+			  Act_GetActionText (TmlFrm_ActionUsr[Form->Action]));
      }
    else
      {
@@ -280,11 +238,11 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Anchor = NULL;
+      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+      free (OnSubmit);
+	 Ico_PutIconLink (Form->Icon,Form->Color,
+			  Act_GetActionText (TmlFrm_ActionGbl[Form->Action]));
      }
-   Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
-   free (OnSubmit);
-      Ico_PutIconLink (Form->Icon,Form->Color,Form->Title);
    Frm_EndForm ();
   }
 

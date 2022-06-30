@@ -113,12 +113,10 @@ static void TmlCom_ResetComm (struct TmlCom_Comment *Com);
 /********* Put an icon to toggle on/off the form to comment a note ***********/
 /*****************************************************************************/
 
-void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
+void TmlCom_PutIconToToggleComm (const struct Tml_Timeline *Timeline,
+                                 const char UniqueId[Frm_MAX_BYTES_ID + 1])
   {
-   extern const char *Txt_Comment;
-
-   /***** Link to toggle on/off the form to comment a note *****/
-   /* Begin container */
+   /***** Begin container *****/
    HTM_DIV_Begin ("id=\"%s_ico\" class=\"Tml_ICO_COM_OFF\"",UniqueId);
 
       /* Begin anchor */
@@ -128,12 +126,14 @@ void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 
          /* Icon to toggle comment */
 	 Ico_PutIcon ("comment-regular.svg",Ico_BLACK,
-	              Txt_Comment,"CONTEXT_ICO16x16");
+	              Act_GetActionText (Timeline->UsrOrGbl == TmlUsr_TIMELINE_GBL ? ActRcvComGblTL :
+	        	                                                             ActRcvComUsrTL),
+	              "CONTEXT_ICO16x16");
 
       /* End anchor */
       HTM_A_End ();
 
-   /* End container */
+   /***** End container *****/
    HTM_DIV_End ();
   }
 
@@ -143,14 +143,14 @@ void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 
 void TmlCom_PutIconCommDisabled (void)
   {
-   extern const char *Txt_Comment;
+   extern const char *Txt_not_available;
 
    /***** Disabled icon to comment a note *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"Tml_ICO_COM_OFF Tml_ICO_DISABLED\"");
 
       /* Disabled icon */
-      Ico_PutIcon ("edit.svg",Ico_BLACK,Txt_Comment,"ICO16x16");
+      Ico_PutIcon ("comment-regular.svg",Ico_BLACK,Txt_not_available,"ICO16x16");
 
    /* End container */
    HTM_DIV_End ();
@@ -671,8 +671,8 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
-	                        Com->PubCod,Com->UsrCod,Com->NumFavs,
-			        TmlUsr_SHOW_FEW_USRS);
+	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
+			       TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/

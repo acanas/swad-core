@@ -70,8 +70,8 @@ void TmlSha_ShowAllSharersNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share/unshare *****/
    TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
-	                  Not.NotCod,Not.UsrCod,Not.NumShared,
-	                  TmlUsr_SHOW_ALL_USRS);
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TmlUsr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -96,8 +96,8 @@ void TmlSha_ShaNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unshare *****/
    TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
-	                  Not.NotCod,Not.UsrCod,Not.NumShared,
-	                  TmlUsr_SHOW_FEW_USRS);
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TmlUsr_SHOW_FEW_USRS);
   }
 
 static void TmlSha_ShaNote (struct TmlNot_Note *Not)
@@ -155,8 +155,8 @@ void TmlSha_UnsNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share *****/
    TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
-	                  Not.NotCod,Not.UsrCod,Not.NumShared,
-	                  TmlUsr_SHOW_FEW_USRS);
+	                 Not.NotCod,Not.UsrCod,Not.NumShared,
+	                 TmlUsr_SHOW_FEW_USRS);
   }
 
 static void TmlSha_UnsNote (struct TmlNot_Note *Not)

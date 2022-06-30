@@ -5244,29 +5244,6 @@ const char *Txt_columns =
 	"S&uuml;tunlar";
 #endif
 
-const char *Txt_Comment =	// As a verb
-#if   L==1	// ca
-	"Comentar";
-#elif L==2	// de
-	"Kommentieren";
-#elif L==3	// en
-	"Comment";
-#elif L==4	// es
-	"Comentar";
-#elif L==5	// fr
-	"Commenter";
-#elif L==6	// gn
-	"Comentar";	// Okoteve traducción
-#elif L==7	// it
-	"Commentare";
-#elif L==8	// pl
-	"Komentowa&cacute;";
-#elif L==9	// pt
-	"Comentar";
-#elif L==10	// tr
-	"Comment";	// Çeviri lazim!
-#endif
-
 const char *Txt_Comment_removed =
 #if   L==1	// ca
 	"Comentari eliminat.";
@@ -20354,29 +20331,6 @@ const char *Txt_Mark_all_NOTIFICATIONS_as_read =
 	"Marcar todas como lidas";
 #elif L==10	// tr
 	"Mark all as read";			// Çeviri lazim!
-#endif
-
-const char *Txt_TIMELINE_Mark_as_favourite =
-#if   L==1	// ca
-	"Marca com favorit";
-#elif L==2	// de
-	"Markieren als Favorit";
-#elif L==3	// en
-	"Mark as favourite";
-#elif L==4	// es
-	"Marcar como favorito";
-#elif L==5	// fr
-	"Marquer comme favori";
-#elif L==6	// gn
-	"Marcar como favorito";	// Okoteve traducción
-#elif L==7	// it
-	"Segnare come preferito";
-#elif L==8	// pl
-	"Oznacz jako ulubiony";
-#elif L==9	// pt
-	"Marcar como favorito";
-#elif L==10	// tr
-	"Mark as favourite";	// Çeviri lazim!
 #endif
 
 const char *Txt_Marks_management_area =
@@ -54391,29 +54345,6 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 	"%s timeline";		// Çeviri lazim!
 #endif
 
-const char *Txt_TIMELINE_Favourite =
-#if   L==1	// ca
-	"Favorit";
-#elif L==2	// de
-	"Favorit";
-#elif L==3	// en
-	"Favourite";
-#elif L==4	// es
-	"Favorito";
-#elif L==5	// fr
-	"Favori";
-#elif L==6	// gn
-	"Favorito";	// Okoteve traducción
-#elif L==7	// it
-	"Preferito";
-#elif L==8	// pl
-	"Ulubiony";
-#elif L==9	// pt
-	"Favorito";
-#elif L==10	// tr
-	"Favourite";	// Çeviri lazim!
-#endif
-
 const char *Txt_TIMELINE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
 	"Marcat com favorit per %u";
@@ -55023,52 +54954,6 @@ const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 	"Tutoring hours"		// Çeviri lazim!
 #endif
 	};
-
-const char *Txt_TIMELINE_Share =
-#if   L==1	// ca
-	"Compartir";
-#elif L==2	// de
-	"Teilen";
-#elif L==3	// en
-	"Share";
-#elif L==4	// es
-	"Compartir";
-#elif L==5	// fr
-	"Partager";
-#elif L==6	// gn
-	"Compartir";	// Okoteve traducción
-#elif L==7	// it
-	"Condividere";
-#elif L==8	// pl
-	"Dzieli&cacute;";
-#elif L==9	// pt
-	"Compartilhar";
-#elif L==10	// tr
-	"Share";	// Çeviri lazim!
-#endif
-
-const char *Txt_TIMELINE_Shared =
-#if   L==1	// ca
-	"Compartit";
-#elif L==2	// de
-	"Geteilt";
-#elif L==3	// en
-	"Shared";
-#elif L==4	// es
-	"Compartido";
-#elif L==5	// fr
-	"Partag&eacute;";
-#elif L==6	// gn
-	"Compartido";	// Okoteve traducción
-#elif L==7	// it
-	"Condiviso";
-#elif L==8	// pl
-	"Udost&eogon;pnione";
-#elif L==9	// pt
-	"Compartilhado";
-#elif L==10	// tr
-	"Shared";	// Çeviri lazim!
-#endif
 
 const char *Txt_TIMELINE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
 #if   L==1	// ca
@@ -58286,29 +58171,6 @@ const char *Txt_View_all_recipients =
 	"Ver todos os estinat&aacute;rios";
 #elif L==10	// tr
 	"View all recipients";		// Çeviri lazim!
-#endif
-
-const char *Txt_View_all_USERS =
-#if   L==1	// ca
-	"Veure tots";
-#elif L==2	// de
-	"Anzeigen alle";
-#elif L==3	// en
-	"View all";
-#elif L==4	// es
-	"Ver todos";
-#elif L==5	// fr
-	"Voir tous";
-#elif L==6	// gn
-	"Ver todos";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi tutti";
-#elif L==8	// pl
-	"Zobacz wszystkich";
-#elif L==9	// pt
-	"Ver todos";
-#elif L==10	// tr
-	"View all";	// Çeviri lazim!
 #endif
 
 const char *Txt_View_attendance =

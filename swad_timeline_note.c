@@ -96,7 +96,8 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
                                          const struct TmlNot_Note *Not,
                                          const struct UsrData *UsrDat);
-static void TmlNot_WriteButtonToAddAComm (const struct TmlNot_Note *Not,
+static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
+                                          const struct TmlNot_Note *Not,
                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
 					   const struct TmlNot_Note *Not,
@@ -758,7 +759,7 @@ static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
    Frm_SetUniqueId (IdNewComm);
 
    /***** Left: button to add a comment *****/
-   TmlNot_WriteButtonToAddAComm (Not,IdNewComm);
+   TmlNot_WriteButtonToAddAComm (Timeline,Not,IdNewComm);
 
    /***** Right: write favs, shared and remove buttons, and comments *****/
    TmlNot_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
@@ -771,7 +772,8 @@ static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
 /********************** Write button to add a comment ************************/
 /*****************************************************************************/
 
-static void TmlNot_WriteButtonToAddAComm (const struct TmlNot_Note *Not,
+static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
+                                          const struct TmlNot_Note *Not,
                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
    /***** Begin container *****/
@@ -781,7 +783,7 @@ static void TmlNot_WriteButtonToAddAComm (const struct TmlNot_Note *Not,
       if (Not->Unavailable)	// Unavailable notes can not be commented
 	 TmlCom_PutIconCommDisabled ();
       else
-	 TmlCom_PutIconToToggleComm (IdNewComm);
+	 TmlCom_PutIconToToggleComm (Timeline,IdNewComm);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -828,8 +830,8 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 	             " class=\"Tml_FAV_NOT Tml_FAV_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
-	                        Not->NotCod,Not->UsrCod,Not->NumFavs,
-			        TmlUsr_SHOW_FEW_USRS);
+	                       Not->NotCod,Not->UsrCod,Not->NumFavs,
+			       TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: share zone *****/
@@ -837,8 +839,8 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 	             " class=\"Tml_SHA_NOT Tml_SHA_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
-	                        Not->NotCod,Not->UsrCod,Not->NumShared,
-	                        TmlUsr_SHOW_FEW_USRS);
+	                       Not->NotCod,Not->UsrCod,Not->NumShared,
+	                       TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 3: icon to remove this note *****/

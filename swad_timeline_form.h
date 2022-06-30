@@ -63,7 +63,6 @@ struct Tml_Form
    long ParamCod;
    const char *Icon;
    Ico_Color_t Color;
-   const char *Title;
   };
 
 /*****************************************************************************/
@@ -76,9 +75,6 @@ void TmlFrm_BeginForm (const struct Tml_Timeline *Timeline,
                        TmlFrm_Action_t Action);
 void TmlFrm_EndForm (void);
 
-void TmlFrm_PutFormToSeeAllFaversSharers (TmlFrm_Action_t Action,
-		                          const char *ParamFormat,long ParamCod,
-                                          TmlUsr_HowManyUsrs_t HowManyUsrs);
 void TmlFrm_FormFavSha (const struct Tml_Form *Form);
 
 void TmlFrm_FormToShowHiddenComms (long NotCod,

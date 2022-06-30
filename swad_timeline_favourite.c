@@ -73,8 +73,8 @@ void TmlFav_ShowAllFaversNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
-                          Not.NotCod,Not.UsrCod,Not.NumFavs,
-                          TmlUsr_SHOW_ALL_USRS);
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TmlUsr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -99,8 +99,8 @@ void TmlFav_FavNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
-                          Not.NotCod,Not.UsrCod,Not.NumFavs,
-                          TmlUsr_SHOW_FEW_USRS);
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TmlUsr_SHOW_FEW_USRS);
   }
 
 void TmlFav_UnfNoteUsr (void)
@@ -121,8 +121,8 @@ void TmlFav_UnfNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
-                          Not.NotCod,Not.UsrCod,Not.NumFavs,
-                          TmlUsr_SHOW_FEW_USRS);
+                         Not.NotCod,Not.UsrCod,Not.NumFavs,
+                         TmlUsr_SHOW_FEW_USRS);
   }
 
 static void TmlFav_FavNote (struct TmlNot_Note *Not)
@@ -209,8 +209,8 @@ void TmlFav_ShowAllFaversComGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
-                          Com.PubCod,Com.UsrCod,Com.NumFavs,
-                          TmlUsr_SHOW_ALL_USRS);
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TmlUsr_SHOW_ALL_USRS);
   }
 
 /*****************************************************************************/
@@ -235,8 +235,8 @@ void TmlFav_FavCommGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
-                          Com.PubCod,Com.UsrCod,Com.NumFavs,
-                          TmlUsr_SHOW_FEW_USRS);
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TmlUsr_SHOW_FEW_USRS);
   }
 
 void TmlFav_UnfCommUsr (void)
@@ -257,8 +257,8 @@ void TmlFav_UnfCommGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
-                          Com.PubCod,Com.UsrCod,Com.NumFavs,
-                          TmlUsr_SHOW_FEW_USRS);
+                         Com.PubCod,Com.UsrCod,Com.NumFavs,
+                         TmlUsr_SHOW_FEW_USRS);
   }
 
 static void TmlFav_FavComm (struct TmlCom_Comment *Com)

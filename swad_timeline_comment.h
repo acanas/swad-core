@@ -48,7 +48,8 @@ struct TmlCom_Comment
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+void TmlCom_PutIconToToggleComm (const struct Tml_Timeline *Timeline,
+                                 const char UniqueId[Frm_MAX_BYTES_ID + 1]);
 void TmlCom_PutIconCommDisabled (void);
 
 void TmlCom_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
