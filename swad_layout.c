@@ -146,6 +146,18 @@ void Lay_WriteStartOfPage (void)
 
    Gbl.Layout.WritingHTMLStart = true;
 
+   /***** Get browser tab associated to current action *****/
+   BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
+   switch (BrowserTab)
+     {
+      case Act_BRW_NEW_TAB:
+      case Act_BRW_2ND_TAB:
+	 Gbl.Prefs.Theme = The_THEME_WHITE;	// In a new tab, use white background
+	 break;
+      default:
+	 break;
+     }
+
    /***** Write header to standard output to avoid timeout *****/
    // Two \r\n are necessary
    fprintf (stdout,"Content-type: text/html; charset=windows-1252\r\n\r\n"
@@ -259,7 +271,6 @@ void Lay_WriteStartOfPage (void)
    HTM_Txt ("</head>\n");
 
    /***** HTML body *****/
-   BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
@@ -292,7 +303,6 @@ void Lay_WriteStartOfPage (void)
 	       break;
            }
 	 HTM_Txt (">\n");
-	 Gbl.Prefs.Theme = The_THEME_WHITE;	// In a new tab, use white background
          Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
 	 Gbl.Layout.DivsEndWritten   = true;

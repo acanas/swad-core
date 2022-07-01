@@ -533,7 +533,7 @@ const char *Txt_Absent =
 #elif L==9	// pt
 	"Assente";
 #elif L==10	// tr
-	"Absent";	// Çeviri lazim!
+	"Devams&inodot;z";
 #endif
 
 const char *Txt_Absents =
@@ -556,7 +556,7 @@ const char *Txt_Absents =
 #elif L==9	// pt
 	"Assentes";
 #elif L==10	// tr
-	"Absents";	// Çeviri lazim!
+	"Devams&inodot;z";
 #endif
 
 const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites =
@@ -1079,7 +1079,7 @@ const char *Txt_Add_questions =
 #elif L==9	// pt
 	"Adicionar perguntas";
 #elif L==10	// tr
-	"Add questions";		// Çeviri lazim!
+	"Soru ekle";
 #endif
 
 const char *Txt_Add_this_ID =
@@ -1102,7 +1102,7 @@ const char *Txt_Add_this_ID =
 #elif L==9	// pt
 	"Adicionar este n&ordm; identif.";
 #elif L==10	// tr
-	"Add this ID";			// Çeviri lazim!
+	"Bu kimli&gbreve;i ekle";
 #endif
 
 const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
@@ -1125,7 +1125,7 @@ const char *Txt_Add_USERS =	// Warning: it is very important to include %s in th
 #elif L==9	// pt
 	"Adicionar %s";
 #elif L==10	// tr
-	"Add %s";		// Çeviri lazim!
+	"%s ekle";
 #endif
 
 const char *Txt_Administer_me =
@@ -1148,7 +1148,7 @@ const char *Txt_Administer_me =
 #elif L==9	// pt
 	"Gerenciar me";
 #elif L==10	// tr
-	"Administer me";	// Çeviri lazim!
+	"Beni y&ouml;net";
 #endif
 
 const char *Txt_Administer_multiple_students =
@@ -1314,7 +1314,7 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos privados"
 #elif L==10	// tr
-	"Private events"	// Çeviri lazim!
+	"&Ouml;zel etkinlikler"
 #endif
 	,
 	// Agd_PUBLIC_EVENTS
@@ -1337,7 +1337,7 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos p&uacute;blicos"
 #elif L==10	// tr
-	"Public events"			// Çeviri lazim!
+	"Halka a&ccedil;&inodot;k etkinlikler"
 #endif
 	};
 
@@ -1363,7 +1363,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos ocultos"
 #elif L==10	// tr
-	"Hidden events"		// Çeviri lazim!
+	"Gizli etkinlikler"
 #endif
 	,
 	// Agd_VISIBL_EVENTS
@@ -1386,7 +1386,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 #elif L==9	// pt
 	"Eventos vis&iacute;veis"
 #elif L==10	// tr
-	"Visible events"	// Çeviri lazim!
+	"G&ouml;r&uuml;n&uuml;r etkinlikler"
 #endif
 	};
 
@@ -1410,7 +1410,7 @@ const char *Txt_all =
 #elif L==9	// pt
 	"tudo";
 #elif L==10	// tr
-	"all";	// Çeviri lazim!
+	"t&uuml;m";
 #endif
 
 const char *Txt_all_degrees =
