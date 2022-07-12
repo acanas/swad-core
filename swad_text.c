@@ -2634,7 +2634,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	"Start"	// Çeviri lazim!
+	"Ba&scedil;lama"
 #endif
 	,
 	[Dat_END_TIME] =
@@ -2657,7 +2657,7 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	"End"	// Çeviri lazim!
+	"Son"
 #endif
 	};
 
@@ -2773,7 +2773,7 @@ const char *Txt_Availability =
 #elif L==9	// pt
 	"Disponibilidade";
 #elif L==10	// tr
-	"Availability";		// Çeviri lazim!
+	"Bulunma";
 #endif
 
 const char *Txt_average =
@@ -2796,7 +2796,7 @@ const char *Txt_average =
 #elif L==9	// pt
 	"m&eacute;dia";
 #elif L==10	// tr
-	"average";	// Çeviri lazim!
+	"ortalama";
 #endif
 
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
@@ -3213,7 +3213,7 @@ const char *Txt_Banner =
 #elif L==9	// pt
 	"Banner";
 #elif L==10	// tr
-	"Banner";	// Çeviri lazim!
+	"Afi&scedil;";
 #endif
 
 const char *Txt_Banner_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -3259,7 +3259,7 @@ const char *Txt_Banners =
 #elif L==9	// pt
 	"Banners";
 #elif L==10	// tr
-	"Banners";	// Çeviri lazim!
+	"Afi&scedil;ler";
 #endif
 
 const char *Txt_Basic_public_profile =
@@ -3457,11 +3457,11 @@ const char *Txt_Briefcases =
 #elif L==7	// it
 	"Penna USB";
 #elif L==8	// pl
-	"Briefcases";	// Potrzebujesz tlumaczenie
+	"Teczki";
 #elif L==9	// pt
 	"Pasta";
 #elif L==10	// tr
-	"Briefcases";	// Çeviri lazim!
+	"Evrak &ccedil;antalar&inodot;";
 #endif
 
 const char *Txt_Building =
@@ -3484,7 +3484,7 @@ const char *Txt_Building =
 #elif L==9	// pt
 	"Edif&iacute;cio";
 #elif L==10	// tr
-	"Building";	// Çeviri lazim!
+	"Bina";
 #endif
 
 const char *Txt_Building_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -3604,7 +3604,7 @@ const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome abreviado"
 #elif L==10	// tr
-	"Short name"	// Çeviri lazim!
+	"K&inodot;sa isim"
 #endif
 	,
 	[Bld_ORDER_BY_FULL_NAME] =
@@ -3627,7 +3627,7 @@ const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome completo"
 #elif L==10	// tr
-	"Full name"		// Çeviri lazim!
+	"Tam isim"
 #endif
 	,
 	[Bld_ORDER_BY_LOCATION] =
@@ -13096,7 +13096,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	"Start"	// Çeviri lazim!
+	"Ba&scedil;lama"
 #endif
 	,
 	[Exa_ORDER_BY_END_DATE] =
@@ -13119,7 +13119,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	"End"	// Çeviri lazim!
+	"Son"
 #endif
 	,
 	[Exa_ORDER_BY_TITLE] =
@@ -15458,7 +15458,7 @@ const char *Txt_Full_name =
 #elif L==9	// pt
 	"Nome completo";
 #elif L==10	// tr
-	"Full name";		// Çeviri lazim!
+	"Tam isim";
 #endif
 
 const char *Txt_Full_name_of_the_degree =
@@ -15667,7 +15667,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"In&iacute;cio"
 #elif L==10	// tr
-	"Start"	// Çeviri lazim!
+	"Ba&scedil;lama"
 #endif
 	,
 	[Gam_ORDER_BY_END_DATE] =
@@ -15690,7 +15690,7 @@ const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
 #elif L==9	// pt
 	"Fim"
 #elif L==10	// tr
-	"End"	// Çeviri lazim!
+	"Son"
 #endif
 	,
 	[Gam_ORDER_BY_TITLE] =
@@ -20376,7 +20376,7 @@ const char *Txt_MATCH_End =
 #elif L==9	// pt
 	"Fim";
 #elif L==10	// tr
-	"End";	// Çeviri lazim!
+	"Son";
 #endif
 
 const char *Txt_MATCH_Paused =
@@ -20468,7 +20468,7 @@ const char *Txt_MATCH_Start =
 #elif L==9	// pt
 	"In&iacute;cio";
 #elif L==10	// tr
-	"Start";	// Çeviri lazim!
+	"Ba&scedil;lama";
 #endif
 
 const char *Txt_Match_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -25337,6 +25337,29 @@ const char *Txt_New_record_field =
 	"Novo campo de cart&atilde;o";
 #elif L==10	// tr
 	"New record field";		// Çeviri lazim!
+#endif
+
+const char *Txt_New_resource =
+#if   L==1	// ca
+	"Nou recurs";
+#elif L==2	// de
+	"Neue Ressource";
+#elif L==3	// en
+	"New resource";
+#elif L==4	// es
+	"Nuevo recurso";
+#elif L==5	// fr
+	"Nouvelle ressource";
+#elif L==6	// gn
+	"Nuevo recurso";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova risorsa";
+#elif L==8	// pl
+	"Nowy zas&oacute;b";
+#elif L==9	// pt
+	"Novo recurso";
+#elif L==10	// tr
+	"Yeni kaynak";
 #endif
 
 const char *Txt_New_room =
@@ -35579,6 +35602,29 @@ const char *Txt_Reset_survey =
 	"Reset survey";			// Çeviri lazim!
 #endif
 
+const char *Txt_Resources =
+#if   L==1	// ca
+	"Recursos";
+#elif L==2	// de
+	"Ressourcen";
+#elif L==3	// en
+	"Resources";
+#elif L==4	// es
+	"Recursos";
+#elif L==5	// fr
+	"Ressources";
+#elif L==6	// gn
+	"Recursos";	// Okoteve traducción
+#elif L==7	// it
+	"Risorse";
+#elif L==8	// pl
+	"Zasoby";
+#elif L==9	// pt
+	"Recursos";
+#elif L==10	// tr
+	"Kaynaklar";
+#endif
+
 const char *Txt_Result =
 #if   L==1	// ca
 	"Resultat";
@@ -40314,7 +40360,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome abreviado"
 #elif L==10	// tr
-	"Short name"	// Çeviri lazim!
+	"K&inodot;sa isim"
 #endif
 	,
 	[Roo_ORDER_BY_FULL_NAME] =
@@ -40337,7 +40383,7 @@ const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS] =
 #elif L==9	// pt
 	"Nome completo"
 #elif L==10	// tr
-	"Full name"		// Çeviri lazim!
+	"Tam isim"
 #endif
 	,
 	[Roo_ORDER_BY_CAPACITY] =
@@ -43115,7 +43161,7 @@ const char *Txt_Short_name =
 #elif L==9	// pt
 	"Nome abreviado";
 #elif L==10	// tr
-	"Short name";		// Çeviri lazim!
+	"K&inodot;sa isim";
 #endif
 
 const char *Txt_Short_name_of_the_degree =
@@ -45899,7 +45945,7 @@ const char *Txt_Start =	// As a verb
 #elif L==9	// pt
 	"Come&ccedil;ar";
 #elif L==10	// tr
-	"Start";	// Çeviri lazim!
+	"Ba&scedil;lama";
 #endif
 
 const char *Txt_Statistic =

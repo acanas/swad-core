@@ -606,10 +606,14 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.103.6 (2022-07-01)"
+#define Log_PLATFORM_VERSION	"SWAD 21.104 (2022-07-12)"
 #define CSS_FILE		"swad21.103.6.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 21.104:   Jul 12, 2022  Adding resources to program items. (? lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS prg_resources (RscCod INT NOT NULL AUTO_INCREMENT,ItmCod INT NOT NULL DEFAULT -1,RscInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(RscCod),UNIQUE INDEX(ItmCod,RscInd));
+
 	Version 21.103.6: Jul 01, 2022  Fixed issues in matches. (327737 lines)
 	Version 21.103.5: Jun 30, 2022  Code refactoring in icons. (327727 lines)
 	Version 21.103.4: Jun 30, 2022  Code refactoring in icons. (327968 lines)

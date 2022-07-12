@@ -86,6 +86,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_program.h"
+#include "swad_program_resource.h"
 #include "swad_project.h"
 #include "swad_question_import.h"
 #include "swad_QR.h"
@@ -440,6 +441,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDwnPrgItm	] = {1832,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveDownItem		,NULL},
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveLeftItem		,NULL},
    [ActRgtPrgItm	] = {1833,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveRightItem		,NULL},
+
+   [ActFrmNewPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangeItem		,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
@@ -3743,6 +3746,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1915 (obsolete action)
 	-1,			// #1916 (obsolete action)
 	ActChgUsrPho,		// #1917
+	ActFrmNewPrgRsc,	// #1918
   };
 
 /*****************************************************************************/

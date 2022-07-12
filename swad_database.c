@@ -2451,6 +2451,29 @@ mysql> DESCRIBE prg_items;
 		   "UNIQUE INDEX(ItmCod),"
 		   "UNIQUE INDEX(CrsCod,ItmInd))");
 
+   /***** Table prg_resources *****/
+/*
+mysql> DESCRIBE prg_resources;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| RscCod | int           | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int           | NO   | MUL | -1      |                |
+| RscInd | int           | NO   |     | 0       |                |
+| Hidden | enum('N','Y') | NO   |     | N       |                |
+| Title  | varchar(2047) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
+			"RscCod INT NOT NULL AUTO_INCREMENT,"
+			"ItmCod INT NOT NULL DEFAULT -1,"
+			"RscInd INT NOT NULL DEFAULT 0,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Title VARCHAR(2047) NOT NULL,"		// PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE
+		   "UNIQUE INDEX(RscCod),"
+		   "UNIQUE INDEX(ItmCod,RscInd))");
+
    /***** Table prj_config *****/
 /*
 mysql> DESCRIBE prj_config;

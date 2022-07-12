@@ -46,6 +46,7 @@
 #include "swad_photo.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
+#include "swad_program_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -116,7 +117,6 @@ static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *T
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			      const struct Prg_ItemRange *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
-static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
@@ -149,8 +149,6 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 
-static void Prg_PutParams (void *ItmCod);
-
 static void Prg_GetListItems (void);
 static void Prg_GetDataOfItemByCod (struct Prg_Item *Item);
 static void Prg_GetDataOfItem (struct Prg_Item *Item,
@@ -182,6 +180,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod);
 static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
+
 static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 		            struct Prg_Item *Item,const char *Txt);
 
@@ -279,14 +278,13 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 		  case Prg_PUT_FORM_CHANGE_ITEM:
 		     Prg_WriteRowWithItemForm (Prg_PUT_FORM_CHANGE_ITEM,
 					       ItmCodBeforeForm,FormLevel);
-		     break;
 		 }
 
 	    /* End range to highlight? */
 	    if (Item.Hierarchy.Index == ToHighlight->End)	// End of the highlighted range
 	      {
 	       HTM_TBODY_End ();				// Highlighted tbody end
-	       if (NumItem < Prg_Gbl.List.NumItems - 1)	// Not the last item
+	       if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
 		  HTM_TBODY_Begin (NULL);			// 3rd tbody begin
 	      }
 
@@ -294,7 +292,8 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 	   }
 
 	 /***** Create item at the end? *****/
-	 if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+	 if (ItmCodBeforeForm <= 0 &&
+	     CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
 	    Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
 
 	 /***** End table *****/
@@ -316,7 +315,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 /******************* Check if I can create program items *********************/
 /*****************************************************************************/
 
-static bool Prg_CheckIfICanCreateItems (void)
+bool Prg_CheckIfICanCreateItems (void)
   {
    return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
@@ -543,9 +542,18 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
       ColSpan = (Prg_GetMaxItemLevel () + 4) - FormLevel;
       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
 		    ColSpan,The_GetColorRows ());
+         /* Form for item data */
 	 HTM_ARTICLE_Begin ("item_form");
 	    ShowForm[CreateOrChangeItem] (ItmCod);
 	 HTM_ARTICLE_End ();
+
+	 /* List of item resources */
+	 if (CreateOrChangeItem == Prg_PUT_FORM_CHANGE_ITEM)
+	   {
+	    HTM_ARTICLE_Begin ("rsc_form");
+	       PrgRsc_ShowAllResources (ItmCod);
+	    HTM_ARTICLE_End ();
+	   }
       HTM_TD_End ();
 
    /***** End row *****/
@@ -880,7 +888,7 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
-static void Prg_PutParams (void *ItmCod)
+void Prg_PutParams (void *ItmCod)
   {
    if (ItmCod)
       if (*((long *) ItmCod) > 0)
@@ -1758,7 +1766,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"25\""
+	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
 			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			     The_GetSuffix ());
 	    if (Txt)
@@ -1830,7 +1838,7 @@ void Prg_ReceiveFormNewItem (void)
 
 void Prg_ReceiveFormChgItem (void)
   {
-   struct Prg_Item OldItem;	// Current program item data in database
+   // struct Prg_Item OldItem;	// Current program item data in database
    struct Prg_Item NewItem;	// Item data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
    struct Prg_ItemRange ToHighlight;
@@ -1845,8 +1853,8 @@ void Prg_ReceiveFormChgItem (void)
       Err_WrongItemExit ();
 
    /***** Get data of the old (current) program item from database *****/
-   OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
-   Prg_GetDataOfItemByCod (&OldItem);
+   // OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
+   // Prg_GetDataOfItemByCod (&OldItem);
 
    /***** Get start/end date-times *****/
    NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");

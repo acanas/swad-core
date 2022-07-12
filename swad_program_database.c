@@ -256,6 +256,59 @@ void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   }
 
 /*****************************************************************************/
+/****************** Get list of item resources from database *****************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod)
+  {
+   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK    ] = " AND Hidden='N'",
+      [Rol_GST    ] = " AND Hidden='N'",
+      [Rol_USR    ] = " AND Hidden='N'",
+      [Rol_STD    ] = " AND Hidden='N'",
+      [Rol_NET    ] = " AND Hidden='N'",
+      [Rol_TCH    ] = "",
+      [Rol_DEG_ADM] = " AND Hidden='N'",
+      [Rol_CTR_ADM] = " AND Hidden='N'",
+      [Rol_INS_ADM] = " AND Hidden='N'",
+      [Rol_SYS_ADM] = "",
+     };
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get item resources",
+		   "SELECT ItmCod,"	// row[0]
+			  "RscCod,"	// row[1]
+			  "Hidden,"	// row[2]
+			  "Title"	// row[3]
+		    " FROM prg_resources"
+		   " WHERE ItmCod=%ld"
+		     "%s"
+		   " ORDER BY RscInd",
+		   ItmCod,
+		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+  }
+
+/*****************************************************************************/
+/****************** Get item resource data using its code ********************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,
+                                        long ItmCod,long RscCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get item resource data",
+		   "SELECT ItmCod,"	// row[0]
+			  "RscCod,"	// row[1]
+			  "Hidden,"	// row[2]
+			  "Title"	// row[3]
+		    " FROM prg_resources"
+		   " WHERE RscCod=%ld"
+                     " AND ItmCod=%ld",	// Extra check
+		   RscCod,ItmCod);
+  }
+
+/*****************************************************************************/
 /****************** Get number of courses with program items *****************/
 /*****************************************************************************/
 // Returns the number of courses with program items

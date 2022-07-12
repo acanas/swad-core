@@ -47,6 +47,11 @@ void Prg_DB_MoveLeftRightItemRange (const struct Prg_ItemRange *ToMove,
 unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res);
 unsigned Prg_DB_GetDataOfItemByCod (MYSQL_RES **mysql_res,long ItmCod);
 void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod);
+unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,
+                                        long ItmCod,long RscCod);
+
 unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope);
 unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope);
 

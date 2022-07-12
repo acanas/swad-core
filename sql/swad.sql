@@ -1178,6 +1178,17 @@ CREATE TABLE IF NOT EXISTS prg_items (
 	UNIQUE INDEX(ItmCod),
 	UNIQUE INDEX(CrsCod,ItmInd));
 --
+-- Table prg_resources: stores the resources of the course program
+--
+CREATE TABLE IF NOT EXISTS prg_resources (
+	RscCod INT NOT NULL AUTO_INCREMENT,
+	ItmCod INT NOT NULL DEFAULT -1,
+	RscInd INT NOT NULL DEFAULT 0,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Title VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(RscCod),
+	UNIQUE INDEX(ItmCod,RscInd));
+--
 -- Table prj_config: stores the configuration of projects for each course
 --
 CREATE TABLE IF NOT EXISTS prj_config (

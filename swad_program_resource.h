@@ -1,7 +1,7 @@
-// swad_program.h: course program
+// swad_program_resource.h: course program (resources)
 
-#ifndef _SWAD_PRG
-#define _SWAD_PRG
+#ifndef _SWAD_PRG_RSC
+#define _SWAD_PRG_RSC
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,19 +27,19 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-#include <time.h>		// For time
+// #include <stdbool.h>		// For boolean type
+// #include <time.h>		// For time
 
-#include "swad_database.h"
-#include "swad_date.h"
+// #include "swad_database.h"
+// #include "swad_date.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
-#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
+#define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
+#define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+/*
 struct Prg_ItemHierarchy
   {
    long ItmCod;
@@ -47,17 +47,15 @@ struct Prg_ItemHierarchy
    unsigned Level;
    bool Hidden;
   };
-
-struct Prg_Item
+*/
+struct PrgRsc_Resource
   {
-   struct Prg_ItemHierarchy Hierarchy;
-   unsigned NumItem;
-   long UsrCod;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
-   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
+   long ItmCod;
+   long RscCod;
+   bool Hidden;
+   char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
   };
-
+/*
 struct Prg_ItemRange
   {
    unsigned Begin;	// Index of the first item in the subtree
@@ -70,31 +68,12 @@ typedef enum
    Prg_MOVE_LEFT,
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
-
+*/
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Prg_ShowCourseProgram (void);
-
-bool Prg_CheckIfICanCreateItems (void);
-void Prg_PutParams (void *ItmCod);
-void Prg_RequestCreateItem (void);
-void Prg_RequestChangeItem (void);
-void Prg_ReceiveFormNewItem (void);
-void Prg_ReceiveFormChgItem (void);
-
-void Prg_ReqRemItem (void);
-void Prg_RemoveItem (void);
-void Prg_HideItem (void);
-void Prg_UnhideItem (void);
-
-void Prg_MoveUpItem (void);
-void Prg_MoveDownItem (void);
-void Prg_MoveLeftItem (void);
-void Prg_MoveRightItem (void);
-
-//-------------------------------- Figures ------------------------------------
-void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
+void PrgRsc_ShowAllResources (long ItmCod);
+void PrgRsc_RequestCreateResource (void);
 
 #endif

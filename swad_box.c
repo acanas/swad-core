@@ -222,16 +222,16 @@ void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
 
 void Box_BoxEnd (void)
   {
-   /***** Check level of nesting *****/
-   if (Gbl.Box.Nested < 0)
-      Err_ShowErrorAndExit ("Trying to end a box not open.");
+	 /***** Check level of nesting *****/
+	 if (Gbl.Box.Nested < 0)
+	    Err_ShowErrorAndExit ("Trying to end a box not open.");
 
-   /***** Free memory allocated for box id string *****/
-   if (Gbl.Box.Ids[Gbl.Box.Nested])
-      free (Gbl.Box.Ids[Gbl.Box.Nested]);
+	 /***** Free memory allocated for box id string *****/
+	 if (Gbl.Box.Ids[Gbl.Box.Nested])
+	    free (Gbl.Box.Ids[Gbl.Box.Nested]);
 
-   /***** End box and box container *****/
-   HTM_DIV_End ();
+      /***** End box and box container *****/
+      HTM_DIV_End ();
    HTM_DIV_End ();
 
    /***** Decrease level of nesting *****/

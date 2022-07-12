@@ -13605,6 +13605,11 @@ ALTER TABLE usr_data ADD COLUMN PhotoShape TINYINT NOT NULL DEFAULT 0 AFTER Side
 UPDATE usr_data SET PhotoShape=3;
 
 
+-----------------
+
+INSERT INTO prg_resources (ItmCod,RscInd,Hidden,Title) VALUES (14,0,'N','Recurso 1');
+INSERT INTO prg_resources (ItmCod,RscInd,Hidden,Title) VALUES (14,1,'N','Recurso 2');
+INSERT INTO prg_resources (ItmCod,RscInd,Hidden,Title) VALUES (14,2,'N','Recurso 3');
 
 
 
