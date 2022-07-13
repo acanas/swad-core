@@ -5697,6 +5697,52 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move right program item"			// Çeviri lazim!
 #endif
 	,
+	[ActFrmNewPrgRsc] =
+#if   L==1	// ca
+	"Request new resource"		// Necessita traducció
+#elif L==2	// de
+	"Request new resource"		// Need Übersetzung
+#elif L==3	// en
+	"Request new resource"
+#elif L==4	// es
+	"Solicitar nuevo recurso"
+#elif L==5	// fr
+	"Request new resource"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Request new resource"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new resource"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new resource"		// Precisa de tradução
+#elif L==10	// tr
+	"Request new resource"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemPrgRsc] =
+#if   L==1	// ca
+	"Request removal of resource"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of resource"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of resource"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de recurso"
+#elif L==5	// fr
+	"Request removal of resource"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of resource"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of resource"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of resource"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of resource"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeTchGui] =
 #if   L==1	// ca
 	"See the teaching guide of course"		// Necessita traducció

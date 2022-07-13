@@ -9749,7 +9749,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_f
 #elif L==7	// it
 	"Vuoi realmente rimuovere tutti i messaggi ricevuti da %s da %s?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac wszystkie wiadomosci otrzymane od %s z %s?";
+	"Czy na pewno chcesz usun&aogon;&cacute; wszystkie wiadomosci otrzymane od %s z %s?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens recebidas de %s de %s?";
 #elif L==10	// tr
@@ -9779,7 +9779,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_f
 	"Vuoi realmente rimuovere tutti i messaggi"
 	" ricevuti da %s da %s relativi a <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac wszystkie wiadomosci"
+	"Czy na pewno chcesz usun&aogon;&cacute; wszystkie wiadomosci"
 	" otrzymane od %s z %s podobne do <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens"
@@ -9805,7 +9805,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_CO
 #elif L==7	// it
 	"Vuoi realmente rimuovere tutti i messaggi inviati a %s da %s?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac wszystkie wiadomosci wyslane do %s z %s?";
+	"Czy na pewno chcesz usun&aogon;&cacute; wszystkie wiadomosci wyslane do %s z %s?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens enviadas para %s de %s?";
 #elif L==10	// tr
@@ -9828,7 +9828,7 @@ const char *Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_CO
 #elif L==7	// it
 	"Vuoi realmente rimuovere tutti i messaggi inviati a %s da %s relativi a<strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac wszystkie wiadomosci wyslane do %s z %s podobne do <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; wszystkie wiadomosci wyslane do %s z %s podobne do <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar todas as mensagens enviadas para %s de %s relacionadas com <strong>%s</strong>?";
 #elif L==10	// tr
@@ -9851,7 +9851,7 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 #elif L==7	// it
 	"Vuoi realmente rimuovere tutti i messaggi non letti ricevuti da %s da %s?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nieprzeczytanych wiadomosci otrzymane od %s z %s?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nieprzeczytanych wiadomosci otrzymane od %s z %s?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar as mensagens n&atilde;o lidas recebidas de %s de %s?";
 #elif L==10	// tr
@@ -9881,7 +9881,7 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 	"Vuoi realmente rimuovere tutti i messaggi non letti"
 	" ricevuti da %s da %s relativi a <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nieprzeczytanych wiadomosci"
+	"Czy na pewno chcesz usun&aogon;&cacute; nieprzeczytanych wiadomosci"
 	" otrzymane od %s z %s podobne do <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja eliminar as mensagens n&atilde;o lidas"
@@ -10018,7 +10018,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	" le loro schede per questo corso,"
 	" e la loro registrazione nei gruppi di questo corso saranno rimossi.</strong>";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac %u student&oacute;w z kursu <strong>%s</strong>?<br />"
+	"Czy na pewno chcesz usun&aogon;&cacute; %u student&oacute;w z kursu <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
 	" nie beda juz zarejestrowane w tym kurs"
 	" a takze <strong>wszystkie prace zlozone przez nich w tym kursie,"
@@ -10056,7 +10056,7 @@ const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it i
 #elif L==7	// it
 	"Vuoi realmente rimuovere l'attivit&agrave; <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac przypisanie <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; przypisanie <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a atividade <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10079,7 +10079,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 #elif L==7	// it
 	"Vuoi realmente rimuovere l'intera discussione?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac caly watek?";
+	"Czy na pewno chcesz usun&aogon;&cacute; caly watek?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o?";
 #elif L==10	// tr
@@ -10102,7 +10102,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 #elif L==7	// it
 	"Vuoi realmente rimuovere l'intera discussione <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac caly watek <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; caly watek <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10125,7 +10125,7 @@ const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is ver
 #elif L==7	// it
 	"Vuoi realmente rimuovere l'evento <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac wydarzenie <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; wydarzenie <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o evento <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10148,7 +10148,7 @@ const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very
 #elif L==7	// it
 	"Vuoi realmente rimuovere l'esame <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac egzaminu <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; egzaminu <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o exame <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10214,7 +10214,7 @@ const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is 
 #elif L==7	// it
 	"Vuoi realmente rimuovere <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10244,7 +10244,7 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	"Vuoi realmente rimuovere"
 	" la cartella <strong>%s</strong> e tutto il suo contenuto?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac"
+	"Czy na pewno chcesz usun&aogon;&cacute;"
 	" folder <strong>%s</strong> i wszystkie jego skladniki?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover"
@@ -10293,7 +10293,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente avviso?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nastepujace obwieszczenie?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nastepujace obwieszczenie?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte aviso?";
 #elif L==10	// tr
@@ -10316,7 +10316,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente commento?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nastepujace komentarz?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nastepujace komentarz?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte coment&aacute;rio?";
 #elif L==10	// tr
@@ -10339,7 +10339,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente post?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nastepujace post?";
+	"Czy na pewno chcesz usun&aogon;&cacute; nastepujace post?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte post?";
 #elif L==10	// tr
@@ -10369,7 +10369,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administra
 	"Vuoi realmente rimuovere il seguente utente"
 	" come amministratore de <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac nastepujace u&zdot;ytkownika"
+	"Czy na pewno chcesz usun&aogon;&cacute; nastepujace u&zdot;ytkownika"
 	" jako administratora <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte usu&aacute;rio"
@@ -10461,7 +10461,7 @@ const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very
 #elif L==7	// it
 	"Vuoi realmente rimuovere il gioco <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac gra <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; gra <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10484,7 +10484,7 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is ver
 #elif L==7	// it
 	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac grupe <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; grupe <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10573,7 +10573,7 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 #elif L==7	// it
 	"Vuoi realmente rimuovere il articolo <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac przedmiot <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; przedmiot <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o item <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10596,7 +10596,7 @@ const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is ver
 #elif L==7	// it
 	"Vuoi realmente rimuovere la partita <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac mecz <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; mecz <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10642,7 +10642,7 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 #elif L==7	// it
 	"Vuoi realmente rimuovere il progetto <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac projekt <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; projekt <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o projeto <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10665,11 +10665,34 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 #elif L==7	// it
 	"Vuoi realmente rimuovere la domanda <strong>%ld</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac pytanie <strong>%ld</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; pytanie <strong>%ld</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a pergunta <strong>%ld</strong>?";
 #elif L==10	// tr
 	"Do you really want to remove the question <strong>%ld</strong>?";	// Çeviri lazim!
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_resource_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar el recurs <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Ressource <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the resource <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el recurso <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer la ressource <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el recurso <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere la risorsa <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usun&aogon;&cacute; zas&oacute;b <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o recurso <strong>%s</strong>?";
+#elif L==10	// tr
+	"<strong>%s</strong> kayna&gbreve;&inodot;n&inodot; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
@@ -10711,7 +10734,7 @@ const char *Txt_Do_you_really_want_to_remove_the_session_X =	// Warning: it is v
 #elif L==7	// it
 	"Vuoi realmente rimuovere la sessione <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac sesji <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; sesji <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a sess&atilde;o <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10734,7 +10757,7 @@ const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning
 #elif L==7	// it
 	"Vuoi realmente rimuovere il set di domande <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac zestaw pyta&nacute; <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; zestaw pyta&nacute; <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o conjunto de perguntas <strong>%s</strong>?";
 #elif L==10	// tr
@@ -10757,7 +10780,7 @@ const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is ve
 #elif L==7	// it
 	"Vuoi realmente rimuovere il sondaggio <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac badania <strong>%s</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; badania <strong>%s</strong>?";
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o inqu&eacute;rito <strong>%s</strong>?";
 #elif L==10	// tr
@@ -35041,6 +35064,29 @@ const char *Txt_Remove_record_field =
 	"Remover campo de cart&atilde;o";
 #elif L==10	// tr
 	"Remove record field";		// Çeviri lazim!
+#endif
+
+const char *Txt_Remove_resource =
+#if   L==1	// ca
+	"Eliminar recurs";
+#elif L==2	// de
+	"Entfernen Ressource";
+#elif L==3	// en
+	"Remove resource";
+#elif L==4	// es
+	"Eliminar recurso";
+#elif L==5	// fr
+	"Supprimer ressource";
+#elif L==6	// gn
+	"Eliminar recurso";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere risorsa";
+#elif L==8	// pl
+	"Usu&nacute; zas&oacute;b";
+#elif L==9	// pt
+	"Remover recurso";
+#elif L==10	// tr
+	"Kayna&gbreve;&inodot; kaynak";
 #endif
 
 const char *Txt_Remove_session =

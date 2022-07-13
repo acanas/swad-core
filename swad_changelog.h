@@ -606,11 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.104 (2022-07-12)"
+#define Log_PLATFORM_VERSION	"SWAD 21.104.1 (2022-07-13)"
 #define CSS_FILE		"swad21.103.6.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 21.104:   Jul 12, 2022  Adding resources to program items. (? lines)
+	Version 21.104.1: Jul 13, 2022  Adding resources to program items. (328504 lines)
+	Version 21.104:   Jul 12, 2022  Adding resources to program items. (328263 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS prg_resources (RscCod INT NOT NULL AUTO_INCREMENT,ItmCod INT NOT NULL DEFAULT -1,RscInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(RscCod),UNIQUE INDEX(ItmCod,RscInd));
 

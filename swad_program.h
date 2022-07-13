@@ -64,6 +64,14 @@ struct Prg_ItemRange
    unsigned End;	// Index of the last item in the subtree
   };
 
+#define Prg_NUM_TYPES_FORMS 3
+typedef enum
+  {
+   Prg_DONT_PUT_FORM_ITEM,
+   Prg_PUT_FORM_CREATE_ITEM,
+   Prg_PUT_FORM_CHANGE_ITEM,
+  } Prg_CreateOrChangeItem_t;
+
 #define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
 typedef enum
   {
@@ -76,9 +84,20 @@ typedef enum
 /*****************************************************************************/
 
 void Prg_ShowCourseProgram (void);
+void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
+
+void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+                       const struct Prg_ItemRange *ToHighlight,
+                       long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 
 bool Prg_CheckIfICanCreateItems (void);
 void Prg_PutParams (void *ItmCod);
+
+void Prg_GetListItems (void);
+void Prg_FreeListItems (void);
+unsigned Prg_GetNumItemFromItmCod (long ItmCod);
+unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
+
 void Prg_RequestCreateItem (void);
 void Prg_RequestChangeItem (void);
 void Prg_ReceiveFormNewItem (void);
@@ -93,6 +112,8 @@ void Prg_MoveUpItem (void);
 void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
+
+void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange);
 
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule

@@ -293,8 +293,7 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod)
 /****************** Get item resource data using its code ********************/
 /*****************************************************************************/
 
-unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,
-                                        long ItmCod,long RscCod)
+unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get item resource data",
@@ -303,9 +302,8 @@ unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,
 			  "Hidden,"	// row[2]
 			  "Title"	// row[3]
 		    " FROM prg_resources"
-		   " WHERE RscCod=%ld"
-                     " AND ItmCod=%ld",	// Extra check
-		   RscCod,ItmCod);
+		   " WHERE RscCod=%ld",
+		   RscCod);
   }
 
 /*****************************************************************************/

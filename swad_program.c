@@ -61,14 +61,6 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Prg_NUM_TYPES_FORMS 3
-typedef enum
-  {
-   Prg_DONT_PUT_FORM_ITEM,
-   Prg_PUT_FORM_CREATE_ITEM,
-   Prg_PUT_FORM_CHANGE_ITEM,
-  } Prg_CreateOrChangeItem_t;
-
 #define Prg_NUM_MOVEMENTS_UP_DOWN 2
 typedef enum
   {
@@ -113,10 +105,6 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
-static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      const struct Prg_ItemRange *ToHighlight,
-			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
@@ -149,17 +137,13 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 
-static void Prg_GetListItems (void);
 static void Prg_GetDataOfItemByCod (struct Prg_Item *Item);
 static void Prg_GetDataOfItem (struct Prg_Item *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned NumRows);
 static void Prg_ResetItem (struct Prg_Item *Item);
-static void Prg_FreeListItems (void);
 static void Prg_PutParamItmCod (long ItmCod);
 static long Prg_GetParamItmCod (void);
-
-static unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 
 static void Prg_HideOrUnhideItem (bool Hide);
 
@@ -170,7 +154,6 @@ static int Prg_GetNextBrother (int NumItem);
 
 static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight);
 
-static void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange);
 static void Prg_SetItemRangeOnlyItem (unsigned Index,struct Prg_ItemRange *ItemRange);
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange);
 static unsigned Prg_GetLastChild (int NumItem);
@@ -203,7 +186,7 @@ void Prg_ShowCourseProgram (void)
    Prg_FreeListItems ();
   }
 
-static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
+void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
    /***** Show all program items *****/
    Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,ToHighlight,-1L,-1L,0);
@@ -213,9 +196,9 @@ static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *T
 /************************* Show all program items ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      const struct Prg_ItemRange *ToHighlight,
-			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
+void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+                       const struct Prg_ItemRange *ToHighlight,
+                       long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
@@ -397,7 +380,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
       /***** Forms to remove/edit this program item *****/
       if (!PrintView)
 	{
-	 HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
 	    Prg_PutFormsToRemEditOneItem (NumItem,Item);
 	 HTM_TD_End ();
 	}
@@ -407,44 +390,25 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	   NumCol < Item->Hierarchy.Level;
 	   NumCol++)
 	{
-	 HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"%s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 	}
 
       /***** Item number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM %s RT %s\"",
+      HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_NUM %s RT %s\"",
 		    TitleClass,The_GetColorRows ());
 	 Prg_WriteNumItem (Item->Hierarchy.Level);
       HTM_TD_End ();
 
-      /***** Title and text *****/
-      /* Begin title and text */
+      /***** Title *****/
       ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
       if (PrintView)
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",
-		       ColSpan);
-      else
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-		       ColSpan,The_GetColorRows ());
-
-      /* Title */
-      HTM_DIV_Begin ("class=\"%s\"",TitleClass);
-	 HTM_Txt (Item->Title);
-      HTM_DIV_End ();
-
-      /* Text */
-      Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-                     The_GetSuffix (),
-		     LightStyle ? " PRG_HIDDEN" :
-				  "");
-	 HTM_Txt (Txt);
-      HTM_DIV_End ();
-
-      /* End title and text */
+		       ColSpan,TitleClass);
+      else
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s %s\"",
+		       ColSpan,TitleClass,The_GetColorRows ());
+      HTM_Txt (Item->Title);
       HTM_TD_End ();
 
       /***** Start/end date/time *****/
@@ -479,6 +443,39 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	 HTM_TD_End ();
 	 free (Id);
 	}
+
+   /***** End row *****/
+   HTM_TR_End ();
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /* Begin text and resources */
+      ColSpan += 2;
+      if (PrintView)
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",
+		       ColSpan);
+      else
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+		       ColSpan,The_GetColorRows ());
+
+      /* Text */
+      Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+                     The_GetSuffix (),
+		     LightStyle ? " PRG_HIDDEN" :
+				  "");
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+
+      /* List of resources */
+      PrgRsc_ShowResources (Item->Hierarchy.ItmCod);
+
+      /* End text and resources */
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -551,7 +548,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 	 if (CreateOrChangeItem == Prg_PUT_FORM_CHANGE_ITEM)
 	   {
 	    HTM_ARTICLE_Begin ("rsc_form");
-	       PrgRsc_ShowAllResources (ItmCod);
+	       PrgRsc_EditResources (ItmCod);
 	    HTM_ARTICLE_End ();
 	   }
       HTM_TD_End ();
@@ -610,8 +607,8 @@ static unsigned Prg_CalculateMaxItemLevel (void)
    for (NumItem = 0;
 	NumItem < Prg_Gbl.List.NumItems;
 	NumItem++)
-      if (Prg_Gbl.List.Items[NumItem].Level > MaxLevel)
-	 MaxLevel = Prg_Gbl.List.Items[NumItem].Level;
+      if (Prg_GetLevelFromNumItem (NumItem) > MaxLevel)
+	 MaxLevel = Prg_GetLevelFromNumItem (NumItem);
 
    return MaxLevel;
   }
@@ -826,8 +823,8 @@ static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem)
 
    /***** Move up is allowed if the item has brothers before it *****/
    // NumItem >= 2
-   return Prg_Gbl.List.Items[NumItem - 1].Level >=
-	  Prg_Gbl.List.Items[NumItem    ].Level;
+   return Prg_GetLevelFromNumItem (NumItem - 1) >=
+	  Prg_GetLevelFromNumItem (NumItem    );
   }
 
 /*****************************************************************************/
@@ -845,14 +842,14 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem)
 
    /***** Move down is allowed if the item has brothers after it *****/
    // NumItem + 1 < Prg_Gbl.List.NumItems
-   Level = Prg_Gbl.List.Items[NumItem].Level;
+   Level = Prg_GetLevelFromNumItem (NumItem);
    for (i = NumItem + 1;
 	i < Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Prg_Gbl.List.Items[i].Level == Level)
+      if (Prg_GetLevelFromNumItem (i) == Level)
 	 return true;	// Next brother found
-      if (Prg_Gbl.List.Items[i].Level < Level)
+      if (Prg_GetLevelFromNumItem (i) < Level)
 	 return false;	// Next lower level found ==> there are no more brothers
      }
    return false;	// End reached ==> there are no more brothers
@@ -865,7 +862,7 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem)
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem)
   {
    /***** Move left is allowed if the item has parent *****/
-   return Prg_Gbl.List.Items[NumItem].Level > 1;
+   return Prg_GetLevelFromNumItem (NumItem) > 1;
   }
 
 /*****************************************************************************/
@@ -880,8 +877,8 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 
    /***** Move right is allowed if the item has brothers before it *****/
    // NumItem >= 2
-   return Prg_Gbl.List.Items[NumItem - 1].Level >=
-	  Prg_Gbl.List.Items[NumItem    ].Level;
+   return Prg_GetLevelFromNumItem (NumItem - 1) >=
+	  Prg_GetLevelFromNumItem (NumItem    );
   }
 
 /*****************************************************************************/
@@ -899,7 +896,7 @@ void Prg_PutParams (void *ItmCod)
 /************************** List all program items ***************************/
 /*****************************************************************************/
 
-static void Prg_GetListItems (void)
+void Prg_GetListItems (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1047,7 +1044,7 @@ static void Prg_ResetItem (struct Prg_Item *Item)
 /************************ Free list of program items *************************/
 /*****************************************************************************/
 
-static void Prg_FreeListItems (void)
+void Prg_FreeListItems (void)
   {
    if (Prg_Gbl.List.IsRead && Prg_Gbl.List.Items)
      {
@@ -1074,7 +1071,6 @@ static void Prg_PutParamItmCod (long ItmCod)
 
 static long Prg_GetParamItmCod (void)
   {
-   /***** Get code of program item *****/
    return Par_GetParToLong ("ItmCod");
   }
 
@@ -1082,7 +1078,7 @@ static long Prg_GetParamItmCod (void)
 /**************** Get number of item in list from item code ******************/
 /*****************************************************************************/
 
-static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
+unsigned Prg_GetNumItemFromItmCod (long ItmCod)
   {
    unsigned NumItem;
 
@@ -1100,6 +1096,15 @@ static unsigned Prg_GetNumItemFromItmCod (long ItmCod)
    /***** Not found *****/
    Err_WrongItemExit ();
    return 0;	// Not reached
+  }
+
+/*****************************************************************************/
+/****************** Get level of item from number of item ********************/
+/*****************************************************************************/
+
+inline unsigned Prg_GetLevelFromNumItem (unsigned NumItem)
+  {
+   return Prg_Gbl.List.Items[NumItem].Level;
   }
 
 /*****************************************************************************/
@@ -1381,14 +1386,14 @@ static int Prg_GetPrevBrother (int NumItem)
 
    /***** Get previous brother before item *****/
    // 1 <= NumItem < Prg_Gbl.List.NumItems
-   Level = Prg_Gbl.List.Items[NumItem].Level;
+   Level = Prg_GetLevelFromNumItem (NumItem);
    for (i  = NumItem - 1;
 	i >= 0;
 	i--)
      {
-      if (Prg_Gbl.List.Items[i].Level == Level)
+      if (Prg_GetLevelFromNumItem (i) == Level)
 	 return i;	// Previous brother before item found
-      if (Prg_Gbl.List.Items[i].Level < Level)
+      if (Prg_GetLevelFromNumItem (i) < Level)
 	 return -1;		// Previous lower level found ==> there are no brothers before item
      }
    return -1;	// Start reached ==> there are no brothers before item
@@ -1411,14 +1416,14 @@ static int Prg_GetNextBrother (int NumItem)
 
    /***** Get next brother after item *****/
    // 0 <= NumItem < Prg_Gbl.List.NumItems - 1
-   Level = Prg_Gbl.List.Items[NumItem].Level;
+   Level = Prg_GetLevelFromNumItem (NumItem);
    for (i = NumItem + 1;
 	i < (int) Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Prg_Gbl.List.Items[i].Level == Level)
+      if (Prg_GetLevelFromNumItem (i) == Level)
 	 return i;	// Next brother found
-      if (Prg_Gbl.List.Items[i].Level < Level)
+      if (Prg_GetLevelFromNumItem (i) < Level)
 	 return -1;	// Next lower level found ==> there are no brothers after item
      }
    return -1;	// End reached ==> there are no brothers after item
@@ -1493,7 +1498,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
 /****** Set subtree begin and end from number of item in course program ******/
 /*****************************************************************************/
 
-static void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange)
+void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
@@ -1550,12 +1555,12 @@ static unsigned Prg_GetLastChild (int NumItem)
 
    /***** Get next brother after item *****/
    // 0 <= NumItem < Prg_Gbl.List.NumItems
-   Level = Prg_Gbl.List.Items[NumItem].Level;
+   Level = Prg_GetLevelFromNumItem (NumItem);
    for (i = NumItem + 1;
 	i < (int) Prg_Gbl.List.NumItems;
 	i++)
      {
-      if (Prg_Gbl.List.Items[i].Level <= Level)
+      if (Prg_GetLevelFromNumItem (i) <= Level)
 	 return i - 1;	// Last child found
      }
    return Prg_Gbl.List.NumItems - 1;	// End reached ==> all items after the given item are its children
@@ -1582,7 +1587,7 @@ void Prg_RequestCreateItem (void)
      {
       NumItem = Prg_GetNumItemFromItmCod (ParentItmCod);
       ItmCodBeforeForm = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
-      FormLevel = Prg_Gbl.List.Items[NumItem].Level + 1;
+      FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
      }
    else	// No parent item (user clicked on button to add a new first-level item at the end)
      {
@@ -1616,7 +1621,7 @@ void Prg_RequestChangeItem (void)
    ItmCodBeforeForm = Prg_GetParamItmCod ();
 
    if (ItmCodBeforeForm > 0)
-      FormLevel = Prg_Gbl.List.Items[Prg_GetNumItemFromItmCod (ItmCodBeforeForm)].Level;
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCodBeforeForm));
    else
       FormLevel = 0;
 

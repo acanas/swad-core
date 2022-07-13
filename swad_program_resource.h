@@ -39,15 +39,7 @@
 
 #define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
 #define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-/*
-struct Prg_ItemHierarchy
-  {
-   long ItmCod;
-   unsigned Index;
-   unsigned Level;
-   bool Hidden;
-  };
-*/
+
 struct PrgRsc_Resource
   {
    long ItmCod;
@@ -55,25 +47,14 @@ struct PrgRsc_Resource
    bool Hidden;
    char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
   };
-/*
-struct Prg_ItemRange
-  {
-   unsigned Begin;	// Index of the first item in the subtree
-   unsigned End;	// Index of the last item in the subtree
-  };
 
-#define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
-typedef enum
-  {
-   Prg_MOVE_LEFT,
-   Prg_MOVE_RIGHT,
-  } Prg_MoveLeftRight_t;
-*/
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_ShowAllResources (long ItmCod);
+void PrgRsc_ShowResources (long ItmCod);
+void PrgRsc_EditResources (long ItmCod);
 void PrgRsc_RequestCreateResource (void);
+void PrgRsc_ReqRemResource (void);
 
 #endif
