@@ -29,11 +29,13 @@
 
 #include "swad_hierarchy_level.h"
 #include "swad_program.h"
+#include "swad_program_resource.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Items -------------------------------------
 long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_HideOrUnhideItem (long ItmCod,bool Hide);
@@ -56,5 +58,8 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope);
 
 void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove);
 void Prg_DB_RemoveCrsItems (long CrsCod);
+
+//------------------------------ Resources ------------------------------------
+void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource);
 
 #endif

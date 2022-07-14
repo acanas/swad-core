@@ -35648,6 +35648,29 @@ const char *Txt_Reset_survey =
 	"Reset survey";			// Çeviri lazim!
 #endif
 
+const char *Txt_Resource_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Recurs <strong>%s</strong> eliminat.";
+#elif L==2	// de
+	"Ressource <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Resource <strong>s</strong> removed.";
+#elif L==4	// es
+	"Recurso <strong>%s</strong> eliminado.";
+#elif L==5	// fr
+	"Ressource <strong>%s</strong> supprim&eacute;e.";
+#elif L==6	// gn
+	"Recurso <strong>%s</strong> eliminado.";	// Okoteve traducción
+#elif L==7	// it
+	"Risorsa <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Usuni&eogon;to zas&oacute;b <strong>%s</strong>.";
+#elif L==9	// pt
+	"Recurso <strong>%s</strong> removido.";
+#elif L==10	// tr
+	"Kaynak <strong>s</strong> kald&inodot;r&inodot;ld&inodot;.";
+#endif
+
 const char *Txt_Resources =
 #if   L==1	// ca
 	"Recursos";

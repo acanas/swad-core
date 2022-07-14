@@ -341,7 +341,7 @@ void Cfe_ReceiveCallForExam1 (void)
    Frm_SetAnchorStr (ExaCod,&Anchor);
    Ale_CreateAlert (Ale_SUCCESS,Anchor,
                     NewCallForExam ? Txt_Created_new_call_for_exam :
-                                          Txt_The_call_for_exam_has_been_successfully_updated);
+                                     Txt_The_call_for_exam_has_been_successfully_updated);
    Frm_FreeAnchorStr (Anchor);
 
    /***** Set exam to be highlighted *****/

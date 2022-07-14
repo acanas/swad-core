@@ -546,11 +546,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 
 	 /* List of item resources */
 	 if (CreateOrChangeItem == Prg_PUT_FORM_CHANGE_ITEM)
-	   {
-	    HTM_ARTICLE_Begin ("rsc_form");
-	       PrgRsc_EditResources (ItmCod);
-	    HTM_ARTICLE_End ();
-	   }
+	    PrgRsc_EditResources (ItmCod);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -1706,7 +1702,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Prg_DB_GetItemTxt (Item.Hierarchy.ItmCod,Txt);
 
    /***** Show pending alerts */
-   Ale_ShowAlerts (NULL);
+   // Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgPrgItm,"prg_highlighted");

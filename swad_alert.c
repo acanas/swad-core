@@ -137,7 +137,7 @@ void Ale_ResetAllAlerts (void)
 
 static void Ale_ResetLastAlert (void)
   {
-   if (Gbl.Alerts.Num)	// There are pending alerts no shown
+   if (Gbl.Alerts.Num)	// There are pending alerts not shown
       Ale_ResetAlert (Gbl.Alerts.Num - 1);	// Reset the last one
   }
 

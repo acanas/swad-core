@@ -56,5 +56,6 @@ void PrgRsc_ShowResources (long ItmCod);
 void PrgRsc_EditResources (long ItmCod);
 void PrgRsc_RequestCreateResource (void);
 void PrgRsc_ReqRemResource (void);
+void PrgRsc_RemoveResource (void);
 
 #endif

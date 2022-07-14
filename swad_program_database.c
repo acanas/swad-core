@@ -28,6 +28,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_program.h"
+#include "swad_program_resource.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -485,4 +486,18 @@ void Prg_DB_RemoveCrsItems (long CrsCod)
 		   "DELETE FROM prg_items"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************************** Remove an item resource **************************/
+/*****************************************************************************/
+
+void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
+  {
+   DB_QueryDELETE ("can not remove item resource",
+		   "DELETE FROM prg_resources"
+		   " WHERE RscCod=%ld"
+		     " AND ItmCod=%ld",	// Extra check
+		   Resource->RscCod,
+		   Resource->ItmCod);
   }

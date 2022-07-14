@@ -5743,6 +5743,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of resource"			// Çeviri lazim!
 #endif
 	,
+	[ActRemPrgRsc] =
+#if   L==1	// ca
+	"Remove resource"	// Necessita traducció
+#elif L==2	// de
+	"Remove resource"	// Need Übersetzung
+#elif L==3	// en
+	"Remove resource"
+#elif L==4	// es
+	"Eliminar recurso"
+#elif L==5	// fr
+	"Remove resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Remove resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove resource"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeTchGui] =
 #if   L==1	// ca
 	"See the teaching guide of course"		// Necessita traducció

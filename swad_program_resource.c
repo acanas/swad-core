@@ -109,6 +109,11 @@ static struct
    .Levels        = NULL
   };
 */
+
+static long PrgSrc_RscCodToBeRemoved = -1L;
+
+static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -185,6 +190,7 @@ void PrgRsc_ShowResources (long ItmCod)
 void PrgRsc_EditResources (long ItmCod)
   {
    extern const char *Hlp_COURSE_Program;
+   extern const char *Txt_Remove_resource;
    extern const char *Txt_Resources;
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
@@ -198,44 +204,64 @@ void PrgRsc_EditResources (long ItmCod)
    /***** Get list of item resources from database *****/
    NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod); // Resources found...
 
-   /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Resources,
-		 PrgRsc_PutIconsListResources,&ItmCod,
-		 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+   /***** Begin section *****/
+   HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
 
-      /***** Table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-	 HTM_TBODY_Begin (NULL);		// 1st tbody start
+      /***** Show possible alerts *****/
+      switch (Gbl.Action.Act)
+        {
+	 case ActReqRemPrgRsc:
+            /* Alert with button to remove resource */
+	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
+					PrgRsc_PutParams,&PrgSrc_RscCodToBeRemoved,
+					Btn_REMOVE_BUTTON,Txt_Remove_resource);
+	    break;
+	 default:
+            Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
+            break;
+        }
 
-	    /***** Write all item resources *****/
-	    for (NumRsc  = 1;
-		 NumRsc <= NumResources;
-		 NumRsc++)
-	      {
-	       /* Get data of this item resource */
-	       PrgRsc_GetDataOfResource (&Resource,&mysql_res);
+      /***** Begin box *****/
+      Box_BoxBegin ("100%",Txt_Resources,
+		    PrgRsc_PutIconsListResources,&ItmCod,
+		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
-	       /* Show item */
-	       PrgRsc_WriteRowEditResource (NumRsc,&Resource);
+	 /***** Table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
+	    HTM_TBODY_Begin (NULL);
 
-	       The_ChangeRowColor ();
-	      }
+	       /***** Write all item resources *****/
+	       for (NumRsc  = 1;
+		    NumRsc <= NumResources;
+		    NumRsc++)
+		 {
+		  /* Get data of this item resource */
+		  PrgRsc_GetDataOfResource (&Resource,&mysql_res);
 
-	    /***** Create item at the end? *****/
-	    /*
-	    if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-	       Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
-	    */
+		  /* Show item */
+		  PrgRsc_WriteRowEditResource (NumRsc,&Resource);
 
-	 /***** End table *****/
-	 HTM_TBODY_End ();					// 3rd tbody end
-      HTM_TABLE_End ();
+		  The_ChangeRowColor ();
+		 }
 
-      /***** Button to create a new program item *****/
-      PrgRsc_PutButtonToCreateNewResource (ItmCod);
+	       /***** Create item at the end? *****/
+	       /*
+	       if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
+		  Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
+	       */
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	    /***** End table *****/
+	    HTM_TBODY_End ();
+	 HTM_TABLE_End ();
+
+	 /***** Button to create a new program item *****/
+	 PrgRsc_PutButtonToCreateNewResource (ItmCod);
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
+   /***** End section *****/
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -257,7 +283,7 @@ static void PrgRsc_PutIconsListResources (void *ItmCod)
 
 static void PrgSrc_PutIconToCreateNewResource (long ItmCod)
   {
-   Ico_PutContextualIconToAdd (ActFrmNewPrgRsc,"rsc_form",
+   Ico_PutContextualIconToAdd (ActFrmNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
                                Prg_PutParams,&ItmCod);
   }
 
@@ -269,7 +295,7 @@ static void PrgRsc_PutButtonToCreateNewResource (long ItmCod)
   {
    extern const char *Txt_New_resource;
 
-   Frm_BeginFormAnchor (ActFrmNewPrgRsc,"rsc_form");
+   Frm_BeginFormAnchor (ActFrmNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
       Prg_PutParams (&ItmCod);
       Btn_PutConfirmButton (Txt_New_resource);
    Frm_EndForm ();
@@ -441,7 +467,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct PrgRsc_Resource *Resourc
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove program item *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,"rsc_form",
+	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                PrgRsc_PutParams,&Resource->RscCod);
 
 	 /***** Put form to hide/show program item *****/
@@ -522,7 +548,6 @@ static long PrgRsc_GetParamRscCod (void)
 void PrgRsc_ReqRemResource (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
-   extern const char *Txt_Remove_resource;
    struct PrgRsc_Resource Resource;
    long ItmCodBeforeForm;
    unsigned FormLevel;
@@ -537,12 +562,52 @@ void PrgRsc_ReqRemResource (void)
    if (Resource.ItmCod <= 0)
       Err_WrongResourceExit ();
 
-   /***** Show question and button to remove the item resource *****/
-   Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
-                           PrgRsc_PutParams,&Resource.RscCod,
-                           Btn_REMOVE_BUTTON,Txt_Remove_resource,
-    			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_resource_X,
-                           Resource.Title);
+   /***** Create alert to remove the item resource *****/
+   Ale_CreateAlert (Ale_QUESTION,PrgRsc_RESOURCE_SECTION_ID,
+                    Txt_Do_you_really_want_to_remove_the_resource_X,
+                    Resource.Title);
+   PrgSrc_RscCodToBeRemoved = Resource.RscCod;
+
+   /***** Get the code of the program item *****/
+   ItmCodBeforeForm = Resource.ItmCod;
+   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
+
+   /***** Show current program items, if any *****/
+   Prg_SetItemRangeEmpty (&ToHighlight);
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
+		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/**************************** Remove an item resource ************************/
+/*****************************************************************************/
+
+void PrgRsc_RemoveResource (void)
+  {
+   extern const char *Txt_Resource_X_removed;
+   struct PrgRsc_Resource Resource;
+   long ItmCodBeforeForm;
+   unsigned FormLevel;
+   struct Prg_ItemRange ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get data of the item resource from database *****/
+   Resource.RscCod = PrgRsc_GetParamRscCod ();
+   PrgRsc_GetDataOfResourceByCod (&Resource);
+   if (Resource.ItmCod <= 0)
+      Err_WrongResourceExit ();
+
+   /***** Remove resource *****/
+   Prg_DB_RemoveResource (&Resource);
+
+   /***** Create alert to remove the item resource *****/
+   Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
+                    Txt_Resource_X_removed,Resource.Title);
 
    /***** Get the code of the program item *****/
    ItmCodBeforeForm = Resource.ItmCod;
