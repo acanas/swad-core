@@ -128,12 +128,20 @@ static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
 static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource);
 static void PrgRsc_WriteRowShowResource (unsigned NumRsc,
                                          struct PrgRsc_Resource *Resource);
-static void PrgRsc_WriteRowEditResource (unsigned NumRsc,
+static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct PrgRsc_Resource *Resource);
-static void PrgRsc_PutFormsToRemEditOneResource (struct PrgRsc_Resource *Resource);
+static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
+                                                 unsigned NumResources,
+                                                 struct PrgRsc_Resource *Resource);
 static void PrgRsc_PutParams (void *RscCod);
 static void PrgRsc_PutParamRscCod (long RscCod);
 static long PrgRsc_GetParamRscCod (void);
+
+static void PrgRsc_HideOrUnhideResource (bool Hide);
+
+static bool PrgRsc_CheckIfMoveUpIsAllowed (unsigned NumRsc);
+static bool PrgRsc_CheckIfMoveDownIsAllowed (unsigned NumRsc,
+                                             unsigned NumResources);
 
 /*****************************************************************************/
 /****************************** Show resources *******************************/
@@ -151,7 +159,8 @@ void PrgRsc_ShowResources (long ItmCod)
       return;
 
    /***** Get list of item resources from database *****/
-   if ((NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod))) // Resources found...
+   if ((NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
+                                                false)))	// Don't get hidden resources
      {
       /***** Begin box *****/
       Box_BoxBegin ("100%",NULL,
@@ -202,7 +211,8 @@ void PrgRsc_EditResources (long ItmCod)
       return;
 
    /***** Get list of item resources from database *****/
-   NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod); // Resources found...
+   NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
+                                           true);	// Get hidden resources
 
    /***** Begin section *****/
    HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
@@ -231,15 +241,15 @@ void PrgRsc_EditResources (long ItmCod)
 	    HTM_TBODY_Begin (NULL);
 
 	       /***** Write all item resources *****/
-	       for (NumRsc  = 1;
-		    NumRsc <= NumResources;
+	       for (NumRsc = 0;
+		    NumRsc < NumResources;
 		    NumRsc++)
 		 {
 		  /* Get data of this item resource */
 		  PrgRsc_GetDataOfResource (&Resource,&mysql_res);
 
 		  /* Show item */
-		  PrgRsc_WriteRowEditResource (NumRsc,&Resource);
+		  PrgRsc_WriteRowEditResource (NumRsc,NumResources,&Resource);
 
 		  The_ChangeRowColor ();
 		 }
@@ -425,7 +435,7 @@ static void PrgRsc_WriteRowShowResource (unsigned NumRsc,
 /************************** Edit one item resource ***************************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowEditResource (unsigned NumRsc,
+static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct PrgRsc_Resource *Resource)
   {
    /***** Begin row *****/
@@ -433,12 +443,12 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,
 
       /***** Forms to remove/edit this item resource *****/
       HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
-	 PrgRsc_PutFormsToRemEditOneResource (Resource);
+	 PrgRsc_PutFormsToRemEditOneResource (NumRsc,NumResources,Resource);
       HTM_TD_End ();
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM RT %s\"",The_GetColorRows ());
-	 HTM_Unsigned (NumRsc);
+	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
@@ -454,7 +464,9 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
-static void PrgRsc_PutFormsToRemEditOneResource (struct PrgRsc_Resource *Resource)
+static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
+                                                 unsigned NumResources,
+                                                 struct PrgRsc_Resource *Resource)
   {
    extern const char *Txt_Movement_not_allowed;
    // char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -466,17 +478,17 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct PrgRsc_Resource *Resourc
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to remove program item *****/
+	 /***** Put form to remove item resource *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                PrgRsc_PutParams,&Resource->RscCod);
 
-	 /***** Put form to hide/show program item *****/
-	 //if (Item->Hierarchy.Hidden)
-	 //   Ico_PutContextualIconToUnhide (ActShoPrgItm,"prg_highlighted",
-	 //                                  Prg_PutParams,&Item->Hierarchy.ItmCod);
-	 //else
-	 //   Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",
-	 //                                Prg_PutParams,&Item->Hierarchy.ItmCod);
+	 /***** Put form to hide/show item resource *****/
+	 if (Resource->Hidden)
+	    Ico_PutContextualIconToUnhide (ActUnhPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	                                   PrgRsc_PutParams,&Resource->RscCod);
+	 else
+	    Ico_PutContextualIconToHide (ActHidPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	                                 PrgRsc_PutParams,&Resource->RscCod);
 
 	 /***** Put form to edit program item *****/
 	 // Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
@@ -489,19 +501,19 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct PrgRsc_Resource *Resourc
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
-	 // if (Prg_CheckIfMoveUpIsAllowed (NumItem))
-	 //   Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
-	 //                                  Prg_PutParams,&Item->Hierarchy.ItmCod,
-	 //				   "arrow-up.svg",Ico_BLACK);
-	 // else
+	 if (PrgRsc_CheckIfMoveUpIsAllowed (NumRsc))
+	   Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	                                  PrgRsc_PutParams,&Resource->RscCod,
+	 			          "arrow-up.svg",Ico_BLACK);
+	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
-	 // if (Prg_CheckIfMoveDownIsAllowed (NumItem))
-	 //   Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
-	 //                                  Prg_PutParams,&Item->Hierarchy.ItmCod,
-	 //				   "arrow-down.svg",Ico_BLACK);
-	 //else
+	 if (PrgRsc_CheckIfMoveDownIsAllowed (NumRsc,NumResources))
+	   Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	                                  PrgRsc_PutParams,&Resource->RscCod,
+	                                  "arrow-down.svg",Ico_BLACK);
+	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
 	 break;
       case Rol_STD:
@@ -620,4 +632,81 @@ void PrgRsc_RemoveResource (void)
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/***************************** Hide a program item ***************************/
+/*****************************************************************************/
+
+void PrgRsc_HideResource (void)
+  {
+   PrgRsc_HideOrUnhideResource (true);
+  }
+
+void PrgRsc_UnhideResource (void)
+  {
+   PrgRsc_HideOrUnhideResource (false);
+  }
+
+static void PrgRsc_HideOrUnhideResource (bool Hide)
+  {
+   struct PrgRsc_Resource Resource;
+   long ItmCodBeforeForm;
+   unsigned FormLevel;
+   struct Prg_ItemRange ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get data of the item resource from database *****/
+   Resource.RscCod = PrgRsc_GetParamRscCod ();
+   PrgRsc_GetDataOfResourceByCod (&Resource);
+   if (Resource.ItmCod <= 0)
+      Err_WrongResourceExit ();
+
+   /***** Hide/unhide item resource *****/
+   Prg_DB_HideOrUnhideResource (Resource.RscCod,Hide);
+
+   /***** Get the code of the program item *****/
+   ItmCodBeforeForm = Resource.ItmCod;
+   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
+
+   /***** Show current program items, if any *****/
+   Prg_SetItemRangeEmpty (&ToHighlight);
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
+		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/********************* Check if resource can be moved up *********************/
+/*****************************************************************************/
+
+static bool PrgRsc_CheckIfMoveUpIsAllowed (unsigned NumRsc)
+  {
+   /***** Trivial check: if resource is the first one, move up is not allowed *****/
+   return (NumRsc != 0);
+  }
+
+/*****************************************************************************/
+/******************** Check if resource can be moved down ********************/
+/*****************************************************************************/
+
+static bool PrgRsc_CheckIfMoveDownIsAllowed (unsigned NumRsc,
+                                             unsigned NumResources)
+  {
+   /***** Trivial check: if resource is the last one, move up is not allowed *****/
+   return (NumRsc < NumResources - 1);
+  }
+
+void PrgRsc_MoveUpResource (void)
+  {
+
+  }
+
+void PrgRsc_MoveDownResource (void)
+  {
+
   }

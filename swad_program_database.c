@@ -260,8 +260,9 @@ void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 /****************** Get list of item resources from database *****************/
 /*****************************************************************************/
 
-unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod)
-  {
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
+                                  bool ShowHiddenResources)
+  {/*
    static const char *HiddenSubQuery[Rol_NUM_ROLES] =
      {
       [Rol_UNK    ] = " AND Hidden='N'",
@@ -274,6 +275,11 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod)
       [Rol_CTR_ADM] = " AND Hidden='N'",
       [Rol_INS_ADM] = " AND Hidden='N'",
       [Rol_SYS_ADM] = "",
+     }; */
+   static const char *HiddenSubQuery[2] =
+     {
+      [false] = " AND Hidden='N'",
+      [true ] = "",
      };
 
    return (unsigned)
@@ -284,10 +290,10 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod)
 			  "Title"	// row[3]
 		    " FROM prg_resources"
 		   " WHERE ItmCod=%ld"
-		     "%s"
+		       "%s"
 		   " ORDER BY RscInd",
 		   ItmCod,
-		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+		   HiddenSubQuery[ShowHiddenResources]);
   }
 
 /*****************************************************************************/
@@ -500,4 +506,19 @@ void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
 		     " AND ItmCod=%ld",	// Extra check
 		   Resource->RscCod,
 		   Resource->ItmCod);
+  }
+
+/*****************************************************************************/
+/************************ Hide/unhide an item resource ***********************/
+/*****************************************************************************/
+
+void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide)
+  {
+   DB_QueryUPDATE ("can not hide/unhide item resource",
+		   "UPDATE prg_resources"
+		     " SET Hidden='%c'"
+		   " WHERE RscCod=%ld",
+		   Hide ? 'Y' :
+			  'N',
+		   RscCod);
   }

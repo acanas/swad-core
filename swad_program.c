@@ -751,7 +751,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 
 	 /***** Put form to hide/show program item *****/
 	 if (Item->Hierarchy.Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoPrgItm,"prg_highlighted",
+	    Ico_PutContextualIconToUnhide (ActUnhPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",
@@ -818,7 +818,7 @@ static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem)
       return false;
 
    /***** Move up is allowed if the item has brothers before it *****/
-   // NumItem >= 2
+   // NumItem >= 1
    return Prg_GetLevelFromNumItem (NumItem - 1) >=
 	  Prg_GetLevelFromNumItem (NumItem    );
   }

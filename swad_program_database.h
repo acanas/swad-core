@@ -50,7 +50,8 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res);
 unsigned Prg_DB_GetDataOfItemByCod (MYSQL_RES **mysql_res,long ItmCod);
 void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod);
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
+                                  bool ShowHiddenResources);
 unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
 
 unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope);
@@ -61,5 +62,7 @@ void Prg_DB_RemoveCrsItems (long CrsCod);
 
 //------------------------------ Resources ------------------------------------
 void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource);
+
+void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
 
 #endif

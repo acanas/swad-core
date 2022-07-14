@@ -55,7 +55,14 @@ struct PrgRsc_Resource
 void PrgRsc_ShowResources (long ItmCod);
 void PrgRsc_EditResources (long ItmCod);
 void PrgRsc_RequestCreateResource (void);
+
 void PrgRsc_ReqRemResource (void);
 void PrgRsc_RemoveResource (void);
+
+void PrgRsc_HideResource (void);
+void PrgRsc_UnhideResource (void);
+
+void PrgRsc_MoveUpResource (void);
+void PrgRsc_MoveDownResource (void);
 
 #endif

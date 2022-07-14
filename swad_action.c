@@ -436,7 +436,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemPrgItm	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemItem			,NULL},
    [ActRemPrgItm	] = {1828,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RemoveItem			,NULL},
    [ActHidPrgItm	] = {1829,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_HideItem			,NULL},
-   [ActShoPrgItm	] = {1830,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_UnhideItem			,NULL},
+   [ActUnhPrgItm	] = {1830,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_UnhideItem			,NULL},
    [ActUp_PrgItm	] = {1831,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveUpItem			,NULL},
    [ActDwnPrgItm	] = {1832,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveDownItem		,NULL},
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveLeftItem		,NULL},
@@ -445,6 +445,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActFrmNewPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangeItem		,NULL},
    [ActReqRemPrgRsc	] = {1919,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ReqRemResource		,NULL},
    [ActRemPrgRsc	] = {1920,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RemoveResource		,NULL},
+   [ActHidPrgRsc	] = {1921,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_HideResource		,NULL},
+   [ActUnhPrgRsc	] = {1922,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_UnhideResource		,NULL},
+   [ActUp_PrgRsc	] = {1923,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_MoveUpResource		,NULL},
+   [ActDwnPrgRsc	] = {1924,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_MoveDownResource	,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
@@ -3660,7 +3664,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemPrgItm,	// #1827
 	ActRemPrgItm,		// #1828
 	ActHidPrgItm,		// #1829
-	ActShoPrgItm,		// #1830
+	ActUnhPrgItm,		// #1830
 	ActUp_PrgItm,		// #1832
 	ActDwnPrgItm,		// #1833
 	ActRgtPrgItm,		// #1833
@@ -3751,6 +3755,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActFrmNewPrgRsc,	// #1918
 	ActReqRemPrgRsc,	// #1919
 	ActRemPrgRsc,		// #1920
+	ActHidPrgRsc,		// #1921
+	ActUnhPrgRsc,		// #1922
+	ActUp_PrgRsc,		// #1923
+	ActDwnPrgRsc,		// #1924
   };
 
 /*****************************************************************************/

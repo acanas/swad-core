@@ -5582,7 +5582,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide program item"			// Çeviri lazim!
 #endif
 	,
-	[ActShoPrgItm] =
+	[ActUnhPrgItm] =
 #if   L==1	// ca
 	"Show program item"			// Necessita traducció
 #elif L==2	// de
@@ -5764,6 +5764,98 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove resource"	// Precisa de tradução
 #elif L==10	// tr
 	"Remove resource"	// Çeviri lazim!
+#endif
+	,
+	[ActHidPrgRsc] =
+#if   L==1	// ca
+	"Hide resource"		// Necessita traducció
+#elif L==2	// de
+	"Hide resource"		// Need Übersetzung
+#elif L==3	// en
+	"Hide resource"
+#elif L==4	// es
+	"Ocultar recurso"
+#elif L==5	// fr
+	"Hide resource"		// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Hide resource"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide resource"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide resource"		// Precisa de tradução
+#elif L==10	// tr
+	"Hide resource"		// Çeviri lazim!
+#endif
+	,
+	[ActUnhPrgRsc] =
+#if   L==1	// ca
+	"Unhide resource"	// Necessita traducció
+#elif L==2	// de
+	"Unhide resource"	// Need Übersetzung
+#elif L==3	// en
+	"Unhide resource"
+#elif L==4	// es
+	"Mostrar recurso"
+#elif L==5	// fr
+	"Unhide resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Unhide resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Unhide resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unhide resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Unhide resource"	// Çeviri lazim!
+#endif
+	,
+	[ActUp_PrgRsc] =
+#if   L==1	// ca
+	"Move up resource"	// Necessita traducció
+#elif L==2	// de
+	"Move up resource"	// Need Übersetzung
+#elif L==3	// en
+	"Move up resource"
+#elif L==4	// es
+	"Subir recurso"
+#elif L==5	// fr
+	"Move up resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Subir recurso"		// Okoteve traducción
+#elif L==7	// it
+	"Move up resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Move up resource"	// Çeviri lazim!
+#endif
+	,
+	[ActDwnPrgRsc] =
+#if   L==1	// ca
+	"Move down resource"	// Necessita traducció
+#elif L==2	// de
+	"Move down resource"	// Need Übersetzung
+#elif L==3	// en
+	"Move down resource"
+#elif L==4	// es
+	"Bajar recurso"
+#elif L==5	// fr
+	"Move down resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Bajar recurso"		// Okoteve traducción
+#elif L==7	// it
+	"Move down resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Move down resource"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeTchGui] =
