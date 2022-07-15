@@ -40,8 +40,7 @@ long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_HideOrUnhideItem (long ItmCod,bool Hide);
 void Prg_DB_UpdateIndexRange (long Diff,long Begin,long End);
-void Prg_DB_LockTable (void);
-void Prg_DB_UnlockTable (void);
+void Prg_DB_LockTableItems (void);
 void Prg_DB_MoveDownItems (unsigned Index);
 void Prg_DB_MoveLeftRightItemRange (const struct Prg_ItemRange *ToMove,
                                     Prg_MoveLeftRight_t LeftRight);
@@ -50,10 +49,6 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res);
 unsigned Prg_DB_GetDataOfItemByCod (MYSQL_RES **mysql_res,long ItmCod);
 void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
-                                  bool ShowHiddenResources);
-unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
-
 unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope);
 unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope);
 
@@ -61,8 +56,20 @@ void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove);
 void Prg_DB_RemoveCrsItems (long CrsCod);
 
 //------------------------------ Resources ------------------------------------
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
+                                  bool ShowHiddenResources);
+unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
+unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
+                                        long ItmCod,unsigned RscInd);
+unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd);
+unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd);
+long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);
+
 void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource);
 
 void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
+
+void Prg_DB_LockTableResources (void);
+void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 
 #endif

@@ -620,18 +620,6 @@ void Exa_DB_LockTables (void)
   }
 
 /*****************************************************************************/
-/********** Unlock tables to make the exchange of sets atomic ****************/
-/*****************************************************************************/
-
-void Exa_DB_UnlockTables (void)
-  {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after exchanging sets of questions",
-	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
 /*********************** Get number of sets in an exam ***********************/
 /*****************************************************************************/
 

@@ -488,18 +488,6 @@ void Gam_DB_LockTable (void)
   }
 
 /*****************************************************************************/
-/********** Unlock table to make the exchange of questions atomic ************/
-/*****************************************************************************/
-
-void Gam_DB_UnlockTable (void)
-  {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after moving game questions",
-	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
 /******************* Get number of questions of a game *********************/
 /*****************************************************************************/
 

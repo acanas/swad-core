@@ -2173,7 +2173,7 @@ static void Gam_ExchangeQuestions (long GamCod,
    Gam_DB_UpdateQstIndex (  (long) QstIndBottom ,GamCod,QstCodTop   );
 
    /***** Unlock table *****/
-   Gam_DB_UnlockTable ();
+   DB_UnlockTables ();
   }
 
 /*****************************************************************************/

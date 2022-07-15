@@ -4337,3 +4337,15 @@ void DB_ExitOnMySQLError (const char *Message)
              Message,mysql_error (&Gbl.mysql));
    Err_ShowErrorAndExit (BigErrorMsg);
   }
+
+/*****************************************************************************/
+/********** Unlock tables to make the exchange of items atomic ***************/
+/*****************************************************************************/
+
+void DB_UnlockTables (void)
+  {
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables",
+	     "UNLOCK TABLES");
+  }

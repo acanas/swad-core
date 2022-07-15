@@ -55,7 +55,6 @@ void Gam_DB_InsertQstInGame (long GamCod,unsigned QstInd,long QstCod);
 void Gam_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
 void Gam_DB_UpdateQstIndex (long QstInd,long GamCod,long QstCod);
 void Gam_DB_LockTable (void);
-void Gam_DB_UnlockTable (void);
 
 unsigned Gam_DB_GetNumQstsGame (long GamCod);
 unsigned Gam_DB_GetGameQuestionsBasic (MYSQL_RES **mysql_res,long GamCod);

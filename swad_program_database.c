@@ -120,26 +120,14 @@ void Prg_DB_UpdateIndexRange (long Diff,long Begin,long End)
   }
 
 /*****************************************************************************/
-/************ Lock tables to make the exchange of items atomic ***************/
+/************ Lock table to make the exchange of items atomic ****************/
 /*****************************************************************************/
 
-void Prg_DB_LockTable (void)
+void Prg_DB_LockTableItems (void)
   {
    DB_Query ("can not lock table",
 	     "LOCK TABLES prg_items WRITE");
    Gbl.DB.LockedTables = true;
-  }
-
-/*****************************************************************************/
-/********** Unlock tables to make the exchange of items atomic ***************/
-/*****************************************************************************/
-
-void Prg_DB_UnlockTable (void)
-  {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables",
-	     "UNLOCK TABLES");
   }
 
 /*****************************************************************************/
@@ -254,63 +242,6 @@ void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 			   " AND CrsCod=%ld",	// Extra check
 		         ItmCod,
 		         Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/****************** Get list of item resources from database *****************/
-/*****************************************************************************/
-
-unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
-                                  bool ShowHiddenResources)
-  {/*
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     }; */
-   static const char *HiddenSubQuery[2] =
-     {
-      [false] = " AND Hidden='N'",
-      [true ] = "",
-     };
-
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get item resources",
-		   "SELECT ItmCod,"	// row[0]
-			  "RscCod,"	// row[1]
-			  "Hidden,"	// row[2]
-			  "Title"	// row[3]
-		    " FROM prg_resources"
-		   " WHERE ItmCod=%ld"
-		       "%s"
-		   " ORDER BY RscInd",
-		   ItmCod,
-		   HiddenSubQuery[ShowHiddenResources]);
-  }
-
-/*****************************************************************************/
-/****************** Get item resource data using its code ********************/
-/*****************************************************************************/
-
-unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get item resource data",
-		   "SELECT ItmCod,"	// row[0]
-			  "RscCod,"	// row[1]
-			  "Hidden,"	// row[2]
-			  "Title"	// row[3]
-		    " FROM prg_resources"
-		   " WHERE RscCod=%ld",
-		   RscCod);
   }
 
 /*****************************************************************************/
@@ -495,6 +426,130 @@ void Prg_DB_RemoveCrsItems (long CrsCod)
   }
 
 /*****************************************************************************/
+/****************** Get list of item resources from database *****************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
+                                  bool ShowHiddenResources)
+  {/*
+   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK    ] = " AND Hidden='N'",
+      [Rol_GST    ] = " AND Hidden='N'",
+      [Rol_USR    ] = " AND Hidden='N'",
+      [Rol_STD    ] = " AND Hidden='N'",
+      [Rol_NET    ] = " AND Hidden='N'",
+      [Rol_TCH    ] = "",
+      [Rol_DEG_ADM] = " AND Hidden='N'",
+      [Rol_CTR_ADM] = " AND Hidden='N'",
+      [Rol_INS_ADM] = " AND Hidden='N'",
+      [Rol_SYS_ADM] = "",
+     }; */
+   static const char *HiddenSubQuery[2] =
+     {
+      [false] = " AND Hidden='N'",
+      [true ] = "",
+     };
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get item resources",
+		   "SELECT ItmCod,"	// row[0]
+			  "RscCod,"	// row[1]
+                          "RscInd,"	// row[2]
+			  "Hidden,"	// row[3]
+			  "Title"	// row[4]
+		    " FROM prg_resources"
+		   " WHERE ItmCod=%ld"
+		       "%s"
+		   " ORDER BY RscInd",
+		   ItmCod,
+		   HiddenSubQuery[ShowHiddenResources]);
+  }
+
+/*****************************************************************************/
+/****************** Get item resource data using its code ********************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get item resource data",
+		   "SELECT ItmCod,"	// row[0]
+			  "RscCod,"	// row[1]
+                          "RscInd,"	// row[2]
+			  "Hidden,"	// row[3]
+			  "Title"	// row[4]
+		    " FROM prg_resources"
+		   " WHERE RscCod=%ld",
+		   RscCod);
+  }
+
+/*****************************************************************************/
+/****************** Get item resource data using its code ********************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
+                                        long ItmCod,unsigned RscInd)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get item resource data",
+		   "SELECT ItmCod,"	// row[0]
+			  "RscCod,"	// row[1]
+                          "RscInd,"	// row[2]
+			  "Hidden,"	// row[3]
+			  "Title"	// row[4]
+		    " FROM prg_resources"
+		   " WHERE ItmCod=%ld"
+		     " AND RscInd=%u",
+		   ItmCod,RscInd);
+  }
+
+/*****************************************************************************/
+/************* Get the resource index before/after a given one ***************/
+/*****************************************************************************/
+
+unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get the resource before",
+			   "SELECT COALESCE(MAX(RscInd),0)"
+			    " FROM prg_resources"
+			   " WHERE ItmCod=%ld"
+			     " AND RscInd<%u",
+			   ItmCod,RscInd);
+  }
+
+unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get the resource after",
+			   "SELECT COALESCE(MIN(RscInd),0)"
+			    " FROM prg_resources"
+			   " WHERE ItmCod=%ld"
+			     " AND RscInd>%u",
+			   ItmCod,RscInd);
+  }
+
+/*****************************************************************************/
+/*********** Get resource code given item code and resource index ************/
+/*****************************************************************************/
+
+long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd)
+  {
+   /***** Trivial check: resource index should be > 0 *****/
+   if (RscInd == 0)
+      return -1L;
+
+   /***** Get resource code given item code and resource index *****/
+   return DB_QuerySELECTCode ("can not get resource code",
+			      "SELECT RscCod"
+			       " FROM prg_resources"
+			      " WHERE ItmCod=%ld"
+				" AND RscInd=%u",
+			      ItmCod,RscInd);
+  }
+
+/*****************************************************************************/
 /************************** Remove an item resource **************************/
 /*****************************************************************************/
 
@@ -520,5 +575,30 @@ void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide)
 		   " WHERE RscCod=%ld",
 		   Hide ? 'Y' :
 			  'N',
+		   RscCod);
+  }
+
+/*****************************************************************************/
+/********** Lock table to make the exchange of resources atomic **************/
+/*****************************************************************************/
+
+void Prg_DB_LockTableResources (void)
+  {
+   DB_Query ("can not lock table",
+	     "LOCK TABLES prg_resources WRITE");
+   Gbl.DB.LockedTables = true;
+  }
+
+/*****************************************************************************/
+/************* Update the index of a resource given its code *****************/
+/*****************************************************************************/
+
+void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
+  {
+   DB_QueryUPDATE ("can not update index of resource",
+		   "UPDATE prg_resources"
+		     " SET RscInd=%d"
+		   " WHERE RscCod=%ld",
+		   RscInd,
 		   RscCod);
   }

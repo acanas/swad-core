@@ -77,4 +77,6 @@ void DB_Query (const char *MsgError,const char *fmt,...);
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res);
 void DB_ExitOnMySQLError (const char *Message);
 
+void DB_UnlockTables (void);
+
 #endif

@@ -40,10 +40,16 @@
 #define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
 #define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+struct PrgRsc_Rsc
+  {
+   long Cod;
+   unsigned Ind;	// 1, 2, 3...
+  };
+
 struct PrgRsc_Resource
   {
    long ItmCod;
-   long RscCod;
+   struct PrgRsc_Rsc Rsc;
    bool Hidden;
    char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
   };

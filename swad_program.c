@@ -1314,7 +1314,7 @@ static bool Prg_ExchangeItemRanges (int NumItemTop,int NumItemBottom)
       DiffEnd   = Bottom.End   - Top.End;
 
       /***** Lock table to make the move atomic *****/
-      Prg_DB_LockTable ();
+      Prg_DB_LockTableItems ();
 
       /***** Exchange indexes of items *****/
       // This implementation works with non continuous indexes
@@ -1357,7 +1357,7 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
                                -((long) Bottom.Begin));	// All indexes in bottom part
 
       /***** Unlock table *****/
-      Prg_DB_UnlockTable ();
+      DB_UnlockTables ();
 
       return true;	// Success
      }
@@ -1894,7 +1894,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
    unsigned NumItemLastChild;
 
    /***** Lock table to create program item *****/
-   Prg_DB_LockTable ();
+   Prg_DB_LockTableItems ();
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1941,7 +1941,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
    Item->Hierarchy.ItmCod = Prg_DB_InsertItem (Item,Txt);
 
    /***** Unlock table *****/
-   Prg_DB_UnlockTable ();
+   DB_UnlockTables ();
 
    /***** Free list items *****/
    Prg_FreeListItems ();

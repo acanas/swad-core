@@ -1797,7 +1797,7 @@ static void ExaSet_ExchangeSets (long ExaCod,
    Exa_DB_UpdateSetIndex (  (long) SetIndBottom ,SetCodTop   ,ExaCod);
 
    /***** Unlock table *****/
-   Exa_DB_LockTables ();
+   DB_UnlockTables ();
   }
 
 /*****************************************************************************/

@@ -58,18 +58,6 @@ void Grp_DB_LockTables (void)
   }
 
 /*****************************************************************************/
-/*********** Unlock tables after changes in registration in groups ***********/
-/*****************************************************************************/
-
-void Grp_DB_UnlockTables (void)
-  {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after changing user's groups",
-	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
 /************************** Create a new group type **************************/
 /*****************************************************************************/
 

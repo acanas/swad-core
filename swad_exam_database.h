@@ -61,7 +61,6 @@ void Exa_DB_UpdateNumQstsToExam (long SetCod,long ExaCod,unsigned NumQstsToPrint
 void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,long SetInd);
 void Exa_DB_UpdateSetIndex (long SetInd,long SetCod,long ExaCod);
 void Exa_DB_LockTables (void);
-void Exa_DB_UnlockTables (void);
 unsigned Exa_DB_GetNumSetsExam (long ExaCod);
 unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);

@@ -34,7 +34,6 @@
 /*****************************************************************************/
 
 void Grp_DB_LockTables (void);
-void Grp_DB_UnlockTables (void);
 
 long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
 void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);

@@ -82,6 +82,14 @@ struct Level
    bool Hidden;		// If each level from 1 to maximum level is hidden
   };
 */
+
+#define PrgRsc_NUM_MOVEMENTS_UP_DOWN 2
+typedef enum
+  {
+   PrgRsc_MOVE_UP,
+   PrgRsc_MOVE_DOWN,
+  } PrgRsc_MoveUpDown_t;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -139,9 +147,9 @@ static long PrgRsc_GetParamRscCod (void);
 
 static void PrgRsc_HideOrUnhideResource (bool Hide);
 
-static bool PrgRsc_CheckIfMoveUpIsAllowed (unsigned NumRsc);
-static bool PrgRsc_CheckIfMoveDownIsAllowed (unsigned NumRsc,
-                                             unsigned NumResources);
+static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
+static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
+                                      const struct PrgRsc_Rsc *Rsc2);
 
 /*****************************************************************************/
 /****************************** Show resources *******************************/
@@ -348,10 +356,10 @@ static void PrgRsc_GetDataOfResourceByCod (struct PrgRsc_Resource *Resource)
   {
    MYSQL_RES *mysql_res;
 
-   if (Resource->RscCod > 0)
+   if (Resource->Rsc.Cod > 0)
      {
       /***** Get data of item resource *****/
-      if (Prg_DB_GetDataOfResourceByCod (&mysql_res,Resource->RscCod))
+      if (Prg_DB_GetDataOfResourceByCod (&mysql_res,Resource->Rsc.Cod))
          PrgRsc_GetDataOfResource (Resource,&mysql_res);
       else
          PrgRsc_ResetResource (Resource);
@@ -379,20 +387,22 @@ static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
    /*
    ItmCod	row[0]
    RscCod	row[1]
-   Hidden	row[2]
-   Title	row[3]
+   RscInd	row[2]
+   Hidden	row[3]
+   Title	row[4]
    */
    /* Get code of the program item (row[0]) */
    Resource->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /* Get code of the item resource (row[1]) */
-   Resource->RscCod = Str_ConvertStrCodToLongCod (row[1]);
+   /* Get code and index of the item resource (row[1], row[2]) */
+   Resource->Rsc.Cod = Str_ConvertStrCodToLongCod (row[1]);
+   Resource->Rsc.Ind = Str_ConvertStrToUnsigned (row[2]);
 
-   /* Get whether the program item is hidden (row(2)) */
-   Resource->Hidden = (row[2][0] == 'Y');
+   /* Get whether the program item is hidden (row(3)) */
+   Resource->Hidden = (row[3][0] == 'Y');
 
-   /* Get the title of the item resource (row[3]) */
-   Str_Copy (Resource->Title,row[3],sizeof (Resource->Title) - 1);
+   /* Get the title of the item resource (row[4]) */
+   Str_Copy (Resource->Title,row[4],sizeof (Resource->Title) - 1);
   }
 
 /*****************************************************************************/
@@ -402,7 +412,8 @@ static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
 static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource)
   {
    Resource->ItmCod = -1L;
-   Resource->RscCod = -1L;
+   Resource->Rsc.Cod = -1L;
+   Resource->Rsc.Ind = 0;
    Resource->Hidden = false;
    Resource->Title[0] = '\0';
   }
@@ -480,15 +491,15 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
       case Rol_SYS_ADM:
 	 /***** Put form to remove item resource *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                PrgRsc_PutParams,&Resource->RscCod);
+	                                PrgRsc_PutParams,&Resource->Rsc.Cod);
 
 	 /***** Put form to hide/show item resource *****/
 	 if (Resource->Hidden)
 	    Ico_PutContextualIconToUnhide (ActUnhPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                   PrgRsc_PutParams,&Resource->RscCod);
+	                                   PrgRsc_PutParams,&Resource->Rsc.Cod);
 	 else
 	    Ico_PutContextualIconToHide (ActHidPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                 PrgRsc_PutParams,&Resource->RscCod);
+	                                 PrgRsc_PutParams,&Resource->Rsc.Cod);
 
 	 /***** Put form to edit program item *****/
 	 // Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
@@ -501,17 +512,17 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
 	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
-	 if (PrgRsc_CheckIfMoveUpIsAllowed (NumRsc))
+	 if (NumRsc > 0)
 	   Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                  PrgRsc_PutParams,&Resource->RscCod,
+	                                  PrgRsc_PutParams,&Resource->Rsc.Cod,
 	 			          "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
-	 if (PrgRsc_CheckIfMoveDownIsAllowed (NumRsc,NumResources))
+	 if (NumRsc < NumResources - 1)
 	   Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                  PrgRsc_PutParams,&Resource->RscCod,
+	                                  PrgRsc_PutParams,&Resource->Rsc.Cod,
 	                                  "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -569,7 +580,7 @@ void PrgRsc_ReqRemResource (void)
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.RscCod = PrgRsc_GetParamRscCod ();
+   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
    PrgRsc_GetDataOfResourceByCod (&Resource);
    if (Resource.ItmCod <= 0)
       Err_WrongResourceExit ();
@@ -578,7 +589,7 @@ void PrgRsc_ReqRemResource (void)
    Ale_CreateAlert (Ale_QUESTION,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Do_you_really_want_to_remove_the_resource_X,
                     Resource.Title);
-   PrgSrc_RscCodToBeRemoved = Resource.RscCod;
+   PrgSrc_RscCodToBeRemoved = Resource.Rsc.Cod;
 
    /***** Get the code of the program item *****/
    ItmCodBeforeForm = Resource.ItmCod;
@@ -609,7 +620,7 @@ void PrgRsc_RemoveResource (void)
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.RscCod = PrgRsc_GetParamRscCod ();
+   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
    PrgRsc_GetDataOfResourceByCod (&Resource);
    if (Resource.ItmCod <= 0)
       Err_WrongResourceExit ();
@@ -659,13 +670,13 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.RscCod = PrgRsc_GetParamRscCod ();
+   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
    PrgRsc_GetDataOfResourceByCod (&Resource);
    if (Resource.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Hide/unhide item resource *****/
-   Prg_DB_HideOrUnhideResource (Resource.RscCod,Hide);
+   Prg_DB_HideOrUnhideResource (Resource.Rsc.Cod,Hide);
 
    /***** Get the code of the program item *****/
    ItmCodBeforeForm = Resource.ItmCod;
@@ -681,32 +692,111 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
   }
 
 /*****************************************************************************/
-/********************* Check if resource can be moved up *********************/
+/**************************** Move up/down resource **************************/
 /*****************************************************************************/
-
-static bool PrgRsc_CheckIfMoveUpIsAllowed (unsigned NumRsc)
-  {
-   /***** Trivial check: if resource is the first one, move up is not allowed *****/
-   return (NumRsc != 0);
-  }
-
-/*****************************************************************************/
-/******************** Check if resource can be moved down ********************/
-/*****************************************************************************/
-
-static bool PrgRsc_CheckIfMoveDownIsAllowed (unsigned NumRsc,
-                                             unsigned NumResources)
-  {
-   /***** Trivial check: if resource is the last one, move up is not allowed *****/
-   return (NumRsc < NumResources - 1);
-  }
 
 void PrgRsc_MoveUpResource (void)
   {
-
+   PrgRsc_MoveUpDownResource (PrgRsc_MOVE_UP);
   }
 
 void PrgRsc_MoveDownResource (void)
   {
+   PrgRsc_MoveUpDownResource (PrgRsc_MOVE_DOWN);
+  }
 
+static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
+  {
+   extern const char *Txt_Movement_not_allowed;
+   struct PrgRsc_Resource Resource;
+   struct PrgRsc_Rsc Rsc2;
+   long ItmCodBeforeForm;
+   unsigned FormLevel;
+   struct Prg_ItemRange ToHighlight;
+   bool Success = false;
+   static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(long ItmCod,unsigned RscInd) =
+     {
+      [PrgRsc_MOVE_UP  ] = Prg_DB_GetRscIndBefore,
+      [PrgRsc_MOVE_DOWN] = Prg_DB_GetRscIndAfter,
+     };
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get data of the item resource from database *****/
+   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
+   PrgRsc_GetDataOfResourceByCod (&Resource);
+   if (Resource.ItmCod <= 0)
+      Err_WrongResourceExit ();
+
+   /***** Move up/down resource *****/
+   if ((Rsc2.Ind = GetOtherRscInd[UpDown] (Resource.ItmCod,Resource.Rsc.Ind)))	// 0 ==> movement not allowed
+     {
+      /* Get the other resource code */
+      Rsc2.Cod = Prg_DB_GetRscCodFromRscInd (Resource.ItmCod,Rsc2.Ind);
+
+      /* Exchange subtrees */
+      Success = PrgRsc_ExchangeResources (&Resource.Rsc,&Rsc2);
+     }
+   if (!Success)
+      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+
+   /***** Get the code of the program item *****/
+   ItmCodBeforeForm = Resource.ItmCod;
+   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
+
+   /***** Show current program items, if any *****/
+   Prg_SetItemRangeEmpty (&ToHighlight);
+   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
+		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/**** Exchange the order of two consecutive subtrees in a course program *****/
+/*****************************************************************************/
+// Return true if success
+
+static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
+                                      const struct PrgRsc_Rsc *Rsc2)
+  {
+   if (Rsc1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
+       Rsc2->Ind > 0)
+     {
+      /***** Lock table to make the move atomic *****/
+      Prg_DB_LockTableResources ();
+
+      /***** Exchange indexes of items *****/
+      // This implementation works with non continuous indexes
+      /*
+      Example:
+      Rsc1->Ind =  5
+      Rsc2->Ind = 17
+                                Step 1            Step 2            Step 3  (Equivalent to)
+      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
+      |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod| |Rsc.Ind|Rsc.Cod|
+      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
+      |     5 |   218 |   |     5 |   218 |-->|--> 17 |   218 |   |    17 |   218 | |     5 |   240 |
+      |    17 |   240 |-->|-->-17 |   240 |   |   -17 |   240 |-->|-->  5 |   240 | |    17 |   218 |
+      +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
+      */
+      /* Step 1: Change second index to negative,
+		 necessary to preserve unique index (ItmCod,RscInd) */
+      Prg_DB_UpdateRscInd (Rsc2->Cod,-(int) Rsc2->Ind);
+
+      /* Step 2: Change first index */
+      Prg_DB_UpdateRscInd (Rsc1->Cod, (int) Rsc2->Ind);
+
+      /* Step 3: Change second index */
+      Prg_DB_UpdateRscInd (Rsc2->Cod, (int) Rsc1->Ind);
+
+      /***** Unlock table *****/
+      DB_UnlockTables ();
+
+      return true;	// Success
+     }
+
+   return false;	// No success
   }

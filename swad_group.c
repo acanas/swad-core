@@ -881,7 +881,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_FreeListCodGrp (&LstGrpsIBelong);
 
    /***** Unlock tables after changes in my groups *****/
-   Grp_DB_UnlockTables ();
+   DB_UnlockTables ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -946,7 +946,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 
    /***** Unlock tables after changes in groups *****/
    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
-      Grp_DB_UnlockTables ();
+      DB_UnlockTables ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
