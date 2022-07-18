@@ -442,7 +442,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveLeftItem		,NULL},
    [ActRgtPrgItm	] = {1833,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveRightItem		,NULL},
 
-   [ActFrmNewPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangeItem		,NULL},
+   [ActFrmEdiPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_EditResources		,NULL},
    [ActReqRemPrgRsc	] = {1919,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ReqRemResource		,NULL},
    [ActRemPrgRsc	] = {1920,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RemoveResource		,NULL},
    [ActHidPrgRsc	] = {1921,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_HideResource		,NULL},
@@ -3752,7 +3752,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1915 (obsolete action)
 	-1,			// #1916 (obsolete action)
 	ActChgUsrPho,		// #1917
-	ActFrmNewPrgRsc,	// #1918
+	ActFrmEdiPrgRsc,	// #1918
 	ActReqRemPrgRsc,	// #1919
 	ActRemPrgRsc,		// #1920
 	ActHidPrgRsc,		// #1921

@@ -64,20 +64,22 @@ struct Prg_ItemRange
    unsigned End;	// Index of the last item in the subtree
   };
 
-#define Prg_NUM_TYPES_FORMS 3
-typedef enum
-  {
-   Prg_DONT_PUT_FORM_ITEM,
-   Prg_PUT_FORM_CREATE_ITEM,
-   Prg_PUT_FORM_CHANGE_ITEM,
-  } Prg_CreateOrChangeItem_t;
-
 #define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
 typedef enum
   {
    Prg_MOVE_LEFT,
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
+
+typedef enum
+  {
+   Prg_ITEM_PRINT,
+   Prg_ITEM_VIEW,
+   Prg_ITEM_EDIT_BUTTONS,
+   Prg_ITEM_CREATE_FORM,
+   Prg_ITEM_CHANGE_FORM,
+   Prg_ITEM_CHANGE_RESOURCES,
+  } Prg_ShowItemForm_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -86,15 +88,16 @@ typedef enum
 void Prg_ShowCourseProgram (void);
 void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
 
-void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+void Prg_ShowAllItems (Prg_ShowItemForm_t ShowItemForm,
                        const struct Prg_ItemRange *ToHighlight,
-                       long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
+                       long ParentItmCod,long ItmCod,unsigned FormLevel);
 
 bool Prg_CheckIfICanCreateItems (void);
 void Prg_PutParams (void *ItmCod);
 
 void Prg_GetListItems (void);
 void Prg_FreeListItems (void);
+long Prg_GetParamItmCod (void);
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
 

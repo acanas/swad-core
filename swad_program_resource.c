@@ -1,4 +1,4 @@
-// swad_program.c: course program
+// swad_program_resource.c: course program (resources)
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -25,31 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For calloc
-// #include <string.h>		// For string functions
-
-// #include "swad_autolink.h"
-// #include "swad_box.h"
-// #include "swad_database.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_pagination.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
-// #include "swad_role.h"
-// #include "swad_setting.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -60,28 +41,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
-/*
-#define Prg_NUM_TYPES_FORMS 3
-typedef enum
-  {
-   Prg_DONT_PUT_FORM_ITEM,
-   Prg_PUT_FORM_CREATE_ITEM,
-   Prg_PUT_FORM_CHANGE_ITEM,
-  } Prg_CreateOrChangeItem_t;
-
-#define Prg_NUM_MOVEMENTS_UP_DOWN 2
-typedef enum
-  {
-   Prg_MOVE_UP,
-   Prg_MOVE_DOWN,
-  } Prg_MoveUpDown_t;
-
-struct Level
-  {
-   unsigned Number;	// Numbers for each level from 1 to maximum level
-   bool Hidden;		// If each level from 1 to maximum level is hidden
-  };
-*/
 
 #define PrgRsc_NUM_MOVEMENTS_UP_DOWN 2
 typedef enum
@@ -93,30 +52,6 @@ typedef enum
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
-/*
-static struct
-  {
-   struct
-     {
-      bool IsRead;		// Is the list already read from database...
-			        // ...or it needs to be read?
-      unsigned NumItems;	// Number of items
-      struct Prg_ItemHierarchy *Items;	// List of items
-     } List;
-   unsigned MaxLevel;		// Maximum level of items
-   struct Level *Levels;	// Numbers and hidden for each level from 1 to maximum level
-  } Prg_Gbl =
-  {
-   .List =
-     {
-      .IsRead     = false,
-      .NumItems   = 0,
-      .Items      = NULL,
-     },
-   .MaxLevel      = 0,
-   .Levels        = NULL
-  };
-*/
 
 static long PrgSrc_RscCodToBeRemoved = -1L;
 
@@ -127,8 +62,7 @@ static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
 /*****************************************************************************/
 
 static void PrgRsc_PutIconsListResources (__attribute__((unused)) void *Args);
-static void PrgSrc_PutIconToCreateNewResource (long ItmCod);
-static void PrgRsc_PutButtonToCreateNewResource (long ItmCod);
+static void PrgSrc_PutIconToEditResources (long ItmCod);
 
 static void PrgRsc_GetDataOfResourceByCod (struct PrgRsc_Resource *Resource);
 static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
@@ -152,11 +86,40 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
                                       const struct PrgRsc_Rsc *Rsc2);
 
 /*****************************************************************************/
+/****************************** Edit resources *******************************/
+/*****************************************************************************/
+
+void PrgRsc_EditResources (void)
+  {
+   long ItmCod;
+   unsigned FormLevel;
+   struct Prg_ItemRange ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get the code of the program item *****/
+   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
+   else
+      FormLevel = 0;
+
+   /***** Show current program items, if any *****/
+   Prg_SetItemRangeEmpty (&ToHighlight);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_RESOURCES,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
 /****************************** Show resources *******************************/
 /*****************************************************************************/
 
-void PrgRsc_ShowResources (long ItmCod)
+void PrgRsc_ListResourcesToShow (long ItmCod)
   {
+   extern const char *Txt_Resources;
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
@@ -166,18 +129,18 @@ void PrgRsc_ShowResources (long ItmCod)
    if (ItmCod <= 0)
       return;
 
-   /***** Get list of item resources from database *****/
-   if ((NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
-                                                false)))	// Don't get hidden resources
-     {
-      /***** Begin box *****/
-      Box_BoxBegin ("100%",NULL,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+   /***** Begin box *****/
+   Box_BoxBegin ("100%",Txt_Resources,
+		 PrgRsc_PutIconsListResources,&ItmCod,
+		 NULL,Box_NOT_CLOSABLE);
 
+      /***** Get list of item resources from database *****/
+      if ((NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
+						   false)))	// Don't get hidden resources
+	{
 	 /***** Table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
-	    HTM_TBODY_Begin (NULL);		// 1st tbody start
+	    HTM_TBODY_Begin (NULL);
 
 	       /***** Write all item resources *****/
 	       for (NumRsc  = 1;
@@ -192,19 +155,15 @@ void PrgRsc_ShowResources (long ItmCod)
 		 }
 
 	    /***** End table *****/
-	    HTM_TBODY_End ();					// 3rd tbody end
+	    HTM_TBODY_End ();
 	 HTM_TABLE_End ();
+	}
 
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
-/*****************************************************************************/
-/****************************** Edit resources *******************************/
-/*****************************************************************************/
-
-void PrgRsc_EditResources (long ItmCod)
+void PrgRsc_ListResourcesToEdit (long ItmCod)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Remove_resource;
@@ -241,7 +200,7 @@ void PrgRsc_EditResources (long ItmCod)
 
       /***** Begin box *****/
       Box_BoxBegin ("100%",Txt_Resources,
-		    PrgRsc_PutIconsListResources,&ItmCod,
+		    NULL,NULL,
 		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
 	 /***** Table *****/
@@ -262,18 +221,9 @@ void PrgRsc_EditResources (long ItmCod)
 		  The_ChangeRowColor ();
 		 }
 
-	       /***** Create item at the end? *****/
-	       /*
-	       if (ItmCodBeforeForm <= 0 && CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-		  Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
-	       */
-
 	    /***** End table *****/
 	    HTM_TBODY_End ();
 	 HTM_TABLE_End ();
-
-	 /***** Button to create a new program item *****/
-	 PrgRsc_PutButtonToCreateNewResource (ItmCod);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -292,60 +242,17 @@ static void PrgRsc_PutIconsListResources (void *ItmCod)
    if (ItmCod)
       if (*((long *) ItmCod) > 0)
 	 if (Prg_CheckIfICanCreateItems ())
-	    PrgSrc_PutIconToCreateNewResource (*((long *) ItmCod));
+	    PrgSrc_PutIconToEditResources (*((long *) ItmCod));
   }
 
 /*****************************************************************************/
-/****************** Put icon to create a new program item ********************/
+/********************* Put icon to edit item resources ***********************/
 /*****************************************************************************/
 
-static void PrgSrc_PutIconToCreateNewResource (long ItmCod)
+static void PrgSrc_PutIconToEditResources (long ItmCod)
   {
-   Ico_PutContextualIconToAdd (ActFrmNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-                               Prg_PutParams,&ItmCod);
-  }
-
-/*****************************************************************************/
-/***************** Put button to create a new item resource ******************/
-/*****************************************************************************/
-
-static void PrgRsc_PutButtonToCreateNewResource (long ItmCod)
-  {
-   extern const char *Txt_New_resource;
-
-   Frm_BeginFormAnchor (ActFrmNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-      Prg_PutParams (&ItmCod);
-      Btn_PutConfirmButton (Txt_New_resource);
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/*** Put a form to create/edit program resource and show current resources ***/
-/*****************************************************************************/
-
-void PrgRsc_RequestCreateResource (void)
-  {
-   // unsigned NumItem;
-   // long ItmCodBeforeForm;
-   // unsigned FormLevel;
-   // struct Prg_Item Item;
-
-   /***** Get list of program items *****/
-   // Prg_GetListItems ();
-
-   /***** Get data of the item from database *****/
-   // Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   // Prg_GetDataOfItemByCod (&Item);
-   // if (Item.Hierarchy.ItmCod <= 0)
-      // Err_WrongItemExit ();
-
-   /***** Show current program items, if any *****/
-   // Prg_SetItemRangeEmpty (&ToHighlight);
-   // Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-   //                   &ToHighlight,ParentItmCod,ItmCodBeforeForm,FormLevel);
-
-   /***** Free list of program items *****/
-   // Prg_FreeListItems ();
+   Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+                                Prg_PutParams,&ItmCod);
   }
 
 /*****************************************************************************/
@@ -411,10 +318,10 @@ static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
 
 static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource)
   {
-   Resource->ItmCod = -1L;
-   Resource->Rsc.Cod = -1L;
-   Resource->Rsc.Ind = 0;
-   Resource->Hidden = false;
+   Resource->ItmCod   = -1L;
+   Resource->Rsc.Cod  = -1L;
+   Resource->Rsc.Ind  = 0;
+   Resource->Hidden   = false;
    Resource->Title[0] = '\0';
   }
 
@@ -429,12 +336,14 @@ static void PrgRsc_WriteRowShowResource (unsigned NumRsc,
    HTM_TR_Begin (NULL);
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM RT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumRsc);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (Resource->Title);
       HTM_TD_End ();
 
@@ -458,12 +367,14 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM RT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (Resource->Title);
       HTM_TD_End ();
 
@@ -480,10 +391,6 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
                                                  struct PrgRsc_Resource *Resource)
   {
    extern const char *Txt_Movement_not_allowed;
-   // char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-
-   /***** Initialize item index string *****/
-   // snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.Index);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -508,8 +415,6 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
 	 /***** Put form to add a new child item inside this item *****/
 	 // Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
 	 //                            Prg_PutParams,&Item->Hierarchy.ItmCod);
-
-	 HTM_BR ();
 
 	 /***** Put icon to move up the item *****/
 	 if (NumRsc > 0)
@@ -572,7 +477,7 @@ void PrgRsc_ReqRemResource (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    struct PrgRsc_Resource Resource;
-   long ItmCodBeforeForm;
+   long ItmCod;
    unsigned FormLevel;
    struct Prg_ItemRange ToHighlight;
 
@@ -592,13 +497,13 @@ void PrgRsc_ReqRemResource (void)
    PrgSrc_RscCodToBeRemoved = Resource.Rsc.Cod;
 
    /***** Get the code of the program item *****/
-   ItmCodBeforeForm = Resource.ItmCod;
+   ItmCod = Resource.ItmCod;
    FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_RESOURCES,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -612,7 +517,7 @@ void PrgRsc_RemoveResource (void)
   {
    extern const char *Txt_Resource_X_removed;
    struct PrgRsc_Resource Resource;
-   long ItmCodBeforeForm;
+   long ItmCod;
    unsigned FormLevel;
    struct Prg_ItemRange ToHighlight;
 
@@ -633,13 +538,13 @@ void PrgRsc_RemoveResource (void)
                     Txt_Resource_X_removed,Resource.Title);
 
    /***** Get the code of the program item *****/
-   ItmCodBeforeForm = Resource.ItmCod;
+   ItmCod = Resource.ItmCod;
    FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_RESOURCES,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -662,7 +567,7 @@ void PrgRsc_UnhideResource (void)
 static void PrgRsc_HideOrUnhideResource (bool Hide)
   {
    struct PrgRsc_Resource Resource;
-   long ItmCodBeforeForm;
+   long ItmCod;
    unsigned FormLevel;
    struct Prg_ItemRange ToHighlight;
 
@@ -679,13 +584,13 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
    Prg_DB_HideOrUnhideResource (Resource.Rsc.Cod,Hide);
 
    /***** Get the code of the program item *****/
-   ItmCodBeforeForm = Resource.ItmCod;
+   ItmCod = Resource.ItmCod;
    FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_RESOURCES,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -710,7 +615,7 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    extern const char *Txt_Movement_not_allowed;
    struct PrgRsc_Resource Resource;
    struct PrgRsc_Rsc Rsc2;
-   long ItmCodBeforeForm;
+   long ItmCod;
    unsigned FormLevel;
    struct Prg_ItemRange ToHighlight;
    bool Success = false;
@@ -742,13 +647,13 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Get the code of the program item *****/
-   ItmCodBeforeForm = Resource.ItmCod;
+   ItmCod = Resource.ItmCod;
    FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_RESOURCES,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

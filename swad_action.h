@@ -408,7 +408,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActDwnPrgItm		(ActChgCrsSta +  25)
 #define ActLftPrgItm		(ActChgCrsSta +  26)
 #define ActRgtPrgItm		(ActChgCrsSta +  27)
-#define ActFrmNewPrgRsc		(ActChgCrsSta +  28)
+#define ActFrmEdiPrgRsc		(ActChgCrsSta +  28)
 #define ActReqRemPrgRsc		(ActChgCrsSta +  29)
 #define ActRemPrgRsc		(ActChgCrsSta +  30)
 #define ActHidPrgRsc		(ActChgCrsSta +  31)

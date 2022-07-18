@@ -27,12 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdbool.h>		// For boolean type
-// #include <time.h>		// For time
-
-// #include "swad_database.h"
-// #include "swad_date.h"
-
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
@@ -58,8 +52,10 @@ struct PrgRsc_Resource
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrgRsc_ShowResources (long ItmCod);
-void PrgRsc_EditResources (long ItmCod);
+void PrgRsc_EditResources (void);
+
+void PrgRsc_ListResourcesToShow (long ItmCod);
+void PrgRsc_ListResourcesToEdit (long ItmCod);
 void PrgRsc_RequestCreateResource (void);
 
 void PrgRsc_ReqRemResource (void);

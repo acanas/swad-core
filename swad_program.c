@@ -110,9 +110,8 @@ static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
-			      bool PrintView);
-static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			              long ItmCod,unsigned FormLevel);
+			      Prg_ShowItemForm_t ShowItemForm);
+static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
 static void Prg_FreeTitleClass (char *TitleClass);
 
@@ -143,7 +142,6 @@ static void Prg_GetDataOfItem (struct Prg_Item *Item,
 			       unsigned NumRows);
 static void Prg_ResetItem (struct Prg_Item *Item);
 static void Prg_PutParamItmCod (long ItmCod);
-static long Prg_GetParamItmCod (void);
 
 static void Prg_HideOrUnhideItem (bool Hide);
 
@@ -189,16 +187,16 @@ void Prg_ShowCourseProgram (void)
 void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
    /***** Show all program items *****/
-   Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,ToHighlight,-1L,-1L,0);
+   Prg_ShowAllItems (Prg_ITEM_VIEW,ToHighlight,-1L,-1L,0);
   }
 
 /*****************************************************************************/
 /************************* Show all program items ****************************/
 /*****************************************************************************/
 
-void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
+void Prg_ShowAllItems (Prg_ShowItemForm_t ShowItemForm,
                        const struct Prg_ItemRange *ToHighlight,
-                       long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
+                       long ParentItmCod,long ItmCod,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
@@ -245,23 +243,30 @@ void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 	       HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
 	      }
 
-	    /* Show item */
-	    Prg_WriteRowItem (NumItem,&Item,false);	// Not print view
-
-	    /* Show form to create/change item */
-	    if (Item.Hierarchy.ItmCod == ItmCodBeforeForm)
-	       switch (CreateOrChangeItem)
-		 {
-		  case Prg_DONT_PUT_FORM_ITEM:
-		     break;
-		  case Prg_PUT_FORM_CREATE_ITEM:
-		     Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,
-					       ParentItmCod,FormLevel);
-		     break;
-		  case Prg_PUT_FORM_CHANGE_ITEM:
-		     Prg_WriteRowWithItemForm (Prg_PUT_FORM_CHANGE_ITEM,
-					       ItmCodBeforeForm,FormLevel);
-		 }
+	    /* Show form to create item */
+	    switch (ShowItemForm)
+	      {
+	       case Prg_ITEM_PRINT:
+	       case Prg_ITEM_VIEW:
+	       case Prg_ITEM_EDIT_BUTTONS:
+	          Prg_WriteRowItem (NumItem,&Item,Prg_ITEM_EDIT_BUTTONS);
+                  break;
+	       case Prg_ITEM_CREATE_FORM:
+	          Prg_WriteRowItem (NumItem,&Item,Prg_ITEM_EDIT_BUTTONS);
+	          if (Item.Hierarchy.ItmCod == ItmCod)
+                     Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
+                  break;
+	       case Prg_ITEM_CHANGE_FORM:
+		  Prg_WriteRowItem (NumItem,&Item,
+				    Item.Hierarchy.ItmCod == ItmCod ? Prg_ITEM_CHANGE_FORM :
+					                              Prg_ITEM_EDIT_BUTTONS);
+                  break;
+	       case Prg_ITEM_CHANGE_RESOURCES:
+	          Prg_WriteRowItem (NumItem,&Item,
+	                            Item.Hierarchy.ItmCod == ItmCod ? Prg_ITEM_CHANGE_RESOURCES :
+					                              Prg_ITEM_EDIT_BUTTONS);
+		  break;
+	      }
 
 	    /* End range to highlight? */
 	    if (Item.Hierarchy.Index == ToHighlight->End)	// End of the highlighted range
@@ -275,9 +280,8 @@ void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 	   }
 
 	 /***** Create item at the end? *****/
-	 if (ItmCodBeforeForm <= 0 &&
-	     CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-	    Prg_WriteRowWithItemForm (Prg_PUT_FORM_CREATE_ITEM,-1L,1);
+	 if (ItmCod <= 0 && ShowItemForm == Prg_ITEM_CREATE_FORM)
+	    Prg_WriteRowToCreateItem (-1L,1);
 
 	 /***** End table *****/
 	 HTM_TBODY_End ();					// 3rd tbody end
@@ -350,7 +354,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 /*****************************************************************************/
 
 static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
-			      bool PrintView)
+			      Prg_ShowItemForm_t ShowItemForm)
   {
    static unsigned UniqueId = 0;
    bool LightStyle;
@@ -378,12 +382,19 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this program item *****/
-      if (!PrintView)
-	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
-	    Prg_PutFormsToRemEditOneItem (NumItem,Item);
-	 HTM_TD_End ();
-	}
+      switch (ShowItemForm)
+        {
+	 case Prg_ITEM_EDIT_BUTTONS:
+	 case Prg_ITEM_CHANGE_FORM:
+	 case Prg_ITEM_CHANGE_RESOURCES:
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
+	                  The_GetColorRows ());
+	       Prg_PutFormsToRemEditOneItem (NumItem,Item);
+	    HTM_TD_End ();
+	    break;
+	 default:
+	    break;
+        }
 
       /***** Indent depending on the level *****/
       for (NumCol = 1;
@@ -402,13 +413,18 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 
       /***** Title *****/
       ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
-      if (PrintView)
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-		       ColSpan,TitleClass);
-      else
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s %s\"",
-		       ColSpan,TitleClass,The_GetColorRows ());
-      HTM_Txt (Item->Title);
+      switch (ShowItemForm)
+        {
+	 case Prg_ITEM_PRINT:
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+		          ColSpan,TitleClass);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s %s\"",
+		          ColSpan,TitleClass,The_GetColorRows ());
+	    break;
+        }
+         HTM_Txt (Item->Title);
       HTM_TD_End ();
 
       /***** Start/end date/time *****/
@@ -420,26 +436,31 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	{
 	 if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 if (PrintView)
-	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s\"",
-			  Id,
-			  LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
-						     "DATE_RED_LIGHT") :
-				       (Item->Open ? "DATE_GREEN" :
-						     "DATE_RED"),
-			  The_GetSuffix ());
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s %s\"",
-			  Id,
-			  LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
-						     "DATE_RED_LIGHT") :
-				       (Item->Open ? "DATE_GREEN" :
-						     "DATE_RED"),
-			  The_GetSuffix (),
-			  The_GetColorRows ());
-	 Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
+	 switch (ShowItemForm)
+	   {
+	    case Prg_ITEM_PRINT:
+	       HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s\"",
+			     Id,
+			     LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
+							"DATE_RED_LIGHT") :
+					  (Item->Open ? "DATE_GREEN" :
+							"DATE_RED"),
+			     The_GetSuffix ());
+	       break;
+	    default:
+	       HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s %s\"",
+			     Id,
+			     LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
+							"DATE_RED_LIGHT") :
+					  (Item->Open ? "DATE_GREEN" :
+							"DATE_RED"),
+			     The_GetSuffix (),
+			     The_GetColorRows ());
+	       break;
+	   }
+	    Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,true,0x7);
 	 HTM_TD_End ();
 	 free (Id);
 	}
@@ -452,27 +473,51 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 
       /* Begin text and resources */
       ColSpan += 2;
-      if (PrintView)
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",
-		       ColSpan);
-      else
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-		       ColSpan,The_GetColorRows ());
+      switch (ShowItemForm)
+	{
+	 case Prg_ITEM_PRINT:
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+			  ColSpan,The_GetColorRows ());
+	    break;
+	}
 
-      /* Text */
-      Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-                     The_GetSuffix (),
-		     LightStyle ? " PRG_HIDDEN" :
-				  "");
-	 HTM_Txt (Txt);
-      HTM_DIV_End ();
+      /* Item text / form */
+      switch (ShowItemForm)
+	{
+	 case Prg_ITEM_CHANGE_FORM:
+            /* Form to change item title, dates and text */
+	    HTM_ARTICLE_Begin ("item_form");
+	       Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
+	    HTM_ARTICLE_End ();
+	    break;
+	 default:
+	    /* Text */
+	    Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+	    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+			   The_GetSuffix (),
+			   LightStyle ? " PRG_HIDDEN" :
+					"");
+	       HTM_Txt (Txt);
+	    HTM_DIV_End ();
+	    break;
+	}
 
       /* List of resources */
-      PrgRsc_ShowResources (Item->Hierarchy.ItmCod);
+      switch (ShowItemForm)
+	{
+	 case Prg_ITEM_CHANGE_RESOURCES:
+            PrgRsc_ListResourcesToEdit (Item->Hierarchy.ItmCod);
+	    break;
+	 default:
+            PrgRsc_ListResourcesToShow (Item->Hierarchy.ItmCod);
+	    break;
+	}
 
       /* End text and resources */
       HTM_TD_End ();
@@ -488,29 +533,17 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 /**************************** Show item form *********************************/
 /*****************************************************************************/
 
-static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			              long ItmCod,unsigned FormLevel)
+static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel)
   {
    char *TitleClass;
    unsigned ColSpan;
    unsigned NumCol;
-   static void (*ShowForm[Prg_NUM_TYPES_FORMS])(long ItmCod) =
-     {
-      [Prg_DONT_PUT_FORM_ITEM  ] = NULL,
-      [Prg_PUT_FORM_CREATE_ITEM] = Prg_ShowFormToCreateItem,
-      [Prg_PUT_FORM_CHANGE_ITEM] = Prg_ShowFormToChangeItem,
-     };
-
-   /***** Trivial check *****/
-   if (CreateOrChangeItem == Prg_DONT_PUT_FORM_ITEM)
-      return;
 
    /***** Title CSS class *****/
    Prg_SetTitleClass (&TitleClass,FormLevel,false);
 
-   /***** Change color row? *****/
-   if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-      The_ChangeRowColor ();
+   /***** Change color *****/
+   The_ChangeRowColor ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -531,8 +564,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
       /***** Item number *****/
       HTM_TD_Begin ("class=\"PRG_NUM %s RT %s\"",
                     TitleClass,The_GetColorRows ());
-	 if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-	    Prg_WriteNumNewItem (FormLevel);
+	 Prg_WriteNumNewItem (FormLevel);
       HTM_TD_End ();
 
       /***** Show form to create new item as child *****/
@@ -541,12 +573,8 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 		    ColSpan,The_GetColorRows ());
          /* Form for item data */
 	 HTM_ARTICLE_Begin ("item_form");
-	    ShowForm[CreateOrChangeItem] (ItmCod);
+	    Prg_ShowFormToCreateItem (ItmCod);
 	 HTM_ARTICLE_End ();
-
-	 /* List of item resources */
-	 if (CreateOrChangeItem == Prg_PUT_FORM_CHANGE_ITEM)
-	    PrgRsc_EditResources (ItmCod);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -1065,7 +1093,7 @@ static void Prg_PutParamItmCod (long ItmCod)
 /***************** Get parameter with code of program item *******************/
 /*****************************************************************************/
 
-static long Prg_GetParamItmCod (void)
+long Prg_GetParamItmCod (void)
   {
    return Par_GetParToLong ("ItmCod");
   }
@@ -1597,7 +1625,7 @@ void Prg_RequestCreateItem (void)
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CREATE_ITEM,
+   Prg_ShowAllItems (Prg_ITEM_CREATE_FORM,
 		     &ToHighlight,ParentItmCod,ItmCodBeforeForm,FormLevel);
 
    /***** Free list of program items *****/
@@ -1606,7 +1634,7 @@ void Prg_RequestCreateItem (void)
 
 void Prg_RequestChangeItem (void)
   {
-   long ItmCodBeforeForm;
+   long ItmCod;
    unsigned FormLevel;
    struct Prg_ItemRange ToHighlight;
 
@@ -1614,17 +1642,15 @@ void Prg_RequestChangeItem (void)
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   ItmCodBeforeForm = Prg_GetParamItmCod ();
-
-   if (ItmCodBeforeForm > 0)
-      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCodBeforeForm));
+   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
    else
       FormLevel = 0;
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_PUT_FORM_CHANGE_ITEM,
-		     &ToHighlight,-1L,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_ITEM_CHANGE_FORM,
+		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

@@ -1773,6 +1773,14 @@ a:hover img.CENTER_PHOTO_SHOW
 	to	{opacity:1;}
 	}
 
+.PRG_RSC_WHITE,
+.PRG_RSC_GREY,
+.PRG_RSC_PURPLE,
+.PRG_RSC_BLUE,
+.PRG_RSC_YELLOW,
+.PRG_RSC_PINK		{color:#202020; font-size:14pt; font-weight:bold;}
+.PRG_RSC_DARK		{color:#e0e0e0; font-size:14pt; font-weight:bold;}
+
 /********************************** Notice ***********************************/
 .NOTICE_CONT
 	{

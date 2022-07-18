@@ -5697,27 +5697,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move right program item"			// Çeviri lazim!
 #endif
 	,
-	[ActFrmNewPrgRsc] =
+	[ActFrmEdiPrgRsc] =
 #if   L==1	// ca
-	"Request new resource"		// Necessita traducció
+	"Edit resources"	// Necessita traducció
 #elif L==2	// de
-	"Request new resource"		// Need Übersetzung
+	"Edit resources"	// Need Übersetzung
 #elif L==3	// en
-	"Request new resource"
+	"Edit resources"
 #elif L==4	// es
-	"Solicitar nuevo recurso"
+	"Editar recursos"
 #elif L==5	// fr
-	"Request new resource"		// Besoin de traduction
+	"Edit resources"	// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar nuevo recurso"	// Okoteve traducción
+	"Editar recursos"	// Okoteve traducción
 #elif L==7	// it
-	"Request new resource"		// Bisogno di traduzione
+	"Edit resources"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request new resource"		// Potrzebujesz tlumaczenie
+	"Edit resources"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request new resource"		// Precisa de tradução
+	"Edit resources"	// Precisa de tradução
 #elif L==10	// tr
-	"Request new resource"		// Çeviri lazim!
+	"Edit resources"	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPrgRsc] =

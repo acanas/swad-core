@@ -559,7 +559,7 @@ void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
 		   "DELETE FROM prg_resources"
 		   " WHERE RscCod=%ld"
 		     " AND ItmCod=%ld",	// Extra check
-		   Resource->RscCod,
+		   Resource->Rsc.Cod,
 		   Resource->ItmCod);
   }
 
