@@ -109,8 +109,8 @@ static void Prg_PutIconsListItems (__attribute__((unused)) void *Args);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
-static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
-			      Prg_ShowItemForm_t ShowItemForm);
+static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
+                              unsigned NumItem,struct Prg_Item *Item);
 static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
 static void Prg_FreeTitleClass (char *TitleClass);
@@ -187,14 +187,14 @@ void Prg_ShowCourseProgram (void)
 void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
    /***** Show all program items *****/
-   Prg_ShowAllItems (Prg_ITEM_VIEW,ToHighlight,-1L,-1L,0);
+   Prg_ShowAllItems (Prg_EDIT_LIST,ToHighlight,-1L,-1L,0);
   }
 
 /*****************************************************************************/
 /************************* Show all program items ****************************/
 /*****************************************************************************/
 
-void Prg_ShowAllItems (Prg_ShowItemForm_t ShowItemForm,
+void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
                        const struct Prg_ItemRange *ToHighlight,
                        long ParentItmCod,long ItmCod,unsigned FormLevel)
   {
@@ -244,27 +244,24 @@ void Prg_ShowAllItems (Prg_ShowItemForm_t ShowItemForm,
 	      }
 
 	    /* Show form to create item */
-	    switch (ShowItemForm)
+	    switch (ListingItem)
 	      {
-	       case Prg_ITEM_PRINT:
-	       case Prg_ITEM_VIEW:
-	       case Prg_ITEM_EDIT_BUTTONS:
-	          Prg_WriteRowItem (NumItem,&Item,Prg_ITEM_EDIT_BUTTONS);
+	       case Prg_PRINT:
+	       case Prg_VIEW:
+	       case Prg_EDIT_LIST:
+	          Prg_WriteRowItem (ListingItem,NumItem,&Item);
                   break;
-	       case Prg_ITEM_CREATE_FORM:
-	          Prg_WriteRowItem (NumItem,&Item,Prg_ITEM_EDIT_BUTTONS);
+	       case Prg_NEW_ITEM:
+	          Prg_WriteRowItem (Prg_EDIT_LIST,NumItem,&Item);
 	          if (Item.Hierarchy.ItmCod == ItmCod)
                      Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
                   break;
-	       case Prg_ITEM_CHANGE_FORM:
-		  Prg_WriteRowItem (NumItem,&Item,
-				    Item.Hierarchy.ItmCod == ItmCod ? Prg_ITEM_CHANGE_FORM :
-					                              Prg_ITEM_EDIT_BUTTONS);
-                  break;
-	       case Prg_ITEM_CHANGE_RESOURCES:
-	          Prg_WriteRowItem (NumItem,&Item,
-	                            Item.Hierarchy.ItmCod == ItmCod ? Prg_ITEM_CHANGE_RESOURCES :
-					                              Prg_ITEM_EDIT_BUTTONS);
+	       case Prg_EDIT_ITEM:
+	       case Prg_EDIT_RESOURCES:
+	       case Prg_END_EDIT_RES:
+	          Prg_WriteRowItem (Item.Hierarchy.ItmCod == ItmCod ? ListingItem :
+					                              Prg_EDIT_LIST,
+				    NumItem,&Item);
 		  break;
 	      }
 
@@ -280,7 +277,7 @@ void Prg_ShowAllItems (Prg_ShowItemForm_t ShowItemForm,
 	   }
 
 	 /***** Create item at the end? *****/
-	 if (ItmCod <= 0 && ShowItemForm == Prg_ITEM_CREATE_FORM)
+	 if (ItmCod <= 0 && ListingItem == Prg_NEW_ITEM)
 	    Prg_WriteRowToCreateItem (-1L,1);
 
 	 /***** End table *****/
@@ -353,8 +350,8 @@ static void Prg_PutButtonToCreateNewItem (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
-			      Prg_ShowItemForm_t ShowItemForm)
+static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
+                              unsigned NumItem,struct Prg_Item *Item)
   {
    static unsigned UniqueId = 0;
    bool LightStyle;
@@ -382,11 +379,12 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this program item *****/
-      switch (ShowItemForm)
+      switch (ListingItem)
         {
-	 case Prg_ITEM_EDIT_BUTTONS:
-	 case Prg_ITEM_CHANGE_FORM:
-	 case Prg_ITEM_CHANGE_RESOURCES:
+	 case Prg_EDIT_LIST:
+	 case Prg_EDIT_ITEM:
+	 case Prg_EDIT_RESOURCES:
+	 case Prg_END_EDIT_RES:
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
 	                  The_GetColorRows ());
 	       Prg_PutFormsToRemEditOneItem (NumItem,Item);
@@ -413,9 +411,9 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 
       /***** Title *****/
       ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
-      switch (ShowItemForm)
+      switch (ListingItem)
         {
-	 case Prg_ITEM_PRINT:
+	 case Prg_PRINT:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
 		          ColSpan,TitleClass);
 	    break;
@@ -436,9 +434,9 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	{
 	 if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 switch (ShowItemForm)
+	 switch (ListingItem)
 	   {
-	    case Prg_ITEM_PRINT:
+	    case Prg_PRINT:
 	       HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s\"",
 			     Id,
 			     LightStyle ? (Item->Open ? "DATE_GREEN_LIGHT" :
@@ -473,9 +471,9 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 
       /* Begin text and resources */
       ColSpan += 2;
-      switch (ShowItemForm)
+      switch (ListingItem)
 	{
-	 case Prg_ITEM_PRINT:
+	 case Prg_PRINT:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
 	    break;
 	 default:
@@ -485,9 +483,9 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	}
 
       /* Item text / form */
-      switch (ShowItemForm)
+      switch (ListingItem)
 	{
-	 case Prg_ITEM_CHANGE_FORM:
+	 case Prg_EDIT_ITEM:
             /* Form to change item title, dates and text */
 	    HTM_ARTICLE_Begin ("item_form");
 	       Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
@@ -509,15 +507,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	}
 
       /* List of resources */
-      switch (ShowItemForm)
-	{
-	 case Prg_ITEM_CHANGE_RESOURCES:
-            PrgRsc_ListResourcesToEdit (Item->Hierarchy.ItmCod);
-	    break;
-	 default:
-            PrgRsc_ListResourcesToShow (Item->Hierarchy.ItmCod);
-	    break;
-	}
+      PrgRsc_ListItemResources (ListingItem,Item->Hierarchy.ItmCod);
 
       /* End text and resources */
       HTM_TD_End ();
@@ -1625,7 +1615,7 @@ void Prg_RequestCreateItem (void)
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_ITEM_CREATE_FORM,
+   Prg_ShowAllItems (Prg_NEW_ITEM,
 		     &ToHighlight,ParentItmCod,ItmCodBeforeForm,FormLevel);
 
    /***** Free list of program items *****/
@@ -1649,7 +1639,7 @@ void Prg_RequestChangeItem (void)
 
    /***** Show current program items, if any *****/
    Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_ITEM_CHANGE_FORM,
+   Prg_ShowAllItems (Prg_EDIT_ITEM,
 		     &ToHighlight,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/

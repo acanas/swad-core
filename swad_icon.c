@@ -263,10 +263,10 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
 				  "folder-open.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToView (Act_Action_t NextAction,
+void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncParams) (void *Args),void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "list.svg",Ico_BLACK);
   }

@@ -486,7 +486,7 @@ void Tmt_EditMyTutTimeTable (void)
 
 static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeCrsTT,
+   Ico_PutContextualIconToView (ActSeeCrsTT,NULL,
 				NULL,NULL);
   }
 
@@ -496,7 +496,7 @@ static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
 
 static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeMyTT,
+   Ico_PutContextualIconToView (ActSeeMyTT,NULL,
 				NULL,NULL);
   }
 

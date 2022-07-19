@@ -52,10 +52,11 @@ struct PrgRsc_Resource
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void PrgRsc_ViewResources (void);
 void PrgRsc_EditResources (void);
 
-void PrgRsc_ListResourcesToShow (long ItmCod);
-void PrgRsc_ListResourcesToEdit (long ItmCod);
+void PrgRsc_ListItemResources (Prg_ListingItem_t ListingItem,long ItmCod);
+
 void PrgRsc_RequestCreateResource (void);
 
 void PrgRsc_ReqRemResource (void);

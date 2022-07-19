@@ -553,7 +553,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	    Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
 	 else
 	    /* Put icon to view game listing its questions */
-	    Ico_PutContextualIconToView (ActLstOneGam,
+	    Ico_PutContextualIconToView (ActLstOneGam,NULL,
 					 Gam_PutParams,Games);
 
 	 HTM_TD_End ();

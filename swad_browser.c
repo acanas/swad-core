@@ -3590,7 +3590,7 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
       case Brw_ICON_NONE:
 	 break;
       case Brw_ICON_VIEW:
-	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],NULL,
 				      Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree);
 	 break;
       case Brw_ICON_EDIT:

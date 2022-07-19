@@ -414,7 +414,7 @@ static void Inf_PutButtonToEditInfo (void)
 static void Inf_PutIconToViewInfo (void *Type)
   {
    if (Type)
-      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[*((Inf_Type_t *) Type)],
+      Ico_PutContextualIconToView (Inf_ActionsSeeInfo[*((Inf_Type_t *) Type)],NULL,
 				   NULL,NULL);
   }
 

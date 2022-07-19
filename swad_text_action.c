@@ -5697,27 +5697,50 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move right program item"			// Çeviri lazim!
 #endif
 	,
+	[ActFrmSeePrgRsc] =
+#if   L==1	// ca
+	"Veure recursos"
+#elif L==2	// de
+	"Siehe Ressourcen"
+#elif L==3	// en
+	"See resources"
+#elif L==4	// es
+	"Ver recursos"
+#elif L==5	// fr
+	"Voir ressources"
+#elif L==6	// gn
+	"Editar recursos"	// Okoteve traducción
+#elif L==7	// it
+	"Vedi risorse"
+#elif L==8	// pl
+	"Zobacz zasoby"
+#elif L==9	// pt
+	"Ver recursos"
+#elif L==10	// tr
+	"Kaynaklar&inodot; d&uuml;zenle"
+#endif
+	,
 	[ActFrmEdiPrgRsc] =
 #if   L==1	// ca
-	"Edit resources"	// Necessita traducció
+	"Editar recursos"
 #elif L==2	// de
-	"Edit resources"	// Need Übersetzung
+	"Ressourcen bearbeiten"
 #elif L==3	// en
 	"Edit resources"
 #elif L==4	// es
 	"Editar recursos"
 #elif L==5	// fr
-	"Edit resources"	// Besoin de traduction
+	"Modifier ressources"
 #elif L==6	// gn
 	"Editar recursos"	// Okoteve traducción
 #elif L==7	// it
-	"Edit resources"	// Bisogno di traduzione
+	"Modifica risorse"
 #elif L==8	// pl
-	"Edit resources"	// Potrzebujesz tlumaczenie
+	"Edytuj zasoby"
 #elif L==9	// pt
-	"Edit resources"	// Precisa de tradução
+	"Editar recursos"
 #elif L==10	// tr
-	"Edit resources"	// Çeviri lazim!
+	"Kaynaklar&inodot; d&uuml;zenle"
 #endif
 	,
 	[ActReqRemPrgRsc] =
@@ -17360,25 +17383,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeDocCrs] =
 #if   L==1	// ca
-	"See documents zone of the course"		// Necessita traducció
+	"Veure zona de documents de l'assignatura"
 #elif L==2	// de
-	"See documents zone of the course"		// Need Übersetzung
+	"Siehe Dokumentenbereich der Kurs"
 #elif L==3	// en
-	"See documents zone of the course"
+	"See document area of the course"
 #elif L==4	// es
 	"Ver zona de documentos de la asignatura"
 #elif L==5	// fr
-	"See documents zone of the course"		// Besoin de traduction
+	"Voir la zone de documents de la mati&egrave;re"
 #elif L==6	// gn
 	"Ver zona de documentos de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"See documents zone of the course"		// Bisogno di traduzione
+	"Vedi area documenti del corso"
 #elif L==8	// pl
-	"See documents zone of the course"		// Potrzebujesz tlumaczenie
+	"Zobacz obszar dokumentu kursu"
 #elif L==9	// pt
-	"See documents zone of the course"		// Precisa de tradução
+	"Ver a &aacute;rea de documentos da disciplina"
 #elif L==10	// tr
-	"See documents zone of the course"		// Çeviri lazim!
+	"Kursun belge alan&inodot;na bak&inodot;n"
 #endif
 	,
 	[ActExpSeeDocCrs] =

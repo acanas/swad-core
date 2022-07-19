@@ -1359,7 +1359,7 @@ static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Ico_PutContextualIconToView (ActReqSelGrp,
+   Ico_PutContextualIconToView (ActReqSelGrp,NULL,
                                 NULL,NULL);
   }
 

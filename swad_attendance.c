@@ -2795,7 +2795,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 
 static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeAtt,
+   Ico_PutContextualIconToView (ActSeeAtt,NULL,
 				NULL,NULL);
   }
 
