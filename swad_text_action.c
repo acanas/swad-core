@@ -5421,6 +5421,328 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See educational schedule of course"				// Çeviri lazim!
 #endif
 	,
+	[ActSeeTchGui] =
+#if   L==1	// ca
+	"See the teaching guide of course"		// Necessita traducció
+#elif L==2	// de
+	"See the teaching guide of course"		// Need Übersetzung
+#elif L==3	// en
+	"See the teaching guide of course"
+#elif L==4	// es
+	"Ver la gu&iacute;a docente de la asignatura"
+#elif L==5	// fr
+	"See the teaching guide of course"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver la gu&iacute;a docente de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the teaching guide of course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the teaching guide of course"		// Precisa de tradução
+#elif L==10	// tr
+	"See the teaching guide of course"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeSyl] =
+#if   L==1	// ca
+	"See the syllabus (lectures or practicals)"		// Necessita traducció
+#elif L==2	// de
+	"See the syllabus (lectures or practicals)"		// Need Übersetzung
+#elif L==3	// en
+	"See the syllabus (lectures or practicals)"
+#elif L==4	// es
+	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"
+#elif L==5	// fr
+	"See the syllabus (lectures or practicals)"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"	// Okoteve traducción
+#elif L==7	// it
+	"See the syllabus (lectures or practicals)"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the syllabus (lectures or practicals)"		// Precisa de tradução
+#elif L==10	// tr
+	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeBib] =
+#if   L==1	// ca
+	"See the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"See the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"See the bibliography"
+#elif L==4	// es
+	"Ver la bibliograf&iacute;a"
+#elif L==5	// fr
+	"See the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"See the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"See the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeFAQ] =
+#if   L==1	// ca
+	"See the FAQ"	// Necessita traducció
+#elif L==2	// de
+	"See the FAQ"	// Need Übersetzung
+#elif L==3	// en
+	"See the FAQ"
+#elif L==4	// es
+	"Ver la FAQ"
+#elif L==5	// fr
+	"See the FAQ"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"See the FAQ"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the FAQ"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	"See the FAQ"	// Çeviri lazim!
+#endif
+	,
+	[ActSeeCrsLnk] =
+#if   L==1	// ca
+	"See the links related to the course"			// Necessita traducció
+#elif L==2	// de
+	"See the links related to the course"			// Need Übersetzung
+#elif L==3	// en
+	"See the links related to the course"
+#elif L==4	// es
+	"Ver los enlaces relacionados con la asignatura"
+#elif L==5	// fr
+	"See the links related to the course"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver los enlaces relacionados con la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the links related to the course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See the links related to the course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the links related to the course"			// Precisa de tradução
+#elif L==10	// tr
+	"See the links related to the course"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeCrsTT] =
+#if   L==1	// ca
+	"See the course timetable"		// Necessita traducció
+#elif L==2	// de
+	"See the course timetable"		// Need Übersetzung
+#elif L==3	// en
+	"See the course timetable"
+#elif L==4	// es
+	"Ver el horario de la asignatura"
+#elif L==5	// fr
+	"See the course timetable"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver el horario de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the course timetable"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the course timetable"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the course timetable"		// Precisa de tradução
+#elif L==10	// tr
+	"See the course timetable"		// Çeviri lazim!
+#endif
+	,
+	[ActPrnCrsInf] =
+#if   L==1	// ca
+	"Print information on the course"			// Necessita traducció
+#elif L==2	// de
+	"Print information on the course"			// Need Übersetzung
+#elif L==3	// en
+	"Print information on the course"
+#elif L==4	// es
+	"Imprimir informaci&oacute;n sobre la asignatura"
+#elif L==5	// fr
+	"Print information on the course"			// Besoin de traduction
+#elif L==6	// gn
+	"Imprimir informaci&oacute;n sobre la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Print information on the course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Print information on the course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Print information on the course"			// Precisa de tradução
+#elif L==10	// tr
+	"Print information on the course"			// Çeviri lazim!
+#endif
+	,
+	[ActChgCrsDegCfg] =
+#if   L==1	// ca
+	"Change degree of course in its configuration"				// Necessita traducció
+#elif L==2	// de
+	"Change degree of course in its configuration"				// Need Übersetzung
+#elif L==3	// en
+	"Change degree of course in its configuration"
+#elif L==4	// es
+	"Cambiar titulaci&oacute;n de asignatura en su configuraci&oacute;n"
+#elif L==5	// fr
+	"Change degree of course in its configuration"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar titulaci&oacute;n de asignatura en su configuraci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change degree of course in its configuration"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change degree of course in its configuration"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change degree of course in its configuration"				// Precisa de tradução
+#elif L==10	// tr
+	"Change degree of course in its configuration"				// Çeviri lazim!
+#endif
+	,
+	[ActRenCrsShoCfg] =
+#if   L==1	// ca
+	"Change short name of course in its configuration"		// Necessita traducció
+#elif L==2	// de
+	"Change short name of course in its configuration"		// Need Übersetzung
+#elif L==3	// en
+	"Change short name of course in its configuration"
+#elif L==4	// es
+	"Cambiar nombre breve de asignatura en su configuraci&oacute;n"
+#elif L==5	// fr
+	"Change short name of course in its configuration"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nombre breve de asignatura en su configuraci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change short name of course in its configuration"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change short name of course in its configuration"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change short name of course in its configuration"		// Precisa de tradução
+#elif L==10	// tr
+	"Change short name of course in its configuration"		// Çeviri lazim!
+#endif
+	,
+	[ActRenCrsFulCfg] =
+#if   L==1	// ca
+	"Change full name of course in its configuration"			// Necessita traducció
+#elif L==2	// de
+	"Change full name of course in its configuration"			// Need Übersetzung
+#elif L==3	// en
+	"Change full name of course in its configuration"
+#elif L==4	// es
+	"Cambiar nombre completo de asignatura en su configuraci&oacute;n"
+#elif L==5	// fr
+	"Change full name of course in its configuration"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nombre completo de asignatura en su configuraci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change full name of course in its configuration"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change full name of course in its configuration"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change full name of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	"Change full name of course in its configuration"			// Çeviri lazim!
+#endif
+	,
+	[ActChgInsCrsCodCfg] =
+#if   L==1	// ca
+	"Change institutional code of course in its configuration"			// Necessita traducció
+#elif L==2	// de
+	"Change institutional code of course in its configuration"			// Need Übersetzung
+#elif L==3	// en
+	"Change institutional code of course in its configuration"
+#elif L==4	// es
+	"Cambiar c&oacute;digo institucional de asignatura en su configuraci&oacute;n"
+#elif L==5	// fr
+	"Change institutional code of course in its configuration"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar c&oacute;digo institucional de asignatura en su configuraci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change institutional code of course in its configuration"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change institutional code of course in its configuration"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change institutional code of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	"Change institutional code of course in its configuration"			// Çeviri lazim!
+#endif
+	,
+	[ActChgCrsYeaCfg] =
+#if   L==1	// ca
+	"Change year/semester of course in its configuration"			// Necessita traducció
+#elif L==2	// de
+	"Change year/semester of course in its configuration"			// Need Übersetzung
+#elif L==3	// en
+	"Change year/semester of course in its configuration"
+#elif L==4	// es
+	"Cambiar a&ntilde;o/semestre de asignatura en su configuraci&oacute;n"
+#elif L==5	// fr
+	"Change year/semester of course in its configuration"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar a&ntilde;o/semestre de asignatura en su configuraci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change year/semester of course in its configuration"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change year/semester of course in its configuration"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change year/semester of course in its configuration"			// Precisa de tradução
+#elif L==10	// tr
+	"Change year/semester of course in its configuration"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiCrsInf] =
+#if   L==1	// ca
+	"Edit information about the course"		// Necessita traducció
+#elif L==2	// de
+	"Edit information about the course"		// Need Übersetzung
+#elif L==3	// en
+	"Edit information about the course"
+#elif L==4	// es
+	"Editar la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Edit information about the course"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit information about the course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit information about the course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit information about the course"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit information about the course"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiPrg] =
+#if   L==1	// ca
+	"Edit educational schedule of course"				// Necessita traducció
+#elif L==2	// de
+	"Edit educational schedule of course"				// Need Übersetzung
+#elif L==3	// en
+	"Edit educational schedule of course"
+#elif L==4	// es
+	"Editar programaci&oacute;n did&aacute;ctica de la asignatura"
+#elif L==5	// fr
+	"Edit educational schedule of course"				// Besoin de traduction
+#elif L==6	// gn
+	"Editar programaci&oacute;n did&aacute;ctica de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit educational schedule of course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit educational schedule of course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit educational schedule of course"				// Precisa de tradução
+#elif L==10	// tr
+	"Edit educational schedule of course"				// Çeviri lazim!
+#endif
+	,
 	[ActFrmNewPrgItm] =
 #if   L==1	// ca
 	"Request new program item"			// Necessita traducció
@@ -5879,305 +6201,6 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down resource"	// Precisa de tradução
 #elif L==10	// tr
 	"Move down resource"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeTchGui] =
-#if   L==1	// ca
-	"See the teaching guide of course"		// Necessita traducció
-#elif L==2	// de
-	"See the teaching guide of course"		// Need Übersetzung
-#elif L==3	// en
-	"See the teaching guide of course"
-#elif L==4	// es
-	"Ver la gu&iacute;a docente de la asignatura"
-#elif L==5	// fr
-	"See the teaching guide of course"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver la gu&iacute;a docente de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the teaching guide of course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the teaching guide of course"		// Precisa de tradução
-#elif L==10	// tr
-	"See the teaching guide of course"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeSyl] =
-#if   L==1	// ca
-	"See the syllabus (lectures or practicals)"		// Necessita traducció
-#elif L==2	// de
-	"See the syllabus (lectures or practicals)"		// Need Übersetzung
-#elif L==3	// en
-	"See the syllabus (lectures or practicals)"
-#elif L==4	// es
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"
-#elif L==5	// fr
-	"See the syllabus (lectures or practicals)"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"	// Okoteve traducción
-#elif L==7	// it
-	"See the syllabus (lectures or practicals)"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the syllabus (lectures or practicals)"		// Precisa de tradução
-#elif L==10	// tr
-	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeBib] =
-#if   L==1	// ca
-	"See the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"See the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"See the bibliography"
-#elif L==4	// es
-	"Ver la bibliograf&iacute;a"
-#elif L==5	// fr
-	"See the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"See the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"See the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeFAQ] =
-#if   L==1	// ca
-	"See the FAQ"	// Necessita traducció
-#elif L==2	// de
-	"See the FAQ"	// Need Übersetzung
-#elif L==3	// en
-	"See the FAQ"
-#elif L==4	// es
-	"Ver la FAQ"
-#elif L==5	// fr
-	"See the FAQ"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"See the FAQ"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the FAQ"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the FAQ"	// Precisa de tradução
-#elif L==10	// tr
-	"See the FAQ"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeCrsLnk] =
-#if   L==1	// ca
-	"See the links related to the course"			// Necessita traducció
-#elif L==2	// de
-	"See the links related to the course"			// Need Übersetzung
-#elif L==3	// en
-	"See the links related to the course"
-#elif L==4	// es
-	"Ver los enlaces relacionados con la asignatura"
-#elif L==5	// fr
-	"See the links related to the course"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver los enlaces relacionados con la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the links related to the course"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See the links related to the course"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the links related to the course"			// Precisa de tradução
-#elif L==10	// tr
-	"See the links related to the course"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeCrsTT] =
-#if   L==1	// ca
-	"See the course timetable"		// Necessita traducció
-#elif L==2	// de
-	"See the course timetable"		// Need Übersetzung
-#elif L==3	// en
-	"See the course timetable"
-#elif L==4	// es
-	"Ver el horario de la asignatura"
-#elif L==5	// fr
-	"See the course timetable"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver el horario de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the course timetable"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the course timetable"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the course timetable"		// Precisa de tradução
-#elif L==10	// tr
-	"See the course timetable"		// Çeviri lazim!
-#endif
-	,
-	[ActPrnCrsInf] =
-#if   L==1	// ca
-	"Print information on the course"			// Necessita traducció
-#elif L==2	// de
-	"Print information on the course"			// Need Übersetzung
-#elif L==3	// en
-	"Print information on the course"
-#elif L==4	// es
-	"Imprimir informaci&oacute;n sobre la asignatura"
-#elif L==5	// fr
-	"Print information on the course"			// Besoin de traduction
-#elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Print information on the course"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Print information on the course"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Print information on the course"			// Precisa de tradução
-#elif L==10	// tr
-	"Print information on the course"			// Çeviri lazim!
-#endif
-	,
-	[ActChgCrsDegCfg] =
-#if   L==1	// ca
-	"Change degree of course in its configuration"				// Necessita traducció
-#elif L==2	// de
-	"Change degree of course in its configuration"				// Need Übersetzung
-#elif L==3	// en
-	"Change degree of course in its configuration"
-#elif L==4	// es
-	"Cambiar titulaci&oacute;n de asignatura en su configuraci&oacute;n"
-#elif L==5	// fr
-	"Change degree of course in its configuration"				// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar titulaci&oacute;n de asignatura en su configuraci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change degree of course in its configuration"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Change degree of course in its configuration"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change degree of course in its configuration"				// Precisa de tradução
-#elif L==10	// tr
-	"Change degree of course in its configuration"				// Çeviri lazim!
-#endif
-	,
-	[ActRenCrsShoCfg] =
-#if   L==1	// ca
-	"Change short name of course in its configuration"		// Necessita traducció
-#elif L==2	// de
-	"Change short name of course in its configuration"		// Need Übersetzung
-#elif L==3	// en
-	"Change short name of course in its configuration"
-#elif L==4	// es
-	"Cambiar nombre breve de asignatura en su configuraci&oacute;n"
-#elif L==5	// fr
-	"Change short name of course in its configuration"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar nombre breve de asignatura en su configuraci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change short name of course in its configuration"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change short name of course in its configuration"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change short name of course in its configuration"		// Precisa de tradução
-#elif L==10	// tr
-	"Change short name of course in its configuration"		// Çeviri lazim!
-#endif
-	,
-	[ActRenCrsFulCfg] =
-#if   L==1	// ca
-	"Change full name of course in its configuration"			// Necessita traducció
-#elif L==2	// de
-	"Change full name of course in its configuration"			// Need Übersetzung
-#elif L==3	// en
-	"Change full name of course in its configuration"
-#elif L==4	// es
-	"Cambiar nombre completo de asignatura en su configuraci&oacute;n"
-#elif L==5	// fr
-	"Change full name of course in its configuration"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar nombre completo de asignatura en su configuraci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change full name of course in its configuration"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change full name of course in its configuration"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change full name of course in its configuration"			// Precisa de tradução
-#elif L==10	// tr
-	"Change full name of course in its configuration"			// Çeviri lazim!
-#endif
-	,
-	[ActChgInsCrsCodCfg] =
-#if   L==1	// ca
-	"Change institutional code of course in its configuration"			// Necessita traducció
-#elif L==2	// de
-	"Change institutional code of course in its configuration"			// Need Übersetzung
-#elif L==3	// en
-	"Change institutional code of course in its configuration"
-#elif L==4	// es
-	"Cambiar c&oacute;digo institucional de asignatura en su configuraci&oacute;n"
-#elif L==5	// fr
-	"Change institutional code of course in its configuration"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar c&oacute;digo institucional de asignatura en su configuraci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change institutional code of course in its configuration"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change institutional code of course in its configuration"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change institutional code of course in its configuration"			// Precisa de tradução
-#elif L==10	// tr
-	"Change institutional code of course in its configuration"			// Çeviri lazim!
-#endif
-	,
-	[ActChgCrsYeaCfg] =
-#if   L==1	// ca
-	"Change year/semester of course in its configuration"			// Necessita traducció
-#elif L==2	// de
-	"Change year/semester of course in its configuration"			// Need Übersetzung
-#elif L==3	// en
-	"Change year/semester of course in its configuration"
-#elif L==4	// es
-	"Cambiar a&ntilde;o/semestre de asignatura en su configuraci&oacute;n"
-#elif L==5	// fr
-	"Change year/semester of course in its configuration"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar a&ntilde;o/semestre de asignatura en su configuraci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change year/semester of course in its configuration"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change year/semester of course in its configuration"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change year/semester of course in its configuration"			// Precisa de tradução
-#elif L==10	// tr
-	"Change year/semester of course in its configuration"			// Çeviri lazim!
-#endif
-	,
-	[ActEdiCrsInf] =
-#if   L==1	// ca
-	"Edit information about the course"		// Necessita traducció
-#elif L==2	// de
-	"Edit information about the course"		// Need Übersetzung
-#elif L==3	// en
-	"Edit information about the course"
-#elif L==4	// es
-	"Editar la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Edit information about the course"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Edit information about the course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit information about the course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit information about the course"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit information about the course"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiTchGui] =

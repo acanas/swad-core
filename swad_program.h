@@ -71,7 +71,7 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
-#define Prg_NUM_LISTING_ITEM_TYPES 7
+#define Prg_NUM_LISTING_TYPES 7
 typedef enum
   {
    Prg_PRINT,		// List items ready to be printed
@@ -81,20 +81,21 @@ typedef enum
    Prg_EDIT_ITEM,	// Form to edit a selected item
    Prg_EDIT_RESOURCES,	// List resources of a selected item for edition
    Prg_END_EDIT_RES,	// List resources of a selected item after edition
-  } Prg_ListingItem_t;
+  } Prg_ListingType_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Prg_ShowCourseProgram (void);
-void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
+void Prg_EditCourseProgram (void);
+void Prg_EditCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
 
-void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
+void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                        const struct Prg_ItemRange *ToHighlight,
                        long ParentItmCod,long ItmCod,unsigned FormLevel);
 
-bool Prg_CheckIfICanCreateItems (void);
+bool Prg_CheckIfICanEditProgram (void);
 void Prg_PutParams (void *ItmCod);
 
 void Prg_GetListItems (void);
@@ -117,8 +118,6 @@ void Prg_MoveUpItem (void);
 void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
-
-void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange);
 
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule

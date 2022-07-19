@@ -106,10 +106,13 @@ static struct
 /*****************************************************************************/
 
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args);
+static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args);
+static void Prg_PutIconToEditProgram (void);
+static void Prg_PutIconToViewProgram (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
-static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
+static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item);
 static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
@@ -171,20 +174,29 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 
 void Prg_ShowCourseProgram (void)
   {
-   struct Prg_ItemRange ToHighlight;
-
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Show course program without highlighting any item *****/
-   Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_ShowAllItems (Prg_VIEW,NULL,-1L,-1L,0);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
   }
 
-void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
+void Prg_EditCourseProgram (void)
+  {
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Show course program without highlighting any item *****/
+   Prg_EditCourseProgramHighlightingItem (NULL);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+void Prg_EditCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
    /***** Show all program items *****/
    Prg_ShowAllItems (Prg_EDIT_LIST,ToHighlight,-1L,-1L,0);
@@ -194,7 +206,7 @@ void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighli
 /************************* Show all program items ****************************/
 /*****************************************************************************/
 
-void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
+void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                        const struct Prg_ItemRange *ToHighlight,
                        long ParentItmCod,long ItmCod,unsigned FormLevel)
   {
@@ -203,6 +215,16 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
    unsigned NumItem;
    struct Prg_Item Item;
    static bool FirstTBodyOpen = false;
+   static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
+     {
+      [Prg_PRINT         ] = NULL,
+      [Prg_VIEW          ] = Prg_PutIconsListItems,
+      [Prg_EDIT_LIST     ] = Prg_PutIconsEditItems,
+      [Prg_NEW_ITEM      ] = Prg_PutIconsEditItems,
+      [Prg_EDIT_ITEM     ] = Prg_PutIconsEditItems,
+      [Prg_EDIT_RESOURCES] = Prg_PutIconsEditItems,
+      [Prg_END_EDIT_RES  ] = Prg_PutIconsEditItems,
+     };
 
    /***** Create numbers and hidden levels *****/
    Prg_SetMaxItemLevel (Prg_CalculateMaxItemLevel ());
@@ -210,7 +232,7 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
 
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Course_program,
-                 Prg_PutIconsListItems,NULL,
+                 FunctionToDrawContextualIcons[ListingType],NULL,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
       /***** Table *****/
@@ -233,23 +255,24 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
 	    Prg_GetDataOfItemByCod (&Item);
 
 	    /* Begin range to highlight? */
-	    if (Item.Hierarchy.Index == ToHighlight->Begin)	// Begin of the highlighted range
-	      {
-	       if (FirstTBodyOpen)
+	    if (ToHighlight)
+	       if (Item.Hierarchy.Index == ToHighlight->Begin)	// Begin of the highlighted range
 		 {
-		  HTM_TBODY_End ();				// 1st tbody end
-		  FirstTBodyOpen = false;
+		  if (FirstTBodyOpen)
+		    {
+		     HTM_TBODY_End ();				// 1st tbody end
+		     FirstTBodyOpen = false;
+		    }
+		  HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
 		 }
-	       HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
-	      }
 
 	    /* Show form to create item */
-	    switch (ListingItem)
+	    switch (ListingType)
 	      {
 	       case Prg_PRINT:
 	       case Prg_VIEW:
 	       case Prg_EDIT_LIST:
-	          Prg_WriteRowItem (ListingItem,NumItem,&Item);
+	          Prg_WriteRowItem (ListingType,NumItem,&Item);
                   break;
 	       case Prg_NEW_ITEM:
 	          Prg_WriteRowItem (Prg_EDIT_LIST,NumItem,&Item);
@@ -259,25 +282,26 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
 	       case Prg_EDIT_ITEM:
 	       case Prg_EDIT_RESOURCES:
 	       case Prg_END_EDIT_RES:
-	          Prg_WriteRowItem (Item.Hierarchy.ItmCod == ItmCod ? ListingItem :
+	          Prg_WriteRowItem (Item.Hierarchy.ItmCod == ItmCod ? ListingType :
 					                              Prg_EDIT_LIST,
 				    NumItem,&Item);
 		  break;
 	      }
 
 	    /* End range to highlight? */
-	    if (Item.Hierarchy.Index == ToHighlight->End)	// End of the highlighted range
-	      {
-	       HTM_TBODY_End ();				// Highlighted tbody end
-	       if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
-		  HTM_TBODY_Begin (NULL);			// 3rd tbody begin
-	      }
+	    if (ToHighlight)
+	       if (Item.Hierarchy.Index == ToHighlight->End)	// End of the highlighted range
+		 {
+		  HTM_TBODY_End ();				// Highlighted tbody end
+		  if (NumItem < Prg_Gbl.List.NumItems - 1)	// Not the last item
+		     HTM_TBODY_Begin (NULL);			// 3rd tbody begin
+		 }
 
 	    The_ChangeRowColor ();
 	   }
 
 	 /***** Create item at the end? *****/
-	 if (ItmCod <= 0 && ListingItem == Prg_NEW_ITEM)
+	 if (ItmCod <= 0 && ListingType == Prg_NEW_ITEM)
 	    Prg_WriteRowToCreateItem (-1L,1);
 
 	 /***** End table *****/
@@ -285,7 +309,7 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
       HTM_TABLE_End ();
 
       /***** Button to create a new program item *****/
-      if (Prg_CheckIfICanCreateItems ())
+      if (Prg_CheckIfICanEditProgram ())
 	 Prg_PutButtonToCreateNewItem ();
 
    /***** End box *****/
@@ -299,7 +323,7 @@ void Prg_ShowAllItems (Prg_ListingItem_t ListingItem,
 /******************* Check if I can create program items *********************/
 /*****************************************************************************/
 
-bool Prg_CheckIfICanCreateItems (void)
+bool Prg_CheckIfICanEditProgram (void)
   {
    return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
@@ -311,12 +335,49 @@ bool Prg_CheckIfICanCreateItems (void)
 
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args)
   {
+   /***** Put icon to edit program *****/
+   if (Prg_CheckIfICanEditProgram ())
+      Prg_PutIconToEditProgram ();
+
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_COURSE_PROGRAMS);
+  }
+
+/*****************************************************************************/
+/************** Put contextual icons in list of program items ****************/
+/*****************************************************************************/
+
+static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to view program *****/
+   Prg_PutIconToViewProgram ();
+
    /***** Put icon to create a new program item *****/
-   if (Prg_CheckIfICanCreateItems ())
+   if (Prg_CheckIfICanEditProgram ())
       Prg_PutIconToCreateNewItem ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_COURSE_PROGRAMS);
+  }
+
+/*****************************************************************************/
+/************************* Put icon to edit program **************************/
+/*****************************************************************************/
+
+static void Prg_PutIconToEditProgram (void)
+  {
+   Ico_PutContextualIconToEdit (ActEdiPrg,NULL,
+                                NULL,NULL);
+  }
+
+/*****************************************************************************/
+/************************* Put icon to view program **************************/
+/*****************************************************************************/
+
+static void Prg_PutIconToViewProgram (void)
+  {
+   Ico_PutContextualIconToView (ActSeePrg,NULL,
+                                NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -350,7 +411,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
+static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item)
   {
    static unsigned UniqueId = 0;
@@ -379,7 +440,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this program item *****/
-      switch (ListingItem)
+      switch (ListingType)
         {
 	 case Prg_EDIT_LIST:
 	 case Prg_EDIT_ITEM:
@@ -411,7 +472,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
 
       /***** Title *****/
       ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
-      switch (ListingItem)
+      switch (ListingType)
         {
 	 case Prg_PRINT:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
@@ -434,7 +495,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
 	{
 	 if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 switch (ListingItem)
+	 switch (ListingType)
 	   {
 	    case Prg_PRINT:
 	       HTM_TD_Begin ("id=\"%s\" class=\"PRG_DATE LT %s_%s\"",
@@ -471,7 +532,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
 
       /* Begin text and resources */
       ColSpan += 2;
-      switch (ListingItem)
+      switch (ListingType)
 	{
 	 case Prg_PRINT:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
@@ -483,7 +544,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
 	}
 
       /* Item text / form */
-      switch (ListingItem)
+      switch (ListingType)
 	{
 	 case Prg_EDIT_ITEM:
             /* Form to change item title, dates and text */
@@ -507,7 +568,7 @@ static void Prg_WriteRowItem (Prg_ListingItem_t ListingItem,
 	}
 
       /* List of resources */
-      PrgRsc_ListItemResources (ListingItem,Item->Hierarchy.ItmCod);
+      PrgRsc_ListItemResources (ListingType,Item->Hierarchy.ItmCod);
 
       /* End text and resources */
       HTM_TD_End ();
@@ -1151,7 +1212,7 @@ void Prg_ReqRemItem (void)
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
 				    &ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1166,7 +1227,6 @@ void Prg_RemoveItem (void)
    extern const char *Txt_Item_X_removed;
    struct Prg_Item Item;
    struct Prg_ItemRange ToRemove;
-   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1192,8 +1252,7 @@ void Prg_RemoveItem (void)
    Prg_GetListItems ();
 
    /***** Show course program without highlighting any item *****/
-   Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (NULL);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1233,7 +1292,7 @@ static void Prg_HideOrUnhideItem (bool Hide)
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
 				    &ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1295,17 +1354,18 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
       /* Update list of program items */
       Prg_FreeListItems ();
       Prg_GetListItems ();
+
+      /* Show program items highlighting subtree */
       Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
 				       &ToHighlight);
+      Prg_EditCourseProgramHighlightingItem (&ToHighlight);
      }
    else
      {
+      /* Show course program without highlighting any item */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Prg_SetItemRangeEmpty (&ToHighlight);
+      Prg_EditCourseProgramHighlightingItem (NULL);
      }
-
-   /***** Show program items highlighting subtree *****/
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1492,17 +1552,18 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
       /* Update list of program items */
       Prg_FreeListItems ();
       Prg_GetListItems ();
+
+      /* Show program items highlighting subtree */
       Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
 				       &ToHighlight);
+      Prg_EditCourseProgramHighlightingItem (&ToHighlight);
      }
    else
      {
+      /* Show course program without highlighting any item */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Prg_SetItemRangeEmpty (&ToHighlight);
+      Prg_EditCourseProgramHighlightingItem (NULL);
      }
-
-   /***** Show program items highlighting subtree *****/
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1511,21 +1572,6 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
 /*****************************************************************************/
 /****** Set subtree begin and end from number of item in course program ******/
 /*****************************************************************************/
-
-void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange)
-  {
-   /***** List of items must be filled *****/
-   if (!Prg_Gbl.List.IsRead)
-      Err_WrongItemsListExit ();
-
-   /***** Range is empty *****/
-   if (Prg_Gbl.List.NumItems)
-      ItemRange->Begin =
-      ItemRange->End   = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
-   else
-      ItemRange->Begin =
-      ItemRange->End   = 1;
-  }
 
 static void Prg_SetItemRangeOnlyItem (unsigned Index,struct Prg_ItemRange *ItemRange)
   {
@@ -1590,7 +1636,6 @@ void Prg_RequestCreateItem (void)
    unsigned NumItem;
    long ItmCodBeforeForm;
    unsigned FormLevel;
-   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1614,9 +1659,7 @@ void Prg_RequestCreateItem (void)
      }
 
    /***** Show current program items, if any *****/
-   Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_NEW_ITEM,
-		     &ToHighlight,ParentItmCod,ItmCodBeforeForm,FormLevel);
+   Prg_ShowAllItems (Prg_NEW_ITEM,NULL,ParentItmCod,ItmCodBeforeForm,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1626,7 +1669,6 @@ void Prg_RequestChangeItem (void)
   {
    long ItmCod;
    unsigned FormLevel;
-   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1638,9 +1680,7 @@ void Prg_RequestChangeItem (void)
       FormLevel = 0;
 
    /***** Show current program items, if any *****/
-   Prg_SetItemRangeEmpty (&ToHighlight);
-   Prg_ShowAllItems (Prg_EDIT_ITEM,
-		     &ToHighlight,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_ITEM,NULL,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1843,7 +1883,7 @@ void Prg_ReceiveFormNewItem (void)
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeOnlyItem (NewItem.Hierarchy.Index,&ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1894,7 +1934,7 @@ void Prg_ReceiveFormChgItem (void)
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeOnlyItem (NewItem.Hierarchy.Index,&ToHighlight);
-   Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

@@ -55,7 +55,7 @@ struct PrgRsc_Resource
 void PrgRsc_ViewResources (void);
 void PrgRsc_EditResources (void);
 
-void PrgRsc_ListItemResources (Prg_ListingItem_t ListingItem,long ItmCod);
+void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod);
 
 void PrgRsc_RequestCreateResource (void);
 
