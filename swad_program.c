@@ -114,6 +114,7 @@ static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item);
+static void Prg_WriteItemText (long ItmCod,bool LightStyle);
 static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
 static void Prg_FreeTitleClass (char *TitleClass);
@@ -132,8 +133,9 @@ static void Prg_SetHiddenLevel (unsigned Level,bool Hidden);
 static bool Prg_GetHiddenLevel (unsigned Level);
 static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
-static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
-					  struct Prg_Item *Item);
+static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
+                                          unsigned NumItem,
+                                          struct Prg_Item *Item);
 static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
@@ -222,6 +224,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
       [Prg_EDIT_LIST     ] = Prg_PutIconsEditItems,
       [Prg_NEW_ITEM      ] = Prg_PutIconsEditItems,
       [Prg_EDIT_ITEM     ] = Prg_PutIconsEditItems,
+      [Prg_END_EDIT_ITEM ] = Prg_PutIconsEditItems,
       [Prg_EDIT_RESOURCES] = Prg_PutIconsEditItems,
       [Prg_END_EDIT_RES  ] = Prg_PutIconsEditItems,
      };
@@ -280,6 +283,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                      Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
                   break;
 	       case Prg_EDIT_ITEM:
+	       case Prg_END_EDIT_ITEM:
 	       case Prg_EDIT_RESOURCES:
 	       case Prg_END_EDIT_RES:
 	          Prg_WriteRowItem (Item.Hierarchy.ItmCod == ItmCod ? ListingType :
@@ -421,7 +425,6 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    unsigned NumCol;
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if this item should be shown as hidden *****/
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.Hidden);
@@ -444,11 +447,12 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
         {
 	 case Prg_EDIT_LIST:
 	 case Prg_EDIT_ITEM:
+	 case Prg_END_EDIT_ITEM:
 	 case Prg_EDIT_RESOURCES:
 	 case Prg_END_EDIT_RES:
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
 	                  The_GetColorRows ());
-	       Prg_PutFormsToRemEditOneItem (NumItem,Item);
+	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
 	    HTM_TD_End ();
 	    break;
 	 default:
@@ -477,14 +481,22 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 case Prg_PRINT:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
 		          ColSpan,TitleClass);
+               HTM_Txt (Item->Title);
+            HTM_TD_End ();
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s %s\"",
 		          ColSpan,TitleClass,The_GetColorRows ());
+	       if (ListingType == Prg_EDIT_ITEM ||
+		   ListingType == Prg_END_EDIT_ITEM)
+	          HTM_ARTICLE_Begin ("item_form");
+               HTM_Txt (Item->Title);
+	       if (ListingType == Prg_EDIT_ITEM ||
+		   ListingType == Prg_END_EDIT_ITEM)
+	          HTM_ARTICLE_End ();
+            HTM_TD_End ();
 	    break;
         }
-         HTM_Txt (Item->Title);
-      HTM_TD_End ();
 
       /***** Start/end date/time *****/
       UniqueId++;
@@ -552,18 +564,15 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	       Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
 	    HTM_ARTICLE_End ();
 	    break;
+	 case Prg_END_EDIT_ITEM:
+            /* Text */
+	    HTM_ARTICLE_Begin ("item_form");
+	       Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
+	    HTM_ARTICLE_End ();
+	    break;
 	 default:
 	    /* Text */
-	    Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-	    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-			   The_GetSuffix (),
-			   LightStyle ? " PRG_HIDDEN" :
-					"");
-	       HTM_Txt (Txt);
-	    HTM_DIV_End ();
+	    Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
 	    break;
 	}
 
@@ -578,6 +587,27 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 
    /***** Free title CSS class *****/
    Prg_FreeTitleClass (TitleClass);
+  }
+
+/*****************************************************************************/
+/**************************** Show item text *********************************/
+/*****************************************************************************/
+
+static void Prg_WriteItemText (long ItmCod,bool LightStyle)
+  {
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /* Text */
+   Prg_DB_GetItemTxt (ItmCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+		     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
+		  The_GetSuffix (),
+		  LightStyle ? " PRG_HIDDEN" :
+			       "");
+      HTM_Txt (Txt);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -811,8 +841,9 @@ static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
 /**************** Put a link (form) to edit one program item *****************/
 /*****************************************************************************/
 
-static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
-					  struct Prg_Item *Item)
+static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
+                                          unsigned NumItem,
+                                          struct Prg_Item *Item)
   {
    extern const char *Txt_Movement_not_allowed;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -837,8 +868,17 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	                                 Prg_PutParams,&Item->Hierarchy.ItmCod);
 
 	 /***** Put form to edit program item *****/
-	 Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
-	                              Prg_PutParams,&Item->Hierarchy.ItmCod);
+	 switch (ListingType)
+	   {
+	    case Prg_EDIT_ITEM:
+	       Ico_PutContextualIconToView (ActSeePrgItm,"item_form",
+					    Prg_PutParams,&Item->Hierarchy.ItmCod);
+	       break;
+	    default:
+	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
+					    Prg_PutParams,&Item->Hierarchy.ItmCod);
+	       break;
+	   }
 
 	 /***** Put form to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
@@ -1627,7 +1667,57 @@ static unsigned Prg_GetLastChild (int NumItem)
   }
 
 /*****************************************************************************/
-/******* Put a form to create/edit program item and show current items *******/
+/******** List program items when click on view an item after edition ********/
+/*****************************************************************************/
+
+void Prg_ViewItemAfterEdit (void)
+  {
+   long ItmCod;
+   unsigned FormLevel;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get the code of the program item *****/
+   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
+   else
+      FormLevel = 0;
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems (Prg_END_EDIT_ITEM,NULL,-1L,ItmCod,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/*********** List program items with a form to change a given item ***********/
+/*****************************************************************************/
+
+void Prg_RequestChangeItem (void)
+  {
+   long ItmCod;
+   unsigned FormLevel;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get the code of the program item *****/
+   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
+   else
+      FormLevel = 0;
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems (Prg_EDIT_ITEM,NULL,-1L,ItmCod,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
+/************ List program items with a form to create a new item ************/
 /*****************************************************************************/
 
 void Prg_RequestCreateItem (void)
@@ -1660,27 +1750,6 @@ void Prg_RequestCreateItem (void)
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_NEW_ITEM,NULL,ParentItmCod,ItmCodBeforeForm,FormLevel);
-
-   /***** Free list of program items *****/
-   Prg_FreeListItems ();
-  }
-
-void Prg_RequestChangeItem (void)
-  {
-   long ItmCod;
-   unsigned FormLevel;
-
-   /***** Get list of program items *****/
-   Prg_GetListItems ();
-
-   /***** Get the code of the program item *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
-      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
-   else
-      FormLevel = 0;
-
-   /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_ITEM,NULL,-1L,ItmCod,FormLevel);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1836,6 +1905,57 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
   }
 
 /*****************************************************************************/
+/************* Receive form to change an existing program item ***************/
+/*****************************************************************************/
+
+void Prg_ReceiveFormChgItem (void)
+  {
+   // struct Prg_Item OldItem;	// Current program item data in database
+   struct Prg_Item NewItem;	// Item data received from form
+   char Description[Cns_MAX_BYTES_TEXT + 1];
+   struct Prg_ItemRange ToHighlight;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get data of the item from database *****/
+   NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetDataOfItemByCod (&NewItem);
+   if (NewItem.Hierarchy.ItmCod <= 0)
+      Err_WrongItemExit ();
+
+   /***** Get data of the old (current) program item from database *****/
+   // OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
+   // Prg_GetDataOfItemByCod (&OldItem);
+
+   /***** Get start/end date-times *****/
+   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+
+   /***** Get program item title *****/
+   Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+
+   /***** Get program item text *****/
+   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+   /***** Adjust dates *****/
+   if (NewItem.TimeUTC[Dat_STR_TIME] == 0)
+      NewItem.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewItem.TimeUTC[Dat_END_TIME] == 0)
+      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+
+   /***** Update existing item *****/
+   Prg_DB_UpdateItem (&NewItem,Description);
+
+   /***** Show program items highlighting subtree *****/
+   Prg_SetItemRangeOnlyItem (NewItem.Hierarchy.Index,&ToHighlight);
+   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
 /***************** Receive form to create a new program item *****************/
 /*****************************************************************************/
 
@@ -1880,57 +2000,6 @@ void Prg_ReceiveFormNewItem (void)
    /* Update list of program items */
    Prg_FreeListItems ();
    Prg_GetListItems ();
-
-   /***** Show program items highlighting subtree *****/
-   Prg_SetItemRangeOnlyItem (NewItem.Hierarchy.Index,&ToHighlight);
-   Prg_EditCourseProgramHighlightingItem (&ToHighlight);
-
-   /***** Free list of program items *****/
-   Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/************* Receive form to change an existing program item ***************/
-/*****************************************************************************/
-
-void Prg_ReceiveFormChgItem (void)
-  {
-   // struct Prg_Item OldItem;	// Current program item data in database
-   struct Prg_Item NewItem;	// Item data received from form
-   char Description[Cns_MAX_BYTES_TEXT + 1];
-   struct Prg_ItemRange ToHighlight;
-
-   /***** Get list of program items *****/
-   Prg_GetListItems ();
-
-   /***** Get data of the item from database *****/
-   NewItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&NewItem);
-   if (NewItem.Hierarchy.ItmCod <= 0)
-      Err_WrongItemExit ();
-
-   /***** Get data of the old (current) program item from database *****/
-   // OldItem.Hierarchy.ItmCod = NewItem.Hierarchy.ItmCod;
-   // Prg_GetDataOfItemByCod (&OldItem);
-
-   /***** Get start/end date-times *****/
-   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
-
-   /***** Get program item title *****/
-   Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
-
-   /***** Get program item text *****/
-   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Adjust dates *****/
-   if (NewItem.TimeUTC[Dat_STR_TIME] == 0)
-      NewItem.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewItem.TimeUTC[Dat_END_TIME] == 0)
-      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
-
-   /***** Update existing item *****/
-   Prg_DB_UpdateItem (&NewItem,Description);
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeOnlyItem (NewItem.Hierarchy.Index,&ToHighlight);

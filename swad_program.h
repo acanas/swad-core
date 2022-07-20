@@ -71,14 +71,17 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
-#define Prg_NUM_LISTING_TYPES 7
+#define Prg_NUM_LISTING_TYPES 8
 typedef enum
   {
    Prg_PRINT,		// List items ready to be printed
    Prg_VIEW,		// List items without any edition
+
    Prg_EDIT_LIST,	// Buttons to edit list of items
    Prg_NEW_ITEM,	// Form to create a new item
    Prg_EDIT_ITEM,	// Form to edit a selected item
+   Prg_END_EDIT_ITEM,	// List item after edition
+
    Prg_EDIT_RESOURCES,	// List resources of a selected item for edition
    Prg_END_EDIT_RES,	// List resources of a selected item after edition
   } Prg_ListingType_t;
@@ -104,10 +107,11 @@ long Prg_GetParamItmCod (void);
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
 
-void Prg_RequestCreateItem (void);
+void Prg_ViewItemAfterEdit (void);
 void Prg_RequestChangeItem (void);
-void Prg_ReceiveFormNewItem (void);
+void Prg_RequestCreateItem (void);
 void Prg_ReceiveFormChgItem (void);
+void Prg_ReceiveFormNewItem (void);
 
 void Prg_ReqRemItem (void);
 void Prg_RemoveItem (void);

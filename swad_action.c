@@ -430,10 +430,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActEdiCrsInf	] = { 848,-1,TabUnk,ActSeeCrsInf	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
    [ActEdiPrg		] = {1926, 1,TabCrs,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_EditCourseProgram		,NULL},
-   [ActFrmNewPrgItm	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreateItem		,NULL},
+   [ActSeePrgItm	] = {1927,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ViewItemAfterEdit		,NULL},
    [ActFrmChgPrgItm	] = {1823,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestChangeItem		,NULL},
-   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReceiveFormNewItem		,NULL},
+   [ActFrmNewPrgItm	] = {1822,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RequestCreateItem		,NULL},
    [ActChgPrgItm	] = {1826,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReceiveFormChgItem		,NULL},
+   [ActNewPrgItm	] = {1825,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReceiveFormNewItem		,NULL},
    [ActReqRemPrgItm	] = {1827,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ReqRemItem			,NULL},
    [ActRemPrgItm	] = {1828,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_RemoveItem			,NULL},
    [ActHidPrgItm	] = {1829,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_HideItem			,NULL},
@@ -443,7 +444,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveLeftItem		,NULL},
    [ActRgtPrgItm	] = {1833,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveRightItem		,NULL},
 
-   [ActFrmSeePrgRsc	] = {1925,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResources		,NULL},
+   [ActFrmSeePrgRsc	] = {1925,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourcesAfterEdit	,NULL},
    [ActFrmEdiPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_EditResources		,NULL},
    [ActReqRemPrgRsc	] = {1919,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ReqRemResource		,NULL},
    [ActRemPrgRsc	] = {1920,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RemoveResource		,NULL},
@@ -3763,6 +3764,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDwnPrgRsc,		// #1924
 	ActFrmSeePrgRsc,	// #1925
 	ActEdiPrg,		// #1926
+	ActSeePrgItm,		// #1927
   };
 
 /*****************************************************************************/

@@ -5743,27 +5743,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit educational schedule of course"				// Çeviri lazim!
 #endif
 	,
-	[ActFrmNewPrgItm] =
+	[ActSeePrgItm] =
 #if   L==1	// ca
-	"Request new program item"			// Necessita traducció
+	"See program item"			// Necessita traducció
 #elif L==2	// de
-	"Request new program item"			// Need Übersetzung
+	"See program item"			// Need Übersetzung
 #elif L==3	// en
-	"Request new program item"
+	"See program item"
 #elif L==4	// es
-	"Solicitar nuevo &iacute;tem del programa"
+	"Ver &iacute;tem del programa"
 #elif L==5	// fr
-	"Request new program item"			// Besoin de traduction
+	"See program item"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar nuevo &iacute;tem del programa"	// Okoteve traducción
+	"Ver &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Request new program item"			// Bisogno di traduzione
+	"See program item"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request new program item"			// Potrzebujesz tlumaczenie
+	"See program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request new program item"			// Precisa de tradução
+	"See program item"			// Precisa de tradução
 #elif L==10	// tr
-	"Request new program item"			// Çeviri lazim!
+	"See program item"			// Çeviri lazim!
 #endif
 	,
 	[ActFrmChgPrgItm] =
@@ -5789,27 +5789,27 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit program item"			// Çeviri lazim!
 #endif
 	,
-	[ActNewPrgItm] =
+	[ActFrmNewPrgItm] =
 #if   L==1	// ca
-	"Create new program item"		// Necessita traducció
+	"Request new program item"			// Necessita traducció
 #elif L==2	// de
-	"Create new program item"		// Need Übersetzung
+	"Request new program item"			// Need Übersetzung
 #elif L==3	// en
-	"Create new program item"
+	"Request new program item"
 #elif L==4	// es
-	"Crear nuevo &iacute;tem del programa"
+	"Solicitar nuevo &iacute;tem del programa"
 #elif L==5	// fr
-	"Create new program item"		// Besoin de traduction
+	"Request new program item"			// Besoin de traduction
 #elif L==6	// gn
-	"Crear nuevo &iacute;tem del programa"	// Okoteve traducción
+	"Solicitar nuevo &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Create new program item"		// Bisogno di traduzione
+	"Request new program item"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Create new program item"		// Potrzebujesz tlumaczenie
+	"Request new program item"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Create new program item"		// Precisa de tradução
+	"Request new program item"			// Precisa de tradução
 #elif L==10	// tr
-	"Create new program item"		// Çeviri lazim!
+	"Request new program item"			// Çeviri lazim!
 #endif
 	,
 	[ActChgPrgItm] =
@@ -5833,6 +5833,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change program item"			// Precisa de tradução
 #elif L==10	// tr
 	"Change program item"			// Çeviri lazim!
+#endif
+	,
+	[ActNewPrgItm] =
+#if   L==1	// ca
+	"Create new program item"		// Necessita traducció
+#elif L==2	// de
+	"Create new program item"		// Need Übersetzung
+#elif L==3	// en
+	"Create new program item"
+#elif L==4	// es
+	"Crear nuevo &iacute;tem del programa"
+#elif L==5	// fr
+	"Create new program item"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo &iacute;tem del programa"	// Okoteve traducción
+#elif L==7	// it
+	"Create new program item"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new program item"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new program item"		// Precisa de tradução
+#elif L==10	// tr
+	"Create new program item"		// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPrgItm] =

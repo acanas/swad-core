@@ -91,7 +91,7 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
 /****************************** View resources *******************************/
 /*****************************************************************************/
 
-void PrgRsc_ViewResources (void)
+void PrgRsc_ViewResourcesAfterEdit (void)
   {
    long ItmCod;
    unsigned FormLevel;
@@ -157,16 +157,18 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
       [Prg_EDIT_LIST     ] = false,
       [Prg_NEW_ITEM      ] = false,
       [Prg_EDIT_ITEM     ] = false,
+      [Prg_END_EDIT_ITEM ] = false,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = false,
      };
-   static bool ShowEmptyList[Prg_NUM_LISTING_TYPES] =
+   static bool ShowListWhenEmpty[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT         ] = false,
       [Prg_VIEW          ] = false,
       [Prg_EDIT_LIST     ] = true,
       [Prg_NEW_ITEM      ] = true,
       [Prg_EDIT_ITEM     ] = true,
+      [Prg_END_EDIT_ITEM ] = true,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = true,
      };
@@ -177,8 +179,20 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
       [Prg_EDIT_LIST     ] = false,
       [Prg_NEW_ITEM      ] = false,
       [Prg_EDIT_ITEM     ] = false,
+      [Prg_END_EDIT_ITEM ] = false,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = true,
+     };
+   static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
+     {
+      [Prg_PRINT         ] = NULL,
+      [Prg_VIEW          ] = NULL,
+      [Prg_EDIT_LIST     ] = PrgRsc_PutIconsEditResources,
+      [Prg_NEW_ITEM      ] = PrgRsc_PutIconsEditResources,
+      [Prg_EDIT_ITEM     ] = PrgRsc_PutIconsEditResources,
+      [Prg_END_EDIT_ITEM ] = PrgRsc_PutIconsEditResources,
+      [Prg_EDIT_RESOURCES] = PrgRsc_PutIconsViewResources,
+      [Prg_END_EDIT_RES  ] = PrgRsc_PutIconsEditResources,
      };
 
    /***** Trivial check *****/
@@ -189,7 +203,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
    NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
                                            GetHiddenResources[ListingType]);
 
-   if (NumResources || ShowEmptyList[ListingType])
+   if (NumResources || ShowListWhenEmpty[ListingType])
      {
       /***** Begin section *****/
       if (FeaturedList[ListingType])
@@ -211,27 +225,9 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
 	   }
 
       /***** Begin box *****/
-      switch (ListingType)
-	{
-	 case Prg_EDIT_LIST:
-	 case Prg_NEW_ITEM:
-	 case Prg_EDIT_ITEM:
-	 case Prg_END_EDIT_RES:
-	    Box_BoxBegin ("100%",Txt_Resources,
-			  PrgRsc_PutIconsEditResources,&ItmCod,
-			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-	    break;
-	 case Prg_EDIT_RESOURCES:
-	    Box_BoxBegin ("100%",Txt_Resources,
-			  PrgRsc_PutIconsViewResources,&ItmCod,
-			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-	    break;
-	 default:
-	    Box_BoxBegin ("100%",Txt_Resources,
-			  NULL,NULL,
-			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-	    break;
-	}
+      Box_BoxBegin ("100%",Txt_Resources,
+		    FunctionToDrawContextualIcons[ListingType],&ItmCod,
+		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
 	 /***** Table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
