@@ -74,12 +74,11 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
                                        void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncParams) (void *Args),void *Args);
-void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
                                        void (*FuncParams) (void *Args),void *Args);
-void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
-                                  void (*FuncParams) (void *Args),void *Args);
+void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const char *Anchor,
+                                        void (*FuncParams) (void *Args),void *Args,
+                                        bool Hidden);
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,

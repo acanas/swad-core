@@ -628,6 +628,12 @@ static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const struct Asg_Assignment *Asg,
                                          const char *Anchor)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidAsg,	// Visible ==> action to hide
+      [true ] = ActUnhAsg,	// Hidden ==> action to unhide
+     };
+
    /***** Set assigment to edit
           (used as parameter in contextual links) *****/
    Assignments->AsgCodToEdit = Asg->AsgCod;
@@ -636,26 +642,23 @@ static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to remove assignment *****/
+	 /***** Icon to remove assignment *****/
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,NULL,
 	                                Asg_PutParams,Assignments);
 
-	 /***** Put form to hide/show assignment *****/
-	 if (Asg->Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,
-	                                   Asg_PutParams,Assignments);
-	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,
-	                                 Asg_PutParams,Assignments);
+	 /***** Icon to hide/unhide assignment *****/
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					    Asg_PutParams,Assignments,
+					    Asg->Hidden);
 
-	 /***** Put form to edit assignment *****/
+	 /***** Icon to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
 	                              Asg_PutParams,Assignments);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
-	 /***** Put form to print assignment *****/
+	 /***** Icon to print assignment *****/
 	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
 	                               Asg_PutParams,Assignments);
 	 break;

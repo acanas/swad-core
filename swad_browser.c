@@ -383,70 +383,37 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActShow[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Act_Action_t Brw_ActHideUnhide[Brw_NUM_TYPES_FILE_BROWSER][2] =
   {
-   [Brw_UNKNOWN     ] = ActUnk,
-   [Brw_SHOW_DOC_CRS] = ActUnk,
-   [Brw_SHOW_MRK_CRS] = ActUnk,
-   [Brw_ADMI_DOC_CRS] = ActShoDocCrs,
-   [Brw_ADMI_SHR_CRS] = ActUnk,
-   [Brw_ADMI_SHR_GRP] = ActUnk,
-   [Brw_ADMI_WRK_USR] = ActUnk,
-   [Brw_ADMI_WRK_CRS] = ActUnk,
-   [Brw_ADMI_MRK_CRS] = ActShoMrkCrs,
-   [Brw_ADMI_BRF_USR] = ActUnk,
-   [Brw_SHOW_DOC_GRP] = ActUnk,
-   [Brw_ADMI_DOC_GRP] = ActShoDocGrp,
-   [Brw_SHOW_MRK_GRP] = ActUnk,
-   [Brw_ADMI_MRK_GRP] = ActShoMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActUnk,
-   [Brw_ADMI_ASG_CRS] = ActUnk,
-   [Brw_SHOW_DOC_DEG] = ActUnk,
-   [Brw_ADMI_DOC_DEG] = ActShoDocDeg,
-   [Brw_SHOW_DOC_CTR] = ActUnk,
-   [Brw_ADMI_DOC_CTR] = ActShoDocCtr,
-   [Brw_SHOW_DOC_INS] = ActUnk,
-   [Brw_ADMI_DOC_INS] = ActShoDocIns,
-   [Brw_ADMI_SHR_DEG] = ActUnk,
-   [Brw_ADMI_SHR_CTR] = ActUnk,
-   [Brw_ADMI_SHR_INS] = ActUnk,
-   [Brw_ADMI_TCH_CRS] = ActUnk,
-   [Brw_ADMI_TCH_GRP] = ActUnk,
-   [Brw_ADMI_DOC_PRJ] = ActUnk,
-   [Brw_ADMI_ASS_PRJ] = ActUnk,
-  };
-
-static const Act_Action_t Brw_ActHide[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = ActUnk,
-   [Brw_SHOW_DOC_CRS] = ActUnk,
-   [Brw_SHOW_MRK_CRS] = ActUnk,
-   [Brw_ADMI_DOC_CRS] = ActHidDocCrs,
-   [Brw_ADMI_SHR_CRS] = ActUnk,
-   [Brw_ADMI_SHR_GRP] = ActUnk,
-   [Brw_ADMI_WRK_USR] = ActUnk,
-   [Brw_ADMI_WRK_CRS] = ActUnk,
-   [Brw_ADMI_MRK_CRS] = ActHidMrkCrs,
-   [Brw_ADMI_BRF_USR] = ActUnk,
-   [Brw_SHOW_DOC_GRP] = ActUnk,
-   [Brw_ADMI_DOC_GRP] = ActHidDocGrp,
-   [Brw_SHOW_MRK_GRP] = ActUnk,
-   [Brw_ADMI_MRK_GRP] = ActHidMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActUnk,
-   [Brw_ADMI_ASG_CRS] = ActUnk,
-   [Brw_SHOW_DOC_DEG] = ActUnk,
-   [Brw_ADMI_DOC_DEG] = ActHidDocDeg,
-   [Brw_SHOW_DOC_CTR] = ActUnk,
-   [Brw_ADMI_DOC_CTR] = ActHidDocCtr,
-   [Brw_SHOW_DOC_INS] = ActUnk,
-   [Brw_ADMI_DOC_INS] = ActHidDocIns,
-   [Brw_ADMI_SHR_DEG] = ActUnk,
-   [Brw_ADMI_SHR_CTR] = ActUnk,
-   [Brw_ADMI_SHR_INS] = ActUnk,
-   [Brw_ADMI_TCH_CRS] = ActUnk,
-   [Brw_ADMI_TCH_GRP] = ActUnk,
-   [Brw_ADMI_DOC_PRJ] = ActUnk,
-   [Brw_ADMI_ASS_PRJ] = ActUnk,
+   [Brw_UNKNOWN     ] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_SHOW_DOC_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_SHOW_MRK_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_CRS] = {[false] = ActHidDocCrs	,[true] = ActUnhDocCrs	},
+   [Brw_ADMI_SHR_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_SHR_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_WRK_USR] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_WRK_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_MRK_CRS] = {[false] = ActHidMrkCrs	,[true] = ActUnhMrkCrs	},
+   [Brw_ADMI_BRF_USR] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_SHOW_DOC_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_GRP] = {[false] = ActHidDocGrp	,[true] = ActUnhDocGrp	},
+   [Brw_SHOW_MRK_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_MRK_GRP] = {[false] = ActHidMrkGrp	,[true] = ActUnhMrkGrp	},
+   [Brw_ADMI_ASG_USR] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_ASG_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_SHOW_DOC_DEG] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_DEG] = {[false] = ActHidDocDeg	,[true] = ActUnhDocDeg	},
+   [Brw_SHOW_DOC_CTR] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_CTR] = {[false] = ActHidDocCtr	,[true] = ActUnhDocCtr	},
+   [Brw_SHOW_DOC_INS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_INS] = {[false] = ActHidDocIns	,[true] = ActUnhDocIns	},
+   [Brw_ADMI_SHR_DEG] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_SHR_CTR] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_SHR_INS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_TCH_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_TCH_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_DOC_PRJ] = {[false] = ActUnk	,[true] = ActUnk	},
+   [Brw_ADMI_ASS_PRJ] = {[false] = ActUnk	,[true] = ActUnk	},
   };
 
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -1236,8 +1203,9 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
                                          bool Hidden);
 
-static void Brw_PutIconShow (const char *Anchor);
-static void Brw_PutIconHide (const char *Anchor);
+static void Brw_PutIconHideUnhide (const char *Anchor,bool RowSetAsHidden);
+// static void Brw_PutIconShow (const char *Anchor);
+// static void Brw_PutIconHide (const char *Anchor);
 static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Brw_PutIconFolder (unsigned Level,
@@ -1394,7 +1362,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmDocIns:
       case ActConAdmDocIns:
       case ActZIPAdmDocIns:
-      case ActShoDocIns:
+      case ActUnhDocIns:
       case ActHidDocIns:
       case ActReqDatAdmDocIns:
       case ActChgDatAdmDocIns:
@@ -1453,7 +1421,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmDocCtr:
       case ActConAdmDocCtr:
       case ActZIPAdmDocCtr:
-      case ActShoDocCtr:
+      case ActUnhDocCtr:
       case ActHidDocCtr:
       case ActReqDatAdmDocCtr:
       case ActChgDatAdmDocCtr:
@@ -1512,7 +1480,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmDocDeg:
       case ActConAdmDocDeg:
       case ActZIPAdmDocDeg:
-      case ActShoDocDeg:
+      case ActUnhDocDeg:
       case ActHidDocDeg:
       case ActReqDatAdmDocDeg:
       case ActChgDatAdmDocDeg:
@@ -1587,7 +1555,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmDocCrs:
       case ActConAdmDocCrs:
       case ActZIPAdmDocCrs:
-      case ActShoDocCrs:
+      case ActUnhDocCrs:
       case ActHidDocCrs:
       case ActReqDatAdmDocCrs:
       case ActChgDatAdmDocCrs:
@@ -1610,7 +1578,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmDocGrp:
       case ActConAdmDocGrp:
       case ActZIPAdmDocGrp:
-      case ActShoDocGrp:
+      case ActUnhDocGrp:
       case ActHidDocGrp:
       case ActReqDatAdmDocGrp:
       case ActChgDatAdmDocGrp:
@@ -1913,7 +1881,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmMrkCrs:
       case ActConAdmMrkCrs:
       case ActZIPAdmMrkCrs:
-      case ActShoMrkCrs:
+      case ActUnhMrkCrs:
       case ActHidMrkCrs:
       case ActReqDatAdmMrkCrs:
       case ActChgDatAdmMrkCrs:
@@ -1937,7 +1905,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpAdmMrkGrp:
       case ActConAdmMrkGrp:
       case ActZIPAdmMrkGrp:
-      case ActShoMrkGrp:
+      case ActUnhMrkGrp:
       case ActHidMrkGrp:
       case ActReqDatAdmMrkGrp:
       case ActChgDatAdmMrkGrp:
@@ -4605,14 +4573,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	    if (Level)
 	       Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow);
 
-	    /* Put icon to show/hide file or folder */
+	    /* Put icon to hide/unhide file or folder */
 	    if (AdminDocsZone || AdminMarks)
-	      {
-	       if (RowSetAsHidden)	// this row is marked as hidden
-		  Brw_PutIconShow (Anchor);
-	       else			// this row is not marked as hidden
-		  Brw_PutIconHide (Anchor);
-	      }
+	       Brw_PutIconHideUnhide (Anchor,RowSetAsHidden);
 
 	    /***** File or folder icon *****/
 	    switch (Gbl.FileBrowser.FilFolLnk.Type)
@@ -4950,26 +4913,15 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
   }
 
 /*****************************************************************************/
-/****************** Put link and icon to show file or folder *****************/
+/************* Put link and icon to hide/unhide file or folder ***************/
 /*****************************************************************************/
 
-static void Brw_PutIconShow (const char *Anchor)
+static void Brw_PutIconHideUnhide (const char *Anchor,bool RowSetAsHidden)
   {
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-      Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
-				     Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
-   HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/****************** Put link and icon to hide file or folder *****************/
-/*****************************************************************************/
-
-static void Brw_PutIconHide (const char *Anchor)
-  {
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-      Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
-				   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+      Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[Gbl.FileBrowser.Type],Anchor,
+					 Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
+					 RowSetAsHidden);
    HTM_TD_End ();
   }
 

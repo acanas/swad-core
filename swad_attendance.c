@@ -604,21 +604,24 @@ static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
 					      const struct Att_Event *Event,
                                               const char *Anchor)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidAtt,	// Visible ==> action to hide
+      [true ] = ActUnhAtt,	// Hidden ==> action to unhide
+     };
+
    Events->AttCod = Event->AttCod;
 
-   /***** Put form to remove attendance event *****/
+   /***** Icon to remove attendance event *****/
    Ico_PutContextualIconToRemove (ActReqRemAtt,NULL,
                                   Att_PutParams,Events);
 
-   /***** Put form to hide/show attendance event *****/
-   if (Event->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoAtt,Anchor,
-                                     Att_PutParams,Events);
-   else
-      Ico_PutContextualIconToHide (ActHidAtt,Anchor,
-                                   Att_PutParams,Events);
+   /***** Icon to hide/unhide attendance event *****/
+   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+				      Att_PutParams,Events,
+				      Event->Hidden);
 
-   /***** Put form to edit attendance event *****/
+   /***** Icon to edit attendance event *****/
    Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,
                                 Att_PutParams,Events);
   }

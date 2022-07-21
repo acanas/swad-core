@@ -734,19 +734,22 @@ static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
 					  const struct Gam_Game *Game,
 					  const char *Anchor)
   {
-   /***** Put icon to remove game *****/
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidGam,	// Visible ==> action to hide
+      [true ] = ActUnhGam,	// Hidden ==> action to unhide
+     };
+
+   /***** Icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
                                   Gam_PutParams,Games);
 
-   /***** Put icon to unhide/hide game *****/
-   if (Game->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoGam,Anchor,
-                                     Gam_PutParams,Games);
-   else
-      Ico_PutContextualIconToHide (ActHidGam,Anchor,
-                                   Gam_PutParams,Games);
+   /***** Icon to unhide/hide game *****/
+   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+				      Gam_PutParams,Games,
+				      Game->Hidden);
 
-   /***** Put icon to edit game *****/
+   /***** Icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
                                 Gam_PutParams,Games);
   }

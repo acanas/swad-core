@@ -2038,7 +2038,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Request removal of a banner"			// Çeviri lazim!
 #endif
 	,
-	[ActShoBan] =
+	[ActUnhBan] =
 #if   L==1	// ca
 	"Show a hidden banner"	// Necessita traducció
 #elif L==2	// de
@@ -9078,7 +9078,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide assignment"	// Çeviri lazim!
 #endif
 	,
-	[ActShoAsg] =
+	[ActUnhAsg] =
 #if   L==1	// ca
 	"Unhide assignment"	// Necessita traducció
 #elif L==2	// de
@@ -9469,7 +9469,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide project"		// Çeviri lazim!
 #endif
 	,
-	[ActShoPrj] =
+	[ActUnhPrj] =
 #if   L==1	// ca
 	"Unhide project"	// Necessita traducció
 #elif L==2	// de
@@ -11654,7 +11654,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide exam"		// Çeviri lazim!
 #endif
 	,
-	[ActShoExa] =
+	[ActUnhExa] =
 #if   L==1	// ca
 	"Unhide exam"		// Necessita traducció
 #elif L==2	// de
@@ -13310,7 +13310,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide game"	// Çeviri lazim!
 #endif
 	,
-	[ActShoGam] =
+	[ActUnhGam] =
 #if   L==1	// ca
 	"Show game"	// Necessita traducció
 #elif L==2	// de
@@ -13747,7 +13747,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide survey"		// Çeviri lazim!
 #endif
 	,
-	[ActShoSvy] =
+	[ActUnhSvy] =
 #if   L==1	// ca
 	"Unhide survey"		// Necessita traducció
 #elif L==2	// de
@@ -14713,7 +14713,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of institution"			// Çeviri lazim!
 #endif
 	,
-	[ActShoDocIns] =
+	[ActUnhDocIns] =
 #if   L==1	// ca
 	"Unhide folder/file of documents zone of institution"					// Necessita traducció
 #elif L==2	// de
@@ -15794,7 +15794,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of center"	// Çeviri lazim!
 #endif
 	,
-	[ActShoDocCtr] =
+	[ActUnhDocCtr] =
 #if   L==1	// ca
 	"Unhide folder/file of documents zone of center"		// Necessita traducció
 #elif L==2	// de
@@ -16875,7 +16875,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when mamaging documents zone of degree"			// Çeviri lazim!
 #endif
 	,
-	[ActShoDocDeg] =
+	[ActUnhDocDeg] =
 #if   L==1	// ca
 	"Unhide folder/file in documents zone of degree"			// Necessita traducció
 #elif L==2	// de
@@ -18094,7 +18094,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of course"		// Çeviri lazim!
 #endif
 	,
-	[ActShoDocCrs] =
+	[ActUnhDocCrs] =
 #if   L==1	// ca
 	"Unhide folder/file in documents zone of course"		// Necessita traducció
 #elif L==2	// de
@@ -18577,7 +18577,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder when managing documents zone of group"		// Çeviri lazim!
 #endif
 	,
-	[ActShoDocGrp] =
+	[ActUnhDocGrp] =
 #if   L==1	// ca
 	"Unhide folder/file in documents zone of group"			// Necessita traducció
 #elif L==2	// de
@@ -22786,7 +22786,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in marks management zone of course"					// Çeviri lazim!
 #endif
 	,
-	[ActShoMrkCrs] =
+	[ActUnhMrkCrs] =
 #if   L==1	// ca
 	"Unhide folder/file in marks management zone of course"						// Necessita traducció
 #elif L==2	// de
@@ -23292,7 +23292,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Compress folder in marks management zone of group"				// Çeviri lazim!
 #endif
 	,
-	[ActShoMrkGrp] =
+	[ActUnhMrkGrp] =
 #if   L==1	// ca
 	"Unhide folder/file of marks management zone of group"				// Necessita traducció
 #elif L==2	// de
@@ -25615,7 +25615,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide attendance event"			// Çeviri lazim!
 #endif
 	,
-	[ActShoAtt] =
+	[ActUnhAtt] =
 #if   L==1	// ca
 	"Unhide attendance event"	// Necessita traducció
 #elif L==2	// de
@@ -28168,7 +28168,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide global announcement"	// Çeviri lazim!
 #endif
 	,
-	[ActRevAnn] =
+	[ActUnhAnn] =
 #if   L==1	// ca
 	"Unhide global announcement"	// Necessita traducció
 #elif L==2	// de
@@ -28306,7 +28306,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide notice"		// Çeviri lazim!
 #endif
 	,
-	[ActRevNot] =
+	[ActUnhNot] =
 #if   L==1	// ca
 	"Unhide notice"	// Necessita traducció
 #elif L==2	// de
@@ -32561,7 +32561,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Hide event from my agenda"		// Çeviri lazim!
 #endif
 	,
-	[ActShoEvtMyAgd] =
+	[ActUnhEvtMyAgd] =
 #if   L==1	// ca
 	"Unhide event from my agenda"	// Necessita traducció
 #elif L==2	// de

@@ -541,6 +541,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Not_Status_t Status)
   {
    extern const char *Txt_See_full_notice;
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidNot,	// Visible ==> action to hide
+      [true ] = ActUnhNot,	// Hidden ==> action to unhide
+     };
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
       [Not_ACTIVE_NOTICE  ] = "NOTICE_BOX",
@@ -577,23 +582,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
 	 if (Not_CheckIfICanEditNotices ())
 	   {
-	    /***** Put form to remove announcement *****/
+	    /***** Icon to remove announcement *****/
 	    Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
 					   Not_PutParams,&NotCod);
 
-	    /***** Put form to change the status of the notice *****/
-	    switch (Status)
-	      {
-	       case Not_ACTIVE_NOTICE:
-		  Ico_PutContextualIconToHide (ActHidNot,NULL,
-					       Not_PutParams,&NotCod);
-		  break;
-	       case Not_OBSOLETE_NOTICE:
-		  Ico_PutContextualIconToUnhide (ActRevNot,NULL,
-						 Not_PutParams,&NotCod);
-		  break;
-	      }
-	    Frm_EndForm ();
+	    /***** Icon to change the status of the notice *****/
+	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
+				               Not_PutParams,&NotCod,
+				               Status == Not_OBSOLETE_NOTICE);
 	   }
 
       /* Write the date */

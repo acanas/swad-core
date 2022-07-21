@@ -683,19 +683,22 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const struct Exa_Exam *Exam,
 					  const char *Anchor)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidExa,	// Visible ==> action to hide
+      [true ] = ActUnhExa,	// Hidden ==> action to unhide
+     };
+
    Exams->ExaCod = Exam->ExaCod;
 
    /***** Icon to remove exam *****/
    Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
                                   Exa_PutParams,Exams);
 
-   /***** Icon to unhide/hide exam *****/
-   if (Exam->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoExa,Anchor,
-                                     Exa_PutParams,Exams);
-   else
-      Ico_PutContextualIconToHide (ActHidExa,Anchor,
-                                   Exa_PutParams,Exams);
+   /***** Icon to hide/unhide exam *****/
+   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+				      Exa_PutParams,Exams,
+				      Exam->Hidden);
 
    /***** Icon to edit exam *****/
    Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,

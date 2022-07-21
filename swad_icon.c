@@ -279,20 +279,24 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
 				  "cog.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
-                                  void (*FuncParams) (void *Args),void *Args)
+void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const char *Anchor,
+                                        void (*FuncParams) (void *Args),void *Args,
+                                        bool Hidden)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
-                                  FuncParams,Args,
-				  "eye.svg",Ico_GREEN);
-  }
+   static const char *Icon[2] =
+     {
+      [false] = "eye.svg",		// visible ==> icon to hide
+      [true ] = "eye-slash.svg",	// hidden ==> icon to unhide
+     };
+   static Ico_Color_t Color[2] =
+     {
+      [false] = Ico_GREEN,		// visible ==> green icon to hide
+      [true ] = Ico_RED,		// hidden ==> red icon to unhide
+     };
 
-void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncParams) (void *Args),void *Args)
-  {
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+   Lay_PutContextualLinkOnlyIcon (NextAction[Hidden],Anchor,
                                   FuncParams,Args,
-				  "eye-slash.svg",Ico_RED);
+				  Icon[Hidden],Color[Hidden]);
   }
 
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,

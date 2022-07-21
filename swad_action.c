@@ -228,7 +228,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActEdiBan		] = {1138,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ban_EditBanners		,NULL},
    [ActNewBan		] = {1139,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_ReceiveFormNewBanner	,Ban_ContEditAfterChgBan	,NULL},
    [ActRemBan		] = {1140,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_RemoveBanner		,Ban_ContEditAfterChgBan	,NULL},
-   [ActShoBan		] = {1212,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_ShowBanner			,Ban_ContEditAfterChgBan	,NULL},
+   [ActUnhBan		] = {1212,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_ShowBanner			,Ban_ContEditAfterChgBan	,NULL},
    [ActHidBan		] = {1213,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_HideBanner			,Ban_ContEditAfterChgBan	,NULL},
    [ActRenBanSho	] = {1141,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_RenameBannerShort		,Ban_ContEditAfterChgBan	,NULL},
    [ActRenBanFul	] = {1142,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ban_RenameBannerFull		,Ban_ContEditAfterChgBan	,NULL},
@@ -596,7 +596,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemAsg	] = { 813,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqRemAssignment		,NULL},
    [ActRemAsg		] = { 806,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RemoveAssignment		,NULL},
    [ActHidAsg		] = { 964,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_HideAssignment		,NULL},
-   [ActShoAsg		] = { 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_UnhideAssignment		,NULL},
+   [ActUnhAsg		] = { 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_UnhideAssignment		,NULL},
 
    [ActReqUsrPrj	] = {1805,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ListUsrsToSelect		,NULL},
    [ActSeeTblAllPrj	] = {1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableSelectedPrjs	,NULL},
@@ -614,7 +614,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemPrj	] = {1680,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
    [ActRemPrj		] = {1681,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
    [ActHidPrj		] = {1682,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
-   [ActShoPrj		] = {1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
+   [ActUnhPrj		] = {1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
    [ActLckPrj		] = {1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
    [ActUnlPrj		] = {1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnloProjectEdition		,NULL},
    [ActReqAddStdPrj	] = {1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
@@ -719,7 +719,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemExa	] = {1881,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_AskRemExam			,NULL},
    [ActRemExa		] = {1882,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveExam			,NULL},
    [ActHidExa		] = {1883,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_HideExam			,NULL},
-   [ActShoExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
+   [ActUnhExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
 
    [ActFrmNewExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,ExaSet_RequestCreatOrEditSet	,NULL},
    [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ReceiveFormSet		,NULL},
@@ -809,7 +809,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemGam	] = {1656,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AskRemGame			,NULL},
    [ActRemGam		] = {1657,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveGame			,NULL},
    [ActHidGam		] = {1660,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_HideGame			,NULL},
-   [ActShoGam		] = {1661,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_UnhideGame			,NULL},
+   [ActUnhGam		] = {1661,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_UnhideGame			,NULL},
    [ActAddOneGamQst	] = {1662,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Gam_ReqSelectQstsToAddToGame	,NULL},
    [ActGamLstTstQst	] = {1666,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ListQstsToAddToGame	,NULL},
    [ActAddTstQstToGam	] = {1667,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AddQstsToGame		,NULL},
@@ -829,7 +829,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRstSvy	] = { 984,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_AskResetSurvey		,NULL},
    [ActRstSvy		] = { 985,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ResetSurvey		,NULL},
    [ActHidSvy		] = { 977,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_HideSurvey			,NULL},
-   [ActShoSvy		] = { 978,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_UnhideSurvey		,NULL},
+   [ActUnhSvy		] = { 978,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_UnhideSurvey		,NULL},
    [ActEdiOneSvyQst	] = { 979,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestEditQuestion	,NULL},
    [ActRcvSvyQst	] = { 980,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveQst			,NULL},
    [ActReqRemSvyQst	] = {1524,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestRemoveQst		,NULL},
@@ -879,7 +879,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmDocIns	] = {1329,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmDocIns	] = {1330,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmDocIns	] = {1331,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoDocIns	] = {1332,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhDocIns	] = {1332,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidDocIns	] = {1333,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocIns	] = {1334,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocIns	] = {1335,-1,TabUnk,ActSeeAdmDocIns	,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -931,7 +931,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmDocCtr	] = {1300,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmDocCtr	] = {1301,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmDocCtr	] = {1302,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoDocCtr	] = {1303,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhDocCtr	] = {1303,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidDocCtr	] = {1304,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocCtr	] = {1305,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocCtr	] = {1306,-1,TabUnk,ActSeeAdmDocCtr	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -983,7 +983,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmDocDeg	] = {1271,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmDocDeg	] = {1272,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmDocDeg	] = {1273,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoDocDeg	] = {1274,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhDocDeg	] = {1274,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidDocDeg	] = {1275,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocDeg	] = {1276,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocDeg	] = {1277,-1,TabUnk,ActSeeAdmDocDeg	,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -1042,7 +1042,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmDocCrs	] = { 477,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmDocCrs	] = { 494,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmDocCrs	] = {1126,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoDocCrs	] = { 464,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhDocCrs	] = { 464,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidDocCrs	] = { 465,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocCrs	] = {1029,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocCrs	] = { 996,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -1064,7 +1064,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmDocGrp	] = { 486,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmDocGrp	] = { 487,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmDocGrp	] = {1127,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoDocGrp	] = { 493,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhDocGrp	] = { 493,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidDocGrp	] = { 492,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocGrp	] = {1030,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocGrp	] = { 998,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -1263,7 +1263,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmMrkCrs	] = { 607,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmMrkCrs	] = { 621,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmMrkCrs	] = {1134,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoMrkCrs	] = {1191,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhMrkCrs	] = {1191,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidMrkCrs	] = {1192,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmMrkCrs	] = {1035,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmMrkCrs	] = {1036,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -1286,7 +1286,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpAdmMrkGrp	] = { 631,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConAdmMrkGrp	] = { 900,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPAdmMrkGrp	] = {1135,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActShoMrkGrp	] = {1193,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
+   [ActUnhMrkGrp	] = {1193,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsVisible	,NULL},
    [ActHidMrkGrp	] = {1194,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmMrkGrp	] = {1037,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmMrkGrp	] = {1038,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
@@ -1405,7 +1405,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemAtt	] = {1067,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_AskRemAttEvent		,NULL},
    [ActRemAtt		] = {1068,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetAndRemAttEvent		,NULL},
    [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideAttEvent		,NULL},
-   [ActShoAtt		] = {1070,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideAttEvent		,NULL},
+   [ActUnhAtt		] = {1070,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideAttEvent		,NULL},
    [ActSeeOneAtt	] = {1071,-1,TabUnk,ActSeeAtt		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeOneAttEvent		,NULL},
    [ActRecAttStd	] = {1072,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterStudentsInAttEvent	,NULL},
    [ActRecAttMe		] = {1076,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterMeAsStdInAttEvent	,NULL},
@@ -1548,14 +1548,14 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActWriAnn		] = {1237,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ShowFormAnnouncement	,NULL},
    [ActRcvAnn		] = {1238,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ReceiveAnnouncement	,NULL},
    [ActHidAnn		] = {1470,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_HideActiveAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
-   [ActRevAnn		] = {1471,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_RevealHiddenAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
+   [ActUnhAnn		] = {1471,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_RevealHiddenAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
    [ActRemAnn		] = {1236,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_RemoveAnnouncement		,NULL},
 
    [ActSeeOneNot	] = {1164,-1,TabUnk,ActSeeAllNot	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_GetHighLightedNotCod	,Not_ListFullNotices		,NULL},
    [ActWriNot		] = {  59,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_ShowFormNotice		,NULL},
    [ActRcvNot		] = {  60,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
    [ActHidNot		] = { 763,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_HideActiveNotice		,Not_ListFullNotices		,NULL},
-   [ActRevNot		] = { 764,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RevealHiddenNotice		,Not_ListFullNotices		,NULL},
+   [ActUnhNot		] = { 764,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RevealHiddenNotice		,Not_ListFullNotices		,NULL},
    [ActReqRemNot	] = {1472,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_RequestRemNotice		,NULL},
    [ActRemNot		] = {  73,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RemoveNotice		,Not_ListNoticesAfterRemoval	,NULL},
 
@@ -1770,7 +1770,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqRemEvtMyAgd	] = {1607,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_AskRemEvent		,NULL},
    [ActRemEvtMyAgd	] = {1608,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_RemoveEvent		,NULL},
    [ActHidEvtMyAgd	] = {1612,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_HideEvent			,NULL},
-   [ActShoEvtMyAgd	] = {1613,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_UnhideEvent		,NULL},
+   [ActUnhEvtMyAgd	] = {1613,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_UnhideEvent		,NULL},
    [ActPrvEvtMyAgd	] = {1609,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_MakeEventPrivate		,NULL},
    [ActPubEvtMyAgd	] = {1610,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_MakeEventPublic		,NULL},
    [ActPrnAgdQR		] = {1618,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Agd_PrintAgdQRCode		,NULL},
@@ -2301,7 +2301,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAdmShaCrsGrp,	// #461
 	ActExpSeeDocCrs,	// #462
 	-1,			// #463 (obsolete action)
-	ActShoDocCrs,		// #464
+	ActUnhDocCrs,		// #464
 	ActHidDocCrs,		// #465
 	-1,			// #466 (obsolete action)
 	-1,			// #467 (obsolete action)
@@ -2330,7 +2330,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActRenFolDocGrp,	// #490
 	ActCreFolDocCrs,	// #491
 	ActHidDocGrp,		// #492
-	ActShoDocGrp,		// #493
+	ActUnhDocGrp,		// #493
 	ActConAdmDocCrs,	// #494
 	ActEnaFilZonGrp,	// #495
 	ActDisFilZonGrp,	// #496
@@ -2601,7 +2601,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqUseGbl,		// #761
 	ActSeeAllNot,		// #762
 	ActHidNot,		// #763
-	ActRevNot,		// #764
+	ActUnhNot,		// #764
 	ActRcvThrForGenTch,	// #765
 	ActRenHld,		// #766
 	ActReqStaCrs,		// #767
@@ -2802,7 +2802,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDisPstForInsTch,	// #962
 	ActDisPstForGenUsr,	// #963
 	ActHidAsg,		// #964
-	ActShoAsg,		// #965
+	ActUnhAsg,		// #965
 	ActSeeAllSvy,		// #966
 	-1,			// #967 (obsolete action)
 	ActNewSvy,		// #968
@@ -2815,7 +2815,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgSvy,		// #975
 	ActReqRemSvy,		// #976
 	ActHidSvy,		// #977
-	ActShoSvy,		// #978
+	ActUnhSvy,		// #978
 	ActEdiOneSvyQst,	// #979
 	ActRcvSvyQst,		// #980
 	ActRemSvyQst,		// #981
@@ -2907,7 +2907,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemAtt,		// #1067
 	ActRemAtt,		// #1068
 	ActHidAtt,		// #1069
-	ActShoAtt,		// #1070
+	ActUnhAtt,		// #1070
 	ActSeeOneAtt,		// #1071
 	ActRecAttStd,		// #1072
 	ActReqLstUsrAtt,	// #1073
@@ -3028,9 +3028,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPrnRecSevGst,	// #1188
 	ActLstGstAll,		// #1189
 	ActPrnGstPho,		// #1190
-	ActShoMrkCrs,		// #1191
+	ActUnhMrkCrs,		// #1191
 	ActHidMrkCrs,		// #1192
-	ActShoMrkGrp,		// #1193
+	ActUnhMrkGrp,		// #1193
 	ActHidMrkGrp,		// #1194
 	ActChgToSeeDocCrs,	// #1195
 	ActChgToAdmDocCrs,	// #1196
@@ -3049,7 +3049,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgCtrSta,		// #1209
 	ActReqIns,		// #1210
 	ActChgInsSta,		// #1211
-	ActShoBan,		// #1212
+	ActUnhBan,		// #1212
 	ActHidBan,		// #1213
 	ActRcvFilDocCrsDZ,	// #1214
 	ActRcvFilDocGrpDZ,	// #1215
@@ -3111,7 +3111,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActExpAdmDocDeg,	// #1271
 	ActConAdmDocDeg,	// #1272
 	ActZIPAdmDocDeg,	// #1273
-	ActShoDocDeg,		// #1274
+	ActUnhDocDeg,		// #1274
 	ActHidDocDeg,		// #1275
 	ActReqDatAdmDocDeg,	// #1276
 	ActChgDatAdmDocDeg,	// #1277
@@ -3140,7 +3140,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActExpAdmDocCtr,	// #1300
 	ActConAdmDocCtr,	// #1301
 	ActZIPAdmDocCtr,	// #1302
-	ActShoDocCtr,		// #1303
+	ActUnhDocCtr,		// #1303
 	ActHidDocCtr,		// #1304
 	ActReqDatAdmDocCtr,	// #1305
 	ActChgDatAdmDocCtr,	// #1306
@@ -3169,7 +3169,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActExpAdmDocIns,	// #1329
 	ActConAdmDocIns,	// #1330
 	ActZIPAdmDocIns,	// #1331
-	ActShoDocIns,		// #1332
+	ActUnhDocIns,		// #1332
 	ActHidDocIns,		// #1333
 	ActReqDatAdmDocIns,	// #1334
 	ActChgDatAdmDocIns,	// #1335
@@ -3308,7 +3308,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgPwdStd,		// #1468
 	ActChgPwdTch,		// #1469
 	ActHidAnn,		// #1470
-	ActRevAnn,		// #1471
+	ActUnhAnn,		// #1471
 	ActReqRemNot,		// #1472
 	ActSeeLstMyAtt,		// #1473
 	ActPrnLstMyAtt,		// #1474
@@ -3450,7 +3450,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPubEvtMyAgd,		// #1610
 	ActSeeUsrAgd,		// #1611
 	ActHidEvtMyAgd,		// #1612
-	ActShoEvtMyAgd,		// #1613
+	ActUnhEvtMyAgd,		// #1613
 	ActFrmLogInUsrAgd,	// #1614
 	ActLogInUsrAgd,		// #1615
 	ActLogInUsrAgdLan,	// #1616
@@ -3498,7 +3498,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1658 (obsolete action)
 	-1,			// #1659 (obsolete action)
 	ActHidGam,		// #1660
-	ActShoGam,		// #1661
+	ActUnhGam,		// #1661
 	ActAddOneGamQst,	// #1662
 	-1,			// #1663 (obsolete action)
 	ActReqRemGamQst,	// #1664
@@ -3520,7 +3520,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemPrj,		// #1680
 	ActRemPrj,		// #1681
 	ActHidPrj,		// #1682
-	ActShoPrj,		// #1683
+	ActUnhPrj,		// #1683
 	ActReqAddStdPrj,	// #1684
 	ActReqAddTutPrj,	// #1685
 	ActReqAddEvlPrj,	// #1686
@@ -3721,7 +3721,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemExa,		// #1881
 	ActRemExa,		// #1882
 	ActHidExa,		// #1883
-	ActShoExa,		// #1884
+	ActUnhExa,		// #1884
 	ActReqAddQstExaSet,	// #1885
 	ActLstTstQstForSet,	// #1886
 	ActAddQstToExa,		// #1887

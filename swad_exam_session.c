@@ -428,6 +428,12 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidExaSes,	// Visible ==> action to hide
+      [true ] = ActUnhExaSes,	// Hidden ==> action to unhide
+     };
+
    Exams->ExaCod = Session->ExaCod;
    Exams->SesCod = Session->SesCod;
 
@@ -439,12 +445,9 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 				     ExaSes_PutParamsEdit,Exams);
 
       /***** Icon to hide/unhide the exam session *****/
-      if (Session->Hidden)
-	 Ico_PutContextualIconToUnhide (ActUnhExaSes,Anchor,
-					ExaSes_PutParamsEdit,Exams);
-      else
-	 Ico_PutContextualIconToHide (ActHidExaSes,Anchor,
-				      ExaSes_PutParamsEdit,Exams);
+      Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					 ExaSes_PutParamsEdit,Exams,
+					 Session->Hidden);
 
       /***** Icon to edit the exam session *****/
       Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,

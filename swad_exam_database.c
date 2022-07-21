@@ -1520,7 +1520,7 @@ void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,bool Hide)
    DB_QueryUPDATE ("can not hide exam sessions",
 		   "UPDATE exa_sessions,"
 		          "exa_exams"
-		     " SET exa_sessions.Hidden='Y'"
+		     " SET exa_sessions.Hidden='%c'"
 		   " WHERE exa_sessions.SesCod=%ld"
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"

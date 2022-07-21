@@ -2711,51 +2711,49 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor,
                                          bool ICanViewProjectFiles)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidPrj,	// Visible ==> action to hide
+      [true ] = ActUnhPrj,	// Hidden ==> action to unhide
+     };
+
    Projects->PrjCod = Prj->PrjCod;	// Used as parameter in contextual links
 
    if (Prj_CheckIfICanEditProject (Prj))
      {
-      /***** Put form to remove project *****/
+      /***** Icon to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,NULL,
                                      Prj_PutCurrentParams,Projects);
 
-      /***** Put form to hide/show project *****/
-      switch (Prj->Hidden)
-        {
-	 case Prj_HIDDEN:
-	    Ico_PutContextualIconToUnhide (ActShoPrj,Anchor,
-	                                   Prj_PutCurrentParams,Projects);
-	    break;
-	 case Prj_VISIBL:
-	    Ico_PutContextualIconToHide (ActHidPrj,Anchor,
-	                                 Prj_PutCurrentParams,Projects);
-	    break;
-        }
+      /***** Icon to hide/unhide project *****/
+      Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					 Prj_PutCurrentParams,Projects,
+					 Prj->Hidden == Prj_HIDDEN);
 
-      /***** Put form to edit project *****/
+      /***** Icon to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
                                    Prj_PutCurrentParams,Projects);
      }
 
-   /***** Put form to admin project documents *****/
+   /***** Icon to admin project documents *****/
    if (ICanViewProjectFiles)
       Ico_PutContextualIconToViewFiles (ActAdmDocPrj,
                                         Prj_PutCurrentParams,Projects);
 
-   /***** Put form to print project *****/
+   /***** Icon to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,
                                  Prj_PutCurrentParams,Projects);
 
    /***** Locked/unlocked project edition *****/
    if (Prj_CheckIfICanConfigAllProjects ())
      {
-      /* Put form to lock/unlock project edition */
+      /* Icon to lock/unlock project edition */
       HTM_DIV_Begin ("id=\"prj_lck_%ld\"",Prj->PrjCod);
 	 Prj_FormLockUnlock (Prj);
       HTM_DIV_End ();
      }
    else
-      /* Put icon toinform about locked/unlocked project edition */
+      /* Icon to inform about locked/unlocked project edition */
       Prj_PutIconOffLockedUnlocked (Prj);
   }
 

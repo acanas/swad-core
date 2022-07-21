@@ -229,6 +229,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
       [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
      };
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidAnn,	// Visible ==> action to hide
+      [true ] = ActUnhAnn,	// Hidden ==> action to unhide
+     };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
 
@@ -237,22 +242,14 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 
       if (ICanEdit)
 	{
-	 /***** Put form to remove announcement *****/
+	 /***** Icon to remove announcement *****/
 	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
 					Ann_PutParams,&AnnCod);
 
-	 /***** Put form to change the status of the announcement *****/
-	 switch (Status)
-	   {
-	    case Ann_ACTIVE_ANNOUNCEMENT:
-	       Ico_PutContextualIconToHide (ActHidAnn,NULL,
-					    Ann_PutParams,&AnnCod);
-	       break;
-	    case Ann_OBSOLETE_ANNOUNCEMENT:
-	       Ico_PutContextualIconToUnhide (ActRevAnn,NULL,
-					      Ann_PutParams,&AnnCod);
-	       break;
-	   }
+	 /***** Icon to hide/unhide the announcement *****/
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
+					    Ann_PutParams,&AnnCod,
+					    Status == Ann_OBSOLETE_ANNOUNCEMENT);
 	}
 
       /***** Write the subject of the announcement *****/

@@ -1488,34 +1488,37 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallForExam (void *CallsForExams)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidCfe,	// Visible ==> action to hide
+      [true ] = ActUnhCfe,	// Hidden ==> action to unhide
+     };
+
    if (CallsForExams)
      {
       if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
-	 /***** Link to remove this call for exam *****/
+	 /***** Icon to remove call for exam *****/
 	 Ico_PutContextualIconToRemove (ActReqRemCfe,NULL,
 					Cfe_PutParamExaCodToEdit,
 					&((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
-	 /***** Put form to hide/show call for exam *****/
+	 /***** Icon to hide/unhide call for exam *****/
 	 switch (((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status)
 	   {
 	    case Cfe_VISIBLE_CALL_FOR_EXAM:
-	       Ico_PutContextualIconToHide (ActHidCfe,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
-					    Cfe_PutParamExaCodToEdit,
-					    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
-	       break;
 	    case Cfe_HIDDEN_CALL_FOR_EXAM:
-	       Ico_PutContextualIconToUnhide (ActUnhCfe,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
-					      Cfe_PutParamExaCodToEdit,
-					      &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
+	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
+					          Cfe_PutParamExaCodToEdit,
+					          &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod,
+					          ((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status == Cfe_HIDDEN_CALL_FOR_EXAM);
 	       break;
 	    case Cfe_DELETED_CALL_FOR_EXAM:	// Not applicable here
 	       break;
 	   }
 
-	 /***** Link to edit this call for exam *****/
+	 /***** Icon to edit call for exam *****/
 	 Ico_PutContextualIconToEdit (ActEdiCfe,NULL,
 				      Cfe_PutParamExaCodToEdit,
 				      &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);

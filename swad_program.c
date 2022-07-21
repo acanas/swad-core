@@ -846,6 +846,11 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           struct Prg_Item *Item)
   {
    extern const char *Txt_Movement_not_allowed;
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidPrgItm,	// Visible ==> action to hide
+      [true ] = ActUnhPrgItm,	// Hidden ==> action to unhide
+     };
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Initialize item index string *****/
@@ -855,19 +860,16 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to remove program item *****/
+	 /***** Icon to remove program item *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,NULL,
 	                                Prg_PutParams,&Item->Hierarchy.ItmCod);
 
-	 /***** Put form to hide/show program item *****/
-	 if (Item->Hierarchy.Hidden)
-	    Ico_PutContextualIconToUnhide (ActUnhPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&Item->Hierarchy.ItmCod);
-	 else
-	    Ico_PutContextualIconToHide (ActHidPrgItm,"prg_highlighted",
-	                                 Prg_PutParams,&Item->Hierarchy.ItmCod);
+	 /***** Icon to hide/unhide program item *****/
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,"prg_highlighted",
+					    Prg_PutParams,&Item->Hierarchy.ItmCod,
+					    Item->Hierarchy.Hidden);
 
-	 /***** Put form to edit program item *****/
+	 /***** Icon to edit program item *****/
 	 switch (ListingType)
 	   {
 	    case Prg_EDIT_ITEM:
@@ -880,13 +882,13 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	       break;
 	   }
 
-	 /***** Put form to add a new child item inside this item *****/
+	 /***** Icon to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
 	                             Prg_PutParams,&Item->Hierarchy.ItmCod);
 
 	 HTM_BR ();
 
-	 /***** Put icon to move up the item *****/
+	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
@@ -894,7 +896,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
-	 /***** Put icon to move down the item *****/
+	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,

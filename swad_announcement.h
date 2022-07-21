@@ -30,8 +30,8 @@
 #define Ann_NUM_STATUS 2
 typedef enum
   {
-   Ann_ACTIVE_ANNOUNCEMENT   = 0,
-   Ann_OBSOLETE_ANNOUNCEMENT = 1,
+   Ann_ACTIVE_ANNOUNCEMENT   = 0,	// Visible
+   Ann_OBSOLETE_ANNOUNCEMENT = 1,	// Hidden
   } Ann_Status_t;	// Don't change these numbers because they are used in database
 
 /*****************************************************************************/

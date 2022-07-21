@@ -65,14 +65,13 @@ struct Ban_Banners
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Ban_Banner *Ban_EditingBan;
+static struct Ban_Banner Ban_EditingBan;
 static long Ban_BanCodClicked;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ban_SetEditingBanner (struct Ban_Banner *Ban);
 static struct Ban_Banner *Ban_GetEditingBanner (void);
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners);
@@ -106,14 +105,9 @@ static void Ban_ResetBanner (struct Ban_Banner *Ban);
 /************************** Access to editing banner *************************/
 /*****************************************************************************/
 
-static void Ban_SetEditingBanner (struct Ban_Banner *Ban)
-  {
-   Ban_EditingBan = Ban;
-  }
-
 static struct Ban_Banner *Ban_GetEditingBanner (void)
   {
-   return Ban_EditingBan;
+   return &Ban_EditingBan;
   }
 
 /*****************************************************************************/
@@ -398,6 +392,11 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidBan,	// Visible ==> action to hide
+      [true ] = ActUnhBan,	// Hidden ==> action to unhide
+     };
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
@@ -422,23 +421,19 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	 /* Begin table row */
 	 HTM_TR_Begin (NULL);
 
-	    /* Put icon to remove banner */
+	    /* Icon to remove banner */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemBan,NULL,
 					      Ban_PutParamBanCodToEdit,
 					      &Banners->BanCodToEdit);
 	    HTM_TD_End ();
 
-	    /* Put icon to hide/show banner */
+	    /* Icon to hide/unhide banner */
 	    HTM_TD_Begin ("class=\"BM\"");
-	       if (Ban->Hidden)
-		  Ico_PutContextualIconToUnhide (ActShoBan,Anchor,
-						 Ban_PutParamBanCodToEdit,
-						 &Banners->BanCodToEdit);
-	       else
-		  Ico_PutContextualIconToHide (ActHidBan,Anchor,
-					       Ban_PutParamBanCodToEdit,
-					       &Banners->BanCodToEdit);
+	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+						  Ban_PutParamBanCodToEdit,
+						  &Banners->BanCodToEdit,
+						  Ban->Hidden);
 	    HTM_TD_End ();
 
 	    /* Banner code */
@@ -537,28 +532,25 @@ long Ban_GetParamBanCod (void)
 void Ban_RemoveBanner (void)
   {
    extern const char *Txt_Banner_X_removed;
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
       Err_WrongBannerExit ();
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetDataOfBannerByCod (Ban);
 
    /***** Remove banner *****/
-   Ban_DB_RemoveBanner (Ban.BanCod);
+   Ban_DB_RemoveBanner (Ban->BanCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Banner_X_removed,
-                    Ban.ShrtName);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+                    Ban->ShrtName);
   }
 
 /*****************************************************************************/
@@ -567,16 +559,13 @@ void Ban_RemoveBanner (void)
 
 void Ban_ShowBanner (void)
   {
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Set banner as visible *****/
-   Ban_ShowOrHideBanner (&Ban,false);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Ban_ShowOrHideBanner (Ban,false);
   }
 
 /*****************************************************************************/
@@ -585,16 +574,13 @@ void Ban_ShowBanner (void)
 
 void Ban_HideBanner (void)
   {
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Set banner as hidden *****/
-   Ban_ShowOrHideBanner (&Ban,true);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Ban_ShowOrHideBanner (Ban,true);
   }
 
 /*****************************************************************************/
@@ -621,16 +607,13 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
 
 void Ban_RenameBannerShort (void)
   {
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Rename banner *****/
-   Ban_RenameBanner (&Ban,Cns_SHRT_NAME);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Ban_RenameBanner (Ban,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -639,16 +622,13 @@ void Ban_RenameBannerShort (void)
 
 void Ban_RenameBannerFull (void)
   {
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Rename banner *****/
-   Ban_RenameBanner (&Ban,Cns_FULL_NAME);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Ban_RenameBanner (Ban,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -736,28 +716,28 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 void Ban_ChangeBannerImg (void)
   {
    extern const char *Txt_The_new_image_is_X;
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
       Err_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
 
    /***** Get banner data from the database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetDataOfBannerByCod (Ban);
 
    /***** Check if new image is empty *****/
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      Ban_DB_UpdateBanImg (Ban.BanCod,NewImg);
+      Ban_DB_UpdateBanImg (Ban->BanCod,NewImg);
 
       /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -769,10 +749,7 @@ void Ban_ChangeBannerImg (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update image *****/
-   Str_Copy (Ban.Img,NewImg,sizeof (Ban.Img) - 1);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Str_Copy (Ban->Img,NewImg,sizeof (Ban->Img) - 1);
   }
 
 /*****************************************************************************/
@@ -782,28 +759,28 @@ void Ban_ChangeBannerImg (void)
 void Ban_ChangeBannerWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
+   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
       Err_WrongBannerExit ();
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get banner data from the database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetDataOfBannerByCod (Ban);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      Ban_DB_UpdateBanWWW (Ban.BanCod,NewWWW);
+      Ban_DB_UpdateBanWWW (Ban->BanCod,NewWWW);
 
       /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -815,10 +792,7 @@ void Ban_ChangeBannerWWW (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
-   Str_Copy (Ban.WWW,NewWWW,sizeof (Ban.WWW) - 1);
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
+   Str_Copy (Ban->WWW,NewWWW,sizeof (Ban->WWW) - 1);
   }
 
 /*****************************************************************************/
@@ -957,54 +931,44 @@ void Ban_ReceiveFormNewBanner (void)
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_banner_X;
-   struct Ban_Banner Ban;
+   struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
    /***** Reset banner *****/
-   Ban_ResetBanner (&Ban);
+   Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   /* Get banner short name */
-   Par_GetParToText ("ShortName",Ban.ShrtName,Ban_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("FullName" ,Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("Img"      ,Ban->Img     ,Ban_MAX_BYTES_IMAGE);
+   Par_GetParToText ("WWW"      ,Ban->WWW     ,Cns_MAX_BYTES_WWW);
 
-   /* Get banner full name */
-   Par_GetParToText ("FullName",Ban.FullName,Ban_MAX_BYTES_FULL_NAME);
-
-   /* Get banner image */
-   Par_GetParToText ("Img",Ban.Img,Ban_MAX_BYTES_IMAGE);
-
-   /* Get banner URL */
-   Par_GetParToText ("WWW",Ban.WWW,Cns_MAX_BYTES_WWW);
-
-   if (Ban.ShrtName[0] &&
-       Ban.FullName[0])	// If there's a banner name
+   if (Ban->ShrtName[0] &&
+       Ban->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      if (Ban_DB_CheckIfBannerNameExists ("ShortName",Ban.ShrtName,-1L))
+      if (Ban_DB_CheckIfBannerNameExists ("ShortName",Ban->ShrtName,-1L))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_banner_X_already_exists,
-                          Ban.ShrtName);
-      else if (Ban_DB_CheckIfBannerNameExists ("FullName",Ban.FullName,-1L))
+                          Ban->ShrtName);
+      else if (Ban_DB_CheckIfBannerNameExists ("FullName",Ban->FullName,-1L))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_banner_X_already_exists,
-                          Ban.FullName);
-      else if (!Ban.Img[0])
+                          Ban->FullName);
+      else if (!Ban->Img[0])
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_You_must_specify_the_image_of_the_new_banner);
-      else if (!Ban.WWW[0])
+      else if (!Ban->WWW[0])
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_You_must_specify_the_web_address);
       else	// Add new banner to database
         {
-         Ban_DB_CreateBanner (&Ban);
+         Ban_DB_CreateBanner (Ban);
 	 Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
-			  Ban.ShrtName);
+			  Ban->ShrtName);
         }
      }
    else	// If there is not a banner name
       Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
-
-   /***** Set editing banner to use ot in a posterior function *****/
-   Ban_SetEditingBanner (&Ban);
   }
 
 /*****************************************************************************/

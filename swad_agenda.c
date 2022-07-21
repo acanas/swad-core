@@ -888,25 +888,28 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidEvtMyAgd,	// Visible ==> action to hide
+      [true ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
+     };
+
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
-   /***** Put form to remove event *****/
+   /***** Icon to remove event *****/
    Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,NULL,
                                   Agd_PutCurrentParamsMyAgenda,Agenda);
 
-   /***** Put form to hide/show event *****/
-   if (AgdEvent->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,Anchor,
-                                     Agd_PutCurrentParamsMyAgenda,Agenda);
-   else
-      Ico_PutContextualIconToHide (ActHidEvtMyAgd,Anchor,
-                                   Agd_PutCurrentParamsMyAgenda,Agenda);
+   /***** Icon to hide/unhide event *****/
+   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+				      Agd_PutCurrentParamsMyAgenda,Agenda,
+				      AgdEvent->Hidden);
 
-   /***** Put form to edit event *****/
+   /***** Icon to edit event *****/
    Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,
                                 Agd_PutCurrentParamsMyAgenda,Agenda);
 
-   /***** Put form to make event public/private *****/
+   /***** Icon to make event public/private *****/
    if (AgdEvent->Public)
       Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
 				     Agd_PutCurrentParamsMyAgenda,Agenda,

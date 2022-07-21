@@ -444,33 +444,35 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
                                                  unsigned NumResources,
                                                  struct PrgRsc_Resource *Resource)
   {
+   static Act_Action_t ActionHideUnhide[2] =
+     {
+      [false] = ActHidPrgRsc,	// Visible ==> action to hide
+      [true ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+     };
    extern const char *Txt_Movement_not_allowed;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Put form to remove item resource *****/
+	 /***** Icon to remove item resource *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                PrgRsc_PutParams,&Resource->Rsc.Cod);
 
-	 /***** Put form to hide/show item resource *****/
-	 if (Resource->Hidden)
-	    Ico_PutContextualIconToUnhide (ActUnhPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                   PrgRsc_PutParams,&Resource->Rsc.Cod);
-	 else
-	    Ico_PutContextualIconToHide (ActHidPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                 PrgRsc_PutParams,&Resource->Rsc.Cod);
+	 /***** Icon to hide/unhide item resource *****/
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
+					    PrgRsc_PutParams,&Resource->Rsc.Cod,
+					    Resource->Hidden);
 
-	 /***** Put form to edit program item *****/
+	 /***** Icon to edit program resource *****/
 	 // Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
 	 //                             Prg_PutParams,&Item->Hierarchy.ItmCod);
 
-	 /***** Put form to add a new child item inside this item *****/
+	 /***** Icon to add a new resource after this resource *****/
 	 // Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
 	 //                            Prg_PutParams,&Item->Hierarchy.ItmCod);
 
-	 /***** Put icon to move up the item *****/
+	 /***** Icon to move up the item *****/
 	 if (NumRsc > 0)
 	   Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                  PrgRsc_PutParams,&Resource->Rsc.Cod,
