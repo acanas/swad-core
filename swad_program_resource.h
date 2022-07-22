@@ -57,7 +57,7 @@ void PrgRsc_EditResources (void);
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod);
 
-void PrgRsc_RequestCreateResource (void);
+void PrgRsc_RenameResource (void);
 
 void PrgRsc_ReqRemResource (void);
 void PrgRsc_RemoveResource (void);

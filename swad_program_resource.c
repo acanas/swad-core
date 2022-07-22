@@ -427,9 +427,14 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 HTM_Txt (Resource->Title);
+      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows ());
+	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
+	    PrgRsc_PutParamRscCod (Resource->Rsc.Cod);
+	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Resource->Title,
+			    HTM_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    The_GetSuffix ());
+	 Frm_EndForm ();
       HTM_TD_End ();
 
    /***** End row *****/
@@ -523,6 +528,44 @@ static void PrgRsc_PutParamRscCod (long RscCod)
 static long PrgRsc_GetParamRscCod (void)
   {
    return Par_GetParToLong ("RscCod");
+  }
+
+/*****************************************************************************/
+/******************************** Rename resource ****************************/
+/*****************************************************************************/
+
+void PrgRsc_RenameResource (void)
+  {
+   struct PrgRsc_Resource Resource;
+   char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
+   long ItmCod;
+   unsigned FormLevel;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get data of the item resource from database *****/
+   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
+   PrgRsc_GetDataOfResourceByCod (&Resource);
+   if (Resource.ItmCod <= 0)
+      Err_WrongResourceExit ();
+
+   /***** Rename resource *****/
+   /* Get the new title for the resource */
+   Par_GetParToText ("Title",NewTitle,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+
+   /* Update database changing old title by new title */
+   Prg_DB_UpdateResourceTitle (Resource.Rsc.Cod,Resource.ItmCod,NewTitle);
+
+   /***** Get the code of the program item *****/
+   ItmCod = Resource.ItmCod;
+   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/

@@ -446,6 +446,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmSeePrgRsc	] = {1925,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourcesAfterEdit	,NULL},
    [ActFrmEdiPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_EditResources		,NULL},
+   [ActRenPrgRsc	] = {1928,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RenameResource		,NULL},
    [ActReqRemPrgRsc	] = {1919,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ReqRemResource		,NULL},
    [ActRemPrgRsc	] = {1920,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RemoveResource		,NULL},
    [ActHidPrgRsc	] = {1921,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_HideResource		,NULL},
@@ -3765,6 +3766,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActFrmSeePrgRsc,	// #1925
 	ActEdiPrg,		// #1926
 	ActSeePrgItm,		// #1927
+	ActRenPrgRsc,		// #1928
   };
 
 /*****************************************************************************/

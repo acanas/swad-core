@@ -426,44 +426,66 @@ void Prg_DB_RemoveCrsItems (long CrsCod)
   }
 
 /*****************************************************************************/
+/**************************** Update resource title **************************/
+/*****************************************************************************/
+
+void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
+                                 const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1])
+  {
+   Ale_ShowAlert (Ale_INFO,
+                  "can not update the title of a resource",
+		   "UPDATE prg_resources,prg_items"
+		     " SET prg_resources.Title='%s'"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.ItmCod=%ld"
+		     " AND prg_resources.ItmCod=prg_items.ItmCod"
+		     " AND prg_items.CrsCod=%ld",
+	           NewTitle,
+	           RscCod,
+	           ItmCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
+   DB_QueryUPDATE ("can not update the title of a resource",
+		   "UPDATE prg_resources,prg_items"
+		     " SET prg_resources.Title='%s'"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.ItmCod=%ld"
+		     " AND prg_resources.ItmCod=prg_items.ItmCod"
+		     " AND prg_items.CrsCod=%ld",
+	           NewTitle,
+	           RscCod,
+	           ItmCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /****************** Get list of item resources from database *****************/
 /*****************************************************************************/
 
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
                                   bool ShowHiddenResources)
-  {/*
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     }; */
+  {
    static const char *HiddenSubQuery[2] =
      {
-      [false] = " AND Hidden='N'",
+      [false] = " AND prg_resources.Hidden='N'",
       [true ] = "",
      };
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get item resources",
-		   "SELECT ItmCod,"	// row[0]
-			  "RscCod,"	// row[1]
-                          "RscInd,"	// row[2]
-			  "Hidden,"	// row[3]
-			  "Title"	// row[4]
-		    " FROM prg_resources"
-		   " WHERE ItmCod=%ld"
+		   "SELECT prg_resources.ItmCod,"	// row[0]
+			  "prg_resources.RscCod,"	// row[1]
+                          "prg_resources.RscInd,"	// row[2]
+			  "prg_resources.Hidden,"	// row[3]
+			  "prg_resources.Title"		// row[4]
+		    " FROM prg_resources,prg_items"
+		   " WHERE prg_resources.ItmCod=%ld"
 		       "%s"
-		   " ORDER BY RscInd",
+		     " AND prg_resources.ItmCod=prg_items.ItmCod"
+		     " AND prg_items.CrsCod=%ld"	// Extra check
+		   " ORDER BY prg_resources.RscInd",
 		   ItmCod,
-		   HiddenSubQuery[ShowHiddenResources]);
+		   HiddenSubQuery[ShowHiddenResources],
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -474,14 +496,17 @@ unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get item resource data",
-		   "SELECT ItmCod,"	// row[0]
-			  "RscCod,"	// row[1]
-                          "RscInd,"	// row[2]
-			  "Hidden,"	// row[3]
-			  "Title"	// row[4]
-		    " FROM prg_resources"
-		   " WHERE RscCod=%ld",
-		   RscCod);
+		   "SELECT prg_resources.ItmCod,"	// row[0]
+			  "prg_resources.RscCod,"	// row[1]
+                          "prg_resources.RscInd,"	// row[2]
+			  "prg_resources.Hidden,"	// row[3]
+			  "prg_resources.Title"		// row[4]
+		    " FROM prg_resources,prg_items"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.ItmCod=prg_items.ItmCod"
+		     " AND prg_items.CrsCod=%ld",	// Extra check
+		   RscCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -493,15 +518,18 @@ unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get item resource data",
-		   "SELECT ItmCod,"	// row[0]
-			  "RscCod,"	// row[1]
-                          "RscInd,"	// row[2]
-			  "Hidden,"	// row[3]
-			  "Title"	// row[4]
-		    " FROM prg_resources"
-		   " WHERE ItmCod=%ld"
-		     " AND RscInd=%u",
-		   ItmCod,RscInd);
+		   "SELECT prg_resources.ItmCod,"	// row[0]
+			  "prg_resources.RscCod,"	// row[1]
+                          "prg_resources.RscInd,"	// row[2]
+			  "prg_resources.Hidden,"	// row[3]
+			  "prg_resources.Title"		// row[4]
+		    " FROM prg_resources,prg_items"
+		   " WHERE prg_resources.ItmCod=%ld"
+		     " AND prg_resources.RscInd=%u"
+		     " AND prg_resources.ItmCod=prg_items.ItmCod"
+		     " AND prg_items.CrsCod=%ld",	// Extra check
+		   ItmCod,RscInd,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -557,10 +585,14 @@ void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
   {
    DB_QueryDELETE ("can not remove item resource",
 		   "DELETE FROM prg_resources"
-		   " WHERE RscCod=%ld"
-		     " AND ItmCod=%ld",	// Extra check
+		    "USING prg_resources,prg_items"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.ItmCod=%ld"
+                     " AND prg_resources.ItmCod=prg_items.ItmCod"
+                     " AND prg_items.CrsCod=%ld",	// Extra check
 		   Resource->Rsc.Cod,
-		   Resource->ItmCod);
+		   Resource->ItmCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

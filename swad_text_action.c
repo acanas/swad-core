@@ -2017,25 +2017,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActRemBan] =
 #if   L==1	// ca
-	"Request removal of a banner"			// Necessita traducció
+	"Request removal of banner"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a banner"			// Need Übersetzung
+	"Request removal of banner"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a banner"
+	"Request removal of banner"
 #elif L==4	// es
-	"Solicitar eliminaci&ocute;n de un banner"
+	"Solicitar eliminaci&ocute;n de banner"
 #elif L==5	// fr
-	"Request removal of a banner"			// Besoin de traduction
+	"Request removal of banner"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&ocute;n de un banner"	// Okoteve traducción
+	"Solicitar eliminaci&ocute;n de banner"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a banner"			// Bisogno di traduzione
+	"Request removal of banner"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a banner"			// Potrzebujesz tlumaczenie
+	"Request removal of banner"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a banner"			// Precisa de tradução
+	"Request removal of banner"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a banner"			// Çeviri lazim!
+	"Request removal of banner"			// Çeviri lazim!
 #endif
 	,
 	[ActUnhBan] =
@@ -6088,27 +6088,50 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Kaynaklar&inodot; d&uuml;zenle"
 #endif
 	,
+	[ActRenPrgRsc] =
+#if   L==1	// ca
+	"Rename resource"	// Necessita traducció
+#elif L==2	// de
+	"Rename resource"	// Need Übersetzung
+#elif L==3	// en
+	"Rename resource"
+#elif L==4	// es
+	"Renombrar recurso"
+#elif L==5	// fr
+	"Rename resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Renombrar recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Rename resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Rename resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rename resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Rename resource"	// Çeviri lazim!
+#endif
+	,
 	[ActReqRemPrgRsc] =
 #if   L==1	// ca
-	"Request removal of resource"			// Necessita traducció
+	"Request removal of resource"	// Necessita traducció
 #elif L==2	// de
-	"Request removal of resource"			// Need Übersetzung
+	"Request removal of resource"	// Need Übersetzung
 #elif L==3	// en
 	"Request removal of resource"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de recurso"
 #elif L==5	// fr
-	"Request removal of resource"			// Besoin de traduction
+	"Request removal of resource"	// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de recurso"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of resource"			// Bisogno di traduzione
+	"Request removal of resource"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of resource"			// Potrzebujesz tlumaczenie
+	"Request removal of resource"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of resource"			// Precisa de tradução
+	"Request removal of resource"	// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of resource"			// Çeviri lazim!
+	"Request removal of resource"	// Çeviri lazim!
 #endif
 	,
 	[ActRemPrgRsc] =
@@ -9011,25 +9034,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemAsg] =
 #if   L==1	// ca
-	"Request removal of an assignment"		// Necessita traducció
+	"Request removal of assignment"		// Necessita traducció
 #elif L==2	// de
-	"Request removal of an assignment"		// Need Übersetzung
+	"Request removal of assignment"		// Need Übersetzung
 #elif L==3	// en
-	"Request removal of an assignment"
+	"Request removal of assignment"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de una actividad"
+	"Solicitar eliminaci&oacute;n de actividad"
 #elif L==5	// fr
-	"Request removal of an assignment"		// Besoin de traduction
+	"Request removal of assignment"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de una actividad"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de actividad"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of an assignment"		// Bisogno di traduzione
+	"Request removal of assignment"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of an assignment"		// Potrzebujesz tlumaczenie
+	"Request removal of assignment"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of an assignment"		// Precisa de tradução
+	"Request removal of assignment"		// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of an assignment"		// Çeviri lazim!
+	"Request removal of assignment"		// Çeviri lazim!
 #endif
 	,
 	[ActRemAsg] =
@@ -9402,25 +9425,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemPrj] =
 #if   L==1	// ca
-	"Request removal of a project"			// Necessita traducció
+	"Request removal of project"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a project"			// Need Übersetzung
+	"Request removal of project"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a project"
+	"Request removal of project"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un proyecto"
+	"Solicitar eliminaci&oacute;n de proyecto"
 #elif L==5	// fr
-	"Request removal of a project"			// Besoin de traduction
+	"Request removal of project"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un proyecto"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a project"			// Bisogno di traduzione
+	"Request removal of project"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a project"			// Potrzebujesz tlumaczenie
+	"Request removal of project"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a project"			// Precisa de tradução
+	"Request removal of project"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a project"			// Çeviri lazim!
+	"Request removal of project"			// Çeviri lazim!
 #endif
 	,
 	[ActRemPrj] =
@@ -10805,25 +10828,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemCfe] =
 #if   L==1	// ca
-	"Request removal of an exam announcement"			// Necessita traducció
+	"Request removal of exam announcement"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of an exam announcement"			// Need Übersetzung
+	"Request removal of exam announcement"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of an exam announcement"
+	"Request removal of exam announcement"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de una convocatoria de examen"
+	"Solicitar eliminaci&oacute;n de convocatoria de examen"
 #elif L==5	// fr
-	"Request removal of an exam announcement"			// Besoin de traduction
+	"Request removal of exam announcement"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de una convocatoria de examen"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of an exam announcement"			// Bisogno di traduzione
+	"Request removal of exam announcement"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of an exam announcement"			// Potrzebujesz tlumaczenie
+	"Request removal of exam announcement"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of an exam announcement"			// Precisa de tradução
+	"Request removal of exam announcement"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of an exam announcement"			// Çeviri lazim!
+	"Request removal of exam announcement"			// Çeviri lazim!
 #endif
 	,
 	[ActRemCfe] =
@@ -19637,25 +19660,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemFilShaCrs] =
 #if   L==1	// ca
-	"Request removal of a shared file of course"				// Necessita traducció
+	"Request removal of shared file of course"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of a shared file of course"				// Need Übersetzung
+	"Request removal of shared file of course"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a shared file of course"
+	"Request removal of shared file of course"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de archivo compartido de asignatura"
 #elif L==5	// fr
-	"Request removal of a shared file of course"				// Besoin de traduction
+	"Request removal of shared file of course"				// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de archivo compartido de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a shared file of course"				// Bisogno di traduzione
+	"Request removal of shared file of course"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a shared file of course"				// Potrzebujesz tlumaczenie
+	"Request removal of shared file of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a shared file of course"				// Precisa de tradução
+	"Request removal of shared file of course"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a shared file of course"				// Çeviri lazim!
+	"Request removal of shared file of course"				// Çeviri lazim!
 #endif
 	,
 	[ActRemFilShaCrs] =
@@ -21339,25 +21362,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemFilAsgCrs] =
 #if   L==1	// ca
-	"Request removal of file in assignments zone of course"				// Necessita traducció
+	"Request removal of file from assignments zone of course"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of file in assignments zone of course"				// Need Übersetzung
+	"Request removal of file from assignments zone of course"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of file in assignments zone of course"
+	"Request removal of file from assignments zone of course"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de archivo en zona de actividades de asignatura"
+	"Solicitar eliminaci&oacute;n de archivo de zona de actividades de asignatura"
 #elif L==5	// fr
-	"Request removal of file in assignments zone of course"				// Besoin de traduction
+	"Request removal of file from assignments zone of course"				// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de archivo en zona de actividades de asignatura"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de archivo de zona de actividades de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of file in assignments zone of course"				// Bisogno di traduzione
+	"Request removal of file from assignments zone of course"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of file in assignments zone of course"				// Potrzebujesz tlumaczenie
+	"Request removal of file from assignments zone of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of file in assignments zone of course"				// Precisa de tradução
+	"Request removal of file from assignments zone of course"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of file in assignments zone of course"				// Çeviri lazim!
+	"Request removal of file from assignments zone of course"				// Çeviri lazim!
 #endif
 	,
 	[ActRemFilAsgCrs] =
@@ -22466,25 +22489,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemFilMrkCrs] =
 #if   L==1	// ca
-	"Request removal of file in marks in course"					// Necessita traducció
+	"Request removal of file from marks in course"					// Necessita traducció
 #elif L==2	// de
-	"Request removal of file in marks in course"					// Need Übersetzung
+	"Request removal of file from marks in course"					// Need Übersetzung
 #elif L==3	// en
-	"Request removal of file in marks in course"
+	"Request removal of file from marks in course"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de archivo de calificaciones de asignatura"
 #elif L==5	// fr
-	"Request removal of file in marks in course"					// Besoin de traduction
+	"Request removal of file from marks in course"					// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de archivo de calificaciones de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of file in marks in course"					// Bisogno di traduzione
+	"Request removal of file from marks in course"					// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of file in marks in course"					// Potrzebujesz tlumaczenie
+	"Request removal of file from marks in course"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of file in marks in course"					// Precisa de tradução
+	"Request removal of file from marks in course"					// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of file in marks in course"					// Çeviri lazim!
+	"Request removal of file from marks in course"					// Çeviri lazim!
 #endif
 	,
 	[ActRemFilMrkCrs] =
@@ -24168,25 +24191,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemGrpTyp] =
 #if   L==1	// ca
-	"Request removal of a type of group"			// Necessita traducció
+	"Request removal of type of group"		// Necessita traducció
 #elif L==2	// de
-	"Request removal of a type of group"			// Need Übersetzung
+	"Request removal of type of group"		// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a type of group"
+	"Request removal of type of group"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un tipo de grupo"
+	"Solicitar eliminaci&oacute;n de tipo de grupo"
 #elif L==5	// fr
-	"Request removal of a type of group"			// Besoin de traduction
+	"Request removal of type of group"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un tipo de grupo"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a type of group"			// Bisogno di traduzione
+	"Request removal of type of group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a type of group"			// Potrzebujesz tlumaczenie
+	"Request removal of type of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a type of group"			// Precisa de tradução
+	"Request removal of type of group"		// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a type of group"			// Çeviri lazim!
+	"Request removal of type of group"		// Çeviri lazim!
 #endif
 	,
 	[ActRemGrpTyp] =
@@ -25548,25 +25571,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemAtt] =
 #if   L==1	// ca
-	"Request removal of an attendance event"			// Necessita traducció
+	"Request removal of attendance event"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of an attendance event"			// Need Übersetzung
+	"Request removal of attendance event"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of an attendance event"
+	"Request removal of attendance event"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un evento de asistencia"
+	"Solicitar eliminaci&oacute;n de evento de asistencia"
 #elif L==5	// fr
-	"Request removal of an attendance event"			// Besoin de traduction
+	"Request removal of attendance event"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un evento de asistencia"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de evento de asistencia"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of an attendance event"			// Bisogno di traduzione
+	"Request removal of attendance event"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of an attendance event"			// Potrzebujesz tlumaczenie
+	"Request removal of attendance event"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of an attendance event"			// Precisa de tradução
+	"Request removal of attendance event"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of an attendance event"			// Çeviri lazim!
+	"Request removal of attendance event"			// Çeviri lazim!
 #endif
 	,
 	[ActRemAtt] =
@@ -26169,71 +26192,71 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemOthPho] =
 #if   L==1	// ca
-	"Request removal of a user's photo"			// Necessita traducció
+	"Request removal of user's photo"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a user's photo"			// Need Übersetzung
+	"Request removal of user's photo"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a user's photo"
+	"Request removal of user's photo"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de foto de usuario"
 #elif L==5	// fr
-	"Request removal of a user's photo"			// Besoin de traduction
+	"Request removal of user's photo"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de foto de usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a user's photo"			// Bisogno di traduzione
+	"Request removal of user's photo"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a user's photo"			// Potrzebujesz tlumaczenie
+	"Request removal of user's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a user's photo"			// Precisa de tradução
+	"Request removal of user's photo"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a user's photo"			// Çeviri lazim!
+	"Request removal of user's photo"			// Çeviri lazim!
 #endif
 	,
 	[ActReqRemStdPho] =
 #if   L==1	// ca
-	"Request removal of a student's photo"			// Necessita traducció
+	"Request removal of student's photo"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a student's photo"			// Need Übersetzung
+	"Request removal of student's photo"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a student's photo"
+	"Request removal of student's photo"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de foto de estudiante"
 #elif L==5	// fr
-	"Request removal of a student's photo"			// Besoin de traduction
+	"Request removal of student's photo"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de foto de estudiante"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a student's photo"			// Bisogno di traduzione
+	"Request removal of student's photo"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a student's photo"			// Potrzebujesz tlumaczenie
+	"Request removal of student's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a student's photo"			// Precisa de tradução
+	"Request removal of student's photo"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a student's photo"			// Çeviri lazim!
+	"Request removal of student's photo"			// Çeviri lazim!
 #endif
 	,
 	[ActReqRemTchPho] =
 #if   L==1	// ca
-	"Request removal of a teacher's photo"			// Necessita traducció
+	"Request removal of teacher's photo"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a teacher's photo"			// Need Übersetzung
+	"Request removal of teacher's photo"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a teacher's photo"
+	"Request removal of teacher's photo"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de foto de profesor"
 #elif L==5	// fr
-	"Request removal of a teacher's photo"			// Besoin de traduction
+	"Request removal of teacher's photo"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de foto de profesor"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a teacher's photo"			// Bisogno di traduzione
+	"Request removal of teacher's photo"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a teacher's photo"			// Potrzebujesz tlumaczenie
+	"Request removal of teacher's photo"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a teacher's photo"			// Precisa de tradução
+	"Request removal of teacher's photo"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a teacher's photo"			// Çeviri lazim!
+	"Request removal of teacher's photo"			// Çeviri lazim!
 #endif
 	,
 	[ActRemOthPho] =
@@ -28331,25 +28354,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemNot] =
 #if   L==1	// ca
-	"Request removal of a notice"			// Necessita traducció
+	"Request removal of notice"		// Necessita traducció
 #elif L==2	// de
-	"Request removal of a notice"			// Need Übersetzung
+	"Request removal of notice"		// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a notice"
+	"Request removal of notice"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un aviso"
+	"Solicitar eliminaci&oacute;n de aviso"
 #elif L==5	// fr
-	"Request removal of a notice"			// Besoin de traduction
+	"Request removal of notice"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un aviso"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de aviso"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a notice"			// Bisogno di traduzione
+	"Request removal of notice"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a notice"			// Potrzebujesz tlumaczenie
+	"Request removal of notice"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a notice"			// Precisa de tradução
+	"Request removal of notice"		// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a notice"			// Çeviri lazim!
+	"Request removal of notice"		// Çeviri lazim!
 #endif
 	,
 	[ActRemNot] =
@@ -29481,278 +29504,278 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqDelThrCrsUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of users of course"			// Necessita traducció
+	"Request removal of thread of forum of users of course"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of users of course"			// Need Übersetzung
+	"Request removal of thread of forum of users of course"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of users of course"
+	"Request removal of thread of forum of users of course"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de asignatura"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de asignatura"
 #elif L==5	// fr
-	"Request removal of a thread of forum of users of course"			// Besoin de traduction
+	"Request removal of thread of forum of users of course"				// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de asignatura"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of users of course"			// Bisogno di traduzione
+	"Request removal of thread of forum of users of course"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of users of course"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of users of course"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of users of course"			// Precisa de tradução
+	"Request removal of thread of forum of users of course"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of users of course"			// Çeviri lazim!
+	"Request removal of thread of forum of users of course"				// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCrsTch] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of teachers of course"			// Necessita traducció
+	"Request removal of thread of forum of teachers of course"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of teachers of course"			// Need Übersetzung
+	"Request removal of thread of forum of teachers of course"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of teachers of course"
+	"Request removal of thread of forum of teachers of course"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de asignatura"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de asignatura"
 #elif L==5	// fr
-	"Request removal of a thread of forum of teachers of course"			// Besoin de traduction
+	"Request removal of thread of forum of teachers of course"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de asignatura"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of teachers of course"			// Bisogno di traduzione
+	"Request removal of thread of forum of teachers of course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of teachers of course"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of teachers of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of teachers of course"			// Precisa de tradução
+	"Request removal of thread of forum of teachers of course"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of teachers of course"			// Çeviri lazim!
+	"Request removal of thread of forum of teachers of course"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrDegUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of users of degree"				// Necessita traducció
+	"Request removal of thread of forum of users of degree"					// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of users of degree"				// Need Übersetzung
+	"Request removal of thread of forum of users of degree"					// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of users of degree"
+	"Request removal of thread of forum of users of degree"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de titulaci&oacute;n"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de titulaci&oacute;n"
 #elif L==5	// fr
-	"Request removal of a thread of forum of users of degree"				// Besoin de traduction
+	"Request removal of thread of forum of users of degree"					// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de titulaci&oacute;n"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of users of degree"				// Bisogno di traduzione
+	"Request removal of thread of forum of users of degree"					// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of users of degree"				// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of users of degree"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of users of degree"				// Precisa de tradução
+	"Request removal of thread of forum of users of degree"					// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of users of degree"				// Çeviri lazim!
+	"Request removal of thread of forum of users of degree"					// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrDegTch] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of teachers of degree"				// Necessita traducció
+	"Request removal of thread of forum of teachers of degree"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of teachers of degree"				// Need Übersetzung
+	"Request removal of thread of forum of teachers of degree"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of teachers of degree"
+	"Request removal of thread of forum of teachers of degree"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de titulaci&oacute;n"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de titulaci&oacute;n"
 #elif L==5	// fr
-	"Request removal of a thread of forum of teachers of degree"				// Besoin de traduction
+	"Request removal of thread of forum of teachers of degree"				// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de titulaci&oacute;n"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of teachers of degree"				// Bisogno di traduzione
+	"Request removal of thread of forum of teachers of degree"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of teachers of degree"				// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of teachers of degree"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of teachers of degree"				// Precisa de tradução
+	"Request removal of thread of forum of teachers of degree"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of teachers of degree"				// Çeviri lazim!
+	"Request removal of thread of forum of teachers of degree"				// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCtrUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of users of center"			// Necessita traducció
+	"Request removal of thread of forum of users of center"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of users of center"			// Need Übersetzung
+	"Request removal of thread of forum of users of center"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of users of center"
+	"Request removal of thread of forum of users of center"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de centro"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de centro"
 #elif L==5	// fr
-	"Request removal of a thread of forum of users of center"			// Besoin de traduction
+	"Request removal of thread of forum of users of center"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de centro"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de centro"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of users of center"			// Bisogno di traduzione
+	"Request removal of thread of forum of users of center"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of users of center"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of users of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of users of center"			// Precisa de tradução
+	"Request removal of thread of forum of users of center"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of users of center"			// Çeviri lazim!
+	"Request removal of thread of forum of users of center"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrCtrTch] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of teachers of center"			// Necessita traducció
+	"Request removal of thread of forum of teachers of center"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of teachers of center"			// Need Übersetzung
+	"Request removal of thread of forum of teachers of center"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of teachers of center"
+	"Request removal of thread of forum of teachers of center"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de centro"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de centro"
 #elif L==5	// fr
-	"Request removal of a thread of forum of teachers of center"			// Besoin de traduction
+	"Request removal of thread of forum of teachers of center"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de centro"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de centro"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of teachers of center"			// Bisogno di traduzione
+	"Request removal of thread of forum of teachers of center"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of teachers of center"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of teachers of center"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of teachers of center"			// Precisa de tradução
+	"Request removal of thread of forum of teachers of center"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of teachers of center"			// Çeviri lazim!
+	"Request removal of thread of forum of teachers of center"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrInsUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of users of institution"				// Necessita traducció
+	"Request removal of thread of forum of users of institution"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of users of institution"				// Need Übersetzung
+	"Request removal of thread of forum of users of institution"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of users of institution"
+	"Request removal of thread of forum of users of institution"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de instituci&oacute;n"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de instituci&oacute;n"
 #elif L==5	// fr
-	"Request removal of a thread of forum of users of institution"				// Besoin de traduction
+	"Request removal of thread of forum of users of institution"				// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de instituci&oacute;n"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of users of institution"				// Bisogno di traduzione
+	"Request removal of thread of forum of users of institution"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of users of institution"				// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of users of institution"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of users of institution"				// Precisa de tradução
+	"Request removal of thread of forum of users of institution"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of users of institution"				// Çeviri lazim!
+	"Request removal of thread of forum of users of institution"				// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrInsTch] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of teachers of institution"			// Necessita traducció
+	"Request removal of thread of forum of teachers of institution"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of teachers of institution"			// Need Übersetzung
+	"Request removal of thread of forum of teachers of institution"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of teachers of institution"
+	"Request removal of thread of forum of teachers of institution"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de instituci&oacute;n"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de instituci&oacute;n"
 #elif L==5	// fr
-	"Request removal of a thread of forum of teachers of institution"			// Besoin de traduction
+	"Request removal of thread of forum of teachers of institution"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de instituci&oacute;n"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of teachers of institution"			// Bisogno di traduzione
+	"Request removal of thread of forum of teachers of institution"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of teachers of institution"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of teachers of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of teachers of institution"			// Precisa de tradução
+	"Request removal of thread of forum of teachers of institution"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of teachers of institution"			// Çeviri lazim!
+	"Request removal of thread of forum of teachers of institution"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrGenUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of general forum of users"			// Necessita traducció
+	"Request removal of thread of general forum of users"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of general forum of users"			// Need Übersetzung
+	"Request removal of thread of general forum of users"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of general forum of users"
+	"Request removal of thread of general forum of users"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios general"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios general"
 #elif L==5	// fr
-	"Request removal of a thread of general forum of users"			// Besoin de traduction
+	"Request removal of thread of general forum of users"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios general"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios general"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of general forum of users"			// Bisogno di traduzione
+	"Request removal of thread of general forum of users"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of general forum of users"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of general forum of users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of general forum of users"			// Precisa de tradução
+	"Request removal of thread of general forum of users"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of general forum of users"			// Çeviri lazim!
+	"Request removal of thread of general forum of users"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrGenTch] =
 #if   L==1	// ca
-	"Request removal of a thread of general forum of teachers"			// Necessita traducció
+	"Request removal of thread of general forum of teachers"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of general forum of teachers"			// Need Übersetzung
+	"Request removal of thread of general forum of teachers"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of general forum of teachers"
+	"Request removal of thread of general forum of teachers"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores general"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores general"
 #elif L==5	// fr
-	"Request removal of a thread of general forum of teachers"			// Besoin de traduction
+	"Request removal of thread of general forum of teachers"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores general"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores general"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of general forum of teachers"			// Bisogno di traduzione
+	"Request removal of thread of general forum of teachers"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of general forum of teachers"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of general forum of teachers"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of general forum of teachers"			// Precisa de tradução
+	"Request removal of thread of general forum of teachers"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of general forum of teachers"			// Çeviri lazim!
+	"Request removal of thread of general forum of teachers"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrSWAUsr] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of users of the platform"			// Necessita traducció
+	"Request removal of thread of forum of users of the platform"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of users of the platform"			// Need Übersetzung
+	"Request removal of thread of forum of users of the platform"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of users of the platform"
+	"Request removal of thread of forum of users of the platform"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de la plataforma"
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de la plataforma"
 #elif L==5	// fr
-	"Request removal of a thread of forum of users of the platform"			// Besoin de traduction
+	"Request removal of thread of forum of users of the platform"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de usuarios de la plataforma"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de usuarios de la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of users of the platform"			// Bisogno di traduzione
+	"Request removal of thread of forum of users of the platform"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of users of the platform"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of users of the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of users of the platform"			// Precisa de tradução
+	"Request removal of thread of forum of users of the platform"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of users of the platform"			// Çeviri lazim!
+	"Request removal of thread of forum of users of the platform"			// Çeviri lazim!
 #endif
 	,
 	[ActReqDelThrSWATch] =
 #if   L==1	// ca
-	"Request removal of a thread of forum of teachers of the platform"			// Necessita traducció
+	"Request removal of thread of forum of teachers of the platform"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of a thread of forum of teachers of the platform"			// Need Übersetzung
+	"Request removal of thread of forum of teachers of the platform"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of a thread of forum of teachers of the platform"
+	"Request removal of thread of forum of teachers of the platform"
 #elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de la plataforma"
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de la plataforma"
 #elif L==5	// fr
-	"Request removal of a thread of forum of teachers of the platform"			// Besoin de traduction
+	"Request removal of thread of forum of teachers of the platform"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un hilo del foro de profesores de la plataforma"	// Okoteve traducción
+	"Solicitar eliminaci&oacute;n de hilo del foro de profesores de la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of a thread of forum of teachers of the platform"			// Bisogno di traduzione
+	"Request removal of thread of forum of teachers of the platform"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of a thread of forum of teachers of the platform"			// Potrzebujesz tlumaczenie
+	"Request removal of thread of forum of teachers of the platform"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of a thread of forum of teachers of the platform"			// Precisa de tradução
+	"Request removal of thread of forum of teachers of the platform"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of a thread of forum of teachers of the platform"			// Çeviri lazim!
+	"Request removal of thread of forum of teachers of the platform"			// Çeviri lazim!
 #endif
 	,
 	[ActDelThrForCrsUsr] =
@@ -32494,25 +32517,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemEvtMyAgd] =
 #if   L==1	// ca
-	"Request removal of an event from my agenda"			// Necessita traducció
+	"Request removal of event from my agenda"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of an event from my agenda"			// Need Übersetzung
+	"Request removal of event from my agenda"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of an event from my agenda"
+	"Request removal of event from my agenda"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de un evento de mi agenda"
 #elif L==5	// fr
-	"Request removal of an event from my agenda"			// Besoin de traduction
+	"Request removal of event from my agenda"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de un evento de mi agenda"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of an event from my agenda"			// Bisogno di traduzione
+	"Request removal of event from my agenda"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of an event from my agenda"			// Potrzebujesz tlumaczenie
+	"Request removal of event from my agenda"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of an event from my agenda"			// Precisa de tradução
+	"Request removal of event from my agenda"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of an event from my agenda"			// Çeviri lazim!
+	"Request removal of event from my agenda"			// Çeviri lazim!
 #endif
 	,
 	[ActRemEvtMyAgd] =
