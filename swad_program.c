@@ -101,6 +101,8 @@ static struct
    .Levels        = NULL
   };
 
+static const char *Prg_ITEM_SECTION_ID = "item_section";
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -392,7 +394,7 @@ static void Prg_PutIconToCreateNewItem (void)
   {
    long ItmCod = -1L;
 
-   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
+   Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
                                Prg_PutParams,&ItmCod);
   }
 
@@ -405,7 +407,7 @@ static void Prg_PutButtonToCreateNewItem (void)
    extern const char *Txt_New_item;
    long ItmCod = -1L;
 
-   Frm_BeginFormAnchor (ActFrmNewPrgItm,"item_form");
+   Frm_BeginFormAnchor (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID);
       Prg_PutParams (&ItmCod);
       Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
@@ -489,7 +491,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 		          ColSpan,TitleClass,The_GetColorRows ());
 	       if (ListingType == Prg_EDIT_ITEM ||
 		   ListingType == Prg_END_EDIT_ITEM)
-	          HTM_ARTICLE_Begin ("item_form");
+	          HTM_ARTICLE_Begin (Prg_ITEM_SECTION_ID);
                HTM_Txt (Item->Title);
 	       if (ListingType == Prg_EDIT_ITEM ||
 		   ListingType == Prg_END_EDIT_ITEM)
@@ -560,15 +562,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	{
 	 case Prg_EDIT_ITEM:
             /* Form to change item title, dates and text */
-	    HTM_ARTICLE_Begin ("item_form");
-	       Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
-	    HTM_ARTICLE_End ();
-	    break;
-	 case Prg_END_EDIT_ITEM:
-            /* Text */
-	    HTM_ARTICLE_Begin ("item_form");
-	       Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
-	    HTM_ARTICLE_End ();
+	    Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
 	    break;
 	 default:
 	    /* Text */
@@ -653,7 +647,7 @@ static void Prg_WriteRowToCreateItem (long ItmCod,unsigned FormLevel)
       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
 		    ColSpan,The_GetColorRows ());
          /* Form for item data */
-	 HTM_ARTICLE_Begin ("item_form");
+	 HTM_ARTICLE_Begin (Prg_ITEM_SECTION_ID);
 	    Prg_ShowFormToCreateItem (ItmCod);
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
@@ -873,17 +867,17 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 switch (ListingType)
 	   {
 	    case Prg_EDIT_ITEM:
-	       Ico_PutContextualIconToView (ActSeePrgItm,"item_form",
+	       Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
 					    Prg_PutParams,&Item->Hierarchy.ItmCod);
 	       break;
 	    default:
-	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
+	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
 					    Prg_PutParams,&Item->Hierarchy.ItmCod);
 	       break;
 	   }
 
 	 /***** Icon to add a new child item inside this item *****/
-	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
+	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
 	                             Prg_PutParams,&Item->Hierarchy.ItmCod);
 
 	 HTM_BR ();

@@ -465,12 +465,12 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
 					    Resource->Hidden);
 
 	 /***** Icon to edit program resource *****/
-	 // Ico_PutContextualIconToEdit (ActFrmChgPrgItm,"item_form",
-	 //                             Prg_PutParams,&Item->Hierarchy.ItmCod);
+	 // Ico_PutContextualIconToEdit (ActFrmChgPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	 //                              PrgRsc_PutParams,&Resource->Rsc.Cod,);
 
 	 /***** Icon to add a new resource after this resource *****/
-	 // Ico_PutContextualIconToAdd (ActFrmNewPrgItm,"item_form",
-	 //                            Prg_PutParams,&Item->Hierarchy.ItmCod);
+	 // Ico_PutContextualIconToAdd (ActFrmNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	 //                             PrgRsc_PutParams,&Resource->Rsc.Cod,);
 
 	 /***** Icon to move up the item *****/
 	 if (NumRsc > 0)
