@@ -6088,6 +6088,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Kaynaklar&inodot; d&uuml;zenle"
 #endif
 	,
+	[ActNewPrgRsc] =
+#if   L==1	// ca
+	"Create resource"	// Necessita traducció
+#elif L==2	// de
+	"Create resource"	// Need Übersetzung
+#elif L==3	// en
+	"Create resource"
+#elif L==4	// es
+	"Crear recurso"
+#elif L==5	// fr
+	"Create resource"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear recurso"		// Okoteve traducción
+#elif L==7	// it
+	"Create resource"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create resource"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create resource"	// Precisa de tradução
+#elif L==10	// tr
+	"Create resource"	// Çeviri lazim!
+#endif
+	,
 	[ActRenPrgRsc] =
 #if   L==1	// ca
 	"Rename resource"	// Necessita traducció

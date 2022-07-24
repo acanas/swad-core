@@ -56,6 +56,8 @@ void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove);
 void Prg_DB_RemoveCrsItems (long CrsCod);
 
 //------------------------------ Resources ------------------------------------
+long Prg_DB_CreateResource (const struct PrgRsc_Resource *Resource);
+
 void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
                                  const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1]);
 
@@ -64,6 +66,7 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
 unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
 unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
                                         long ItmCod,unsigned RscInd);
+// unsigned Prg_DB_GetMaxRscIndexInItem (long ItmCod);
 unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd);
 unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd);
 long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);

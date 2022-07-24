@@ -230,7 +230,6 @@ void Agd_DB_RemoveEvent (const struct Agd_Event *AgdEvent)
 
 long Agd_DB_CreateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
   {
-   /***** Create a new event *****/
    return
    DB_QueryINSERTandReturnCode ("can not create new event",
 				"INSERT INTO agd_agendas"

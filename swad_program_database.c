@@ -426,24 +426,30 @@ void Prg_DB_RemoveCrsItems (long CrsCod)
   }
 
 /*****************************************************************************/
+/************************** Create a new resource ****************************/
+/*****************************************************************************/
+
+long Prg_DB_CreateResource (const struct PrgRsc_Resource *Resource)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new resource",
+				"INSERT INTO prg_resources"
+				" (ItmCod,RscInd,Hidden,Title)"
+				" SELECT %ld,COALESCE(MAX(t2.RscInd),0)+1,'N','%s'"
+				  " FROM prg_resources AS t2"
+				 " WHERE t2.ItmCod=%ld",
+				Resource->ItmCod,
+				Resource->Title,
+				Resource->ItmCod);
+  }
+
+/*****************************************************************************/
 /**************************** Update resource title **************************/
 /*****************************************************************************/
 
 void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
                                  const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1])
   {
-   Ale_ShowAlert (Ale_INFO,
-                  "can not update the title of a resource",
-		   "UPDATE prg_resources,prg_items"
-		     " SET prg_resources.Title='%s'"
-		   " WHERE prg_resources.RscCod=%ld"
-		     " AND prg_resources.ItmCod=%ld"
-		     " AND prg_resources.ItmCod=prg_items.ItmCod"
-		     " AND prg_items.CrsCod=%ld",
-	           NewTitle,
-	           RscCod,
-	           ItmCod,
-	           Gbl.Hierarchy.Crs.CrsCod);
    DB_QueryUPDATE ("can not update the title of a resource",
 		   "UPDATE prg_resources,prg_items"
 		     " SET prg_resources.Title='%s'"
@@ -532,6 +538,21 @@ unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
+/*****************************************************************************/
+/******************* Get maximum resource index in an item *******************/
+/*****************************************************************************/
+// Resource index can be 1, 2, 3...
+// Return 0 if no resources
+/*
+unsigned Prg_DB_GetMaxRscIndexInItem (long ItmCod)
+  {
+   return DB_QuerySELECTUnsigned ("can not get max resource index",
+				  "SELECT MAX(RscInd)"
+				   " FROM prg_resources"
+				  " WHERE ItmCod=%ld",
+				  ItmCod);
+  }
+*/
 /*****************************************************************************/
 /************* Get the resource index before/after a given one ***************/
 /*****************************************************************************/

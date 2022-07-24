@@ -57,7 +57,7 @@ void ID_DB_InsertANewUsrID (long UsrCod,
 
 void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
   {
-   DB_QueryINSERT ("can not confirm a user's ID",
+   DB_QueryUPDATE ("can not confirm a user's ID",
 		   "UPDATE usr_ids"
 		     " SET Confirmed='Y'"
 		   " WHERE UsrCod=%ld"

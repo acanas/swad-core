@@ -148,7 +148,6 @@ static void Prg_GetDataOfItem (struct Prg_Item *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned NumRows);
 static void Prg_ResetItem (struct Prg_Item *Item);
-static void Prg_PutParamItmCod (long ItmCod);
 
 static void Prg_HideOrUnhideItem (bool Hide);
 
@@ -1171,7 +1170,7 @@ void Prg_FreeListItems (void)
 /**************** Write parameter with code of program item ******************/
 /*****************************************************************************/
 
-static void Prg_PutParamItmCod (long ItmCod)
+void Prg_PutParamItmCod (long ItmCod)
   {
    Par_PutHiddenParamLong (NULL,"ItmCod",ItmCod);
   }

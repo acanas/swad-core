@@ -74,6 +74,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          struct PrgRsc_Resource *Resource);
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct PrgRsc_Resource *Resource);
+static void PrgRsc_WriteRowNewResource (long ItmCod,unsigned NumRsc);
 static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
                                                  unsigned NumResources,
                                                  struct PrgRsc_Resource *Resource);
@@ -255,6 +256,10 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
 		  The_ChangeRowColor ();
 		 }
 
+	       /***** Form to create a new resource *****/
+	       if (ListingType == Prg_EDIT_RESOURCES)
+	          PrgRsc_WriteRowNewResource (ItmCod,NumResources);
+
 	    /***** End table *****/
 	    HTM_TBODY_End ();
 	 HTM_TABLE_End ();
@@ -416,23 +421,59 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows ());
 	 PrgRsc_PutFormsToRemEditOneResource (NumRsc,NumResources,Resource);
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RM %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows ());
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    PrgRsc_PutParamRscCod (Resource->Rsc.Cod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Resource->Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    The_GetSuffix ());
+	 Frm_EndForm ();
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************* Edit a new item resource **************************/
+/*****************************************************************************/
+
+static void PrgRsc_WriteRowNewResource (long ItmCod,unsigned NumRsc)
+  {
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Forms to remove/edit this item resource *****/
+      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows ());
+      HTM_TD_End ();
+
+      /***** Resource number *****/
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RM %s\"",
+                    The_GetSuffix (),The_GetColorRows ());
+	 HTM_Unsigned (NumRsc + 1);
+      HTM_TD_End ();
+
+      /***** Title *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows ());
+	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
+	    Prg_PutParamItmCod (ItmCod);
+	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
+			    HTM_SUBMIT_ON_CHANGE,
+			    "placeholder=\"%s\""
+			    " class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    "Nuevo recurso",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -528,6 +569,38 @@ static void PrgRsc_PutParamRscCod (long RscCod)
 static long PrgRsc_GetParamRscCod (void)
   {
    return Par_GetParToLong ("RscCod");
+  }
+/*****************************************************************************/
+/******************************** Rename resource ****************************/
+/*****************************************************************************/
+
+void PrgRsc_CreateResource (void)
+  {
+   struct PrgRsc_Resource Resource;
+   unsigned FormLevel;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get parameters *****/
+   /* Get the code of the program item */
+   if ((Resource.ItmCod = Prg_GetParamItmCod ()) > 0)
+      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
+   else
+      FormLevel = 0;
+
+   /* Get the new title for the new resource */
+   Par_GetParToText ("Title",Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+
+   /***** Create resource *****/
+   // Resource.Rsc.Ind = Prg_DB_GetMaxRscIndexInItem (Resource.ItmCod) + 1;
+   Resource.Rsc.Cod = Prg_DB_CreateResource (&Resource);
+
+   /***** Show current program items, if any *****/
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,Resource.ItmCod,FormLevel);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
   }
 
 /*****************************************************************************/

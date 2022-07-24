@@ -103,6 +103,7 @@ void Prg_PutParams (void *ItmCod);
 
 void Prg_GetListItems (void);
 void Prg_FreeListItems (void);
+void Prg_PutParamItmCod (long ItmCod);
 long Prg_GetParamItmCod (void);
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
