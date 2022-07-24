@@ -451,7 +451,8 @@ void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
                                  const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1])
   {
    DB_QueryUPDATE ("can not update the title of a resource",
-		   "UPDATE prg_resources,prg_items"
+		   "UPDATE prg_resources,"
+		          "prg_items"
 		     " SET prg_resources.Title='%s'"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.ItmCod=%ld"
@@ -483,7 +484,8 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
                           "prg_resources.RscInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Title"		// row[4]
-		    " FROM prg_resources,prg_items"
+		    " FROM prg_resources,"
+		          "prg_items"
 		   " WHERE prg_resources.ItmCod=%ld"
 		       "%s"
 		     " AND prg_resources.ItmCod=prg_items.ItmCod"
@@ -507,7 +509,8 @@ unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
                           "prg_resources.RscInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Title"		// row[4]
-		    " FROM prg_resources,prg_items"
+		    " FROM prg_resources,"
+		          "prg_items"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.ItmCod=prg_items.ItmCod"
 		     " AND prg_items.CrsCod=%ld",	// Extra check
@@ -529,7 +532,8 @@ unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
                           "prg_resources.RscInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
 			  "prg_resources.Title"		// row[4]
-		    " FROM prg_resources,prg_items"
+		    " FROM prg_resources,"
+		          "prg_items"
 		   " WHERE prg_resources.ItmCod=%ld"
 		     " AND prg_resources.RscInd=%u"
 		     " AND prg_resources.ItmCod=prg_items.ItmCod"
@@ -606,7 +610,8 @@ void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
   {
    DB_QueryDELETE ("can not remove item resource",
 		   "DELETE FROM prg_resources"
-		    "USING prg_resources,prg_items"
+		   " USING prg_resources,"
+		          "prg_items"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.ItmCod=%ld"
                      " AND prg_resources.ItmCod=prg_items.ItmCod"
