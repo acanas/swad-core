@@ -95,19 +95,15 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
 void PrgRsc_ViewResourcesAfterEdit (void)
   {
    long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
-      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
-   else
-      FormLevel = 0;
+   ItmCod = Prg_GetParamItmCod ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_END_EDIT_RES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_END_EDIT_RES,ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -120,19 +116,15 @@ void PrgRsc_ViewResourcesAfterEdit (void)
 void PrgRsc_EditResources (void)
   {
    long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   if ((ItmCod = Prg_GetParamItmCod ()) > 0)
-      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (ItmCod));
-   else
-      FormLevel = 0;
+   ItmCod = Prg_GetParamItmCod ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -155,10 +147,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
      {
       [Prg_PRINT         ] = false,
       [Prg_VIEW          ] = false,
-      [Prg_EDIT_LIST     ] = false,
-      [Prg_NEW_ITEM      ] = false,
-      [Prg_EDIT_ITEM     ] = false,
+      [Prg_EDIT_ITEMS     ] = false,
+      [Prg_FORM_NEW_ITEM      ] = false,
+      [Prg_FORM_EDIT_ITEM     ] = false,
       [Prg_END_EDIT_ITEM ] = false,
+      [Prg_RECEIVE_ITEM  ] = false,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = false,
      };
@@ -166,10 +159,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
      {
       [Prg_PRINT         ] = false,
       [Prg_VIEW          ] = false,
-      [Prg_EDIT_LIST     ] = true,
-      [Prg_NEW_ITEM      ] = true,
-      [Prg_EDIT_ITEM     ] = true,
+      [Prg_EDIT_ITEMS     ] = true,
+      [Prg_FORM_NEW_ITEM      ] = true,
+      [Prg_FORM_EDIT_ITEM     ] = true,
       [Prg_END_EDIT_ITEM ] = true,
+      [Prg_RECEIVE_ITEM  ] = true,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = true,
      };
@@ -177,10 +171,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
      {
       [Prg_PRINT         ] = false,
       [Prg_VIEW          ] = false,
-      [Prg_EDIT_LIST     ] = false,
-      [Prg_NEW_ITEM      ] = false,
-      [Prg_EDIT_ITEM     ] = false,
+      [Prg_EDIT_ITEMS     ] = false,
+      [Prg_FORM_NEW_ITEM      ] = false,
+      [Prg_FORM_EDIT_ITEM     ] = false,
       [Prg_END_EDIT_ITEM ] = false,
+      [Prg_RECEIVE_ITEM  ] = false,
       [Prg_EDIT_RESOURCES] = true,
       [Prg_END_EDIT_RES  ] = true,
      };
@@ -188,10 +183,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
      {
       [Prg_PRINT         ] = NULL,
       [Prg_VIEW          ] = NULL,
-      [Prg_EDIT_LIST     ] = PrgRsc_PutIconsEditResources,
-      [Prg_NEW_ITEM      ] = PrgRsc_PutIconsEditResources,
-      [Prg_EDIT_ITEM     ] = PrgRsc_PutIconsEditResources,
+      [Prg_EDIT_ITEMS     ] = PrgRsc_PutIconsEditResources,
+      [Prg_FORM_NEW_ITEM      ] = PrgRsc_PutIconsEditResources,
+      [Prg_FORM_EDIT_ITEM     ] = PrgRsc_PutIconsEditResources,
       [Prg_END_EDIT_ITEM ] = PrgRsc_PutIconsEditResources,
+      [Prg_RECEIVE_ITEM  ] = PrgRsc_PutIconsEditResources,
       [Prg_EDIT_RESOURCES] = PrgRsc_PutIconsViewResources,
       [Prg_END_EDIT_RES  ] = PrgRsc_PutIconsEditResources,
      };
@@ -577,27 +573,22 @@ static long PrgRsc_GetParamRscCod (void)
 void PrgRsc_CreateResource (void)
   {
    struct PrgRsc_Resource Resource;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get parameters *****/
    /* Get the code of the program item */
-   if ((Resource.ItmCod = Prg_GetParamItmCod ()) > 0)
-      FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-   else
-      FormLevel = 0;
+   Resource.ItmCod = Prg_GetParamItmCod ();
 
    /* Get the new title for the new resource */
    Par_GetParToText ("Title",Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
 
    /***** Create resource *****/
-   // Resource.Rsc.Ind = Prg_DB_GetMaxRscIndexInItem (Resource.ItmCod) + 1;
    Resource.Rsc.Cod = Prg_DB_CreateResource (&Resource);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,Resource.ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -611,8 +602,6 @@ void PrgRsc_RenameResource (void)
   {
    struct PrgRsc_Resource Resource;
    char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
-   long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -630,12 +619,8 @@ void PrgRsc_RenameResource (void)
    /* Update database changing old title by new title */
    Prg_DB_UpdateResourceTitle (Resource.Rsc.Cod,Resource.ItmCod,NewTitle);
 
-   /***** Get the code of the program item *****/
-   ItmCod = Resource.ItmCod;
-   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -649,8 +634,6 @@ void PrgRsc_ReqRemResource (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    struct PrgRsc_Resource Resource;
-   long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -667,12 +650,8 @@ void PrgRsc_ReqRemResource (void)
                     Resource.Title);
    PrgSrc_RscCodToBeRemoved = Resource.Rsc.Cod;
 
-   /***** Get the code of the program item *****/
-   ItmCod = Resource.ItmCod;
-   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -686,8 +665,6 @@ void PrgRsc_RemoveResource (void)
   {
    extern const char *Txt_Resource_X_removed;
    struct PrgRsc_Resource Resource;
-   long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -705,12 +682,8 @@ void PrgRsc_RemoveResource (void)
    Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Resource_X_removed,Resource.Title);
 
-   /***** Get the code of the program item *****/
-   ItmCod = Resource.ItmCod;
-   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -733,8 +706,6 @@ void PrgRsc_UnhideResource (void)
 static void PrgRsc_HideOrUnhideResource (bool Hide)
   {
    struct PrgRsc_Resource Resource;
-   long ItmCod;
-   unsigned FormLevel;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -748,12 +719,8 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
    /***** Hide/unhide item resource *****/
    Prg_DB_HideOrUnhideResource (Resource.Rsc.Cod,Hide);
 
-   /***** Get the code of the program item *****/
-   ItmCod = Resource.ItmCod;
-   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -778,8 +745,6 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    extern const char *Txt_Movement_not_allowed;
    struct PrgRsc_Resource Resource;
    struct PrgRsc_Rsc Rsc2;
-   long ItmCod;
-   unsigned FormLevel;
    bool Success = false;
    static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(long ItmCod,unsigned RscInd) =
      {
@@ -808,12 +773,8 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    if (!Success)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
-   /***** Get the code of the program item *****/
-   ItmCod = Resource.ItmCod;
-   FormLevel = Prg_GetLevelFromNumItem (Prg_GetNumItemFromItmCod (Resource.ItmCod));
-
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,NULL,-1L,ItmCod,FormLevel);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

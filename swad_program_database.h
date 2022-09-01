@@ -66,7 +66,6 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
 unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
 unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
                                         long ItmCod,unsigned RscInd);
-// unsigned Prg_DB_GetMaxRscIndexInItem (long ItmCod);
 unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd);
 unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd);
 long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);

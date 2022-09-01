@@ -71,16 +71,17 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
-#define Prg_NUM_LISTING_TYPES 8
+#define Prg_NUM_LISTING_TYPES 9
 typedef enum
   {
    Prg_PRINT,		// List items ready to be printed
    Prg_VIEW,		// List items without any edition
 
-   Prg_EDIT_LIST,	// Buttons to edit list of items
-   Prg_NEW_ITEM,	// Form to create a new item
-   Prg_EDIT_ITEM,	// Form to edit a selected item
+   Prg_EDIT_ITEMS,	// Buttons to edit list of items
+   Prg_FORM_NEW_ITEM,	// Form to create a new item
+   Prg_FORM_EDIT_ITEM,	// Form to edit a selected item
    Prg_END_EDIT_ITEM,	// List item after edition
+   Prg_RECEIVE_ITEM,	// Receive item data after create/edit
 
    Prg_EDIT_RESOURCES,	// List resources of a selected item for edition
    Prg_END_EDIT_RES,	// List resources of a selected item after edition
@@ -92,11 +93,8 @@ typedef enum
 
 void Prg_ShowCourseProgram (void);
 void Prg_EditCourseProgram (void);
-void Prg_EditCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
 
-void Prg_ShowAllItems (Prg_ListingType_t ListingType,
-                       const struct Prg_ItemRange *ToHighlight,
-                       long ParentItmCod,long ItmCod,unsigned FormLevel);
+void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod);
 
 bool Prg_CheckIfICanEditProgram (void);
 void Prg_PutParams (void *ItmCod);

@@ -218,7 +218,7 @@ unsigned Prg_DB_GetDataOfItemByCod (MYSQL_RES **mysql_res,long ItmCod)
 			  "Level,"					// row[2]
 			  "Hidden,"					// row[3]
 			  "UsrCod,"					// row[4]
-			  "UNIX_TIMESTAMP(StartTime),"		// row[5]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[5]
 			  "UNIX_TIMESTAMP(EndTime),"			// row[6]
 			  "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
 			  "Title"					// row[8]
@@ -542,21 +542,6 @@ unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
-/*****************************************************************************/
-/******************* Get maximum resource index in an item *******************/
-/*****************************************************************************/
-// Resource index can be 1, 2, 3...
-// Return 0 if no resources
-/*
-unsigned Prg_DB_GetMaxRscIndexInItem (long ItmCod)
-  {
-   return DB_QuerySELECTUnsigned ("can not get max resource index",
-				  "SELECT MAX(RscInd)"
-				   " FROM prg_resources"
-				  " WHERE ItmCod=%ld",
-				  ItmCod);
-  }
-*/
 /*****************************************************************************/
 /************* Get the resource index before/after a given one ***************/
 /*****************************************************************************/
