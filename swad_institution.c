@@ -157,9 +157,9 @@ void Ins_SeeInsWithPendingCtrs (void)
 	 HTM_TR_End ();
 
 	 /***** List the institutions *****/
-	 for (NumIns = 0;
+	 for (NumIns = 0, The_ResetRowColor ();
 	      NumIns < NumInss;
-	      NumIns++)
+	      NumIns++, The_ChangeRowColor ())
 	   {
 	    /* Get next center */
 	    row = mysql_fetch_row (mysql_res);
@@ -187,8 +187,6 @@ void Ins_SeeInsWithPendingCtrs (void)
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
-
-	    The_ChangeRowColor ();
 	   }
 
       /***** End table and box *****/
@@ -308,9 +306,9 @@ static void Ins_ListInstitutions (void)
 	 Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
 	    /***** Write all institutions and their nuber of users *****/
-	    for (NumIns = 0;
+	    for (NumIns = 0, The_ResetRowColor ();
 		 NumIns < Gbl.Hierarchy.Inss.Num;
-		 NumIns++)
+		 NumIns++, The_ChangeRowColor ())
 	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.Inss.Lst[NumIns]),
 	                                        NumIns + 1);
 
@@ -447,8 +445,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       Hie_WriteStatusCell (Ins->Status,TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS);
 
    HTM_TR_End ();
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1833,9 +1829,9 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per institution) *****/
-      for (NumIns = 1;
+      for (NumIns  = 1, The_ResetRowColor ();
 	   NumIns <= NumInss;
-	   NumIns++)
+	   NumIns++, The_ChangeRowColor ())
 	{
 	 /* Get next institution */
 	 Ins.InsCod = DB_GetNextCode (*mysql_res);

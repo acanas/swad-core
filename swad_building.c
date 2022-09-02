@@ -141,7 +141,7 @@ void Bld_SeeBuildings (void)
 	 HTM_TR_End ();
 
 	 /***** Write list of buildings *****/
-	 for (NumBuilding = 0;
+	 for (NumBuilding = 0, The_ResetRowColor ();
 	      NumBuilding < Buildings.Num;
 	      NumBuilding++, The_ChangeRowColor ())
 	   {

@@ -211,7 +211,7 @@ void Roo_SeeRooms (void)
 	 HTM_TR_End ();
 
 	 /***** Write list of rooms *****/
-	 for (NumRoom = 0;
+	 for (NumRoom = 0, The_ResetRowColor ();
 	      NumRoom < Rooms.Num;
 	      NumRoom++, The_ChangeRowColor ())
 	   {

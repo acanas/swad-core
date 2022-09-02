@@ -2807,7 +2807,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	 HTM_TR_End ();
 
 	 /***** Write questions one by one *****/
-	 for (NumQst = 0;
+	 for (NumQst = 0, The_ResetRowColor ();
 	      NumQst < NumQsts;
 	      NumQst++, The_ChangeRowColor ())
 	   {

@@ -71,20 +71,21 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
-#define Prg_NUM_LISTING_TYPES 9
+#define Prg_NUM_LISTING_TYPES 10
 typedef enum
   {
-   Prg_PRINT,		// List items ready to be printed
-   Prg_VIEW,		// List items without any edition
+   Prg_PRINT,			// List items ready to be printed
+   Prg_VIEW,			// List items without any edition
 
-   Prg_EDIT_ITEMS,	// Buttons to edit list of items
-   Prg_FORM_NEW_ITEM,	// Form to create a new item
-   Prg_FORM_EDIT_ITEM,	// Form to edit a selected item
-   Prg_END_EDIT_ITEM,	// List item after edition
-   Prg_RECEIVE_ITEM,	// Receive item data after create/edit
+   Prg_EDIT_ITEMS,		// Buttons to edit list of items
+   Prg_FORM_NEW_END_ITEM,	// Form to create a new first level item at the end
+   Prg_FORM_NEW_CHILD_ITEM,	// Form to create a new child item
+   Prg_FORM_EDIT_ITEM,		// Form to edit a selected item
+   Prg_END_EDIT_ITEM,		// List item after edition
+   Prg_RECEIVE_ITEM,		// Receive item data after create/edit
 
-   Prg_EDIT_RESOURCES,	// List resources of a selected item for edition
-   Prg_END_EDIT_RES,	// List resources of a selected item after edition
+   Prg_EDIT_RESOURCES,		// List resources of a selected item for edition
+   Prg_END_EDIT_RES,		// List resources of a selected item after edition
   } Prg_ListingType_t;
 
 /*****************************************************************************/

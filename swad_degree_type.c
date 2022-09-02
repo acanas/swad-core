@@ -316,7 +316,7 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
    const char *BgColor;
 
    /***** List degree types with forms for edition *****/
-   for (NumDegTyp = 0;
+   for (NumDegTyp = 0, The_ResetRowColor ();
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++, The_ChangeRowColor ())
      {

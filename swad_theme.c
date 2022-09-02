@@ -206,35 +206,59 @@ const char *The_GetSuffix (void)
 /******** Get background colors for rows depending on selected theme *********/
 /*****************************************************************************/
 
-static unsigned The_RowEvenOdd = 0;	// To alternate row colors in listings
+static unsigned The_RowEvenOdd[2] =	// To alternate row colors in listings
+  {
+   0,
+   0
+  };
+
+static const char *The_ClassColorRows[2][The_NUM_THEMES] =
+  {
+   [0][The_THEME_WHITE ] = "COLOR0_WHITE",
+   [0][The_THEME_GREY  ] = "COLOR0_GREY",
+   [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
+   [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
+   [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
+   [0][The_THEME_PINK  ] = "COLOR0_PINK",
+   [0][The_THEME_DARK  ] = "COLOR0_DARK",
+
+   [1][The_THEME_WHITE ] = "COLOR1_WHITE",
+   [1][The_THEME_GREY  ] = "COLOR1_GREY",
+   [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
+   [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
+   [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
+   [1][The_THEME_PINK  ] = "COLOR1_PINK",
+   [1][The_THEME_DARK  ] = "COLOR1_DARK",
+  };
 
 const char *The_GetColorRows (void)
   {
-   static const char *The_ClassColorRows[2][The_NUM_THEMES] =
-     {
-      [0][The_THEME_WHITE ] = "COLOR0_WHITE",
-      [0][The_THEME_GREY  ] = "COLOR0_GREY",
-      [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
-      [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
-      [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
-      [0][The_THEME_PINK  ] = "COLOR0_PINK",
-      [0][The_THEME_DARK  ] = "COLOR0_DARK",
+   return The_ClassColorRows[The_RowEvenOdd[0]][Gbl.Prefs.Theme];
+  }
 
-      [1][The_THEME_WHITE ] = "COLOR1_WHITE",
-      [1][The_THEME_GREY  ] = "COLOR1_GREY",
-      [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
-      [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
-      [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
-      [1][The_THEME_PINK  ] = "COLOR1_PINK",
-      [1][The_THEME_DARK  ] = "COLOR1_DARK",
-     };
+const char *The_GetColorRows1 (void)
+  {
+   return The_ClassColorRows[The_RowEvenOdd[1]][Gbl.Prefs.Theme];
+  }
 
-   return The_ClassColorRows[The_RowEvenOdd][Gbl.Prefs.Theme];
+void The_ResetRowColor (void)
+  {
+   The_RowEvenOdd[0] = 0;
+  }
+
+void The_ResetRowColor1 (void)
+  {
+   The_RowEvenOdd[1] = 0;
   }
 
 void The_ChangeRowColor (void)
   {
-   The_RowEvenOdd = 1 - The_RowEvenOdd;
+   The_RowEvenOdd[0] = 1 - The_RowEvenOdd[0];
+  }
+
+void The_ChangeRowColor1 (void)
+  {
+   The_RowEvenOdd[1] = 1 - The_RowEvenOdd[1];
   }
 
 /*****************************************************************************/

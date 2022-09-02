@@ -287,7 +287,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
       ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
 
       /***** Write rows *****/
-      for (NumSession = 0, UniqueId = 1;
+      for (NumSession = 0, UniqueId = 1, The_ResetRowColor ();
 	   NumSession < NumSessions;
 	   NumSession++, UniqueId++, The_ChangeRowColor ())
 	{

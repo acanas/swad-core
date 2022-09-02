@@ -55,8 +55,15 @@ The_Theme_t The_GetParamTheme (void);
 The_Theme_t The_GetThemeFromStr (const char *Str);
 
 const char *The_GetSuffix (void);
+
 const char *The_GetColorRows (void);
+const char *The_GetColorRows1 (void);
+
+void The_ResetRowColor (void);
+void The_ResetRowColor1 (void);
+
 void The_ChangeRowColor (void);
+void The_ChangeRowColor1 (void);
 
 //-------------------------------- Figures ------------------------------------
 void The_GetAndShowNumUsrsPerTheme (void);

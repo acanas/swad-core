@@ -133,7 +133,7 @@ void Cty_SeeCtyWithPendingInss (void)
 	 HTM_TR_End ();
 
 	 /***** List the countries *****/
-	 for (NumCty = 0;
+	 for (NumCty = 0, The_ResetRowColor ();
 	      NumCty < NumCtys;
 	      NumCty++, The_ChangeRowColor ())
 	   {
@@ -462,8 +462,6 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1831,9 +1829,9 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	 Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
 
 	 /***** List the countries (one row per country) *****/
-	 for (NumCty  = 1;
+	 for (NumCty  = 1, The_ResetRowColor ();
 	      NumCty <= NumCtys;
-	      NumCty++)
+	      NumCty++, The_ChangeRowColor ())
 	   {
 	    /* Get next country */
 	    Cty.CtyCod = DB_GetNextCode (*mysql_res);

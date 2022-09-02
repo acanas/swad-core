@@ -210,20 +210,22 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod)
    long ParentItmCod = -1L;	// Initialized to avoid warning
    unsigned NumItem;
    unsigned FormLevel = 0;	// Initialized to avoid warning
+   Prg_ListingType_t LT;
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
    static bool FirstTBodyOpen = false;
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
      {
-      [Prg_PRINT         ] = NULL,
-      [Prg_VIEW          ] = Prg_PutIconsListItems,
-      [Prg_EDIT_ITEMS     ] = Prg_PutIconsEditItems,
-      [Prg_FORM_NEW_ITEM      ] = Prg_PutIconsEditItems,
+      [Prg_PRINT              ] = NULL,
+      [Prg_VIEW               ] = Prg_PutIconsListItems,
+      [Prg_EDIT_ITEMS         ] = Prg_PutIconsEditItems,
+      [Prg_FORM_NEW_END_ITEM  ] = Prg_PutIconsEditItems,
+      [Prg_FORM_NEW_CHILD_ITEM] = Prg_PutIconsEditItems,
       [Prg_FORM_EDIT_ITEM     ] = Prg_PutIconsEditItems,
-      [Prg_END_EDIT_ITEM ] = Prg_PutIconsEditItems,
-      [Prg_RECEIVE_ITEM  ] = Prg_PutIconsEditItems,
-      [Prg_EDIT_RESOURCES] = Prg_PutIconsEditItems,
-      [Prg_END_EDIT_RES  ] = Prg_PutIconsEditItems,
+      [Prg_END_EDIT_ITEM      ] = Prg_PutIconsEditItems,
+      [Prg_RECEIVE_ITEM       ] = Prg_PutIconsEditItems,
+      [Prg_EDIT_RESOURCES     ] = Prg_PutIconsEditItems,
+      [Prg_END_EDIT_RES       ] = Prg_PutIconsEditItems,
      };
 
    /***** Create numbers and hidden levels *****/
@@ -247,23 +249,11 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod)
             Prg_SetItemRangeOnlyItem (Prg_GetNumItemFromItmCod (ItmCod),
                                       &ToHighlight);
          break;
-      case Prg_FORM_NEW_ITEM:
-	 if (ItmCod > 0)
-	   {
-	    ParentItmCod = ItmCod;	// Item code here is the code of the parent of the item to create
-	    NumItem = Prg_GetNumItemFromItmCod (ItmCod);
-	    ItmCod = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
-	    FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
-	   }
-	 else
-	   {
-	    ParentItmCod = -1L;		// No parent item (user clicked on button to add a new first-level item at the end)
-	    if (Prg_Gbl.List.NumItems)	// There are items already
-	       ItmCod = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmCod;
-	    else			// No current items
-	       ItmCod = -1L;
-	    FormLevel = 1;
-	   }
+      case Prg_FORM_NEW_CHILD_ITEM:
+	 ParentItmCod = ItmCod;		// Item code here is parent of the item to create
+	 NumItem = Prg_GetNumItemFromItmCod (ItmCod);
+	 ItmCod = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
+	 FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
 	 break;
       default:
 	 break;
@@ -285,9 +275,9 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod)
 	 FirstTBodyOpen = true;
 
 	 /***** Write all program items *****/
-	 for (NumItem = 0;
+	 for (NumItem = 0, The_ResetRowColor ();
 	      NumItem < Prg_Gbl.List.NumItems;
-	      NumItem++)
+	      NumItem++, The_ChangeRowColor ())
 	   {
 	    /* Get data of this program item */
 	    Item.Hierarchy.ItmCod = Prg_Gbl.List.Items[NumItem].ItmCod;
@@ -304,51 +294,41 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod)
 	       HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
 	      }
 
-	    /* Show form to create item */
+	    /* Write row with this item */
+	    LT = ListingType;
 	    switch (ListingType)
 	      {
-	       case Prg_PRINT:
-	       case Prg_VIEW:
-	       case Prg_EDIT_ITEMS:
-	          Prg_WriteRowItem (ListingType,NumItem,&Item);
-                  break;
-	       case Prg_FORM_NEW_ITEM:
-	          Prg_WriteRowItem (Prg_EDIT_ITEMS,NumItem,&Item);
-	          if (Item.Hierarchy.ItmCod == ItmCod)
-                     Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
-                  break;
 	       case Prg_FORM_EDIT_ITEM:
-	       case Prg_END_EDIT_ITEM:
-	       case Prg_RECEIVE_ITEM:
 	       case Prg_EDIT_RESOURCES:
 	       case Prg_END_EDIT_RES:
-	          Prg_WriteRowItem (Item.Hierarchy.ItmCod == ItmCod ? ListingType :
-					                              Prg_EDIT_ITEMS,
-				    NumItem,&Item);
+		  if (Item.Hierarchy.ItmCod != ItmCod)
+		     LT = Prg_EDIT_ITEMS;
 		  break;
+	       default:
+		  break;
+	      }
+	    Prg_WriteRowItem (LT,NumItem,&Item);
+
+	    /* Show form to create child item? */
+	    if (ListingType == Prg_FORM_NEW_CHILD_ITEM &&
+		Item.Hierarchy.ItmCod == ItmCod)
+	      {
+	       The_ChangeRowColor ();
+	       Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
 	      }
 
 	    /* End range to highlight? */
 	    if (Item.Hierarchy.Index == ToHighlight.End)	// End of the highlighted range
 	      {
 	       HTM_TBODY_End ();				// Highlighted tbody end
-	       if (NumItem < Prg_Gbl.List.NumItems - 1)	// Not the last item
+	       if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
 		  HTM_TBODY_Begin (NULL);			// 3rd tbody begin
 	      }
-
-	    The_ChangeRowColor ();
 	   }
 
 	 /***** Create item at the end? *****/
-	 switch (ListingType)
-	   {
-	    case Prg_FORM_NEW_ITEM:
-	       if (ParentItmCod <= 0)
-	          Prg_WriteRowToCreateItem (-1L,1);
-	       break;
-	    default:
-	       break;
-	   }
+	 if (ListingType == Prg_FORM_NEW_END_ITEM)
+	    Prg_WriteRowToCreateItem (-1L,1);
 
 	 /***** End table *****/
 	 HTM_TBODY_End ();					// 3rd tbody end
@@ -461,6 +441,19 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item)
   {
    static unsigned UniqueId = 0;
+   static bool PutFormsToRemEditOneItem[Prg_NUM_LISTING_TYPES] =
+     {
+      [Prg_PRINT              ] = false,
+      [Prg_VIEW               ] = false,
+      [Prg_EDIT_ITEMS         ] = true,
+      [Prg_FORM_NEW_END_ITEM  ] = true,
+      [Prg_FORM_NEW_CHILD_ITEM] = true,
+      [Prg_FORM_EDIT_ITEM     ] = true,
+      [Prg_END_EDIT_ITEM      ] = true,
+      [Prg_RECEIVE_ITEM       ] = true,
+      [Prg_EDIT_RESOURCES     ] = true,
+      [Prg_END_EDIT_RES       ] = true,
+     };
    bool LightStyle;
    char *Id;
    unsigned ColSpan;
@@ -485,21 +478,12 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this program item *****/
-      switch (ListingType)
+      if (PutFormsToRemEditOneItem[ListingType])
         {
-	 case Prg_EDIT_ITEMS:
-	 case Prg_FORM_EDIT_ITEM:
-	 case Prg_END_EDIT_ITEM:
-	 case Prg_RECEIVE_ITEM:
-	 case Prg_EDIT_RESOURCES:
-	 case Prg_END_EDIT_RES:
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
-	                  The_GetColorRows ());
-	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
-	    HTM_TD_End ();
-	    break;
-	 default:
-	    break;
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
+		       The_GetColorRows ());
+	    Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
+	 HTM_TD_End ();
         }
 
       /***** Indent depending on the level *****/
@@ -657,9 +641,6 @@ static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel)
 
    /***** Title CSS class *****/
    Prg_SetTitleClass (&TitleClass,FormLevel,false);
-
-   /***** Change color *****/
-   The_ChangeRowColor ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1752,7 +1733,9 @@ void Prg_RequestCreateItem (void)
    ParentItmCod = Prg_GetParamItmCod ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_FORM_NEW_ITEM,ParentItmCod);
+   Prg_ShowAllItems (ParentItmCod > 0 ? Prg_FORM_NEW_CHILD_ITEM :
+	                                Prg_FORM_NEW_END_ITEM,
+	             ParentItmCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

@@ -228,7 +228,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List users found *****/
-	 for (NumUsr  = 1;
+	 for (NumUsr  = 1, The_ResetRowColor ();
 	      NumUsr <= NumUsrs;
 	      NumUsr++, The_ChangeRowColor ())
 	   {

@@ -4048,7 +4048,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List guests' data *****/
-	 for (NumUsr = 0;
+	 for (NumUsr = 0, The_ResetRowColor ();
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
 	      NumUsr++, The_ChangeRowColor ())
 	   {
@@ -4118,7 +4118,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List students' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, The_ResetRowColor ();
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
            NumUsr++, The_ChangeRowColor ())
         {
@@ -4190,7 +4190,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List teachers' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, The_ResetRowColor ();
            NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
            NumUsr++, The_ChangeRowColor ())
         {
@@ -4288,7 +4288,7 @@ void Usr_ListAllDataGsts (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List guests' data *****/
-	 for (NumUsr = 0;
+	 for (NumUsr = 0, The_ResetRowColor ();
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs; )
 	   {
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
@@ -4489,7 +4489,7 @@ void Usr_ListAllDataStds (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List students' data *****/
-	 for (NumUsr = 0;
+	 for (NumUsr = 0, The_ResetRowColor ();
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs; )
 	   {
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
@@ -4554,7 +4554,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List users' data *****/
-      for (NumUsr = 0;
+      for (NumUsr = 0, The_ResetRowColor ();
 	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
 	{
 	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
@@ -4691,7 +4691,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List data of teachers *****/
-   for (NumUsr = 0;
+   for (NumUsr = 0, The_ResetRowColor ();
 	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
      {
       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
@@ -4762,7 +4762,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List data of users *****/
-	 for (NumUsr = 0;
+	 for (NumUsr = 0, The_ResetRowColor ();
 	      NumUsr < NumUsrs;
 	      NumUsr++, The_ChangeRowColor ())
 	   {
@@ -4937,7 +4937,7 @@ void Usr_ListDataAdms (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** List data of administrators *****/
-	    for (NumUsr = 0;
+	    for (NumUsr = 0, The_ResetRowColor ();
 		 NumUsr < Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs; )
 	      {
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;

@@ -610,7 +610,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	    HTM_TR_End ();
 
 	    /***** List the sessions *****/
-	    for (NumExam = 0, UniqueId = 1;
+	    for (NumExam = 0, UniqueId = 1, The_ResetRowColor ();
 		 NumExam < Exams->Num;
 		 NumExam++, UniqueId++, The_ChangeRowColor ())
 	      {
@@ -1821,7 +1821,7 @@ static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
    unsigned QstInd;
    struct Qst_Question Question;
 
-   for (QstInd = 0;
+   for (QstInd = 0, The_ResetRowColor ();
 	QstInd < Print->NumQsts.All;
 	QstInd++, The_ChangeRowColor ())
      {

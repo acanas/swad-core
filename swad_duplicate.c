@@ -138,7 +138,7 @@ void Dup_ListDuplicateUsrs (void)
 	    Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
 	    /***** List users *****/
-	    for (NumUsr = 0;
+	    for (NumUsr = 0, The_ResetRowColor ();
 		 NumUsr < NumUsrs;
 		 NumUsr++)
 	      {
@@ -259,7 +259,7 @@ static void Dup_ListSimilarUsrs (void)
 	 Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
 	 /***** List users *****/
-	 for (NumUsr = 0;
+	 for (NumUsr = 0, The_ResetRowColor ();
 	      NumUsr < NumUsrs;
 	      NumUsr++)
 	   {

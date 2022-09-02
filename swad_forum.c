@@ -2185,7 +2185,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List threads *****/
-   for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0;
+   for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0, The_ResetRowColor ();
         NumThr <= PaginationThrs->LastItemVisible;
         NumThr++, NumThrInScreen++, The_ChangeRowColor ())
      {

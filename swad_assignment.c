@@ -179,9 +179,9 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	 Asg_PutHeadForSeeing (Assignments,false);	// Not print view
 
 	 /***** Write all assignments *****/
-	 for (NumAsg  = Pagination.FirstItemVisible;
+	 for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
 	      NumAsg <= Pagination.LastItemVisible;
-	      NumAsg++)
+	      NumAsg++, The_ChangeRowColor ())
 	    Asg_ShowOneAssignment (Assignments,
 				   Assignments->LstAsgCods[NumAsg - 1],
 				   false);	// Not print view
@@ -371,7 +371,7 @@ void Asg_PrintOneAssignment (void)
 
       /***** Table head *****/
       Asg_PutHeadForSeeing (&Assignments,
-			    true);		// Print view
+			    true);	// Print view
 
       /***** Write assignment *****/
       Asg_ShowOneAssignment (&Assignments,
@@ -516,8 +516,6 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
-
-   The_ChangeRowColor ();
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_ASSIGNMENT,AsgCod);

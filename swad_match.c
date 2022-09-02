@@ -395,7 +395,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
       Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
       /***** Write rows *****/
-      for (NumMatch = 0, UniqueId = 1;
+      for (NumMatch = 0, UniqueId = 1, The_ResetRowColor ();
 	   NumMatch < NumMatches;
 	   NumMatch++, UniqueId++, The_ChangeRowColor ())
 	{

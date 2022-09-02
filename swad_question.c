@@ -858,7 +858,7 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
 	 Qst_WriteHeadingRowQuestionsForEdition (Questions);
 
 	 /***** Write rows *****/
-	 for (QstInd = 0;
+	 for (QstInd = 0, The_ResetRowColor ();
 	      QstInd < Questions->NumQsts;
 	      QstInd++, The_ChangeRowColor ())
 	   {
@@ -1132,7 +1132,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	    HTM_TR_End ();
 
 	    /***** Write rows *****/
-	    for (QstInd = 0;
+	    for (QstInd = 0, The_ResetRowColor ();
 		 QstInd < NumQsts;
 		 QstInd++, The_ChangeRowColor ())
 	      {
@@ -1214,7 +1214,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	    HTM_TR_End ();
 
 	    /***** Write rows *****/
-	    for (QstInd = 0;
+	    for (QstInd = 0, The_ResetRowColor ();
 		 QstInd < NumQsts;
 		 QstInd++, The_ChangeRowColor ())
 	      {
@@ -2125,7 +2125,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	       OptionsDisabled = Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 				 Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
 				 Question->Answer.Type != Qst_ANS_TEXT;
-	       for (NumOpt = 0;
+	       for (NumOpt = 0, The_ResetRowColor ();
 		    NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 		    NumOpt++, The_ChangeRowColor ())
 		 {

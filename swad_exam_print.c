@@ -390,12 +390,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                     Set->NumQstsToPrint);
 
    /***** Questions in this set *****/
-   for (NumQstInSet = 0;
+   for (NumQstInSet = 0, The_ResetRowColor ();
 	NumQstInSet < NumQstsInSet;
-	NumQstInSet++, (*NumQstsInPrint)++)
+	NumQstInSet++, (*NumQstsInPrint)++, The_ChangeRowColor ())
      {
-      The_ChangeRowColor ();
-
       /***** Get question data *****/
       row = mysql_fetch_row (mysql_res);
       /*

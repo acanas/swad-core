@@ -137,7 +137,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	 HTM_TR_End ();
 
 	 /***** List the degrees *****/
-	 for (NumDeg = 0;
+	 for (NumDeg = 0, The_ResetRowColor ();
 	      NumDeg < NumDegs;
 	      NumDeg++, The_ChangeRowColor ())
 	   {
@@ -866,8 +866,6 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
    /***** End table row *****/
    HTM_TR_End ();
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1813,9 +1811,9 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	 Deg_PutHeadDegreesForSeeing ();
 
 	 /***** List the degrees (one row per degree) *****/
-	 for (NumDeg  = 1;
+	 for (NumDeg  = 1, The_ResetRowColor ();
 	      NumDeg <= NumDegs;
-	      NumDeg++)
+	      NumDeg++, The_ChangeRowColor ())
 	   {
 	    /* Get next degree */
 	    Deg.DegCod = DB_GetNextCode (*mysql_res);

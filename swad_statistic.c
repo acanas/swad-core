@@ -1211,7 +1211,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    HTM_TR_End ();
 
    /***** Write rows back *****/
-   for (NumRow  = LastRow, UniqueId = 1;
+   for (NumRow  = LastRow, UniqueId = 1, The_ResetRowColor ();
 	NumRow >= FirstRow;
 	NumRow--, UniqueId++, The_ChangeRowColor ())
      {
@@ -1352,7 +1352,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumHit  = 1, Hits.Max = 0.0;
+   for (NumHit  = 1, Hits.Max = 0.0, The_ResetRowColor ();
 	NumHit <= NumHits;
 	NumHit++, The_ChangeRowColor ())
      {

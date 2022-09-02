@@ -1717,7 +1717,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       HTM_TR_End ();
 
       /***** Write rows *****/
-      for (NumQst = 0;
+      for (NumQst = 0, The_ResetRowColor ();
 	   NumQst < NumQsts;
 	   NumQst++, The_ChangeRowColor ())
 	{

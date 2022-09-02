@@ -420,9 +420,9 @@ void Prj_ShowTableSelectedPrjs (void)
 	 Prj_ShowTableAllProjectsHead ();
 
 	 /***** Write all projects *****/
-	 for (NumPrj = 0;
+	 for (NumPrj = 0, The_ResetRowColor ();
 	      NumPrj < Projects.Num;
-	      NumPrj++)
+	      NumPrj++, The_ChangeRowColor ())
 	   {
 	    Prj.PrjCod = Projects.LstPrjCods[NumPrj];
 	    Prj_ShowTableAllProjectsOneRow (&Prj);
@@ -508,9 +508,9 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
 
 	       /***** Write all projects *****/
-	       for (NumPrj  = Pagination.FirstItemVisible;
+	       for (NumPrj  = Pagination.FirstItemVisible, The_ResetRowColor ();
 		    NumPrj <= Pagination.LastItemVisible;
-		    NumPrj++)
+		    NumPrj++, The_ChangeRowColor ())
 		 {
 		  /* Get project data */
 		  Prj.PrjCod = ((struct Prj_Projects *) Projects)->LstPrjCods[NumPrj - 1];
@@ -1547,8 +1547,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1751,8 +1749,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
    /***** End row *****/
    HTM_TR_End ();
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

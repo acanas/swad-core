@@ -229,7 +229,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	 HTM_TABLE_BeginWideMarginPadding (10);
 
 	    /***** Write one row for each question *****/
-	    for (QstInd = 0;
+	    for (QstInd = 0, The_ResetRowColor ();
 		 QstInd < Print->NumQsts.All;
 		 QstInd++, The_ChangeRowColor ())
 	      {
@@ -537,7 +537,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
       Print->NumQsts.NotBlank = 0;
       Print->Score = 0.0;
 
-      for (QstInd = 0;
+      for (QstInd = 0, The_ResetRowColor ();
 	   QstInd < Print->NumQsts.All;
 	   QstInd++, The_ChangeRowColor ())
 	{
@@ -2491,7 +2491,7 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
    struct Qst_Question Question;
    bool QuestionExists;
 
-   for (QstInd = 0;
+   for (QstInd = 0, The_ResetRowColor ();
 	QstInd < NumQsts;
 	QstInd++, The_ChangeRowColor ())
      {

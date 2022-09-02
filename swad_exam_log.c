@@ -277,7 +277,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	    HTM_TR_End ();
 
 	    /***** Write clicks *****/
-	    for (NumClick = 0;
+	    for (NumClick = 0, The_ResetRowColor ();
 		 NumClick < NumClicks;
 		 NumClick++, The_ChangeRowColor ())
 	      {

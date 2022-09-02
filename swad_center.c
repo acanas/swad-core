@@ -135,7 +135,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	 HTM_TR_End ();
 
 	 /***** List the centers *****/
-	 for (NumCtr = 0;
+	 for (NumCtr = 0, The_ResetRowColor ();
 	      NumCtr < NumCtrs;
 	      NumCtr++, The_ChangeRowColor ())
 	   {
@@ -404,8 +404,6 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       Hie_WriteStatusCell (Ctr->Status,TxtClassNormal,BgColor,Txt_CENTER_STATUS);
 
    HTM_TR_End ();
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1857,9 +1855,9 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	 Ctr_PutHeadCentersForSeeing (false);	// Order not selectable
 
 	 /***** List the centers (one row per center) *****/
-	 for (NumCtr  = 1;
+	 for (NumCtr  = 1, The_ResetRowColor ();
 	      NumCtr <= NumCtrs;
-	      NumCtr++)
+	      NumCtr++, The_ChangeRowColor ())
 	   {
 	    /* Get next center */
 	    Ctr.CtrCod = DB_GetNextCode (*mysql_res);

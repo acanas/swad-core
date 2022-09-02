@@ -145,51 +145,55 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
    struct PrgRsc_Resource Resource;
    static bool GetHiddenResources[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT         ] = false,
-      [Prg_VIEW          ] = false,
-      [Prg_EDIT_ITEMS     ] = false,
-      [Prg_FORM_NEW_ITEM      ] = false,
+      [Prg_PRINT              ] = false,
+      [Prg_VIEW               ] = false,
+      [Prg_EDIT_ITEMS         ] = false,
+      [Prg_FORM_NEW_END_ITEM  ] = false,
+      [Prg_FORM_NEW_CHILD_ITEM] = false,
       [Prg_FORM_EDIT_ITEM     ] = false,
-      [Prg_END_EDIT_ITEM ] = false,
-      [Prg_RECEIVE_ITEM  ] = false,
-      [Prg_EDIT_RESOURCES] = true,
-      [Prg_END_EDIT_RES  ] = false,
+      [Prg_END_EDIT_ITEM      ] = false,
+      [Prg_RECEIVE_ITEM       ] = false,
+      [Prg_EDIT_RESOURCES     ] = true,
+      [Prg_END_EDIT_RES       ] = false,
      };
    static bool ShowListWhenEmpty[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT         ] = false,
-      [Prg_VIEW          ] = false,
-      [Prg_EDIT_ITEMS     ] = true,
-      [Prg_FORM_NEW_ITEM      ] = true,
+      [Prg_PRINT              ] = false,
+      [Prg_VIEW               ] = false,
+      [Prg_EDIT_ITEMS         ] = true,
+      [Prg_FORM_NEW_END_ITEM  ] = true,
+      [Prg_FORM_NEW_CHILD_ITEM] = true,
       [Prg_FORM_EDIT_ITEM     ] = true,
-      [Prg_END_EDIT_ITEM ] = true,
-      [Prg_RECEIVE_ITEM  ] = true,
-      [Prg_EDIT_RESOURCES] = true,
-      [Prg_END_EDIT_RES  ] = true,
+      [Prg_END_EDIT_ITEM      ] = true,
+      [Prg_RECEIVE_ITEM       ] = true,
+      [Prg_EDIT_RESOURCES     ] = true,
+      [Prg_END_EDIT_RES       ] = true,
      };
    static bool FeaturedList[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT         ] = false,
-      [Prg_VIEW          ] = false,
-      [Prg_EDIT_ITEMS     ] = false,
-      [Prg_FORM_NEW_ITEM      ] = false,
+      [Prg_PRINT              ] = false,
+      [Prg_VIEW               ] = false,
+      [Prg_EDIT_ITEMS         ] = false,
+      [Prg_FORM_NEW_END_ITEM  ] = false,
+      [Prg_FORM_NEW_CHILD_ITEM] = false,
       [Prg_FORM_EDIT_ITEM     ] = false,
-      [Prg_END_EDIT_ITEM ] = false,
-      [Prg_RECEIVE_ITEM  ] = false,
-      [Prg_EDIT_RESOURCES] = true,
-      [Prg_END_EDIT_RES  ] = true,
+      [Prg_END_EDIT_ITEM      ] = false,
+      [Prg_RECEIVE_ITEM       ] = false,
+      [Prg_EDIT_RESOURCES     ] = true,
+      [Prg_END_EDIT_RES       ] = true,
      };
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
      {
-      [Prg_PRINT         ] = NULL,
-      [Prg_VIEW          ] = NULL,
-      [Prg_EDIT_ITEMS     ] = PrgRsc_PutIconsEditResources,
-      [Prg_FORM_NEW_ITEM      ] = PrgRsc_PutIconsEditResources,
+      [Prg_PRINT              ] = NULL,
+      [Prg_VIEW               ] = NULL,
+      [Prg_EDIT_ITEMS         ] = PrgRsc_PutIconsEditResources,
+      [Prg_FORM_NEW_END_ITEM  ] = PrgRsc_PutIconsEditResources,
+      [Prg_FORM_NEW_CHILD_ITEM] = PrgRsc_PutIconsEditResources,
       [Prg_FORM_EDIT_ITEM     ] = PrgRsc_PutIconsEditResources,
-      [Prg_END_EDIT_ITEM ] = PrgRsc_PutIconsEditResources,
-      [Prg_RECEIVE_ITEM  ] = PrgRsc_PutIconsEditResources,
-      [Prg_EDIT_RESOURCES] = PrgRsc_PutIconsViewResources,
-      [Prg_END_EDIT_RES  ] = PrgRsc_PutIconsEditResources,
+      [Prg_END_EDIT_ITEM      ] = PrgRsc_PutIconsEditResources,
+      [Prg_RECEIVE_ITEM       ] = PrgRsc_PutIconsEditResources,
+      [Prg_EDIT_RESOURCES     ] = PrgRsc_PutIconsViewResources,
+      [Prg_END_EDIT_RES       ] = PrgRsc_PutIconsEditResources,
      };
 
    /***** Trivial check *****/
@@ -231,9 +235,9 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
 	    HTM_TBODY_Begin (NULL);
 
 	       /***** Write all item resources *****/
-	       for (NumRsc = 0;
+	       for (NumRsc = 0, The_ResetRowColor1 ();
 		    NumRsc < NumResources;
-		    NumRsc++)
+		    NumRsc++, The_ChangeRowColor1 ())
 		 {
 		  /* Get data of this item resource */
 		  PrgRsc_GetDataOfResource (&Resource,&mysql_res);
@@ -248,8 +252,6 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod)
 			PrgRsc_WriteRowViewResource (NumRsc,&Resource);
 			break;
 		    }
-
-		  The_ChangeRowColor ();
 		 }
 
 	       /***** Form to create a new resource *****/
@@ -392,13 +394,13 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows1 ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
       HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows1 ());
 	 HTM_Txt (Resource->Title);
       HTM_TD_End ();
 
@@ -417,18 +419,18 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows1 ());
 	 PrgRsc_PutFormsToRemEditOneResource (NumRsc,NumResources,Resource);
       HTM_TD_End ();
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows1 ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows1 ());
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    PrgRsc_PutParamRscCod (Resource->Rsc.Cod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Resource->Title,

@@ -290,9 +290,9 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	    HTM_TR_End ();
 
 	    /***** Write all attendance events *****/
-	    for (NumAttEvent  = Pagination.FirstItemVisible;
+	    for (NumAttEvent  = Pagination.FirstItemVisible, The_ResetRowColor ();
 		 NumAttEvent <= Pagination.LastItemVisible;
-		 NumAttEvent++)
+		 NumAttEvent++, The_ChangeRowColor ())
 	       Att_ShowOneAttEvent (Events,
 				    &Events->Lst[NumAttEvent - 1],
 				    false);
@@ -570,8 +570,6 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

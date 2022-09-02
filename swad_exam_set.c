@@ -729,7 +729,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       ExaSet_PutTableHeadingForSets ();
 
       /***** Write rows *****/
-      for (NumSet = 0;
+      for (NumSet = 0, The_ResetRowColor ();
 	   NumSet < NumSets;
 	   NumSet++, The_ChangeRowColor ())
 	{
@@ -957,7 +957,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       HTM_TR_End ();
 
       /***** Write rows *****/
-      for (QstInd = 0;
+      for (QstInd = 0, The_ResetRowColor ();
 	   QstInd < NumQsts;
 	   QstInd++, The_ChangeRowColor ())
 	{

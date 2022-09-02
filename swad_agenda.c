@@ -523,9 +523,9 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
 	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
 	 /***** Write all events *****/
-	 for (NumEvent  = Pagination.FirstItemVisible;
+	 for (NumEvent  = Pagination.FirstItemVisible, The_ResetRowColor ();
 	      NumEvent <= Pagination.LastItemVisible;
-	      NumEvent++)
+	      NumEvent++, The_ChangeRowColor ())
 	    Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent - 1]);
 
       /***** End table *****/
@@ -592,9 +592,9 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
 	 /***** Write all events *****/
-	 for (NumEvent = 0;
+	 for (NumEvent = 0, The_ResetRowColor ();
 	      NumEvent < Agenda->Num;
-	      NumEvent++)
+	      NumEvent++, The_ChangeRowColor ())
 	    Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent]);
 
       /***** End table and box *****/
@@ -876,8 +876,6 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
-
-   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

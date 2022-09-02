@@ -567,7 +567,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	    HTM_TR_End ();
 
 	    /***** List the events *****/
-	    for (NumGame = 0, UniqueId = 1;
+	    for (NumGame = 0, UniqueId = 1, The_ResetRowColor ();
 		 NumGame < Games->Num;
 		 NumGame++, UniqueId++, The_ChangeRowColor ())
 	      {

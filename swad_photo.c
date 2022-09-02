@@ -2204,7 +2204,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	 HTM_TR_End ();
 
 	 /***** Get degrees *****/
-	 for (NumDeg = 0, NumDegsNotEmpty = 0;
+	 for (NumDeg = 0, NumDegsNotEmpty = 0, The_ResetRowColor ();
 	      NumDeg < NumDegs;
 	      NumDeg++, The_ChangeRowColor ())
 	   {

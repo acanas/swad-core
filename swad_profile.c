@@ -1184,7 +1184,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
       HTM_TABLE_Begin (NULL);
 
-	 for (NumUsr = 1, Rank = 1;
+	 for (NumUsr = 1, Rank = 1, The_ResetRowColor ();
 	      NumUsr <= NumUsrs;
 	      NumUsr++, The_ChangeRowColor ())
 	   {
@@ -1255,7 +1255,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       HTM_TABLE_Begin (NULL);
 
-	 for (NumUsr  = 1, Rank = 1;
+	 for (NumUsr  = 1, Rank = 1, The_ResetRowColor ();
 	      NumUsr <= NumUsrs;
 	      NumUsr++, The_ChangeRowColor ())
 	   {

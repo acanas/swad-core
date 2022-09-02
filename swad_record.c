@@ -1680,7 +1680,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       HTM_TR_End ();
 
       /***** Fields of the record that depends on the course *****/
-      for (NumField = 0;
+      for (NumField = 0, The_ResetRowColor ();
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++, The_ChangeRowColor ())
 	{
