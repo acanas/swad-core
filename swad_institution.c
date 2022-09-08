@@ -1377,7 +1377,7 @@ void Ins_ChangeInsStatus (void)
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
 
    /***** Update status *****/
-   Ins_DB_UpdateInsStatus (Status,Ins_EditingIns->InsCod);
+   Ins_DB_UpdateInsStatus (Ins_EditingIns->InsCod,Status);
    Ins_EditingIns->Status = Status;
 
    /***** Create message to show the change made

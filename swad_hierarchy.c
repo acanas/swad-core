@@ -814,6 +814,7 @@ Hie_Status_t Hie_GetParamStatus (void)
 	                              0,
 	                              (unsigned long) Hie_MAX_STATUS,
                                       (unsigned long) Hie_WRONG_STATUS);
+
    if (Status == Hie_WRONG_STATUS)
       Err_WrongStatusExit ();
 

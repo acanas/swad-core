@@ -51882,7 +51882,7 @@ const char *Txt_The_status_of_the_institution_X_has_changed =	// Warning: it is 
 #elif L==9	// pt
 	"O status da institui&ccedil;&atilde;o <strong>%s</strong> mudou.";
 #elif L==10	// tr
-	"The status of the institution <strong>%s</strong> has changed.";	// Çeviri lazim!
+	"<strong>%s</strong> kurumunun stat&uuml;s&uuml; de&gbreve;i&scedil;ti.";
 #endif
 
 const char *Txt_The_survey_has_been_modified =
