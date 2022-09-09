@@ -1340,17 +1340,6 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
    if (RowSpan == 0)
       return;
 
-   /***** If group code > 0, a group is selected ==> get group data *****/
-   if (IntervalType == Tmt_FIRST_INTERVAL &&
-       (Timetable->View == Tmt_CRS_VIEW ||
-        Timetable->View == Tmt_CRS_EDIT) &&
-       GrpCod > 0)
-     {
-      /* Get group data */
-      GrpDat.GrpCod = GrpCod;
-      Grp_GetDataOfGroupByCod (&GrpDat);
-     }
-
    /***** Cell start *****/
    /* Create rowspan, colspan and class strings */
    if (RowSpan > 1)
@@ -1437,17 +1426,15 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
    HTM_DIV_Begin ("class=\"Tmt_TXT\"");
 
       /***** Course name *****/
-      if (Timetable->Type == Tmt_MY_TIMETABLE)
+      if (Timetable->Type == Tmt_MY_TIMETABLE &&
+	  (ClassType == Tmt_LECTURE ||
+	   ClassType == Tmt_PRACTICAL))
 	{
 	 Crs.CrsCod = CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-	 if (ClassType == Tmt_LECTURE ||
-	     ClassType == Tmt_PRACTICAL)
-	   {
-	    HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
-				       Txt_unknown_removed_course);
-	    HTM_BR ();
-	   }
+	 HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
+				    Txt_unknown_removed_course);
+	 HTM_BR ();
 	}
 
       /***** Type of class and duration *****/
@@ -1461,6 +1448,8 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
       if (Timetable->View == Tmt_CRS_VIEW &&
 	  GrpCod > 0)
 	{
+	 GrpDat.GrpCod = GrpCod;
+         Grp_GetDataOfGroupByCod (&GrpDat);
 	 HTM_BR ();
 	 HTM_Txt (GrpDat.GrpTypName);
 	 HTM_BR ();

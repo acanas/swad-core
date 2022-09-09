@@ -303,7 +303,7 @@ static void SysCfg_NumCtys (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_Submit_Begin (Txt_Countries,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_Countries,"class=\"LB BT_LINK\"");
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

@@ -54797,23 +54797,23 @@ const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES] =
 #if   L==1	// ca
 	"Horari de classes de l'assignatura"
 #elif L==2	// de
-	"Stundenplan"
+	"Stundenplan des Kurses"
 #elif L==3	// en
-	"Class timetable"
+	"Class timetable of the course"
 #elif L==4	// es
 	"Horario de clases de la asignatura"
 #elif L==5	// fr
-	"Horaire"
+	"Horaire de classe de la mati&egrave;re"
 #elif L==6	// gn
 	"Horario de clases de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Orario del corso"
+	"Orario delle lezioni del corso"
 #elif L==8	// pl
-	"Harmonogram klasy"
+	"Plan zaj&eogon;&cacute; kursu"
 #elif L==9	// pt
-	"Hor&aacute;rio"
+	"Hor&aacute;rio das aulas da disciplina"
 #elif L==10	// tr
-	"Class timetable"			// Çeviri lazim!
+	"Dersin ders program&inodot;"
 #endif
 	,
 	[Tmt_MY_TIMETABLE] =

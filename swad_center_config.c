@@ -580,7 +580,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ins.ShrtName),
-		                           "class=\"BT_LINK\"");
+		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 
@@ -755,7 +755,7 @@ static void CtrCfg_NumDegs (void)
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
 	    HTM_BUTTON_End ();

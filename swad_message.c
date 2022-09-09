@@ -2662,7 +2662,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		     Msg_PutHiddenParamsOneMsg (Messages);
 		     Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
 			HTM_BUTTON_Submit_Begin (Txt_View_all_recipients,
-			                         "class=\"BT_LINK\"");
+			                         "class=\"LM BT_LINK\"");
 			   HTM_TxtF (Txt_and_X_other_recipients,
 				     NumRecipients.Known - NumRecipients.ToShow);
 			HTM_BUTTON_End ();

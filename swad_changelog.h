@@ -606,10 +606,14 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.116.1 (2022-09-08)"
+#define Log_PLATFORM_VERSION	"SWAD 21.116.2 (2022-09-08)"
 #define CSS_FILE		"swad21.107.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 21.116.2: Sep 08, 2022  Fixed bug in timetable. Reported by Javier Fernández Baldomero and José Luis Bernier Villamor. (329208 lines)
+					If you want to use MyISAM:
+ALTER TABLE prg_resources ENGINE=MyISAM;
+
 	Version 21.116.1: Sep 08, 2022  Fixed bug updating institution status. (329215 lines)
 	Version 21.116:   Sep 02, 2022  Code refactoring in edition of program items. (329214 lines)
 	Version 21.115:   Sep 01, 2022  Code refactoring in edition of program items. (329212 lines)

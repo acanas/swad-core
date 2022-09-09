@@ -614,7 +614,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
 	       HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
-	                                "class=\"BT_LINK LT\"");
+	                                "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -724,7 +724,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 		  if (PutLinkToRecord)
 		     HTM_BUTTON_Submit_Begin (UsrDat.FullName,
-					      "class=\"BT_LINK LT\"");
+					      "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (&UsrDat);
 		  if (PutLinkToRecord)
 		     HTM_BUTTON_End ();

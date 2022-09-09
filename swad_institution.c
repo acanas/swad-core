@@ -2333,7 +2333,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     Frm_BeginForm (ActSeeInsInf);
 			Ins_PutParamInsCod (Ins.InsCod);
 			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
-			                         "class=\"BT_LINK\"");
+			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
 			      Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,

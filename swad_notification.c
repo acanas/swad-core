@@ -507,7 +507,7 @@ void Ntf_ShowMyNotifications (void)
 			PutLink = Gbl.Form.Inside;
 
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s_%s\"",
+			                            "class=\"LT %s_%s\"",
 			                            ClassLink,The_GetSuffix ());
 			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 			   HTM_BUTTON_End ();
@@ -542,7 +542,7 @@ void Ntf_ShowMyNotifications (void)
 
 			if (PutLink)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s_%s\"",
+			                            "class=\"LT %s_%s\"",
 			                            ClassLink,The_GetSuffix ());
 			else
 			   HTM_SPAN_Begin ("class=\"%s_%s\"",
@@ -566,7 +566,7 @@ void Ntf_ShowMyNotifications (void)
 
 			if (PutLink)
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"%s_%s\"",
+			                            "class=\"LT %s_%s\"",
 			                            ClassLink,The_GetSuffix ());
 			else
 			   HTM_SPAN_Begin ("class=\"%s_%s\"",

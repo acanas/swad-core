@@ -3341,7 +3341,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
-		                           "class=\"BT_LINK\"");
+		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();

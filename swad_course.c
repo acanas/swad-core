@@ -993,7 +993,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs->CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
-					   "class=\"BT_LINK\"");
+					   "class=\"LM BT_LINK\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs->FullName);
 		  HTM_BUTTON_End ();
@@ -2453,7 +2453,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
-	                             "class=\"BT_LINK\"");
+	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
@@ -2473,7 +2473,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
-	                             "class=\"BT_LINK\"");
+	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
 	       HTM_Txt (row[5]);
 	    HTM_BUTTON_End ();

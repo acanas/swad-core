@@ -687,7 +687,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
 		  HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
-		                           "class=\"BT_LINK LT\"");
+		                           "class=\"LT BT_LINK\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();

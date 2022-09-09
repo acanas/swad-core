@@ -373,7 +373,7 @@ static void CtyCfg_Platform (bool PrintView)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
 	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cfg_PLATFORM_SHORT_NAME),
-					"class=\"BT_LINK\"");
+					"class=\"LT BT_LINK\"");
 	       Str_FreeGoToTitle ();
 	   }
 	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,Cfg_PLATFORM_FULL_NAME,"ICO20x20");
@@ -480,7 +480,7 @@ static void CtyCfg_NumInss (void)
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
 	                  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
 	    HTM_BUTTON_End ();

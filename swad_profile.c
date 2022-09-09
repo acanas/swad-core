@@ -1344,7 +1344,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
-				     "class=\"BT_LINK\"");
+				     "class=\"LM BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
