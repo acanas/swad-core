@@ -2418,6 +2418,30 @@ mysql> DESCRIBE plg_plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
+   /***** Table prg_clipboards *****/
+/*
+mysql> DESCRIBE prg_clipboards;
++-------------+------------+------+-----+-------------------+-----------------------------+
+| Field       | Type       | Null | Key | Default           | Extra                       |
++-------------+------------+------+-----+-------------------+-----------------------------+
+| UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
+| FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
+| Cod         | int(11)    | NO   |     | -1                |                             |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
+| FileType    | tinyint(4) | NO   |     | 0                 |                             |
+| Path        | text       | NO   |     | NULL              |                             |
+| CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+------------+------+-----+-------------------+-----------------------------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_clipboards ("
+			"UsrCod INT NOT NULL,"
+			"RscType TINYINT NOT NULL DEFAULT 0,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"CopyTime TIMESTAMP,"
+		   "INDEX(UsrCod),"
+		   "INDEX(RscType,Cod)))");
+
    /***** Table prg_items *****/
 /*
 mysql> DESCRIBE prg_items;

@@ -19726,7 +19726,7 @@ const char *Txt_Link =
 #elif L==9	// pt
 	"Liga&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"Link";		// Çeviri lazim!
+	"Ba&gbreve;lant&inodot;";
 #endif
 
 const char *Txt_link =
@@ -19749,7 +19749,7 @@ const char *Txt_link =
 #elif L==9	// pt
 	"liga&ccedil;&atilde;o.";
 #elif L==10	// tr
-	"link"	;	// Çeviri lazim!
+	"ba&gbreve;lant&inodot;";
 #endif
 
 const char *Txt_Link_X_removed =	// Warning: it is very important to include %s in the following sentences

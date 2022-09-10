@@ -1317,7 +1317,6 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
       [Tmt_PRACTICAL] = "Tmt_PRAC",	// practical class
       [Tmt_TUTORING ] = "Tmt_TUTO",	// tutoring/office hour
      };
-   struct GroupData GrpDat;
    unsigned RowSpan = 0;
    char *RowSpanStr;
    char *ColSpanStr;

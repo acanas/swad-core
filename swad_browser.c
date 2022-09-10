@@ -5106,7 +5106,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *Fi
 			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
 			     true);	// Put link to view metadata
 	 else
-	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,
+	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"up-right-from-square.svg",Txt_Link,
 			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
 			     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 
@@ -8485,7 +8485,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 				"ICO40x40",
 				false);	// Don't put link to view metadata
 	    else
-	       Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,"ICO40x40");
+	       Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 
 	    /* Name of the file of marks, link end and form end */
 	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
@@ -8510,7 +8510,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			     "ICO40x40",
 			     false);	// Don't put link to view metadata
 	 else
-	    Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,"ICO40x40");
+	    Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 	 HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
 	 Ico_PutIcon ("download.svg",Ico_BLACK,Title,"ICO40x40");
       HTM_A_End ();
@@ -10105,7 +10105,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 				  Txt_Folder,"CONTEXT_ICO16x16");
 		     break;
 		  case Brw_IS_LINK:
-	             Ico_PutIcon ("link.svg",Ico_BLACK,
+	             Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,
 	                          Txt_Link,"CONTEXT_ICO16x16");
 		     break;
 		  default:

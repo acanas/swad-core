@@ -606,11 +606,24 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.116.2 (2022-09-08)"
+#define Log_PLATFORM_VERSION	"SWAD 21.116.3 (2022-09-10)"
 #define CSS_FILE		"swad21.107.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 21.116.2: Sep 08, 2022  Fixed bug in timetable. Reported by Javier Fernández Baldomero and José Luis Bernier Villamor. (329208 lines)
+	Version 21.117:   Sep 10, 2022  New database table with clipboards for program resources. (? lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS prg_clipboards...
+					If you want to use MyISAM:
+ALTER TABLE prg_clipboards ENGINE=MyISAM;
+
+	Version 21.116.3: Sep 10, 2022  Changed icon for external link. (329241 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/up-right-from-square.svg /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/up-right-from-square.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/up-right-from-square.svg /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/globe-americas.svg /var/www/html/swad/icon/iconset/nuvola/
+
+	Version 21.116.2: Sep 09, 2022  Fixed bug in timetable. Reported by Javier Fernández Baldomero and José Luis Bernier Villamor. (329208 lines)
 					If you want to use MyISAM:
 ALTER TABLE prg_resources ENGINE=MyISAM;
 
