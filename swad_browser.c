@@ -8292,7 +8292,7 @@ void Brw_ShowFileMetadata (void)
 
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata)
   {
-   Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],
+   Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
                                    Brw_PutParamsToGetLinkToFile,FileMetadata);
   }
 

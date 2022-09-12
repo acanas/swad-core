@@ -440,6 +440,12 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	 Frm_EndForm ();
       HTM_TD_End ();
 
+      /***** Link to resource *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows1 ());
+	 Ico_PutContextualIconToGetLink (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 PrgRsc_PutParams,&Resource->Rsc.Cod);
+      HTM_TD_End ();
+
    /***** End row *****/
    HTM_TR_End ();
   }
@@ -454,17 +460,17 @@ static void PrgRsc_WriteRowNewResource (long ItmCod,unsigned NumRsc)
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_COL1 LM %s\"",The_GetColorRows1 ());
       HTM_TD_End ();
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows1 ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows1 ());
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    Prg_PutParamItmCod (ItmCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
@@ -474,6 +480,12 @@ static void PrgRsc_WriteRowNewResource (long ItmCod,unsigned NumRsc)
 			    "Nuevo recurso",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
+      HTM_TD_End ();
+
+      /***** Link to resource *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LM %s\"",The_GetColorRows1 ());
+	 Ico_PutContextualIconToGetLink (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 PrgRsc_PutParams,NULL);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -827,4 +839,13 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
      }
 
    return false;	// No success
+  }
+
+/*****************************************************************************/
+/**************************** Change resource link ***************************/
+/*****************************************************************************/
+
+void PrgRsc_ChangeResourceLink (void)
+  {
+   Ale_ShowAlert (Ale_ERROR,"Not implemented.");
   }

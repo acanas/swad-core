@@ -81,7 +81,7 @@ void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const c
                                         bool Hidden);
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args);
-void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,
+void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
                                      void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
                                   void (*FuncParams) (void *Args),void *Args);

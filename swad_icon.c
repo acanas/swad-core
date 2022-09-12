@@ -307,10 +307,10 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
 				  "print.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,
+void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
                                      void (*FuncParams) (void *Args),void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
 				  "link.svg",Ico_BLACK);
   }

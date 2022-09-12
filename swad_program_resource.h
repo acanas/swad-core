@@ -93,4 +93,6 @@ void PrgRsc_UnhideResource (void);
 void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
+void PrgRsc_ChangeResourceLink (void);
+
 #endif
