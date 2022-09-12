@@ -31,6 +31,32 @@
 #include "swad_program_resource.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES] =
+  {
+   [PrgRsc_NONE            ] = "non",
+   // gui TEACHING_GUIDE	// Link to teaching guide
+   // bib BIBLIOGRAPHY		// Link to bibliography
+   // faq FAQ			// Link to FAQ
+   // lnk LINKS			// Link to links
+   // tmt TIMETABLE		// Link to timetable
+   [PrgRsc_ASSIGNMENT      ] = "asg",
+   // prj PROJECT		// A project is only for some students
+   [PrgRsc_CALL_FOR_EXAM   ] = "cfe",
+   // tst TEST			// User selects tags, teacher should select
+   [PrgRsc_EXAM            ] = "exa",
+   [PrgRsc_GAME            ] = "gam",
+   [PrgRsc_SURVEY          ] = "svy",
+   [PrgRsc_DOCUMENT        ] = "doc",
+   [PrgRsc_MARKS           ] = "mrk",
+   // grp GROUPS		// ??? User select groups
+   [PrgRsc_ATTENDANCE_EVENT] = "att",
+   [PrgRsc_FORUM_THREAD    ] = "for",
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -644,4 +670,46 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
 		   " WHERE RscCod=%ld",
 		   RscInd,
 		   RscCod);
+  }
+
+/*****************************************************************************/
+/**************** Get resources in the current course clipboard **************/
+/*****************************************************************************/
+/*
+mysql> SELECT * FROM prg_clipboards;
++--------+--------+------+-----+---------------------+
+| UsrCod | CrsCod | Type | Cod | CopyTime            |
++--------+--------+------+-----+---------------------+
+|      1 |      1 | doc  |  33 | 2022-09-12 12:08:25 |
+|      1 |      1 | doc  |  28 | 2022-09-12 12:08:31 |
++--------+--------+------+-----+---------------------+
+2 rows in set (0,00 sec)
+*/
+/*****************************************************************************/
+/********************** Copy link to resource into clipboard *****************/
+/*****************************************************************************/
+/*
+mysql> DESCRIBE prg_clipboards;
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                               | Null | Key | Default | Extra |
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                                | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                                | NO   | PRI | NULL    |       |
+| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   | PRI | none    |       |
+| Cod      | int                                                                | NO   | PRI | -1      |       |
+| CopyTime | timestamp                                                          | YES  | MUL | NULL    |       |
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+5 rows in set (0,00 sec)
+*/
+void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
+  {
+   DB_QueryREPLACE ("can not copy link to resource clipboard",
+		    "REPLACE INTO prg_clipboards"
+		    " (UsrCod,CrsCod,Type,Cod,CopyTime)"
+		    " VALUES"
+		    " (%ld,%ld,'%s',%ld,NOW())",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Gbl.Hierarchy.Crs.CrsCod,
+		    Prg_ResourceTypesDB[Type],
+		    Cod);
   }

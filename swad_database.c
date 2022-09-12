@@ -2456,10 +2456,10 @@ mysql> DESCRIBE prg_clipboards;
 +----------+--------------------------------------------------------------------+------+-----+---------+-------+
 | Field    | Type                                                               | Null | Key | Default | Extra |
 +----------+--------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                | NO   | MUL | NULL    |       |
-| CrsCod   | int                                                                | NO   | MUL | NULL    |       |
-| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   |     | none    |       |
-| Cod      | int                                                                | NO   |     | -1      |       |
+| UsrCod   | int                                                                | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                                | NO   | PRI | NULL    |       |
+| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   | PRI | none    |       |
+| Cod      | int                                                                | NO   | PRI | -1      |       |
 | CopyTime | timestamp                                                          | YES  | MUL | NULL    |       |
 +----------+--------------------------------------------------------------------+------+-----+---------+-------+
 5 rows in set (0,00 sec)
@@ -2480,7 +2480,7 @@ mysql> DESCRIBE prg_clipboards;
 			"'for') NOT NULL DEFAULT 'none',"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"CopyTime TIMESTAMP,"
-		   "INDEX(UsrCod,CrsCod,CopyTime),"
+		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
 		   "INDEX(CrsCod,Type,Cod),"
 		   "INDEX(CopyTime))");
 

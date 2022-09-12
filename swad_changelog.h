@@ -606,15 +606,16 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.117 (2022-09-12)"
+#define Log_PLATFORM_VERSION	"SWAD 21.117.1 (2022-09-12)"
 #define CSS_FILE		"swad21.107.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 21.117.1: Sep 12, 2022  Copy link to file into resource clipboard. (329561 lines)
 	Version 21.117:   Sep 12, 2022  New database table with clipboards for program resources.
 					New actions to get link to file in course document area. (329514 lines)
 					1 change necessary in database:
 ALTER TABLE prg_resources ADD COLUMN Type ENUM('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'none' AFTER Hidden;
-CREATE TABLE IF NOT EXISTS prg_clipboards (UsrCod INT NOT NULL,CrsCod INT NOT NULL,Type ENUM('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'none',Cod INT NOT NULL DEFAULT -1,CopyTime TIMESTAMP,INDEX(UsrCod,CrsCod,CopyTime),INDEX(CrsCod,Type,Cod),INDEX(CopyTime));
+CREATE TABLE IF NOT EXISTS prg_clipboards (UsrCod INT NOT NULL,CrsCod INT NOT NULL,Type ENUM('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'none',Cod INT NOT NULL DEFAULT -1,CopyTime TIMESTAMP,UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),INDEX(CrsCod,Type,Cod),INDEX(CopyTime));
 					If you want to use MyISAM:
 ALTER TABLE prg_clipboards ENGINE=MyISAM;
 

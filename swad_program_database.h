@@ -77,4 +77,6 @@ void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
 void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 
+void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
+
 #endif

@@ -65,6 +65,7 @@
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
+#include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_role.h"
@@ -8325,7 +8326,7 @@ void Brw_GetLinkToFile (void)
    if (Found)
      {
       /***** Copy link to file into resource clipboard *****/
-      // Prg_DB_CopyToClipboard (&FileMetadata);
+      Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
 
       /***** Write sucess message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
