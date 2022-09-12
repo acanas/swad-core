@@ -225,6 +225,9 @@ void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path);
 void Brw_ShowFileMetadata (void);
+
+void Brw_GetLinkToFile (void);
+
 void Brw_DownloadFile (void);
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
 void Brw_ChgFileMetadata (void);

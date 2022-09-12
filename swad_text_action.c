@@ -17588,6 +17588,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in documents zone of course"			// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkSeeDocCrs] =
+#if   L==1	// ca
+	"Copy link to file when showing course documents area"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to file when showing course documents area"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to file when showing course documents area"
+#elif L==4	// es
+	"Copiar enlace a archivo viendo zona de documentos de asignatura"
+#elif L==5	// fr
+	"Copy link to file when showing course documents area"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a archivo viendo zona de documentos de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to file when showing course documents area"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to file when showing course documents area"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to file when showing course documents area"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to file when showing course documents area"			// Çeviri lazim!
+#endif
+	,
 	[ActDowSeeDocCrs] =
 #if   L==1	// ca
 	"Download file from documents zone of course"		// Necessita traducció
@@ -18230,6 +18253,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in documents zone of course"			// Precisa de tradução
 #elif L==10	// tr
 	"Change file metadata in documents zone of course"			// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkAdmDocCrs] =
+#if   L==1	// ca
+	"Copy link to file when managing course documents area"				// Necessita traducció
+#elif L==2	// de
+	"Copy link to file when managing course documents area"				// Need Übersetzung
+#elif L==3	// en
+	"Copy link to file when managing course documents area"
+#elif L==4	// es
+	"Copiar enlace a archivo administrando zona de documentos de asignatura"
+#elif L==5	// fr
+	"Copy link to file when managing course documents area"				// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a archivo administrando zona de documentos de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to file when managing course documents area"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to file when managing course documents area"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to file when managing course documents area"				// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to file when managing course documents area"				// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmDocCrs] =

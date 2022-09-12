@@ -727,7 +727,15 @@ mysql> DESCRIBE crs_info_read;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_read ("
 			"UsrCod INT NOT NULL,"
 			"CrsCod INT NOT NULL,"
-			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+			"InfoType ENUM("
+			"'intro',"
+			"'description',"
+			"'theory',"
+			"'practices',"
+			"'bibliography',"
+			"'FAQ',"
+			"'links',"
+			"'assessment') NOT NULL,"
 		   "UNIQUE INDEX(UsrCod,CrsCod,InfoType))");
 
    /***** Table crs_info_src *****/
@@ -745,7 +753,15 @@ mysql> DESCRIBE crs_info_src;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_src ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+			"InfoType ENUM("
+			"'intro',"
+			"'description',"
+			"'theory',"
+			"'practices',"
+			"'bibliography',"
+			"'FAQ',"
+			"'links',"
+			"'assessment') NOT NULL,"
 			"InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL,"
 			"MustBeRead ENUM('N','Y') NOT NULL DEFAULT 'N',"
 		   "UNIQUE INDEX(CrsCod,InfoType))");
@@ -765,7 +781,15 @@ mysql> DESCRIBE crs_info_txt;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_txt ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+			"InfoType ENUM("
+			"'intro',"
+			"'description',"
+			"'theory',"
+			"'practices',"
+			"'bibliography',"
+			"'FAQ',"
+			"'links',"
+			"'assessment') NOT NULL,"
 			"InfoTxtHTML LONGTEXT NOT NULL,"
 			"InfoTxtMD LONGTEXT NOT NULL,"
 		   "UNIQUE INDEX(CrsCod,InfoType))");
@@ -2094,7 +2118,15 @@ mysql> DESCRIBE med_media;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS med_media ("
 			"MedCod INT NOT NULL AUTO_INCREMENT,"
-			"Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none',"
+			"Type ENUM("
+			"'none',"
+			"'jpg',"
+			"'gif',"
+			"'mp4',"
+			"'webm',"
+			"'ogg',"
+			"'youtube',"
+			"'embed') NOT NULL DEFAULT 'none',"
 			"Name VARCHAR(43) NOT NULL DEFAULT '',"		// Med_BYTES_NAME
 			"URL VARCHAR(255) NOT NULL DEFAULT '',"		// Cns_MAX_BYTES_WWW
 			"Title VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
@@ -2421,26 +2453,36 @@ mysql> DESCRIBE plg_plugins;
    /***** Table prg_clipboards *****/
 /*
 mysql> DESCRIBE prg_clipboards;
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| Field       | Type       | Null | Key | Default           | Extra                       |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
-| FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
-| Cod         | int(11)    | NO   |     | -1                |                             |
-| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
-| FileType    | tinyint(4) | NO   |     | 0                 |                             |
-| Path        | text       | NO   |     | NULL              |                             |
-| CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-7 rows in set (0.00 sec)
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                               | Null | Key | Default | Extra |
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                                | NO   | MUL | NULL    |       |
+| CrsCod   | int                                                                | NO   | MUL | NULL    |       |
+| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   |     | none    |       |
+| Cod      | int                                                                | NO   |     | -1      |       |
+| CopyTime | timestamp                                                          | YES  | MUL | NULL    |       |
++----------+--------------------------------------------------------------------+------+-----+---------+-------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_clipboards ("
 			"UsrCod INT NOT NULL,"
-			"RscType TINYINT NOT NULL DEFAULT 0,"
+			"CrsCod INT NOT NULL,"
+			"Type ENUM("
+			"'none',"
+			"'asg',"
+			"'cfe',"
+			"'exa',"
+			"'gam',"
+			"'svy',"
+			"'doc',"
+			"'mrk',"
+			"'att',"
+			"'for') NOT NULL DEFAULT 'none',"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"CopyTime TIMESTAMP,"
-		   "INDEX(UsrCod),"
-		   "INDEX(RscType,Cod)))");
+		   "INDEX(UsrCod,CrsCod,CopyTime),"
+		   "INDEX(CrsCod,Type,Cod),"
+		   "INDEX(CopyTime))");
 
    /***** Table prg_items *****/
 /*
@@ -2478,22 +2520,34 @@ mysql> DESCRIBE prg_items;
    /***** Table prg_resources *****/
 /*
 mysql> DESCRIBE prg_resources;
-+--------+---------------+------+-----+---------+----------------+
-| Field  | Type          | Null | Key | Default | Extra          |
-+--------+---------------+------+-----+---------+----------------+
-| RscCod | int           | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int           | NO   | MUL | -1      |                |
-| RscInd | int           | NO   |     | 0       |                |
-| Hidden | enum('N','Y') | NO   |     | N       |                |
-| Title  | varchar(2047) | NO   |     | NULL    |                |
-+--------+---------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
++--------+--------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                               | Null | Key | Default | Extra          |
++--------+--------------------------------------------------------------------+------+-----+---------+----------------+
+| RscCod | int                                                                | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int                                                                | NO   | MUL | -1      |                |
+| RscInd | int                                                                | NO   |     | 0       |                |
+| Hidden | enum('N','Y')                                                      | NO   |     | N       |                |
+| Type   | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   |     | none    |                |
+| Title  | varchar(2047)                                                      | NO   |     | NULL    |                |
++--------+--------------------------------------------------------------------+------+-----+---------+----------------+
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
 			"RscCod INT NOT NULL AUTO_INCREMENT,"
 			"ItmCod INT NOT NULL DEFAULT -1,"
 			"RscInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Type ENUM("
+			"'none',"
+			"'asg',"
+			"'cfe',"
+			"'exa',"
+			"'gam',"
+			"'svy',"
+			"'doc',"
+			"'mrk',"
+			"'att',"
+			"'for') NOT NULL DEFAULT 'none',"
 			"Title VARCHAR(2047) NOT NULL,"		// PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE
 		   "UNIQUE INDEX(RscCod),"
 		   "UNIQUE INDEX(ItmCod,RscInd))");

@@ -449,6 +449,39 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActReqDatAssPrj,
   };
 
+static const Act_Action_t Brw_ActReqLnk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActReqLnkSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActUnk,	// ActReqLnkSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActReqLnkAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActUnk,
+   [Brw_ADMI_SHR_GRP] = ActUnk,
+   [Brw_ADMI_WRK_USR] = ActUnk,
+   [Brw_ADMI_WRK_CRS] = ActUnk,
+   [Brw_ADMI_MRK_CRS] = ActUnk,	// ActReqLnkAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActUnk,
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActUnk,
+   [Brw_SHOW_MRK_GRP] = ActUnk,	// ActReqLnkSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActUnk,	// ActReqLnkAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActUnk,
+   [Brw_ADMI_ASG_CRS] = ActUnk,
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActUnk,
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActUnk,
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActUnk,
+   [Brw_ADMI_SHR_DEG] = ActUnk,
+   [Brw_ADMI_SHR_CTR] = ActUnk,
+   [Brw_ADMI_SHR_INS] = ActUnk,
+   [Brw_ADMI_TCH_CRS] = ActUnk,
+   [Brw_ADMI_TCH_GRP] = ActUnk,
+   [Brw_ADMI_DOC_PRJ] = ActUnk,
+   [Brw_ADMI_ASS_PRJ] = ActUnk,
+  };
+
 static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1260,6 +1293,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow);
 static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType);
 static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 
+static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
+static void Brw_PutParamsToGetLinkToFile (void *FileMetadata);
+
 static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner);
 static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
@@ -1523,6 +1559,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActConSeeDocCrs:
       case ActZIPSeeDocCrs:
       case ActReqDatSeeDocCrs:
+      case ActReqLnkSeeDocCrs:
       case ActDowSeeDocCrs:
 	 Gbl.FileBrowser.Type = Brw_SHOW_DOC_CRS;
          break;
@@ -1559,6 +1596,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActHidDocCrs:
       case ActReqDatAdmDocCrs:
       case ActChgDatAdmDocCrs:
+      case ActReqLnkAdmDocCrs:
       case ActDowAdmDocCrs:
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_CRS;
          break;
@@ -7842,6 +7880,7 @@ void Brw_ShowFileMetadata (void)
    bool ICanEdit;
    bool ICanChangePublic = false;
    bool FileHasPublisher;
+   bool PutIconToGetLink;
    Brw_License_t License;
    unsigned LicenseUnsigned;
 
@@ -7928,6 +7967,23 @@ void Brw_ShowFileMetadata (void)
 	                        FileMetadata.FilFolLnk.Name,
 	                        FileNameToShow);
 
+         /***** Begin box *****/
+	 PutIconToGetLink = (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||	// Only document zone
+		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS) &&
+		            (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
+	                     FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
+	                    (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am teacher or superuser
+	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 if (PutIconToGetLink)
+	    Box_BoxShadowBegin (NULL,NULL,
+				Brw_PutIconToGetLinkToFile,&FileMetadata,
+				NULL);
+	 else
+	    Box_BoxShadowBegin (NULL,NULL,
+				NULL,NULL,
+			        NULL);
+
+
 	 /***** Begin form to update the metadata of a file *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
@@ -7950,16 +8006,14 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    Frm_BeginForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
-	       Brw_PutParamsFileBrowser (NULL,		// Not used
-					 NULL,		// Not used
+	       Brw_PutParamsFileBrowser (NULL,			// Not used
+					 NULL,			// Not used
 					 Brw_IS_UNKNOWN,	// Not used
 					 FileMetadata.FilCod);
 	   }
 
-         /***** Begin box and table *****/
-	 Box_BoxTableShadowBegin (NULL,NULL,
-	                          NULL,NULL,
-	                          NULL,2);
+         /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
 	    /***** Link to download the file *****/
 	    HTM_TR_Begin (NULL);
@@ -7976,7 +8030,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_Filename);
 
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	       HTM_TD_End ();
 
@@ -7988,13 +8042,13 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
 
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  if (FileHasPublisher)
 		    {
 		     /* Show photo */
 		     Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-		                                false);
+						ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
+						false);
 
 		     /* Write name */
 		     HTM_NBSP ();
@@ -8018,7 +8072,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_File_size);
 
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  HTM_Txt (FileSizeStr);
 	       HTM_TD_End ();
 
@@ -8030,7 +8084,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
 
 	       HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						true,true,true,0x7);
@@ -8043,12 +8097,12 @@ void Brw_ShowFileMetadata (void)
 
 	       /* Label */
 	       Frm_LabelColumn ("RT",ICanChangePublic ? "PublicFile" :
-			                                NULL,
-			        Txt_Availability);
+							NULL,
+				Txt_Availability);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  if (ICanChangePublic)	// I can change file to public
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8073,12 +8127,12 @@ void Brw_ShowFileMetadata (void)
 
 	       /* Label */
 	       Frm_LabelColumn ("RT",ICanEdit ? "License" :
-			                        NULL,
-			        Txt_License);
+						NULL,
+				Txt_License);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  if (ICanEdit)	// I can edit file properties
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8105,10 +8159,10 @@ void Brw_ShowFileMetadata (void)
 	      {
 	       HTM_TR_Begin (NULL);
 
-	          Frm_LabelColumn ("RT",NULL,Txt_My_views);
+		  Frm_LabelColumn ("RT",NULL,Txt_My_views);
 
 		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-		                The_GetSuffix ());
+				The_GetSuffix ());
 		     HTM_Unsigned (FileMetadata.NumMyViews);
 		  HTM_TD_End ();
 
@@ -8121,7 +8175,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
 
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 		  HTM_TxtF ("(%u %s)",
 			    FileMetadata.NumLoggedUsrs,
@@ -8137,24 +8191,24 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT",NULL,Txt_Public_views);
 
 	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+			     The_GetSuffix ());
 		  HTM_Unsigned (FileMetadata.NumPublicViews);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
-	 /***** End box *****/
+	 /***** End table *****/
+         HTM_TABLE_End ();
+
+	 /***** End form *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	       /* End table, send button and end box */
-	       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
-
-	    /* End form */
+	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 	    Frm_EndForm ();
 	   }
-	 else
-            /* End table and box */
-	    Box_BoxTableEnd ();
+
+	 /***** End box *****/
+	 Box_BoxEnd ();
 
 	 /***** Mark possible notifications as seen *****/
 	 switch (Gbl.FileBrowser.Type)
@@ -8225,6 +8279,57 @@ void Brw_ShowFileMetadata (void)
 	}
 
       Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+     }
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+/*****************************************************************************/
+/*********************** Put icon to get link to file ************************/
+/*****************************************************************************/
+
+static void Brw_PutIconToGetLinkToFile (void *FileMetadata)
+  {
+   Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],
+                                   Brw_PutParamsToGetLinkToFile,FileMetadata);
+  }
+
+static void Brw_PutParamsToGetLinkToFile (void *FileMetadata)
+  {
+   if (FileMetadata)
+      Brw_PutParamsFileBrowser (NULL,		// Not used
+				NULL,		// Not used
+				Brw_IS_UNKNOWN,	// Not used
+				((struct FileMetadata *) FileMetadata)->FilCod);
+  }
+
+/*****************************************************************************/
+/*********************** Put icon to get link to file ************************/
+/*****************************************************************************/
+
+void Brw_GetLinkToFile (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct FileMetadata FileMetadata;
+   bool Found;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   Brw_GetFileMetadataByCod (&FileMetadata);
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+
+   if (Found)
+     {
+      /***** Copy link to file into resource clipboard *****/
+      // Prg_DB_CopyToClipboard (&FileMetadata);
+
+      /***** Write sucess message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		     FileMetadata.FilFolLnk.Name);
      }
 
    /***** Show again the file browser *****/
@@ -8717,7 +8822,7 @@ void Brw_ChgFileMetadata (void)
 
 	 /***** Write sucess message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
-			Gbl.FileBrowser.FilFolLnk.Name);
+			FileMetadata.FilFolLnk.Name);
 	}
       else
 	 /***** Write error message and exit *****/

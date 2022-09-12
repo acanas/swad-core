@@ -1052,7 +1052,7 @@ static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
    TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_NOTE,
-			   TmlNot_PutParamsRemoveNote);
+			  TmlNot_PutParamsRemoveNote);
   }
 
 /*****************************************************************************/

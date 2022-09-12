@@ -307,6 +307,14 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
 				  "print.svg",Ico_BLACK);
   }
 
+void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,
+                                     void (*FuncParams) (void *Args),void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+                                  FuncParams,Args,
+				  "link.svg",Ico_BLACK);
+  }
+
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
                                   void (*FuncParams) (void *Args),void *Args)
   {
