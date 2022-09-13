@@ -78,7 +78,10 @@ typedef enum
 void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
-void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,long ItmCod);
+void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
+                               struct Prg_ItmRsc *SelectedItmRsc);
+
+void PrgRsc_PutParamRscCod (long RscCod);
 
 void PrgRsc_CreateResource (void);
 
@@ -93,6 +96,6 @@ void PrgRsc_UnhideResource (void);
 void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
-void PrgRsc_ChangeResourceLink (void);
+void PrgRsc_ShowClipboardToChgLink (void);
 
 #endif

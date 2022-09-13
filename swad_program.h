@@ -71,7 +71,7 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
-#define Prg_NUM_LISTING_TYPES 10
+#define Prg_NUM_LISTING_TYPES 12
 typedef enum
   {
    Prg_PRINT,			// List items ready to be printed
@@ -85,8 +85,16 @@ typedef enum
    Prg_RECEIVE_ITEM,		// Receive item data after create/edit
 
    Prg_EDIT_RESOURCES,		// List resources of a selected item for edition
+   Prg_SHOW_CLIPBOARD,		// Show clipboard in a resource to select a link
+   Prg_CHANGE_RESOURCE_LINK,	// Change resource link
    Prg_END_EDIT_RES,		// List resources of a selected item after edition
   } Prg_ListingType_t;
+
+struct Prg_ItmRsc	// Used in forms to pass an item and a resource as parameters
+  {
+   long ItmCod;
+   long RscCod;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -95,10 +103,11 @@ typedef enum
 void Prg_ShowCourseProgram (void);
 void Prg_EditCourseProgram (void);
 
-void Prg_ShowAllItems (Prg_ListingType_t ListingType,long ItmCod);
+void Prg_ShowAllItems (Prg_ListingType_t ListingType,
+                       long SelectedItmCod,long SelectedRscCod);
 
 bool Prg_CheckIfICanEditProgram (void);
-void Prg_PutParams (void *ItmCod);
+void Prg_PutParams (void *SelectedItmRsc);
 
 void Prg_GetListItems (void);
 void Prg_FreeListItems (void);

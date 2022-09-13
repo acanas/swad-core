@@ -454,7 +454,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnhPrgRsc	] = {1922,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_UnhideResource		,NULL},
    [ActUp_PrgRsc	] = {1923,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_MoveUpResource		,NULL},
    [ActDwnPrgRsc	] = {1924,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_MoveDownResource	,NULL},
-   [ActChgLnkPrgRsc	] = {1932,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ChangeResourceLink	,NULL},
+   [ActChgLnkPrgRsc	] = {1932,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ShowClipboardToChgLink	,NULL},
 
    [ActEdiTchGui	] = { 785,-1,TabUnk,ActSeeTchGui	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
