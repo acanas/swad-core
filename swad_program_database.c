@@ -79,7 +79,7 @@ long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s')",
 			        Gbl.Hierarchy.Crs.CrsCod,
-			        Item->Hierarchy.Index,
+			        Item->Hierarchy.ItmInd,
 			        Item->Hierarchy.Level,
 			        Gbl.Usrs.Me.UsrDat.UsrCod,
 			        Item->TimeUTC[Dat_STR_TIME],
@@ -455,7 +455,7 @@ void Prg_DB_RemoveCrsItems (long CrsCod)
 /************************** Create a new resource ****************************/
 /*****************************************************************************/
 
-long Prg_DB_CreateResource (const struct PrgRsc_Resource *Resource)
+long Prg_DB_CreateResource (const struct Prg_Item *Item)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new resource",
@@ -464,16 +464,16 @@ long Prg_DB_CreateResource (const struct PrgRsc_Resource *Resource)
 				" SELECT %ld,COALESCE(MAX(t2.RscInd),0)+1,'N','%s'"
 				  " FROM prg_resources AS t2"
 				 " WHERE t2.ItmCod=%ld",
-				Resource->ItmCod,
-				Resource->Title,
-				Resource->ItmCod);
+				Item->Hierarchy.ItmCod,
+				Item->Resource.Title,
+				Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
 /**************************** Update resource title **************************/
 /*****************************************************************************/
 
-void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
+void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
                                  const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1])
   {
    DB_QueryUPDATE ("can not update the title of a resource",
@@ -617,7 +617,7 @@ long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd)
 /************************** Remove an item resource **************************/
 /*****************************************************************************/
 
-void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
+void Prg_DB_RemoveResource (const struct Prg_Item *Item)
   {
    DB_QueryDELETE ("can not remove item resource",
 		   "DELETE FROM prg_resources"
@@ -627,8 +627,8 @@ void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource)
 		     " AND prg_resources.ItmCod=%ld"
                      " AND prg_resources.ItmCod=prg_items.ItmCod"
                      " AND prg_items.CrsCod=%ld",	// Extra check
-		   Resource->Rsc.Cod,
-		   Resource->ItmCod,
+		   Item->Resource.Hierarchy.RscCod,
+		   Item->Hierarchy.ItmCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -673,19 +673,6 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
   }
 
 /*****************************************************************************/
-/**************** Get resources in the current course clipboard **************/
-/*****************************************************************************/
-/*
-mysql> SELECT * FROM prg_clipboards;
-+--------+--------+------+-----+---------------------+
-| UsrCod | CrsCod | Type | Cod | CopyTime            |
-+--------+--------+------+-----+---------------------+
-|      1 |      1 | doc  |  33 | 2022-09-12 12:08:25 |
-|      1 |      1 | doc  |  28 | 2022-09-12 12:08:31 |
-+--------+--------+------+-----+---------------------+
-2 rows in set (0,00 sec)
-*/
-/*****************************************************************************/
 /********************** Copy link to resource into clipboard *****************/
 /*****************************************************************************/
 /*
@@ -712,4 +699,55 @@ void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
 		    Gbl.Hierarchy.Crs.CrsCod,
 		    Prg_ResourceTypesDB[Type],
 		    Cod);
+  }
+
+/*****************************************************************************/
+/**************** Get resources in the current course clipboard **************/
+/*****************************************************************************/
+/*
+mysql> SELECT * FROM prg_clipboards;
++--------+--------+------+-----+---------------------+
+| UsrCod | CrsCod | Type | Cod | CopyTime            |
++--------+--------+------+-----+---------------------+
+|      1 |      1 | doc  |  33 | 2022-09-12 12:08:25 |
+|      1 |      1 | doc  |  28 | 2022-09-12 12:08:31 |
++--------+--------+------+-----+---------------------+
+2 rows in set (0,00 sec)
+*/
+
+unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get clipboard",
+		   "SELECT Type,"	// row[0]
+			  "Cod"		// row[1]
+		    " FROM prg_clipboards"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld"
+		   " ORDER BY CopyTime",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********************** Get resource data from clipboard *********************/
+/*****************************************************************************/
+
+void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
+                                               MYSQL_RES **mysql_res)
+  {
+   MYSQL_ROW row;
+
+   /***** Get data of item resource from database *****/
+   /* Get row */
+   row = mysql_fetch_row (*mysql_res);
+   /*
+   Type	row[0]
+   Cod	row[1]
+   */
+   /* Get type (row[0]) */
+   Link->Type = PrgRsc_GetTypeFromString (row[0]);
+
+   /* Get code (row[1]) */
+   Link->Cod = Str_ConvertStrCodToLongCod (row[1]);
   }

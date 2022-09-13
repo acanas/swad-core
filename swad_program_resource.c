@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <string.h>		// For string functions
+
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -59,33 +61,33 @@ static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewResources (void *ItmRsc);
-static void PrgRsc_PutIconsEditResources (void *ItmRsc);
+static void PrgRsc_PutIconsViewResources (void *ItmRscCodes);
+static void PrgRsc_PutIconsEditResources (void *ItmRscCodes);
 
-static void PrgRsc_GetDataOfResourceByCod (struct PrgRsc_Resource *Resource);
-static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
+static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
                                       MYSQL_RES **mysql_res);
-static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource);
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
-                                         struct PrgRsc_Resource *Resource);
+                                         const struct Prg_Item *Item);
 static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
                                          unsigned NumRsc,unsigned NumResources,
-                                         struct PrgRsc_Resource *Resource,
-                                         struct Prg_ItmRsc *SelectedItmRsc);
+                                         const struct Prg_Item *Item,
+                                         struct Prg_ItmRscCodes *SelectedItmRscCodes);
 static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
                                         unsigned NumResources,
-                                        struct Prg_ItmRsc *SelectedItmRsc);
+                                        struct Prg_ItmRscCodes *SelectedItmRscCodes);
 static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
                                                  unsigned NumResources,
-                                                 struct Prg_ItmRsc *ItmRsc,
+                                                 struct Prg_ItmRscCodes *ItmRscCodes,
                                                  bool Hidden);
-static long PrgRsc_GetParamRscCod (void);
-
 static void PrgRsc_HideOrUnhideResource (bool Hide);
 
 static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
-static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
-                                      const struct PrgRsc_Rsc *Rsc2);
+static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
+                                      const struct Prg_ResourceHierarchy *Rsc2);
+
+static void PrgRsc_ShowClipboard (void);
+static void PrgRsc_WriteRowViewLink (unsigned NumLink,
+                                     const struct PrgRsc_Link *Link);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -93,16 +95,16 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
 
 void PrgRsc_ViewResourcesAfterEdit (void)
   {
-   long ItmCod;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   ItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_END_EDIT_RES,ItmCod,-1L);
+   Prg_ShowAllItems (Prg_END_EDIT_RES,Item.Hierarchy.ItmCod,-1L);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -114,16 +116,16 @@ void PrgRsc_ViewResourcesAfterEdit (void)
 
 void PrgRsc_EditResources (void)
   {
-   long ItmCod;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   ItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,ItmCod,-1L);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,-1L);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -134,7 +136,7 @@ void PrgRsc_EditResources (void)
 /*****************************************************************************/
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_ItmRsc *SelectedItmRsc)
+                               struct Prg_ItmRscCodes *SelectedItmRscCodes)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Remove_resource;
@@ -142,7 +144,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
    static bool GetHiddenResources[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
@@ -205,11 +207,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
      };
 
    /***** Trivial check *****/
-   if (SelectedItmRsc->ItmCod <= 0)
+   if (SelectedItmRscCodes->ItmCod <= 0)
       return;
 
    /***** Get list of item resources from database *****/
-   NumResources = Prg_DB_GetListResources (&mysql_res,SelectedItmRsc->ItmCod,
+   NumResources = Prg_DB_GetListResources (&mysql_res,SelectedItmRscCodes->ItmCod,
                                            GetHiddenResources[ListingType]);
 
    if (NumResources || ShowListWhenEmpty[ListingType])
@@ -225,7 +227,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	    case ActReqRemPrgRsc:
 	       /* Alert with button to remove resource */
 	       Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
-					   Prg_PutParams,SelectedItmRsc,
+					   Prg_PutParams,SelectedItmRscCodes,
 					   Btn_REMOVE_BUTTON,Txt_Remove_resource);
 	       break;
 	    default:
@@ -235,7 +237,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
       /***** Begin box *****/
       Box_BoxBegin ("100%",Txt_Resources,
-		    FunctionToDrawContextualIcons[ListingType],SelectedItmRsc,
+		    FunctionToDrawContextualIcons[ListingType],SelectedItmRscCodes,
 		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 
 	 /***** Table *****/
@@ -243,12 +245,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	    HTM_TBODY_Begin (NULL);
 
 	       /***** Write all item resources *****/
-	       for (NumRsc = 0, The_ResetRowColor1 ();
+	       for (NumRsc = 0, The_ResetRowColor1 (1);
 		    NumRsc < NumResources;
-		    NumRsc++, The_ChangeRowColor1 ())
+		    NumRsc++, The_ChangeRowColor1 (1))
 		 {
 		  /* Get data of this item resource */
-		  PrgRsc_GetDataOfResource (&Resource,&mysql_res);
+		  PrgRsc_GetDataOfResource (&Item,&mysql_res);
 
 		  /* Show item */
 		  switch (ListingType)
@@ -258,10 +260,10 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		     case Prg_CHANGE_RESOURCE_LINK:
 			PrgRsc_WriteRowEditResource (ListingType,
 			                             NumRsc,NumResources,
-			                             &Resource,SelectedItmRsc);
+			                             &Item,SelectedItmRscCodes);
 			break;
 		     default:
-			PrgRsc_WriteRowViewResource (NumRsc,&Resource);
+			PrgRsc_WriteRowViewResource (NumRsc,&Item);
 			break;
 		    }
 		 }
@@ -273,7 +275,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		  case Prg_SHOW_CLIPBOARD:
 		  case Prg_CHANGE_RESOURCE_LINK:
 		     PrgRsc_WriteRowNewResource (ListingType,NumResources,
-		                                 SelectedItmRsc);
+		                                 SelectedItmRscCodes);
 		     break;
 		  default:
 		     break;
@@ -299,55 +301,55 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 /************** Put contextual icons in list of item resources ***************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewResources (void *ItmRsc)
+static void PrgRsc_PutIconsViewResources (void *ItmRscCodes)
   {
    /***** Put icon to create a new item resource *****/
-   if (ItmRsc)
-      if (((struct Prg_ItmRsc *) ItmRsc)->ItmCod > 0)
+   if (ItmRscCodes)
+      if (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod > 0)
 	 if (Prg_CheckIfICanEditProgram ())
 	    Ico_PutContextualIconToView (ActFrmSeePrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-				         Prg_PutParams,ItmRsc);
+				         Prg_PutParams,ItmRscCodes);
   }
 
-static void PrgRsc_PutIconsEditResources (void *ItmRsc)
+static void PrgRsc_PutIconsEditResources (void *ItmRscCodes)
   {
    /***** Put icon to create a new item resource *****/
-   if (ItmRsc)
-      if (((struct Prg_ItmRsc *) ItmRsc)->ItmCod > 0)
+   if (ItmRscCodes)
+      if (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod > 0)
 	 if (Prg_CheckIfICanEditProgram ())
 	    Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParams,ItmRsc);
+					 Prg_PutParams,ItmRscCodes);
   }
 
 /*****************************************************************************/
 /****************** Get item resource data using its code ********************/
 /*****************************************************************************/
 
-static void PrgRsc_GetDataOfResourceByCod (struct PrgRsc_Resource *Resource)
+void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item)
   {
    MYSQL_RES *mysql_res;
 
-   if (Resource->Rsc.Cod > 0)
+   if (Item->Resource.Hierarchy.RscCod > 0)
      {
       /***** Get data of item resource *****/
-      if (Prg_DB_GetDataOfResourceByCod (&mysql_res,Resource->Rsc.Cod))
-         PrgRsc_GetDataOfResource (Resource,&mysql_res);
+      if (Prg_DB_GetDataOfResourceByCod (&mysql_res,Item->Resource.Hierarchy.RscCod))
+         PrgRsc_GetDataOfResource (Item,&mysql_res);
       else
-         PrgRsc_ResetResource (Resource);
+         Prg_ResetItem (Item);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /***** Clear all item resource data *****/
-      PrgRsc_ResetResource (Resource);
+      Prg_ResetItem (Item);
   }
 
 /*****************************************************************************/
 /************************* Get item resource data ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
+static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
                                       MYSQL_RES **mysql_res)
   {
    MYSQL_ROW row;
@@ -363,30 +365,17 @@ static void PrgRsc_GetDataOfResource (struct PrgRsc_Resource *Resource,
    Title	row[4]
    */
    /* Get code of the program item (row[0]) */
-   Resource->ItmCod = Str_ConvertStrCodToLongCod (row[0]);
+   Item->Hierarchy.ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /* Get code and index of the item resource (row[1], row[2]) */
-   Resource->Rsc.Cod = Str_ConvertStrCodToLongCod (row[1]);
-   Resource->Rsc.Ind = Str_ConvertStrToUnsigned (row[2]);
+   Item->Resource.Hierarchy.RscCod = Str_ConvertStrCodToLongCod (row[1]);
+   Item->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
    /* Get whether the program item is hidden (row(3)) */
-   Resource->Hidden = (row[3][0] == 'Y');
+   Item->Resource.Hierarchy.Hidden = (row[3][0] == 'Y');
 
    /* Get the title of the item resource (row[4]) */
-   Str_Copy (Resource->Title,row[4],sizeof (Resource->Title) - 1);
-  }
-
-/*****************************************************************************/
-/************************ Clear all item resource data ***********************/
-/*****************************************************************************/
-
-static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource)
-  {
-   Resource->ItmCod   = -1L;
-   Resource->Rsc.Cod  = -1L;
-   Resource->Rsc.Ind  = 0;
-   Resource->Hidden   = false;
-   Resource->Title[0] = '\0';
+   Str_Copy (Item->Resource.Title,row[4],sizeof (Item->Resource.Title) - 1);
   }
 
 /*****************************************************************************/
@@ -394,21 +383,21 @@ static void PrgRsc_ResetResource (struct PrgRsc_Resource *Resource)
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
-                                         struct PrgRsc_Resource *Resource)
+                                         const struct Prg_Item *Item)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows1 ());
+                    The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
       HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 ());
-	 HTM_Txt (Resource->Title);
+                    The_GetSuffix (),The_GetColorRows1 (1));
+	 HTM_Txt (Item->Resource.Title);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -421,58 +410,58 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 
 static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
                                          unsigned NumRsc,unsigned NumResources,
-                                         struct PrgRsc_Resource *Resource,
-                                         struct Prg_ItmRsc *SelectedItmRsc)
+                                         const struct Prg_Item *Item,
+                                         struct Prg_ItmRscCodes *SelectedItmRscCodes)
   {
-   struct Prg_ItmRsc ItmRsc;
+   struct Prg_ItmRscCodes ItmRscCodes;
 
-   ItmRsc.ItmCod = Resource->ItmCod;
-   ItmRsc.RscCod = Resource->Rsc.Cod;
+   ItmRscCodes.ItmCod = Item->Hierarchy.ItmCod;
+   ItmRscCodes.RscCod = Item->Resource.Hierarchy.RscCod;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 ());
+      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
 	 PrgRsc_PutFormsToRemEditOneResource (NumRsc,NumResources,
-	                                      &ItmRsc,Resource->Hidden);
+	                                      &ItmRscCodes,Item->Resource.Hierarchy.Hidden);
       HTM_TD_End ();
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows1 ());
+                    The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Prg_PutParams (&ItmRsc);
-	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Resource->Title,
+	    Prg_PutParams (&ItmRscCodes);
+	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\"",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
 
-      /***** Link to resource *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
+      /***** Icon to edit link *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 	 Ico_PutContextualIconToGetLink (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParams,&ItmRsc);
+					 Prg_PutParams,&ItmRscCodes);
       HTM_TD_End ();
 
-      /***** Show clipboard to change resource link *****/
-      switch (ListingType)
-        {
-         case Prg_SHOW_CLIPBOARD:
-            HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
-               if (Resource->Rsc.Cod == SelectedItmRsc->RscCod)
-                  Ale_ShowAlert (Ale_INFO,"Clipboard for existing resource");
-            HTM_TD_End ();
-            break;
-         default:
-            break;
-        }
+      /***** Link *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+
+         /* Current link */
+	 // Ale_ShowAlert (Ale_INFO,"Current link.");
+
+	 /* Show clipboard to change resource link */
+	 if (ListingType == Prg_SHOW_CLIPBOARD &&
+	     Item->Resource.Hierarchy.RscCod == SelectedItmRscCodes->RscCod)
+	    PrgRsc_ShowClipboard ();
+
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -484,30 +473,30 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 
 static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
                                         unsigned NumResources,
-                                        struct Prg_ItmRsc *SelectedItmRsc)
+                                        struct Prg_ItmRscCodes *SelectedItmRscCodes)
   {
-   struct Prg_ItmRsc ItmRsc;
+   struct Prg_ItmRscCodes ItmRscCodes;
 
-   ItmRsc.ItmCod = SelectedItmRsc->ItmCod;
-   ItmRsc.RscCod = -1L;
+   ItmRscCodes.ItmCod = SelectedItmRscCodes->ItmCod;
+   ItmRscCodes.RscCod = -1L;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 ());
+      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
       HTM_TD_End ();
 
       /***** Resource number *****/
       HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows1 ());
+                    The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumResources + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Prg_PutParams (&ItmRsc);
+	    Prg_PutParams (&ItmRscCodes);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
@@ -517,24 +506,21 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 	 Frm_EndForm ();
       HTM_TD_End ();
 
-      /***** Link to resource *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
+      /***** Icon to edit link *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 	 Ico_PutContextualIconToGetLink (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParams,&ItmRsc);
+					 Prg_PutParams,&ItmRscCodes);
       HTM_TD_End ();
 
-      /***** Show clipboard to change resource link *****/
-      switch (ListingType)
-        {
-         case Prg_SHOW_CLIPBOARD:
-            HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 ());
-               if (ItmRsc.RscCod == SelectedItmRsc->RscCod)
-                  Ale_ShowAlert (Ale_INFO,"Clipboard for new resource");
-            HTM_TD_End ();
-            break;
-         default:
-            break;
-        }
+      /***** Link *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+
+	 /* Show clipboard to change resource link */
+	 if (ListingType == Prg_SHOW_CLIPBOARD &&
+	     SelectedItmRscCodes->RscCod <= 0)	// No resource selected
+	    PrgRsc_ShowClipboard ();
+
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -546,7 +532,7 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 
 static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
                                                  unsigned NumResources,
-                                                 struct Prg_ItmRsc *ItmRsc,
+                                                 struct Prg_ItmRscCodes *ItmRscCodes,
                                                  bool Hidden)
   {
    static Act_Action_t ActionHideUnhide[2] =
@@ -562,17 +548,17 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
       case Rol_SYS_ADM:
 	 /***** Icon to remove item resource *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                Prg_PutParams,ItmRsc);
+	                                Prg_PutParams,ItmRscCodes);
 
 	 /***** Icon to hide/unhide item resource *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
-					    Prg_PutParams,ItmRsc,
+					    Prg_PutParams,ItmRscCodes,
 					    Hidden);
 
 	 /***** Icon to move up the item *****/
 	 if (NumRsc > 0)
 	   Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                  Prg_PutParams,ItmRsc,
+	                                  Prg_PutParams,ItmRscCodes,
 	 			          "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -580,7 +566,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (unsigned NumRsc,
 	 /***** Put icon to move down the item *****/
 	 if (NumRsc < NumResources - 1)
 	   Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                  Prg_PutParams,ItmRsc,
+	                                  Prg_PutParams,ItmRscCodes,
 	                                  "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -606,7 +592,7 @@ void PrgRsc_PutParamRscCod (long RscCod)
 /***************** Get parameter with code of item resource ******************/
 /*****************************************************************************/
 
-static long PrgRsc_GetParamRscCod (void)
+long PrgRsc_GetParamRscCod (void)
   {
    return Par_GetParToLong ("RscCod");
   }
@@ -617,23 +603,23 @@ static long PrgRsc_GetParamRscCod (void)
 
 void PrgRsc_CreateResource (void)
   {
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get parameters *****/
    /* Get the code of the program item */
-   Resource.ItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /* Get the new title for the new resource */
-   Par_GetParToText ("Title",Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+   Par_GetParToText ("Title",Item.Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
 
    /***** Create resource *****/
-   Resource.Rsc.Cod = Prg_DB_CreateResource (&Resource);
+   Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -645,16 +631,15 @@ void PrgRsc_CreateResource (void)
 
 void PrgRsc_RenameResource (void)
   {
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
    char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   PrgRsc_GetDataOfResourceByCod (&Resource);
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Rename resource *****/
@@ -662,10 +647,10 @@ void PrgRsc_RenameResource (void)
    Par_GetParToText ("Title",NewTitle,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
 
    /* Update database changing old title by new title */
-   Prg_DB_UpdateResourceTitle (Resource.Rsc.Cod,Resource.ItmCod,NewTitle);
+   Prg_DB_UpdateResourceTitle (Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod,NewTitle);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -678,24 +663,23 @@ void PrgRsc_RenameResource (void)
 void PrgRsc_ReqRemResource (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   PrgRsc_GetDataOfResourceByCod (&Resource);
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Create alert to remove the item resource *****/
    Ale_CreateAlert (Ale_QUESTION,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Do_you_really_want_to_remove_the_resource_X,
-                    Resource.Title);
+                    Item.Resource.Title);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -708,26 +692,25 @@ void PrgRsc_ReqRemResource (void)
 void PrgRsc_RemoveResource (void)
   {
    extern const char *Txt_Resource_X_removed;
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   PrgRsc_GetDataOfResourceByCod (&Resource);
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Remove resource *****/
-   Prg_DB_RemoveResource (&Resource);
+   Prg_DB_RemoveResource (&Item);
 
    /***** Create alert to remove the item resource *****/
    Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
-                    Txt_Resource_X_removed,Resource.Title);
+                    Txt_Resource_X_removed,Item.Resource.Title);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -749,22 +732,21 @@ void PrgRsc_UnhideResource (void)
 
 static void PrgRsc_HideOrUnhideResource (bool Hide)
   {
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   PrgRsc_GetDataOfResourceByCod (&Resource);
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Hide/unhide item resource *****/
-   Prg_DB_HideOrUnhideResource (Resource.Rsc.Cod,Hide);
+   Prg_DB_HideOrUnhideResource (Item.Resource.Hierarchy.RscCod,Hide);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -787,8 +769,8 @@ void PrgRsc_MoveDownResource (void)
 static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct PrgRsc_Resource Resource;
-   struct PrgRsc_Rsc Rsc2;
+   struct Prg_Item Item;
+   struct Prg_ResourceHierarchy Rsc2;
    bool Success = false;
    static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(long ItmCod,unsigned RscInd) =
      {
@@ -800,25 +782,24 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   PrgRsc_GetDataOfResourceByCod (&Resource);
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Move up/down resource *****/
-   if ((Rsc2.Ind = GetOtherRscInd[UpDown] (Resource.ItmCod,Resource.Rsc.Ind)))	// 0 ==> movement not allowed
+   if ((Rsc2.RscInd = GetOtherRscInd[UpDown] (Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscInd)))	// 0 ==> movement not allowed
      {
       /* Get the other resource code */
-      Rsc2.Cod = Prg_DB_GetRscCodFromRscInd (Resource.ItmCod,Rsc2.Ind);
+      Rsc2.RscCod = Prg_DB_GetRscCodFromRscInd (Item.Hierarchy.ItmCod,Rsc2.RscInd);
 
       /* Exchange subtrees */
-      Success = PrgRsc_ExchangeResources (&Resource.Rsc,&Rsc2);
+      Success = PrgRsc_ExchangeResources (&Item.Resource.Hierarchy,&Rsc2);
      }
    if (!Success)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -829,11 +810,11 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
 /*****************************************************************************/
 // Return true if success
 
-static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
-                                      const struct PrgRsc_Rsc *Rsc2)
+static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
+                                      const struct Prg_ResourceHierarchy *Rsc2)
   {
-   if (Rsc1->Ind > 0 &&	// Indexes should be in the range [1, 2,...]
-       Rsc2->Ind > 0)
+   if (Rsc1->RscInd > 0 &&	// Indexes should be in the range [1, 2,...]
+       Rsc2->RscInd > 0)
      {
       /***** Lock table to make the move atomic *****/
       Prg_DB_LockTableResources ();
@@ -842,11 +823,11 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
       // This implementation works with non continuous indexes
       /*
       Example:
-      Rsc1->Ind =  5
-      Rsc2->Ind = 17
+      Rsc1->Index =  5
+      Rsc2->Index = 17
                                 Step 1            Step 2            Step 3  (Equivalent to)
       +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
-      |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod|   |Rsc.Ind|Rsc.Cod| |Rsc.Ind|Rsc.Cod|
+      | RscInd| RscCod|   | RscInd| RscCod|   | RscInd| RscCod|   | RscInd| RscCod| | RscInd| RscCod|
       +-------+-------+   +-------+-------+   +-------+-------+   +-------+-------+ +-------+-------+
       |     5 |   218 |   |     5 |   218 |-->|--> 17 |   218 |   |    17 |   218 | |     5 |   240 |
       |    17 |   240 |-->|-->-17 |   240 |   |   -17 |   240 |-->|-->  5 |   240 | |    17 |   218 |
@@ -854,13 +835,13 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
       */
       /* Step 1: Change second index to negative,
 		 necessary to preserve unique index (ItmCod,RscInd) */
-      Prg_DB_UpdateRscInd (Rsc2->Cod,-(int) Rsc2->Ind);
+      Prg_DB_UpdateRscInd (Rsc2->RscCod,-(int) Rsc2->RscInd);
 
       /* Step 2: Change first index */
-      Prg_DB_UpdateRscInd (Rsc1->Cod, (int) Rsc2->Ind);
+      Prg_DB_UpdateRscInd (Rsc1->RscCod, (int) Rsc2->RscInd);
 
       /* Step 3: Change second index */
-      Prg_DB_UpdateRscInd (Rsc2->Cod, (int) Rsc1->Ind);
+      Prg_DB_UpdateRscInd (Rsc2->RscCod, (int) Rsc1->RscInd);
 
       /***** Unlock table *****/
       DB_UnlockTables ();
@@ -877,26 +858,110 @@ static bool PrgRsc_ExchangeResources (const struct PrgRsc_Rsc *Rsc1,
 
 void PrgRsc_ShowClipboardToChgLink (void)
   {
-   struct PrgRsc_Resource Resource;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Resource.Rsc.Cod = PrgRsc_GetParamRscCod ();
-   if (Resource.Rsc.Cod > 0)	// Resource selected ==> get item code from database using resource code
-      PrgRsc_GetDataOfResourceByCod (&Resource);
-   else				// No resource selected ==> get item code directly from parameter
-     {
-      PrgRsc_ResetResource (&Resource);
-      Resource.ItmCod = Prg_GetParamItmCod ();
-     }
-   if (Resource.ItmCod <= 0)
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_SHOW_CLIPBOARD,Resource.ItmCod,Resource.Rsc.Cod);
+   Prg_ShowAllItems (Prg_SHOW_CLIPBOARD,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
+  }
+
+static void PrgRsc_ShowClipboard (void)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   struct PrgRsc_Link Link;
+
+   /***** Get list of item resources from database *****/
+   NumLinks = Prg_DB_GetClipboard (&mysql_res);
+   if (NumLinks)
+     {
+      /***** Table *****/
+      HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TBODY_Begin (NULL);
+
+	    /***** Write all item resources *****/
+	    for (NumLink = 0, The_ResetRowColor1 (2);
+		 NumLink < NumLinks;
+		 NumLink++, The_ChangeRowColor1 (2))
+	      {
+	       /* Get data of this link */
+	       PrgRsc_GetDataOfLinkFromClipboard (&Link,&mysql_res);
+
+	       /* Show link */
+	       PrgRsc_WriteRowViewLink (NumLink,&Link);
+	      }
+
+	 /***** End table *****/
+	 HTM_TBODY_End ();
+      HTM_TABLE_End ();
+     }
+   else
+      Ale_ShowAlert (Ale_INFO,"Empty clipboard.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************** Convert from string to type **************************/
+/*****************************************************************************/
+
+PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str)
+  {
+   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+   PrgRsc_Type_t Type;
+
+   /***** Compare string with all string types *****/
+   for (Type  = (PrgRsc_Type_t) 0;
+	Type <= (PrgRsc_Type_t) (PrgRsc_NUM_TYPES - 1);
+	Type++)
+      if (!strcmp (Prg_ResourceTypesDB[Type],Str))
+	 return Type;
+
+   return PrgRsc_NONE;
+  }
+
+/*****************************************************************************/
+/************************ Show one link from clipboard ***********************/
+/*****************************************************************************/
+
+static void PrgRsc_WriteRowViewLink (unsigned NumLink,
+                                     const struct PrgRsc_Link *Link)
+  {
+   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Link number *****/
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+                    The_GetSuffix (),The_GetColorRows1 (2));
+	 HTM_Unsigned (NumLink + 1);
+      HTM_TD_End ();
+
+      /***** Type *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows1 (2));
+	 HTM_Txt (Prg_ResourceTypesDB[Link->Type]);
+      HTM_TD_End ();
+
+      /***** Code *****/
+      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows1 (2));
+	 HTM_Long (Link->Cod);
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }

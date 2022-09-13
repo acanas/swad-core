@@ -31,23 +31,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
-#define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-struct PrgRsc_Rsc
-  {
-   long Cod;
-   unsigned Ind;	// 1, 2, 3...
-  };
-
-struct PrgRsc_Resource
-  {
-   long ItmCod;
-   struct PrgRsc_Rsc Rsc;
-   bool Hidden;
-   char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
-  };
-
 #define PrgRsc_NUM_TYPES 10
 typedef enum
   {
@@ -71,6 +54,12 @@ typedef enum
   PrgRsc_FORUM_THREAD,
   } PrgRsc_Type_t;
 
+struct PrgRsc_Link
+  {
+   PrgRsc_Type_t Type;
+   long Cod;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -79,9 +68,12 @@ void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_ItmRsc *SelectedItmRsc);
+                               struct Prg_ItmRscCodes *SelectedItmRscCodes);
+
+void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item);
 
 void PrgRsc_PutParamRscCod (long RscCod);
+long PrgRsc_GetParamRscCod (void);
 
 void PrgRsc_CreateResource (void);
 
@@ -97,5 +89,7 @@ void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ShowClipboardToChgLink (void);
+
+PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str);
 
 #endif

@@ -206,10 +206,11 @@ const char *The_GetSuffix (void)
 /******** Get background colors for rows depending on selected theme *********/
 /*****************************************************************************/
 
-static unsigned The_RowEvenOdd[2] =	// To alternate row colors in listings
+static unsigned The_RowEvenOdd[3] =	// To alternate row colors in listings
   {
    0,
-   0
+   0,
+   0,
   };
 
 static const char *The_ClassColorRows[2][The_NUM_THEMES] =
@@ -236,9 +237,9 @@ const char *The_GetColorRows (void)
    return The_ClassColorRows[The_RowEvenOdd[0]][Gbl.Prefs.Theme];
   }
 
-const char *The_GetColorRows1 (void)
+const char *The_GetColorRows1 (unsigned Level)
   {
-   return The_ClassColorRows[The_RowEvenOdd[1]][Gbl.Prefs.Theme];
+   return The_ClassColorRows[The_RowEvenOdd[Level]][Gbl.Prefs.Theme];
   }
 
 void The_ResetRowColor (void)
@@ -246,9 +247,9 @@ void The_ResetRowColor (void)
    The_RowEvenOdd[0] = 0;
   }
 
-void The_ResetRowColor1 (void)
+void The_ResetRowColor1 (unsigned Level)
   {
-   The_RowEvenOdd[1] = 0;
+   The_RowEvenOdd[Level] = 0;
   }
 
 void The_ChangeRowColor (void)
@@ -256,9 +257,9 @@ void The_ChangeRowColor (void)
    The_RowEvenOdd[0] = 1 - The_RowEvenOdd[0];
   }
 
-void The_ChangeRowColor1 (void)
+void The_ChangeRowColor1 (unsigned Level)
   {
-   The_RowEvenOdd[1] = 1 - The_RowEvenOdd[1];
+   The_RowEvenOdd[Level] = 1 - The_RowEvenOdd[Level];
   }
 
 /*****************************************************************************/

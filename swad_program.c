@@ -148,7 +148,6 @@ static void Prg_GetDataOfItemByCod (struct Prg_Item *Item);
 static void Prg_GetDataOfItem (struct Prg_Item *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned NumRows);
-static void Prg_ResetItem (struct Prg_Item *Item);
 
 static void Prg_HideOrUnhideItem (bool Hide);
 
@@ -290,7 +289,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	    Prg_GetDataOfItemByCod (&Item);
 
 	    /* Begin range to highlight? */
-	    if (Item.Hierarchy.Index == ToHighlight.Begin)	// Begin of the highlighted range
+	    if (Item.Hierarchy.ItmInd == ToHighlight.Begin)	// Begin of the highlighted range
 	      {
 	       if (FirstTBodyOpen)
 		 {
@@ -326,7 +325,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	      }
 
 	    /* End range to highlight? */
-	    if (Item.Hierarchy.Index == ToHighlight.End)	// End of the highlighted range
+	    if (Item.Hierarchy.ItmInd == ToHighlight.End)	// End of the highlighted range
 	      {
 	       HTM_TBODY_End ();				// Highlighted tbody end
 	       if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
@@ -420,12 +419,12 @@ static void Prg_PutIconToViewProgram (void)
 
 static void Prg_PutIconToCreateNewItem (void)
   {
-   struct Prg_ItmRsc SelectedItmRsc;
+   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
-   SelectedItmRsc.ItmCod = -1L;
-   SelectedItmRsc.RscCod = -1L;
+   SelectedItmRscCodes.ItmCod = -1L;
+   SelectedItmRscCodes.RscCod = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-                               Prg_PutParams,&SelectedItmRsc);
+                               Prg_PutParams,&SelectedItmRscCodes);
   }
 
 /*****************************************************************************/
@@ -435,12 +434,12 @@ static void Prg_PutIconToCreateNewItem (void)
 static void Prg_PutButtonToCreateNewItem (void)
   {
    extern const char *Txt_New_item;
-   struct Prg_ItmRsc SelectedItmRsc;
+   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
-   SelectedItmRsc.ItmCod = -1L;
-   SelectedItmRsc.RscCod = -1L;
+   SelectedItmRscCodes.ItmCod = -1L;
+   SelectedItmRscCodes.RscCod = -1L;
    Frm_BeginFormAnchor (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID);
-      Prg_PutParams (&SelectedItmRsc);
+      Prg_PutParams (&SelectedItmRscCodes);
       Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
   }
@@ -475,7 +474,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    unsigned NumCol;
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
-   struct Prg_ItmRsc SelectedItmRsc;
+   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Check if this item should be shown as hidden *****/
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.Hidden);
@@ -612,9 +611,9 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	}
 
       /* List of resources */
-      SelectedItmRsc.ItmCod = Item->Hierarchy.ItmCod;
-      SelectedItmRsc.RscCod = SelectedRscCod;
-      PrgRsc_ListItemResources (ListingType,&SelectedItmRsc);
+      SelectedItmRscCodes.ItmCod = Item->Hierarchy.ItmCod;
+      SelectedItmRscCodes.RscCod = SelectedRscCod;
+      PrgRsc_ListItemResources (ListingType,&SelectedItmRscCodes);
 
       /* End text and resources */
       HTM_TD_End ();
@@ -886,24 +885,24 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
       [true ] = ActUnhPrgItm,	// Hidden ==> action to unhide
      };
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   struct Prg_ItmRsc SelectedItmRsc;
+   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Initialize item index string *****/
-   snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.Index);
+   snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.ItmInd);
 
-   SelectedItmRsc.ItmCod = Item->Hierarchy.ItmCod;
-   SelectedItmRsc.RscCod = -1L;
+   SelectedItmRscCodes.ItmCod = Item->Hierarchy.ItmCod;
+   SelectedItmRscCodes.RscCod = -1L;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Icon to remove program item *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,NULL,
-	                                Prg_PutParams,&SelectedItmRsc);
+	                                Prg_PutParams,&SelectedItmRscCodes);
 
 	 /***** Icon to hide/unhide program item *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,"prg_highlighted",
-					    Prg_PutParams,&SelectedItmRsc,
+					    Prg_PutParams,&SelectedItmRscCodes,
 					    Item->Hierarchy.Hidden);
 
 	 /***** Icon to edit program item *****/
@@ -911,24 +910,24 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	   {
 	    case Prg_FORM_EDIT_ITEM:
 	       Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParams,&SelectedItmRsc);
+					    Prg_PutParams,&SelectedItmRscCodes);
 	       break;
 	    default:
 	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParams,&SelectedItmRsc);
+					    Prg_PutParams,&SelectedItmRscCodes);
 	       break;
 	   }
 
 	 /***** Icon to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-	                             Prg_PutParams,&SelectedItmRsc);
+	                             Prg_PutParams,&SelectedItmRscCodes);
 
 	 HTM_BR ();
 
 	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRsc,
+	                                   Prg_PutParams,&SelectedItmRscCodes,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -936,7 +935,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRsc,
+	                                   Prg_PutParams,&SelectedItmRscCodes,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -944,7 +943,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRsc,
+	                                   Prg_PutParams,&SelectedItmRscCodes,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -952,7 +951,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRsc,
+	                                   Prg_PutParams,&SelectedItmRscCodes,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1039,16 +1038,33 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
-void Prg_PutParams (void *SelectedItmRsc)
+void Prg_PutParams (void *ItmRscCodes)
   {
-   if (SelectedItmRsc)
-      if (((struct Prg_ItmRsc *) SelectedItmRsc)->ItmCod > 0)
-	{
-	 Prg_PutParamItmCod (((struct Prg_ItmRsc *) SelectedItmRsc)->ItmCod);
+   if (ItmRscCodes)
+     {
+      /* If a resource is present, put resource code.
+         If no resource present, but item is, put item code. */
+      if (((struct Prg_ItmRscCodes *) ItmRscCodes)->RscCod > 0)
+	 PrgRsc_PutParamRscCod (((struct Prg_ItmRscCodes *) ItmRscCodes)->RscCod);
+      else if (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod > 0)
+	 Prg_PutParamItmCod (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod);
+     }
+  }
 
-	 if (((struct Prg_ItmRsc *) SelectedItmRsc)->RscCod > 0)
-	    PrgRsc_PutParamRscCod (((struct Prg_ItmRsc *) SelectedItmRsc)->RscCod);
-	}
+void Prg_GetParams (struct Prg_Item *Item)
+  {
+   /***** Try to get item resource *****/
+   Item->Resource.Hierarchy.RscCod = PrgRsc_GetParamRscCod ();
+
+   /***** Get data of the program item from database *****/
+   PrgRsc_GetDataOfResourceByCod (Item);
+
+   if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
+      /***** Try to get data of the program item from database *****/
+      Item->Hierarchy.ItmCod = Prg_GetParamItmCod ();
+
+   /***** Get data of the program item from database *****/
+   Prg_GetDataOfItemByCod (Item);
   }
 
 /*****************************************************************************/
@@ -1086,7 +1102,7 @@ void Prg_GetListItems (void)
 
          /* Get index of the program item (row[1])
             and level of the program item (row[2]) */
-         Prg_Gbl.List.Items[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
+         Prg_Gbl.List.Items[NumItem].ItmInd = Str_ConvertStrToUnsigned (row[1]);
          Prg_Gbl.List.Items[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
@@ -1132,9 +1148,6 @@ static void Prg_GetDataOfItem (struct Prg_Item *Item,
   {
    MYSQL_ROW row;
 
-   /***** Clear all program item data *****/
-   Prg_ResetItem (Item);
-
    /***** Get data of program item from database *****/
    if (NumRows) // Item found...
      {
@@ -1157,7 +1170,7 @@ static void Prg_GetDataOfItem (struct Prg_Item *Item,
 
       /* Get index of the program item (row[1])
          and level of the program item (row[2]) */
-      Item->Hierarchy.Index = Str_ConvertStrToUnsigned (row[1]);
+      Item->Hierarchy.ItmInd = Str_ConvertStrToUnsigned (row[1]);
       Item->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the program item is hidden or not (row[3]) */
@@ -1177,26 +1190,12 @@ static void Prg_GetDataOfItem (struct Prg_Item *Item,
       /* Get the title of the program item (row[8]) */
       Str_Copy (Item->Title,row[8],sizeof (Item->Title) - 1);
      }
+   else
+      /***** Clear all program item data *****/
+      Prg_ResetItem (Item);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
-  }
-
-/*****************************************************************************/
-/************************ Clear all program item data ************************/
-/*****************************************************************************/
-
-static void Prg_ResetItem (struct Prg_Item *Item)
-  {
-   Item->Hierarchy.ItmCod = -1L;
-   Item->Hierarchy.Index  = 0;
-   Item->Hierarchy.Level  = 0;
-   Item->Hierarchy.Hidden = false;
-   Item->UsrCod = -1L;
-   Item->TimeUTC[Dat_STR_TIME] =
-   Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Item->Open = false;
-   Item->Title[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -1213,6 +1212,27 @@ void Prg_FreeListItems (void)
       Prg_Gbl.List.NumItems = 0;
       Prg_Gbl.List.IsRead = false;
      }
+  }
+
+/*****************************************************************************/
+/************************ Clear all program item data ************************/
+/*****************************************************************************/
+
+void Prg_ResetItem (struct Prg_Item *Item)
+  {
+   Item->Hierarchy.ItmCod = -1L;
+   Item->Hierarchy.ItmInd = 0;
+   Item->Hierarchy.Level  = 0;
+   Item->Hierarchy.Hidden = false;
+   Item->UsrCod = -1L;
+   Item->TimeUTC[Dat_STR_TIME] =
+   Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
+   Item->Open = false;
+   Item->Title[0] = '\0';
+   Item->Resource.Hierarchy.RscCod = -1L;
+   Item->Resource.Hierarchy.RscInd = 0;
+   Item->Resource.Hierarchy.Hidden = false;
+   Item->Resource.Title[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -1275,22 +1295,21 @@ void Prg_ReqRemItem (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    extern const char *Txt_Remove_item;
    struct Prg_Item Item;
-   struct Prg_ItmRsc SelectedItmRsc;
+   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the program item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
    /***** Show question and button to remove the program item *****/
-   SelectedItmRsc.ItmCod = Item.Hierarchy.ItmCod;
-   SelectedItmRsc.RscCod = -1L;
+   SelectedItmRscCodes.ItmCod = Item.Hierarchy.ItmCod;
+   SelectedItmRscCodes.RscCod = -1L;
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
-                           Prg_PutParams,&SelectedItmRsc,
+                           Prg_PutParams,&SelectedItmRscCodes,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
@@ -1316,8 +1335,7 @@ void Prg_RemoveItem (void)
    Prg_GetListItems ();
 
    /***** Get data of the program item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1364,8 +1382,7 @@ static void Prg_HideOrUnhideItem (bool Hide)
    Prg_GetListItems ();
 
    /***** Get data of the item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1409,8 +1426,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
    Prg_GetListItems ();
 
    /***** Get data of the item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1611,8 +1627,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
    Prg_GetListItems ();
 
    /***** Get data of the item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1660,7 +1675,7 @@ static void Prg_SetItemRangeOnlyItem (unsigned NumItem,struct Prg_ItemRange *Ite
 
    /***** Range includes only this item *****/
    ItemRange->Begin =
-   ItemRange->End   = Prg_Gbl.List.Items[NumItem].Index;
+   ItemRange->End   = Prg_Gbl.List.Items[NumItem].ItmInd;
   }
 
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange)
@@ -1674,8 +1689,8 @@ static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRan
       Err_WrongItemExit ();
 
    /***** Range includes this item and all its children *****/
-   ItemRange->Begin = Prg_Gbl.List.Items[NumItem                   ].Index;
-   ItemRange->End   = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].Index;
+   ItemRange->Begin = Prg_Gbl.List.Items[NumItem                   ].ItmInd;
+   ItemRange->End   = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmInd;
   }
 
 /*****************************************************************************/
@@ -1711,16 +1726,16 @@ static unsigned Prg_GetLastChild (int NumItem)
 
 void Prg_ViewItemAfterEdit (void)
   {
-   long ItmCod;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   ItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_END_EDIT_ITEM,ItmCod,-1L);
+   Prg_ShowAllItems (Prg_END_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1732,16 +1747,16 @@ void Prg_ViewItemAfterEdit (void)
 
 void Prg_RequestChangeItem (void)
   {
-   long ItmCod;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the program item *****/
-   ItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_FORM_EDIT_ITEM,ItmCod,-1L);
+   Prg_ShowAllItems (Prg_FORM_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1753,18 +1768,18 @@ void Prg_RequestChangeItem (void)
 
 void Prg_RequestCreateItem (void)
   {
-   long ParentItmCod;
+   struct Prg_Item Item;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get the code of the parent program item *****/
-   ParentItmCod = Prg_GetParamItmCod ();
+   Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (ParentItmCod > 0 ? Prg_FORM_NEW_CHILD_ITEM :
-	                                Prg_FORM_NEW_END_ITEM,
-	             ParentItmCod,-1L);
+   Prg_ShowAllItems (Item.Hierarchy.ItmCod > 0 ? Prg_FORM_NEW_CHILD_ITEM :
+	                                         Prg_FORM_NEW_END_ITEM,
+	             Item.Hierarchy.ItmCod,-1L);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -1925,15 +1940,14 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 
 void Prg_ReceiveFormChgItem (void)
   {
-   struct Prg_Item Item;	// Item data received from form
+   struct Prg_Item Item;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
    /***** Get data of the item from database *****/
-   Item.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1969,7 +1983,7 @@ void Prg_ReceiveFormChgItem (void)
 
 void Prg_ReceiveFormNewItem (void)
   {
-   struct Prg_Item ParentItem;	// Parent item
+   struct Prg_Item Item;		// Parent item
    struct Prg_Item NewItem;		// Item data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1977,13 +1991,12 @@ void Prg_ReceiveFormNewItem (void)
    Prg_GetListItems ();
 
    /***** Get data of the program item from database *****/
-   ParentItem.Hierarchy.ItmCod = Prg_GetParamItmCod ();
-   Prg_GetDataOfItemByCod (&ParentItem);
+   Prg_GetParams (&Item);
    // If item code <= 0 ==> this is the first item in the program
 
    /***** Set new item code *****/
    NewItem.Hierarchy.ItmCod = -1L;
-   NewItem.Hierarchy.Level = ParentItem.Hierarchy.Level + 1;	// Create as child
+   NewItem.Hierarchy.Level = Item.Hierarchy.Level + 1;	// Create as child
 
    /***** Get start/end date-times *****/
    NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
@@ -2002,7 +2015,7 @@ void Prg_ReceiveFormNewItem (void)
       NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Create a new program item *****/
-   Prg_InsertItem (&ParentItem,&NewItem,Description);
+   Prg_InsertItem (&Item,&NewItem,Description);
 
    /* Update list of program items */
    Prg_FreeListItems ();
@@ -2038,14 +2051,14 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 	 if (NumItemLastChild < Prg_Gbl.List.NumItems - 1)
 	   {
 	    /***** New program item will be inserted after last child of parent *****/
-	    Item->Hierarchy.Index = Prg_Gbl.List.Items[NumItemLastChild + 1].Index;
+	    Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[NumItemLastChild + 1].ItmInd;
 
 	    /***** Move down all indexes of after last child of parent *****/
-	    Prg_DB_MoveDownItems (Item->Hierarchy.Index);
+	    Prg_DB_MoveDownItems (Item->Hierarchy.ItmInd);
 	   }
 	 else
 	    /***** New program item will be inserted at the end *****/
-	    Item->Hierarchy.Index = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
+	    Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmInd + 1;
 
 	 /***** Child ==> parent level + 1 *****/
          Item->Hierarchy.Level = ParentItem->Hierarchy.Level + 1;
@@ -2053,7 +2066,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
       else	// No parent specified
 	{
 	 /***** New program item will be inserted at the end *****/
-	 Item->Hierarchy.Index = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].Index + 1;
+	 Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmInd + 1;
 
 	 /***** First level *****/
          Item->Hierarchy.Level = 1;
@@ -2062,7 +2075,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
    else		// There are no items
      {
       /***** New program item will be inserted as the first one *****/
-      Item->Hierarchy.Index = 1;
+      Item->Hierarchy.ItmInd = 1;
 
       /***** First level *****/
       Item->Hierarchy.Level = 1;

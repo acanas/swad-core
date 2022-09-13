@@ -56,9 +56,9 @@ void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove);
 void Prg_DB_RemoveCrsItems (long CrsCod);
 
 //------------------------------ Resources ------------------------------------
-long Prg_DB_CreateResource (const struct PrgRsc_Resource *Resource);
+long Prg_DB_CreateResource (const struct Prg_Item *Item);
 
-void Prg_DB_UpdateResourceTitle (long RscCod,long ItmCod,
+void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
                                  const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1]);
 
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
@@ -70,7 +70,7 @@ unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd);
 unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd);
 long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);
 
-void Prg_DB_RemoveResource (const struct PrgRsc_Resource *Resource);
+void Prg_DB_RemoveResource (const struct Prg_Item *Item);
 
 void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
 
@@ -78,5 +78,9 @@ void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 
 void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
+
+unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
+void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
+                                        MYSQL_RES **mysql_res);
 
 #endif

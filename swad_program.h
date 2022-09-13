@@ -37,13 +37,29 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+#define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
+#define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+struct Prg_ResourceHierarchy
+  {
+   long RscCod;
+   unsigned RscInd;	// 1, 2, 3...
+   bool Hidden;
+  };
+
+struct Prg_Resource
+  {
+   struct Prg_ResourceHierarchy Hierarchy;
+   char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
+  };
+
 #define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
 #define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Prg_ItemHierarchy
   {
    long ItmCod;
-   unsigned Index;
+   unsigned ItmInd;	// 1, 2, 3...
    unsigned Level;
    bool Hidden;
   };
@@ -56,6 +72,7 @@ struct Prg_Item
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
+   struct Prg_Resource Resource;
   };
 
 struct Prg_ItemRange
@@ -90,7 +107,7 @@ typedef enum
    Prg_END_EDIT_RES,		// List resources of a selected item after edition
   } Prg_ListingType_t;
 
-struct Prg_ItmRsc	// Used in forms to pass an item and a resource as parameters
+struct Prg_ItmRscCodes	// Used in forms to pass an item and a resource as parameters
   {
    long ItmCod;
    long RscCod;
@@ -107,10 +124,15 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod);
 
 bool Prg_CheckIfICanEditProgram (void);
-void Prg_PutParams (void *SelectedItmRsc);
+
+void Prg_PutParams (void *ItmRsc);
+void Prg_GetParams (struct Prg_Item *Item);
 
 void Prg_GetListItems (void);
 void Prg_FreeListItems (void);
+
+void Prg_ResetItem (struct Prg_Item *Item);
+
 void Prg_PutParamItmCod (long ItmCod);
 long Prg_GetParamItmCod (void);
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);

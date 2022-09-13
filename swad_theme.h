@@ -57,13 +57,13 @@ The_Theme_t The_GetThemeFromStr (const char *Str);
 const char *The_GetSuffix (void);
 
 const char *The_GetColorRows (void);
-const char *The_GetColorRows1 (void);
+const char *The_GetColorRows1 (unsigned Level);
 
 void The_ResetRowColor (void);
-void The_ResetRowColor1 (void);
+void The_ResetRowColor1 (unsigned Level);
 
 void The_ChangeRowColor (void);
-void The_ChangeRowColor1 (void);
+void The_ChangeRowColor1 (unsigned Level);
 
 //-------------------------------- Figures ------------------------------------
 void The_GetAndShowNumUsrsPerTheme (void);
