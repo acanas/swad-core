@@ -31,29 +31,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define PrgRsc_NUM_TYPES 10
-typedef enum
-  {
-  PrgRsc_NONE,
-  // gui TEACHING_GUIDE	// Link to teaching guide
-  // bib BIBLIOGRAPHY	// Link to bibliography
-  // faq FAQ		// Link to FAQ
-  // lnk LINKS		// Link to links
-  // tmt TIMETABLE	// Link to timetable
-  PrgRsc_ASSIGNMENT,
-  // prj PROJECT	// A project is only for some students
-  PrgRsc_CALL_FOR_EXAM,
-  // tst TEST		// User selects tags, teacher should select
-  PrgRsc_EXAM,
-  PrgRsc_GAME,
-  PrgRsc_SURVEY,
-  PrgRsc_DOCUMENT,
-  PrgRsc_MARKS,
-  // grp GROUPS		// ??? User select groups
-  PrgRsc_ATTENDANCE_EVENT,
-  PrgRsc_FORUM_THREAD,
-  } PrgRsc_Type_t;
-
 struct PrgRsc_Link
   {
    PrgRsc_Type_t Type;
@@ -89,6 +66,7 @@ void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ShowClipboardToChgLink (void);
+void PrgRsc_ChangeLink (void);
 
 PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str);
 

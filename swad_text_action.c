@@ -6272,6 +6272,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down resource"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeCliPrgRsc] =
+#if   L==1	// ca
+	"Edit resource link"		// Necessita traducció
+#elif L==2	// de
+	"Edit resource link"		// Need Übersetzung
+#elif L==3	// en
+	"Edit resource link"
+#elif L==4	// es
+	"Editar enlace de recurso"
+#elif L==5	// fr
+	"Edit resource link"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar enlace de recurso"	// Okoteve traducción
+#elif L==7	// it
+	"Edit resource link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit resource link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit resource link"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit resource link"		// Çeviri lazim!
+#endif
+	,
 	[ActChgLnkPrgRsc] =
 #if   L==1	// ca
 	"Change resource link"		// Necessita traducció

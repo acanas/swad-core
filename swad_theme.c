@@ -234,7 +234,7 @@ static const char *The_ClassColorRows[2][The_NUM_THEMES] =
 
 const char *The_GetColorRows (void)
   {
-   return The_ClassColorRows[The_RowEvenOdd[0]][Gbl.Prefs.Theme];
+   return The_GetColorRows1 (0);
   }
 
 const char *The_GetColorRows1 (unsigned Level)
@@ -244,7 +244,7 @@ const char *The_GetColorRows1 (unsigned Level)
 
 void The_ResetRowColor (void)
   {
-   The_RowEvenOdd[0] = 0;
+   The_ResetRowColor1 (0);
   }
 
 void The_ResetRowColor1 (unsigned Level)
@@ -254,7 +254,7 @@ void The_ResetRowColor1 (unsigned Level)
 
 void The_ChangeRowColor (void)
   {
-   The_RowEvenOdd[0] = 1 - The_RowEvenOdd[0];
+   The_ChangeRowColor1 (0);
   }
 
 void The_ChangeRowColor1 (unsigned Level)

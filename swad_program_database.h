@@ -64,8 +64,7 @@ void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
                                   bool ShowHiddenResources);
 unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod);
-unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
-                                        long ItmCod,unsigned RscInd);
+
 unsigned Prg_DB_GetRscIndBefore (long ItmCod,unsigned RscInd);
 unsigned Prg_DB_GetRscIndAfter (long ItmCod,unsigned RscInd);
 long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);
@@ -76,11 +75,10 @@ void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
 
 void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
+void Prg_DB_UpdateRscLink (long RscCod,PrgRsc_Type_t Type,long Cod);
 
 void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
-
 unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
-void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
-                                        MYSQL_RES **mysql_res);
+void Prg_DB_RemoveLinkFromClipboard (PrgRsc_Type_t Type,long Cod);
 
 #endif

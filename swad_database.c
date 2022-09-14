@@ -2453,22 +2453,22 @@ mysql> DESCRIBE plg_plugins;
    /***** Table prg_clipboards *****/
 /*
 mysql> DESCRIBE prg_clipboards;
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                               | Null | Key | Default | Extra |
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                | NO   | PRI | NULL    |       |
-| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   | PRI | none    |       |
-| Cod      | int                                                                | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                          | YES  | MUL | NULL    |       |
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
++----------+-------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                              | Null | Key | Default | Extra |
++----------+-------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                               | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                               | NO   | PRI | NULL    |       |
+| Type     | enum('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   | PRI | non     |       |
+| Cod      | int                                                               | NO   | PRI | -1      |       |
+| CopyTime | timestamp                                                         | YES  | MUL | NULL    |       |
++----------+-------------------------------------------------------------------+------+-----+---------+-------+
 5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_clipboards ("
 			"UsrCod INT NOT NULL,"
 			"CrsCod INT NOT NULL,"
 			"Type ENUM("
-			"'none',"
+			"'non',"
 			"'asg',"
 			"'cfe',"
 			"'exa',"
@@ -2477,7 +2477,7 @@ mysql> DESCRIBE prg_clipboards;
 			"'doc',"
 			"'mrk',"
 			"'att',"
-			"'for') NOT NULL DEFAULT 'none',"
+			"'for') NOT NULL DEFAULT 'non',"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
@@ -2520,17 +2520,18 @@ mysql> DESCRIBE prg_items;
    /***** Table prg_resources *****/
 /*
 mysql> DESCRIBE prg_resources;
-+--------+--------------------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                               | Null | Key | Default | Extra          |
-+--------+--------------------------------------------------------------------+------+-----+---------+----------------+
-| RscCod | int                                                                | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int                                                                | NO   | MUL | -1      |                |
-| RscInd | int                                                                | NO   |     | 0       |                |
-| Hidden | enum('N','Y')                                                      | NO   |     | N       |                |
-| Type   | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   |     | none    |                |
-| Title  | varchar(2047)                                                      | NO   |     | NULL    |                |
-+--------+--------------------------------------------------------------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
++--------+-------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                              | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------+------+-----+---------+----------------+
+| RscCod | int                                                               | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int                                                               | NO   | MUL | -1      |                |
+| RscInd | int                                                               | NO   |     | 0       |                |
+| Hidden | enum('N','Y')                                                     | NO   |     | N       |                |
+| Type   | enum('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   |     | non     |                |
+| Cod    | int                                                               | NO   |     | -1      |                |
+| Title  | varchar(2047)                                                     | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
 			"RscCod INT NOT NULL AUTO_INCREMENT,"
@@ -2538,7 +2539,7 @@ mysql> DESCRIBE prg_resources;
 			"RscInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Type ENUM("
-			"'none',"
+			"'non',"
 			"'asg',"
 			"'cfe',"
 			"'exa',"
@@ -2547,7 +2548,7 @@ mysql> DESCRIBE prg_resources;
 			"'doc',"
 			"'mrk',"
 			"'att',"
-			"'for') NOT NULL DEFAULT 'none',"
+			"'for') NOT NULL DEFAULT 'non',"
 			"Title VARCHAR(2047) NOT NULL,"		// PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE
 		   "UNIQUE INDEX(RscCod),"
 		   "UNIQUE INDEX(ItmCod,RscInd))");

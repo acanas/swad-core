@@ -1232,6 +1232,9 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->Resource.Hierarchy.RscCod = -1L;
    Item->Resource.Hierarchy.RscInd = 0;
    Item->Resource.Hierarchy.Hidden = false;
+   Item->Resource.Type = PrgRsc_NONE;
+   Item->Resource.Cod  = -1L;
+   Item->Resource.Title[0] = '\0';
    Item->Resource.Title[0] = '\0';
   }
 
@@ -1300,7 +1303,7 @@ void Prg_ReqRemItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the program item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1334,7 +1337,7 @@ void Prg_RemoveItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the program item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1381,7 +1384,7 @@ static void Prg_HideOrUnhideItem (bool Hide)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1425,7 +1428,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1626,7 +1629,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1731,7 +1734,7 @@ void Prg_ViewItemAfterEdit (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get the code of the program item *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
@@ -1752,7 +1755,7 @@ void Prg_RequestChangeItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get the code of the program item *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
@@ -1773,7 +1776,7 @@ void Prg_RequestCreateItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get the code of the parent program item *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
 
    /***** Show current program items, if any *****/
@@ -1946,7 +1949,7 @@ void Prg_ReceiveFormChgItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
@@ -1990,7 +1993,7 @@ void Prg_ReceiveFormNewItem (void)
    /***** Get list of program items *****/
    Prg_GetListItems ();
 
-   /***** Get data of the program item from database *****/
+   /***** Get program item *****/
    Prg_GetParams (&Item);
    // If item code <= 0 ==> this is the first item in the program
 

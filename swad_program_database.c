@@ -509,7 +509,9 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
 			  "prg_resources.RscCod,"	// row[1]
                           "prg_resources.RscInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
-			  "prg_resources.Title"		// row[4]
+			  "prg_resources.Type,"		// row[4]
+			  "prg_resources.Cod,"		// row[5]
+			  "prg_resources.Title"		// row[6]
 		    " FROM prg_resources,"
 		          "prg_items"
 		   " WHERE prg_resources.ItmCod=%ld"
@@ -534,37 +536,15 @@ unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
 			  "prg_resources.RscCod,"	// row[1]
                           "prg_resources.RscInd,"	// row[2]
 			  "prg_resources.Hidden,"	// row[3]
-			  "prg_resources.Title"		// row[4]
+			  "prg_resources.Type,"		// row[4]
+			  "prg_resources.Cod,"		// row[5]
+			  "prg_resources.Title"		// row[6]
 		    " FROM prg_resources,"
 		          "prg_items"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.ItmCod=prg_items.ItmCod"
 		     " AND prg_items.CrsCod=%ld",	// Extra check
 		   RscCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/****************** Get item resource data using its code ********************/
-/*****************************************************************************/
-
-unsigned Prg_DB_GetDataOfResourceByInd (MYSQL_RES **mysql_res,
-                                        long ItmCod,unsigned RscInd)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get item resource data",
-		   "SELECT prg_resources.ItmCod,"	// row[0]
-			  "prg_resources.RscCod,"	// row[1]
-                          "prg_resources.RscInd,"	// row[2]
-			  "prg_resources.Hidden,"	// row[3]
-			  "prg_resources.Title"		// row[4]
-		    " FROM prg_resources,"
-		          "prg_items"
-		   " WHERE prg_resources.ItmCod=%ld"
-		     " AND prg_resources.RscInd=%u"
-		     " AND prg_resources.ItmCod=prg_items.ItmCod"
-		     " AND prg_items.CrsCod=%ld",	// Extra check
-		   ItmCod,RscInd,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -673,21 +653,25 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
   }
 
 /*****************************************************************************/
+/************* Update the link of a resource given its code *****************/
+/*****************************************************************************/
+
+void Prg_DB_UpdateRscLink (long RscCod,PrgRsc_Type_t Type,long Cod)
+  {
+   DB_QueryUPDATE ("can not update link of resource",
+		   "UPDATE prg_resources"
+		     " SET Type='%s',"
+		          "Cod=%ld"
+		   " WHERE RscCod=%ld",
+		   Prg_ResourceTypesDB[Type],
+		   Cod,
+		   RscCod);
+  }
+
+/*****************************************************************************/
 /********************** Copy link to resource into clipboard *****************/
 /*****************************************************************************/
-/*
-mysql> DESCRIBE prg_clipboards;
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                               | Null | Key | Default | Extra |
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                | NO   | PRI | NULL    |       |
-| Type     | enum('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') | NO   | PRI | none    |       |
-| Cod      | int                                                                | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                          | YES  | MUL | NULL    |       |
-+----------+--------------------------------------------------------------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
-*/
+
 void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
   {
    DB_QueryREPLACE ("can not copy link to resource clipboard",
@@ -704,16 +688,6 @@ void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
 /*****************************************************************************/
 /**************** Get resources in the current course clipboard **************/
 /*****************************************************************************/
-/*
-mysql> SELECT * FROM prg_clipboards;
-+--------+--------+------+-----+---------------------+
-| UsrCod | CrsCod | Type | Cod | CopyTime            |
-+--------+--------+------+-----+---------------------+
-|      1 |      1 | doc  |  33 | 2022-09-12 12:08:25 |
-|      1 |      1 | doc  |  28 | 2022-09-12 12:08:31 |
-+--------+--------+------+-----+---------------------+
-2 rows in set (0,00 sec)
-*/
 
 unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
   {
@@ -730,24 +704,19 @@ unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
-/********************** Get resource data from clipboard *********************/
+/*************************** Remove link from clipboard **********************/
 /*****************************************************************************/
 
-void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
-                                               MYSQL_RES **mysql_res)
+void Prg_DB_RemoveLinkFromClipboard (PrgRsc_Type_t Type,long Cod)
   {
-   MYSQL_ROW row;
-
-   /***** Get data of item resource from database *****/
-   /* Get row */
-   row = mysql_fetch_row (*mysql_res);
-   /*
-   Type	row[0]
-   Cod	row[1]
-   */
-   /* Get type (row[0]) */
-   Link->Type = PrgRsc_GetTypeFromString (row[0]);
-
-   /* Get code (row[1]) */
-   Link->Cod = Str_ConvertStrCodToLongCod (row[1]);
+   DB_QueryDELETE ("can not remove link from clipboard",
+		   "DELETE FROM prg_clipboards"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND Type='%s'"
+		     " AND Cod=%ld",
+ 		   Gbl.Usrs.Me.UsrDat.UsrCod,
+                   Gbl.Hierarchy.Crs.CrsCod,
+		   Prg_ResourceTypesDB[Type],
+		   Cod);
   }

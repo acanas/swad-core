@@ -606,17 +606,27 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.2 (2022-09-13)"
-#define CSS_FILE		"swad21.107.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 22.3 (2022-09-14)"
+#define CSS_FILE		"swad22.3.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.3:     Sep 14, 2022  Listing program resource clipboard. (? lines)
+					4 changes necessary in database:
+ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';
+ALTER TABLE prg_resources DROP COLUMN Type;
+ALTER TABLE prg_resources ADD COLUMN Type ENUM('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non' AFTER Hidden;
+ALTER TABLE prg_resources ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER Type;
+
+Copy the following icons to icon public directory:
+sudo cp icon/link-slash.svg /var/www/html/swad/icon/
+
 	Version 22.2:     Sep 13, 2022  Code refactoring in program resources. (329795 lines)
 	Version 22.1:     Sep 13, 2022  Code refactoring in program resources. (329693 lines)
 	Version 22.0:     Sep 12, 2022  New action to change resource link. Not implemented. (329606 lines)
 	Version 21.117.1: Sep 12, 2022  Copy link to file into resource clipboard. (329561 lines)
 	Version 21.117:   Sep 12, 2022  New database table with clipboards for program resources.
 					New actions to get link to file in course document area. (329514 lines)
-					1 change necessary in database:
+					2 changes necessary in database:
 ALTER TABLE prg_resources ADD COLUMN Type ENUM('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'none' AFTER Hidden;
 CREATE TABLE IF NOT EXISTS prg_clipboards (UsrCod INT NOT NULL,CrsCod INT NOT NULL,Type ENUM('none','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'none',Cod INT NOT NULL DEFAULT -1,CopyTime TIMESTAMP,UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),INDEX(CrsCod,Type,Cod),INDEX(CopyTime));
 					If you want to use MyISAM:

@@ -1781,6 +1781,27 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_RSC_PINK		{color:#202020; font-size:14pt; font-weight:bold;}
 .PRG_RSC_DARK		{color:#e0e0e0; font-size:14pt; font-weight:bold;}
 
+/************************* Program resource clipboard ************************/
+.PRG_CLIPBOARD
+	{
+	box-sizing:border-box;
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
+/*
+.PRG_CLIPBOARD li
+	{
+	text-align:left;
+	vertical-align:middle;
+	}
+.PRG_CLIPBOARD label
+	{
+	font-size:13pt;
+	}
+*/
 /********************************** Notice ***********************************/
 .NOTICE_CONT
 	{

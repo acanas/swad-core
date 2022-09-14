@@ -47,11 +47,28 @@ struct Prg_ResourceHierarchy
    bool Hidden;
   };
 
-struct Prg_Resource
+#define PrgRsc_NUM_TYPES 10
+typedef enum
   {
-   struct Prg_ResourceHierarchy Hierarchy;
-   char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
-  };
+  PrgRsc_NONE,
+  // gui TEACHING_GUIDE	// Link to teaching guide
+  // bib BIBLIOGRAPHY	// Link to bibliography
+  // faq FAQ		// Link to FAQ
+  // lnk LINKS		// Link to links
+  // tmt TIMETABLE	// Link to timetable
+  PrgRsc_ASSIGNMENT,
+  // prj PROJECT	// A project is only for some students
+  PrgRsc_CALL_FOR_EXAM,
+  // tst TEST		// User selects tags, teacher should select
+  PrgRsc_EXAM,
+  PrgRsc_GAME,
+  PrgRsc_SURVEY,
+  PrgRsc_DOCUMENT,
+  PrgRsc_MARKS,
+  // grp GROUPS		// ??? User select groups
+  PrgRsc_ATTENDANCE_EVENT,
+  PrgRsc_FORUM_THREAD,
+  } PrgRsc_Type_t;
 
 #define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
 #define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -72,7 +89,13 @@ struct Prg_Item
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
-   struct Prg_Resource Resource;
+   struct
+     {
+      struct Prg_ResourceHierarchy Hierarchy;
+      PrgRsc_Type_t Type;
+      long Cod;
+      char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
+     } Resource;
   };
 
 struct Prg_ItemRange
