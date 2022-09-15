@@ -606,10 +606,14 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.4 (2022-09-15)"
+#define Log_PLATFORM_VERSION	"SWAD 22.4.1 (2022-09-15)"
 #define CSS_FILE		"swad22.3.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.4.1:   Sep 15, 2022  Changes in edition of program items. (329955 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/link.svg /var/www/html/swad/icon/
+
 	Version 22.4:     Sep 15, 2022  Changes in edition of program items. (329940 lines)
 	Version 22.3:     Sep 14, 2022  Listing program resource clipboard. (329918 lines)
 					4 changes necessary in database:
@@ -618,7 +622,7 @@ ALTER TABLE prg_resources DROP COLUMN Type;
 ALTER TABLE prg_resources ADD COLUMN Type ENUM('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non' AFTER Hidden;
 ALTER TABLE prg_resources ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER Type;
 
-Copy the following icons to icon public directory:
+Copy the following icon to icon public directory:
 sudo cp icon/link-slash.svg /var/www/html/swad/icon/
 
 	Version 22.2:     Sep 13, 2022  Code refactoring in program resources. (329795 lines)

@@ -450,6 +450,12 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
                                          struct Prg_Item *Item,
                                          long SelectedRscCod)
   {
+   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+   struct PrgRsc_Link Link;
+
+   Link.Type = Item->Resource.Type;
+   Link.Cod  = Item->Resource.Cod;
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -477,20 +483,24 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 
       /***** Icon to edit link *****/
       HTM_TD_Begin ("class=\"PRG_MAIN RT %s\"",The_GetColorRows1 (1));
-	 Ico_PutContextualIconToGetLink (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+	 Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+				      Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
       HTM_TD_End ();
 
       /***** Link *****/
       HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 
-         /* Current link */
-	 // Ale_ShowAlert (Ale_INFO,"Current link.");
-
 	 /* Show clipboard to change resource link */
 	 if (ListingType == Prg_SHOW_CLIPBOARD &&
 	     Item->Resource.Hierarchy.RscCod == SelectedRscCod)
 	    PrgRsc_ShowClipboard (Item);
+	 else
+	   {
+	    /***** Link *****/
+	    Ico_PutIconOn (Prg_ResourceTypesLogos[Link.Type],Ico_BLACK,
+			   Prg_ResourceTypesDB[Link.Type]);
+	    PrgRsc_WriteLinkName (&Link);
+	   }
 
       HTM_TD_End ();
 
@@ -507,6 +517,8 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
                                         struct Prg_Item *Item,
                                         long SelectedRscCod)
   {
+   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -535,8 +547,8 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 
       /***** Icon to edit link *****/
       HTM_TD_Begin ("class=\"PRG_MAIN RT %s\"",The_GetColorRows1 (1));
-	 Ico_PutContextualIconToGetLink (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+	 Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+				      Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
       HTM_TD_End ();
 
       /***** Link *****/
@@ -546,6 +558,10 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 	 if (ListingType == Prg_SHOW_CLIPBOARD &&
 	     SelectedRscCod <= 0)	// No resource selected
 	    PrgRsc_ShowClipboard (Item);
+	 else
+	    /***** Link *****/
+	    Ico_PutIconOn (Prg_ResourceTypesLogos[PrgRsc_NONE],Ico_BLACK,
+			   Prg_ResourceTypesDB[PrgRsc_NONE]);
 
       HTM_TD_End ();
 
@@ -961,7 +977,8 @@ static void PrgRsc_WriteRowClipboard (unsigned NumLink,
 			     Prg_ResourceTypesDB[Link->Type],Link->Cod);
 
 	 /***** Type *****/
-         Ico_PutIconOn (Prg_ResourceTypesLogos[Link->Type],Ico_BLACK,Prg_ResourceTypesDB[Link->Type]);
+         Ico_PutIconOn (Prg_ResourceTypesLogos[Link->Type],Ico_BLACK,
+                        Prg_ResourceTypesDB[Link->Type]);
 
 	 /***** Name *****/
          PrgRsc_WriteLinkName (Link);
@@ -980,10 +997,7 @@ static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link)
 
    /***** Trivial check: code should be > 0 *****/
    if (Link->Cod <= 0)
-     {
-      HTM_Txt ("sin enlace");	// TODO: Need translation!!!!!
       return;
-     }
 
    switch (Link->Type)
      {
