@@ -7969,12 +7969,19 @@ void Brw_ShowFileMetadata (void)
 	                        FileNameToShow);
 
          /***** Begin box *****/
+	 /*
 	 PutIconToGetLink = (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||	// Only document zone
 		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS) &&
 		            (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	                     FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
 	                    (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am teacher or superuser
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 */
+	 PutIconToGetLink = (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||	// Only document zone
+		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS) &&
+		            (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
+	                     FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
+	                    (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);		// Only if I am superuser // TODO: Include teachers
 	 if (PutIconToGetLink)
 	    Box_BoxShadowBegin (NULL,NULL,
 				Brw_PutIconToGetLinkToFile,&FileMetadata,

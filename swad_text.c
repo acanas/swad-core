@@ -58403,6 +58403,29 @@ const char *Txt_View_homework =
 	"View homework";	// Çeviri lazim!
 #endif
 
+const char *Txt_Visible =
+#if   L==1	// ca
+	"Visible";
+#elif L==2	// de
+	"Sichtbare";
+#elif L==3	// en
+	"Visible";
+#elif L==4	// es
+	"Visible";
+#elif L==5	// fr
+	"Visible";
+#elif L==6	// gn
+	"Visible";	// Okoteve traducción
+#elif L==7	// it
+	"Visibile";
+#elif L==8	// pl
+	"Widoczny";
+#elif L==9	// pt
+	"Vis&iacute;vel";
+#elif L==10	// tr
+	"Visible";	// Çeviri lazim!
+#endif
+
 const char *Txt_Visible_by_BR_the_student =
 #if   L==1	// ca
 	"&iquest;Visible por<br />el estudiante?";	// Necessita traducció

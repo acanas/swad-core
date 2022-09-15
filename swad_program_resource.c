@@ -112,10 +112,9 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
                                       const struct Prg_ResourceHierarchy *Rsc2);
 
 static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
-static void PrgRsc_WriteRowClipboard (unsigned NumLink,
-                                      const struct PrgRsc_Link *Link);
-static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link);
-static void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
+static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link);
+static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
 
 /*****************************************************************************/
@@ -408,8 +407,8 @@ static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
    Item->Resource.Hierarchy.Hidden = (row[3][0] == 'Y');
 
    /* Get link type and code (row[4], row[5]) */
-   Item->Resource.Type = PrgRsc_GetTypeFromString (row[4]);
-   Item->Resource.Cod  = Str_ConvertStrCodToLongCod (row[5]);
+   Item->Resource.Link.Type = PrgRsc_GetTypeFromString (row[4]);
+   Item->Resource.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
 
    /* Get the title of the item resource (row[6]) */
    Str_Copy (Item->Resource.Title,row[6],sizeof (Item->Resource.Title) - 1);
@@ -422,6 +421,8 @@ static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item)
   {
+   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -435,6 +436,10 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
       HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
+	 HTM_BR ();
+	 Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
+			Prg_ResourceTypesDB[Item->Resource.Link.Type]);
+	 PrgRsc_WriteLinkName (&Item->Resource.Link);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -451,10 +456,6 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
                                          long SelectedRscCod)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
-   struct PrgRsc_Link Link;
-
-   Link.Type = Item->Resource.Type;
-   Link.Cod  = Item->Resource.Cod;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -470,8 +471,10 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
-      /***** Title *****/
+      /***** Title and link/clipboard *****/
       HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+
+         /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
@@ -479,27 +482,20 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\"",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
-      HTM_TD_End ();
 
-      /***** Icon to edit link *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN RT %s\"",The_GetColorRows1 (1));
-	 Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-				      Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
-      HTM_TD_End ();
+         HTM_BR ();
 
-      /***** Link *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
-
-	 /* Show clipboard to change resource link */
+	 /* Link / clipboard */
 	 if (ListingType == Prg_SHOW_CLIPBOARD &&
 	     Item->Resource.Hierarchy.RscCod == SelectedRscCod)
+	    /* Show clipboard to change resource link */
 	    PrgRsc_ShowClipboard (Item);
 	 else
 	   {
-	    /***** Link *****/
-	    Ico_PutIconOn (Prg_ResourceTypesLogos[Link.Type],Ico_BLACK,
-			   Prg_ResourceTypesDB[Link.Type]);
-	    PrgRsc_WriteLinkName (&Link);
+	    /* Link */
+	    Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
+			   Prg_ResourceTypesDB[Item->Resource.Link.Type]);
+	    PrgRsc_WriteLinkName (&Item->Resource.Link);
 	   }
 
       HTM_TD_End ();
@@ -524,6 +520,7 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 
       /***** Forms to remove/edit this item resource *****/
       HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
+	 PrgRsc_PutFormsToRemEditOneResource (Item,NumResources,NumResources);
       HTM_TD_End ();
 
       /***** Resource number *****/
@@ -532,8 +529,10 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 	 HTM_Unsigned (NumResources + 1);
       HTM_TD_End ();
 
-      /***** Title *****/
+      /***** Title and link/clipboard *****/
       HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+
+         /* Title */
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    Prg_PutParamItmCod (&Item->Hierarchy.ItmCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
@@ -543,25 +542,17 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 			    "Nuevo recurso",	// TODO: Need translation!!!!!!!!!!!!!!!!!!!
 			    The_GetSuffix ());
 	 Frm_EndForm ();
-      HTM_TD_End ();
 
-      /***** Icon to edit link *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN RT %s\"",The_GetColorRows1 (1));
-	 Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-				      Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
-      HTM_TD_End ();
 
-      /***** Link *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
-
-	 /* Show clipboard to change resource link */
+	 /* Link / clipboard */
 	 if (ListingType == Prg_SHOW_CLIPBOARD &&
-	     SelectedRscCod <= 0)	// No resource selected
+	     Item->Resource.Hierarchy.RscCod == SelectedRscCod)
+	   {
+            HTM_BR ();
+
+	    /* Show clipboard to change resource link */
 	    PrgRsc_ShowClipboard (Item);
-	 else
-	    /***** Link *****/
-	    Ico_PutIconOn (Prg_ResourceTypesLogos[PrgRsc_NONE],Ico_BLACK,
-			   Prg_ResourceTypesDB[PrgRsc_NONE]);
+	   }
 
       HTM_TD_End ();
 
@@ -583,35 +574,50 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
       [true ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
      };
    extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_Visible;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Icon to remove item resource *****/
-	 Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+	 if (NumRsc < NumResources)
+	    Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+	 else
+	    Ico_PutIconRemovalNotAllowed ();
 
 	 /***** Icon to hide/unhide item resource *****/
-	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
-					    Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
-					    Item->Resource.Hierarchy.Hidden);
+	 if (NumRsc < NumResources)
+	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
+					       Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
+					       Item->Resource.Hierarchy.Hidden);
+	 else
+	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
-	 /***** Icon to move up the item *****/
-	 if (NumRsc > 0)
+	 /***** Icon to move up the item resource *****/
+	 if (NumRsc > 0 && NumRsc < NumResources)
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
-	 /***** Put icon to move down the item *****/
+	 /***** Put icon to move down the item resource *****/
 	 if (NumRsc < NumResources - 1)
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
+
+	 /***** Put icon to edit the item resource *****/
+	 if (NumRsc < NumResources)
+	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+	 else
+	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 	 break;
       case Rol_STD:
       case Rol_NET:
@@ -917,7 +923,12 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
-   struct PrgRsc_Link Link;
+   struct Prg_Link Link;
+   static const struct Prg_Link EmptyLink =
+     {
+      .Type = PrgRsc_NONE,
+      .Cod  = -1L,
+     };
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
@@ -926,24 +937,21 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
 
-	 /***** Current link *****/
-	 Link.Type = Item->Resource.Type;
-	 Link.Cod  = Item->Resource.Cod;
-	 PrgRsc_WriteRowClipboard (0,&Link);
+	 /***** Current link (empty or not) *****/
+	 PrgRsc_WriteRowClipboard (false,&Item->Resource.Link);
 
-	 /***** Get list of item resources from database *****/
+         /***** Row with empty link to remove the current link *****/
+	 if (Item->Resource.Link.Type != PrgRsc_NONE)
+	    PrgRsc_WriteRowClipboard (true,&EmptyLink);
+
+	 /***** Get links in clipboard from database and write them *****/
 	 NumLinks = Prg_DB_GetClipboard (&mysql_res);
-
-	 /***** Write all item resources *****/
 	 for (NumLink  = 1;
 	      NumLink <= NumLinks;
 	      NumLink++)
 	   {
-	    /* Get data of this link */
 	    PrgRsc_GetDataOfLinkFromClipboard (&Link,&mysql_res);
-
-	    /* Show link */
-	    PrgRsc_WriteRowClipboard (NumLink,&Link);
+	    PrgRsc_WriteRowClipboard (true,&Link);
 	   }
 
 	 /***** Free structure that stores the query result *****/
@@ -960,21 +968,19 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 /************************ Show one link from clipboard ***********************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowClipboard (unsigned NumLink,
-                                      const struct PrgRsc_Link *Link)
+static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
 
    HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
-         if (NumLink)
-	    HTM_INPUT_RADIO ("Link",true,
-			     "value=\"%s_%ld\"",
-			     Prg_ResourceTypesDB[Link->Type],Link->Cod);
-         else
-            HTM_INPUT_RADIO ("Link",false,
-			     "value=\"%s_%ld\" checked=\"checked\"",
-			     Prg_ResourceTypesDB[Link->Type],Link->Cod);
+
+         /***** Radio selector *****/
+	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
+			  "value=\"%s_%ld\"%s",
+			  Prg_ResourceTypesDB[Link->Type],Link->Cod,
+			  SubmitOnClick ? "" :
+					  " checked=\"checked\"");
 
 	 /***** Type *****/
          Ico_PutIconOn (Prg_ResourceTypesLogos[Link->Type],Ico_BLACK,
@@ -991,7 +997,7 @@ static void PrgRsc_WriteRowClipboard (unsigned NumLink,
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link)
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link)
   {
    char FileName[NAME_MAX + 1];
 
@@ -1072,7 +1078,7 @@ void PrgRsc_ChangeLink (void)
 /********************** Get resource data from clipboard *********************/
 /*****************************************************************************/
 
-static void PrgRsc_GetDataOfLinkFromClipboard (struct PrgRsc_Link *Link,
+static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res)
   {
    MYSQL_ROW row;

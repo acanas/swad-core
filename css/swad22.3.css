@@ -1679,7 +1679,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_COL1
 	{
 	box-sizing:border-box;
-	width:86px;
+	width:108px;
 	}
 	
 .PRG_TITLE_DESCRIPTION_WIDTH
@@ -1778,8 +1778,8 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_RSC_PURPLE,
 .PRG_RSC_BLUE,
 .PRG_RSC_YELLOW,
-.PRG_RSC_PINK		{color:#202020; font-size:14pt; font-weight:bold;}
-.PRG_RSC_DARK		{color:#e0e0e0; font-size:14pt; font-weight:bold;}
+.PRG_RSC_PINK		{color:#202020; font-size:12pt;}
+.PRG_RSC_DARK		{color:#e0e0e0; font-size:12pt;}
 
 /************************* Program resource clipboard ************************/
 .PRG_CLIPBOARD
