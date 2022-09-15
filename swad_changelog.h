@@ -606,11 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.3 (2022-09-14)"
+#define Log_PLATFORM_VERSION	"SWAD 22.4 (2022-09-15)"
 #define CSS_FILE		"swad22.3.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 22.3:     Sep 14, 2022  Listing program resource clipboard. (? lines)
+	Version 22.4:     Sep 15, 2022  Changes in edition of program items. (329940 lines)
+	Version 22.3:     Sep 14, 2022  Listing program resource clipboard. (329918 lines)
 					4 changes necessary in database:
 ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';
 ALTER TABLE prg_resources DROP COLUMN Type;

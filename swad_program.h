@@ -130,12 +130,6 @@ typedef enum
    Prg_END_EDIT_RES,		// List resources of a selected item after edition
   } Prg_ListingType_t;
 
-struct Prg_ItmRscCodes	// Used in forms to pass an item and a resource as parameters
-  {
-   long ItmCod;
-   long RscCod;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -148,7 +142,8 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 
 bool Prg_CheckIfICanEditProgram (void);
 
-void Prg_PutParams (void *ItmRsc);
+void Prg_PutParamRscCod (void *RscCod);
+void Prg_PutParamItmCod (void *ItmCod);
 void Prg_GetParams (struct Prg_Item *Item);
 
 void Prg_GetListItems (void);
@@ -156,8 +151,6 @@ void Prg_FreeListItems (void);
 
 void Prg_ResetItem (struct Prg_Item *Item);
 
-void Prg_PutParamItmCod (long ItmCod);
-long Prg_GetParamItmCod (void);
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
 

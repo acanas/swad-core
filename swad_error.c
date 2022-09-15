@@ -249,12 +249,12 @@ void Err_WrongGroupExit (void)
   }
 
 /*****************************************************************************/
-/************* Write error message and exit when wrong order *****************/
+/************* Write error message and exit when wrong type ******************/
 /*****************************************************************************/
 
-void Err_WrongTypeOfViewExit (void)
+void Err_WrongTypeExit (void)
   {
-   Err_ShowErrorAndExit ("Wrong type of view.");
+   Err_ShowErrorAndExit ("Wrong type.");
   }
 
 /*****************************************************************************/

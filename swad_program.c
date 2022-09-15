@@ -419,12 +419,10 @@ static void Prg_PutIconToViewProgram (void)
 
 static void Prg_PutIconToCreateNewItem (void)
   {
-   struct Prg_ItmRscCodes SelectedItmRscCodes;
+   long ItmCod = -1L;
 
-   SelectedItmRscCodes.ItmCod = -1L;
-   SelectedItmRscCodes.RscCod = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-                               Prg_PutParams,&SelectedItmRscCodes);
+                               Prg_PutParamItmCod,&ItmCod);
   }
 
 /*****************************************************************************/
@@ -434,12 +432,10 @@ static void Prg_PutIconToCreateNewItem (void)
 static void Prg_PutButtonToCreateNewItem (void)
   {
    extern const char *Txt_New_item;
-   struct Prg_ItmRscCodes SelectedItmRscCodes;
+   long ItmCod = -1L;
 
-   SelectedItmRscCodes.ItmCod = -1L;
-   SelectedItmRscCodes.RscCod = -1L;
    Frm_BeginFormAnchor (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID);
-      Prg_PutParams (&SelectedItmRscCodes);
+      Prg_PutParamItmCod (&ItmCod);
       Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
   }
@@ -474,7 +470,6 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    unsigned NumCol;
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
-   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Check if this item should be shown as hidden *****/
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.Hidden);
@@ -611,9 +606,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	}
 
       /* List of resources */
-      SelectedItmRscCodes.ItmCod = Item->Hierarchy.ItmCod;
-      SelectedItmRscCodes.RscCod = SelectedRscCod;
-      PrgRsc_ListItemResources (ListingType,&SelectedItmRscCodes);
+      PrgRsc_ListItemResources (ListingType,Item->Hierarchy.ItmCod,SelectedRscCod);
 
       /* End text and resources */
       HTM_TD_End ();
@@ -885,24 +878,21 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
       [true ] = ActUnhPrgItm,	// Hidden ==> action to unhide
      };
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.ItmInd);
 
-   SelectedItmRscCodes.ItmCod = Item->Hierarchy.ItmCod;
-   SelectedItmRscCodes.RscCod = -1L;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Icon to remove program item *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,NULL,
-	                                Prg_PutParams,&SelectedItmRscCodes);
+	                                Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to hide/unhide program item *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,"prg_highlighted",
-					    Prg_PutParams,&SelectedItmRscCodes,
+					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					    Item->Hierarchy.Hidden);
 
 	 /***** Icon to edit program item *****/
@@ -910,24 +900,24 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	   {
 	    case Prg_FORM_EDIT_ITEM:
 	       Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParams,&SelectedItmRscCodes);
+					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 	       break;
 	    default:
 	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParams,&SelectedItmRscCodes);
+					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 	       break;
 	   }
 
 	 /***** Icon to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-	                             Prg_PutParams,&SelectedItmRscCodes);
+	                             Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 
 	 HTM_BR ();
 
 	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRscCodes,
+	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -935,7 +925,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRscCodes,
+	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -943,7 +933,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRscCodes,
+	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -951,7 +941,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
-	                                   Prg_PutParams,&SelectedItmRscCodes,
+	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1038,30 +1028,31 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
-void Prg_PutParams (void *ItmRscCodes)
+void Prg_PutParamItmCod (void *ItmCod)
   {
-   if (ItmRscCodes)
-     {
-      /* If a resource is present, put resource code.
-         If no resource present, but item is, put item code. */
-      if (((struct Prg_ItmRscCodes *) ItmRscCodes)->RscCod > 0)
-	 PrgRsc_PutParamRscCod (((struct Prg_ItmRscCodes *) ItmRscCodes)->RscCod);
-      else if (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod > 0)
-	 Prg_PutParamItmCod (((struct Prg_ItmRscCodes *) ItmRscCodes)->ItmCod);
-     }
+   if (ItmCod)
+      if (*((long *) ItmCod) > 0)
+	 Par_PutHiddenParamLong (NULL,"ItmCod",*((long *) ItmCod));
+  }
+
+void Prg_PutParamRscCod (void *RscCod)
+  {
+   if (RscCod)
+      if (*((long *) RscCod) > 0)
+	 Par_PutHiddenParamLong (NULL,"RscCod",*((long *) RscCod));
   }
 
 void Prg_GetParams (struct Prg_Item *Item)
   {
    /***** Try to get item resource *****/
-   Item->Resource.Hierarchy.RscCod = PrgRsc_GetParamRscCod ();
+   Item->Resource.Hierarchy.RscCod = Par_GetParToLong ("RscCod");
 
    /***** Get data of the program item from database *****/
    PrgRsc_GetDataOfResourceByCod (Item);
 
    if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
       /***** Try to get data of the program item from database *****/
-      Item->Hierarchy.ItmCod = Prg_GetParamItmCod ();
+      Item->Hierarchy.ItmCod = Par_GetParToLong ("ItmCod");
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (Item);
@@ -1239,24 +1230,6 @@ void Prg_ResetItem (struct Prg_Item *Item)
   }
 
 /*****************************************************************************/
-/**************** Write parameter with code of program item ******************/
-/*****************************************************************************/
-
-void Prg_PutParamItmCod (long ItmCod)
-  {
-   Par_PutHiddenParamLong (NULL,"ItmCod",ItmCod);
-  }
-
-/*****************************************************************************/
-/***************** Get parameter with code of program item *******************/
-/*****************************************************************************/
-
-long Prg_GetParamItmCod (void)
-  {
-   return Par_GetParToLong ("ItmCod");
-  }
-
-/*****************************************************************************/
 /**************** Get number of item in list from item code ******************/
 /*****************************************************************************/
 
@@ -1298,7 +1271,6 @@ void Prg_ReqRemItem (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    extern const char *Txt_Remove_item;
    struct Prg_Item Item;
-   struct Prg_ItmRscCodes SelectedItmRscCodes;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1309,10 +1281,8 @@ void Prg_ReqRemItem (void)
       Err_WrongItemExit ();
 
    /***** Show question and button to remove the program item *****/
-   SelectedItmRscCodes.ItmCod = Item.Hierarchy.ItmCod;
-   SelectedItmRscCodes.RscCod = -1L;
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
-                           Prg_PutParams,&SelectedItmRscCodes,
+                           Prg_PutParamItmCod,&Item.Hierarchy.ItmCod,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
@@ -1820,7 +1790,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActNewPrgItm,"prg_highlighted");
-      Prg_PutParamItmCod (ParentItem.Hierarchy.ItmCod);
+      Prg_PutParamItmCod (&ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",Txt_New_item,
@@ -1864,7 +1834,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgPrgItm,"prg_highlighted");
-      Prg_PutParamItmCod (Item.Hierarchy.ItmCod);
+      Prg_PutParamItmCod (&Item.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",

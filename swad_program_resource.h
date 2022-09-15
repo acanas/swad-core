@@ -45,12 +45,11 @@ void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_ItmRscCodes *SelectedItmRscCodes);
+                               long SelectedItmCod,long SelectedRscCod);
 
 void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item);
 
 void PrgRsc_PutParamRscCod (long RscCod);
-long PrgRsc_GetParamRscCod (void);
 
 void PrgRsc_CreateResource (void);
 

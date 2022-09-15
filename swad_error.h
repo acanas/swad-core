@@ -54,7 +54,7 @@ void Err_WrongCopySrcExit (void);
 void Err_WrongNumberOfRowsExit (void);
 void Err_WrongGrpTypExit (void);
 void Err_WrongGroupExit (void);
-void Err_WrongTypeOfViewExit (void);
+void Err_WrongTypeExit (void);
 void Err_WrongBannerExit (void);
 void Err_WrongLinkExit (void);
 void Err_WrongHolidayExit (void);

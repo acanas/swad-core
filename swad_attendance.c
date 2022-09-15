@@ -2235,7 +2235,7 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	 Att_FreeListAttEvents (&Events);
 	 break;
       default:
-	 Err_WrongTypeOfViewExit ();
+	 Err_WrongTypeExit ();
 	 break;
      }
   }
@@ -2303,7 +2303,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 			     NULL,Box_NOT_CLOSABLE);
 	       break;
 	    default:
-	       Err_WrongTypeOfViewExit ();
+	       Err_WrongTypeExit ();
 	       break;
 	   }
 
@@ -2333,7 +2333,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_FreeListAttEvents (&Events);
 	 break;
       default:
-	 Err_WrongTypeOfViewExit ();
+	 Err_WrongTypeExit ();
 	 break;
      }
   }
@@ -2419,7 +2419,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 				NULL,Box_NOT_CLOSABLE);
 		  break;
 	       default:
-		  Err_WrongTypeOfViewExit ();
+		  Err_WrongTypeExit ();
 	      }
 
 	    /***** List events to select *****/
@@ -2453,7 +2453,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	 Grp_FreeListCodSelectedGrps ();
 	 break;
       default:
-	 Err_WrongTypeOfViewExit ();
+	 Err_WrongTypeExit ();
 	 break;
      }
   }

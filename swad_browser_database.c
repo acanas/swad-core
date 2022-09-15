@@ -298,7 +298,7 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 /*****************************************************************************/
 /********************* Get file metadata using its code **********************/
 /*****************************************************************************/
-// FileMetadata.FilCod must be filled
+
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
@@ -321,6 +321,29 @@ unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
 		   FilCod);
   }
 
+/*****************************************************************************/
+/*********************** Get file name using its code ************************/
+/*****************************************************************************/
+/*
+unsigned Brw_DB_GetFileNameByCod (MYSQL_RES **mysql_res,long FilCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get file metadata",
+		   "SELECT FilCod,"		// row[0]
+			  "FileBrowser,"	// row[1]
+			  "Cod,"		// row[2]
+			  "ZoneUsrCod,"		// row[3]
+			  "PublisherUsrCod,"	// row[4]
+			  "FileType,"		// row[5]
+			  "Path,"		// row[6]
+			  "Hidden,"		// row[7]
+			  "Public,"		// row[8]
+			  "License"		// row[9]
+		    " FROM brw_files"
+		   " WHERE FilCod=%ld",
+		   FilCod);
+  }
+*/
 /*****************************************************************************/
 /************************ Get the publisher of a subtree *********************/
 /*****************************************************************************/

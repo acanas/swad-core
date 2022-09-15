@@ -9104,6 +9104,25 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
+/******************** Get summary and content of a file **********************/
+/*****************************************************************************/
+
+void Brw_GetFileNameFromFilCod (long FilCod,char FileName[NAME_MAX + 1])
+  {
+   struct FileMetadata FileMetadata;
+
+   /***** Return nothing on error *****/
+   FileName[0] = '\0';	// Return nothing on error
+
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_GetFileMetadataByCod (&FileMetadata);
+
+   /***** Copy file name into summary string *****/
+   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
+  }
+
+/*****************************************************************************/
 /********************** Get file type, size and date *************************/
 /*****************************************************************************/
 // Return true if file exists

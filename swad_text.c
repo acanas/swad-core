@@ -35677,7 +35677,7 @@ const char *Txt_Resource_X_removed =	// Warning: it is very important to include
 #elif L==2	// de
 	"Ressource <strong>%s</strong> entfernt.";
 #elif L==3	// en
-	"Resource <strong>s</strong> removed.";
+	"Resource <strong>%s</strong> removed.";
 #elif L==4	// es
 	"Recurso <strong>%s</strong> eliminado.";
 #elif L==5	// fr
