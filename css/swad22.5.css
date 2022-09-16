@@ -1778,8 +1778,14 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_RSC_PURPLE,
 .PRG_RSC_BLUE,
 .PRG_RSC_YELLOW,
-.PRG_RSC_PINK		{color:#202020; font-size:12pt;}
-.PRG_RSC_DARK		{color:#e0e0e0; font-size:12pt;}
+.PRG_RSC_PINK		{color:#202020; font-size:13pt;}
+.PRG_RSC_DARK		{color:#e0e0e0; font-size:13pt;}
+
+.PRG_RSC_INPUT
+	{
+	box-sizing:border-box;
+	width:360px;
+	}
 
 /************************* Program resource clipboard ************************/
 .PRG_CLIPBOARD

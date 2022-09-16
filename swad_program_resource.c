@@ -113,7 +113,7 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
 
 static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
 static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link);
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm);
 static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
 
@@ -439,7 +439,8 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 	 HTM_BR ();
 	 Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
 			Prg_ResourceTypesDB[Item->Resource.Link.Type]);
-	 PrgRsc_WriteLinkName (&Item->Resource.Link);
+	 PrgRsc_WriteLinkName (&Item->Resource.Link,
+	                       true);	// Put form
       HTM_TD_End ();
 
    /***** End row *****/
@@ -479,7 +480,7 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 	    Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
 
@@ -495,7 +496,8 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 	    /* Link */
 	    Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
 			   Prg_ResourceTypesDB[Item->Resource.Link.Type]);
-	    PrgRsc_WriteLinkName (&Item->Resource.Link);
+	    PrgRsc_WriteLinkName (&Item->Resource.Link,
+	                          true);	// Put form
 	   }
 
       HTM_TD_End ();
@@ -538,7 +540,7 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
-			    " class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    "Nuevo recurso",	// TODO: Need translation!!!!!!!!!!!!!!!!!!!
 			    The_GetSuffix ());
 	 Frm_EndForm ();
@@ -987,7 +989,8 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
                         Prg_ResourceTypesDB[Link->Type]);
 
 	 /***** Name *****/
-         PrgRsc_WriteLinkName (Link);
+         PrgRsc_WriteLinkName (Link,
+                               false);	// Don't put form
 
       HTM_LABEL_End ();
    HTM_LI_End ();
@@ -997,10 +1000,8 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link)
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
   {
-   char FileName[NAME_MAX + 1];
-
    /***** Trivial check: code should be > 0 *****/
    if (Link->Cod <= 0)
       return;
@@ -1018,8 +1019,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link)
          Ale_ShowAlert (Ale_ERROR,"Not implemented!");
          break;
       case PrgRsc_DOCUMENT:
-         Brw_GetFileNameFromFilCod (Link->Cod,FileName);
-         HTM_Txt (FileName);
+	 Brw_WriteFileNameInCrsProgram (Link->Cod,PutForm);
 	 break;
       case PrgRsc_MARKS:
       case PrgRsc_ATTENDANCE_EVENT:

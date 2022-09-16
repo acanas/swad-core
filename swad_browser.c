@@ -5319,6 +5319,39 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
   }
 
 /*****************************************************************************/
+/******************** Get summary and content of a file **********************/
+/*****************************************************************************/
+
+void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
+  {
+   extern const char *Txt_Download;
+   struct FileMetadata FileMetadata;
+
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_GetFileMetadataByCod (&FileMetadata);
+
+   /***** Begin form to download file *****/
+   if (PutFormToDownload)
+     {
+      Frm_BeginForm (Brw_ActDowFile[Brw_SHOW_DOC_CRS]);
+	 Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk);
+	 HTM_BUTTON_Submit_Begin (Txt_Download,"class=\"LM BT_LINK PRG_RSC_%s\"",The_GetSuffix ());
+     }
+
+   /***** Write filename *****/
+   HTM_Txt (FileMetadata.FilFolLnk.Name);
+
+   /***** End form to download file *****/
+   if (PutFormToDownload)
+     {
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
 /*********************** Which filename must be shown? ***********************/
 /*****************************************************************************/
 
@@ -9113,22 +9146,22 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 /*****************************************************************************/
 /******************** Get summary and content of a file **********************/
 /*****************************************************************************/
-
+/*
 void Brw_GetFileNameFromFilCod (long FilCod,char FileName[NAME_MAX + 1])
   {
    struct FileMetadata FileMetadata;
 
-   /***** Return nothing on error *****/
+   ***** Return nothing on error *****
    FileName[0] = '\0';	// Return nothing on error
 
-   /***** Get file metadata *****/
+   ***** Get file metadata *****
    FileMetadata.FilCod = FilCod;
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   /***** Copy file name into summary string *****/
+   ***** Copy file name into summary string *****
    Str_Copy (FileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
   }
-
+*/
 /*****************************************************************************/
 /********************** Get file type, size and date *************************/
 /*****************************************************************************/
@@ -9944,7 +9977,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	 HTM_TR_End ();
 
 	 /***** List documents found *****/
-	 for (NumDoc = 1;
+	 for (NumDoc  = 1;
 	      NumDoc <= NumDocs;
 	      NumDoc++)
 	   {
