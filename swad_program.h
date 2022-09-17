@@ -130,7 +130,7 @@ typedef enum
    Prg_RECEIVE_ITEM,		// Receive item data after create/edit
 
    Prg_EDIT_RESOURCES,		// List resources of a selected item for edition
-   Prg_SHOW_CLIPBOARD,		// Show clipboard in a resource to select a link
+   Prg_EDIT_RESOURCE_LINK,	// Show clipboard in a resource to select a link
    Prg_CHANGE_RESOURCE_LINK,	// Change resource link
    Prg_END_EDIT_RES,		// List resources of a selected item after edition
   } Prg_ListingType_t;

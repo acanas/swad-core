@@ -233,7 +233,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
-// void Brw_GetFileNameFromFilCod (long FilCod,char FileName[NAME_MAX + 1]);
+void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);

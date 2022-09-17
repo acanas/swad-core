@@ -94,14 +94,12 @@ static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
                                       MYSQL_RES **mysql_res);
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item);
-static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
-                                         unsigned NumRsc,unsigned NumResources,
+static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,
-                                         long SelectedRscCod);
-static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
-                                        unsigned NumResources,
+                                         bool EditLink);
+static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
-                                        long SelectedRscCod);
+                                        bool EditLink);
 static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources);
@@ -173,6 +171,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
    unsigned NumRsc;
    unsigned NumResources;
    struct Prg_Item Item;
+   bool EditLink;
    static bool GetHiddenResources[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
@@ -184,7 +183,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = false,
       [Prg_RECEIVE_ITEM        ] = false,
       [Prg_EDIT_RESOURCES      ] = true,
-      [Prg_SHOW_CLIPBOARD      ] = true,
+      [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = false,
      };
@@ -199,7 +198,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = true,
       [Prg_RECEIVE_ITEM        ] = true,
       [Prg_EDIT_RESOURCES      ] = true,
-      [Prg_SHOW_CLIPBOARD      ] = true,
+      [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
      };
@@ -214,7 +213,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = false,
       [Prg_RECEIVE_ITEM        ] = false,
       [Prg_EDIT_RESOURCES      ] = true,
-      [Prg_SHOW_CLIPBOARD      ] = true,
+      [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
      };
@@ -229,7 +228,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = PrgRsc_PutIconsEditResources,
       [Prg_RECEIVE_ITEM        ] = PrgRsc_PutIconsEditResources,
       [Prg_EDIT_RESOURCES      ] = PrgRsc_PutIconsViewResources,
-      [Prg_SHOW_CLIPBOARD      ] = PrgRsc_PutIconsViewResources,
+      [Prg_EDIT_RESOURCE_LINK  ] = PrgRsc_PutIconsViewResources,
       [Prg_CHANGE_RESOURCE_LINK] = PrgRsc_PutIconsViewResources,
       [Prg_END_EDIT_RES        ] = PrgRsc_PutIconsEditResources,
      };
@@ -284,11 +283,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		  switch (ListingType)
 		    {
 		     case Prg_EDIT_RESOURCES:
-		     case Prg_SHOW_CLIPBOARD:
+		     case Prg_EDIT_RESOURCE_LINK:
 		     case Prg_CHANGE_RESOURCE_LINK:
-			PrgRsc_WriteRowEditResource (ListingType,
-			                             NumRsc,NumResources,
-			                             &Item,SelectedRscCod);
+			EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
+	                            Item.Resource.Hierarchy.RscCod == SelectedRscCod);
+			PrgRsc_WriteRowEditResource (NumRsc,NumResources,&Item,
+			                             EditLink);
 			break;
 		     default:
 			PrgRsc_WriteRowViewResource (NumRsc,&Item);
@@ -300,12 +300,13 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	       switch (ListingType)
 		 {
 		  case Prg_EDIT_RESOURCES:
-		  case Prg_SHOW_CLIPBOARD:
+		  case Prg_EDIT_RESOURCE_LINK:
 		  case Prg_CHANGE_RESOURCE_LINK:
 		     Prg_ResetItem (&Item);
 		     Item.Hierarchy.ItmCod = ItmCod;
-		     PrgRsc_WriteRowNewResource (ListingType,NumResources,
-		                                 &Item,SelectedRscCod);
+		     EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
+				 Item.Resource.Hierarchy.RscCod == SelectedRscCod);
+		     PrgRsc_WriteRowNewResource (NumResources,&Item,EditLink);
 		     break;
 		  default:
 		     break;
@@ -451,10 +452,9 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 /************************** Edit one item resource ***************************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
-                                         unsigned NumRsc,unsigned NumResources,
+static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,
-                                         long SelectedRscCod)
+                                         bool EditLink)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
 
@@ -463,7 +463,7 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 
       /***** Forms to remove/edit this item resource *****/
       HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
-	 PrgRsc_PutFormsToRemEditOneResource (Item,NumRsc,NumResources);
+         PrgRsc_PutFormsToRemEditOneResource (Item,NumRsc,NumResources);
       HTM_TD_End ();
 
       /***** Resource number *****/
@@ -486,14 +486,13 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 
          HTM_BR ();
 
-	 /* Link / clipboard */
-	 if (ListingType == Prg_SHOW_CLIPBOARD &&
-	     Item->Resource.Hierarchy.RscCod == SelectedRscCod)
+	 /* Edit link showing clipboard / Show current link */
+	 if (EditLink)
 	    /* Show clipboard to change resource link */
 	    PrgRsc_ShowClipboard (Item);
 	 else
 	   {
-	    /* Link */
+	    /* Show current link */
 	    Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
 			   Prg_ResourceTypesDB[Item->Resource.Link.Type]);
 	    PrgRsc_WriteLinkName (&Item->Resource.Link,
@@ -510,10 +509,9 @@ static void PrgRsc_WriteRowEditResource (Prg_ListingType_t ListingType,
 /************************* Edit a new item resource **************************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
-                                        unsigned NumResources,
+static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
-                                        long SelectedRscCod)
+                                        bool EditLink)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
 
@@ -545,10 +543,8 @@ static void PrgRsc_WriteRowNewResource (Prg_ListingType_t ListingType,
 			    The_GetSuffix ());
 	 Frm_EndForm ();
 
-
-	 /* Link / clipboard */
-	 if (ListingType == Prg_SHOW_CLIPBOARD &&
-	     Item->Resource.Hierarchy.RscCod == SelectedRscCod)
+	 /* Edit link showing clipboard? */
+	 if (EditLink)
 	   {
             HTM_BR ();
 
@@ -910,7 +906,7 @@ void PrgRsc_ShowClipboardToChgLink (void)
       Err_WrongResourceExit ();
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_SHOW_CLIPBOARD,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCE_LINK,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
@@ -934,7 +930,11 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-      Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
+      if (Item->Resource.Hierarchy.RscCod > 0)
+         Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
+      else
+	 /* No resource selected, so it's a new resource at the end of the item */
+         Prg_PutParamItmCod (&Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
@@ -1033,6 +1033,46 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
   }
 
 /*****************************************************************************/
+/* Get the title for a new resource from link title */
+/*****************************************************************************/
+
+static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
+  {
+   /***** Reset title *****/
+   Item->Resource.Title[0] = '\0';
+
+   /***** Trivial check: code should be > 0 *****/
+   if (Item->Resource.Link.Cod <= 0)
+      return;
+
+   switch (Item->Resource.Link.Type)
+     {
+      case PrgRsc_NONE:
+	 break;
+      case PrgRsc_ASSIGNMENT:
+      case PrgRsc_CALL_FOR_EXAM:
+      case PrgRsc_EXAM:
+      case PrgRsc_GAME:
+      case PrgRsc_SURVEY:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
+      case PrgRsc_DOCUMENT:
+	 Brw_GetFileNameFromFilCod (Item->Resource.Link.Cod,
+	                            Item->Resource.Title,
+	                            sizeof (Item->Resource.Title) - 1);
+	 break;
+      case PrgRsc_MARKS:
+      case PrgRsc_ATTENDANCE_EVENT:
+      case PrgRsc_FORUM_THREAD:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
@@ -1042,7 +1082,6 @@ void PrgRsc_ChangeLink (void)
    struct Prg_Item Item;
    char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char TypeStr[3 + 1];
-   PrgRsc_Type_t Type;
    long Cod;
 
    /***** Get list of program items *****/
@@ -1058,17 +1097,29 @@ void PrgRsc_ChangeLink (void)
    Par_GetParToText ("Link",TypeCod,sizeof (TypeCod) - 1);
    if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
      {
-      Type = PrgRsc_GetTypeFromString (TypeStr);
+      Item.Resource.Link.Type = PrgRsc_GetTypeFromString (TypeStr);
+      Item.Resource.Link.Cod  = Cod;
+
+      /***** Is it an existing resource? *****/
+      if (Item.Resource.Hierarchy.RscCod <= 0)
+	{
+	 /* No resource selected, so it's a new resource at the end of the item */
+	 /* Get the new title for the new resource from link title */
+	 PrgRsc_GetResourceTitleFromLink (&Item);
+
+	 /***** Create resource *****/
+	 Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
+	}
 
       /***** Update resource link *****/
-      Prg_DB_UpdateRscLink (Item.Resource.Hierarchy.RscCod,Type,Cod);
+      Prg_DB_UpdateRscLink (&Item);
 
       /***** Remove link from clipboard *****/
-      Prg_DB_RemoveLinkFromClipboard (Type,Cod);
+      Prg_DB_RemoveLinkFromClipboard (&Item.Resource.Link);
      }
 
    /***** Show current program items, if any *****/
-   Prg_ShowAllItems (Prg_SHOW_CLIPBOARD,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
+   Prg_ShowAllItems (Prg_EDIT_RESOURCE_LINK,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();

@@ -656,16 +656,16 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
 /************* Update the link of a resource given its code *****************/
 /*****************************************************************************/
 
-void Prg_DB_UpdateRscLink (long RscCod,PrgRsc_Type_t Type,long Cod)
+void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
   {
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE prg_resources"
 		     " SET Type='%s',"
 		          "Cod=%ld"
 		   " WHERE RscCod=%ld",
-		   Prg_ResourceTypesDB[Type],
-		   Cod,
-		   RscCod);
+		   Prg_ResourceTypesDB[Item->Resource.Link.Type],
+		   Item->Resource.Link.Cod,
+		   Item->Resource.Hierarchy.RscCod);
   }
 
 /*****************************************************************************/
@@ -707,7 +707,7 @@ unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
 /*************************** Remove link from clipboard **********************/
 /*****************************************************************************/
 
-void Prg_DB_RemoveLinkFromClipboard (PrgRsc_Type_t Type,long Cod)
+void Prg_DB_RemoveLinkFromClipboard (struct Prg_Link *Link)
   {
    DB_QueryDELETE ("can not remove link from clipboard",
 		   "DELETE FROM prg_clipboards"
@@ -717,6 +717,6 @@ void Prg_DB_RemoveLinkFromClipboard (PrgRsc_Type_t Type,long Cod)
 		     " AND Cod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
                    Gbl.Hierarchy.Crs.CrsCod,
-		   Prg_ResourceTypesDB[Type],
-		   Cod);
+		   Prg_ResourceTypesDB[Link->Type],
+		   Link->Cod);
   }

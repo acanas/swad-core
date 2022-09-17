@@ -5336,7 +5336,9 @@ void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
      {
       Frm_BeginForm (Brw_ActDowFile[Brw_SHOW_DOC_CRS]);
 	 Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk);
-	 HTM_BUTTON_Submit_Begin (Txt_Download,"class=\"LM BT_LINK PRG_RSC_%s\"",The_GetSuffix ());
+	 HTM_BUTTON_Submit_Begin (Txt_Download,
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
      }
 
    /***** Write filename *****/
@@ -9146,22 +9148,22 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 /*****************************************************************************/
 /******************** Get summary and content of a file **********************/
 /*****************************************************************************/
-/*
-void Brw_GetFileNameFromFilCod (long FilCod,char FileName[NAME_MAX + 1])
+
+void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
   {
    struct FileMetadata FileMetadata;
 
-   ***** Return nothing on error *****
+   /***** Return nothing on error *****/
    FileName[0] = '\0';	// Return nothing on error
 
-   ***** Get file metadata *****
+   /***** Get file metadata *****/
    FileMetadata.FilCod = FilCod;
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   ***** Copy file name into summary string *****
-   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
+   /***** Copy file name into summary string *****/
+   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
   }
-*/
+
 /*****************************************************************************/
 /********************** Get file type, size and date *************************/
 /*****************************************************************************/

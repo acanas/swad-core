@@ -75,10 +75,10 @@ void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
 
 void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
-void Prg_DB_UpdateRscLink (long RscCod,PrgRsc_Type_t Type,long Cod);
+void Prg_DB_UpdateRscLink (const struct Prg_Item *Item);
 
 void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
 unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
-void Prg_DB_RemoveLinkFromClipboard (PrgRsc_Type_t Type,long Cod);
+void Prg_DB_RemoveLinkFromClipboard (struct Prg_Link *Link);
 
 #endif
