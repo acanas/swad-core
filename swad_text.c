@@ -3746,29 +3746,6 @@ const char *Txt_Calendar =
 	"Takvim";
 #endif
 
-const char *Txt_CALL_FOR_EXAM =
-#if   L==1	// ca
-	"CONVOCAT&Ograve;RIA D'EXAMEN";
-#elif L==2	// de
-	"PR&Uuml;FUNGSAUFRUF";
-#elif L==3	// en
-	"CALL FOR EXAM";
-#elif L==4	// es
-	"CONVOCATORIA DE EXAMEN";
-#elif L==5	// fr
-	"CONVOCATION &Agrave; UN EXAMEN";
-#elif L==6	// gn
-	"CONVOCATORIA DE EXAMEN";	// Okoteve traducción
-#elif L==7	// it
-	"APPELLO D'ESAME";
-#elif L==8	// pl
-	"OGLOSZENIE egzaminu";
-#elif L==9	// pt
-	"CHAMADA DE EXAME";
-#elif L==10	// tr
-	"CALL FOR EXAM";		// Çeviri lazim!
-#endif
-
 const char *Txt_CALL_FOR_EXAM_Approximate_duration =
 #if   L==1	// ca
 	"Durada aproximada";
@@ -4066,6 +4043,29 @@ const char *Txt_CALL_FOR_EXAM_Year_or_semester =	// 1, 2, 3..., not 1984, 2038..
 	"Ano ou semestre";
 #elif L==10	// tr
 	"Year or semester";		// Çeviri lazim!
+#endif
+
+const char *Txt_Call_for_exam =
+#if   L==1	// ca
+	"Convocat&ograve;ria d'examen";
+#elif L==2	// de
+	"Aufrufe für Pr&uuml;fung";
+#elif L==3	// en
+	"Call for exam";
+#elif L==4	// es
+	"Convocatoria de examen";
+#elif L==5	// fr
+	"Convocation &agrave; un examen";
+#elif L==6	// gn
+	"Convocatoria de examen";	// Okoteve traducción
+#elif L==7	// it
+	"Appello d'esame";
+#elif L==8	// pl
+	"Ogloszenie egzamin";
+#elif L==9	// pt
+	"Chamada para exame";
+#elif L==10	// tr
+	"Call for exam";		// Çeviri lazim!
 #endif
 
 const char *Txt_Call_for_exam_removed =

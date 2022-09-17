@@ -683,6 +683,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemCfe		] = { 187,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_RemoveCallForExam1		,Cfe_RemoveCallForExam2		,NULL},
    [ActHidCfe		] = {1620,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_HideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
    [ActUnhCfe		] = {1621,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_UnhideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
+   [ActReqLnkCfe	] = {1934,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_GetLinkToFile		,NULL},
 
    [ActEdiOneTstQst	] = { 105,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ShowFormEditOneQst		,NULL},
    [ActReqImpTstQst	] = {1007,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,QstImp_ShowFormImpQstsFromXML	,NULL},
@@ -3777,6 +3778,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkAdmDocCrs,	// #1931
 	ActSeeCliPrgRsc,	// #1932
 	ActChgLnkPrgRsc,	// #1933
+	ActReqLnkCfe,		// #1934
   };
 
 /*****************************************************************************/

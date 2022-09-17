@@ -27,6 +27,8 @@
 
 #include <string.h>		// For string functions
 
+#include "swad_browser.h"
+#include "swad_call_for_exam.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -1012,7 +1014,11 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
          HTM_Txt ("sin enlace");	// TODO: Need translation!!!!!
 	 break;
       case PrgRsc_ASSIGNMENT:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
       case PrgRsc_CALL_FOR_EXAM:
+         Cfe_WriteCallForExamInCrsProgram (Link->Cod,PutForm);
+         break;
       case PrgRsc_EXAM:
       case PrgRsc_GAME:
       case PrgRsc_SURVEY:

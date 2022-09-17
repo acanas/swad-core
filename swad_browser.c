@@ -5319,7 +5319,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
   }
 
 /*****************************************************************************/
-/******************** Get summary and content of a file **********************/
+/******************** Write file name in course program **********************/
 /*****************************************************************************/
 
 void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
@@ -8348,7 +8348,7 @@ static void Brw_PutParamsToGetLinkToFile (void *FileMetadata)
   }
 
 /*****************************************************************************/
-/*********************** Put icon to get link to file ************************/
+/****************************** Get link to file *****************************/
 /*****************************************************************************/
 
 void Brw_GetLinkToFile (void)

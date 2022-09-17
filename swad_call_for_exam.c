@@ -882,7 +882,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Hlp_ASSESSMENT_Calls_for_exam_new_call;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_CALL_FOR_EXAM;
+   extern const char *Txt_Call_for_exam;
    extern const char *Txt_CALL_FOR_EXAM_Course;
    extern const char *Txt_CALL_FOR_EXAM_Year_or_semester;
    extern const char *Txt_CALL_FOR_EXAM_Session;
@@ -1005,13 +1005,11 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Title *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_STRONG_%s\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM CALL_FOR_EXAM_TIT DAT_STRONG_%s\"",
 	                  The_GetSuffix ());
 	       HTM_NBSP ();
 	       HTM_BR ();
-	       HTM_STRONG_Begin ();
-		  HTM_Txt (Txt_CALL_FOR_EXAM);
-	       HTM_STRONG_End ();
+		  HTM_TxtF (Txt_Call_for_exam);
 	       HTM_BR ();
 	       HTM_NBSP ();
 	    HTM_TD_End ();
@@ -1528,6 +1526,12 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
       Ico_PutContextualIconToPrint (ActPrnCfe,
 				    Cfe_PutParamExaCodToEdit,
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
+
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
+					 Cfe_PutParamExaCodToEdit,
+					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
      }
   }
 
@@ -1677,4 +1681,66 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                  Txt_CALL_FOR_EXAM_Material_allowed,CallsForExams->CallForExam.MatAllowed,
                  Txt_CALL_FOR_EXAM_Other_information,CallsForExams->CallForExam.OtherInfo) < 0)
       Err_NotEnoughMemoryExit ();
+  }
+
+/*****************************************************************************/
+/******************** Write file name in course program **********************/
+/*****************************************************************************/
+
+void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
+  {
+   extern const char *Txt_Call_for_exam;
+
+   /***** Begin form to download file *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeOneCfe);
+         Cfe_PutHiddenParamExaCod (ExaCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Call_for_exam,
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Write filename *****/
+   HTM_Txt ("Convocatoria de examen");
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Get link to call for exam ************************/
+/*****************************************************************************/
+
+void Cfe_GetLinkToFile (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   // struct FileMetadata FileMetadata;
+   // bool Found;
+
+   /***** Get parameters related to file browser *****/
+   // Brw_GetParAndInitFileBrowser ();
+
+   /***** Get file metadata *****/
+   // FileMetadata.FilCod = Brw_GetParamFilCod ();
+   // Brw_GetFileMetadataByCod (&FileMetadata);
+   // Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+
+   // if (Found)
+   //  {
+      /***** Copy link to file into resource clipboard *****/
+   //   Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
+
+      /***** Write sucess message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		     "Convocatoria");
+   //  }
+
+   /***** Show again the file browser *****/
+   // Brw_ShowAgainFileBrowserOrWorks ();
   }

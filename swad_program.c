@@ -226,7 +226,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = Prg_PutIconsEditItems,
       [Prg_RECEIVE_ITEM        ] = Prg_PutIconsEditItems,
       [Prg_EDIT_RESOURCES      ] = Prg_PutIconsEditItems,
-      [Prg_SHOW_CLIPBOARD      ] = Prg_PutIconsEditItems,
+      [Prg_EDIT_RESOURCE_LINK  ] = Prg_PutIconsEditItems,
       [Prg_CHANGE_RESOURCE_LINK] = Prg_PutIconsEditItems,
       [Prg_END_EDIT_RES        ] = Prg_PutIconsEditItems,
      };
@@ -247,7 +247,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	 break;
       case Prg_RECEIVE_ITEM:
       // case Prg_EDIT_RESOURCES:	// Uncomment to higlight item
-      // case Prg_SHOW_CLIPBOARD:	// Uncomment to higlight item
+      // case Prg_EDIT_RESOURCE_LINK:	// Uncomment to higlight item
       // case Prg_CHANGE_RESOURCE_LINK:	// Uncomment to higlight item
       // case Prg_END_EDIT_RES:		// Uncomment to higlight item
 	 if (SelectedItmCod > 0)
@@ -305,7 +305,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	      {
 	       case Prg_FORM_EDIT_ITEM:
 	       case Prg_EDIT_RESOURCES:
-	       case Prg_SHOW_CLIPBOARD:
+	       case Prg_EDIT_RESOURCE_LINK:
 	       case Prg_CHANGE_RESOURCE_LINK:
 	       case Prg_END_EDIT_RES:
 		  if (Item.Hierarchy.ItmCod != SelectedItmCod)
@@ -460,7 +460,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       [Prg_END_EDIT_ITEM       ] = true,
       [Prg_RECEIVE_ITEM        ] = true,
       [Prg_EDIT_RESOURCES      ] = true,
-      [Prg_SHOW_CLIPBOARD      ] = true,
+      [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
      };
@@ -1223,8 +1223,8 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->Resource.Hierarchy.RscCod = -1L;
    Item->Resource.Hierarchy.RscInd = 0;
    Item->Resource.Hierarchy.Hidden = false;
-   Item->Resource.Type = PrgRsc_NONE;
-   Item->Resource.Cod  = -1L;
+   Item->Resource.Link.Type = PrgRsc_NONE;
+   Item->Resource.Link.Cod  = -1L;
    Item->Resource.Title[0] = '\0';
    Item->Resource.Title[0] = '\0';
   }
