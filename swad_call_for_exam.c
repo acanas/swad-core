@@ -47,11 +47,18 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_program_database.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
+
+/*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+#define Cfe_MAX_BYTES_SESSION_AND_DATE (Cfe_MAX_BYTES_SESSION + (2 + Cns_MAX_BYTES_DATE + 7) + 1)
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -90,6 +97,9 @@ static long Cfe_GetParamExaCod (void);
 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr);
+
+static void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
+                                     char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE]);
 
 /*****************************************************************************/
 /******************** Get global calls for exams context *********************/
@@ -1570,8 +1580,7 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
   {
    extern const char *Txt_hours_ABBREVIATION;
    struct Cfe_CallsForExams CallsForExams;
-   char CrsNameAndDate[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 7) + 1];
-   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
    /***** Reset calls for exams context *****/
    Cfe_ResetCallsForExams (&CallsForExams);
@@ -1590,14 +1599,9 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
       Cfe_GetNotifContentCallForExam (&CallsForExams,ContentStr);
 
    /***** Summary *****/
-   /* Name of the course and date of exam */
-   Dat_ConvDateToDateStr (&CallsForExams.CallForExam.ExamDate,StrExamDate);
-   snprintf (CrsNameAndDate,sizeof (CrsNameAndDate),"%s, %s, %2u:%02u",
-             CallsForExams.CallForExam.CrsFullName,
-             StrExamDate,
-             CallsForExams.CallForExam.StartTime.Hour,
-             CallsForExams.CallForExam.StartTime.Minute);
-   Str_Copy (SummaryStr,CrsNameAndDate,Ntf_MAX_BYTES_SUMMARY);
+   /* Session and date of the exam */
+   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
+   Str_Copy (SummaryStr,SessionAndDate,Ntf_MAX_BYTES_SUMMARY);
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (&CallsForExams);
@@ -1689,24 +1693,42 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
 
 void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
   {
-   extern const char *Txt_Call_for_exam;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   struct Cfe_CallsForExams CallsForExams;
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
+   char *Anchor = NULL;
+
+   /***** Get session and date of the exam *****/
+   Cfe_ResetCallsForExams (&CallsForExams);
+   Cfe_AllocMemCallForExam (&CallsForExams);
+   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
+   Cfe_FreeMemCallForExam (&CallsForExams);
 
    /***** Begin form to download file *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeOneCfe);
+      /* Build anchor string */
+      Frm_SetAnchorStr (ExaCod,&Anchor);
+
+      /* Begin form */
+      Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
          Cfe_PutHiddenParamExaCod (ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Call_for_exam,
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
+
+      /* Free anchor string */
+      Frm_FreeAnchorStr (Anchor);
      }
 
-   /***** Write filename *****/
-   HTM_Txt ("Convocatoria de examen");
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt (SessionAndDate);
 
    /***** End form to download file *****/
    if (PutFormToGo)
      {
+      /* End form */
          HTM_BUTTON_End ();
 
       Frm_EndForm ();
@@ -1714,33 +1736,85 @@ void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
   }
 
 /*****************************************************************************/
-/*********************** Get link to call for exam ************************/
+/************************ Get link to call for exam **************************/
 /*****************************************************************************/
 
-void Cfe_GetLinkToFile (void)
+void Cfe_GetLinkToCallForExam (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   // struct FileMetadata FileMetadata;
-   // bool Found;
+   struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
+   long ExaCod;
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
-   /***** Get parameters related to file browser *****/
-   // Brw_GetParAndInitFileBrowser ();
+   /***** Reset calls for exams context *****/
+   Cfe_ResetCallsForExams (CallsForExams);
 
-   /***** Get file metadata *****/
-   // FileMetadata.FilCod = Brw_GetParamFilCod ();
-   // Brw_GetFileMetadataByCod (&FileMetadata);
-   // Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   /***** Get the code of the call for exam *****/
+   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
+      Err_WrongCallForExamExit ();
 
-   // if (Found)
-   //  {
-      /***** Copy link to file into resource clipboard *****/
-   //   Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
+   /***** Get data of call for exam *****/
+   Cfe_AllocMemCallForExam (CallsForExams);
+   Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
 
-      /***** Write sucess message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		     "Convocatoria");
-   //  }
+   /***** Session and date of the exam *****/
+   Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
 
-   /***** Show again the file browser *****/
-   // Brw_ShowAgainFileBrowserOrWorks ();
+   /***** Copy link to call for exam into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		  SessionAndDate);
+
+   /***** Free memory of the call for exam *****/
+   Cfe_FreeMemCallForExam (CallsForExams);
+
+   /***** Set exam to be highlighted *****/
+   CallsForExams->HighlightExaCod = ExaCod;
+
+   /***** Show again the list of calls for exams *****/
+   Cfe_ListCallsForExamsEdit ();
+  }
+
+/*****************************************************************************/
+/************** Get call for exam text from call for exam code ***************/
+/*****************************************************************************/
+
+void Cfe_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+  {
+   extern const char *Txt_Call_for_exam;
+   struct Cfe_CallsForExams CallsForExams;
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
+
+   /***** Reset calls for exams context *****/
+   Cfe_ResetCallsForExams (&CallsForExams);
+
+   /***** Get data of call for exam *****/
+   Cfe_AllocMemCallForExam (&CallsForExams);
+   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+
+   /***** Session and date of the exam *****/
+   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
+   snprintf (Title,TitleSize,"%s: %s",Txt_Call_for_exam,SessionAndDate);
+
+   /***** Free memory of the call for exam *****/
+   Cfe_FreeMemCallForExam (&CallsForExams);
+  }
+
+/*****************************************************************************/
+/*********** Build string with session and date of a call for exam ***********/
+/*****************************************************************************/
+
+static void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
+                                     char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE])
+  {
+   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+
+   Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);
+   snprintf (SessionAndDate,Cfe_MAX_BYTES_SESSION_AND_DATE,"%s, %s, %2u:%02u",
+             CallsForExams->CallForExam.Session,
+             StrExamDate,
+             CallsForExams->CallForExam.StartTime.Hour,
+             CallsForExams->CallForExam.StartTime.Minute);
   }

@@ -19800,25 +19800,25 @@ const char *Txt_Link_to_call_for_exam =
 
 const char *Txt_Link_to_resource_X_copied_into_clipboard =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Enlla&ccedil; al recurs %s copiat al porta-retalls.";
+	"Enlla&ccedil; al recurs <strong>%s</strong> copiat al porta-retalls.";
 #elif L==2	// de
-	"Link zu Ressource %s in die Zwischenablage kopiert.";
+	"Link zu Ressource <strong>%s</strong> in die Zwischenablage kopiert.";
 #elif L==3	// en
-	"Link to resource %s copied into clipboard.";
+	"Link to resource <strong>%s</strong> copied into clipboard.";
 #elif L==4	// es
-	"Enlace al recurso %s copiado en el portapapeles.";
+	"Enlace al recurso <strong>%s</strong> copiado en el portapapeles.";
 #elif L==5	// fr
-	"Lien vers la ressource %s copi&eacute; dans le presse-papiers.";
+	"Lien vers la ressource <strong>%s</strong> copi&eacute; dans le presse-papiers.";
 #elif L==6	// gn
-	"Enlace al recurso %s copiado en el portapapeles.";	// Okoteve traducción
+	"Enlace al recurso <strong>%s</strong> copiado en el portapapeles.";	// Okoteve traducción
 #elif L==7	// it
-	"Collegamento alla risorsa %s copiata negli appunti.";
+	"Collegamento alla risorsa <strong>%s</strong> copiata negli appunti.";
 #elif L==8	// pl
-	"Link do zasobu %s skopiowany do schowka.";
+	"Link do zasobu <strong>%s</strong> skopiowany do schowka.";
 #elif L==9	// pt
-	"Link para o recurso %s copiado para a &aacute;rea de transfer&ecirc;ncia.";
+	"Link para o recurso <strong>%s</strong> copiado para a &aacute;rea de transfer&ecirc;ncia.";
 #elif L==10	// tr
-	"Panoya kopyalanan %s kayna&gbreve;&inodot;na ba&gbreve;lant&inodot;.";
+	"Panoya kopyalanan <strong>%s</strong> kayna&gbreve;&inodot;na ba&gbreve;lant&inodot;.";
 #endif
 
 const char *Txt_List_of_detailed_clicks =

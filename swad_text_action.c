@@ -10782,25 +10782,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeOneCfe] =
 #if   L==1	// ca
-	"See one exam announcement"		// Necessita traducció
+	"See exam announcement"		// Necessita traducció
 #elif L==2	// de
-	"See one exam announcement"		// Need Übersetzung
+	"See exam announcement"		// Need Übersetzung
 #elif L==3	// en
-	"See one exam announcement"
+	"See exam announcement"
 #elif L==4	// es
-	"Ver una convocatoria de examen"
+	"Ver convocatoria de examen"
 #elif L==5	// fr
-	"See one exam announcement"		// Besoin de traduction
+	"See exam announcement"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver una convocatoria de examen"	// Okoteve traducción
+	"Ver convocatoria de examen"	// Okoteve traducción
 #elif L==7	// it
-	"See one exam announcement"		// Bisogno di traduzione
+	"See exam announcement"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See one exam announcement"		// Potrzebujesz tlumaczenie
+	"See exam announcement"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See one exam announcement"		// Precisa de tradução
+	"See exam announcement"		// Precisa de tradução
 #elif L==10	// tr
-	"See one exam announcement"		// Çeviri lazim!
+	"See exam announcement"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeDatCfe] =

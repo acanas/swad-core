@@ -1056,7 +1056,13 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
       case PrgRsc_NONE:
 	 break;
       case PrgRsc_ASSIGNMENT:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
       case PrgRsc_CALL_FOR_EXAM:
+	 Cfe_GetTitleFromExaCod (Item->Resource.Link.Cod,
+	                         Item->Resource.Title,
+	                         sizeof (Item->Resource.Title) - 1);
+	 break;
       case PrgRsc_EXAM:
       case PrgRsc_GAME:
       case PrgRsc_SURVEY:

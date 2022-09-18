@@ -32,7 +32,6 @@
 
 #include "swad_box.h"
 #include "swad_calendar.h"
-#include "swad_call_for_exam.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"

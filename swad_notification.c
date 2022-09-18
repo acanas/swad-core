@@ -699,10 +699,23 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
    long DegCod = -1L;
    long GrpCod = -1L;
    Act_Action_t Action = ActUnk;
+   char *Anchor = NULL;
 
    /***** Parameters depending on the type of event *****/
    switch (NotifyEvent)
      {
+      case Ntf_EVENT_CALL_FOR_EXAM:
+	 /* Build anchor string */
+	 Frm_SetAnchorStr (Cod,&Anchor);
+
+	 /* Begin form */
+	 Action = ActSeeOneCfe;
+         Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
+            Cfe_PutHiddenParamExaCod (Cod);
+
+	 /* Free anchor string */
+	 Frm_FreeAnchorStr (Anchor);
+	 break;
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:

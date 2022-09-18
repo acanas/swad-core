@@ -610,7 +610,8 @@ TODO: Attach pdf files in multimedia.
 #define CSS_FILE		"swad22.7.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 22.7:     Sep 17, 2022  Link to calls for exams in program. (? lines)
+	Version 22.7:     Sep 18, 2022  Link to calls for exams in program.
+					Notification of a call for exam now links to the call. (330230 lines)
 	Version 22.6:     Sep 17, 2022  Changes in edition of program items. (330065 lines)
 	Version 22.5:     Sep 16, 2022  Link to download document in program. (330018 lines)
 	Version 22.4.2:   Sep 16, 2022  Changes in edition of program items. (329982 lines)

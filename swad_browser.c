@@ -9146,7 +9146,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
-/******************** Get summary and content of a file **********************/
+/********************** Get file name from file code *************************/
 /*****************************************************************************/
 
 void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)

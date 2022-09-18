@@ -1946,9 +1946,9 @@ function DrawMonth (id,FirstDayOfWeek,
 					   Mon == CurrentMonth &&
 					   Day == CurrentDay);
 
-			/* Check if day has an exam announcement */
+			/* Check if day has a call for exam */
 			ThisDayHasEvent = false;
-			if (!DrawingCalendar || Mon == MonthToDraw) // If drawing calendar and the month is not the real one, don't draw exam announcements
+			if (!DrawingCalendar || Mon == MonthToDraw) // If drawing calendar and the month is not the real one, don't draw call for exams
 				for (NumExamAnnouncement = 0;
 					NumExamAnnouncement < LstExamAnnouncements.length;
 					NumExamAnnouncement++)
