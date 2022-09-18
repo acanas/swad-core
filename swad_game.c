@@ -47,6 +47,7 @@
 #include "swad_match_database.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
@@ -116,7 +117,7 @@ static void Gam_PutParamsToCreateNewGame (void *Games);
 static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame);
 
-static void Gam_PutIconToShowResultsOfGame (void *Games);
+static void Gam_PutIconsOneGame (void *Games);
 static void Gam_WriteAuthor (struct Gam_Game *Game);
 
 static void Gam_PutHiddenParamGameOrder (Gam_Order_t SelectedOrder);
@@ -487,7 +488,7 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;
    Box_BoxBegin (NULL,Txt_Game,
-                 Gam_PutIconToShowResultsOfGame,Games,
+                 Gam_PutIconsOneGame,Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
       /***** Show game *****/
@@ -691,7 +692,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 /************* Put icon to show results of matches in a game *****************/
 /*****************************************************************************/
 
-static void Gam_PutIconToShowResultsOfGame (void *Games)
+static void Gam_PutIconsOneGame (void *Games)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -702,10 +703,17 @@ static void Gam_PutIconToShowResultsOfGame (void *Games)
      };
 
    if (Games)
+     {
       /***** Put icon to view matches results *****/
       if (NextAction[Gbl.Usrs.Me.Role.Logged])
 	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],MchRes_RESULTS_BOX_ID,
 					     Gam_PutParams,Games);
+
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
+					 Gam_PutParams,Games);
+     }
   }
 
 /*****************************************************************************/
@@ -2341,4 +2349,86 @@ void Gam_GetAndShowGamesStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/***************************** Get link to game ******************************/
+/*****************************************************************************/
+
+void Gam_GetLinkToGame (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct Gam_Games Games;
+   struct Gam_Game Game;
+
+   /***** Reset games context *****/
+   Gam_ResetGames (&Games);
+
+   /***** Reset game *****/
+   Gam_ResetGame (&Game);
+
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+      Err_WrongGameExit ();
+
+   /***** Get data of the game from database *****/
+   Gam_GetDataOfGameByCod (&Game);
+
+   /***** Copy link to call for exam into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_GAME,Game.GamCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Game.Title);
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
+  }
+
+/*****************************************************************************/
+/*********************** Write game in course program ************************/
+/*****************************************************************************/
+
+void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+
+   /***** Get game title *****/
+   Gam_DB_GetGameTitle (GamCod,Title);
+
+   /***** Begin form to download file *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeGam);
+         Gam_PutParamGameCod (GamCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt (Title);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/************** Get game title from call for exam code ***************/
+/*****************************************************************************/
+
+void Gam_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
+  {
+   char TitleFromDB[Gam_MAX_BYTES_TITLE + 1];
+
+   /***** Get game title *****/
+   Gam_DB_GetGameTitle (GamCod,TitleFromDB);
+   Str_Copy (Title,TitleFromDB,TitleSize);
   }

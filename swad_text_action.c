@@ -13609,6 +13609,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move down game question"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkGam] =
+#if   L==1	// ca
+	"Copy link to game"	// Necessita traducció
+#elif L==2	// de
+	"Copy link to game"	// Need Übersetzung
+#elif L==3	// en
+	"Copy link to game"
+#elif L==4	// es
+	"Copiar enlace a juego"
+#elif L==5	// fr
+	"Copy link to game"	// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a juego"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to game"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to game"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to game"	// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to game"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeSvy] =
 #if   L==1	// ca
 	"Show survey"		// Necessita traducció

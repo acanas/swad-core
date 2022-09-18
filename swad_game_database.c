@@ -217,9 +217,24 @@ unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod)
 		    " LEFT JOIN mch_matches"
 		      " ON gam_games.GamCod=mch_matches.GamCod"
 		   " WHERE gam_games.GamCod=%ld"
-		     " AND gam_games.CrsCod='%ld'",	// Extra check
+		     " AND gam_games.CrsCod=%ld",	// Extra check
 		   GamCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get game title from database ************************/
+/*****************************************************************************/
+
+void Gam_DB_GetGameTitle (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Gam_MAX_BYTES_TITLE,"can not get game title",
+		         "SELECT Title"	// row[0]
+			  " FROM gam_games"
+		         " WHERE GamCod=%ld"
+		           " AND gam_games.CrsCod=%ld",	// Extra check
+			 GamCod,
+			 Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -228,7 +243,6 @@ unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod)
 
 void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   /***** Get text of game from database *****/
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get game text",
 		         "SELECT Txt"	// row[0]
 			  " FROM gam_games"

@@ -126,9 +126,9 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
                                           char **ContentStr,
                                           long ExaCod,bool GetContent);
 
-void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo);
-
+//--------------------------- Program resources -------------------------------
 void Cfe_GetLinkToCallForExam (void);
+void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo);
 void Cfe_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

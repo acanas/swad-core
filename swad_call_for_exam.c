@@ -1688,7 +1688,49 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
   }
 
 /*****************************************************************************/
-/******************** Write file name in course program **********************/
+/************************ Get link to call for exam **************************/
+/*****************************************************************************/
+
+void Cfe_GetLinkToCallForExam (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
+   long ExaCod;
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
+
+   /***** Reset calls for exams context *****/
+   Cfe_ResetCallsForExams (CallsForExams);
+
+   /***** Get the code of the call for exam *****/
+   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
+      Err_WrongCallForExamExit ();
+
+   /***** Get data of call for exam *****/
+   Cfe_AllocMemCallForExam (CallsForExams);
+   Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
+
+   /***** Session and date of the exam *****/
+   Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
+
+   /***** Copy link to call for exam into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		  SessionAndDate);
+
+   /***** Free memory of the call for exam *****/
+   Cfe_FreeMemCallForExam (CallsForExams);
+
+   /***** Set exam to be highlighted *****/
+   CallsForExams->HighlightExaCod = ExaCod;
+
+   /***** Show again the list of calls for exams *****/
+   Cfe_ListCallsForExamsEdit ();
+  }
+
+/*****************************************************************************/
+/******************* Write call for exam in course program *******************/
 /*****************************************************************************/
 
 void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
@@ -1733,48 +1775,6 @@ void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
 
       Frm_EndForm ();
      }
-  }
-
-/*****************************************************************************/
-/************************ Get link to call for exam **************************/
-/*****************************************************************************/
-
-void Cfe_GetLinkToCallForExam (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
-   long ExaCod;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
-
-   /***** Reset calls for exams context *****/
-   Cfe_ResetCallsForExams (CallsForExams);
-
-   /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
-
-   /***** Get data of call for exam *****/
-   Cfe_AllocMemCallForExam (CallsForExams);
-   Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
-
-   /***** Session and date of the exam *****/
-   Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
-
-   /***** Copy link to call for exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  SessionAndDate);
-
-   /***** Free memory of the call for exam *****/
-   Cfe_FreeMemCallForExam (CallsForExams);
-
-   /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = ExaCod;
-
-   /***** Show again the list of calls for exams *****/
-   Cfe_ListCallsForExamsEdit ();
   }
 
 /*****************************************************************************/

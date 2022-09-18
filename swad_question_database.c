@@ -286,11 +286,11 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
 	                "tst_tags",
 	          Qst_MAX_BYTES_QUERY_QUESTIONS);
 
-   Str_Concat (Query," WHERE tst_questions.CrsCod='",
+   Str_Concat (Query," WHERE tst_questions.CrsCod=",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Crs.CrsCod);
    Str_Concat (Query,CrsCodStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
-   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
+   Str_Concat (Query," AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (LongStr,sizeof (LongStr),"%ld",
              (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
@@ -307,10 +307,9 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
      {
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
-                        " AND tst_tags.CrsCod='",
+                        " AND tst_tags.CrsCod=",
                   Qst_MAX_BYTES_QUERY_QUESTIONS);
       Str_Concat (Query,CrsCodStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
-      Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
       LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Questions->Tags.List;

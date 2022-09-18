@@ -1484,7 +1484,7 @@ unsigned Exa_DB_GetDataOfSessionByCod (MYSQL_RES **mysql_res,long SesCod)
 		     " AND ExaCod IN"		// Extra check
 		         " (SELECT ExaCod"
 			    " FROM exa_exams"
-			   " WHERE CrsCod='%ld')",
+			   " WHERE CrsCod=%ld)",
 		   SesCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }

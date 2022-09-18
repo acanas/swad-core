@@ -65,7 +65,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1934
+#define Act_MAX_ACTION_COD		1935
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -776,23 +776,24 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRemGamQst		(ActChgCrsTT1stDay + 222)
 #define ActUp_GamQst		(ActChgCrsTT1stDay + 223)
 #define ActDwnGamQst		(ActChgCrsTT1stDay + 224)
+#define ActReqLnkGam		(ActChgCrsTT1stDay + 225)
 
-#define ActSeeSvy		(ActChgCrsTT1stDay + 225)
-#define ActAnsSvy		(ActChgCrsTT1stDay + 226)
-#define ActFrmNewSvy		(ActChgCrsTT1stDay + 227)
-#define ActEdiOneSvy		(ActChgCrsTT1stDay + 228)
-#define ActNewSvy		(ActChgCrsTT1stDay + 229)
-#define ActChgSvy		(ActChgCrsTT1stDay + 230)
-#define ActReqRemSvy		(ActChgCrsTT1stDay + 231)
-#define ActRemSvy		(ActChgCrsTT1stDay + 232)
-#define ActReqRstSvy		(ActChgCrsTT1stDay + 233)
-#define ActRstSvy		(ActChgCrsTT1stDay + 234)
-#define ActHidSvy		(ActChgCrsTT1stDay + 235)
-#define ActUnhSvy		(ActChgCrsTT1stDay + 236)
-#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 237)
-#define ActRcvSvyQst		(ActChgCrsTT1stDay + 238)
-#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 239)
-#define ActRemSvyQst		(ActChgCrsTT1stDay + 240)
+#define ActSeeSvy		(ActChgCrsTT1stDay + 226)
+#define ActAnsSvy		(ActChgCrsTT1stDay + 227)
+#define ActFrmNewSvy		(ActChgCrsTT1stDay + 228)
+#define ActEdiOneSvy		(ActChgCrsTT1stDay + 229)
+#define ActNewSvy		(ActChgCrsTT1stDay + 230)
+#define ActChgSvy		(ActChgCrsTT1stDay + 231)
+#define ActReqRemSvy		(ActChgCrsTT1stDay + 232)
+#define ActRemSvy		(ActChgCrsTT1stDay + 233)
+#define ActReqRstSvy		(ActChgCrsTT1stDay + 234)
+#define ActRstSvy		(ActChgCrsTT1stDay + 235)
+#define ActHidSvy		(ActChgCrsTT1stDay + 236)
+#define ActUnhSvy		(ActChgCrsTT1stDay + 237)
+#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 238)
+#define ActRcvSvyQst		(ActChgCrsTT1stDay + 239)
+#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 240)
+#define ActRemSvyQst		(ActChgCrsTT1stDay + 241)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/

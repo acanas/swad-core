@@ -31,6 +31,7 @@
 #include "swad_call_for_exam.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_game.h"
 #include "swad_global.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
@@ -1020,7 +1021,11 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
          Cfe_WriteCallForExamInCrsProgram (Link->Cod,PutForm);
          break;
       case PrgRsc_EXAM:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
       case PrgRsc_GAME:
+         Gam_WriteGameInCrsProgram (Link->Cod,PutForm);
+         break;
       case PrgRsc_SURVEY:
          Ale_ShowAlert (Ale_ERROR,"Not implemented!");
          break;
@@ -1064,7 +1069,13 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
 	                         sizeof (Item->Resource.Title) - 1);
 	 break;
       case PrgRsc_EXAM:
+         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         break;
       case PrgRsc_GAME:
+	 Gam_GetTitleFromGamCod (Item->Resource.Link.Cod,
+	                         Item->Resource.Title,
+	                         sizeof (Item->Resource.Title) - 1);
+	 break;
       case PrgRsc_SURVEY:
          Ale_ShowAlert (Ale_ERROR,"Not implemented!");
          break;

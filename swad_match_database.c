@@ -192,7 +192,7 @@ unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod)
 		     " AND GamCod IN"		// Extra check
 		         " (SELECT GamCod"
 		            " FROM gam_games"
-		           " WHERE CrsCod='%ld')",
+		           " WHERE CrsCod=%ld)",
 		 MchCod,
 		 Gbl.Hierarchy.Crs.CrsCod);
   }

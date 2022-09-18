@@ -822,6 +822,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemGamQst	] = {1665,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveQstFromGame		,NULL},
    [ActUp_GamQst	] = {1668,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveUpQst			,NULL},
    [ActDwnGamQst	] = {1669,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveDownQst		,NULL},
+   [ActReqLnkGam	] = {1935,-1,TabUnk,ActSeeAllGam	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_GetLinkToGame		,NULL},
 
    [ActSeeSvy		] = { 982,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeOneSurvey		,NULL},
    [ActAnsSvy		] = { 983,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
@@ -3779,6 +3780,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeCliPrgRsc,	// #1932
 	ActChgLnkPrgRsc,	// #1933
 	ActReqLnkCfe,		// #1934
+	ActReqLnkGam,		// #1935
   };
 
 /*****************************************************************************/
