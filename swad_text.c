@@ -82,6 +82,7 @@
 #include "swad_photo.h"
 #include "swad_place.h"
 #include "swad_privacy.h"
+#include "swad_program.h"
 #include "swad_project.h"
 #include "swad_record.h"
 #include "swad_role.h"
@@ -4065,7 +4066,7 @@ const char *Txt_Call_for_exam =
 #elif L==9	// pt
 	"Chamada para exame";
 #elif L==10	// tr
-	"Call for exam";		// Çeviri lazim!
+	"S&inodot;nav i&ccedil;in aray&inodot;n";
 #endif
 
 const char *Txt_Call_for_exam_removed =
@@ -11102,11 +11103,11 @@ const char *Txt_Document =
 #elif L==7	// it
 	"Documento";
 #elif L==8	// pl
-	"Document";	// Potrzebujesz tlumaczenie
+	"Dokument";
 #elif L==9	// pt
 	"Documento";
 #elif L==10	// tr
-	"Document";	// Çeviri lazim!
+	"Belge";
 #endif
 
 const char *Txt_document_in_my_courses =
@@ -12884,7 +12885,7 @@ const char *Txt_Exam =
 #elif L==9	// pt
 	"Exame";
 #elif L==10	// tr
-	"Exam";	// Çeviri lazim!
+	"S&inodot;nav";
 #endif
 
 const char *Txt_EXAM_LOG_ACTIONS[ExaLog_NUM_ACTIONS] =
@@ -15107,7 +15108,7 @@ const char *Txt_Forum_threads =
 #elif L==9	// pt
 	"Discuss&otilde;es de f&oacute;rum";
 #elif L==10	// tr
-	"Forum threads";	// Çeviri lazim!
+	"Forum konular&inodot;";
 #endif
 
 const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
@@ -15619,7 +15620,7 @@ const char *Txt_Game =
 #elif L==9	// pt
 	"Jogo";
 #elif L==10	// tr
-	"Game";		// Çeviri lazim!
+	"Oyun";
 #endif
 
 const char *Txt_Game_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -28134,7 +28135,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==9	// pt
 	"Chamada para exame"
 #elif L==10	// tr
-	"Call for exam"			// Çeviri lazim!
+	"S&inodot;nav i&ccedil;in aray&inodot;n"
 #endif
 	,
 	[Ntf_EVENT_MARKS_FILE] =
@@ -35694,6 +35695,239 @@ const char *Txt_Resource_X_removed =	// Warning: it is very important to include
 	"Kaynak <strong>s</strong> kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
+const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
+	{
+	[PrgRsc_NONE] =
+#if   L==1	// ca
+	"Sense enlla&ccedil;"
+#elif L==2	// de
+	"Keine Verbindung"
+#elif L==3	// en
+	"No link"
+#elif L==4	// es
+	"Sin enlace"
+#elif L==5	// fr
+	"Pas de lien"
+#elif L==6	// gn
+	"Sin enlace"	// Okoteve traducción
+#elif L==7	// it
+	"Nessun collegamento"
+#elif L==8	// pl
+	"Brak &lstrok;&aogon;cza"
+#elif L==9	// pt
+	"Sem link"
+#elif L==10	// tr
+	"Ba&gbreve;lant&inodot; yok"
+#endif
+	,
+	[PrgRsc_ASSIGNMENT] =
+#if   L==1	// ca
+	"Activitat"
+#elif L==2	// de
+	"Aufgabe"
+#elif L==3	// en
+	"Assignment"
+#elif L==4	// es
+	"Actividad"
+#elif L==5	// fr
+	"Activit&eacute;"
+#elif L==6	// gn
+	"Actividad"	// Okoteve traducción
+#elif L==7	// it
+	"Attivit&agrave;"
+#elif L==8	// pl
+	"Zadanie"
+#elif L==9	// pt
+	"Atividade"
+#elif L==10	// tr
+	"Atama"
+#endif
+	,
+	[PrgRsc_CALL_FOR_EXAM] =
+#if   L==1	// ca
+	"Convocat&ograve;ria d'examen"
+#elif L==2	// de
+	"Aufrufe für Pr&uuml;fung"
+#elif L==3	// en
+	"Call for exam"
+#elif L==4	// es
+	"Convocatoria de examen"
+#elif L==5	// fr
+	"Convocation &agrave; un examen"
+#elif L==6	// gn
+	"Convocatoria de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Appello d'esame"
+#elif L==8	// pl
+	"Ogloszenie egzamin"
+#elif L==9	// pt
+	"Chamada para exame"
+#elif L==10	// tr
+	"S&inodot;nav i&ccedil;in aray&inodot;n"
+#endif
+	,
+	[PrgRsc_EXAM] =
+#if   L==1	// ca
+	"Ex&agrave;men"
+#elif L==2	// de
+	"Pr&uuml;fung"
+#elif L==3	// en
+	"Exam"
+#elif L==4	// es
+	"Examen"
+#elif L==5	// fr
+	"Examen"
+#elif L==6	// gn
+	"Kuaara'&atilde;"
+#elif L==7	// it
+	"Esame"
+#elif L==8	// pl
+	"Egzamin"
+#elif L==9	// pt
+	"Exame"
+#elif L==10	// tr
+	"S&inodot;nav"
+#endif
+	,
+	[PrgRsc_GAME] =
+#if   L==1	// ca
+	"Joc"
+#elif L==2	// de
+	"Spiel"
+#elif L==3	// en
+	"Game"
+#elif L==4	// es
+	"Juego"
+#elif L==5	// fr
+	"Jeu"
+#elif L==6	// gn
+	"Juego"	// Okoteve traducción
+#elif L==7	// it
+	"Gioco"
+#elif L==8	// pl
+	"Gra"
+#elif L==9	// pt
+	"Jogo"
+#elif L==10	// tr
+	"Oyun"
+#endif
+	,
+	[PrgRsc_SURVEY] =
+#if   L==1	// ca
+	"Enquesta"
+#elif L==2	// de
+	"Umfrage"
+#elif L==3	// en
+	"Survey"
+#elif L==4	// es
+	"Encuesta"
+#elif L==5	// fr
+	"Sondage"
+#elif L==6	// gn
+	"Encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggio"
+#elif L==8	// pl
+	"Ankieta"
+#elif L==9	// pt
+	"Inqu&eacute;rito"
+#elif L==10	// tr
+	"Anket"
+#endif
+	,
+	[PrgRsc_DOCUMENT] =
+#if   L==1	// ca
+	"Document"
+#elif L==2	// de
+	"Dokument"
+#elif L==3	// en
+	"Document"
+#elif L==4	// es
+	"Documento"
+#elif L==5	// fr
+	"Document"
+#elif L==6	// gn
+	"Documento"	// Okoteve traducción
+#elif L==7	// it
+	"Documento"
+#elif L==8	// pl
+	"Dokument"
+#elif L==9	// pt
+	"Documento"
+#elif L==10	// tr
+	"Belge"
+#endif
+	,
+	[PrgRsc_MARKS] =
+#if   L==1	// ca
+	"Qualificacions"	// Necessita traducció
+#elif L==2	// de
+	"Bewertungen"
+#elif L==3	// en
+	"Marks"
+#elif L==4	// es
+	"Calificaciones"
+#elif L==5	// fr
+	"Notes"
+#elif L==6	// gn
+	"Calificaciones"	// Okoteve traducción
+#elif L==7	// it
+	"Risultati"
+#elif L==8	// pl
+	"Marks"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Notas"
+#elif L==10	// tr
+	"Marks"			// Çeviri lazim!
+#endif
+	,
+	[PrgRsc_ATTENDANCE_EVENT] =
+#if   L==1	// ca
+	"Assist&egrave;ncia"
+#elif L==2	// de
+	"Anwesenheit"
+#elif L==3	// en
+	"Attendance"
+#elif L==4	// es
+	"Asistencia"
+#elif L==5	// fr
+	"Pr&eacute;sence"
+#elif L==6	// gn
+	"Asistencia"	// Okoteve traducción
+#elif L==7	// it
+	"Presenza"
+#elif L==8	// pl
+	"Bytno&sacute;&cacute;"
+#elif L==9	// pt
+	"Presen&ccedil;a"
+#elif L==10	// tr
+	"Kat&inodot;l&inodot;m"
+#endif
+	,
+	[PrgRsc_FORUM_THREAD] =
+#if   L==1	// ca
+	"Discussi&oacute; de f&ograve;rum"
+#elif L==2	// de
+	"Forum-Thread"
+#elif L==3	// en
+	"Forum thread"
+#elif L==4	// es
+	"Discusi&oacute;n de foro"
+#elif L==5	// fr
+	"Fil de forum"
+#elif L==6	// gn
+	"Discusi&oacute;n de foro"	// Okoteve traducción
+#elif L==7	// it
+	"Discussione del forum"
+#elif L==8	// pl
+	"W&aogon;tek na forum"
+#elif L==9	// pt
+	"T&oacute;pico do f&oacute;rum"
+#elif L==10	// tr
+	"Forum ba&scedil;l&inodot;&gbreve;&inodot;"
+#endif
+	};
+
 const char *Txt_Resources =
 #if   L==1	// ca
 	"Recursos";
@@ -41518,7 +41752,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	"documents"	// Çeviri lazim!
+	"belgeler"
 #endif
 	,
 	[Brw_SHOW_DOC_CTR] =
@@ -41541,7 +41775,7 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #elif L==9	// pt
 	"documentos"
 #elif L==10	// tr
-	"documents"	// Çeviri lazim!
+	"belgeler"
 #endif
 	,
 	[Brw_ADMI_DOC_CTR] =
@@ -46428,7 +46662,7 @@ const char *Txt_Survey =
 #elif L==9	// pt
 	"Inqu&eacute;rito";
 #elif L==10	// tr
-	"Survey";	// Çeviri lazim!
+	"Anket";
 #endif
 
 const char *Txt_SURVEY_You_belong_to_the_scope_of_the_survey =
@@ -54574,7 +54808,7 @@ const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 #elif L==9	// pt
 	"Chamada para exame"
 #elif L==10	// tr
-	"Call for exam"			// Çeviri lazim!
+	"S&inodot;nav i&ccedil;in aray&inodot;n"
 #endif
 	,
 	[TmlNot_POST] =
@@ -56593,11 +56827,11 @@ const char *Txt_unknown_assignment =
 #elif L==7	// it
 	"attivit&agrave; sconosciuta";
 #elif L==8	// pl
-	"unknown assignment";		// Potrzebujesz tlumaczenie
+	"nieznany przydzia&lstrok;";
 #elif L==9	// pt
 	"atividade desconhecida";
 #elif L==10	// tr
-	"unknown assignment";		// Çeviri lazim!
+	"bilinmeyen atama";
 #endif
 
 const char *Txt_Unknown_or_without_photo =

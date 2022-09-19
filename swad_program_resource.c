@@ -426,7 +426,7 @@ static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item)
   {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -443,7 +443,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
 	 Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
-			Prg_ResourceTypesDB[Item->Resource.Link.Type]);
+			Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	 PrgRsc_WriteLinkName (&Item->Resource.Link,
 	                       true);	// Put form
       HTM_TD_End ();
