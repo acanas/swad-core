@@ -837,6 +837,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRstSvy		] = { 985,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ResetSurvey		,NULL},
    [ActHidSvy		] = { 977,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_HideSurvey			,NULL},
    [ActUnhSvy		] = { 978,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_UnhideSurvey		,NULL},
+   [ActReqLnkSvy	] = {1937,-1,TabUnk,ActSeeAllSvy	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_GetLinkToSurvey		,NULL},
    [ActEdiOneSvyQst	] = { 979,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestEditQuestion	,NULL},
    [ActRcvSvyQst	] = { 980,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveQst			,NULL},
    [ActReqRemSvyQst	] = {1524,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RequestRemoveQst		,NULL},
@@ -3783,6 +3784,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkCfe,		// #1934
 	ActReqLnkGam,		// #1935
 	ActReqLnkExa,		// #1936
+	ActReqLnkSvy,		// #1937
   };
 
 /*****************************************************************************/

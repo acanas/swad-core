@@ -287,7 +287,20 @@ unsigned Svy_DB_GetDataOfSurveyByCod (MYSQL_RES **mysql_res,long SvyCod)
   }
 
 /*****************************************************************************/
-/********************* Get survey data using its code ************************/
+/******************** Get survey title using its code ************************/
+/*****************************************************************************/
+
+void Svy_DB_GetSurveyTitle (long SvyCod,char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Svy_MAX_BYTES_SURVEY_TITLE,"can not get survey title",
+		         "SELECT Title"	// row[0]
+			  " FROM svy_surveys"
+		         " WHERE SvyCod=%ld",	// Extra check
+			 SvyCod);
+  }
+
+/*****************************************************************************/
+/*************** Get survey title and text using its code ********************/
 /*****************************************************************************/
 
 unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod)

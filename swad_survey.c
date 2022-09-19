@@ -47,6 +47,8 @@
 #include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_program.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_survey.h"
@@ -97,6 +99,7 @@ static void Svy_PutParamsToCreateNewSvy (void *Surveys);
 static void Svy_ParamsWhichGroupsToShow (void *Surveys);
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
                                long SvyCod,bool ShowOnlyThisSvyComplete);
+static void Svy_PutIconsOneSvy (void *Surveys);
 static void Svy_WriteAuthor (struct Svy_Survey *Svy);
 static void Svy_WriteStatus (struct Svy_Survey *Svy);
 static Dat_StartEndTime_t Svy_GetParamSvyOrder (void);
@@ -441,15 +444,16 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    struct Svy_Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Begin box *****/
-   if (ShowOnlyThisSvyComplete)
-      Box_BoxBegin (NULL,Txt_Survey,
-                    NULL,NULL,
-                    Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
-
    /***** Get data of this survey *****/
    Svy.SvyCod = SvyCod;
    Svy_GetDataOfSurveyByCod (&Svy);
+   Surveys->SvyCod = Svy.SvyCod;	// Used as parameters in contextual links
+
+   /***** Begin box *****/
+   if (ShowOnlyThisSvyComplete)
+      Box_BoxBegin (NULL,Txt_Survey,
+                    Svy_PutIconsOneSvy,Surveys,
+                    Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Svy.SvyCod,&Anchor);
@@ -721,6 +725,18 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
   }
 
 /*****************************************************************************/
+/******************** Put contextual icons in a survey ***********************/
+/*****************************************************************************/
+
+static void Svy_PutIconsOneSvy (void *Surveys)
+  {
+   /***** Put icon to get resource link *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
+				      Svy_PutParams,Surveys);
+  }
+
+/*****************************************************************************/
 /*********************** Write the author of a survey ************************/
 /*****************************************************************************/
 
@@ -877,8 +893,6 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
       [false] = ActHidSvy,	// Visible ==> action to hide
       [true ] = ActUnhSvy,	// Hidden ==> action to unhide
      };
-
-   Surveys->SvyCod = Svy->SvyCod;	// Used as parameters in contextual links
 
    /***** Icon to remove survey *****/
    Ico_PutContextualIconToRemove (ActReqRemSvy,NULL,
@@ -3437,4 +3451,84 @@ void Svy_GetAndShowSurveysStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/**************************** Get link to survey *****************************/
+/*****************************************************************************/
+
+void Svy_GetLinkToSurvey (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct Svy_Surveys Surveys;
+   long SvyCod;
+   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
+
+   /***** Reset surveys context *****/
+   Svy_ResetSurveys (&Surveys);
+
+   /***** Get survey code *****/
+   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
+      Err_WrongSurveyExit ();
+
+   /***** Get survey title *****/
+   Svy_DB_GetSurveyTitle (SvyCod,Title);
+
+   /***** Copy link to survey into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_SURVEY,SvyCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Title);
+
+   /***** Show surveys again *****/
+   Svy_ListAllSurveys (&Surveys);
+  }
+
+/*****************************************************************************/
+/********************** Write survey in course program ***********************/
+/*****************************************************************************/
+
+void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
+
+   /***** Get survey title *****/
+   Svy_DB_GetSurveyTitle (SvyCod,Title);
+
+   /***** Begin form to go to survey *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeSvy);
+         Svy_PutParamSvyCod (SvyCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeSvy],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt (Title);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/********************* Get survey title from survey code *********************/
+/*****************************************************************************/
+
+void Svy_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
+  {
+   char TitleFromDB[Svy_MAX_BYTES_SURVEY_TITLE + 1];
+
+   /***** Get survey title *****/
+   Svy_DB_GetSurveyTitle (SvyCod,TitleFromDB);
+   Str_Copy (Title,TitleFromDB,TitleSize);
   }

@@ -65,7 +65,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1936
+#define Act_MAX_ACTION_COD		1937
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -792,10 +792,12 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRstSvy		(ActChgCrsTT1stDay + 236)
 #define ActHidSvy		(ActChgCrsTT1stDay + 237)
 #define ActUnhSvy		(ActChgCrsTT1stDay + 238)
-#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 239)
-#define ActRcvSvyQst		(ActChgCrsTT1stDay + 240)
-#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 241)
-#define ActRemSvyQst		(ActChgCrsTT1stDay + 242)
+#define ActReqLnkSvy		(ActChgCrsTT1stDay + 239)
+
+#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 240)
+#define ActRcvSvyQst		(ActChgCrsTT1stDay + 241)
+#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 242)
+#define ActRemSvyQst		(ActChgCrsTT1stDay + 243)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/

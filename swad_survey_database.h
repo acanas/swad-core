@@ -48,6 +48,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 unsigned HiddenAllowed,
                                 Dat_StartEndTime_t SelectedOrder);
 unsigned Svy_DB_GetDataOfSurveyByCod (MYSQL_RES **mysql_res,long SvyCod);
+void Svy_DB_GetSurveyTitle (long SvyCod,char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1]);
 unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);

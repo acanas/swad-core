@@ -1028,7 +1028,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
          Gam_WriteGameInCrsProgram (Link->Cod,PutForm);
          break;
       case PrgRsc_SURVEY:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+         Svy_WriteSurveyInCrsProgram (Link->Cod,PutForm);
          break;
       case PrgRsc_DOCUMENT:
 	 Brw_WriteFileNameInCrsProgram (Link->Cod,PutForm);
@@ -1080,7 +1080,9 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
 	                         sizeof (Item->Resource.Title) - 1);
 	 break;
       case PrgRsc_SURVEY:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+	 Svy_GetTitleFromSvyCod (Item->Resource.Link.Cod,
+	                         Item->Resource.Title,
+	                         sizeof (Item->Resource.Title) - 1);
          break;
       case PrgRsc_DOCUMENT:
 	 Brw_GetFileNameFromFilCod (Item->Resource.Link.Cod,

@@ -117,4 +117,8 @@ unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
 //-------------------------------- Figures ------------------------------------
 void Svy_GetAndShowSurveysStats (void);
 
+//--------------------------- Program resources -------------------------------
+void Svy_GetLinkToSurvey (void);
+void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo);
+void Svy_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize);
 #endif
