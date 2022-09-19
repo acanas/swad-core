@@ -37,6 +37,7 @@
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
+#include "swad_survey.h"
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
@@ -1006,42 +1007,29 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 
 static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
   {
+   static void (*WriteLinkName[PrgRsc_NUM_TYPES]) (long Cod,bool PutFormToGo) =
+     {
+      [PrgRsc_NONE            ] = NULL,
+      [PrgRsc_ASSIGNMENT      ] = NULL,
+      [PrgRsc_CALL_FOR_EXAM   ] = Cfe_WriteCallForExamInCrsProgram,
+      [PrgRsc_EXAM            ] = Exa_WriteExamInCrsProgram,
+      [PrgRsc_GAME            ] = Gam_WriteGameInCrsProgram,
+      [PrgRsc_SURVEY          ] = Svy_WriteSurveyInCrsProgram,
+      [PrgRsc_DOCUMENT        ] = Brw_WriteFileNameInCrsProgram,
+      [PrgRsc_MARKS           ] = NULL,
+      [PrgRsc_ATTENDANCE_EVENT] = NULL,
+      [PrgRsc_FORUM_THREAD    ] = NULL,
+     };
+
    /***** Trivial check: code should be > 0 *****/
    if (Link->Cod <= 0)
       return;
 
-   switch (Link->Type)
-     {
-      case PrgRsc_NONE:
-         HTM_Txt ("sin enlace");	// TODO: Need translation!!!!!
-	 break;
-      case PrgRsc_ASSIGNMENT:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-         break;
-      case PrgRsc_CALL_FOR_EXAM:
-         Cfe_WriteCallForExamInCrsProgram (Link->Cod,PutForm);
-         break;
-      case PrgRsc_EXAM:
-         Exa_WriteExamInCrsProgram (Link->Cod,PutForm);
-         break;
-      case PrgRsc_GAME:
-         Gam_WriteGameInCrsProgram (Link->Cod,PutForm);
-         break;
-      case PrgRsc_SURVEY:
-         Svy_WriteSurveyInCrsProgram (Link->Cod,PutForm);
-         break;
-      case PrgRsc_DOCUMENT:
-	 Brw_WriteFileNameInCrsProgram (Link->Cod,PutForm);
-	 break;
-      case PrgRsc_MARKS:
-      case PrgRsc_ATTENDANCE_EVENT:
-      case PrgRsc_FORUM_THREAD:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-         break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
-     }
+   /***** Write link name *****/
+   if (WriteLinkName[Link->Type])
+      WriteLinkName[Link->Type] (Link->Cod,PutForm);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
   }
 
 /*****************************************************************************/
@@ -1050,6 +1038,20 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
 
 static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
   {
+   static void (*GetTitle[PrgRsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
+     {
+      [PrgRsc_NONE            ] = NULL,
+      [PrgRsc_ASSIGNMENT      ] = NULL,
+      [PrgRsc_CALL_FOR_EXAM   ] = Cfe_GetTitleFromExaCod,
+      [PrgRsc_EXAM            ] = Exa_GetTitleFromExaCod,
+      [PrgRsc_GAME            ] = Gam_GetTitleFromGamCod,
+      [PrgRsc_SURVEY          ] = Svy_GetTitleFromSvyCod,
+      [PrgRsc_DOCUMENT        ] = Brw_GetFileNameFromFilCod,
+      [PrgRsc_MARKS           ] = NULL,
+      [PrgRsc_ATTENDANCE_EVENT] = NULL,
+      [PrgRsc_FORUM_THREAD    ] = NULL,
+     };
+
    /***** Reset title *****/
    Item->Resource.Title[0] = '\0';
 
@@ -1057,47 +1059,13 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
    if (Item->Resource.Link.Cod <= 0)
       return;
 
-   switch (Item->Resource.Link.Type)
-     {
-      case PrgRsc_NONE:
-	 break;
-      case PrgRsc_ASSIGNMENT:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-         break;
-      case PrgRsc_CALL_FOR_EXAM:
-	 Cfe_GetTitleFromExaCod (Item->Resource.Link.Cod,
-	                         Item->Resource.Title,
-	                         sizeof (Item->Resource.Title) - 1);
-	 break;
-      case PrgRsc_EXAM:
-         Exa_GetTitleFromExaCod (Item->Resource.Link.Cod,
-	                         Item->Resource.Title,
-	                         sizeof (Item->Resource.Title) - 1);
-         break;
-      case PrgRsc_GAME:
-	 Gam_GetTitleFromGamCod (Item->Resource.Link.Cod,
-	                         Item->Resource.Title,
-	                         sizeof (Item->Resource.Title) - 1);
-	 break;
-      case PrgRsc_SURVEY:
-	 Svy_GetTitleFromSvyCod (Item->Resource.Link.Cod,
-	                         Item->Resource.Title,
-	                         sizeof (Item->Resource.Title) - 1);
-         break;
-      case PrgRsc_DOCUMENT:
-	 Brw_GetFileNameFromFilCod (Item->Resource.Link.Cod,
-	                            Item->Resource.Title,
-	                            sizeof (Item->Resource.Title) - 1);
-	 break;
-      case PrgRsc_MARKS:
-      case PrgRsc_ATTENDANCE_EVENT:
-      case PrgRsc_FORUM_THREAD:
-         Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-         break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
-     }
+   /***** Get title *****/
+   if (GetTitle[Item->Resource.Link.Type])
+      GetTitle[Item->Resource.Link.Type] (Item->Resource.Link.Cod,
+					  Item->Resource.Title,
+					  sizeof (Item->Resource.Title) - 1);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
   }
 
 /*****************************************************************************/
