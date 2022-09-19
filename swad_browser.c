@@ -5319,6 +5319,38 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
   }
 
 /*****************************************************************************/
+/****************************** Get link to file *****************************/
+/*****************************************************************************/
+
+void Brw_GetLinkToFile (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct FileMetadata FileMetadata;
+   bool Found;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Get file name *****/
+   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   Brw_GetFileNameByCod (&FileMetadata);
+   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+
+   if (Found)
+     {
+      /***** Copy link to file into resource clipboard *****/
+      Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
+
+      /***** Write sucess message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		     FileMetadata.FilFolLnk.Name);
+     }
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+/*****************************************************************************/
 /******************** Write file name in course program **********************/
 /*****************************************************************************/
 
@@ -5351,6 +5383,25 @@ void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
 
       Frm_EndForm ();
      }
+  }
+
+/*****************************************************************************/
+/********************** Get file name from file code *************************/
+/*****************************************************************************/
+
+void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
+  {
+   struct FileMetadata FileMetadata;
+
+   /***** Return nothing on error *****/
+   FileName[0] = '\0';	// Return nothing on error
+
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_GetFileMetadataByCod (&FileMetadata);
+
+   /***** Copy file name into summary string *****/
+   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
   }
 
 /*****************************************************************************/
@@ -8348,35 +8399,47 @@ static void Brw_PutParamsToGetLinkToFile (void *FileMetadata)
   }
 
 /*****************************************************************************/
-/****************************** Get link to file *****************************/
+/************************ Get link to download a file ************************/
 /*****************************************************************************/
 
-void Brw_GetLinkToFile (void)
+void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL)
   {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct FileMetadata FileMetadata;
-   bool Found;
+   char FullPathIncludingFile[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
+   FILE *FileURL;
+   char URLWithSpaces[PATH_MAX + 1];
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
+   /***** Construct absolute path to file in the private directory *****/
+   snprintf (FullPathIncludingFile,sizeof (FullPathIncludingFile),"%s/%s/%s",
+	     Gbl.FileBrowser.Priv.PathAboveRootFolder,PathInTree,FileName);
 
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = Brw_GetParamFilCod ();
-   Brw_GetFileMetadataByCod (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   if (Found)
+   if (Str_FileIs (FileName,"url"))	// It's a link (URL inside a .url file)
      {
-      /***** Copy link to file into resource clipboard *****/
-      Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
+      /***** Open .url file *****/
+      if ((FileURL = fopen (FullPathIncludingFile,"rb")))
+	{
+	 if (fgets (URLWithSpaces,PATH_MAX,FileURL) == NULL)
+	    URLWithSpaces[0] = '\0';
+	 /* File is not longer needed  ==> close it */
+	 fclose (FileURL);
+	}
+     }
+   else
+     {
+      /***** Create a temporary public directory used to download files *****/
+      Brw_CreateDirDownloadTmp ();
 
-      /***** Write sucess message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		     FileMetadata.FilFolLnk.Name);
+      /***** Create symbolic link from temporary public directory to private file in order to gain access to it for downloading *****/
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathIncludingFile,FileName);
+
+      /***** Create URL pointing to symbolic link *****/
+      snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
+	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+	        Gbl.FileBrowser.TmpPubDir.L,
+	        Gbl.FileBrowser.TmpPubDir.R,
+	        FileName);
      }
 
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
   }
 
 /*****************************************************************************/
@@ -8711,50 +8774,6 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 HTM_Txt (FileNameToShow);
       HTM_A_End ();
      }
-  }
-
-/*****************************************************************************/
-/************************ Get link to download a file ************************/
-/*****************************************************************************/
-
-void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL)
-  {
-   char FullPathIncludingFile[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
-   FILE *FileURL;
-   char URLWithSpaces[PATH_MAX + 1];
-
-   /***** Construct absolute path to file in the private directory *****/
-   snprintf (FullPathIncludingFile,sizeof (FullPathIncludingFile),"%s/%s/%s",
-	     Gbl.FileBrowser.Priv.PathAboveRootFolder,PathInTree,FileName);
-
-   if (Str_FileIs (FileName,"url"))	// It's a link (URL inside a .url file)
-     {
-      /***** Open .url file *****/
-      if ((FileURL = fopen (FullPathIncludingFile,"rb")))
-	{
-	 if (fgets (URLWithSpaces,PATH_MAX,FileURL) == NULL)
-	    URLWithSpaces[0] = '\0';
-	 /* File is not longer needed  ==> close it */
-	 fclose (FileURL);
-	}
-     }
-   else
-     {
-      /***** Create a temporary public directory used to download files *****/
-      Brw_CreateDirDownloadTmp ();
-
-      /***** Create symbolic link from temporary public directory to private file in order to gain access to it for downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathIncludingFile,FileName);
-
-      /***** Create URL pointing to symbolic link *****/
-      snprintf (URLWithSpaces,sizeof (URLWithSpaces),"%s/%s/%s/%s",
-	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir.L,
-	        Gbl.FileBrowser.TmpPubDir.R,
-	        FileName);
-     }
-
-   Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
   }
 
 /*****************************************************************************/
@@ -9146,22 +9165,33 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
-/********************** Get file name from file code *************************/
+/*********************** Get file name using its code ************************/
 /*****************************************************************************/
+// FileMetadata.FilCod must be filled
+// This function only gets file name stored in table files,
+// The rest of the fields are not filled
 
-void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
+void Brw_GetFileNameByCod (struct FileMetadata *FileMetadata)
   {
-   struct FileMetadata FileMetadata;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
 
-   /***** Return nothing on error *****/
-   FileName[0] = '\0';	// Return nothing on error
+   /***** Get metadata of a file from database *****/
+   if (Brw_DB_GetFileNameByCod (&mysql_res,FileMetadata->FilCod))
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
 
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
+      /* Get path (row[0]) */
+      Str_Copy (FileMetadata->FilFolLnk.Full,row[0],
+                sizeof (FileMetadata->FilFolLnk.Full) - 1);
+      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
+					    FileMetadata->FilFolLnk.Path,
+					    FileMetadata->FilFolLnk.Name);
+     }
 
-   /***** Copy file name into summary string *****/
-   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

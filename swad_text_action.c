@@ -11792,6 +11792,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Unhide exam"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkExa] =
+#if   L==1	// ca
+	"Copy link to exam"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to exam"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to exam"
+#elif L==4	// es
+	"Copiar enlace a examen"
+#elif L==5	// fr
+	"Copy link to exam"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a examen"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to exam"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to exam"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to exam"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to exam"		// Çeviri lazim!
+#endif
+	,
 	[ActFrmNewExaSet] =
 #if   L==1	// ca
 	"Request new exam set"			// Necessita traducció

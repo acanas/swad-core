@@ -725,6 +725,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemExa		] = {1882,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_RemoveExam			,NULL},
    [ActHidExa		] = {1883,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_HideExam			,NULL},
    [ActUnhExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
+   [ActReqLnkExa	] = {1936,-1,TabUnk,ActSeeAllExa	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_GetLinkToExam		,NULL},
 
    [ActFrmNewExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,ExaSet_RequestCreatOrEditSet	,NULL},
    [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ReceiveFormSet		,NULL},
@@ -3781,6 +3782,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgLnkPrgRsc,	// #1933
 	ActReqLnkCfe,		// #1934
 	ActReqLnkGam,		// #1935
+	ActReqLnkExa,		// #1936
   };
 
 /*****************************************************************************/

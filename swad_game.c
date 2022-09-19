@@ -2359,27 +2359,25 @@ void Gam_GetLinkToGame (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Gam_Games Games;
-   struct Gam_Game Game;
+   long GamCod;
+   char Title[Gam_MAX_BYTES_TITLE + 1];
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
-   /***** Reset game *****/
-   Gam_ResetGame (&Game);
-
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
 
-   /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   /***** Get game title *****/
+   Gam_DB_GetGameTitle (GamCod,Title);
 
-   /***** Copy link to call for exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_GAME,Game.GamCod);
+   /***** Copy link to game into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_GAME,GamCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Game.Title);
+   		  Title);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -2397,12 +2395,12 @@ void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
    /***** Get game title *****/
    Gam_DB_GetGameTitle (GamCod,Title);
 
-   /***** Begin form to download file *****/
+   /***** Begin form to go to game *****/
    if (PutFormToGo)
      {
       Frm_BeginForm (ActSeeGam);
          Gam_PutParamGameCod (GamCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeGam],
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
@@ -2421,7 +2419,7 @@ void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
   }
 
 /*****************************************************************************/
-/************** Get game title from call for exam code ***************/
+/*********************** Get game title from game code ***********************/
 /*****************************************************************************/
 
 void Gam_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)

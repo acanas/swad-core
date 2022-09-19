@@ -232,7 +232,7 @@ void Gam_DB_GetGameTitle (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 		         "SELECT Title"	// row[0]
 			  " FROM gam_games"
 		         " WHERE GamCod=%ld"
-		           " AND gam_games.CrsCod=%ld",	// Extra check
+		           " AND CrsCod=%ld",	// Extra check
 			 GamCod,
 			 Gbl.Hierarchy.Crs.CrsCod);
   }

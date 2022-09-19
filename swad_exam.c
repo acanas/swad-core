@@ -51,6 +51,7 @@
 #include "swad_match.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
@@ -651,10 +652,18 @@ static void Exa_PutIconToShowResultsOfExam (void *Exams)
      };
 
    if (Exams)
+     {
       /***** Put icon to view sessions results *****/
       if (NextAction[Gbl.Usrs.Me.Role.Logged])
 	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
 					     Exa_PutParams,Exams);
+
+
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
+					 Exa_PutParams,Exams);
+     }
   }
 
 /*****************************************************************************/
@@ -1628,4 +1637,86 @@ void Exa_GetAndShowExamsStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/***************************** Get link to exam ******************************/
+/*****************************************************************************/
+
+void Exa_GetLinkToExam (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct Exa_Exams Exams;
+   long ExaCod;
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+
+   /***** Reset exams context *****/
+   Exa_ResetExams (&Exams);
+
+   /***** Get parameters *****/
+   Exa_GetParams (&Exams);
+   if (Exams.ExaCod <= 0)
+      Err_WrongExamExit ();
+   ExaCod = Exams.ExaCod;
+
+   /***** Get exam title *****/
+   Exa_DB_GetExamTitle (ExaCod,Title);
+
+   /***** Copy link to exam into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_EXAM,ExaCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Title);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
+  }
+
+/*****************************************************************************/
+/*********************** Write exam in course program ************************/
+/*****************************************************************************/
+
+void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+
+   /***** Get exam title *****/
+   Exa_DB_GetExamTitle (ExaCod,Title);
+
+   /***** Begin form to go to exam *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeExa);
+         Exa_PutParamExamCod (ExaCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeExa],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt (Title);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Get exam title from exam code ***********************/
+/*****************************************************************************/
+
+void Exa_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+  {
+   char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
+
+   /***** Get exam title *****/
+   Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
+   Str_Copy (Title,TitleFromDB,TitleSize);
   }

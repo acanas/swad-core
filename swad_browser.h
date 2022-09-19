@@ -226,14 +226,12 @@ void Brw_SetDocumentAsHidden (void);
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path);
 void Brw_ShowFileMetadata (void);
 
-void Brw_GetLinkToFile (void);
-
-void Brw_DownloadFile (void);
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
+void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
-void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
+void Brw_GetFileNameByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
@@ -257,8 +255,12 @@ void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (void);
 
+//--------------------------- Program resources -------------------------------
+void Brw_GetLinkToFile (void);
 void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload);
+void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
 
+//-----------------------------------------------------------------------------
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
