@@ -49,6 +49,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_program_database.h"
 #include "swad_QR.h"
 #include "swad_setting.h"
 
@@ -116,6 +117,7 @@ static void Att_CreateGroups (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Event);
 
 static void Att_ShowEvent (struct Att_Events *Events);
+static void Att_PutIconsOneAtt (void *Events);
 
 static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event);
 static void Att_ListAttStudents (struct Att_Events *Events,
@@ -1482,7 +1484,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Event,
-                      NULL,NULL,
+                      Att_PutIconsOneAtt,Events,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
 
       /***** Show attendance event *****/
@@ -1506,6 +1508,18 @@ static void Att_ShowEvent (struct Att_Events *Events)
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in an attendance event *****************/
+/*****************************************************************************/
+
+static void Att_PutIconsOneAtt (void *Events)
+  {
+   /***** Put icon to get resource link *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+      Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
+                                      Att_PutParams,Events);
   }
 
 /*****************************************************************************/
@@ -3279,4 +3293,80 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	}
 
    The_ChangeRowColor ();
+  }
+
+/*****************************************************************************/
+/************************ Get link to attendance event ***********************/
+/*****************************************************************************/
+
+void Att_GetLinkToEvent (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   long AttCod;
+   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
+
+   /***** Get attendance event code *****/
+   if ((AttCod = Att_GetParamAttCod ()) < 0)
+      Err_WrongEventExit ();
+
+   /***** Get attendance event title *****/
+   Att_DB_GetAttEventTitle (AttCod,Title);
+
+   /***** Copy link to attendance event into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_ATTENDANCE_EVENT,AttCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Title);
+
+   /***** Show attendance events again *****/
+   Att_SeeAttEvents ();
+  }
+
+/*****************************************************************************/
+/**************** Write attendance event in course program *******************/
+/*****************************************************************************/
+
+void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
+
+   /***** Get game title *****/
+   Att_DB_GetAttEventTitle (AttCod,Title);
+
+   /***** Begin form to go to game *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeOneAtt);
+         Att_PutParamAttCod (AttCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAtt],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Write attendance event title *****/
+   HTM_Txt (Title);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/*************** Get attendance event title from game code *******************/
+/*****************************************************************************/
+
+void Att_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
+  {
+   char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
+
+   /***** Get attendance event title *****/
+   Att_DB_GetAttEventTitle (AttCod,TitleFromDB);
+   Str_Copy (Title,TitleFromDB,TitleSize);
   }

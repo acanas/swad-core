@@ -45,6 +45,8 @@ unsigned Att_DB_GetListAttEventsAllGrps (MYSQL_RES **mysql_res,
                                          Att_OrderNewestOldest_t OrderNewestOldest);
 unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Att_DB_GetDataOfAttEventByCod (MYSQL_RES **mysql_res,long AttCod);
+void Att_DB_GetAttEventTitle (long AttCod,
+                              char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1]);
 void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 
 bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);

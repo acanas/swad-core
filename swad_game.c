@@ -2405,7 +2405,7 @@ void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
 	                          The_GetSuffix ());
      }
 
-   /***** Write Name of the course and date of exam *****/
+   /***** Write game title of exam *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/

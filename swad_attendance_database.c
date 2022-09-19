@@ -187,17 +187,33 @@ unsigned Att_DB_GetDataOfAttEventByCod (MYSQL_RES **mysql_res,long AttCod)
   }
 
 /*****************************************************************************/
+/***************** Get attendance event title from database ******************/
+/*****************************************************************************/
+
+void Att_DB_GetAttEventTitle (long AttCod,
+                              char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE,
+                         "can not get attendance event title",
+		         "SELECT Title"	// row[0]
+			  " FROM att_events"
+		         " WHERE AttCod=%ld"
+		           " AND CrsCod=%ld",	// Extra check
+			 AttCod,
+			 Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /***************** Get attendance event text from database *******************/
 /*****************************************************************************/
 
 void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
   {
-   /***** Get text of attendance event from database *****/
    DB_QuerySELECTString (Description,Cns_MAX_BYTES_TEXT,"can not get attendance event text",
-		         "SELECT Txt"
+		         "SELECT Txt"	// row[0]
 			  " FROM att_events"
 		         " WHERE AttCod=%ld"
-			   " AND CrsCod=%ld",
+			   " AND CrsCod=%ld",	// Extra check
 		         AttCod,
 		         Gbl.Hierarchy.Crs.CrsCod);
   }

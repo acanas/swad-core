@@ -1417,6 +1417,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideAttEvent		,NULL},
    [ActUnhAtt		] = {1070,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideAttEvent		,NULL},
    [ActSeeOneAtt	] = {1071,-1,TabUnk,ActSeeAtt		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeOneAttEvent		,NULL},
+   [ActReqLnkAtt	] = {1938,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetLinkToEvent		,NULL},
    [ActRecAttStd	] = {1072,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterStudentsInAttEvent	,NULL},
    [ActRecAttMe		] = {1076,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterMeAsStdInAttEvent	,NULL},
 
@@ -3785,6 +3786,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkGam,		// #1935
 	ActReqLnkExa,		// #1936
 	ActReqLnkSvy,		// #1937
+	ActReqLnkAtt,		// #1938
   };
 
 /*****************************************************************************/

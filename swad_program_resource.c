@@ -27,6 +27,7 @@
 
 #include <string.h>		// For string functions
 
+#include "swad_attendance.h"
 #include "swad_browser.h"
 #include "swad_call_for_exam.h"
 #include "swad_error.h"
@@ -461,7 +462,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,
                                          bool EditLink)
   {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -499,7 +500,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	   {
 	    /* Show current link */
 	    Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
-			   Prg_ResourceTypesDB[Item->Resource.Link.Type]);
+			   Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	    PrgRsc_WriteLinkName (&Item->Resource.Link,
 	                          true);	// Put form
 	   }
@@ -518,8 +519,6 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
                                         bool EditLink)
   {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -978,6 +977,7 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
 
    HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
@@ -991,7 +991,7 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 
 	 /***** Type *****/
          Ico_PutIconOn (Prg_ResourceTypesLogos[Link->Type],Ico_BLACK,
-                        Prg_ResourceTypesDB[Link->Type]);
+                        Txt_RESOURCE_TYPES[Link->Type]);
 
 	 /***** Name *****/
          PrgRsc_WriteLinkName (Link,
@@ -1017,7 +1017,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
       [PrgRsc_SURVEY          ] = Svy_WriteSurveyInCrsProgram,
       [PrgRsc_DOCUMENT        ] = Brw_WriteFileNameInCrsProgram,
       [PrgRsc_MARKS           ] = NULL,
-      [PrgRsc_ATTENDANCE_EVENT] = NULL,
+      [PrgRsc_ATTENDANCE_EVENT] = Att_WriteAttEventInCrsProgram,
       [PrgRsc_FORUM_THREAD    ] = NULL,
      };
 
@@ -1048,7 +1048,7 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
       [PrgRsc_SURVEY          ] = Svy_GetTitleFromSvyCod,
       [PrgRsc_DOCUMENT        ] = Brw_GetFileNameFromFilCod,
       [PrgRsc_MARKS           ] = NULL,
-      [PrgRsc_ATTENDANCE_EVENT] = NULL,
+      [PrgRsc_ATTENDANCE_EVENT] = Att_GetTitleFromAttCod,
       [PrgRsc_FORUM_THREAD    ] = NULL,
      };
 
@@ -1074,7 +1074,6 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
 
 void PrgRsc_ChangeLink (void)
   {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
    struct Prg_Item Item;
    char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char TypeStr[3 + 1];

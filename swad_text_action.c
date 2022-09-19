@@ -25868,6 +25868,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"List students who attended to an event"	// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkAtt] =
+#if   L==1	// ca
+	"Copy link to attendance event"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to attendance event"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to attendance event"
+#elif L==4	// es
+	"Copiar enlace a evento de asistencia"
+#elif L==5	// fr
+	"Copy link to attendance event"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a evento de asistencia"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to attendance event"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to attendance event"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to attendance event"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to attendance event"		// Çeviri lazim!
+#endif
+	,
 	[ActRecAttStd] =
 #if   L==1	// ca
 	"Save students who attended to an event and comments"		// Necessita traducció
