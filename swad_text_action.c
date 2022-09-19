@@ -22487,6 +22487,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See file metadata in marks zone of course"				// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkSeeMrkCrs] =
+#if   L==1	// ca
+	"Copy link to file when showing course marks area"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to file when showing course marks area"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to file when showing course marks area"
+#elif L==4	// es
+	"Copiar enlace a archivo viendo zona de calificaciones de asignatura"
+#elif L==5	// fr
+	"Copy link to file when showing course marks area"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a archivo viendo zona de calificaciones de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to file when showing course marks area"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to file when showing course marks area"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to file when showing course marks area"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to file when showing course marks area"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeMyMrkCrs] =
 #if   L==1	// ca
 	"Individualized access to marks file in course"				// Necessita traducció
@@ -23083,6 +23106,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Change file metadata in marks management zone of course"					// Precisa de tradução
 #elif L==10	// tr
 	"Change file metadata in marks management zone of course"					// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkAdmMrkCrs] =
+#if   L==1	// ca
+	"Copy link to file when managing course marks area"				// Necessita traducció
+#elif L==2	// de
+	"Copy link to file when managing course marks area"				// Need Übersetzung
+#elif L==3	// en
+	"Copy link to file when managing course marks area"
+#elif L==4	// es
+	"Copiar enlace a archivo administrando zona de calificaciones de asignatura"
+#elif L==5	// fr
+	"Copy link to file when managing course marks area"				// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a archivo administrando zona de calificaciones de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to file when managing course marks area"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to file when managing course marks area"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to file when managing course marks area"				// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to file when managing course marks area"				// Çeviri lazim!
 #endif
 	,
 	[ActDowAdmMrkCrs] =

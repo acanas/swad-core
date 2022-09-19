@@ -44,7 +44,7 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-const char *Prg_ResourceTypesLogos[PrgRsc_NUM_TYPES] =
+const char *Prg_ResourceTypesIcons[PrgRsc_NUM_TYPES] =
   {
    [PrgRsc_NONE            ] = "link-slash.svg",
    // gui TEACHING_GUIDE	// Link to teaching guide
@@ -444,7 +444,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
-	 Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
+	 Ico_PutIconOn (Prg_ResourceTypesIcons[Item->Resource.Link.Type],Ico_BLACK,
 			Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	 PrgRsc_WriteLinkName (&Item->Resource.Link,
 	                       true);	// Put form
@@ -499,7 +499,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	 else
 	   {
 	    /* Show current link */
-	    Ico_PutIconOn (Prg_ResourceTypesLogos[Item->Resource.Link.Type],Ico_BLACK,
+	    Ico_PutIconOn (Prg_ResourceTypesIcons[Item->Resource.Link.Type],Ico_BLACK,
 			   Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	    PrgRsc_WriteLinkName (&Item->Resource.Link,
 	                          true);	// Put form
@@ -990,7 +990,7 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 					  " checked=\"checked\"");
 
 	 /***** Type *****/
-         Ico_PutIconOn (Prg_ResourceTypesLogos[Link->Type],Ico_BLACK,
+         Ico_PutIconOn (Prg_ResourceTypesIcons[Link->Type],Ico_BLACK,
                         Txt_RESOURCE_TYPES[Link->Type]);
 
 	 /***** Name *****/
@@ -1016,7 +1016,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
       [PrgRsc_GAME            ] = Gam_WriteGameInCrsProgram,
       [PrgRsc_SURVEY          ] = Svy_WriteSurveyInCrsProgram,
       [PrgRsc_DOCUMENT        ] = Brw_WriteFileNameInCrsProgram,
-      [PrgRsc_MARKS           ] = NULL,
+      [PrgRsc_MARKS           ] = Brw_WriteFileNameInCrsProgram,
       [PrgRsc_ATTENDANCE_EVENT] = Att_WriteAttEventInCrsProgram,
       [PrgRsc_FORUM_THREAD    ] = NULL,
      };
@@ -1047,7 +1047,7 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
       [PrgRsc_GAME            ] = Gam_GetTitleFromGamCod,
       [PrgRsc_SURVEY          ] = Svy_GetTitleFromSvyCod,
       [PrgRsc_DOCUMENT        ] = Brw_GetFileNameFromFilCod,
-      [PrgRsc_MARKS           ] = NULL,
+      [PrgRsc_MARKS           ] = Brw_GetFileNameFromFilCod,
       [PrgRsc_ATTENDANCE_EVENT] = Att_GetTitleFromAttCod,
       [PrgRsc_FORUM_THREAD    ] = NULL,
      };

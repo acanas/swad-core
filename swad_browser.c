@@ -454,13 +454,13 @@ static const Act_Action_t Brw_ActReqLnk[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActReqLnkSeeDocCrs,
-   [Brw_SHOW_MRK_CRS] = ActUnk,	// ActReqLnkSeeMrkCrs,
+   [Brw_SHOW_MRK_CRS] = ActReqLnkSeeMrkCrs,
    [Brw_ADMI_DOC_CRS] = ActReqLnkAdmDocCrs,
    [Brw_ADMI_SHR_CRS] = ActUnk,
    [Brw_ADMI_SHR_GRP] = ActUnk,
    [Brw_ADMI_WRK_USR] = ActUnk,
    [Brw_ADMI_WRK_CRS] = ActUnk,
-   [Brw_ADMI_MRK_CRS] = ActUnk,	// ActReqLnkAdmMrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActReqLnkAdmMrkCrs,
    [Brw_ADMI_BRF_USR] = ActUnk,
    [Brw_SHOW_DOC_GRP] = ActUnk,
    [Brw_ADMI_DOC_GRP] = ActUnk,
@@ -1890,6 +1890,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActExpSeeMrkCrs:
       case ActConSeeMrkCrs:
       case ActReqDatSeeMrkCrs:
+      case ActReqLnkSeeMrkCrs:
       case ActSeeMyMrkCrs:
          Gbl.FileBrowser.Type = Brw_SHOW_MRK_CRS;
          break;
@@ -1924,6 +1925,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActHidMrkCrs:
       case ActReqDatAdmMrkCrs:
       case ActChgDatAdmMrkCrs:
+      case ActReqLnkAdmMrkCrs:
       case ActDowAdmMrkCrs:
       case ActChgNumRowHeaCrs:
       case ActChgNumRowFooCrs:
@@ -5327,6 +5329,7 @@ void Brw_GetLinkToFile (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct FileMetadata FileMetadata;
    bool Found;
+   PrgRsc_Type_t Type;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -5339,7 +5342,22 @@ void Brw_GetLinkToFile (void)
    if (Found)
      {
       /***** Copy link to file into resource clipboard *****/
-      Prg_DB_CopyToClipboard (PrgRsc_DOCUMENT,FileMetadata.FilCod);
+      switch (Gbl.Action.Act)
+        {
+	 case ActReqLnkSeeDocCrs:
+	 case ActReqLnkAdmDocCrs:
+	    Type = PrgRsc_DOCUMENT;
+	    break;
+	 case ActReqLnkSeeMrkCrs:
+	 case ActReqLnkAdmMrkCrs:
+	    Type = PrgRsc_MARKS;
+	    break;
+	 default:
+	    Type = PrgRsc_NONE;	// Initialized to avoid warning
+            Err_WrongTypeExit ();
+            break;
+        }
+      Prg_DB_CopyToClipboard (Type,FileMetadata.FilCod);
 
       /***** Write sucess message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -5366,7 +5384,9 @@ void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
    /***** Begin form to download file *****/
    if (PutFormToDownload)
      {
-      Frm_BeginForm (Brw_ActDowFile[Brw_SHOW_DOC_CRS]);
+      // TODO: Download directly or go to the file data?
+      // TODO: File browser in marks file is always "admin", but student shouldn't have access to view all marks
+      Frm_BeginForm (Brw_ActDowFile[FileMetadata.FileBrowser]);
 	 Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk);
 	 HTM_BUTTON_Submit_Begin (Txt_Download,
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
@@ -8064,7 +8084,9 @@ void Brw_ShowFileMetadata (void)
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 	 */
 	 PutIconToGetLink = (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||	// Only document zone
-		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS) &&
+		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS ||
+		             Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+		             Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS) &&
 		            (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	                     FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
 	                    (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);		// Only if I am superuser // TODO: Include teachers

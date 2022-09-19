@@ -606,10 +606,14 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.11 (2022-09-20)"
+#define Log_PLATFORM_VERSION	"SWAD 22.12 (2022-09-20)"
 #define CSS_FILE		"swad22.7.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.12:    Sep 20, 2022  Links to marks file in program. (330985 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/list-alt.svg /var/www/html/swad/icon/
+
 	Version 22.11:    Sep 20, 2022  Links to attendance events in program. (330907 lines)
 	Version 22.10.1:  Sep 19, 2022  Code refactoring in program. (330789 lines)
 	Version 22.10:    Sep 19, 2022  Links to surveys in program. (330822 lines)

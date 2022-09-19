@@ -1248,6 +1248,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActExpSeeMrkCrs	] = { 528,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConSeeMrkCrs	] = { 527,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActReqDatSeeMrkCrs	] = {1086,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   [ActReqLnkSeeMrkCrs	] = {1939,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_GetLinkToFile		,NULL},
    [ActSeeMyMrkCrs	] = { 523,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mrk_ShowMyMarks		,NULL				,NULL},
 
    [ActSeeMrkGrp	] = {1204,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -1277,6 +1278,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActHidMrkCrs	] = {1192,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmMrkCrs	] = {1035,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmMrkCrs	] = {1036,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   [ActReqLnkAdmMrkCrs	] = {1940,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_GetLinkToFile		,NULL},
    [ActDowAdmMrkCrs	] = {1121,-1,TabUnk,ActSeeAdmMrk	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
    [ActChgNumRowHeaCrs	] = { 503,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsHeader	,NULL},
    [ActChgNumRowFooCrs	] = { 504,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsFooter	,NULL},
@@ -3787,6 +3789,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkExa,		// #1936
 	ActReqLnkSvy,		// #1937
 	ActReqLnkAtt,		// #1938
+	ActReqLnkSeeMrkCrs,	// #1939
+	ActReqLnkAdmMrkCrs,	// #1940
   };
 
 /*****************************************************************************/
