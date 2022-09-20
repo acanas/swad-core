@@ -515,6 +515,17 @@ static void Lay_WriteScripts (void)
 
    /***** Write script to initialize variables used to draw dates *****/
    HTM_SCRIPT_Begin (NULL,NULL);
+      HTM_Txt ("\tvar DAYS = [");
+      for (DayOfWeek = 0;
+	   DayOfWeek < 7;
+	   DayOfWeek++)
+	{
+	 if (DayOfWeek)
+	    HTM_Comma ();
+	 HTM_TxtF ("'%s'",Txt_DAYS[DayOfWeek]);
+	}
+      HTM_Txt ("];\n");
+
       HTM_Txt ("\tvar DAYS2 = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
@@ -548,17 +559,6 @@ static void Lay_WriteScripts (void)
 
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
-
-	 HTM_Txt ("\tvar DAYS = [");
-	 for (DayOfWeek = 0;
-	      DayOfWeek < 7;
-	      DayOfWeek++)
-	   {
-	    if (DayOfWeek)
-	       HTM_Comma ();
-	    HTM_TxtF ("'%s'",Txt_DAYS[DayOfWeek]);
-	   }
-	 HTM_Txt ("];\n");
 
 	 HTM_Txt ("\tvar STR_EXAM = '");
 	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
