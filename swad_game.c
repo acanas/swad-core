@@ -2407,7 +2407,10 @@ void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeGam);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write game title of exam *****/
    HTM_Txt (Title);

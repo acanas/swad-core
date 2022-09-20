@@ -5129,8 +5129,6 @@ static void Brw_PutIconNewFileOrFolder (void)
 
 static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata)
   {
-   extern const char *Txt_Link;
-
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
@@ -5147,9 +5145,13 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *Fi
 			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
 			     true);	// Put link to view metadata
 	 else
+	    /*
 	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"up-right-from-square.svg",Txt_Link,
 			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
-			     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
+			     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ()); */
+	    Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,
+	                     Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
+
 
       /***** End form *****/
       Frm_EndForm ();
@@ -5372,10 +5374,10 @@ void Brw_GetLinkToFile (void)
 /******************** Write file name in course program **********************/
 /*****************************************************************************/
 
-void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                    const char *Icon,const char *IconTitle)
+void Brw_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+                                       const char *Icon,const char *IconTitle)
   {
-   extern const char *Txt_Download;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct FileMetadata FileMetadata;
 
    /***** Get file metadata *****/
@@ -5385,21 +5387,78 @@ void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToGo,
    /***** Begin form to go to file data *****/
    if (PutFormToGo)
      {
-      /* To download the file:
-      Frm_BeginForm (Brw_ActDowFile[FileMetadata.FileBrowser]);
-         Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk); */
-      Frm_BeginForm (Brw_ActReqDatFile[FileMetadata.FileBrowser]);
-	 Brw_PutParamsFileBrowser (NULL,			// Not used
-				   NULL,			// Not used
+      Frm_BeginForm (ActReqDatSeeDocCrs);
+	 Brw_PutParamsFileBrowser (NULL,		// Not used
+				   NULL,		// Not used
 				   Brw_IS_UNKNOWN,	// Not used
 				   FileMetadata.FilCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Download,
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeDocCrs],
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (FileMetadata.FilFolLnk.Type)
+     {
+      case Brw_IS_FILE:
+	 Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
+			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
+			  PutFormToGo);	// Put link to view metadata
+	 break;
+      case Brw_IS_LINK:
+	 if (PutFormToGo)
+	    Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeDocCrs);
+	 else
+	    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      default:
+	 break;
+     }
+
+   /***** Write filename *****/
+   HTM_Txt (FileMetadata.FilFolLnk.Name);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/******************** Write file name in course program **********************/
+/*****************************************************************************/
+
+void Brw_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+                                       const char *Icon,const char *IconTitle)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   struct FileMetadata FileMetadata;
+
+   /***** Get file metadata *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_GetFileMetadataByCod (&FileMetadata);
+
+   /***** Begin form to go to file data *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActReqDatSeeMrkCrs);
+	 Brw_PutParamsFileBrowser (NULL,		// Not used
+				   NULL,		// Not used
+				   Brw_IS_UNKNOWN,	// Not used
+				   FileMetadata.FilCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeMrkCrs],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Icon depending on type ******/
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeMrkCrs);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write filename *****/
    HTM_Txt (FileMetadata.FilFolLnk.Name);

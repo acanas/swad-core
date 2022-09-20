@@ -1766,7 +1766,10 @@ void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneCfe);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
    HTM_Txt (SessionAndDate);

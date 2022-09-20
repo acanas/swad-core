@@ -3348,7 +3348,10 @@ void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAtt);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write attendance event title *****/
    HTM_Txt (Title);

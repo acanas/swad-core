@@ -119,6 +119,8 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
 static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
 static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
                                   const char *Icon,const char *IconTitle);
+static void PrgRsc_WriteEmptyLinkInCrsProgram (long Cod,__attribute__((unused)) bool PutFormToGo,
+                                               const char *Icon,const char *IconTitle);
 static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
 
@@ -958,8 +960,6 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 	    PrgRsc_GetDataOfLinkFromClipboard (&Link,&mysql_res);
 	    PrgRsc_WriteRowClipboard (true,&Link);
 	   }
-
-	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
 
       /***** End list *****/
@@ -1009,20 +1009,21 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
 						   const char *Icon,
 						   const char *IconTitle) =
      {
-      [PrgRsc_NONE            ] = NULL,
+      [PrgRsc_NONE            ] = PrgRsc_WriteEmptyLinkInCrsProgram,
       [PrgRsc_ASSIGNMENT      ] = NULL,
       [PrgRsc_CALL_FOR_EXAM   ] = Cfe_WriteCallForExamInCrsProgram,
       [PrgRsc_EXAM            ] = Exa_WriteExamInCrsProgram,
       [PrgRsc_GAME            ] = Gam_WriteGameInCrsProgram,
       [PrgRsc_SURVEY          ] = Svy_WriteSurveyInCrsProgram,
-      [PrgRsc_DOCUMENT        ] = Brw_WriteFileNameInCrsProgram,
-      [PrgRsc_MARKS           ] = Brw_WriteFileNameInCrsProgram,
+      [PrgRsc_DOCUMENT        ] = Brw_WriteDocFileNameInCrsProgram,
+      [PrgRsc_MARKS           ] = Brw_WriteMrkFileNameInCrsProgram,
       [PrgRsc_ATTENDANCE_EVENT] = Att_WriteAttEventInCrsProgram,
       [PrgRsc_FORUM_THREAD    ] = NULL,
      };
 
    /***** Trivial check: code should be > 0 *****/
-   if (Link->Cod <= 0)
+   if (Link->Type != PrgRsc_NONE &&
+       Link->Cod <= 0)
       return;
 
    /***** Write link name *****/
@@ -1030,6 +1031,20 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
       WriteLinkName[Link->Type] (Link->Cod,PutFormToGo,Icon,IconTitle);
    else
       Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+  }
+
+/*****************************************************************************/
+/********************** Write survey in course program ***********************/
+/*****************************************************************************/
+
+static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,__attribute__((unused)) bool PutFormToGo,
+                                               const char *Icon,const char *IconTitle)
+  {
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt ("sin enlace");	// TODO: Need translation!!!!!!!!!!!!!
   }
 
 /*****************************************************************************/

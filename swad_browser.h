@@ -257,8 +257,10 @@ void Brw_SetFullPathInTree (void);
 
 //--------------------------- Program resources -------------------------------
 void Brw_GetLinkToFile (void);
-void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                    const char *Icon,const char *IconTitle);
+void Brw_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+                                       const char *Icon,const char *IconTitle);
+void Brw_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+                                       const char *Icon,const char *IconTitle);
 void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
 
 //-----------------------------------------------------------------------------
