@@ -119,6 +119,7 @@ void Svy_GetAndShowSurveysStats (void);
 
 //--------------------------- Program resources -------------------------------
 void Svy_GetLinkToSurvey (void);
-void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo);
+void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle);
 void Svy_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize);
 #endif

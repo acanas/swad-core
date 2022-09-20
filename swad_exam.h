@@ -89,7 +89,8 @@ void Exa_GetAndShowExamsStats (void);
 
 //--------------------------- Program resources -------------------------------
 void Exa_GetLinkToExam (void);
-void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo);
+void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
+                                const char *Icon,const char *IconTitle);
 void Exa_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

@@ -117,7 +117,8 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
 
 static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
 static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm);
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle);
 static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
 
@@ -444,10 +445,10 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
-	 Ico_PutIconOn (Prg_ResourceTypesIcons[Item->Resource.Link.Type],Ico_BLACK,
-			Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	 PrgRsc_WriteLinkName (&Item->Resource.Link,
-	                       true);	// Put form
+	                       true,	// Put form
+	                       Prg_ResourceTypesIcons[Item->Resource.Link.Type],
+	                       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -497,13 +498,11 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	    /* Show clipboard to change resource link */
 	    PrgRsc_ShowClipboard (Item);
 	 else
-	   {
 	    /* Show current link */
-	    Ico_PutIconOn (Prg_ResourceTypesIcons[Item->Resource.Link.Type],Ico_BLACK,
-			   Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 	    PrgRsc_WriteLinkName (&Item->Resource.Link,
-	                          true);	// Put form
-	   }
+	                          true,	// Put form
+				  Prg_ResourceTypesIcons[Item->Resource.Link.Type],
+	                          Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 
       HTM_TD_End ();
 
@@ -989,13 +988,11 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 			  SubmitOnClick ? "" :
 					  " checked=\"checked\"");
 
-	 /***** Type *****/
-         Ico_PutIconOn (Prg_ResourceTypesIcons[Link->Type],Ico_BLACK,
-                        Txt_RESOURCE_TYPES[Link->Type]);
-
 	 /***** Name *****/
          PrgRsc_WriteLinkName (Link,
-                               false);	// Don't put form
+                               false,	// Don't put form
+			       Prg_ResourceTypesIcons[Link->Type],
+	                       Txt_RESOURCE_TYPES[Link->Type]);
 
       HTM_LABEL_End ();
    HTM_LI_End ();
@@ -1005,9 +1002,12 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
+static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle)
   {
-   static void (*WriteLinkName[PrgRsc_NUM_TYPES]) (long Cod,bool PutFormToGo) =
+   static void (*WriteLinkName[PrgRsc_NUM_TYPES]) (long Cod,bool PutFormToGo,
+						   const char *Icon,
+						   const char *IconTitle) =
      {
       [PrgRsc_NONE            ] = NULL,
       [PrgRsc_ASSIGNMENT      ] = NULL,
@@ -1027,7 +1027,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutForm)
 
    /***** Write link name *****/
    if (WriteLinkName[Link->Type])
-      WriteLinkName[Link->Type] (Link->Cod,PutForm);
+      WriteLinkName[Link->Type] (Link->Cod,PutFormToGo,Icon,IconTitle);
    else
       Ale_ShowAlert (Ale_ERROR,"Not implemented!");
   }

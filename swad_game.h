@@ -169,7 +169,8 @@ void Gam_GetAndShowGamesStats (void);
 
 //--------------------------- Program resources -------------------------------
 void Gam_GetLinkToGame (void);
-void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo);
+void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
+                                const char *Icon,const char *IconTitle);
 void Gam_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize);
 
 #endif

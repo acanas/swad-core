@@ -3327,7 +3327,8 @@ void Att_GetLinkToEvent (void)
 /**************** Write attendance event in course program *******************/
 /*****************************************************************************/
 
-void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo)
+void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
@@ -3345,6 +3346,9 @@ void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo)
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write attendance event title *****/
    HTM_Txt (Title);

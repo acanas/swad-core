@@ -5372,7 +5372,8 @@ void Brw_GetLinkToFile (void)
 /******************** Write file name in course program **********************/
 /*****************************************************************************/
 
-void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
+void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Download;
    struct FileMetadata FileMetadata;
@@ -5381,23 +5382,30 @@ void Brw_WriteFileNameInCrsProgram (long FilCod,bool PutFormToDownload)
    FileMetadata.FilCod = FilCod;
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   /***** Begin form to download file *****/
-   if (PutFormToDownload)
+   /***** Begin form to go to file data *****/
+   if (PutFormToGo)
      {
-      // TODO: Download directly or go to the file data?
-      // TODO: File browser in marks file is always "admin", but student shouldn't have access to view all marks
+      /* To download the file:
       Frm_BeginForm (Brw_ActDowFile[FileMetadata.FileBrowser]);
-	 Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk);
+         Brw_PutImplicitParamsFileBrowser (&FileMetadata.FilFolLnk); */
+      Frm_BeginForm (Brw_ActReqDatFile[FileMetadata.FileBrowser]);
+	 Brw_PutParamsFileBrowser (NULL,			// Not used
+				   NULL,			// Not used
+				   Brw_IS_UNKNOWN,	// Not used
+				   FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Download,
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
 
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+
    /***** Write filename *****/
    HTM_Txt (FileMetadata.FilFolLnk.Name);
 
    /***** End form to download file *****/
-   if (PutFormToDownload)
+   if (PutFormToGo)
      {
          HTM_BUTTON_End ();
 

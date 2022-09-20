@@ -111,7 +111,8 @@ void Att_PrintUsrsAttendanceCrs (void);
 
 //--------------------------- Program resources -------------------------------
 void Att_GetLinkToEvent (void);
-void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo);
+void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle);
 void Att_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

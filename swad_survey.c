@@ -3489,7 +3489,8 @@ void Svy_GetLinkToSurvey (void)
 /********************** Write survey in course program ***********************/
 /*****************************************************************************/
 
-void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo)
+void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
@@ -3506,6 +3507,9 @@ void Svy_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo)
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
    HTM_Txt (Title);

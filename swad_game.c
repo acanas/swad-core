@@ -2387,7 +2387,8 @@ void Gam_GetLinkToGame (void)
 /*********************** Write game in course program ************************/
 /*****************************************************************************/
 
-void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
+void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
+                                const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Gam_MAX_BYTES_TITLE + 1];
@@ -2404,6 +2405,9 @@ void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo)
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write game title of exam *****/
    HTM_Txt (Title);

@@ -1733,7 +1733,8 @@ void Cfe_GetLinkToCallForExam (void)
 /******************* Write call for exam in course program *******************/
 /*****************************************************************************/
 
-void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
+void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
+                                       const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct Cfe_CallsForExams CallsForExams;
@@ -1763,6 +1764,9 @@ void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo)
       /* Free anchor string */
       Frm_FreeAnchorStr (Anchor);
      }
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
    HTM_Txt (SessionAndDate);

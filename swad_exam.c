@@ -1677,7 +1677,8 @@ void Exa_GetLinkToExam (void)
 /*********************** Write exam in course program ************************/
 /*****************************************************************************/
 
-void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo)
+void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
+                                const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Gam_MAX_BYTES_TITLE + 1];
@@ -1694,6 +1695,9 @@ void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo)
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
 	                          The_GetSuffix ());
      }
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
    HTM_Txt (Title);
