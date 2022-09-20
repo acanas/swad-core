@@ -31687,6 +31687,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Disable post of forum of teachers of the platform"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkForCrsUsr] =
+#if   L==1	// ca
+	"Copy link to thread of forum of users of course"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to thread of forum of users of course"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to thread of forum of users of course"
+#elif L==4	// es
+	"Copiar enlace a discusi&oacute;n del foro de usuarios de asignatura"
+#elif L==5	// fr
+	"Copy link to thread of forum of users of course"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a discusi&oacute;n del foro de usuarios de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to thread of forum of users of course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to thread of forum of users of course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to thread of forum of users of course"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to thread of forum of users of course"			// Çeviri lazim!
+#endif
+	,
 	[ActCht] =
 #if   L==1	// ca
 	"Enter in a chat room to chat"			// Necessita traducció

@@ -57,6 +57,7 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
@@ -320,7 +321,7 @@ static void For_RemoveThreadAndItsPsts (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 				    Ale_AlertType_t AlertType,const char *Message);
-static void For_PutIconNewPost (void *Forums);
+static void For_PutIconsOneThread (void *Forums);
 static void For_PutAllHiddenParamsNewPost (void *Forums);
 
 static void For_ShowAForumPost (struct For_Forums *Forums,
@@ -708,7 +709,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
       snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",
 		Txt_Thread,Thread.Subject);
       Box_BoxBegin (NULL,FrameTitle,
-		    For_PutIconNewPost,Forums,
+		    For_PutIconsOneThread,Forums,
 		    Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
 	 /***** Get posts of a thread from database *****/
@@ -831,12 +832,21 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 /*********************** Put icon to write a new post ************************/
 /*****************************************************************************/
 
-static void For_PutIconNewPost (void *Forums)
+static void For_PutIconsOneThread (void *Forums)
   {
    if (Forums)
+     {
+      /***** Put icon to write a new post *****/
       Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_POST_SECTION_ID,
 				  For_PutAllHiddenParamsNewPost,Forums);
+
+      /***** Put icon to get resource link *****/
+      if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
+					 For_PutAllHiddenParamsNewPost,Forums);
+     }
   }
 
 static void For_PutAllHiddenParamsNewPost (void *Forums)
@@ -2296,7 +2306,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       free (Id);
 	      }
 	    else
-	       for (Column = 1;
+	       for (Column  = 1;
 		    Column <= 2;
 		    Column++)
 		 {
@@ -2576,6 +2586,7 @@ static void For_SetForumType (struct For_Forums *Forums)
       case ActCutThrForCrsUsr:	case ActPasThrForCrsUsr:
       case ActDelPstForCrsUsr:
       case ActEnbPstForCrsUsr:	case ActDisPstForCrsUsr:
+      case ActReqLnkForCrsUsr:
          Forums->Forum.Type = For_FORUM_COURSE_USRS;
          break;
       case ActSeeForCrsTch:	case ActSeePstForCrsTch:
@@ -3501,4 +3512,106 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
       HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Get link to thread *****************************/
+/*****************************************************************************/
+
+void For_GetLinkToThread (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct For_Forums Forums;
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+
+   /***** Reset forum *****/
+   For_ResetForums (&Forums);
+
+   /***** Get parameters related to forums *****/
+   For_GetParamsForums (&Forums);
+
+   /***** Get thread subject *****/
+   For_DB_GetThreadSubject (Forums.Thread.Current,Subject);
+
+   /***** Copy link to thread into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_FORUM_THREAD,Forums.Thread.Current);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Subject);
+
+   /***** Show forum list again *****/
+   For_ShowForumList (&Forums);
+
+   /***** Show threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,NULL);
+
+   /***** Show the posts of that thread *****/
+   For_ShowPostsOfAThread (&Forums,Ale_SUCCESS,NULL);
+  }
+
+/*****************************************************************************/
+/***************** Write thread subject in course program ********************/
+/*****************************************************************************/
+
+void For_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   struct For_Forums Forums;
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+
+   /***** Get thread subject *****/
+   For_DB_GetThreadSubject (ThrCod,Subject);
+
+   /***** Begin form to go to survey *****/
+   if (PutFormToGo)
+     {
+      /***** Set forum and thread *****/
+      For_ResetForums (&Forums);
+      Forums.Forum.Type = For_FORUM_COURSE_USRS;
+      Forums.Forum.Location = Gbl.Hierarchy.Crs.CrsCod;
+      Forums.Thread.Current =
+      Forums.Thread.Selected = ThrCod;
+      // TODO: In the listing of threads, the page is always the first.
+      //       The page should be that corresponding to the selected thread.
+
+      Frm_BeginForm (ActSeePstForCrsUsr);
+	 For_PutAllHiddenParamsNewPost (&Forums);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeePstForCrsUsr],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Icon depending on type ******/
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeePstForCrsUsr);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+
+   /***** Write Name of the course and date of exam *****/
+   HTM_Txt (Subject);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/********************* Get survey title from survey code *********************/
+/*****************************************************************************/
+
+void For_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
+  {
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+
+   /***** Get thread subject *****/
+   For_DB_GetThreadSubject (ThrCod,Subject);
+
+   Str_Copy (Title,Subject,TitleSize);
   }

@@ -150,4 +150,10 @@ void For_PasteThread (void);
 //-------------------------------- Figures ------------------------------------
 void For_GetAndShowForumStats (void);
 
+//--------------------------- Program resources -------------------------------
+void For_GetLinkToThread (void);
+void For_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle);
+void For_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize);
+
 #endif

@@ -59,7 +59,7 @@ const char *Prg_ResourceTypesIcons[PrgRsc_NUM_TYPES] =
    [PrgRsc_EXAM            ] = "file-signature.svg",
    [PrgRsc_GAME            ] = "gamepad.svg",
    [PrgRsc_SURVEY          ] = "poll.svg",
-   [PrgRsc_DOCUMENT        ] = "file.svg",
+   [PrgRsc_DOCUMENT        ] = "up-right-from-square.svg",	// for links because each file type has its own icon
    [PrgRsc_MARKS           ] = "list-alt.svg",
    // grp GROUPS		// ??? User select groups
    [PrgRsc_ATTENDANCE_EVENT] = "calendar-check.svg",
@@ -1018,7 +1018,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
       [PrgRsc_DOCUMENT        ] = Brw_WriteDocFileNameInCrsProgram,
       [PrgRsc_MARKS           ] = Brw_WriteMrkFileNameInCrsProgram,
       [PrgRsc_ATTENDANCE_EVENT] = Att_WriteAttEventInCrsProgram,
-      [PrgRsc_FORUM_THREAD    ] = NULL,
+      [PrgRsc_FORUM_THREAD    ] = For_WriteThreadInCrsProgram,
      };
 
    /***** Trivial check: code should be > 0 *****/
@@ -1064,7 +1064,7 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
       [PrgRsc_DOCUMENT        ] = Brw_GetFileNameFromFilCod,
       [PrgRsc_MARKS           ] = Brw_GetFileNameFromFilCod,
       [PrgRsc_ATTENDANCE_EVENT] = Att_GetTitleFromAttCod,
-      [PrgRsc_FORUM_THREAD    ] = NULL,
+      [PrgRsc_FORUM_THREAD    ] = For_GetTitleFromThrCod,
      };
 
    /***** Reset title *****/

@@ -1715,6 +1715,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDisPstForSWAUsr	] = { 625,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
    [ActDisPstForSWATch	] = { 635,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
 
+   [ActReqLnkForCrsUsr  ] = {1941,-1,TabUnk,ActSeeFor		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_GetLinkToThread		,NULL},
+
 // [ActCht		] = {  52,-1,TabUnk,ActSeeChtRms	,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
    [ActCht		] = {  52,-1,TabUnk,ActSeeChtRms	,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
 
@@ -3791,6 +3793,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkAtt,		// #1938
 	ActReqLnkSeeMrkCrs,	// #1939
 	ActReqLnkAdmMrkCrs,	// #1940
+	ActReqLnkForCrsUsr,	// #1941
   };
 
 /*****************************************************************************/

@@ -520,6 +520,22 @@ unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod)
   }
 
 /*****************************************************************************/
+/***************************** Get thread subject ****************************/
+/*****************************************************************************/
+
+void For_DB_GetThreadSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
+  {
+   DB_QuerySELECTString (Subject,Cns_MAX_BYTES_SUBJECT,
+                         "can not get thread subject",
+		         "SELECT for_posts.Subject"	// row[0]
+			  " FROM for_threads,"
+			        "for_posts"
+		         " WHERE for_threads.ThrCod=%ld"
+			   " AND for_threads.FirstPstCod=for_posts.PstCod",
+		         ThrCod);
+  }
+
+/*****************************************************************************/
 /***************** Get if a thread belongs to current forum ******************/
 /*****************************************************************************/
 
