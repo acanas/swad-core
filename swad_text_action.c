@@ -9032,6 +9032,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit an assignment"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeOneAsg] =
+#if   L==1	// ca
+	"View assignment"	// Necessita traducció
+#elif L==2	// de
+	"View assignment"	// Need Übersetzung
+#elif L==3	// en
+	"View assignment"
+#elif L==4	// es
+	"Ver actividad"
+#elif L==5	// fr
+	"View assignment"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver actividad"		// Okoteve traducción
+#elif L==7	// it
+	"View assignment"	// Bisogno di traduzione
+#elif L==8	// pl
+	"View assignment"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"View assignment"	// Precisa de tradução
+#elif L==10	// tr
+	"View assignment"	// Çeviri lazim!
+#endif
+	,
 	[ActPrnOneAsg] =
 #if   L==1	// ca
 	"Show print view of an assignment"			// Necessita traducció

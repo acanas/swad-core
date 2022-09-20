@@ -3576,7 +3576,7 @@ void For_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
       // TODO: In the listing of threads, the page is always the first.
       //       The page should be that corresponding to the selected thread.
 
-      Frm_BeginForm (ActSeePstForCrsUsr);
+      Frm_BeginFormAnchor (ActSeePstForCrsUsr,For_FORUM_POSTS_SECTION_ID);
 	 For_PutAllHiddenParamsNewPost (&Forums);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeePstForCrsUsr],
 	                          "class=\"LM BT_LINK PRG_RSC_%s\"",

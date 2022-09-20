@@ -346,6 +346,49 @@ static void Asg_ParamsWhichGroupsToShow (void *Assignments)
   }
 
 /*****************************************************************************/
+/**************************** Show one assignment ****************************/
+/*****************************************************************************/
+
+void Asg_SeeOneAssignment (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Assignments;
+   extern const char *Txt_Assignment;
+   struct Asg_Assignments Assignments;
+   long AsgCod;
+
+   /***** Reset assignments *****/
+   Asg_ResetAssignments (&Assignments);
+
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+
+   /***** Get the code of the assignment *****/
+   AsgCod = Asg_GetParamAsgCod ();
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_Assignment,
+		      NULL,NULL,
+		      Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE,2);
+
+      /***** Table head *****/
+      Asg_PutHeadForSeeing (&Assignments,
+			    false);	// Not print view
+
+      /***** Write assignment *****/
+      Asg_ShowOneAssignment (&Assignments,
+			     AsgCod,
+			     false);	// Not print view
+
+   /***** End table and end box *****/
+   Box_BoxTableEnd ();
+
+   /***** Show current assignments, if any *****/
+   Asg_ShowAllAssignments (&Assignments);
+  }
+
+/*****************************************************************************/
 /******************** Show print view of one assignment **********************/
 /*****************************************************************************/
 
@@ -389,6 +432,7 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView)
   {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -455,14 +499,20 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 HTM_TD_Begin ("class=\"LT\"");
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+
       HTM_ARTICLE_Begin (Anchor);
-         HTM_SPAN_Begin ("class=\"%s_%s\"",
-		          Asg.Hidden ? "ASG_TITLE_LIGHT" :
-				       "ASG_TITLE",
-		          The_GetSuffix ());
-            HTM_Txt (Asg.Title);
-         HTM_SPAN_End ();
+	 Frm_BeginForm (ActSeeOneAsg);
+	    Asg_PutParams (Assignments);
+	    HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
+	                             "class=\"LT BT_LINK %s_%s\"",
+				     Asg.Hidden ? "ASG_TITLE_LIGHT" :
+						  "ASG_TITLE",
+				     The_GetSuffix ());
+	       HTM_Txt (Asg.Title);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
       HTM_ARTICLE_End ();
+
       HTM_TD_End ();
 
       /* Assignment folder */

@@ -594,6 +594,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
    [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
+   [ActSeeOneAsg	] = {1942,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeOneAssignment		,NULL},
    [ActPrnOneAsg	] = {1637,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Asg_PrintOneAssignment		,NULL},
    [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
    [ActChgAsg		] = { 815,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
@@ -3794,6 +3795,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkSeeMrkCrs,	// #1939
 	ActReqLnkAdmMrkCrs,	// #1940
 	ActReqLnkForCrsUsr,	// #1941
+	ActSeeOneAsg,		// #1942
   };
 
 /*****************************************************************************/

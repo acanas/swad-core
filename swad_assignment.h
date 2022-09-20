@@ -80,6 +80,7 @@ struct Asg_Assignment
 /*****************************************************************************/
 
 void Asg_SeeAssignments (void);
+void Asg_SeeOneAssignment (void);
 void Asg_PrintOneAssignment (void);
 
 void Asg_RequestCreatOrEditAsg (void);
