@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -111,8 +111,8 @@ void Att_PrintUsrsAttendanceCrs (void);
 
 //--------------------------- Program resources -------------------------------
 void Att_GetLinkToEvent (void);
-void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
+void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
                                     const char *Icon,const char *IconTitle);
-void Att_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
+void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

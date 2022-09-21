@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -5374,7 +5374,7 @@ void Brw_GetLinkToFile (void)
 /******************** Write file name in course program **********************/
 /*****************************************************************************/
 
-void Brw_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                        const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -5431,7 +5431,7 @@ void Brw_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 /******************** Write file name in course program **********************/
 /*****************************************************************************/
 
-void Brw_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                        const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -5476,7 +5476,7 @@ void Brw_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 /********************** Get file name from file code *************************/
 /*****************************************************************************/
 
-void Brw_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
+void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
   {
    struct FileMetadata FileMetadata;
 

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -49,7 +49,6 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -64,9 +63,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Asg_ResetAssignments (struct Asg_Assignments *Assignments);
-
-static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments);
 static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
                                   bool PrintView);
 static bool Asg_CheckIfICanCreateAssignments (void);
@@ -74,13 +70,11 @@ static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_PutButtonToCreateNewAsg (void *Assignments);
 static void Asg_ParamsWhichGroupsToShow (void *Assignments);
-static void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView);
-static Dat_StartEndTime_t Asg_GetParamAsgOrder (void);
 
 static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const struct Asg_Assignment *Asg,
@@ -92,7 +86,6 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
 				     unsigned NumAsgs);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
-static void Asg_PutParamAsgCod (long AsgCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
@@ -104,7 +97,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
 /*************************** Reset assignments *******************************/
 /*****************************************************************************/
 
-static void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
+void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
   {
    Assignments->LstIsRead     = false;	// List is not read
    Assignments->Num           = 0;
@@ -138,7 +131,7 @@ void Asg_SeeAssignments (void)
 /**************************** Show all assignments ***************************/
 /*****************************************************************************/
 
-static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
+void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
@@ -416,7 +409,7 @@ void Asg_PrintOneAssignment (void)
 /************************* Show an assignment in a box ***********************/
 /*****************************************************************************/
 
-static void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
+void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignment;
@@ -685,7 +678,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 /******* Get parameter with the type or order in list of assignments *********/
 /*****************************************************************************/
 
-static Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
+Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
   {
    return (Dat_StartEndTime_t)
    Par_GetParToUnsignedLong ("Order",
@@ -985,7 +978,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /***************** Write parameter with code of assignment *******************/
 /*****************************************************************************/
 
-static void Asg_PutParamAsgCod (long AsgCod)
+void Asg_PutParamAsgCod (long AsgCod)
   {
    Par_PutHiddenParamLong (NULL,"AsgCod",AsgCod);
   }
@@ -1770,100 +1763,4 @@ void Asg_GetAndShowAssignmentsStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/***************************** Get link to assignment ******************************/
-/*****************************************************************************/
-
-void Asg_GetLinkToAssignment (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Asg_Assignments Assignments;
-   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
-
-   /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
-
-   /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
-
-   /***** Get assignment code *****/
-   if ((Assignments.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Err_WrongAssignmentExit ();
-
-   /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (Assignments.AsgCod,Title);
-
-   /***** Copy link to assignment into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.AsgCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
-
-   /***** Show selected assignment in a box *****/
-   Asg_ShowOneAssignmentInBox (&Assignments);
-
-   /***** Show current assignments, if any *****/
-   Asg_ShowAllAssignments (&Assignments);
-  }
-
-/*****************************************************************************/
-/*********************** Write assignment in course program ************************/
-/*****************************************************************************/
-
-void Asg_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                      const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
-
-   /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (AsgCod,Title);
-
-   /***** Begin form to go to assignment *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActSeeOneAsg);
-         Asg_PutParamAsgCod (AsgCod);
-	 // TODO: In the listing of assignments, the page is always the first.
-	 //       The page should be that corresponding to the selected assignment.
-         HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAsg);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write assignment title of exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-      /* End form */
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/**************** Get assignment title from assignment code ******************/
-/*****************************************************************************/
-
-void Asg_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
-  {
-   char TitleFromDB[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
-
-   /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (AsgCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
   }

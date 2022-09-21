@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -79,9 +79,16 @@ struct Asg_Assignment
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Asg_ResetAssignments (struct Asg_Assignments *Assignments);
+
 void Asg_SeeAssignments (void);
+void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments);
 void Asg_SeeOneAssignment (void);
 void Asg_PrintOneAssignment (void);
+
+void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
+
+Dat_StartEndTime_t Asg_GetParamAsgOrder (void);
 
 void Asg_RequestCreatOrEditAsg (void);
 void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg);
@@ -91,6 +98,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
                              long AsgCod,bool GetContent);
 
+void Asg_PutParamAsgCod (long AsgCod);
 long Asg_GetParamAsgCod (void);
 void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
@@ -105,9 +113,9 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif);
 void Asg_GetAndShowAssignmentsStats (void);
 
 //--------------------------- Program resources -------------------------------
-void Asg_GetLinkToAssignment (void);
-void Asg_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                      const char *Icon,const char *IconTitle);
-void Asg_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
+void AsgRsc_GetLinkToAssignment (void);
+void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
+                                         const char *Icon,const char *IconTitle);
+void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
 
 #endif

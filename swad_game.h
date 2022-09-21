@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -169,8 +169,8 @@ void Gam_GetAndShowGamesStats (void);
 
 //--------------------------- Program resources -------------------------------
 void Gam_GetLinkToGame (void);
-void Gam_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
+void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
                                 const char *Icon,const char *IconTitle);
-void Gam_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize);
+void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize);
 
 #endif

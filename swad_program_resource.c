@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -29,6 +29,7 @@
 #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
+#include "swad_assignment_resource.h"
 #include "swad_attendance.h"
 #include "swad_browser.h"
 #include "swad_call_for_exam.h"
@@ -1017,15 +1018,15 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
 						   const char *IconTitle) =
      {
       [PrgRsc_NONE            ] = PrgRsc_WriteEmptyLinkInCrsProgram,
-      [PrgRsc_ASSIGNMENT      ] = Asg_WriteAssignmentInCrsProgram,
-      [PrgRsc_CALL_FOR_EXAM   ] = Cfe_WriteCallForExamInCrsProgram,
-      [PrgRsc_EXAM            ] = Exa_WriteExamInCrsProgram,
-      [PrgRsc_GAME            ] = Gam_WriteGameInCrsProgram,
-      [PrgRsc_SURVEY          ] = Svy_WriteSurveyInCrsProgram,
-      [PrgRsc_DOCUMENT        ] = Brw_WriteDocFileNameInCrsProgram,
-      [PrgRsc_MARKS           ] = Brw_WriteMrkFileNameInCrsProgram,
-      [PrgRsc_ATTENDANCE_EVENT] = Att_WriteAttEventInCrsProgram,
-      [PrgRsc_FORUM_THREAD    ] = For_WriteThreadInCrsProgram,
+      [PrgRsc_ASSIGNMENT      ] = AsgRsc_WriteAssignmentInCrsProgram,
+      [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_WriteCallForExamInCrsProgram,
+      [PrgRsc_EXAM            ] = ExaRsc_WriteExamInCrsProgram,
+      [PrgRsc_GAME            ] = GamRsc_WriteGameInCrsProgram,
+      [PrgRsc_SURVEY          ] = SvyRsc_WriteSurveyInCrsProgram,
+      [PrgRsc_DOCUMENT        ] = BrwRsc_WriteDocFileNameInCrsProgram,
+      [PrgRsc_MARKS           ] = BrwRsc_WriteMrkFileNameInCrsProgram,
+      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_WriteAttEventInCrsProgram,
+      [PrgRsc_FORUM_THREAD    ] = ForRsc_WriteThreadInCrsProgram,
      };
 
    /***** Trivial check: code should be > 0 *****/
@@ -1066,15 +1067,15 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
    static void (*GetTitle[PrgRsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
       [PrgRsc_NONE            ] = NULL,
-      [PrgRsc_ASSIGNMENT      ] = Asg_GetTitleFromAsgCod,
-      [PrgRsc_CALL_FOR_EXAM   ] = Cfe_GetTitleFromExaCod,
-      [PrgRsc_EXAM            ] = Exa_GetTitleFromExaCod,
-      [PrgRsc_GAME            ] = Gam_GetTitleFromGamCod,
-      [PrgRsc_SURVEY          ] = Svy_GetTitleFromSvyCod,
-      [PrgRsc_DOCUMENT        ] = Brw_GetFileNameFromFilCod,
-      [PrgRsc_MARKS           ] = Brw_GetFileNameFromFilCod,
-      [PrgRsc_ATTENDANCE_EVENT] = Att_GetTitleFromAttCod,
-      [PrgRsc_FORUM_THREAD    ] = For_GetTitleFromThrCod,
+      [PrgRsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
+      [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
+      [PrgRsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
+      [PrgRsc_GAME            ] = GamRsc_GetTitleFromGamCod,
+      [PrgRsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
+      [PrgRsc_DOCUMENT        ] = BrwRsc_GetFileNameFromFilCod,
+      [PrgRsc_MARKS           ] = BrwRsc_GetFileNameFromFilCod,
+      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
+      [PrgRsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
      };
 
    /***** Reset title *****/

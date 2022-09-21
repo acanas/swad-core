@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -3327,7 +3327,7 @@ void Att_GetLinkToEvent (void)
 /**************** Write attendance event in course program *******************/
 /*****************************************************************************/
 
-void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
+void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
                                     const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -3370,7 +3370,7 @@ void Att_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
 /*************** Get attendance event title from game code *******************/
 /*****************************************************************************/
 
-void Att_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
+void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 

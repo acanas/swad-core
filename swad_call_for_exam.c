@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -1733,7 +1733,7 @@ void Cfe_GetLinkToCallForExam (void)
 /******************* Write call for exam in course program *******************/
 /*****************************************************************************/
 
-void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
+void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
                                        const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -1788,7 +1788,7 @@ void Cfe_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
 /************** Get call for exam text from call for exam code ***************/
 /*****************************************************************************/
 
-void Cfe_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Call_for_exam;
    struct Cfe_CallsForExams CallsForExams;

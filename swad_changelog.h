@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.16.1 (2022-09-21)"
+#define Log_PLATFORM_VERSION	"SWAD 22.17 (2022-09-21)"
 #define CSS_FILE		"swad22.16.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.17:    Sep 21, 2022  New module swad_assignment_resource. (331524 lines)
 	Version 22.16.1:  Sep 21, 2022  Changes in program layout. (331462 lines)
 	Version 22.16:    Sep 21, 2022  Changes in program layout. (331455 lines)
 	Version 22.15:    Sep 21, 2022  Links to assignments in program. (331442 lines)

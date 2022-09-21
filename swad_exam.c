@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2021 Antonio Cañas Vargas
+    Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -1677,7 +1677,7 @@ void Exa_GetLinkToExam (void)
 /*********************** Write exam in course program ************************/
 /*****************************************************************************/
 
-void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
+void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
                                 const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -1719,7 +1719,7 @@ void Exa_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
 /*********************** Get exam title from exam code ***********************/
 /*****************************************************************************/
 
-void Exa_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
 
