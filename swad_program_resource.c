@@ -476,7 +476,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
          PrgRsc_PutFormsToRemEditOneResource (Item,NumRsc,NumResources);
       HTM_TD_End ();
 
@@ -531,7 +531,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
 	 PrgRsc_PutFormsToRemEditOneResource (Item,NumResources,NumResources);
       HTM_TD_End ();
 
@@ -605,6 +605,14 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
+	 /***** Put icon to edit the item resource *****/
+	 if (NumRsc < NumResources)
+	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+	 else
+	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+
 	 /***** Icon to move up the item resource *****/
 	 if (NumRsc > 0 && NumRsc < NumResources)
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
@@ -620,14 +628,6 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
-
-	 /***** Put icon to edit the item resource *****/
-	 if (NumRsc < NumResources)
-	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
-	 else
-	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 	 break;
       case Rol_STD:
       case Rol_NET:

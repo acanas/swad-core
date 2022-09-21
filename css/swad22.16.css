@@ -1679,7 +1679,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_COL1
 	{
 	box-sizing:border-box;
-	width:108px;
+	width:88px;
 	}
 	
 .PRG_TITLE_DESCRIPTION_WIDTH
@@ -1771,6 +1771,12 @@ a:hover img.CENTER_PHOTO_SHOW
 	to	{outline:thick solid transparent;} */
 	from	{opacity:0;}
 	to	{opacity:1;}
+	}
+	
+.PRG_RSC_COL1
+	{
+	box-sizing:border-box;
+	width:66px;
 	}
 
 .PRG_RSC_WHITE,
