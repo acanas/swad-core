@@ -207,13 +207,14 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod)
   {
    extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_Course_program;
+   extern const char *Txt_COURSE_program;
    long ParentItmCod = -1L;	// Initialized to avoid warning
    unsigned NumItem;
    unsigned FormLevel = 0;	// Initialized to avoid warning
    Prg_ListingType_t LT;
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
+   char *Title;
    static bool FirstTBodyOpen = false;
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
      {
@@ -265,9 +266,12 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Course_program,
+   if (asprintf (&Title,Txt_COURSE_program,Gbl.Hierarchy.Crs.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin ("100%",Title,
                  FunctionToDrawContextualIcons[ListingType],NULL,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+   free (Title);
 
       /***** Table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -606,7 +610,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	}
 
       /* List of resources */
-      PrgRsc_ListItemResources (ListingType,Item->Hierarchy.ItmCod,SelectedRscCod);
+      PrgRsc_ListItemResources (ListingType,Item,SelectedRscCod);
 
       /* End text and resources */
       HTM_TD_End ();
@@ -2086,7 +2090,7 @@ void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assig
 	                     (double) NumCoursesWithItems;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_COURSE_PROGRAMS],
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_course_programs,Box_NOT_CLOSABLE,2);
 

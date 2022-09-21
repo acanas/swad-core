@@ -6060,27 +6060,27 @@ const char *Txt_course =
 	"kurs";
 #endif
 
-const char *Txt_Course_program =
+const char *Txt_COURSE_program =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Programa de l'assignatura";
+	"Programa de %s";
 #elif L==2	// de
-	"Kursprogramm";
+	"Programm %s";
 #elif L==3	// en
-	"Course program";
+	"%s program";
 #elif L==4	// es
-	"Programa de la asignatura";
+	"Programa de %s";
 #elif L==5	// fr
-	"Programme de la mati&egrave;re";
+	"Programme de %s";
 #elif L==6	// gn
-	"Programa de la asignatura";	// Okoteve traducción
+	"Programa de %s";	// Okoteve traducción
 #elif L==7	// it
-	"Programma del corso";
+	"Programma di %s";
 #elif L==8	// pl
-	"Program kursu";
+	"Program %s";
 #elif L==9	// pt
-	"Programa da disciplina";
+	"Programa de %s";
 #elif L==10	// tr
-	"Course program";		// Çeviri lazim!
+	"%s program&inodot;";
 #endif
 
 const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
@@ -35928,27 +35928,27 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 #endif
 	};
 
-const char *Txt_Resources =
+const char *Txt_Resources_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Recursos";
+	"Recursos de %s";
 #elif L==2	// de
-	"Ressourcen";
+	"%s-Ressourcen";
 #elif L==3	// en
-	"Resources";
+	"Resources of %s";
 #elif L==4	// es
-	"Recursos";
+	"Recursos de %s";
 #elif L==5	// fr
-	"Ressources";
+	"Ressources de %s";
 #elif L==6	// gn
-	"Recursos";	// Okoteve traducción
+	"Recursos de %s";	// Okoteve traducción
 #elif L==7	// it
-	"Risorse";
+	"Risorse di %s";
 #elif L==8	// pl
-	"Zasoby";
+	"Zasoby %s";
 #elif L==9	// pt
-	"Recursos";
+	"Recursos de %s";
 #elif L==10	// tr
-	"Kaynaklar";
+	"%s kaynaklar&inodot;";
 #endif
 
 const char *Txt_Result =

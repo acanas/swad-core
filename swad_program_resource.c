@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_attendance.h"
@@ -119,7 +121,8 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
 static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
 static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
                                   const char *Icon,const char *IconTitle);
-static void PrgRsc_WriteEmptyLinkInCrsProgram (long Cod,__attribute__((unused)) bool PutFormToGo,
+static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
+                                               __attribute__((unused)) bool PutFormToGo,
                                                const char *Icon,const char *IconTitle);
 static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
@@ -171,16 +174,16 @@ void PrgRsc_EditResources (void)
 /*****************************************************************************/
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               long ItmCod,long SelectedRscCod)
+                               struct Prg_Item *Item,long SelectedRscCod)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Remove_resource;
-   extern const char *Txt_Resources;
+   extern const char *Txt_Resources_of_X;
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
-   struct Prg_Item Item;
    bool EditLink;
+   char *Title;
    static bool GetHiddenResources[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
@@ -243,11 +246,11 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
      };
 
    /***** Trivial check *****/
-   if (ItmCod <= 0)
+   if (Item->Hierarchy.ItmCod <= 0)
       return;
 
    /***** Get list of item resources from database *****/
-   NumResources = Prg_DB_GetListResources (&mysql_res,ItmCod,
+   NumResources = Prg_DB_GetListResources (&mysql_res,Item->Hierarchy.ItmCod,
                                            GetHiddenResources[ListingType]);
 
    if (NumResources || ShowListWhenEmpty[ListingType])
@@ -272,9 +275,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	   }
 
       /***** Begin box *****/
-      Box_BoxBegin ("100%",Txt_Resources,
-		    FunctionToDrawContextualIcons[ListingType],&ItmCod,
+      if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxBegin ("100%",Title,
+		    FunctionToDrawContextualIcons[ListingType],&Item->Hierarchy.ItmCod,
 		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+      free (Title);
 
 	 /***** Table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
@@ -286,7 +292,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		    NumRsc++, The_ChangeRowColor1 (1))
 		 {
 		  /* Get data of this item resource */
-		  PrgRsc_GetDataOfResource (&Item,&mysql_res);
+		  PrgRsc_GetDataOfResource (Item,&mysql_res);
 
 		  /* Show item */
 		  switch (ListingType)
@@ -295,27 +301,26 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		     case Prg_EDIT_RESOURCE_LINK:
 		     case Prg_CHANGE_RESOURCE_LINK:
 			EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
-	                            Item.Resource.Hierarchy.RscCod == SelectedRscCod);
-			PrgRsc_WriteRowEditResource (NumRsc,NumResources,&Item,
-			                             EditLink);
+	                            Item->Resource.Hierarchy.RscCod == SelectedRscCod);
+			PrgRsc_WriteRowEditResource (NumRsc,
+			                             NumResources,Item,EditLink);
 			break;
 		     default:
-			PrgRsc_WriteRowViewResource (NumRsc,&Item);
+			PrgRsc_WriteRowViewResource (NumRsc,Item);
 			break;
 		    }
 		 }
 
 	       /***** Form to create a new resource *****/
+	       Item->Resource.Hierarchy.RscCod = -1L;
 	       switch (ListingType)
 		 {
 		  case Prg_EDIT_RESOURCES:
 		  case Prg_EDIT_RESOURCE_LINK:
 		  case Prg_CHANGE_RESOURCE_LINK:
-		     Prg_ResetItem (&Item);
-		     Item.Hierarchy.ItmCod = ItmCod;
 		     EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
-				 Item.Resource.Hierarchy.RscCod == SelectedRscCod);
-		     PrgRsc_WriteRowNewResource (NumResources,&Item,EditLink);
+				 Item->Resource.Hierarchy.RscCod == SelectedRscCod);
+		     PrgRsc_WriteRowNewResource (NumResources,Item,EditLink);
 		     break;
 		  default:
 		     break;
@@ -520,6 +525,8 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
                                         bool EditLink)
   {
+   extern const char *Txt_New_resource;
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -544,7 +551,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
 			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
-			    "Nuevo recurso",	// TODO: Need translation!!!!!!!!!!!!!!!!!!!
+			    Txt_New_resource,
 			    The_GetSuffix ());
 	 Frm_EndForm ();
 
@@ -1037,14 +1044,17 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
 /********************** Write survey in course program ***********************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,__attribute__((unused)) bool PutFormToGo,
+static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
+                                               __attribute__((unused)) bool PutFormToGo,
                                                const char *Icon,const char *IconTitle)
   {
+   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
+
    /***** Icon depending on type ******/
    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
-   HTM_Txt ("sin enlace");	// TODO: Need translation!!!!!!!!!!!!!
+   HTM_Txt (Txt_RESOURCE_TYPES[PrgRsc_NONE]);
   }
 
 /*****************************************************************************/

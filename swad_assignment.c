@@ -1838,7 +1838,7 @@ void Asg_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeGam);
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAsg);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
