@@ -53,7 +53,7 @@ struct Asg_Assignments
    unsigned Num;		// Number of assignments
    long *LstAsgCods;		// List of assigment codes
    Dat_StartEndTime_t SelectedOrder;
-   long AsgCodToEdit;		// Used as parameter in contextual links
+   long AsgCod;			// Used as parameter in contextual links
    unsigned CurrentPage;
   };
 
@@ -103,5 +103,11 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
 void Asg_GetAndShowAssignmentsStats (void);
+
+//--------------------------- Program resources -------------------------------
+void Asg_GetLinkToAssignment (void);
+void Asg_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
+                                      const char *Icon,const char *IconTitle);
+void Asg_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
 
 #endif

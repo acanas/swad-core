@@ -195,6 +195,21 @@ unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod
   }
 
 /*****************************************************************************/
+/******************** Get assignment title from database *********************/
+/*****************************************************************************/
+
+void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE,"can not get assignment title",
+		         "SELECT Title"
+			  " FROM asg_assignments"
+		         " WHERE AsgCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+		         AsgCod,
+		         Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /******************** Get assignment text from database **********************/
 /*****************************************************************************/
 

@@ -1010,7 +1010,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
 						   const char *IconTitle) =
      {
       [PrgRsc_NONE            ] = PrgRsc_WriteEmptyLinkInCrsProgram,
-      [PrgRsc_ASSIGNMENT      ] = NULL,
+      [PrgRsc_ASSIGNMENT      ] = Asg_WriteAssignmentInCrsProgram,
       [PrgRsc_CALL_FOR_EXAM   ] = Cfe_WriteCallForExamInCrsProgram,
       [PrgRsc_EXAM            ] = Exa_WriteExamInCrsProgram,
       [PrgRsc_GAME            ] = Gam_WriteGameInCrsProgram,
@@ -1056,7 +1056,7 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
    static void (*GetTitle[PrgRsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
       [PrgRsc_NONE            ] = NULL,
-      [PrgRsc_ASSIGNMENT      ] = NULL,
+      [PrgRsc_ASSIGNMENT      ] = Asg_GetTitleFromAsgCod,
       [PrgRsc_CALL_FOR_EXAM   ] = Cfe_GetTitleFromExaCod,
       [PrgRsc_EXAM            ] = Exa_GetTitleFromExaCod,
       [PrgRsc_GAME            ] = Gam_GetTitleFromGamCod,

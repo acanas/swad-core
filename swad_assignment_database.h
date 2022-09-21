@@ -46,6 +46,7 @@ unsigned Asg_DB_GetDataOfAssignmentByCod (MYSQL_RES **mysql_res,long AsgCod);
 unsigned Asg_DB_GetDataOfAssignmentByFolder (MYSQL_RES **mysql_res,
                                              const char Folder[Brw_MAX_BYTES_FOLDER + 1]);
 unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod);
+void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1]);
 void Asg_DB_GetAssignmentTxtByCod (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,

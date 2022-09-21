@@ -49,6 +49,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -73,6 +74,8 @@ static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_PutButtonToCreateNewAsg (void *Assignments);
 static void Asg_ParamsWhichGroupsToShow (void *Assignments);
+static void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
+static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
@@ -107,7 +110,7 @@ static void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
    Assignments->Num           = 0;
    Assignments->LstAsgCods    = NULL;
    Assignments->SelectedOrder = Asg_ORDER_DEFAULT;
-   Assignments->AsgCodToEdit  = -1L;	// Used as parameter in contextual links
+   Assignments->AsgCod  = -1L;	// Used as parameter in contextual links
    Assignments->CurrentPage   = 0;
   }
 
@@ -157,48 +160,48 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
                  Asg_PutIconsListAssignments,Assignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      Set_BeginSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeAsg,
-                                  Asg_ParamsWhichGroupsToShow,Assignments);
-      Set_EndSettingsHead ();
-     }
+      /***** Select whether show only my groups or all groups *****/
+      if (Gbl.Crs.Grps.NumGrps)
+	{
+	 Set_BeginSettingsHead ();
+	 Grp_ShowFormToSelWhichGrps (ActSeeAsg,
+				     Asg_ParamsWhichGroupsToShow,Assignments);
+	 Set_EndSettingsHead ();
+	}
 
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				  Assignments,-1L);
+      /***** Write links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
+				     Assignments,-1L);
 
-   if (Assignments->Num)
-     {
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      if (Assignments->Num)
+	{
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
 
-	 /***** Table head *****/
-	 Asg_PutHeadForSeeing (Assignments,false);	// Not print view
+	    /***** Table head *****/
+	    Asg_PutHeadForSeeing (Assignments,false);	// Not print view
 
-	 /***** Write all assignments *****/
-	 for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
-	      NumAsg <= Pagination.LastItemVisible;
-	      NumAsg++, The_ChangeRowColor ())
-	    Asg_ShowOneAssignment (Assignments,
-				   Assignments->LstAsgCods[NumAsg - 1],
-				   false);	// Not print view
+	    /***** Write all assignments *****/
+	    for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
+		 NumAsg <= Pagination.LastItemVisible;
+		 NumAsg++, The_ChangeRowColor ())
+	       Asg_ShowOneAssignment (Assignments,
+				      Assignments->LstAsgCods[NumAsg - 1],
+				      false);	// Not print view
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No assignments created
-      Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No assignments created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				  Assignments,-1L);
+      /***** Write again links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
+				     Assignments,-1L);
 
-   /***** Button to create a new assignment *****/
-   if (Asg_CheckIfICanCreateAssignments ())
-      Asg_PutButtonToCreateNewAsg (Assignments);
+      /***** Button to create a new assignment *****/
+      if (Asg_CheckIfICanCreateAssignments ())
+	 Asg_PutButtonToCreateNewAsg (Assignments);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -303,7 +306,7 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments)
   {
    if (Assignments)
      {
-      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
+      ((struct Asg_Assignments *) Assignments)->AsgCod = -1L;
       Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutParams,Assignments);
      }
   }
@@ -320,7 +323,7 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
      {
       /* Begin form */
       Frm_BeginForm (ActFrmNewAsg);
-	 ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
+	 ((struct Asg_Assignments *) Assignments)->AsgCod = -1L;
 	 Asg_PutParams (Assignments);
 
          /* Button to create new assignment */
@@ -352,9 +355,7 @@ static void Asg_ParamsWhichGroupsToShow (void *Assignments)
 void Asg_SeeOneAssignment (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
-   extern const char *Txt_Assignment;
    struct Asg_Assignments Assignments;
-   long AsgCod;
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -365,24 +366,10 @@ void Asg_SeeOneAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   AsgCod = Asg_GetParamAsgCod ();
+   Assignments.AsgCod = Asg_GetParamAsgCod ();
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Assignment,
-		      NULL,NULL,
-		      Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE,2);
-
-      /***** Table head *****/
-      Asg_PutHeadForSeeing (&Assignments,
-			    false);	// Not print view
-
-      /***** Write assignment *****/
-      Asg_ShowOneAssignment (&Assignments,
-			     AsgCod,
-			     false);	// Not print view
-
-   /***** End table and end box *****/
-   Box_BoxTableEnd ();
+   /***** Show selected assignment in a box *****/
+   Asg_ShowOneAssignmentInBox (&Assignments);
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -423,6 +410,45 @@ void Asg_PrintOneAssignment (void)
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/************************* Show an assignment in a box ***********************/
+/*****************************************************************************/
+
+static void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
+  {
+   extern const char *Hlp_ASSESSMENT_Assignments;
+   extern const char *Txt_Assignment;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_Assignment,
+                      Asg_PutIconsOneAsg,Assignments,
+		      Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE,2);
+
+      /***** Table head *****/
+      Asg_PutHeadForSeeing (Assignments,
+			    false);	// Not print view
+
+      /***** Write assignment *****/
+      Asg_ShowOneAssignment (Assignments,
+			     Assignments->AsgCod,
+			     false);	// Not print view
+
+   /***** End table and end box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in an assignment ********************/
+/*****************************************************************************/
+
+static void Asg_PutIconsOneAsg (void *Assignments)
+  {
+   /***** Put icon to get resource link *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+      Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
+				      Asg_PutParams,Assignments);
   }
 
 /*****************************************************************************/
@@ -684,7 +710,7 @@ static void Asg_PutFormsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 
    /***** Set assigment to edit
           (used as parameter in contextual links) *****/
-   Assignments->AsgCodToEdit = Asg->AsgCod;
+   Assignments->AsgCod = Asg->AsgCod;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -725,8 +751,8 @@ static void Asg_PutParams (void *Assignments)
 
    if (Assignments)
      {
-      if (((struct Asg_Assignments *) Assignments)->AsgCodToEdit > 0)
-	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->AsgCodToEdit);
+      if (((struct Asg_Assignments *) Assignments)->AsgCod > 0)
+	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->AsgCod);
       Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Assignments)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -1001,7 +1027,7 @@ void Asg_ReqRemAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Show question and button to remove the assignment *****/
-   Assignments.AsgCodToEdit = Asg.AsgCod;
+   Assignments.AsgCod = Asg.AsgCod;
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
                            Asg_PutParams,&Assignments,
                            Btn_REMOVE_BUTTON,Txt_Remove_assignment,
@@ -1188,12 +1214,12 @@ void Asg_RequestCreatOrEditAsg (void)
    if (ItsANewAssignment)
      {
       Frm_BeginForm (ActNewAsg);
-      Assignments.AsgCodToEdit = -1L;
+      Assignments.AsgCod = -1L;
      }
    else
      {
       Frm_BeginForm (ActChgAsg);
-      Assignments.AsgCodToEdit = Asg.AsgCod;
+      Assignments.AsgCod = Asg.AsgCod;
      }
    Asg_PutParams (&Assignments);
 
@@ -1744,4 +1770,100 @@ void Asg_GetAndShowAssignmentsStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/***************************** Get link to assignment ******************************/
+/*****************************************************************************/
+
+void Asg_GetLinkToAssignment (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   struct Asg_Assignments Assignments;
+   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
+
+   /***** Reset assignments *****/
+   Asg_ResetAssignments (&Assignments);
+
+   /***** Get parameters *****/
+   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
+   Grp_GetParamWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+
+   /***** Get assignment code *****/
+   if ((Assignments.AsgCod = Asg_GetParamAsgCod ()) <= 0)
+      Err_WrongAssignmentExit ();
+
+   /***** Get assignment title *****/
+   Asg_DB_GetAssignmentTitleByCod (Assignments.AsgCod,Title);
+
+   /***** Copy link to assignment into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.AsgCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Title);
+
+   /***** Show selected assignment in a box *****/
+   Asg_ShowOneAssignmentInBox (&Assignments);
+
+   /***** Show current assignments, if any *****/
+   Asg_ShowAllAssignments (&Assignments);
+  }
+
+/*****************************************************************************/
+/*********************** Write assignment in course program ************************/
+/*****************************************************************************/
+
+void Asg_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
+                                      const char *Icon,const char *IconTitle)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
+
+   /***** Get assignment title *****/
+   Asg_DB_GetAssignmentTitleByCod (AsgCod,Title);
+
+   /***** Begin form to go to assignment *****/
+   if (PutFormToGo)
+     {
+      Frm_BeginForm (ActSeeOneAsg);
+         Asg_PutParamAsgCod (AsgCod);
+	 // TODO: In the listing of assignments, the page is always the first.
+	 //       The page should be that corresponding to the selected assignment.
+         HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
+	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          The_GetSuffix ());
+     }
+
+   /***** Icon depending on type ******/
+   if (PutFormToGo)
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeGam);
+   else
+      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+
+   /***** Write assignment title of exam *****/
+   HTM_Txt (Title);
+
+   /***** End form to download file *****/
+   if (PutFormToGo)
+     {
+      /* End form */
+         HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/**************** Get assignment title from assignment code ******************/
+/*****************************************************************************/
+
+void Asg_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
+  {
+   char TitleFromDB[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
+
+   /***** Get assignment title *****/
+   Asg_DB_GetAssignmentTitleByCod (AsgCod,TitleFromDB);
+   Str_Copy (Title,TitleFromDB,TitleSize);
   }
