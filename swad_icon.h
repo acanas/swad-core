@@ -79,6 +79,10 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
 void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const char *Anchor,
                                         void (*FuncParams) (void *Args),void *Args,
                                         bool Hidden);
+void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,
+                                    void (*FuncParams) (void *Args),void *Args);
+void Ico_PutContextualIconToContract (const Act_Action_t NextAction,const char *Anchor,
+                                      void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args);
 void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,

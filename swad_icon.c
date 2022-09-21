@@ -299,6 +299,22 @@ void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const c
 				  Icon[Hidden],Color[Hidden]);
   }
 
+void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,
+                                    void (*FuncParams) (void *Args),void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
+				  "caret-right.svg",Ico_BLACK);
+  }
+
+void Ico_PutContextualIconToContract (const Act_Action_t NextAction,const char *Anchor,
+                                      void (*FuncParams) (void *Args),void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncParams,Args,
+				  "caret-down.svg",Ico_BLACK);
+  }
+
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncParams) (void *Args),void *Args)
   {

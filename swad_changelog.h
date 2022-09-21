@@ -606,10 +606,16 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.17 (2022-09-21)"
-#define CSS_FILE		"swad22.16.css"
+#define Log_PLATFORM_VERSION	"SWAD 22.18 (2022-09-21)"
+#define CSS_FILE		"swad22.18.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.18:    Sep 22, 2022  Expand/contract program items. (331877 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS prg_expanded (UsrCod INT NOT NULL,ItmCod INT NOT NULL,ClickTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,ItmCod),INDEX(ItmCod),INDEX(ClickTime));
+					If you want to use MyISAM:
+ALTER TABLE prg_expanded ENGINE=MyISAM;
+
 	Version 22.17:    Sep 21, 2022  New module swad_assignment_resource. (331524 lines)
 	Version 22.16.1:  Sep 21, 2022  Changes in program layout. (331462 lines)
 	Version 22.16:    Sep 21, 2022  Changes in program layout. (331455 lines)

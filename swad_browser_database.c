@@ -2429,7 +2429,7 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
 	 return
-	 DB_QueryEXISTS ("can not check check if a folder is expanded",
+	 DB_QueryEXISTS ("can not check if a folder is expanded",
 			 "SELECT EXISTS"
 			 "(SELECT *"
 			   " FROM brw_expanded"
@@ -2445,7 +2445,7 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
 			 Path);
       else
 	 return
-	 DB_QueryEXISTS ("can not get check if a folder is expanded",
+	 DB_QueryEXISTS ("can not check if a folder is expanded",
 			 "SELECT EXISTS"
 			 "(SELECT *"
 			   " FROM brw_expanded"
@@ -2460,7 +2460,7 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
      }
    else	// Briefcase
       return
-      DB_QueryEXISTS ("can not get check if a folder is expanded",
+      DB_QueryEXISTS ("can not check if a folder is expanded",
 		      "SELECT EXISTS"
 		      "(SELECT *"
 			" FROM brw_expanded"

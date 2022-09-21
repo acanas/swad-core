@@ -443,6 +443,10 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDwnPrgItm	] = {1832,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveDownItem		,NULL},
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveLeftItem		,NULL},
    [ActRgtPrgItm	] = {1833,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_MoveRightItem		,NULL},
+   [ActExpSeePrgItm	] = {1944,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ExpandItem			,NULL},
+   [ActExpEdiPrgItm	] = {1946,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ExpandItem			,NULL},
+   [ActConSeePrgItm	] = {1945,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ContractItem		,NULL},
+   [ActConEdiPrgItm	] = {1947,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ContractItem		,NULL},
 
    [ActFrmSeePrgRsc	] = {1925,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourcesAfterEdit	,NULL},
    [ActFrmEdiPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_EditResources		,NULL},
@@ -3798,6 +3802,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqLnkForCrsUsr,	// #1941
 	ActSeeOneAsg,		// #1942
 	ActReqLnkAsg,		// #1943
+	ActExpSeePrgItm,	// #1944
+	ActConSeePrgItm,	// #1945
+	ActExpEdiPrgItm,	// #1946
+	ActConEdiPrgItm,	// #1947
   };
 
 /*****************************************************************************/

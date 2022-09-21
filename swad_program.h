@@ -116,6 +116,13 @@ typedef enum
    Prg_MOVE_RIGHT,
   } Prg_MoveLeftRight_t;
 
+#define Prg_NUM_MOVEMENTS_EXPAND_CONTRACT 2
+typedef enum
+  {
+   Prg_EXPAND,
+   Prg_CONTRACT,
+  } Prg_ExpandContract_t;
+
 #define Prg_NUM_LISTING_TYPES 12
 typedef enum
   {
@@ -157,6 +164,8 @@ void Prg_FreeListItems (void);
 void Prg_ResetItem (struct Prg_Item *Item);
 
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
+long Prg_GetItmCodFromNumItem (unsigned NumItem);
+unsigned Prg_GetItmIndFromNumItem (unsigned NumItem);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
 
 void Prg_ViewItemAfterEdit (void);
@@ -174,6 +183,9 @@ void Prg_MoveUpItem (void);
 void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
+
+void Prg_ExpandItem (void);
+void Prg_ContractItem (void);
 
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule

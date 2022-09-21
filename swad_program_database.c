@@ -720,3 +720,49 @@ void Prg_DB_RemoveLinkFromClipboard (struct Prg_Link *Link)
 		   Prg_ResourceTypesDB[Link->Type],
 		   Link->Cod);
   }
+
+/*****************************************************************************/
+/************************ Insert item in expanded items **********************/
+/*****************************************************************************/
+
+void Prg_DB_InsertItemInExpandedItems (long ItmCod)
+  {
+   DB_QueryREPLACE ("can not expand item",
+		   "REPLACE INTO prg_expanded"
+		   " (UsrCod,ItmCod,ClickTime)"
+		   " VALUES"
+		   " (%ld,%ld,NOW())",
+	           Gbl.Usrs.Me.UsrDat.UsrCod,
+	           ItmCod);
+  }
+
+/*****************************************************************************/
+/******************** Check if a program item is expanded ********************/
+/*****************************************************************************/
+
+bool Prg_DB_GetIfExpandedItem (long ItmCod)
+  {
+   return
+   DB_QueryEXISTS ("can not check if an item is expanded",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM prg_expanded"
+		    " WHERE UsrCod=%ld"
+		      " AND ItmCod=%ld)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   ItmCod);
+  }
+
+/*****************************************************************************/
+/********************** Remove item from expanded items **********************/
+/*****************************************************************************/
+
+void Prg_DB_RemoveItemFromExpandedItems (long ItmCod)
+  {
+   DB_QueryDELETE ("can not contract item",
+		   "DELETE FROM prg_expanded"
+		   " WHERE UsrCod=%ld"
+		     " AND ItmCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.UsrCod,
+		   ItmCod);
+  }

@@ -71,6 +71,7 @@ typedef enum
 struct Level
   {
    unsigned Number;	// Numbers for each level from 1 to maximum level
+   bool Expanded;	// If each level from 1 to maximum level is expanded
    bool Hidden;		// If each level from 1 to maximum level is hidden
   };
 
@@ -102,6 +103,7 @@ static struct
   };
 
 static const char *Prg_ITEM_SECTION_ID = "item_section";
+static const char *Prg_HIGHLIGHTED_SECTION_ID = "prg_highlighted";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -116,7 +118,12 @@ static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
+                              bool HasChildren,
+                              bool Expanded,
+                              long SelectedItmCod,
                               long SelectedRscCod);
+static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
+                                             bool Expanded,bool Editing);
 static void Prg_WriteItemText (long ItmCod,bool LightStyle);
 static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level,bool LightStyle);
@@ -132,8 +139,12 @@ static unsigned Prg_GetCurrentNumberInLevel (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
 
+static void Prg_SetExpandedLevel (unsigned Level,bool Expanded);
 static void Prg_SetHiddenLevel (unsigned Level,bool Hidden);
+static bool Prg_GetExpandedLevel (unsigned Level);
 static bool Prg_GetHiddenLevel (unsigned Level);
+
+static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel);
 static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
@@ -157,6 +168,8 @@ static int Prg_GetPrevBrother (int NumItem);
 static int Prg_GetNextBrother (int NumItem);
 
 static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight);
+
+static void Prg_ExpandContractItem (Prg_ExpandContract_t ExpandContract);
 
 static void Prg_SetItemRangeOnlyItem (unsigned NumItem,struct Prg_ItemRange *ItemRange);
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange);
@@ -211,9 +224,10 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    long ParentItmCod = -1L;	// Initialized to avoid warning
    unsigned NumItem;
    unsigned FormLevel = 0;	// Initialized to avoid warning
-   Prg_ListingType_t LT;
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
+   bool HasChildren;
+   bool Expanded;
    char *Title;
    static bool FirstTBodyOpen = false;
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
@@ -241,6 +255,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    ToHighlight.End   = 0;
    switch (ListingType)
      {
+      case Prg_VIEW:
       case Prg_EDIT_ITEMS:
 	 if (SelectedItmCod > 0)
 	    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (SelectedItmCod),
@@ -258,7 +273,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
       case Prg_FORM_NEW_CHILD_ITEM:
 	 ParentItmCod = SelectedItmCod;		// Item code here is parent of the item to create
 	 NumItem = Prg_GetNumItemFromItmCod (SelectedItmCod);
-	 SelectedItmCod = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmCod;
+	 SelectedItmCod = Prg_GetItmCodFromNumItem (Prg_GetLastChild (NumItem));
 	 FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
 	 break;
       default:
@@ -286,11 +301,19 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	 /***** Write all program items *****/
 	 for (NumItem = 0, The_ResetRowColor ();
 	      NumItem < Prg_Gbl.List.NumItems;
-	      NumItem++, The_ChangeRowColor ())
+	      NumItem++)
 	   {
 	    /* Get data of this program item */
-	    Item.Hierarchy.ItmCod = Prg_Gbl.List.Items[NumItem].ItmCod;
+	    Item.Hierarchy.ItmCod = Prg_GetItmCodFromNumItem (NumItem);
 	    Prg_GetDataOfItemByCod (&Item);
+	    if (NumItem == Prg_Gbl.List.NumItems - 1)
+	       // The last item
+	       HasChildren = false;	// Last item has no children
+	    else
+	       // Not the last item
+	       // This item has children if its level is lower than the level of the following item
+	       HasChildren = (Prg_GetLevelFromNumItem (NumItem) <
+			      Prg_GetLevelFromNumItem (NumItem + 1));
 
 	    /* Begin range to highlight? */
 	    if (Item.Hierarchy.ItmInd == ToHighlight.Begin)	// Begin of the highlighted range
@@ -300,32 +323,29 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 		  HTM_TBODY_End ();				// 1st tbody end
 		  FirstTBodyOpen = false;
 		 }
-	       HTM_TBODY_Begin ("id=\"prg_highlighted\"");	// Highlighted tbody start
+	       HTM_TBODY_Begin ("id=\"%s\"",
+	                        Prg_HIGHLIGHTED_SECTION_ID);	// Highlighted tbody start
 	      }
 
-	    /* Write row with this item */
-	    LT = ListingType;
-	    switch (ListingType)
-	      {
-	       case Prg_FORM_EDIT_ITEM:
-	       case Prg_EDIT_RESOURCES:
-	       case Prg_EDIT_RESOURCE_LINK:
-	       case Prg_CHANGE_RESOURCE_LINK:
-	       case Prg_END_EDIT_RES:
-		  if (Item.Hierarchy.ItmCod != SelectedItmCod)
-		     LT = Prg_EDIT_ITEMS;
-		  break;
-	       default:
-		  break;
-	      }
-	    Prg_WriteRowItem (LT,NumItem,&Item,SelectedRscCod);
+	    /* Set if this level is expanded */
+	    Expanded = Prg_DB_GetIfExpandedItem (Item.Hierarchy.ItmCod);
+	    Prg_SetExpandedLevel (Item.Hierarchy.Level,Expanded);
 
-	    /* Show form to create child item? */
-	    if (ListingType == Prg_FORM_NEW_CHILD_ITEM &&
-		Item.Hierarchy.ItmCod == SelectedItmCod)
+	    /* Show this row only if all higher levels are expanded */
+	    if (Prg_CheckIfAllHigherLevelsAreExpanded (Item.Hierarchy.Level))
 	      {
-	       The_ChangeRowColor ();
-	       Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
+	       /* Write row with this item */
+	       Prg_WriteRowItem (ListingType,NumItem,&Item,HasChildren,Expanded,
+				 SelectedItmCod,SelectedRscCod);
+               The_ChangeRowColor ();
+
+	       /* Show form to create child item? */
+	       if (ListingType == Prg_FORM_NEW_CHILD_ITEM &&
+		   Item.Hierarchy.ItmCod == SelectedItmCod)
+		 {
+		  Prg_WriteRowToCreateItem (ParentItmCod,FormLevel);
+		  The_ChangeRowColor ();
+		 }
 	      }
 
 	    /* End range to highlight? */
@@ -346,8 +366,16 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
       HTM_TABLE_End ();
 
       /***** Button to create a new program item *****/
-      if (Prg_CheckIfICanEditProgram ())
-	 Prg_PutButtonToCreateNewItem ();
+      switch (ListingType)
+	{
+	 case Prg_PRINT:
+	 case Prg_VIEW:
+	    break;
+	 default:
+	    if (Prg_CheckIfICanEditProgram ())
+	       Prg_PutButtonToCreateNewItem ();
+	    break;
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -450,10 +478,13 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
+                              bool HasChildren,
+                              bool Expanded,
+                              long SelectedItmCod,
                               long SelectedRscCod)
   {
    static unsigned UniqueId = 0;
-   static bool PutFormsToRemEditOneItem[Prg_NUM_LISTING_TYPES] =
+   static bool Editing[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
       [Prg_VIEW                ] = false,
@@ -474,6 +505,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    unsigned NumCol;
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
+   bool HighlightItem;
 
    /***** Check if this item should be shown as hidden *****/
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.Hidden);
@@ -488,17 +520,13 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    /***** Increase number in level *****/
    Prg_IncreaseNumberInLevel (Item->Hierarchy.Level);
 
+   /***** Is this the item selected? *****/
+   HighlightItem = Item->Hierarchy.ItmCod == SelectedItmCod &&
+		   (ListingType == Prg_FORM_EDIT_ITEM ||
+		    ListingType == Prg_END_EDIT_ITEM);
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
-
-      /***** Forms to remove/edit this program item *****/
-      if (PutFormsToRemEditOneItem[ListingType])
-        {
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
-		       The_GetColorRows ());
-	    Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
-	 HTM_TD_End ();
-        }
 
       /***** Indent depending on the level *****/
       for (NumCol = 1;
@@ -508,6 +536,22 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"%s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 	}
+
+      /***** Expand/contract this program item *****/
+      HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+         /* Only if this item has children ==> show icon to contract/expand */
+         if (HasChildren)
+	    Prg_PutIconToContractExpandItem (Item,Expanded,Editing[ListingType]);
+      HTM_TD_End ();
+
+      /***** Forms to remove/edit this program item *****/
+      if (Editing[ListingType])
+        {
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
+		       The_GetColorRows ());
+	    Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
+	 HTM_TD_End ();
+        }
 
       /***** Item number *****/
       HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_NUM %s RT %s\"",
@@ -528,12 +572,10 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 default:
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s %s\"",
 		          ColSpan,TitleClass,The_GetColorRows ());
-	       if (ListingType == Prg_FORM_EDIT_ITEM ||
-		   ListingType == Prg_END_EDIT_ITEM)
+	       if (HighlightItem)
 	          HTM_ARTICLE_Begin (Prg_ITEM_SECTION_ID);
                HTM_Txt (Item->Title);
-	       if (ListingType == Prg_FORM_EDIT_ITEM ||
-		   ListingType == Prg_END_EDIT_ITEM)
+	       if (HighlightItem)
 	          HTM_ARTICLE_End ();
             HTM_TD_End ();
 	    break;
@@ -597,17 +639,12 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	}
 
       /* Item text / form */
-      switch (ListingType)
-	{
-	 case Prg_FORM_EDIT_ITEM:
-            /* Form to change item title, dates and text */
-	    Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
-	    break;
-	 default:
-	    /* Text */
-	    Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
-	    break;
-	}
+      if (ListingType == Prg_FORM_EDIT_ITEM && HighlightItem)
+	 /* Form to change item title, dates and text */
+	 Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
+      else
+	 /* Text */
+	 Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
 
       /* List of resources */
       PrgRsc_ListItemResources (ListingType,Item,SelectedRscCod);
@@ -620,6 +657,32 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 
    /***** Free title CSS class *****/
    Prg_FreeTitleClass (TitleClass);
+  }
+
+/*****************************************************************************/
+/************************ Put icon to expand an item *************************/
+/*****************************************************************************/
+
+static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
+                                             bool Expanded,bool Editing)
+  {
+   static Act_Action_t NextAction[2][2] =
+     {
+      [false][false] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
+      [false][true ] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
+      [true ][false] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
+      [true ][true ] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
+     };
+   static void (*PutContextualIcon[2]) (const Act_Action_t NextAction,const char *Anchor,
+                                        void (*FuncParams) (void *Args),void *Args) =
+     {
+      [false] = Ico_PutContextualIconToExpand,		// Contracted ==> function to expand
+      [true ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
+     };
+
+   /***** Icon to hide/unhide program item *****/
+   PutContextualIcon[Expanded] (NextAction[Expanded][Editing],Prg_HIGHLIGHTED_SECTION_ID,
+			        Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -658,6 +721,10 @@ static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel)
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
+
+      /***** Column under expand/contract icon *****/
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_End ();
 
       /***** Column under icons *****/
       HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
@@ -764,7 +831,7 @@ static void Prg_CreateLevels (void)
                 MaxLevel = 4
       Level Number
       ----- ------
-        0         <--- Not used
+        0    N.A. <--- Root level
         1     2
         2     5
         3     2
@@ -836,14 +903,36 @@ static void Prg_WriteNumNewItem (unsigned Level)
 /********************** Set / Get if a level is hidden ***********************/
 /*****************************************************************************/
 
+static void Prg_SetExpandedLevel (unsigned Level,bool Expanded)
+  {
+   if (Prg_Gbl.Levels)
+      Prg_Gbl.Levels[Level].Expanded = Expanded;
+  }
+
 static void Prg_SetHiddenLevel (unsigned Level,bool Hidden)
   {
    if (Prg_Gbl.Levels)
       Prg_Gbl.Levels[Level].Hidden = Hidden;
   }
 
+static bool Prg_GetExpandedLevel (unsigned Level)
+  {
+   /* Level 0 (root) is always expanded */
+   if (Level == 0)
+      return true;
+
+   if (Prg_Gbl.Levels)
+      return Prg_Gbl.Levels[Level].Expanded;
+
+   return false;
+  }
+
 static bool Prg_GetHiddenLevel (unsigned Level)
   {
+   /* Level 0 (root) is always visible */
+   if (Level == 0)
+      return false;
+
    if (Prg_Gbl.Levels)
       return Prg_Gbl.Levels[Level].Hidden;
 
@@ -853,6 +942,19 @@ static bool Prg_GetHiddenLevel (unsigned Level)
 /*****************************************************************************/
 /********* Check if any level higher than the current one is hidden **********/
 /*****************************************************************************/
+
+static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
+  {
+   unsigned Level;
+
+   for (Level = 1;
+	Level < CurrentLevel;
+	Level++)
+      if (!Prg_GetExpandedLevel (Level))	// Contracted?
+         return false;	// A level is contracted. Not all are expanded
+
+   return true;	// None is contracted. All are expanded
+  }
 
 static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
   {
@@ -895,7 +997,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	                                Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to hide/unhide program item *****/
-	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,"prg_highlighted",
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Prg_HIGHLIGHTED_SECTION_ID,
 					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					    Item->Hierarchy.Hidden);
 
@@ -920,7 +1022,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
+	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,Prg_HIGHLIGHTED_SECTION_ID,
 	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
@@ -928,7 +1030,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
+	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
 	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
@@ -936,7 +1038,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
 	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
@@ -944,7 +1046,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
 	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
@@ -1098,7 +1200,7 @@ void Prg_GetListItems (void)
          /* Get index of the program item (row[1])
             and level of the program item (row[2]) */
          Prg_Gbl.List.Items[NumItem].ItmInd = Str_ConvertStrToUnsigned (row[1]);
-         Prg_Gbl.List.Items[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
+         Prg_Gbl.List.Items[NumItem].Level  = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
 	 Prg_Gbl.List.Items[NumItem].Hidden = (row[3][0] == 'Y');
@@ -1249,12 +1351,30 @@ unsigned Prg_GetNumItemFromItmCod (long ItmCod)
    for (NumItem = 0;
 	NumItem < Prg_Gbl.List.NumItems;
 	NumItem++)
-      if (Prg_Gbl.List.Items[NumItem].ItmCod == ItmCod)	// Found!
+      if (Prg_GetItmCodFromNumItem (NumItem) == ItmCod)	// Found!
 	 return NumItem;
 
    /***** Not found *****/
    Err_WrongItemExit ();
    return 0;	// Not reached
+  }
+
+/*****************************************************************************/
+/******************** Get item code from number of item **********************/
+/*****************************************************************************/
+
+inline long Prg_GetItmCodFromNumItem (unsigned NumItem)
+  {
+   return Prg_Gbl.List.Items[NumItem].ItmCod;
+  }
+
+/*****************************************************************************/
+/******************** Get item index from number of item *********************/
+/*****************************************************************************/
+
+inline unsigned Prg_GetItmIndFromNumItem (unsigned NumItem)
+  {
+   return Prg_Gbl.List.Items[NumItem].ItmInd;
   }
 
 /*****************************************************************************/
@@ -1539,7 +1659,7 @@ static int Prg_GetPrevBrother (int NumItem)
       if (Prg_GetLevelFromNumItem (i) == Level)
 	 return i;	// Previous brother before item found
       if (Prg_GetLevelFromNumItem (i) < Level)
-	 return -1;		// Previous lower level found ==> there are no brothers before item
+	 return -1;	// Previous lower level found ==> there are no brothers before item
      }
    return -1;	// Start reached ==> there are no brothers before item
   }
@@ -1637,6 +1757,63 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
   }
 
 /*****************************************************************************/
+/************** Move a subtree to left/right in a course program *************/
+/*****************************************************************************/
+
+void Prg_ExpandItem (void)
+  {
+   Prg_ExpandContractItem (Prg_EXPAND);
+  }
+
+void Prg_ContractItem (void)
+  {
+   Prg_ExpandContractItem (Prg_CONTRACT);
+  }
+
+static void Prg_ExpandContractItem (Prg_ExpandContract_t ExpandContract)
+  {
+   struct Prg_Item Item;
+   Prg_ListingType_t ListingType;
+
+   /***** Get list of program items *****/
+   Prg_GetListItems ();
+
+   /***** Get program item *****/
+   Prg_GetParams (&Item);
+   if (Item.Hierarchy.ItmCod <= 0)
+      Err_WrongItemExit ();
+
+   /***** Add/remove item to/from table of expanded items *****/
+   switch (ExpandContract)
+     {
+      case Prg_EXPAND:
+	 Prg_DB_InsertItemInExpandedItems (Item.Hierarchy.ItmCod);
+	 break;
+      case Prg_CONTRACT:
+	 Prg_DB_RemoveItemFromExpandedItems (Item.Hierarchy.ItmCod);
+	 break;
+     }
+
+   /***** Show program items highlighting subtree *****/
+   switch (Gbl.Action.Act)
+     {
+      case ActExpEdiPrgItm:
+      case ActConEdiPrgItm:
+	 ListingType = Prg_EDIT_ITEMS;
+	 break;
+      case ActExpSeePrgItm:
+      case ActConSeePrgItm:
+      default:
+	 ListingType = Prg_VIEW;
+	 break;
+     }
+   Prg_ShowAllItems (ListingType,Item.Hierarchy.ItmCod,-1L);
+
+   /***** Free list of program items *****/
+   Prg_FreeListItems ();
+  }
+
+/*****************************************************************************/
 /****** Set subtree begin and end from number of item in course program ******/
 /*****************************************************************************/
 
@@ -1652,7 +1829,7 @@ static void Prg_SetItemRangeOnlyItem (unsigned NumItem,struct Prg_ItemRange *Ite
 
    /***** Range includes only this item *****/
    ItemRange->Begin =
-   ItemRange->End   = Prg_Gbl.List.Items[NumItem].ItmInd;
+   ItemRange->End   = Prg_GetItmIndFromNumItem (NumItem);
   }
 
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange)
@@ -1666,8 +1843,8 @@ static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRan
       Err_WrongItemExit ();
 
    /***** Range includes this item and all its children *****/
-   ItemRange->Begin = Prg_Gbl.List.Items[NumItem                   ].ItmInd;
-   ItemRange->End   = Prg_Gbl.List.Items[Prg_GetLastChild (NumItem)].ItmInd;
+   ItemRange->Begin = Prg_GetItmIndFromNumItem (NumItem);
+   ItemRange->End   = Prg_GetItmIndFromNumItem (Prg_GetLastChild (NumItem));
   }
 
 /*****************************************************************************/
@@ -1753,6 +1930,10 @@ void Prg_RequestCreateItem (void)
    /***** Get program item *****/
    Prg_GetParams (&Item);
 
+   /***** Add item to table of expanded items
+          to ensure that child items are displayed *****/
+   Prg_DB_InsertItemInExpandedItems (Item.Hierarchy.ItmCod);
+
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Item.Hierarchy.ItmCod > 0 ? Prg_FORM_NEW_CHILD_ITEM :
 	                                         Prg_FORM_NEW_END_ITEM,
@@ -1793,7 +1974,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
-   Frm_BeginFormAnchor (ActNewPrgItm,"prg_highlighted");
+   Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
       Prg_PutParamItmCod (&ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
@@ -1837,7 +2018,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    // Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgPrgItm,"prg_highlighted");
+   Frm_BeginFormAnchor (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
       Prg_PutParamItmCod (&Item.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
@@ -2028,14 +2209,14 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 	 if (NumItemLastChild < Prg_Gbl.List.NumItems - 1)
 	   {
 	    /***** New program item will be inserted after last child of parent *****/
-	    Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[NumItemLastChild + 1].ItmInd;
+	    Item->Hierarchy.ItmInd = Prg_GetItmIndFromNumItem (NumItemLastChild + 1);
 
 	    /***** Move down all indexes of after last child of parent *****/
 	    Prg_DB_MoveDownItems (Item->Hierarchy.ItmInd);
 	   }
 	 else
 	    /***** New program item will be inserted at the end *****/
-	    Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmInd + 1;
+	    Item->Hierarchy.ItmInd = Prg_GetItmIndFromNumItem (Prg_Gbl.List.NumItems - 1) + 1;
 
 	 /***** Child ==> parent level + 1 *****/
          Item->Hierarchy.Level = ParentItem->Hierarchy.Level + 1;
@@ -2043,7 +2224,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
       else	// No parent specified
 	{
 	 /***** New program item will be inserted at the end *****/
-	 Item->Hierarchy.ItmInd = Prg_Gbl.List.Items[Prg_Gbl.List.NumItems - 1].ItmInd + 1;
+	 Item->Hierarchy.ItmInd = Prg_GetItmIndFromNumItem (Prg_Gbl.List.NumItems - 1) + 1;
 
 	 /***** First level *****/
          Item->Hierarchy.Level = 1;

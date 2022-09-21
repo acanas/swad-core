@@ -4901,9 +4901,11 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 
    /***** Begin container *****/
    if (Hidden)
-      HTM_DIV_Begin ("id=\"expand_%s_%s\" style=\"display:none;\"",FileBrowserId,RowId);
+      HTM_DIV_Begin ("id=\"expand_%s_%s\" style=\"display:none;\"",
+                     FileBrowserId,RowId);
    else
-      HTM_DIV_Begin ("id=\"expand_%s_%s\"",FileBrowserId,RowId);
+      HTM_DIV_Begin ("id=\"expand_%s_%s\"",
+                     FileBrowserId,RowId);
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToExpandFolder,sizeof (JavaScriptFuncToExpandFolder),
@@ -4913,7 +4915,8 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
+      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,
+                       Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -4931,8 +4934,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
    /***** Begin container *****/
    if (Hidden)
-      HTM_DIV_Begin ("id=\"contract_%s_%s\""
-	             " style=\"display:none;\"",
+      HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
 	             FileBrowserId,RowId);
    else
       HTM_DIV_Begin ("id=\"contract_%s_%s\"",
@@ -4946,7 +4948,8 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,Brw_ActContractFolder[Gbl.FileBrowser.Type]);
+      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,
+                       Brw_ActContractFolder[Gbl.FileBrowser.Type]);
    Frm_EndForm ();
 
    /***** End container *****/

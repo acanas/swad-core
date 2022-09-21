@@ -6042,6 +6042,98 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Move right program item"			// Çeviri lazim!
 #endif
 	,
+	[ActExpSeePrgItm] =
+#if   L==1	// ca
+	"Expand program item"			// Necessita traducció
+#elif L==2	// de
+	"Expand program item"			// Need Übersetzung
+#elif L==3	// en
+	"Expand program item"
+#elif L==4	// es
+	"Expandir &iacute;tem del programa"
+#elif L==5	// fr
+	"Expand program item"			// Besoin de traduction
+#elif L==6	// gn
+	"Expandir &iacute;tem del programa"	// Okoteve traducción
+#elif L==7	// it
+	"Expand program item"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand program item"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand program item"			// Precisa de tradução
+#elif L==10	// tr
+	"Expand program item"			// Çeviri lazim!
+#endif
+	,
+	[ActConSeePrgItm] =
+#if   L==1	// ca
+	"Contract program item"			// Necessita traducció
+#elif L==2	// de
+	"Contract program item"			// Need Übersetzung
+#elif L==3	// en
+	"Contract program item"
+#elif L==4	// es
+	"Contraer &iacute;tem del programa"
+#elif L==5	// fr
+	"Contract program item"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer &iacute;tem del programa"	// Okoteve traducción
+#elif L==7	// it
+	"Contract program item"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract program item"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract program item"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract program item"			// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiPrgItm] =
+#if   L==1	// ca
+	"Expand program item when editing"		// Necessita traducció
+#elif L==2	// de
+	"Expand program item when editing"		// Need Übersetzung
+#elif L==3	// en
+	"Expand program item when editing"
+#elif L==4	// es
+	"Expandir &iacute;tem del programa editando"
+#elif L==5	// fr
+	"Expand program item when editing"		// Besoin de traduction
+#elif L==6	// gn
+	"Expandir &iacute;tem del programa editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand program item when editing"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand program item when editing"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand program item when editing"		// Precisa de tradução
+#elif L==10	// tr
+	"Expand program item when editing"		// Çeviri lazim!
+#endif
+	,
+	[ActConEdiPrgItm] =
+#if   L==1	// ca
+	"Contract program item when editing"		// Necessita traducció
+#elif L==2	// de
+	"Contract program item when editing"		// Need Übersetzung
+#elif L==3	// en
+	"Contract program item when editing"
+#elif L==4	// es
+	"Contraer &iacute;tem del programa editando"
+#elif L==5	// fr
+	"Contract program item when editing"		// Besoin de traduction
+#elif L==6	// gn
+	"Contraer &iacute;tem del programa editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract program item when editing"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract program item when editing"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract program item when editing"		// Precisa de tradução
+#elif L==10	// tr
+	"Contract program item when editing"		// Çeviri lazim!
+#endif
+	,
 	[ActFrmSeePrgRsc] =
 #if   L==1	// ca
 	"Veure recursos"

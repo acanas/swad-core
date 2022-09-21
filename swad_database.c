@@ -2484,6 +2484,27 @@ mysql> DESCRIBE prg_clipboards;
 		   "INDEX(CrsCod,Type,Cod),"
 		   "INDEX(CopyTime))");
 
+   /***** Table prg_expanded *****/
+/*
+mysql> DESCRIBE prg_expanded;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| UsrCod    | int      | NO   | PRI | NULL    |       |
+| ItmCod    | int      | NO   | PRI | NULL    |       |
+| ClickTime | datetime | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_expanded ("
+			"UsrCod INT NOT NULL,"
+			"ItmCod INT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,ItmCod),"
+		   "INDEX(ItmCod),"
+		   "INDEX(ClickTime))");
+
    /***** Table prg_items *****/
 /*
 mysql> DESCRIBE prg_items;
