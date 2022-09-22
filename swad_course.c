@@ -768,7 +768,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
       Enr_GetMyCourses ();
 
    /***** Begin form *****/
-   Frm_BeginFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
+   Frm_BeginFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeePrg :
                                                ActReqSch);
 
       /***** Begin selector of courses *****/

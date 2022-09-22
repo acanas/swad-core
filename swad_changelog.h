@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.21 (2022-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 22.22 (2022-09-23)"
 #define CSS_FILE		"swad22.21.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.22:    Sep 23, 2022  Course program open to teachers and students. (331856 lines)
 	Version 22.21:    Sep 22, 2022  Changes in layout of course program. (331855 lines)
 	Version 22.20:    Sep 22, 2022  Hidden items are not shown in program. (331838 lines)
 Copy the following icon to icon public directory:

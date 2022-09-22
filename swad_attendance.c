@@ -1517,7 +1517,8 @@ static void Att_ShowEvent (struct Att_Events *Events)
 static void Att_PutIconsOneAtt (void *Events)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
       Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
                                       Att_PutParams,Events);
   }

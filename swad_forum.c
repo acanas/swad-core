@@ -843,7 +843,8 @@ static void For_PutIconsOneThread (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+          (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutAllHiddenParamsNewPost,Forums);
      }

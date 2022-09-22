@@ -731,7 +731,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 static void Svy_PutIconsOneSvy (void *Surveys)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
       Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
 				      Svy_PutParams,Surveys);
   }

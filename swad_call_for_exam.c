@@ -1538,7 +1538,8 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
 	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 					 Cfe_PutParamExaCodToEdit,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);

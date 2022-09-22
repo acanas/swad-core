@@ -660,7 +660,8 @@ static void Exa_PutIconToShowResultsOfExam (void *Exams)
 
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
 	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
 					 Exa_PutParams,Exams);
      }

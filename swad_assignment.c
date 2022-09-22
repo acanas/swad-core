@@ -439,7 +439,8 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
 static void Asg_PutIconsOneAsg (void *Assignments)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)		// Only if I am superuser // TODO: Include teachers
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
       Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
 				      Asg_PutParams,Assignments);
   }
