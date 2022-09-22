@@ -2388,7 +2388,7 @@ void Gam_GetLinkToGame (void)
 /*****************************************************************************/
 
 void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
-                                const char *Icon,const char *IconTitle)
+                                   const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Gam_MAX_BYTES_TITLE + 1];
@@ -2402,7 +2402,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
       Frm_BeginForm (ActSeeGam);
          Gam_PutParamGameCod (GamCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeGam],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

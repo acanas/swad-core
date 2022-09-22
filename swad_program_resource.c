@@ -280,9 +280,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
 	       /***** Form to create a new resource *****/
                if (EditingResourcesOfThisItem)
+        	 {
+        	  Prg_ResetResource (Item);
 		  PrgRsc_WriteRowNewResource (NumResources,Item,
 		                              (ListingType == Prg_EDIT_RESOURCE_LINK &&
-		                               SelectedRscCod <= 0));	// Edit this link?
+		                               Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
+        	 }
 
 	    /***** End table *****/
 	    HTM_TBODY_End ();
@@ -406,14 +409,14 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN PRG_RSC_%s %s\"",
+      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
 	 PrgRsc_WriteLinkName (&Item->Resource.Link,
-	                       true,	// Put form
-	                       Prg_ResourceTypesIcons[Item->Resource.Link.Type],
-	                       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
+			       true,	// Put form
+			       Prg_ResourceTypesIcons[Item->Resource.Link.Type],
+			       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -438,13 +441,14 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
+      HTM_TD_Begin ("class=\"PRG_NUM LT PRG_RSC_%s RT %s\"",
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s %s\"",
+                    The_GetSuffix (),The_GetColorRows1 (1));
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
@@ -941,7 +945,7 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
 
-   HTM_LI_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+   HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
 
          /***** Radio selector *****/

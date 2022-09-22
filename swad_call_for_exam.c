@@ -1734,7 +1734,7 @@ void Cfe_GetLinkToCallForExam (void)
 /*****************************************************************************/
 
 void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle)
+                                          const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct Cfe_CallsForExams CallsForExams;
@@ -1758,7 +1758,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
       Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
          Cfe_PutHiddenParamExaCod (ExaCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
 
       /* Free anchor string */

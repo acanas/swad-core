@@ -162,6 +162,7 @@ void Prg_GetListItems (void);
 void Prg_FreeListItems (void);
 
 void Prg_ResetItem (struct Prg_Item *Item);
+void Prg_ResetResource (struct Prg_Item *Item);
 
 unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 long Prg_GetItmCodFromNumItem (unsigned NumItem);

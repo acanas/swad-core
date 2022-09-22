@@ -5378,7 +5378,7 @@ void Brw_GetLinkToFile (void)
 /*****************************************************************************/
 
 void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle)
+                                          const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct FileMetadata FileMetadata;
@@ -5396,7 +5396,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 				   Brw_IS_UNKNOWN,	// Not used
 				   FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeDocCrs],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
@@ -5435,7 +5435,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 /*****************************************************************************/
 
 void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle)
+                                          const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct FileMetadata FileMetadata;
@@ -5453,7 +5453,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 				   Brw_IS_UNKNOWN,	// Not used
 				   FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeMrkCrs],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

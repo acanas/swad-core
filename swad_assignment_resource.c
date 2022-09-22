@@ -93,7 +93,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
 	 // TODO: In the listing of assignments, the page is always the first.
 	 //       The page should be that corresponding to the selected assignment.
          HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

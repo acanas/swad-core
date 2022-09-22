@@ -3343,7 +3343,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
 	 Att_PutParamAttCod (AttCod);
 	 Att_PutParamsCodGrps (AttCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAtt],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

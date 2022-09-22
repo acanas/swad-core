@@ -3555,7 +3555,7 @@ void For_GetLinkToThread (void)
 /*****************************************************************************/
 
 void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
-                                  const char *Icon,const char *IconTitle)
+                                     const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    struct For_Forums Forums;
@@ -3579,7 +3579,7 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
       Frm_BeginFormAnchor (ActSeePstForCrsUsr,For_FORUM_POSTS_SECTION_ID);
 	 For_PutAllHiddenParamsNewPost (&Forums);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeePstForCrsUsr],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

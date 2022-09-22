@@ -3490,7 +3490,7 @@ void Svy_GetLinkToSurvey (void)
 /*****************************************************************************/
 
 void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
-                                  const char *Icon,const char *IconTitle)
+                                     const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
@@ -3504,7 +3504,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
       Frm_BeginForm (ActSeeSvy);
          Svy_PutParamSvyCod (SvyCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeSvy],
-	                          "class=\"LM BT_LINK PRG_RSC_%s\"",
+	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 

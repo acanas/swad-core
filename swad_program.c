@@ -592,37 +592,36 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 HTM_TD_End ();
 
 	 /***** Start/end date/time *****/
+	 switch (ListingType)
+	   {
+	    case Prg_PRINT:
+	       HTM_TD_Begin ("class=\"PRG_DATE RT\"");
+	       break;
+	    default:
+	       HTM_TD_Begin ("class=\"PRG_DATE RT %s\"",The_GetColorRows ());
+	       break;
+	   }
 	 UniqueId++;
-
 	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
 	   {
 	    if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    switch (ListingType)
-	      {
-	       case Prg_PRINT:
-		  HTM_TD_Begin ("class=\"PRG_DATE LT\"");
-		  break;
-	       default:
-		  HTM_TD_Begin ("class=\"PRG_DATE LT %s\"",The_GetColorRows ());
-		  break;
-	      }
-	       HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
-			      Id,
-			      Item->Open ? "DATE_GREEN" :
-					   "DATE_RED",
-			      The_GetSuffix (),
-			      IsHidden ? " PRG_HIDDEN" :
-					   "");
-		  Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
-						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-						true,true,true,0x7);
-	       HTM_DIV_End ();
-	    HTM_TD_End ();
+	    HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
+			   Id,
+			   Item->Open ? "DATE_GREEN" :
+					"DATE_RED",
+			   The_GetSuffix (),
+			   IsHidden ? " PRG_HIDDEN" :
+					"");
+	       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					     true,true,true,0x7);
+	    HTM_DIV_End ();
 	    free (Id);
 	   }
+	 HTM_TD_End ();
 
       /***** End row *****/
       HTM_TR_End ();
@@ -631,7 +630,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       HTM_TR_Begin (NULL);
 
 	 /* Begin text and resources */
-	 ColSpan += 2;
+	 ColSpan++;
 	 switch (ListingType)
 	   {
 	    case Prg_PRINT:
@@ -1330,6 +1329,11 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Item->Open = false;
    Item->Title[0] = '\0';
+   Prg_ResetResource (Item);
+  }
+
+void Prg_ResetResource (struct Prg_Item *Item)
+  {
    Item->Resource.Hierarchy.RscCod = -1L;
    Item->Resource.Hierarchy.RscInd = 0;
    Item->Resource.Hierarchy.Hidden = false;
