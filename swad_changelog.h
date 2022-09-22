@@ -606,12 +606,14 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.19 (2022-09-21)"
+#define Log_PLATFORM_VERSION	"SWAD 22.20 (2022-09-22)"
 #define CSS_FILE		"swad22.18.css"
 #define JS_FILE			"swad21.100.js"
 /*
-					TODO: Los items ocultos no deben salir en modo ver. En modo edición deben salir en otro color.
-					TODO: Enlace Ok en los TFG sale de otro color.
+	Version 22.20:    Sep 22, 2022  Hidden items are not shown in program. (331838 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/check-circle.svg /var/www/html/swad/icon/
+
 	Version 22.19:    Sep 22, 2022  Fixed bugs in program. (331843 lines)
 	Version 22.18:    Sep 22, 2022  Expand/contract program items. (331877 lines)
 					1 change necessary in database:

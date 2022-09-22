@@ -185,7 +185,6 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
    unsigned NumRsc;
    unsigned NumResources;
    bool EditingResourcesOfThisItem;
-   bool EditLink;
    char *Title;
    static bool Editing[Prg_NUM_LISTING_TYPES] =
      {
@@ -228,14 +227,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
    if (NumResources || Editing[ListingType])
      {
-      /***** Begin section *****/
-      // if (FeaturedList[ListingType])
-      if (Item->Hierarchy.ItmCod == SelectedItmCod)
-	 HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
-
-      /***** Show possible alerts *****/
       if (Item->Hierarchy.ItmCod == SelectedItmCod)
 	{
+	 /***** Begin section *****/
+	 HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
+
+	 /***** Show possible alerts *****/
 	 if (Gbl.Action.Act == ActReqRemPrgRsc)
 	    /* Alert with button to remove resource */
 	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
@@ -274,22 +271,18 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
 		  /* Show item */
                   if (EditingResourcesOfThisItem)
-                    {
-		     EditLink = (Item->Resource.Hierarchy.RscCod == SelectedRscCod);
-		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,EditLink);
-                    }
+ 		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
+		                                  (ListingType == Prg_EDIT_RESOURCE_LINK &&
+		                                   Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
                   else
                      PrgRsc_WriteRowViewResource (NumRsc,Item);
 		 }
 
 	       /***** Form to create a new resource *****/
                if (EditingResourcesOfThisItem)
-        	 {
-		  Item->Resource.Hierarchy.RscCod = -1L;
-		  EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
-			     Item->Resource.Hierarchy.RscCod == SelectedRscCod);
-		  PrgRsc_WriteRowNewResource (NumResources,Item,EditLink);
-        	 }
+		  PrgRsc_WriteRowNewResource (NumResources,Item,
+		                              (ListingType == Prg_EDIT_RESOURCE_LINK &&
+		                               SelectedRscCod <= 0));	// Edit this link?
 
 	    /***** End table *****/
 	    HTM_TBODY_End ();
@@ -299,7 +292,6 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       Box_BoxEnd ();
 
       /***** End section *****/
-      // if (FeaturedList[ListingType])
       if (Item->Hierarchy.ItmCod == SelectedItmCod)
 	 HTM_SECTION_End ();
      }
