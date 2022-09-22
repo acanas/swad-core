@@ -105,11 +105,9 @@ static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item);
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
-                                         struct Prg_Item *Item,
-                                         bool EditLink);
+                                         struct Prg_Item *Item,bool EditLink);
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
-                                        struct Prg_Item *Item,
-                                        bool EditLink);
+                                        struct Prg_Item *Item,bool EditLink);
 static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources);
@@ -176,7 +174,9 @@ void PrgRsc_EditResources (void)
 /*****************************************************************************/
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_Item *Item,long SelectedRscCod)
+                               struct Prg_Item *Item,
+                               long SelectedItmCod,
+                               long SelectedRscCod)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Remove_resource;
@@ -184,24 +184,10 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
+   bool EditingResourcesOfThisItem;
    bool EditLink;
    char *Title;
-   static bool GetHiddenResources[Prg_NUM_LISTING_TYPES] =
-     {
-      [Prg_PRINT               ] = false,
-      [Prg_VIEW                ] = false,
-      [Prg_EDIT_ITEMS          ] = false,
-      [Prg_FORM_NEW_END_ITEM   ] = false,
-      [Prg_FORM_NEW_CHILD_ITEM ] = false,
-      [Prg_FORM_EDIT_ITEM      ] = false,
-      [Prg_END_EDIT_ITEM       ] = false,
-      [Prg_RECEIVE_ITEM        ] = false,
-      [Prg_EDIT_RESOURCES      ] = true,
-      [Prg_EDIT_RESOURCE_LINK  ] = true,
-      [Prg_CHANGE_RESOURCE_LINK] = true,
-      [Prg_END_EDIT_RES        ] = false,
-     };
-   static bool ShowListWhenEmpty[Prg_NUM_LISTING_TYPES] =
+   static bool Editing[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
       [Prg_VIEW                ] = false,
@@ -216,7 +202,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
      };
-   static bool FeaturedList[Prg_NUM_LISTING_TYPES] =
+   static bool EditingResources[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
       [Prg_VIEW                ] = false,
@@ -229,22 +215,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_EDIT_RESOURCES      ] = true,
       [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
-      [Prg_END_EDIT_RES        ] = true,
-     };
-   static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *ItmCod) =
-     {
-      [Prg_PRINT               ] = NULL,
-      [Prg_VIEW                ] = NULL,
-      [Prg_EDIT_ITEMS          ] = PrgRsc_PutIconsEditResources,
-      [Prg_FORM_NEW_END_ITEM   ] = PrgRsc_PutIconsEditResources,
-      [Prg_FORM_NEW_CHILD_ITEM ] = PrgRsc_PutIconsEditResources,
-      [Prg_FORM_EDIT_ITEM      ] = PrgRsc_PutIconsEditResources,
-      [Prg_END_EDIT_ITEM       ] = PrgRsc_PutIconsEditResources,
-      [Prg_RECEIVE_ITEM        ] = PrgRsc_PutIconsEditResources,
-      [Prg_EDIT_RESOURCES      ] = PrgRsc_PutIconsViewResources,
-      [Prg_EDIT_RESOURCE_LINK  ] = PrgRsc_PutIconsViewResources,
-      [Prg_CHANGE_RESOURCE_LINK] = PrgRsc_PutIconsViewResources,
-      [Prg_END_EDIT_RES        ] = PrgRsc_PutIconsEditResources,
+      [Prg_END_EDIT_RES        ] = false,
      };
 
    /***** Trivial check *****/
@@ -253,34 +224,39 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
    /***** Get list of item resources from database *****/
    NumResources = Prg_DB_GetListResources (&mysql_res,Item->Hierarchy.ItmCod,
-                                           GetHiddenResources[ListingType]);
+                                           EditingResources[ListingType]);
 
-   if (NumResources || ShowListWhenEmpty[ListingType])
+   if (NumResources || Editing[ListingType])
      {
       /***** Begin section *****/
-      if (FeaturedList[ListingType])
+      // if (FeaturedList[ListingType])
+      if (Item->Hierarchy.ItmCod == SelectedItmCod)
 	 HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
 
       /***** Show possible alerts *****/
-      if (FeaturedList[ListingType])
-	 switch (Gbl.Action.Act)
-	   {
-	    case ActReqRemPrgRsc:
-	       /* Alert with button to remove resource */
-	       Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
-					   Prg_PutParamRscCod,&SelectedRscCod,
-					   Btn_REMOVE_BUTTON,Txt_Remove_resource);
-	       break;
-	    default:
-	       Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
-	       break;
-	   }
+      if (Item->Hierarchy.ItmCod == SelectedItmCod)
+	{
+	 if (Gbl.Action.Act == ActReqRemPrgRsc)
+	    /* Alert with button to remove resource */
+	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
+					Prg_PutParamRscCod,&SelectedRscCod,
+					Btn_REMOVE_BUTTON,Txt_Remove_resource);
+	 else
+	    Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
+	}
 
       /***** Begin box *****/
+      EditingResourcesOfThisItem = EditingResources[ListingType] &&
+				   (Item->Hierarchy.ItmCod == SelectedItmCod);
+
       if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxBegin ("100%",Title,
-		    FunctionToDrawContextualIcons[ListingType],&Item->Hierarchy.ItmCod,
+                    Editing[ListingType] ? (EditingResourcesOfThisItem ? PrgRsc_PutIconsViewResources :
+                	                                                 PrgRsc_PutIconsEditResources) :
+                	                   NULL,
+                    Editing[ListingType] ? &Item->Hierarchy.ItmCod :
+                	                   NULL,
 		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
       free (Title);
 
@@ -297,36 +273,23 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		  PrgRsc_GetDataOfResource (Item,&mysql_res);
 
 		  /* Show item */
-		  switch (ListingType)
-		    {
-		     case Prg_EDIT_RESOURCES:
-		     case Prg_EDIT_RESOURCE_LINK:
-		     case Prg_CHANGE_RESOURCE_LINK:
-			EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
-	                            Item->Resource.Hierarchy.RscCod == SelectedRscCod);
-			PrgRsc_WriteRowEditResource (NumRsc,
-			                             NumResources,Item,EditLink);
-			break;
-		     default:
-			PrgRsc_WriteRowViewResource (NumRsc,Item);
-			break;
-		    }
+                  if (EditingResourcesOfThisItem)
+                    {
+		     EditLink = (Item->Resource.Hierarchy.RscCod == SelectedRscCod);
+		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,EditLink);
+                    }
+                  else
+                     PrgRsc_WriteRowViewResource (NumRsc,Item);
 		 }
 
 	       /***** Form to create a new resource *****/
-	       Item->Resource.Hierarchy.RscCod = -1L;
-	       switch (ListingType)
-		 {
-		  case Prg_EDIT_RESOURCES:
-		  case Prg_EDIT_RESOURCE_LINK:
-		  case Prg_CHANGE_RESOURCE_LINK:
-		     EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
-				 Item->Resource.Hierarchy.RscCod == SelectedRscCod);
-		     PrgRsc_WriteRowNewResource (NumResources,Item,EditLink);
-		     break;
-		  default:
-		     break;
-		 }
+               if (EditingResourcesOfThisItem)
+        	 {
+		  Item->Resource.Hierarchy.RscCod = -1L;
+		  EditLink = (ListingType == Prg_EDIT_RESOURCE_LINK &&
+			     Item->Resource.Hierarchy.RscCod == SelectedRscCod);
+		  PrgRsc_WriteRowNewResource (NumResources,Item,EditLink);
+        	 }
 
 	    /***** End table *****/
 	    HTM_TBODY_End ();
@@ -336,7 +299,8 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       Box_BoxEnd ();
 
       /***** End section *****/
-      if (FeaturedList[ListingType])
+      // if (FeaturedList[ListingType])
+      if (Item->Hierarchy.ItmCod == SelectedItmCod)
 	 HTM_SECTION_End ();
      }
 
@@ -469,8 +433,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
-                                         struct Prg_Item *Item,
-                                         bool EditLink)
+                                         struct Prg_Item *Item,bool EditLink)
   {
    extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
 
@@ -524,8 +487,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
-                                        struct Prg_Item *Item,
-                                        bool EditLink)
+                                        struct Prg_Item *Item,bool EditLink)
   {
    extern const char *Txt_New_resource;
 

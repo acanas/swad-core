@@ -31,7 +31,9 @@ void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
 void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_Item *Item,long SelectedRscCod);
+                               struct Prg_Item *Item,
+                               long SelectedItmCod,
+                               long SelectedRscCod);
 
 void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item);
 

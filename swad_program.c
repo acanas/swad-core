@@ -647,7 +647,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 Prg_WriteItemText (Item->Hierarchy.ItmCod,LightStyle);
 
       /* List of resources */
-      PrgRsc_ListItemResources (ListingType,Item,SelectedRscCod);
+      PrgRsc_ListItemResources (ListingType,Item,SelectedItmCod,SelectedRscCod);
 
       /* End text and resources */
       HTM_TD_End ();
