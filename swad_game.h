@@ -107,6 +107,7 @@ void Gam_ResetGames (struct Gam_Games *Games);
 void Gam_ResetGame (struct Gam_Game *Game);
 
 void Gam_SeeAllGames (void);
+void Gam_ListAllGames (struct Gam_Games *Games);
 void Gam_SeeOneGame (void);
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
 			  struct Gam_Game *Game,
@@ -166,11 +167,5 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore);
 
 //-------------------------------- Figures ------------------------------------
 void Gam_GetAndShowGamesStats (void);
-
-//--------------------------- Program resources -------------------------------
-void Gam_GetLinkToGame (void);
-void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle);
-void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize);
 
 #endif

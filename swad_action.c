@@ -61,6 +61,7 @@
 #include "swad_follow.h"
 #include "swad_forum.h"
 #include "swad_game.h"
+#include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_hierarchy.h"

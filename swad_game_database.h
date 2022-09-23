@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
 #include "swad_game.h"
 #include "swad_hierarchy_level.h"
 
