@@ -37,6 +37,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams);
 void Exa_ResetExam (struct Exa_Exam *Exam);
 
 void Exa_SeeAllExams (void);
+void Exa_ListAllExams (struct Exa_Exams *Exams);
 
 bool Exa_CheckIfICanEditExams (void);
 
@@ -86,11 +87,5 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
 //-------------------------------- Figures ------------------------------------
 void Exa_GetAndShowExamsStats (void);
-
-//--------------------------- Program resources -------------------------------
-void Exa_GetLinkToExam (void);
-void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle);
-void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

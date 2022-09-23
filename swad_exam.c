@@ -107,7 +107,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Exa_ListAllExams (struct Exa_Exams *Exams);
 static void Exa_PutIconsListExams (void *Exams);
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams);
@@ -208,7 +207,7 @@ void Exa_SeeAllExams (void)
 /******************************* Show all exams ******************************/
 /*****************************************************************************/
 
-static void Exa_ListAllExams (struct Exa_Exams *Exams)
+void Exa_ListAllExams (struct Exa_Exams *Exams)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Exams;
@@ -1638,93 +1637,4 @@ void Exa_GetAndShowExamsStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/***************************** Get link to exam ******************************/
-/*****************************************************************************/
-
-void Exa_GetLinkToExam (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Exa_Exams Exams;
-   long ExaCod;
-   char Title[Gam_MAX_BYTES_TITLE + 1];
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
-   /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Err_WrongExamExit ();
-   ExaCod = Exams.ExaCod;
-
-   /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,Title);
-
-   /***** Copy link to exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_EXAM,ExaCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
-
-   /***** Show exams again *****/
-   Exa_ListAllExams (&Exams);
-  }
-
-/*****************************************************************************/
-/*********************** Write exam in course program ************************/
-/*****************************************************************************/
-
-void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   char Title[Gam_MAX_BYTES_TITLE + 1];
-
-   /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,Title);
-
-   /***** Begin form to go to exam *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActSeeExa);
-         Exa_PutParamExamCod (ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeExa],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeExa);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write Name of the course and date of exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-      /* End form */
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/*********************** Get exam title from exam code ***********************/
-/*****************************************************************************/
-
-void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
-  {
-   char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
-
-   /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
   }
