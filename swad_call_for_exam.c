@@ -1,4 +1,4 @@
-// swad_exam_announcement.c: calls for exams
+// swad_call_for_exam.c: calls for exams
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -55,12 +55,6 @@
 #include "swad_timeline_database.h"
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-#define Cfe_MAX_BYTES_SESSION_AND_DATE (Cfe_MAX_BYTES_SESSION + (2 + Cns_MAX_BYTES_DATE + 7) + 1)
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -70,12 +64,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void);
-
 static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams);
-
-static void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
-static void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
 
 static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams);
 static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
@@ -85,27 +74,21 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 static void Cfe_PutIconToCreateNewCallForExam (__attribute__((unused)) void *Args);
 static void Cfe_PutButtonToCreateNewCallForExam (void);
 
-static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
-                                          long ExaCod);
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
                                  long ExaCod,
 			         Cfe_TypeViewCallForExam_t TypeViewCallForExam,
 			         bool HighLight);
 static void Cfe_PutIconsCallForExam (void *CallsForExams);
 static void Cfe_PutParamExaCodToEdit (void *ExaCod);
-static long Cfe_GetParamExaCod (void);
 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr);
-
-static void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
-                                     char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE]);
 
 /*****************************************************************************/
 /******************** Get global calls for exams context *********************/
 /*****************************************************************************/
 
-static struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void)
+struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void)
   {
    static struct Cfe_CallsForExams Cfe_GlobalCallsForExams;	// Used to preserve information between priori and posteriori functions
 
@@ -246,7 +229,7 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 /* Allocate memory for those parameters of an exam anno. with a lot of text **/
 /*****************************************************************************/
 
-static void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
+void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
   {
    if ((CallsForExams->CallForExam.Place       = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
@@ -274,7 +257,7 @@ static void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
 /* Free memory of those parameters of an exam announcem. with a lot of text **/
 /*****************************************************************************/
 
-static void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
+void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams)
   {
    if (CallsForExams->CallForExam.Place)
      {
@@ -794,8 +777,8 @@ void Cfe_FreeListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 /*********** Read the data of a call for exam from the database **************/
 /*****************************************************************************/
 
-static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
-                                          long ExaCod)
+void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
+                                   long ExaCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1565,7 +1548,7 @@ void Cfe_PutHiddenParamExaCod (long ExaCod)
 /************ Get parameter with the code of a call for exam *****************/
 /*****************************************************************************/
 
-static long Cfe_GetParamExaCod (void)
+long Cfe_GetParamExaCod (void)
   {
    /* Get notice code */
    return Par_GetParToLong ("ExaCod");
@@ -1689,132 +1672,10 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
   }
 
 /*****************************************************************************/
-/************************ Get link to call for exam **************************/
-/*****************************************************************************/
-
-void Cfe_GetLinkToCallForExam (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
-   long ExaCod;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
-
-   /***** Reset calls for exams context *****/
-   Cfe_ResetCallsForExams (CallsForExams);
-
-   /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
-
-   /***** Get data of call for exam *****/
-   Cfe_AllocMemCallForExam (CallsForExams);
-   Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
-
-   /***** Session and date of the exam *****/
-   Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
-
-   /***** Copy link to call for exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  SessionAndDate);
-
-   /***** Free memory of the call for exam *****/
-   Cfe_FreeMemCallForExam (CallsForExams);
-
-   /***** Set exam to be highlighted *****/
-   CallsForExams->HighlightExaCod = ExaCod;
-
-   /***** Show again the list of calls for exams *****/
-   Cfe_ListCallsForExamsEdit ();
-  }
-
-/*****************************************************************************/
-/******************* Write call for exam in course program *******************/
-/*****************************************************************************/
-
-void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   struct Cfe_CallsForExams CallsForExams;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
-   char *Anchor = NULL;
-
-   /***** Get session and date of the exam *****/
-   Cfe_ResetCallsForExams (&CallsForExams);
-   Cfe_AllocMemCallForExam (&CallsForExams);
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
-   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
-   Cfe_FreeMemCallForExam (&CallsForExams);
-
-   /***** Begin form to download file *****/
-   if (PutFormToGo)
-     {
-      /* Build anchor string */
-      Frm_SetAnchorStr (ExaCod,&Anchor);
-
-      /* Begin form */
-      Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
-         Cfe_PutHiddenParamExaCod (ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-
-      /* Free anchor string */
-      Frm_FreeAnchorStr (Anchor);
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneCfe);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write Name of the course and date of exam *****/
-   HTM_Txt (SessionAndDate);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-      /* End form */
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/************** Get call for exam text from call for exam code ***************/
-/*****************************************************************************/
-
-void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Call_for_exam;
-   struct Cfe_CallsForExams CallsForExams;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
-
-   /***** Reset calls for exams context *****/
-   Cfe_ResetCallsForExams (&CallsForExams);
-
-   /***** Get data of call for exam *****/
-   Cfe_AllocMemCallForExam (&CallsForExams);
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
-
-   /***** Session and date of the exam *****/
-   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
-   snprintf (Title,TitleSize,"%s: %s",Txt_Call_for_exam,SessionAndDate);
-
-   /***** Free memory of the call for exam *****/
-   Cfe_FreeMemCallForExam (&CallsForExams);
-  }
-
-/*****************************************************************************/
 /*********** Build string with session and date of a call for exam ***********/
 /*****************************************************************************/
 
-static void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
+void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
                                      char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE])
   {
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];

@@ -96,13 +96,19 @@ struct Cfe_CallsForExams
    struct Cfe_CallForExam CallForExam;
   };
 
+#define Cfe_MAX_BYTES_SESSION_AND_DATE (Cfe_MAX_BYTES_SESSION + (2 + Cns_MAX_BYTES_DATE + 7) + 1)
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void);
+
 void Cfe_ResetCallsForExams (struct Cfe_CallsForExams *CallsForExams);
 
 void Cfe_PutFrmEditACallForExam (void);
+void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
+void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
 void Cfe_ReceiveCallForExam1 (void);
 void Cfe_ReceiveCallForExam2 (void);
 void Cfe_PrintCallForExam (void);
@@ -113,6 +119,8 @@ void Cfe_HideCallForExam (void);
 void Cfe_UnhideCallForExam (void);
 
 void Cfe_FreeListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
+void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
+                                   long ExaCod);
 void Cfe_ListCallsForExamsSee (void);
 void Cfe_ListCallsForExamsEdit (void);
 
@@ -121,15 +129,13 @@ void Cfe_ListCallsForExamsDay (void);
 
 void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
 void Cfe_PutHiddenParamExaCod (long ExaCod);
+long Cfe_GetParamExaCod (void);
 
 void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                           char **ContentStr,
                                           long ExaCod,bool GetContent);
 
-//--------------------------- Program resources -------------------------------
-void Cfe_GetLinkToCallForExam (void);
-void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle);
-void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
+void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
+                              char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE]);
 
 #endif

@@ -33,7 +33,7 @@
 #include "swad_assignment_resource.h"
 #include "swad_attendance.h"
 #include "swad_browser.h"
-#include "swad_call_for_exam.h"
+#include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_form.h"
@@ -246,50 +246,55 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       EditingResourcesOfThisItem = EditingResources[ListingType] &&
 				   (Item->Hierarchy.ItmCod == SelectedItmCod);
 
-      if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin ("100%",Title,
-                    Editing[ListingType] ? (EditingResourcesOfThisItem ? PrgRsc_PutIconsViewResources :
-                	                                                 PrgRsc_PutIconsEditResources) :
-                	                   NULL,
-                    Editing[ListingType] ? &Item->Hierarchy.ItmCod :
-                	                   NULL,
-		    Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-      free (Title);
+      if (Editing[ListingType])
+        {
+	 if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Box_BoxBegin ("100%",Title,
+		       EditingResourcesOfThisItem ? PrgRsc_PutIconsViewResources :
+						    PrgRsc_PutIconsEditResources,
+		       &Item->Hierarchy.ItmCod,
+		       Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+         free (Title);
+        }
+      else
+	 Box_BoxBegin ("100%",NULL,
+		       NULL,NULL,
+		       NULL,Box_NOT_CLOSABLE);
 
-	 /***** Table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
-	    HTM_TBODY_Begin (NULL);
+      /***** Table *****/
+      HTM_TABLE_BeginWidePadding (2);
+	 HTM_TBODY_Begin (NULL);
 
-	       /***** Write all item resources *****/
-	       for (NumRsc = 0, The_ResetRowColor1 (1);
-		    NumRsc < NumResources;
-		    NumRsc++, The_ChangeRowColor1 (1))
-		 {
-		  /* Get data of this item resource */
-		  PrgRsc_GetDataOfResource (Item,&mysql_res);
+	    /***** Write all item resources *****/
+	    for (NumRsc = 0, The_ResetRowColor1 (1);
+		 NumRsc < NumResources;
+		 NumRsc++, The_ChangeRowColor1 (1))
+	      {
+	       /* Get data of this item resource */
+	       PrgRsc_GetDataOfResource (Item,&mysql_res);
 
-		  /* Show item */
-                  if (EditingResourcesOfThisItem)
- 		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
-		                                  (ListingType == Prg_EDIT_RESOURCE_LINK &&
-		                                   Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
-                  else
-                     PrgRsc_WriteRowViewResource (NumRsc,Item);
-		 }
+	       /* Show item */
+	       if (EditingResourcesOfThisItem)
+		  PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
+					       (ListingType == Prg_EDIT_RESOURCE_LINK &&
+						Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
+	       else
+		  PrgRsc_WriteRowViewResource (NumRsc,Item);
+	      }
 
-	       /***** Form to create a new resource *****/
-               if (EditingResourcesOfThisItem)
-        	 {
-        	  Prg_ResetResource (Item);
-		  PrgRsc_WriteRowNewResource (NumResources,Item,
-		                              (ListingType == Prg_EDIT_RESOURCE_LINK &&
-		                               Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
-        	 }
+	    /***** Form to create a new resource *****/
+	    if (EditingResourcesOfThisItem)
+	      {
+	       Prg_ResetResource (Item);
+	       PrgRsc_WriteRowNewResource (NumResources,Item,
+					   (ListingType == Prg_EDIT_RESOURCE_LINK &&
+					    Item->Resource.Hierarchy.RscCod == SelectedRscCod));	// Edit this link?
+	      }
 
-	    /***** End table *****/
-	    HTM_TBODY_End ();
-	 HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TBODY_End ();
+      HTM_TABLE_End ();
 
       /***** End box *****/
       Box_BoxEnd ();

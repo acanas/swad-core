@@ -112,10 +112,4 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif);
 //-------------------------------- Figures ------------------------------------
 void Asg_GetAndShowAssignmentsStats (void);
 
-//--------------------------- Program resources -------------------------------
-void AsgRsc_GetLinkToAssignment (void);
-void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                         const char *Icon,const char *IconTitle);
-void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
-
 #endif

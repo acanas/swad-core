@@ -29,11 +29,13 @@
 #include "swad_admin.h"
 #include "swad_agenda.h"
 #include "swad_announcement.h"
+#include "swad_assignment_resource.h"
 #include "swad_attendance.h"
 #include "swad_banner.h"
 #include "swad_building.h"
 #include "swad_calendar.h"
 #include "swad_call_for_exam.h"
+#include "swad_call_for_exam_resource.h"
 #include "swad_center_config.h"
 #include "swad_config.h"
 #include "swad_cookie.h"
@@ -1425,7 +1427,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideAttEvent		,NULL},
    [ActUnhAtt		] = {1070,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideAttEvent		,NULL},
    [ActSeeOneAtt	] = {1071,-1,TabUnk,ActSeeAtt		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeOneAttEvent		,NULL},
-   [ActReqLnkAtt	] = {1938,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetLinkToEvent		,NULL},
+   [ActReqLnkAtt	] = {1938,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AttRsc_GetLinkToEvent		,NULL},
    [ActRecAttStd	] = {1072,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterStudentsInAttEvent	,NULL},
    [ActRecAttMe		] = {1076,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterMeAsStdInAttEvent	,NULL},
 

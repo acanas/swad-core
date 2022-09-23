@@ -1,7 +1,7 @@
-// swad_assignment_resource.h: links to assignments as program resources
+// swad_call_for_exam_resource.h: links to calls for exams as program resources
 
-#ifndef _SWAD_ASG_RSC
-#define _SWAD_ASG_RSC
+#ifndef _SWAD_CFE_RSC
+#define _SWAD_CFE_RSC
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -11,7 +11,7 @@
     Copyright (C) 1999-2022 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
+    it under the terms of the GNU Affero General 3 License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -27,16 +27,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For size_t
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void AsgRsc_GetLinkToAssignment (void);
-void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                         const char *Icon,const char *IconTitle);
-void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
+void Cfe_GetLinkToCallForExam (void);
+void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
+                                          const char *Icon,const char *IconTitle);
+void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

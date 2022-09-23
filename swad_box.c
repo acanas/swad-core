@@ -155,40 +155,46 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
 
    /***** Row for left and right icons *****/
-   HTM_DIV_Begin ("class=\"FRAME_ICO\"");
+   if (FunctionToDrawContextualIcons ||
+       HelpLink ||
+       Closable == Box_CLOSABLE)
+     {
+      /* Begin row for left and right icons */
+      HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
-      /* Contextual icons at left */
-      if (FunctionToDrawContextualIcons)
-	{
-	 HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
-	    FunctionToDrawContextualIcons (Args);
+	 /* Contextual icons at left */
+	 if (FunctionToDrawContextualIcons)
+	   {
+	    HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
+	       FunctionToDrawContextualIcons (Args);
+	    HTM_DIV_End ();
+	   }
+
+	 /* Icons at right: help and close */
+	 HTM_DIV_Begin ("class=\"FRAME_ICO_RIGHT\"");
+
+	    if (HelpLink)	// Link to help
+	      {
+	       HTM_A_Begin ("href=\"%s%s\" target=\"_blank\"",Hlp_WIKI,HelpLink);
+		  Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+				  "question.svg",Ico_BLACK,Txt_Help);
+	       HTM_A_End ();
+	      }
+
+	    if (Closable == Box_CLOSABLE)	// Icon to close the box
+	      {
+	       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
+			    Gbl.Box.Ids[Gbl.Box.Nested]);
+		  Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+				  "times.svg",Ico_BLACK,Txt_Close);
+	       HTM_A_End ();
+	      }
+
 	 HTM_DIV_End ();
-	}
 
-      /* Icons at right: help and close */
-      HTM_DIV_Begin ("class=\"FRAME_ICO_RIGHT\"");
-
-	 if (HelpLink)	// Link to help
-	   {
-	    HTM_A_Begin ("href=\"%s%s\" target=\"_blank\"",Hlp_WIKI,HelpLink);
-	       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
-			       "question.svg",Ico_BLACK,Txt_Help);
-	    HTM_A_End ();
-	   }
-
-	 if (Closable == Box_CLOSABLE)	// Icon to close the box
-	   {
-	    HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
-			 Gbl.Box.Ids[Gbl.Box.Nested]);
-	       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
-			       "times.svg",Ico_BLACK,Txt_Close);
-	    HTM_A_End ();
-	   }
-
+      /* End row for left and right icons */
       HTM_DIV_End ();
-
-   /***** End row for left and right icons *****/
-   HTM_DIV_End ();
+     }
 
    /***** Frame title *****/
    if (Title)

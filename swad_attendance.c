@@ -3300,7 +3300,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 /************************ Get link to attendance event ***********************/
 /*****************************************************************************/
 
-void Att_GetLinkToEvent (void)
+void AttRsc_GetLinkToEvent (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    long AttCod;
@@ -3329,7 +3329,7 @@ void Att_GetLinkToEvent (void)
 /*****************************************************************************/
 
 void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                    const char *Icon,const char *IconTitle)
+                                       const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];

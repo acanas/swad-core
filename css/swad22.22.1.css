@@ -2125,7 +2125,8 @@ a:hover img.CENTER_PHOTO_SHOW
 	display:inline-block;
 	box-sizing:border-box;
 	margin:2px 0;
-	padding:8px 12px 12px 12px;
+	padding:10px;
+	/* padding:8px 12px 12px 12px; */
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	text-align:center;
@@ -3640,7 +3641,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .MCH_LIMEGREEN	{color:#636e00;}
 .MCH_GREEN	{color:#246600;}
 
-.MCH_TCH_STEM_WHITE
+.MCH_TCH_STEM_WHITE,
+.MCH_TCH_STEM_GREY,
+.MCH_TCH_STEM_PURPLE,
+.MCH_TCH_STEM_BLUE,
+.MCH_TCH_STEM_YELLOW,
+.MCH_TCH_STEM_PINK
+.MCH_TCH_STEM_DARK
 	{
 	color:#202020;
 	font-size:24pt;

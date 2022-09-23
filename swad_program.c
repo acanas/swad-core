@@ -617,7 +617,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 					"");
 	       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					     true,true,true,0x7);
+					     true,true,true,0x6);
 	    HTM_DIV_End ();
 	    free (Id);
 	   }
