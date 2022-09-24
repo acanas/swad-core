@@ -105,7 +105,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	                           const struct ExaSes_Session *Session,
                                    struct ExaPrn_Print *Print,
-                                   struct UsrData *UsrDat,
+                                   struct Usr_Data *UsrDat,
                                    struct ExaRes_ICanView *ICanView,
                                    unsigned Visibility);
 
@@ -125,10 +125,10 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView);
-static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
+static void ExaRes_ShowExamAnswers (struct Usr_Data *UsrDat,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility);
-static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
+static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       struct ExaPrn_Print *Print,
 				       unsigned QstInd,
 				       struct Qst_Question *Question,
@@ -772,7 +772,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				const char *ExamsSelectedCommas)
   {
    MYSQL_RES *mysql_res;
-   struct UsrData *UsrDat;
+   struct Usr_Data *UsrDat;
    unsigned NumResults;
    unsigned NumResult;
    struct ExaRes_ICanView ICanView;
@@ -1295,7 +1295,7 @@ void ExaRes_ShowOneExaResult (void)
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    Usr_MeOrOther_t MeOrOther;
-   struct UsrData *UsrDat;
+   struct Usr_Data *UsrDat;
    struct ExaPrn_Print Print;
    struct ExaRes_ICanView ICanView;
 
@@ -1360,7 +1360,7 @@ void ExaRes_ShowOneExaResult (void)
 static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	                           const struct ExaSes_Session *Session,
                                    struct ExaPrn_Print *Print,
-                                   struct UsrData *UsrDat,
+                                   struct Usr_Data *UsrDat,
                                    struct ExaRes_ICanView *ICanView,
                                    unsigned Visibility)
   {
@@ -1541,7 +1541,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 /************************ Show user row in exam result ***********************/
 /*****************************************************************************/
 
-void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
+void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -1814,7 +1814,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 /**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
-static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
+static void ExaRes_ShowExamAnswers (struct Usr_Data *UsrDat,
 			            struct ExaPrn_Print *Print,
 			            unsigned Visibility)
   {
@@ -1844,7 +1844,7 @@ static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
+static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       struct ExaPrn_Print *Print,
 				       unsigned QstInd,
 				       struct Qst_Question *Question,

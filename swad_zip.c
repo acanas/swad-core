@@ -69,7 +69,7 @@ extern struct Globals Gbl;
 static void ZIP_PutLinkToCreateZIPAsgWrkParams (__attribute__((unused)) void *Args);
 
 static void ZIP_CreateTmpDirForCompression (void);
-static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat);
+static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (void);
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree);
@@ -114,7 +114,7 @@ bool ZIP_GetCreateZIPFromForm (void)
 void ZIP_CreateZIPAsgWrk (void)
   {
    extern const char *Txt_works_ZIP_FILE_NAME;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *Ptr;
    char StrZip[128 + PATH_MAX];
    char Path[PATH_MAX + 1 +
@@ -237,7 +237,7 @@ static void ZIP_CreateTmpDirForCompression (void)
 /**************** in the temporary directory of compression ******************/
 /*****************************************************************************/
 
-static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
+static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
   {
    char FullNameAndUsrID[NAME_MAX + 1];
    char PathFolderUsrInsideCrs[128 + PATH_MAX + NAME_MAX];

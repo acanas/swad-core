@@ -407,7 +407,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
 // Roles >=0 ==> already filled/calculated ==> nothing to do
 // Roles  <0 ==> not yet filled/calculated ==> get roles
 
-void Rol_GetRolesInAllCrss (struct UsrData *UsrDat)
+void Rol_GetRolesInAllCrss (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

@@ -55,12 +55,12 @@ struct ListIDs
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat);
-void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs);
-void ID_FreeListIDs (struct UsrData *UsrDat);
-unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
+void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat);
+void ID_ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs);
+void ID_FreeListIDs (struct Usr_Data *UsrDat);
+unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
                                      const char *EncryptedPassword,	// If NULL or empty ==> do not check password
-                                     struct ListUsrCods *ListUsrCods,
+                                     struct Usr_ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs);
 
 void ID_PutParamOtherUsrIDPlain (void);
@@ -69,8 +69,8 @@ void ID_GetParamOtherUsrIDPlain (void);
 bool ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor);
-bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat);
+void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor);
+bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
 
 void ID_ShowFormChangeMyID (bool IShouldFillInID);
 void ID_ShowFormChangeOtherUsrID (void);

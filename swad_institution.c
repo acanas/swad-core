@@ -929,7 +929,7 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumIns;
    struct Ins_Instit *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumCtrs;
    unsigned NumUsrsIns;

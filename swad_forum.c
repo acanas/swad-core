@@ -878,7 +878,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -2178,7 +2178,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    struct For_Thread Thr;
    unsigned UniqueId;
    char *Id;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    Dat_StartEndTime_t Order;
    time_t TimeUTC;
    struct Pagination PaginationPsts;
@@ -2912,7 +2912,7 @@ void For_RemovePost (void)
    extern const char *Txt_FORUM_Post_and_thread_removed;
    extern const char *Txt_FORUM_Post_removed;
    struct For_Forums Forums;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];

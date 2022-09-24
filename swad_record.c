@@ -111,7 +111,7 @@ static void Rec_PutParamsShowOfficeHoursOneTch (void);
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void);
 static bool Rec_GetParamShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
-                               struct UsrData *UsrDat,const char *Anchor);
+                               struct Usr_Data *UsrDat,const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
@@ -122,36 +122,36 @@ static void Rec_PutParamsWorks (__attribute__((unused)) void *Args);
 static void Rec_PutParamsStudent (__attribute__((unused)) void *Args);
 static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args);
 static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks);
-static void Rec_ShowPhoto (struct UsrData *UsrDat);
-static void Rec_ShowFullName (struct UsrData *UsrDat);
-static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
-static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
-static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
+static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
+static void Rec_ShowFullName (struct Usr_Data *UsrDat);
+static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks);
+static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData);
+static void Rec_ShowWebsAndSocialNets (struct Usr_Data *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
-static void Rec_ShowEmail (struct UsrData *UsrDat);
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor);
-static void Rec_ShowRole (struct UsrData *UsrDat,
+static void Rec_ShowEmail (struct Usr_Data *UsrDat);
+static void Rec_ShowUsrIDs (struct Usr_Data *UsrDat,const char *Anchor);
+static void Rec_ShowRole (struct Usr_Data *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView);
-static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm);
-static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm);
-static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm);
-static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm);
-static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
+static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm);
+static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,bool PutForm);
+static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm);
+static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm);
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone);
-static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
+static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Ins_Instit *Ins,
                                  bool ShowData);
 static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData);
-static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData);
-static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData);
-static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData);
-static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData);
+static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData);
+static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData);
+static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData);
+static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData);
 
 static void Rec_WriteLinkToDataProtectionClause (void);
 
-static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat);
-static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
+static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat);
+static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat);
 
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher);
 
@@ -872,7 +872,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
   {
    unsigned NumUsr = 0;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    char RecordSectionId[32];
 
    /***** Get list of selected users if not already got *****/
@@ -1067,7 +1067,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
   {
    unsigned NumUsr = 0;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    char RecordSectionId[32];
 
    /***** Get list of selected users if not already got *****/
@@ -1280,7 +1280,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    struct Tmt_Timetable Timetable;
    unsigned NumUsr = 0;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    char RecordSectionId[32];
    bool ShowOfficeHours;
    char Width[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
@@ -1568,7 +1568,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 // Show form or only data depending on TypeOfView
 
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
-                               struct UsrData *UsrDat,const char *Anchor)
+                               struct Usr_Data *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
@@ -1933,7 +1933,7 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
 /*************** Show form to edit the record of a new user ******************/
 /*****************************************************************************/
 
-void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole)
+void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t DefaultRole)
   {
    /***** Show the form *****/
    /* In this case UsrDat->Roles.InCurrentCrs
@@ -1974,7 +1974,7 @@ void Rec_ShowMySharedRecordUpd (void)
 /********************** Show user's record for check *************************/
 /*****************************************************************************/
 
-void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
+void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat,
@@ -2003,7 +2003,7 @@ void Rec_ShowPublicSharedRecordOtherUsr (void)
 // Show form or only data depending on TypeOfView
 
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
-                              struct UsrData *UsrDat,const char *Anchor)
+                              struct Usr_Data *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_SignUp;
    extern const char *Hlp_PROFILE_Record;
@@ -2572,7 +2572,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 /********************** Show user's photo in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowPhoto (struct UsrData *UsrDat)
+static void Rec_ShowPhoto (struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2594,7 +2594,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
 /*************************** Show user's full name ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFullName (struct UsrData *UsrDat)
+static void Rec_ShowFullName (struct Usr_Data *UsrDat)
   {
    HTM_TD_Begin ("class=\"REC_C2_MID LT\"");
       HTM_DIV_Begin ("class=\"REC_NAME\"");
@@ -2618,7 +2618,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 /*************************** Show user's nickname ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
+static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -2653,7 +2653,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData)
   {
 
 
@@ -2669,7 +2669,7 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
 /******************* Show user's webs and social networks ********************/
 /*****************************************************************************/
 
-static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
+static void Rec_ShowWebsAndSocialNets (struct Usr_Data *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView)
   {
    HTM_TD_Begin ("class=\"REC_C3_MID CT\"");
@@ -2682,7 +2682,7 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
 /***************************** Show user's email *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowEmail (struct UsrData *UsrDat)
+static void Rec_ShowEmail (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Email;
 
@@ -2718,7 +2718,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
 /******************************* Show user's IDs *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
+static void Rec_ShowUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    extern const char *Txt_ID;
 
@@ -2741,7 +2741,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 /************************** Show user's role / sex ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowRole (struct UsrData *UsrDat,
+static void Rec_ShowRole (struct Usr_Data *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
@@ -3018,7 +3018,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 /*************************** Show user's surname 1 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
+static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm)
   {
    extern const char *Txt_Surname_1;
    char *Label;
@@ -3060,7 +3060,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 /*************************** Show user's surname 2 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
+static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,bool PutForm)
   {
    extern const char *Txt_Surname_2;
 
@@ -3096,7 +3096,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 /************************** Show user's first name ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
+static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm)
   {
    extern const char *Txt_First_name;
    char *Label;
@@ -3140,7 +3140,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
+static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
   {
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
@@ -3193,7 +3193,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 /************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
-static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Date_of_birth;
 
@@ -3229,7 +3229,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 /*****************************************************************************/
 // NumPhone can be 0 or 1
 
-static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone)
   {
    extern const char *Txt_Phone;
@@ -3286,7 +3286,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 /************************** Show user's comments *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_USER_comments;
 
@@ -3328,7 +3328,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
+static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Ins_Instit *Ins,
                                  bool ShowData)
   {
    /***** Institution *****/
@@ -3384,7 +3384,7 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
 /*************************** Show user's center ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
   {
    extern const char *Txt_Center;
    struct Ctr_Center Ctr;
@@ -3422,7 +3422,7 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 /************************* Show user's department ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
   {
    extern const char *Txt_Department;
    struct Dpt_Department Dpt;
@@ -3460,7 +3460,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 /*************************** Show user's office ******************************/
 /*****************************************************************************/
 
-static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData)
   {
    extern const char *Txt_Office;
 
@@ -3484,7 +3484,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
 /************************ Show user's office phone ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
+static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData)
   {
    extern const char *Txt_Phone;
 
@@ -3595,7 +3595,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 /*************** Get data fields of shared record from form ******************/
 /*****************************************************************************/
 
-void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
+void Rec_GetUsrNameFromRecordForm (struct Usr_Data *UsrDat)
   {
    char Surname1[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];	// Temporary surname 1
    char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];	// Temporary first name
@@ -3622,7 +3622,7 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
    Usr_BuildFullName (UsrDat);
   }
 
-static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
+static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
   {
    /***** Get sex from form *****/
    UsrDat->Sex = (Usr_Sex_t)
@@ -3650,7 +3650,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 /********** Get the comments of the record of a user from the form ***********/
 /*****************************************************************************/
 
-static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat)
+static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat)
   {
    /***** Check if memory is allocated for comments *****/
    if (!UsrDat->Comments)

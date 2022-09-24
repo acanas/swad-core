@@ -123,7 +123,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event);
 static void Att_ListAttStudents (struct Att_Events *Events,
 	                         struct Att_Event *Event);
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
-                                          struct UsrData *UsrDat,
+                                          struct Usr_Data *UsrDat,
                                           struct Att_Event *Event);
 static void Att_PutLinkAttEvent (struct Att_Event *Event,
 				 const char *Title,const char *Txt);
@@ -159,13 +159,13 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events);
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
-                                             unsigned NumUsr,struct UsrData *UsrDat);
+                                             unsigned NumUsr,struct Usr_Data *UsrDat);
 static void Att_PutCheckOrCross (bool Present);
 static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
                                               unsigned NumUsrsInList,
                                               long *LstSelectedUsrCods);
 static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
-                                      unsigned NumUsr,struct UsrData *UsrDat);
+                                      unsigned NumUsr,struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /************************** Reset attendance events **************************/
@@ -1601,7 +1601,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save_changes;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -1697,7 +1697,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
 /*****************************************************************************/
 
 static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
-                                          struct UsrData *UsrDat,
+                                          struct Usr_Data *UsrDat,
                                           struct Att_Event *Event)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2012,7 +2012,7 @@ void Att_RegisterStudentsInAttEvent (void)
    char *ParamName;
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
-   struct UsrData UsrData;
+   struct Usr_Data UsrData;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2835,7 +2835,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
                                          long *LstSelectedUsrCods)
   {
    extern const char *Txt_Number_of_users;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumUsr;
    unsigned NumAttEvent;
    unsigned Total;
@@ -2962,7 +2962,7 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 /*****************************************************************************/
 
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
-                                             unsigned NumUsr,struct UsrData *UsrDat)
+                                             unsigned NumUsr,struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -3082,7 +3082,7 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
                                               long *LstSelectedUsrCods)
   {
    extern const char *Txt_Details;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumUsr;
 
    /***** Initialize structure with user's data *****/
@@ -3127,7 +3127,7 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
 /*****************************************************************************/
 
 static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
-                                      unsigned NumUsr,struct UsrData *UsrDat)
+                                      unsigned NumUsr,struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;

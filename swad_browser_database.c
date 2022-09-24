@@ -1394,7 +1394,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 /************ Change public and license of file in the database **************/
 /*****************************************************************************/
 
-void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
+void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
                               bool IsPublic,Brw_License_t License)
   {
    long Cod = Brw_GetCodForFileBrowser ();
@@ -2320,7 +2320,7 @@ unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct FileMetadata *FileMetadata)
+bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct Brw_FileMetadata *FileMetadata)
   {
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 unsigned Dup_DB_GetListDuplicateUsrs (MYSQL_RES **mysql_res);
-unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *UsrDat);
+unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct Usr_Data *UsrDat);
 bool Dup_DB_CheckIfUsrIsDup (long UsrCod);
 
 void Dup_DB_AddUsrToDuplicated (long UsrCod);

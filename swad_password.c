@@ -74,7 +74,7 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat);
+static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat);
 
 static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin);
 
@@ -189,7 +189,7 @@ void Pwd_UpdateOtherUsrPwd (void)
 /********************* Check and update new password *************************/
 /*****************************************************************************/
 
-static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
+static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    extern const char *Txt_The_password_has_been_changed_successfully;
@@ -292,7 +292,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    extern const char *Txt_You_must_enter_your_nick_email_or_ID;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    extern const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_;
-   struct ListUsrCods ListUsrCods;
+   struct Usr_ListUsrCods ListUsrCods;
    unsigned NumUsr;
    char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    int ReturnCode;

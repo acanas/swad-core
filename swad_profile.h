@@ -59,11 +59,11 @@ void Prf_PutLinkRequestAnotherUserProfile (void);
 void Prf_RequestUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
-bool Prf_ShowUserProfile (struct UsrData *UsrDat);
+bool Prf_ShowUserProfile (struct Usr_Data *UsrDat);
 void Prf_ChangeBasicProfileVis (void);
 void Prf_ChangeExtendedProfileVis (void);
 
-void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
+void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat);
 void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);
 void Prf_CalculateFigures (void);
 bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);

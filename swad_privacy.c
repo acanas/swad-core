@@ -250,7 +250,7 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
 /*****************************************************************************/
 // Returns true if it can be shown and false if not.
 
-bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
+bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct Usr_Data *UsrDat)
   {
    /***** I always can see my things *****/
    if (Usr_ItsMe (UsrDat->UsrCod))

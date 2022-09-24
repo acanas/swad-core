@@ -558,7 +558,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      };
    static unsigned UniqueId = 0;
    char *Id;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    char *Anchor = NULL;
 
    /***** Build anchor string *****/

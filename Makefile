@@ -33,8 +33,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_assignment_resource.o swad_attendance.o swad_attendance_database.o \
        swad_autolink.o \
        swad_banner.o swad_banner_database.o swad_box.o swad_browser.o \
-       swad_browser_database.o swad_building.o swad_building_database.o \
-       swad_button.o \
+       swad_browser_database.o swad_browser_resource.o swad_building.o \
+       swad_building_database.o swad_button.o \
        swad_calendar.o swad_call_for_exam.o swad_call_for_exam_resource.o \
        swad_call_for_exam_database.o swad_center.o swad_center_config.o \
        swad_center_database.o swad_chat.o swad_chat_database.o swad_config.o \
@@ -86,7 +86,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_scope.o swad_search.o swad_session.o swad_session_database.o \
        swad_setting.o swad_setting_database.o swad_statistic.o \
        swad_statistic_database.o swad_string.o swad_survey.o \
-       swad_survey_database.o swad_syllabus.o swad_system_config.o \
+       swad_survey_database.o swad_survey_resource.o swad_syllabus.o \
+       swad_system_config.o \
        swad_tab.o swad_tag.o swad_tag_database.o swad_test.o \
        swad_test_database.o swad_test_config.o swad_test_print.o \
        swad_test_visibility.o swad_theme.o swad_timeline.o \

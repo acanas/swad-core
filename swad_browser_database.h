@@ -66,7 +66,7 @@ void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod);
 void Brw_DB_RemoveUsrFiles (long UsrCod);
 
 //------------------------------ Public files ---------------------------------
-void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
+void Brw_DB_ChangeFilePublic (const struct Brw_FileMetadata *FileMetadata,
                               bool IsPublic,Brw_License_t License);
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
@@ -100,7 +100,7 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],bool Hide);
 unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
                                                            const char *Path);
-bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct FileMetadata *FileMetadata);
+bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct Brw_FileMetadata *FileMetadata);
 
 //---------------------------- Expanded folders -------------------------------
 void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);

@@ -77,20 +77,20 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
+static void Prf_ShowTimeSinceFirstClick (const struct Usr_Data *UsrDat,
                                          const struct Prf_UsrFigures *UsrFigures);
-static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
+static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 				     Rol_Role_t Role);
-static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat);
-static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
+static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat);
+static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
                                const struct Prf_UsrFigures *UsrFigures);
-static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
+static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
                                   const struct Prf_UsrFigures *UsrFigures);
-static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
+static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
                                      const struct Prf_UsrFigures *UsrFigures);
-static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
+static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
                                    const struct Prf_UsrFigures *UsrFigures);
-static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
+static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
                                      const struct Prf_UsrFigures *UsrFigures);
 static void Prf_BeginListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
@@ -108,7 +108,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
-static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
+static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool ItsMe);
 
 /*****************************************************************************/
 /************* Suggest who to follow or request user's profile ***************/
@@ -274,7 +274,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*****************************************************************************/
 // Return false on error
 
-bool Prf_ShowUserProfile (struct UsrData *UsrDat)
+bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
   {
    unsigned NumFollowing;
    unsigned NumFollowers;
@@ -372,7 +372,7 @@ void Prf_ChangeExtendedProfileVis (void)
 /********************** Show details of user's profile ***********************/
 /*****************************************************************************/
 
-void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
+void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
   {
    bool UsrIsBannedFromRanking;
    struct Prf_UsrFigures UsrFigures;
@@ -439,7 +439,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 /************** Show time since first click in user's profile ****************/
 /*****************************************************************************/
 
-static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
+static void Prf_ShowTimeSinceFirstClick (const struct Usr_Data *UsrDat,
                                          const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_TIME_Since;
@@ -503,7 +503,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 /*** Show number of courses in which the user has a role in user's profile ***/
 /*****************************************************************************/
 
-static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
+static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 				     Rol_Role_t Role)
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
@@ -537,7 +537,7 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 /******** Show number of files currently published in user's profile *********/
 /*****************************************************************************/
 
-static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
+static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
@@ -568,7 +568,7 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
 /****************** Show number of clicks in user's profile ******************/
 /*****************************************************************************/
 
-static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
+static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
                                const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Clicks;
@@ -606,7 +606,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
 /*************** Show number of file views in user's profile *****************/
 /*****************************************************************************/
 
-static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
+static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
                                   const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Downloads;
@@ -643,7 +643,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
 /********* Show number of timeline publications in user's profile ************/
 /*****************************************************************************/
 
-static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
+static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
                                      const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Timeline;
@@ -680,7 +680,7 @@ static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
 /********** Show number of timeline publications in user's profile ***********/
 /*****************************************************************************/
 
-static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
+static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
                                    const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Forums;
@@ -717,7 +717,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
 /************** Show number of messages sent in user's profile ***************/
 /*****************************************************************************/
 
-static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
+static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
                                      const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Messages;
@@ -1172,7 +1172,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned Rank;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ItsMe;
    long FigureHigh = LONG_MAX;
    long Figure;
@@ -1242,7 +1242,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    unsigned NumUsrs = 0;	// Initialized to avoid warning
    unsigned NumUsr;
    unsigned Rank;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ItsMe;
    double NumClicksPerDayHigh = (double) LONG_MAX;
    double NumClicksPerDay;
@@ -1304,7 +1304,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
+static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =

@@ -291,11 +291,11 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
 
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                             long CrsCod,struct UsrData *UsrDat,long Cod,
+                                             long CrsCod,struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums);
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
-static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
+static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
 static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
                                  Ntf_NotifyEvent_t NotifyEvent,
                                  unsigned *NumEvents,unsigned *NumMails);
@@ -336,7 +336,7 @@ void Ntf_ShowMyNotifications (void)
    unsigned NumNotifications;
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    struct Hie_Hierarchy Hie;
    long Cod;
    struct For_Forums Forums;
@@ -689,11 +689,11 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 /*****************************************************************************/
 
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                             long CrsCod,struct UsrData *UsrDat,long Cod,
+                                             long CrsCod,struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    long InsCod = -1L;
    long CtrCod = -1L;
    long DegCod = -1L;
@@ -1042,7 +1042,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    MYSQL_RES *mysql_res;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    struct For_Forum ForumSelected;
    long InsCod;
    long CtrCod;
@@ -1203,7 +1203,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumNotif;
    unsigned NumTotalNotif = 0;
    unsigned NumMails;
@@ -1250,7 +1250,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 /************ Send pending notifications of one user by email ****************/
 /*****************************************************************************/
 
-static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
+static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
   {
    extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES];
@@ -1267,7 +1267,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    unsigned NumNtfs;
    unsigned NumNtf;
    Lan_Language_t ToUsrLanguage;
-   struct UsrData FromUsrDat;
+   struct Usr_Data FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Hie_Hierarchy Hie;
    long Cod;

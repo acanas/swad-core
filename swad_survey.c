@@ -88,9 +88,6 @@ struct Svy_Question	// Must be initialized to 0 before using it
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Svy_ResetSurveys (struct Svy_Surveys *Surveys);
-
-static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
 static bool Svy_CheckIfICanCreateSvy (void);
 static void Svy_PutIconsListSurveys (void *Surveys);
 static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys);
@@ -113,9 +110,6 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys);
 
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
-
-static void Svy_PutParamSvyCod (long SvyCod);
-static long Svy_GetParamSvyCod (void);
 
 static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys);
 
@@ -160,7 +154,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 /*************************** Reset surveys context ***************************/
 /*****************************************************************************/
 
-static void Svy_ResetSurveys (struct Svy_Surveys *Surveys)
+void Svy_ResetSurveys (struct Svy_Surveys *Surveys)
   {
    Surveys->LstIsRead     = false;	// Is the list already read from database, or it needs to be read?
    Surveys->Num           = 0;		// Number of surveys
@@ -195,7 +189,7 @@ void Svy_SeeAllSurveys (void)
 /***************************** Show all surveys ******************************/
 /*****************************************************************************/
 
-static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
+void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
    extern const char *Txt_Surveys;
@@ -1400,7 +1394,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /******************* Write parameter with code of survey *********************/
 /*****************************************************************************/
 
-static void Svy_PutParamSvyCod (long SvyCod)
+void Svy_PutParamSvyCod (long SvyCod)
   {
    Par_PutHiddenParamLong (NULL,"SvyCod",SvyCod);
   }
@@ -1409,7 +1403,7 @@ static void Svy_PutParamSvyCod (long SvyCod)
 /******************** Get parameter with code of survey **********************/
 /*****************************************************************************/
 
-static long Svy_GetParamSvyCod (void)
+long Svy_GetParamSvyCod (void)
   {
    /***** Get code of survey *****/
    return Par_GetParToLong ("SvyCod");
@@ -3452,91 +3446,4 @@ void Svy_GetAndShowSurveysStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/**************************** Get link to survey *****************************/
-/*****************************************************************************/
-
-void Svy_GetLinkToSurvey (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Svy_Surveys Surveys;
-   long SvyCod;
-   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-
-   /***** Reset surveys context *****/
-   Svy_ResetSurveys (&Surveys);
-
-   /***** Get survey code *****/
-   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Err_WrongSurveyExit ();
-
-   /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,Title);
-
-   /***** Copy link to survey into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_SURVEY,SvyCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
-
-   /***** Show surveys again *****/
-   Svy_ListAllSurveys (&Surveys);
-  }
-
-/*****************************************************************************/
-/********************** Write survey in course program ***********************/
-/*****************************************************************************/
-
-void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-
-   /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,Title);
-
-   /***** Begin form to go to survey *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActSeeSvy);
-         Svy_PutParamSvyCod (SvyCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeSvy],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeSvy);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write Name of the course and date of exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-      /* End form */
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/********************* Get survey title from survey code *********************/
-/*****************************************************************************/
-
-void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
-  {
-   char TitleFromDB[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-
-   /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
   }

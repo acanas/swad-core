@@ -53,9 +53,9 @@ extern struct Globals Gbl;
 
 static void Dup_ListSimilarUsrs (void);
 
-static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat);
-static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat);
-static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat);
+static void Dup_PutButtonToViewSimilarUsrs (const struct Usr_Data *UsrDat);
+static void Dup_PutButtonToEliminateUsrAccount (const struct Usr_Data *UsrDat);
+static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /******************** Report a user as possible duplicate ********************/
@@ -113,7 +113,7 @@ void Dup_ListDuplicateUsrs (void)
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumInformants;
 
    /***** Begin box with list of possible duplicate users *****/
@@ -232,7 +232,7 @@ static void Dup_ListSimilarUsrs (void)
   {
    extern const char *Hlp_USERS_Duplicates_similar_users;
    extern const char *Txt_Similar_users;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
@@ -344,7 +344,7 @@ static void Dup_ListSimilarUsrs (void)
 /********************* Put button to view similar users **********************/
 /*****************************************************************************/
 
-static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
+static void Dup_PutButtonToViewSimilarUsrs (const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Similar_users;
 
@@ -358,7 +358,7 @@ static void Dup_PutButtonToViewSimilarUsrs (const struct UsrData *UsrDat)
 /********* Put button to request the elimination of a user's account *********/
 /*****************************************************************************/
 
-static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
+static void Dup_PutButtonToEliminateUsrAccount (const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Eliminate_user_account;
 
@@ -373,7 +373,7 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct UsrData *UsrDat)
 /****** Put button to remove user from list of possible duplicate users ******/
 /*****************************************************************************/
 
-static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct UsrData *UsrDat)
+static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Not_duplicated;
 

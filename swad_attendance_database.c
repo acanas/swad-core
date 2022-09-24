@@ -616,7 +616,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
   {
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumCodsInList;
    char *SubQueryAllUsrs = NULL;
    char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];

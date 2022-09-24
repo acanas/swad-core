@@ -295,7 +295,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
       const char *PtrEnd;
       size_t Length;		// Length of the nickname
      } Nickname;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool CreateNotif;
    bool NotifyByEmail;
 

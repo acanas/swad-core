@@ -230,8 +230,8 @@ struct Globals
      {
       struct
 	{
-	 struct UsrData UsrDat;
-	 struct UsrLast UsrLast;
+	 struct Usr_Data UsrDat;
+	 struct Usr_Last UsrLast;
 	 struct
 	   {
 	    unsigned Available;
@@ -313,11 +313,11 @@ struct Globals
 	} Me;		// The user logged
       struct
 	{
-	 struct UsrData UsrDat;
+	 struct Usr_Data UsrDat;
 	 unsigned NumIDToConfirm;	// Used as hidden parameter to confirm a user's ID
 	} Other;		// Another user, used for example to register in / remove from a course
-      struct ListUsrs LstUsrs[Rol_NUM_ROLES];
-      struct SelectedUsrs Selected;
+      struct Usr_ListUsrs LstUsrs[Rol_NUM_ROLES];
+      struct Usr_SelectedUsrs Selected;
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
       struct
 	{
@@ -349,7 +349,7 @@ struct Globals
      } Usrs;
    struct
      {
-      struct UsrData *UsrDat;
+      struct Usr_Data *UsrDat;
       Rec_SharedRecordViewType_t TypeOfView;
      } Record;
    struct
@@ -398,7 +398,7 @@ struct Globals
 	 char PathRootFolder[PATH_MAX + 1];
 	} Priv;
       char NewFilFolLnkName[NAME_MAX + 1];
-      struct FilFolLnk FilFolLnk;
+      struct Brw_FilFolLnk FilFolLnk;
       unsigned Level;
       Brw_IconViewEdit_t IconViewEdit;
       struct
@@ -407,7 +407,7 @@ struct Globals
          long Cod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
          unsigned Level;
-         struct FilFolLnk FilFolLnk;
+         struct Brw_FilFolLnk FilFolLnk;
          bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
          bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
         } Clipboard;

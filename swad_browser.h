@@ -1,7 +1,7 @@
 // swad_browser.h: file browsers
 
-#ifndef _SWAD_BROWSER
-#define _SWAD_BROWSER
+#ifndef _SWAD_BRW
+#define _SWAD_BRW
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -120,7 +120,7 @@ typedef enum
    Brw_FOOTER = 1,
   } Brw_HeadOrFoot_t;
 
-struct FilFolLnk
+struct Brw_FilFolLnk
   {
    char Full[PATH_MAX + 1];	// Full path = Path/Name
    char Path[PATH_MAX + 1];	// Path in tree, without ending '/', until file, folder or link name
@@ -128,14 +128,14 @@ struct FilFolLnk
    Brw_FileType_t Type;
   };
 
-struct FileMetadata
+struct Brw_FileMetadata
   {
    long FilCod;
    Brw_FileBrowser_t FileBrowser;
    long Cod;	// Code of institution, center, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
-   struct FilFolLnk FilFolLnk;
+   struct Brw_FilFolLnk FilFolLnk;
    bool IsHidden;
    bool IsPublic;
    Brw_License_t License;
@@ -229,11 +229,11 @@ void Brw_ShowFileMetadata (void);
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
-void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata);
-void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
-void Brw_GetFileNameByCod (struct FileMetadata *FileMetadata);
-bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
-void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
+void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetFileNameByCod (struct Brw_FileMetadata *FileMetadata);
+bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
 
 long Brw_GetZoneUsrCodForFileBrowser (void);
@@ -255,25 +255,22 @@ void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (void);
 
-//--------------------------- Program resources -------------------------------
-void Brw_GetLinkToFile (void);
-void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle);
-void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle);
-void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
+void Brw_PutIconFile (const char *FileName,
+		      const char *Class,bool PutLinkToViewMetadata);
 
 //-----------------------------------------------------------------------------
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
 void Brw_PutImplicitParamsFileBrowser (void *FilFolLnk);
+void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
+                               Brw_FileType_t FileType,long FilCod);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs);
-void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat);
+void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Crs_Course *Crs);
+void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat);
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,

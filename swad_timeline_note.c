@@ -78,7 +78,7 @@ static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCo
 static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
                               const struct TmlNot_Note *Not);
 static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
-                                              const struct UsrData *UsrDat);
+                                              const struct Usr_Data *UsrDat);
 
 static void TmlNot_WriteContent (const struct TmlNot_Note *Not);
 static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not);
@@ -95,16 +95,16 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 
 static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
                                          const struct TmlNot_Note *Not,
-                                         const struct UsrData *UsrDat);
+                                         const struct Usr_Data *UsrDat);
 static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
                                           const struct TmlNot_Note *Not,
                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
 					   const struct TmlNot_Note *Not,
-					   const struct UsrData *UsrDat);
+					   const struct Usr_Data *UsrDat);
 static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
                                    const struct TmlNot_Note *Not,
-                                   const struct UsrData *UsrDat);
+                                   const struct Usr_Data *UsrDat);
 
 static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod);
@@ -127,7 +127,7 @@ static void TmlNot_ResetNote (struct TmlNot_Note *Not);
 void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
                                   struct TmlNot_Note *Not)
   {
-   struct UsrData PublisherDat;
+   struct Usr_Data PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
    static const Tml_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
@@ -228,7 +228,7 @@ void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
 static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod)
   {
    extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES];
-   struct UsrData PublisherDat;
+   struct Usr_Data PublisherDat;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&PublisherDat);
@@ -263,7 +263,7 @@ static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCo
 static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
                               const struct TmlNot_Note *Not)
   {
-   struct UsrData UsrDat;	// Author of the note
+   struct Usr_Data UsrDat;	// Author of the note
 
    /***** Get author data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -289,7 +289,7 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
 /*********************** Show photo of author of a note **********************/
 /*****************************************************************************/
 
-void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
+void TmlNot_ShowAuthorPhoto (struct Usr_Data *UsrDat,bool FormUnique)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -316,7 +316,7 @@ void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 /*****************************************************************************/
 
 static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
-                                              const struct UsrData *UsrDat)
+                                              const struct Usr_Data *UsrDat)
   {
    char *Class;
 
@@ -344,7 +344,7 @@ static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
 /*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
 
-void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
+void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
                              const char *Class)
   {
    extern const char *Txt_My_public_profile;
@@ -751,7 +751,7 @@ void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
 
 static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
                                          const struct TmlNot_Note *Not,
-                                         const struct UsrData *UsrDat)	// Author
+                                         const struct Usr_Data *UsrDat)	// Author
   {
    char IdNewComm[Frm_MAX_BYTES_ID + 1];
 
@@ -795,7 +795,7 @@ static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
 
 static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
 					   const struct TmlNot_Note *Not,
-					   const struct UsrData *UsrDat)	// Author
+					   const struct Usr_Data *UsrDat)	// Author
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_BOTTOM_RIGHT Tml_RIGHT_WIDTH\"");
@@ -816,7 +816,7 @@ static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
 
 static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
                                    const struct TmlNot_Note *Not,
-                                   const struct UsrData *UsrDat)	// Author
+                                   const struct Usr_Data *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
 

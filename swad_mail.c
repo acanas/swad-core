@@ -88,8 +88,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 static void Mai_PutParamsRemoveMyEmail (void *Email);
 static void Mai_PutParamsRemoveOtherEmail (void *Email);
 
-static void Mai_RemoveEmail (struct UsrData *UsrDat);
-static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
+static void Mai_RemoveEmail (struct Usr_Data *UsrDat);
+static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
@@ -297,7 +297,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 /************ Check if user can receive notifications via email **************/
 /*****************************************************************************/
 
-bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
+bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
   {
    char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
@@ -806,7 +806,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    unsigned NumAcceptedUsrsWithEmail = 0;
    char StrAddresses[Mai_MAX_BYTES_STR_ADDR + 1];	// TODO: Use malloc depending on the number of students
    unsigned int LengthStrAddr = 0;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *Ptr;
 
    /***** Begin the box used to list the emails *****/
@@ -955,7 +955,7 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
 /********** Get email address of a user from his/her user's code *************/
 /*****************************************************************************/
 
-bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
+bool Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1087,7 +1087,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       [Rol_INS_ADM] = {ActRemMaiOth,ActNewMaiOth},
       [Rol_SYS_ADM] = {ActRemMaiOth,ActNewMaiOth},
      };
-   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Show possible alerts *****/
@@ -1273,7 +1273,7 @@ void Mai_RemoveOtherUsrEmail (void)
 /************************** Remove email address *****************************/
 /*****************************************************************************/
 
-static void Mai_RemoveEmail (struct UsrData *UsrDat)
+static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Email_X_removed;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
@@ -1341,7 +1341,7 @@ void Mai_NewOtherUsrEmail (void)
 /************************* Update my email address ***************************/
 /*****************************************************************************/
 
-static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
+static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe)
   {
    extern const char *Txt_The_email_address_X_matches_one_previously_registered;
    extern const char *Txt_The_email_address_X_has_been_registered_successfully;
@@ -1400,7 +1400,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 // Return true if email is successfully updated
 // Return false if email can not be updated beacuse it is registered by another user
 
-bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Check if the new email matches any of the confirmed emails of other users *****/
    if (Mai_DB_CheckIfEmailBelongToAnotherUsr (UsrDat->UsrCod,NewEmail))	// An email of another user is the same that my email
@@ -1600,7 +1600,7 @@ void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
 /************ Write a welcome note heading the automatic email ***************/
 /*****************************************************************************/
 
-void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct UsrData *UsrDat)
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
@@ -1631,7 +1631,7 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 /**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
-bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
+bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
   {
    /***** I can see my email *****/
    if (Usr_ItsMe (UsrDat->UsrCod))

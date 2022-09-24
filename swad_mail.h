@@ -63,7 +63,7 @@ void Mai_SeeMailDomains (void);
 void Mai_EditMailDomains (void);
 void Mai_FreeListMailDomains (void);
 
-bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat);
+bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat);
 void Mai_WriteWarningEmailNotifications (void);
 
 void Mai_GetDataOfMailDomainByCod (struct Mail *Plc);
@@ -78,7 +78,7 @@ void Mai_ReqUsrsToListEmails (void);
 void Mai_GetSelUsrsAndListEmails (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
-bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
+bool Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat);
 
 void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail);
 void Mai_ShowFormChangeOtherUsrEmail (void);
@@ -88,16 +88,16 @@ void Mai_RemoveOtherUsrEmail (void);
 
 void May_NewMyUsrEmail (void);
 void Mai_NewOtherUsrEmail (void);
-bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 
 bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail);
-void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct UsrData *UsrDat);
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct Usr_Data *UsrDat);
 void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language);
 
-bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat);
+bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat);
 
 #endif

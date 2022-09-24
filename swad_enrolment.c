@@ -100,7 +100,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
+static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
                                       Rol_Role_t NewRole);
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
@@ -125,7 +125,7 @@ static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
                                          bool *OptionChecked);
 static void Enr_RegRemOneUsrActionEnd (void);
 
-static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
+static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
@@ -138,14 +138,14 @@ static void Enr_ReqRegRemUsr (Rol_Role_t Role);
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
 static void Enr_AskIfRegRemMe (Rol_Role_t Role);
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
-static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role);
+static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
 static bool Enr_CheckIfICanRemUsrFromCrs (void);
 
-static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
-static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
+static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat);
+static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 					  struct Crs_Course *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose);
@@ -203,7 +203,7 @@ void Enr_PutLinkToRequestSignUp (void)
 /***************** Modify the role of a user in a course *********************/
 /*****************************************************************************/
 
-void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
+void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
@@ -243,7 +243,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 // Before calling this function, you must be sure that
 // the user does not belong to the current course
 
-void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
+void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
@@ -286,7 +286,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 /********* Create notification after register user in current course *********/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
+static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
                                       Rol_Role_t NewRole)
   {
    static const Ntf_NotifyEvent_t NotifyEvent[Rol_NUM_ROLES] =
@@ -426,7 +426,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    Rol_Role_t Role;
 
    /***** Get user's role in course from database *****/
@@ -455,7 +455,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*****************************************************************************/
 // UsrDat->UsrCod must be > 0
 
-void Enr_UpdateUsrData (struct UsrData *UsrDat)
+void Enr_UpdateUsrData (struct Usr_Data *UsrDat)
   {
    /***** Check if user's code is initialized *****/
    if (UsrDat->UsrCod <= 0)
@@ -706,7 +706,7 @@ void Enr_RemoveOldUsrs (void)
    unsigned NumUsr;
    unsigned NumUsrs;
    unsigned NumUsrsEliminated = 0;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
@@ -899,7 +899,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       bool RegisterUsrs;
      } WhatToDo;
    char *ListUsrsIDs;
-   struct ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
+   struct Usr_ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
    unsigned NumUsrFound;
    const char *Ptr;
    unsigned NumCurrentUsr;
@@ -907,7 +907,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    unsigned NumUsrsRemoved = 0;
    unsigned NumUsrsEliminated = 0;
    struct ListCodGrps LstGrps;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ItLooksLikeAUsrID;
    Enr_RegRemUsrsAction_t RegRemUsrsAction;
 
@@ -1615,7 +1615,7 @@ static void Enr_RegRemOneUsrActionEnd (void)
 /*****************************************************************************/
 // If user does not exists, UsrDat->IDs must hold the user's ID
 
-static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
+static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered)
   {
    /***** Check if I can register this user *****/
@@ -1869,7 +1869,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    Rol_Role_t DesiredRole;
 
    SummaryStr[0] = '\0';        // Return nothing on error
@@ -2087,7 +2087,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    long ReqCod;
    struct Deg_Degree Deg;
    struct Crs_Course Crs;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool UsrExists;
    bool UsrBelongsToCrs;
    Rol_Role_t DesiredRole;
@@ -2460,7 +2460,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
 
 static void Enr_AskIfRegRemMe (Rol_Role_t Role)
   {
-   struct ListUsrCods ListUsrCods;
+   struct Usr_ListUsrCods ListUsrCods;
 
    /***** I only can admin me *****/
    Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -2492,7 +2492,7 @@ void Enr_AskIfRegRemAnotherTch (void)
 
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
   {
-   struct ListUsrCods ListUsrCods;
+   struct Usr_ListUsrCods ListUsrCods;
 
    /***** Check if UsrCod is present in parameters *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -2516,7 +2516,7 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
 /********************** Ask me for register/remove user **********************/
 /*****************************************************************************/
 
-static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
+static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role)
   {
    extern const char *Txt_There_are_X_users_with_the_ID_Y;
    extern const char *Txt_The_user_is_new_not_yet_in_X;
@@ -3042,7 +3042,7 @@ void Enr_ModifyUsr2 (void)
 /******************* Ask if really wanted to remove a user *******************/
 /*****************************************************************************/
 
-static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
+static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X;
@@ -3092,7 +3092,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 /************************ Remove a user from a course ************************/
 /*****************************************************************************/
 
-static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
+static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 					  struct Crs_Course *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose)
@@ -3322,7 +3322,7 @@ void Enr_FlushCacheUsrBelongsToCurrentCrs (void)
    Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = false;
   }
 
-bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
+bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
@@ -3362,7 +3362,7 @@ void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = false;
   }
 
-bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
+bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
@@ -3392,7 +3392,7 @@ void Enr_FlushCacheUsrSharesAnyOfMyCrs (void)
    Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
   }
 
-bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
+bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)

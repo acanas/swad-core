@@ -36,7 +36,7 @@
 /***************************** Get link to game ******************************/
 /*****************************************************************************/
 
-void Gam_GetLinkToGame (void)
+void GamRsc_GetLinkToGame (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Gam_Games Games;

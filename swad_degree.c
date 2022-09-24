@@ -310,7 +310,7 @@ static void Deg_ListDegreesForEdition (void)
    struct Deg_Degree *Deg;
    unsigned NumDegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;

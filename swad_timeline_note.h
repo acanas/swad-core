@@ -93,8 +93,8 @@ void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
 	                                 const struct TmlNot_Note *Not,
                                          Tml_TopMessage_t TopMessage,
                                          long PublisherCod);
-void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
-void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
+void TmlNot_ShowAuthorPhoto (struct Usr_Data *UsrDat,bool FormUnique);
+void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
                              const char *Class);
 
 void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,

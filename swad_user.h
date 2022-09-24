@@ -155,7 +155,7 @@ typedef enum
 #define Usr_WHO_DEFAULT Usr_WHO_ALL
 
 // Related with user's data
-struct UsrData
+struct Usr_Data
   {
    long UsrCod;
    char EnUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -220,7 +220,7 @@ struct UsrData
      } Prefs;
   };
 
-struct UsrLast
+struct Usr_Last
   {
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
@@ -234,7 +234,7 @@ struct UsrLast
    long LastAccNotif;
   };
 
-struct UsrInList
+struct Usr_InList
   {
    long UsrCod;
    char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -252,13 +252,13 @@ struct UsrInList
    bool Remove;		// A boolean associated with each user that indicates if it must be removed
   };
 
-struct ListUsrs
+struct Usr_ListUsrs
   {
-   struct UsrInList *Lst;	// List of users
+   struct Usr_InList *Lst;	// List of users
    unsigned NumUsrs;		// Number of users in the list
   };
 
-struct SelectedUsrs
+struct Usr_SelectedUsrs
   {
    char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
    bool Filled;			// If lists are already filled/readed
@@ -266,7 +266,7 @@ struct SelectedUsrs
    Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
   };
 
-struct ListUsrCods
+struct Usr_ListUsrCods
   {
    long *Lst;		// List of users' codes
    unsigned NumUsrs;	// Number of users in the list
@@ -278,39 +278,39 @@ struct ListUsrCods
 
 void Usr_InformAboutNumClicksBeforePhoto (void);
 
-void Usr_UsrDataConstructor (struct UsrData *UsrDat);
-void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat);
+void Usr_UsrDataConstructor (struct Usr_Data *UsrDat);
+void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat);
 void Usr_ResetMyLastData (void);
-void Usr_UsrDataDestructor (struct UsrData *UsrDat);
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+void Usr_UsrDataDestructor (struct Usr_Data *UsrDat);
+void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetPrefs_t GetPrefs,
                                   Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
-void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
-void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
+void Usr_AllocateListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
+void Usr_FreeListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 bool Usr_ItsMe (long UsrCod);
-void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
+void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat);
+void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                Usr_GetPrefs_t GetPrefs,
                                Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 
-void Usr_BuildFullName (struct UsrData *UsrDat);
+void Usr_BuildFullName (struct Usr_Data *UsrDat);
 
-void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
+void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
-bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
-bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat);
+bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
+bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat);
 
-bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewTstExaMchResult (const struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat);
-bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
+bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
+bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
+bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat);
+bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
+bool Usr_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
@@ -319,7 +319,7 @@ void Usr_PutLinkToLogin (void);
 void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void));
 void Usr_WelcomeUsr (void);
 
-void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
+void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1]);
 void Usr_FilterUsrBirthday (struct Dat_Date *Birthday);
 
@@ -327,12 +327,12 @@ void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);
 void Usr_PutFormLogOut (void);
 void Usr_GetParamUsrIdLogin (void);
-unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods);
+unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 
 void Usr_PutParamMyUsrCodEncrypted (void *EncryptedUsrCod);
 void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod);
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
-void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat);
+void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
 void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
 
@@ -340,15 +340,15 @@ void Usr_ChkUsrAndGetUsrData (void);
 
 void Usr_ShowFormsLogoutAndRole (void);
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                               Usr_GetPrefs_t GetPrefs,
                                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
-void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
+void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
-			      struct SelectedUsrs *SelectedUsrs);
+			      struct Usr_SelectedUsrs *SelectedUsrs);
 
 void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role);
 
@@ -358,27 +358,27 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 
 void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope);
 
-void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,
-                                   const struct UsrInList *UsrInList);
+void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
+                                   const struct Usr_InList *UsrInList);
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
                            void (*FuncParams) (void *Args),void *Args,
                            const char *OnSubmit);
 
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *SelectedUsrs);
-void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs);
-void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs);
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
 bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
-							      struct SelectedUsrs *SelectedUsrs);
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs);
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs);
-void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs);
+							      struct Usr_SelectedUsrs *SelectedUsrs);
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 
-void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
+void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 				 unsigned NumUsrsInList,
 				 long **LstSelectedUsrCods);
 void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
@@ -395,17 +395,17 @@ unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
-void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
+void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
 				       void (*FuncParams) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
 				       bool PutFormDateRange);
-void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
+void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
-void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs);
+void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsrs);
 
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
@@ -434,7 +434,7 @@ unsigned Usr_GetTotalNumberOfUsers (void);
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 
-void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
+void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);
 
 void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutHiddenParamWho (Usr_Who_t Who);

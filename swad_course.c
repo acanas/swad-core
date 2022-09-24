@@ -1138,7 +1138,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    struct Crs_Course *Crs;
    unsigned YearAux;
    unsigned NumCrs;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
 
@@ -2241,7 +2241,7 @@ void Crs_PutParamCrsCod (long CrsCod)
 /************************** Write courses of a user **************************/
 /*****************************************************************************/
 
-void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
+void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
   {
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_User[Usr_NUM_SEXS];

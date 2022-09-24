@@ -67,16 +67,16 @@ extern struct Globals Gbl;
 static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
-static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
+static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
                                                   unsigned NumUsrs,
                                                   Act_Action_t Action,
                                                   const char *Title);
 
-static void Fol_ListFollowingUsr (struct UsrData *UsrDat);
-static void Fol_ListFollowersUsr (struct UsrData *UsrDat);
+static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat);
+static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat);
 
-static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat);
-static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat);
+static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat);
+static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat);
 static void Fol_PutInactiveIconToFollowUnfollow (void);
 static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
@@ -87,8 +87,8 @@ static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
-static void Fol_FollowUsr (const struct UsrData *UsrDat);
-static void Fol_UnfollowUsr (const struct UsrData *UsrDat);
+static void Fol_FollowUsr (const struct Usr_Data *UsrDat);
+static void Fol_UnfollowUsr (const struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /********************** Put link to show users to follow **********************/
@@ -119,7 +119,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -190,7 +190,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Get users *****/
    if ((NumUsrs = Fol_DB_GetUsrsToFollow (Fol_MAX_USRS_TO_FOLLOW_RIGHT_COLUMN,
@@ -309,7 +309,7 @@ void Fol_GetNumFollow (long UsrCod,
 /**************** Show following and followers of a user *********************/
 /*****************************************************************************/
 
-void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
+void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr)
   {
@@ -379,7 +379,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 /**************** Show following and followers of a user *********************/
 /*****************************************************************************/
 
-static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
+static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
                                                   unsigned NumUsrs,
                                                   Act_Action_t Action,
                                                   const char *Title)
@@ -450,13 +450,13 @@ void Fol_ListFollowing (void)
       Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);
   }
 
-static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
+static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Following;
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData FollowingUsrDat;
+   struct Usr_Data FollowingUsrDat;
 
    /***** Show user's profile *****/
    if (Prf_ShowUserProfile (UsrDat))
@@ -529,13 +529,13 @@ void Fol_ListFollowers (void)
       Fol_ListFollowersUsr (&Gbl.Usrs.Me.UsrDat);
   }
 
-static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
+static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Followers;
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData FollowerUsrDat;
+   struct Usr_Data FollowerUsrDat;
 
    /***** Show user's profile *****/
    if (Prf_ShowUserProfile (UsrDat))
@@ -594,7 +594,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 /************************* Show followed or follower *************************/
 /*****************************************************************************/
 
-static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
+static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -655,7 +655,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 /********************* Write the name of a connected user ********************/
 /*****************************************************************************/
 
-static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
+static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -927,7 +927,7 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
 static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs)
   {
    if (SelectedUsrs)
-      Usr_PutHiddenParSelectedUsrsCods ((struct SelectedUsrs *) SelectedUsrs);
+      Usr_PutHiddenParSelectedUsrsCods ((struct Usr_SelectedUsrs *) SelectedUsrs);
   }
 
 /*****************************************************************************/
@@ -938,7 +938,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed)
   {
    extern const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *Ptr;
    unsigned NumUsrs = 0;
 
@@ -985,7 +985,7 @@ void Fol_FollowUsrs ()
    extern const char *Txt_You_have_followed_one_user;
    extern const char *Txt_You_have_followed_X_users;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumFollowed = 0;
 
    /***** Get list of selected users if not already got *****/
@@ -1034,7 +1034,7 @@ void Fol_UnfollowUsrs (void)
    extern const char *Txt_You_have_stopped_following_one_user;
    extern const char *Txt_You_have_stopped_following_X_users;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumUnfollowed = 0;
 
    /***** Get list of selected users if not already got *****/
@@ -1082,7 +1082,7 @@ void Fol_UnfollowUsrs (void)
 /******************************** Follow user ********************************/
 /*****************************************************************************/
 
-static void Fol_FollowUsr (const struct UsrData *UsrDat)
+static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
   {
    bool CreateNotif;
    bool NotifyByEmail;
@@ -1121,7 +1121,7 @@ static void Fol_FollowUsr (const struct UsrData *UsrDat)
 /******************************* Unfollow user *******************************/
 /*****************************************************************************/
 
-static void Fol_UnfollowUsr (const struct UsrData *UsrDat)
+static void Fol_UnfollowUsr (const struct Usr_Data *UsrDat)
   {
    /***** Avoid wrong cases *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||

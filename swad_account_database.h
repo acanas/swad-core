@@ -42,8 +42,8 @@ unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
 bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
-long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat);
-void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat);
+long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat);
+void Acc_DB_UpdateUsrData (const struct Usr_Data *UsrDat);
 void Acc_DB_UpdateMyInstitutionCenterDepartment (void);
 
 #endif

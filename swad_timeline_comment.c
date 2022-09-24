@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat);
+static void TmlCom_ShowAuthorPhoto (struct Usr_Data *UsrDat);
 static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	                                  long NotCod);
 
@@ -88,12 +88,12 @@ static void TmlCom_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
 static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
 	                      struct TmlCom_Comment *Com);
 static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
-                                              const struct UsrData *UsrDat);
-static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat);
+                                              const struct Usr_Data *UsrDat);
+static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat);
 static void TmlCom_WriteContent (struct TmlCom_Comment *Com);
 static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 	                         const struct TmlCom_Comment *Com,
-                                 const struct UsrData *UsrDat);
+                                 const struct Usr_Data *UsrDat);
 
 static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 	                                long PubCod);
@@ -183,7 +183,7 @@ void TmlCom_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 /********************* Show photo of author of a comment *********************/
 /*****************************************************************************/
 
-static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat)
+static void TmlCom_ShowAuthorPhoto (struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -560,7 +560,7 @@ static void TmlCom_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
 static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
 	                      struct TmlCom_Comment *Com)
   {
-   struct UsrData UsrDat;	// Author of the comment
+   struct Usr_Data UsrDat;	// Author of the comment
 
    /***** Get author's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -594,7 +594,7 @@ static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
 /*****************************************************************************/
 
 static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
-                                              const struct UsrData *UsrDat)	// Author
+                                              const struct Usr_Data *UsrDat)	// Author
   {
    /***** Write author's full name and nickname *****/
    TmlCom_WriteAuthorName (UsrDat);
@@ -610,7 +610,7 @@ static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
 /*************** Write name of author of a comment to a note *****************/
 /*****************************************************************************/
 
-static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
+static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -658,7 +658,7 @@ static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
 
 static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 	                         const struct TmlCom_Comment *Com,
-                                 const struct UsrData *UsrDat)	// Author
+                                 const struct Usr_Data *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav
 

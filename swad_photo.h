@@ -95,7 +95,7 @@ struct Pho_DegPhotos
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat);
+bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat);
 void Pho_PutIconToChangeUsrPhoto (void);
 void Pho_ReqMyPhoto (void);
 void Pho_SendPhotoUsr (void);
@@ -115,23 +115,23 @@ void Pho_UpdateUsrPhoto2 (void);
 
 unsigned Pho_UpdateMyClicksWithoutPhoto (void);
 
-void Pho_ShowUsrPhotoIfAllowed (struct UsrData *UsrDat,
+void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom,
                                 bool FormUnique);
-bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,
+bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
                                    char PhotoURL[PATH_MAX + 1]);
-bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1]);
+bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[PATH_MAX + 1]);
 bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]);
-void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 			    const char *ClassPhoto,Pho_Zoom_t Zoom,
 			    char **ImgStr,
 			    char **CaptionStr);
-void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique);
 
-bool Pho_RemovePhoto (struct UsrData *UsrDat);
-void Pho_UpdatePhotoName (struct UsrData *UsrDat);
+bool Pho_RemovePhoto (struct Usr_Data *UsrDat);
+void Pho_UpdatePhotoName (struct Usr_Data *UsrDat);
 
 void Pho_ChangePhotoVisibility (void);
 

@@ -28,6 +28,8 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_hierarchy_level.h"
+#include "swad_notification.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -85,7 +87,10 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Svy_ResetSurveys (struct Svy_Surveys *Surveys);
+
 void Svy_SeeAllSurveys (void);
+void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
 void Svy_SeeOneSurvey (void);
 void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_RequestCreatOrEditSvy (void);
@@ -95,6 +100,8 @@ void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent);
+void Svy_PutParamSvyCod (long SvyCod);
+long Svy_GetParamSvyCod (void);
 void Svy_AskRemSurvey (void);
 void Svy_RemoveSurvey (void);
 void Svy_AskResetSurvey (void);
@@ -117,9 +124,4 @@ unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
 //-------------------------------- Figures ------------------------------------
 void Svy_GetAndShowSurveysStats (void);
 
-//--------------------------- Program resources -------------------------------
-void Svy_GetLinkToSurvey (void);
-void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle);
-void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize);
 #endif

@@ -159,7 +159,7 @@ static void (*Usr_FuncParamsBigList) (void *Args);	// Used to pass pointer to fu
 /*****************************************************************************/
 
 static void Usr_GetMyLastData (void);
-static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat);
+static void Usr_GetUsrCommentsFromString (char *Str,struct Usr_Data *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
@@ -173,13 +173,13 @@ static void Usr_SetMyPrefsAndRoles (void);
 
 static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
 
-static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
-static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames);
-static void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
-static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat);
-static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
+static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat);
+static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames);
+static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat);
+static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat);
+static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
                                              const char *BgColor);
-static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor);
+static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
@@ -196,19 +196,19 @@ static void Usr_BuildParamName (char **ParamName,
 				const char *ParamRoot,
 				const char *ParamSuffix);
 
-static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs,
+static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
 static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType);
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
-			                     struct SelectedUsrs *SelectedUsrs);
+			                     struct Usr_SelectedUsrs *SelectedUsrs);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
                                          bool UsrIsTheMsgSender,
-					 struct SelectedUsrs *SelectedUsrs);
+					 struct Usr_SelectedUsrs *SelectedUsrs);
 static void Usr_PutCheckboxListWithPhotos (void);
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
@@ -216,7 +216,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataTchs (Rol_Role_t Role,
 				  bool PutCheckBoxToSelectUsr);
 static void Usr_ListUsrsForSelection (Rol_Role_t Role,
-				      struct SelectedUsrs *SelectedUsrs);
+				      struct Usr_SelectedUsrs *SelectedUsrs);
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns);
@@ -247,7 +247,7 @@ static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
-				struct SelectedUsrs *SelectedUsrs,
+				struct Usr_SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr);
 
 static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
@@ -280,7 +280,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 /************************** Create data for a user ***************************/
 /*****************************************************************************/
 
-void Usr_UsrDataConstructor (struct UsrData *UsrDat)
+void Usr_UsrDataConstructor (struct Usr_Data *UsrDat)
   {
    /***** Allocate memory for the comments *****/
    if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
@@ -297,7 +297,7 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat)
 /*****************************************************************************/
 // UsrCod and ID are not changed
 
-void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
+void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
   {
    UsrDat->EnUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
@@ -368,7 +368,7 @@ void Usr_ResetMyLastData (void)
 /**************** Free memory used to store the data of a user ***************/
 /*****************************************************************************/
 
-void Usr_UsrDataDestructor (struct UsrData *UsrDat)
+void Usr_UsrDataDestructor (struct Usr_Data *UsrDat)
   {
    /***** Free memory allocated for comments *****/
    if (UsrDat->Comments)
@@ -386,7 +386,7 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold user's code
 
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetPrefs_t GetPrefs,
                                   Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
@@ -398,7 +398,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
 /**************** Allocate memory for the list of users' codes ***************/
 /*****************************************************************************/
 
-void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods)
+void Usr_AllocateListUsrCods (struct Usr_ListUsrCods *ListUsrCods)
   {
    if ((ListUsrCods->Lst = malloc (ListUsrCods->NumUsrs *
                                    sizeof (*ListUsrCods->Lst))) == NULL)
@@ -409,7 +409,7 @@ void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods)
 /****************** Free memory for the list of users' codes *****************/
 /*****************************************************************************/
 
-void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods)
+void Usr_FreeListUsrCods (struct Usr_ListUsrCods *ListUsrCods)
   {
    if (ListUsrCods->NumUsrs && ListUsrCods->Lst)
      {
@@ -434,7 +434,7 @@ bool Usr_ItsMe (long UsrCod)
 /*****************************************************************************/
 // Input: UsrDat->EncryptedUsrCod must hold user's encrypted code
 
-void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
+void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat)
   {
    if (UsrDat->EnUsrCod[0])
       /***** Get user's code from database *****/
@@ -448,7 +448,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
 
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
+void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                Usr_GetPrefs_t GetPrefs,
                                Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
@@ -575,7 +575,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
 /********* Get the comments in the record of a user from a string ************/
 /*****************************************************************************/
 
-static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat)
+static void Usr_GetUsrCommentsFromString (char *Str,struct Usr_Data *UsrDat)
   {
    /***** Check that memory for comments is allocated *****/
    if (UsrDat->Comments)
@@ -681,7 +681,7 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
 /********** Build full name using FirstName, Surname1 and Surname2 ***********/
 /*****************************************************************************/
 
-void Usr_BuildFullName (struct UsrData *UsrDat)
+void Usr_BuildFullName (struct Usr_Data *UsrDat)
   {
    Str_Copy (UsrDat->FullName,UsrDat->FrstName,sizeof (UsrDat->FullName) - 1);
    if (UsrDat->Surname1[0])
@@ -700,7 +700,7 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 /********* Write user name in two lines. 1: first name, 2: surnames **********/
 /*****************************************************************************/
 
-void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
+void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
   {
    /***** Write first name and surname 1 *****/
    HTM_Txt (UsrDat->FrstName);
@@ -762,7 +762,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 /**************** Check if I can change another user's data ******************/
 /*****************************************************************************/
 
-bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
+bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
   {
    /***** I can change my data *****/
    if (Usr_ItsMe (UsrDat->UsrCod))
@@ -795,7 +795,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
 /***************** Check if I can edit another user's data *******************/
 /*****************************************************************************/
 
-bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
+bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
   {
    /***** I can edit me *****/
    if (Usr_ItsMe (UsrDat->UsrCod))
@@ -838,7 +838,7 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
 /************ Check if I can view the record card of a student ***************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -892,7 +892,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
 // - a non-editing teacher
 // - or a teacher
 
-bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -915,7 +915,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 /********* Check if I can view test/exam/match result of another user ********/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewTstExaMchResult (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -961,7 +961,7 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct UsrData *UsrDat)
 /********** Check if I can view assigments / works of another user ***********/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -1008,7 +1008,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
 /************** Check if I can view attendance of another user ***************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -1050,7 +1050,7 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
 /******************* Check if I can view a user's agenda *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -1301,7 +1301,7 @@ void Usr_WelcomeUsr (void)
 /*****************************************************************************/
 // It can include start and ending apostrophes
 
-void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
+void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1])
   {
    if (UsrDat->Birthday.Year  == 0 ||
@@ -1442,7 +1442,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
 /*****************************************************************************/
 // Returns the number of users for a given ID, @nick or email
 
-unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods)
+unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods)
   {
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
    bool Wrong = false;
@@ -1530,7 +1530,7 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED
 /********* Get hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
+void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
   {
    Par_GetParToText ("OtherUsrCod",UsrDat->EnUsrCod,
                      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -1745,7 +1745,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
   {
-   struct ListUsrCods ListUsrCods;
+   struct Usr_ListUsrCods ListUsrCods;
    bool PasswordCorrect = false;
 
    /***** Check if user typed anything *****/
@@ -2099,7 +2099,7 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
 // Output: When true ==> UsrDat will hold all user's data
 //         When false ==> UsrDat is reset, except user's code
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                               Usr_GetPrefs_t GetPrefs,
                                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
@@ -2138,9 +2138,9 @@ void Usr_UpdateMyLastData (void)
 
 #define Usr_MAX_BYTES_BG_COLOR (16 - 1)
 
-void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
+void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
-			      struct SelectedUsrs *SelectedUsrs)
+			      struct Usr_SelectedUsrs *SelectedUsrs)
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
@@ -2239,7 +2239,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 /*************** Write a row of a table with the data of a guest *************/
 /*****************************************************************************/
 
-static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
+static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2330,7 +2330,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 /************ Write a row of a table with the data of a student **************/
 /*****************************************************************************/
 
-static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
+static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2442,7 +2442,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 /*** Write a row of a table with the data of a teacher or an administrator ***/
 /*****************************************************************************/
 
-static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
+static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2524,7 +2524,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 /********** Write a row of a table with the data of an administrator *********/
 /*****************************************************************************/
 
-static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
+static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -2586,7 +2586,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 /************************* Write main data of a user *************************/
 /*****************************************************************************/
 
-static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
+static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
                                              const char *BgColor)
   {
    Usr_WriteUsrData (BgColor,
@@ -2607,7 +2607,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
 /**************************** Write user's email *****************************/
 /*****************************************************************************/
 
-static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
+static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
   {
    bool ShowEmail;
    char MailLink[7 + Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// mailto:mail_address
@@ -2758,7 +2758,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
-   struct UsrInList *UsrInList;
+   struct Usr_InList *UsrInList;
    bool Abort = false;
 
    if (Query == NULL)
@@ -2925,8 +2925,8 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
 /********************** Copy user's basic data from list *********************/
 /*****************************************************************************/
 
-void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,
-                                   const struct UsrInList *UsrInList)
+void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
+                                   const struct Usr_InList *UsrInList)
   {
    UsrDat->UsrCod             = UsrInList->UsrCod;
    Str_Copy (UsrDat->EnUsrCod,UsrInList->EnUsrCod,sizeof (UsrDat->EnUsrCod) - 1);
@@ -3042,7 +3042,7 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
 /************ Create list of selected users with one given user **************/
 /*****************************************************************************/
 
-void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *SelectedUsrs)
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    /***** Create list of user codes and put encrypted user code in it *****/
    if (!SelectedUsrs->List[Rol_UNK])
@@ -3060,7 +3060,7 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct SelectedUsrs *Sel
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs)
+void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    char *ParamName;
 
@@ -3087,7 +3087,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 /************************* Get list of selected users ************************/
 /*****************************************************************************/
 
-void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
+void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    char *ParamName;
@@ -3191,8 +3191,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    size_t LengthUsrCod;
    const char *Ptr;
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
-   struct UsrData UsrDat;
-   struct ListUsrCods ListUsrCods;
+   struct Usr_Data UsrDat;
+   struct Usr_ListUsrCods ListUsrCods;
    bool Error = false;
 
    /***** Get list of selected encrypted users's codes if not already got.
@@ -3361,7 +3361,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 // Returns true if EncryptedUsrCodToFind is in list
 
 bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
-							      struct SelectedUsrs *SelectedUsrs)
+							      struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -3384,10 +3384,10 @@ bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *Encryp
 /******* Check if there are valid users in list of encrypted user codes ******/
 /*****************************************************************************/
 
-bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs)
+bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Loop over the list to check if there are valid users *****/
    Ptr = SelectedUsrs->List[Rol_UNK];
@@ -3406,11 +3406,11 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsr
 /******** Count number of valid users in list of encrypted user codes ********/
 /*****************************************************************************/
 
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs)
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    unsigned NumUsrs = 0;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Loop over the list to count the number of users *****/
    Ptr = SelectedUsrs->List[Rol_UNK];
@@ -3430,7 +3430,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct SelectedUsrs *
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *SelectedUsrs,
+static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 						      Rol_Role_t Role)
   {
    if (!SelectedUsrs->List[Role])
@@ -3447,7 +3447,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
-void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
+void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    Rol_Role_t Role;
 
@@ -3474,13 +3474,13 @@ void Usr_FreeListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
 /************* Get list of users selected to show their projects *************/
 /*****************************************************************************/
 
-void Usr_GetListSelectedUsrCods (struct SelectedUsrs *SelectedUsrs,
+void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 				 unsigned NumUsrsInList,
 				 long **LstSelectedUsrCods)
   {
    unsigned NumUsr;
    const char *Ptr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Create list of user codes *****/
    if ((*LstSelectedUsrCods = calloc (NumUsrsInList,
@@ -3664,7 +3664,7 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 /******************** List users to select some of them **********************/
 /*****************************************************************************/
 
-void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
+void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
 				       void (*FuncParams) (void *Args),void *Args,
 				       const char *Title,
@@ -3796,7 +3796,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    Box_BoxEnd ();
   }
 
-void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
+void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected)
   {
@@ -3824,7 +3824,7 @@ void Usr_GetSelectedUsrsAndGoToAct (struct SelectedUsrs *SelectedUsrs,
 /*********** List users with a given role to select some of them *************/
 /*****************************************************************************/
 
-void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs)
+void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsrs)
   {
    /***** If there are no users, don't list anything *****/
    if (!Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -3850,7 +3850,7 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs)
 /*****************************************************************************/
 
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
-			                     struct SelectedUsrs *SelectedUsrs)
+			                     struct Usr_SelectedUsrs *SelectedUsrs)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3926,7 +3926,7 @@ unsigned Usr_GetColumnsForSelectUsrs (void)
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
                                          bool UsrIsTheMsgSender,
-					 struct SelectedUsrs *SelectedUsrs)
+					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
    bool CheckboxChecked;
    char *ParamName;
@@ -4030,7 +4030,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
   {
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
@@ -4082,7 +4082,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
   {
    unsigned NumUsr;
    char *GroupNames;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
@@ -4160,7 +4160,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
   {
    unsigned NumCol;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
@@ -4232,7 +4232,7 @@ void Usr_ListAllDataGsts (void)
    unsigned NumColumnsCommonCard;
    unsigned NumCol;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_GST];
 
    /***** Initialize field names *****/
@@ -4344,7 +4344,7 @@ void Usr_ListAllDataStds (void)
    unsigned NumUsr;
    char *GroupNames;
    unsigned NumGrpTyp,NumField;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_STD];
    size_t Length;
 
@@ -4534,10 +4534,10 @@ void Usr_ListAllDataStds (void)
 /*****************************************************************************/
 
 static void Usr_ListUsrsForSelection (Rol_Role_t Role,
-				      struct SelectedUsrs *SelectedUsrs)
+				      struct Usr_SelectedUsrs *SelectedUsrs)
   {
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
@@ -4673,7 +4673,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      unsigned NumColumns)
   {
    unsigned NumCol;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned NumUsr;
 
    /***** Heading row *****/
@@ -4727,9 +4727,9 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    unsigned NumUsrs;
    unsigned NumUsr;
    char *Title;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    Usr_Sex_t Sex;
-   struct UsrInList *UsrInList;
+   struct Usr_InList *UsrInList;
 
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
@@ -4840,7 +4840,7 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_Institution;
    unsigned NumCol;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
    /***** Put contextual links *****/
@@ -6092,7 +6092,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
-				struct SelectedUsrs *SelectedUsrs,
+				struct Usr_SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
@@ -6113,7 +6113,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    unsigned NumUsr;
    bool TRIsOpen = false;
    bool UsrIsTheMsgSender;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
@@ -6342,7 +6342,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
      };
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -6375,7 +6375,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 /*************** Show a table cell with the data of a user *******************/
 /*****************************************************************************/
 
-void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
+void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {

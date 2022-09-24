@@ -78,8 +78,8 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod);
 
 void Enr_PutLinkToRequestSignUp (void);
 
-void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole);
-void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
+void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
+void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void));
@@ -87,7 +87,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
 void Enr_ReqAcceptRegisterInCrs (void);
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod);
-void Enr_UpdateUsrData (struct UsrData *UsrDat);
+void Enr_UpdateUsrData (struct Usr_Data *UsrDat);
 
 void Enr_ReqAdminStds (void);
 void Enr_ReqAdminNonEditingTchs (void);
@@ -144,11 +144,11 @@ void Enr_FlushCacheUsrBelongsToCrs (void);
 bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses);;
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
-bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
+bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
-bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
+bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
-bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
+bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
 
 unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
 unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);

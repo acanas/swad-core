@@ -1047,7 +1047,7 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
 /******************* Register user in the groups of a list *******************/
 /*****************************************************************************/
 
-void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps)
+void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z;
@@ -1123,7 +1123,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 /*****************************************************************************/
 // Returns NumGrpsHeIsRemoved
 
-unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps)
+unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps)
   {
    extern const char *Txt_THE_USER_X_has_not_been_removed_from_any_group;
    extern const char *Txt_THE_USER_X_has_been_removed_from_one_group;
@@ -3037,7 +3037,7 @@ void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
   }
 
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
+bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)

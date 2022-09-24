@@ -123,7 +123,7 @@ bool ID_DB_FindStrInUsrsIDs (const char *Str)
 // Returns the number of users with any of these IDs
 
 unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
-                                    const struct UsrData *UsrDat,
+                                    const struct Usr_Data *UsrDat,
                                     const char *EncryptedPassword,	// If NULL or empty ==> do not check password
                                     bool OnlyConfirmedIDs)
   {

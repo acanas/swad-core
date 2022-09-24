@@ -568,8 +568,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    const char *ClassTxt;
    long UsrCod;
    bool ItsMe;
-   struct UsrData *UsrDat;
-   struct UsrData OtherUsrDat;
+   struct Usr_Data *UsrDat;
+   struct Usr_Data OtherUsrDat;
 
    /***** Get user's code from list *****/
    UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
@@ -666,7 +666,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    bool ThisCrs;
    time_t TimeDiff;
    const char *ClassTxt;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool PutLinkToRecord = (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	                   Gbl.Scope.Current   == HieLvl_CRS &&	// Scope is current course
 	                   (Role == Rol_STD ||				// Role is student,...

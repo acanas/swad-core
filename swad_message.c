@@ -123,7 +123,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
                                                      char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
-static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
+static void Msg_PutHiddenParamAnotherRecipient (const struct Usr_Data *UsrDat);
 static void Msg_PutHiddenParamOtherRecipients (void);
 
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
@@ -156,15 +156,15 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 static bool Msg_WriteCrsOrgMsg (long CrsCod);
 
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
-                                  const struct UsrData *UsrDat);
+                                  const struct Usr_Data *UsrDat);
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
-                              struct UsrData *UsrDat,bool Deleted);
+                              struct Usr_Data *UsrDat,bool Deleted);
 static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod);
 
 static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
-                                    struct UsrData *UsrDat);
+                                    struct Usr_Data *UsrDat);
 static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
-                                      struct UsrData *UsrDat);
+                                      struct Usr_Data *UsrDat);
 static void Msg_UnbanSender (void);
 
 /*****************************************************************************/
@@ -690,7 +690,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 /********* Put hidden parameter for another recipient (one nickname) *********/
 /*****************************************************************************/
 
-static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
+static void Msg_PutHiddenParamAnotherRecipient (const struct Usr_Data *UsrDat)
   {
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
@@ -733,7 +733,7 @@ void Msg_RecMsgFromUsr (void)
    const char *Ptr;
    unsigned NumRecipients;
    unsigned NumRecipientsToBeNotifiedByEMail = 0;
-   struct UsrData UsrDstData;
+   struct Usr_Data UsrDstData;
    int NumErrors = 0;
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
    bool MsgAlreadyInserted = false;
@@ -2017,7 +2017,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       [Msg_RECEIVED] = ActDelRcvMsg,
       [Msg_SENT    ] = ActDelSntMsg,
      };
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    const char *Title = NULL;	// Initialized to avoid warning
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
@@ -2301,7 +2301,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 /*****************************************************************************/
 // Input: UsrDat must hold user's data
 
-void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled)
+void Msg_WriteMsgAuthor (struct Usr_Data *UsrDat,bool Enabled)
   {
    extern const char *Txt_Unknown_or_without_photo;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2415,7 +2415,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 /*****************************************************************************/
 
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
-                                  const struct UsrData *UsrDat)
+                                  const struct Usr_Data *UsrDat)
   {
    /***** Begin form and parameters *****/
    if (FromThisCrs)
@@ -2443,7 +2443,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
 /*****************************************************************************/
 
 static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
-                              struct UsrData *UsrDat,bool Deleted)
+                              struct Usr_Data *UsrDat,bool Deleted)
   {
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
@@ -2540,7 +2540,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
       unsigned Unknown;
       unsigned ToShow;
      } NumRecipients;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool Deleted;
    bool OpenByDst;
    bool UsrValid;
@@ -2756,7 +2756,7 @@ static long Msg_GetParamMsgCod (void)
 /*****************************************************************************/
 
 static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
-                                    struct UsrData *UsrDat)
+                                    struct Usr_Data *UsrDat)
   {
    Frm_BeginForm (ActBanUsrMsg);
       Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
@@ -2772,7 +2772,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
 /*****************************************************************************/
 
 static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
-                                      struct UsrData *UsrDat)
+                                      struct Usr_Data *UsrDat)
   {
    Frm_BeginForm (ActUnbUsrMsg);
       Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
@@ -2882,7 +2882,7 @@ void Msg_ListBannedUsrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumUsr;
    unsigned NumUsrs;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Get users banned by me *****/
    if ((NumUsrs = Msg_DB_GetUsrsBannedBy (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod)))

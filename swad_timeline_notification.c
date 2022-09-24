@@ -50,7 +50,7 @@ extern struct Globals Gbl;
 void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                  Ntf_NotifyEvent_t NotifyEvent)
   {
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool CreateNotif;
    bool NotifyByEmail;
 

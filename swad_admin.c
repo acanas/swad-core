@@ -66,7 +66,7 @@ static void Adm_ReqAddAdm (HieLvl_Level_t Scope,long Cod,
                            const char *InsCtrDegName);
 static void Enr_AddAdm (HieLvl_Level_t Scope,long Cod,
                         const char *InsCtrDegName);
-static void Adm_RegisterAdmin (struct UsrData *UsrDat,
+static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,
                                HieLvl_Level_t Scope,long Cod,
                                const char *InsCtrDegName);
 
@@ -75,7 +75,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
                                 const char *InsCtrDegName);
 static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
                              const char *InsCtrDegName);
-static void Adm_EffectivelyRemAdm (struct UsrData *UsrDat,
+static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,
                                    HieLvl_Level_t Scope,long Cod,
                                    const char *InsCtrDegName);
 
@@ -253,7 +253,7 @@ static void Enr_AddAdm (HieLvl_Level_t Scope,long Cod,
 /**************** Register administrator in current institution **************/
 /*****************************************************************************/
 
-static void Adm_RegisterAdmin (struct UsrData *UsrDat,
+static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,
                                HieLvl_Level_t Scope,long Cod,
                                const char *InsCtrDegName)
   {
@@ -433,7 +433,7 @@ static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
 /**** Remove an administrator from current institution, center or degree *****/
 /*****************************************************************************/
 
-static void Adm_EffectivelyRemAdm (struct UsrData *UsrDat,
+static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,
                                    HieLvl_Level_t Scope,long Cod,
                                    const char *InsCtrDegName)
   {

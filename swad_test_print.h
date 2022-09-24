@@ -128,7 +128,7 @@ void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
 void TstPrn_ShowGrade (double Grade,double MaxGrade);
 
-void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
+void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Qst_Question *Question,
 			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -144,7 +144,7 @@ void TstPrn_PutParamPrnCod (long ExaCod);
 long TstPrn_GetParamPrnCod (void);
 
 void TstPrn_ShowOnePrint (void);
-void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
+void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned NumQsts,
 			      struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
 			      time_t TimeUTC[Dat_NUM_START_END_TIME],

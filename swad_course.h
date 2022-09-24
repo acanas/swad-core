@@ -129,7 +129,7 @@ void Crs_PutParamCrsCod (long CrsCod);
 
 void Crs_ReqSelectOneOfMyCourses (void);
 
-void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
+void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role);
 
 void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

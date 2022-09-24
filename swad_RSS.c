@@ -149,7 +149,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
    extern const char *Txt_Notice;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    struct tm *tm;
    time_t CreatTimeUTC;
    long NotCod;
@@ -238,7 +238,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
    extern const char *Txt_Exam;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    struct tm *tm;
    time_t CallTimeUTC;
    long ExaCod;

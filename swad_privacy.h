@@ -65,7 +65,7 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
 Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
                                          unsigned MaskAllowedVisibility);
 
-bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat);
+bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct Usr_Data *UsrDat);
 
 //-------------------------------- Figures ------------------------------------
 void Pri_GetAndShowNumUsrsPerPrivacy (void);

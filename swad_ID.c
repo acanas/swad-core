@@ -70,7 +70,7 @@ const char *ID_ID_SECTION_ID = "id_section";
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
-static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
+static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
 static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID);
@@ -78,14 +78,14 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID);
 static void ID_PutParamsRemoveMyID (void *ID);
 static void ID_PutParamsRemoveOtherID (void *ID);
 
-static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
-static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe);
+static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
+static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
 /*****************************************************************************/
 
-void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
+void ID_GetListIDsFromUsrCod (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -130,7 +130,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
 /***************** Free memory allocated for list of IDs *********************/
 /*****************************************************************************/
 
-void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs)
+void ID_ReallocateListIDs (struct Usr_Data *UsrDat,unsigned NumIDs)
   {
    /***** Free list of IDs if used *****/
    ID_FreeListIDs (UsrDat);
@@ -147,7 +147,7 @@ void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs)
 /***************** Free memory allocated for list of IDs *********************/
 /*****************************************************************************/
 
-void ID_FreeListIDs (struct UsrData *UsrDat)
+void ID_FreeListIDs (struct Usr_Data *UsrDat)
   {
    /***** Free list *****/
    if (UsrDat->IDs.Num && UsrDat->IDs.List)
@@ -164,9 +164,9 @@ void ID_FreeListIDs (struct UsrData *UsrDat)
 // Returns the number of users with any of these IDs
 // The list of users' codes is allocated inside this function and should be freed by caller
 
-unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
+unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
                                      const char *EncryptedPassword,	// If NULL or empty ==> do not check password
-                                     struct ListUsrCods *ListUsrCods,
+                                     struct Usr_ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs)
   {
    MYSQL_RES *mysql_res;
@@ -303,7 +303,7 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 /*************************** Write list of user's ID *************************/
 /*****************************************************************************/
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
+void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
    bool ICanSeeUsrID;
@@ -342,7 +342,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 /***************** Check if I can see another user's IDs *********************/
 /*****************************************************************************/
 
-bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
+bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
   {
    if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
@@ -387,7 +387,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 /****************** Put a link to confirm another user's ID ******************/
 /*****************************************************************************/
 
-static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
+static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
    extern const char *Txt_Confirm_ID;
@@ -529,7 +529,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
       [Rol_INS_ADM] = {ActRemID_Oth,ActNewID_Oth},
       [Rol_SYS_ADM] = {ActRemID_Oth,ActNewID_Oth},
      };
-   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Show possible alerts *****/
@@ -711,7 +711,7 @@ void ID_RemoveOtherUsrID (void)
 /***************************** Remove user's ID ******************************/
 /*****************************************************************************/
 
-static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
+static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
   {
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
@@ -801,7 +801,7 @@ void ID_NewOtherUsrID (void)
 /***************************** New user's ID *********************************/
 /*****************************************************************************/
 
-static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
+static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
   {
    extern const char *Txt_The_ID_X_matches_one_of_the_existing;
    extern const char *Txt_The_ID_X_has_been_confirmed;

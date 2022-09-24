@@ -71,7 +71,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat);
+void Net_ShowWebsAndSocialNets (const struct Usr_Data *UsrDat);
 
 void Net_ShowFormMyWebsAndSocialNets (void);
 void Net_UpdateMyWebsAndSocialNets (void);

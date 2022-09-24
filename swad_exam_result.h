@@ -51,6 +51,6 @@ void ExaRes_ShowAllResultsInSes (void);
 
 void ExaRes_ShowExaResultAfterFinish (void);
 void ExaRes_ShowOneExaResult (void);
-void ExaRes_ShowExamResultUser (struct UsrData *UsrDat);
+void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat);
 
 #endif

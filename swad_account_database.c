@@ -95,7 +95,7 @@ bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_A
 /*****************************************************************************/
 // Return new user's code
 
-long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
+long Acc_DB_CreateNewUsr (const struct Usr_Data *UsrDat)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -158,7 +158,7 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 /*****************************************************************************/
 // UsrDat->UsrCod must be > 0
 
-void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat)
+void Acc_DB_UpdateUsrData (const struct Usr_Data *UsrDat)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];

@@ -194,7 +194,7 @@ static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Trivial check 1: are there favers or sharers? *****/
    if (!NumUsrs)

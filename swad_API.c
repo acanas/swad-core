@@ -242,7 +242,7 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 static int API_GenerateNewAPIKey (struct soap *soap,
                                   long UsrCod,
                                   char APIKey[API_BYTES_KEY + 1]);
-static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
+static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod);
 
 static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
                                       char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
@@ -262,7 +262,7 @@ static void API_CopyListUsers (struct soap *soap,
                                Rol_Role_t Role,
 			       struct swad__getUsersOutput *getUsersOut);
 static void API_CopyUsrData (struct soap *soap,
-			     struct swad__user *Usr,struct UsrData *UsrDat,
+			     struct swad__user *Usr,struct Usr_Data *UsrDat,
 			     bool UsrIDIsVisible);
 
 static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
@@ -534,7 +534,7 @@ static int API_GenerateNewAPIKey (struct soap *soap,
 /*****************************************************************************/
 // Return false if UsrDat->UsrCod does not exist ini database
 
-static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
+static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1736,7 +1736,7 @@ static void API_CopyListUsers (struct soap *soap,
   {
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ICanSeeUsrID;
 
    /***** Initialize result *****/
@@ -2184,7 +2184,7 @@ int swad__sendMyGroups (struct soap *soap,
 /*****************************************************************************/
 
 static void API_CopyUsrData (struct soap *soap,
-			     struct swad__user *Usr,struct UsrData *UsrDat,
+			     struct swad__user *Usr,struct Usr_Data *UsrDat,
 			     bool UsrIDIsVisible)
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -4815,7 +4815,7 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
   {
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Is this row hidden or visible? *****/
@@ -4893,7 +4893,7 @@ int swad__getFile (struct soap *soap,
   {
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    char URL[Cns_MAX_BYTES_WWW + 1];
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
 
@@ -5056,7 +5056,7 @@ int swad__getMarks (struct soap *soap,
                     struct swad__getMarksOutput *getMarksOut)	// output
   {
    int ReturnCode;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];	// Not used
    char *ContentStr;
    size_t Length;

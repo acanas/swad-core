@@ -177,8 +177,8 @@ void Grp_ChangeOtherUsrGrps (void);
 bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
 void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
 bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct ListCodGrps *LstGrps);
-void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
-unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps);
+void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
+unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
 void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
@@ -198,7 +198,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
 void Grp_FlushCacheIBelongToGrp (void);
 bool Grp_GetIfIBelongToGrp (long GrpCod);
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
-bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat);
+bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat);
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames);

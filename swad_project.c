@@ -109,7 +109,7 @@ static const struct
 
 /***** List of users to select one or more members
        to be added to a project *****/
-struct SelectedUsrs Prj_MembersToAdd =
+struct Usr_SelectedUsrs Prj_MembersToAdd =
   {
    .List =
      {

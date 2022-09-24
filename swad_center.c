@@ -755,7 +755,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    struct Ctr_Center *Ctr;
    unsigned NumPlc;
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumDegs;
    unsigned NumUsrsCtr;

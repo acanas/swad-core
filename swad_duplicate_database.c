@@ -55,7 +55,7 @@ unsigned Dup_DB_GetListDuplicateUsrs (MYSQL_RES **mysql_res)
 /***************** Get list of users similar to a given one ******************/
 /*****************************************************************************/
 
-unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *UsrDat)
+unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct Usr_Data *UsrDat)
   {
    if (UsrDat->Surname1[0] &&
        UsrDat->FrstName[0])	// Name and surname 1 not empty

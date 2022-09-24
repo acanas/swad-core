@@ -87,20 +87,20 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
-static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
+static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
                                      char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                      char *NewEncryptedPassword);
-static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
+static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod);
 
 static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
 
-static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat);
+static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /******************** Put link to create a new account ***********************/
@@ -196,7 +196,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    char ID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    MYSQL_RES *mysql_res;
 
    /***** Contextual menu *****/
@@ -274,7 +274,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 /************************ Write data of empty account ************************/
 /*****************************************************************************/
 
-static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat)
+static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat)
   {
    extern const char *Txt_ID;
    extern const char *Txt_Name;
@@ -720,7 +720,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_W
 // UsrDat->UsrCod must be <= 0
 // UsrDat->UsrDat.IDs must contain a list of IDs for the new user
 
-void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
+void Acc_CreateNewUsr (struct Usr_Data *UsrDat,bool CreatingMyOwnAccount)
   {
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
@@ -765,7 +765,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 #define LENGTH_RANDOM_STR 32
 #define MAX_TRY 10
 
-static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
+static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat)
   {
    char RandomStr[LENGTH_RANDOM_STR + 1];
    unsigned NumTry;
@@ -955,7 +955,7 @@ void Acc_RemoveMyAccount (void)
       Acc_AskIfRemoveUsrAccount (true);
   }
 
-void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
+void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses;
@@ -1097,7 +1097,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 /********************** Remove the briefcase of a user ***********************/
 /*****************************************************************************/
 
-static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
+static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat)
   {
    char PathRelUsr[PATH_MAX + 1];
 

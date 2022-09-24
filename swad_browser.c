@@ -1175,8 +1175,6 @@ bool Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, e
 static long Brw_GetGrpSettings (void);
 static void Brw_GetDataCurrentGrp (void);
 
-static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FileFolderName,
-                                      Brw_FileType_t FileType,long FilCod);
 static void Brw_GetParamsPathInTreeAndFileName (void);
 static void Brw_SetPathFileBrowser (void);
 static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
@@ -1191,7 +1189,7 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
 static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError);
-static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
+static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args);
@@ -1251,9 +1249,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden);
 
 static void Brw_PutIconNewFileOrFolder (void);
-static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata);
-static void Brw_PutIconFile (const char *FileName,
-			     const char *Class,bool PutLinkToViewMetadata);
+static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata *FileMetadata);
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (void);
 
@@ -1267,7 +1263,7 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    const char FileName[NAME_MAX + 1],
                                    char FileNameToShow[NAME_MAX + 1]);
 static void Brw_WriteDatesAssignment (void);
-static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
+static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
@@ -1300,14 +1296,14 @@ static void Brw_PutParamsToGetLinkToFile (void *FileMetadata);
 static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner);
 static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
-                                            struct FileMetadata *FileMetadata,
+                                            struct Brw_FileMetadata *FileMetadata,
                                             const char *FileNameToShow);
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
-	                                      struct FileMetadata *FileMetadata,
+	                                      struct Brw_FileMetadata *FileMetadata,
                                               const char *FileNameToShow);
 static bool Brw_GetParamPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
-static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata);
+static void Brw_GetFileViewsFromLoggedUsrs (struct Brw_FileMetadata *FileMetadata);
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1]);
@@ -2228,14 +2224,14 @@ long Brw_GetParamFilCod (void)
 void Brw_PutImplicitParamsFileBrowser (void *FilFolLnk)
   {
    if (FilFolLnk)
-      Brw_PutParamsFileBrowser (((struct FilFolLnk *) FilFolLnk)->Path,
-				((struct FilFolLnk *) FilFolLnk)->Name,
-				((struct FilFolLnk *) FilFolLnk)->Type,
+      Brw_PutParamsFileBrowser (((struct Brw_FilFolLnk *) FilFolLnk)->Path,
+				((struct Brw_FilFolLnk *) FilFolLnk)->Name,
+				((struct Brw_FilFolLnk *) FilFolLnk)->Type,
 				-1L);	// Not used
   }
 
-static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
-                                      Brw_FileType_t FileType,long FilCod)
+void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
+                               Brw_FileType_t FileType,long FilCod)
   {
    if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
       /***** Group code *****/
@@ -3247,7 +3243,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 /******** Show a row with the data of the owner of assignments/works *********/
 /*****************************************************************************/
 
-static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
+static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_View_record_for_this_course;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -4442,7 +4438,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool RowSetAsPublic = false;
    bool LightStyle = false;
    bool IsRecent = false;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    char FileBrowserId[32];
    bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
@@ -5130,7 +5126,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata)
+static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata *FileMetadata)
   {
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
@@ -5167,8 +5163,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *Fi
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-static void Brw_PutIconFile (const char *FileName,
-			     const char *Class,bool PutLinkToViewMetadata)
+void Brw_PutIconFile (const char *FileName,
+		      const char *Class,bool PutLinkToViewMetadata)
   {
    extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
    extern const char *Ext_FileExtensionsAllowed[];
@@ -5326,175 +5322,6 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
   }
 
 /*****************************************************************************/
-/****************************** Get link to file *****************************/
-/*****************************************************************************/
-
-void Brw_GetLinkToFile (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct FileMetadata FileMetadata;
-   bool Found;
-   PrgRsc_Type_t Type;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
-
-   /***** Get file name *****/
-   FileMetadata.FilCod = Brw_GetParamFilCod ();
-   Brw_GetFileNameByCod (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-
-   if (Found)
-     {
-      /***** Copy link to file into resource clipboard *****/
-      switch (Gbl.Action.Act)
-        {
-	 case ActReqLnkSeeDocCrs:
-	 case ActReqLnkAdmDocCrs:
-	    Type = PrgRsc_DOCUMENT;
-	    break;
-	 case ActReqLnkSeeMrkCrs:
-	 case ActReqLnkAdmMrkCrs:
-	    Type = PrgRsc_MARKS;
-	    break;
-	 default:
-	    Type = PrgRsc_NONE;	// Initialized to avoid warning
-            Err_WrongTypeExit ();
-            break;
-        }
-      Prg_DB_CopyToClipboard (Type,FileMetadata.FilCod);
-
-      /***** Write sucess message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		     FileMetadata.FilFolLnk.Name);
-     }
-
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
-  }
-
-/*****************************************************************************/
-/******************** Write file name in course program **********************/
-/*****************************************************************************/
-
-void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   struct FileMetadata FileMetadata;
-
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
-
-   /***** Begin form to go to file data *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActReqDatSeeDocCrs);
-	 Brw_PutParamsFileBrowser (NULL,		// Not used
-				   NULL,		// Not used
-				   Brw_IS_UNKNOWN,	// Not used
-				   FileMetadata.FilCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeDocCrs],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (FileMetadata.FilFolLnk.Type)
-     {
-      case Brw_IS_FILE:
-	 Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
-			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
-			  PutFormToGo);	// Put link to view metadata
-	 break;
-      case Brw_IS_LINK:
-	 if (PutFormToGo)
-	    Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeDocCrs);
-	 else
-	    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      default:
-	 break;
-     }
-
-   /***** Write filename *****/
-   HTM_Txt (FileMetadata.FilFolLnk.Name);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/******************** Write file name in course program **********************/
-/*****************************************************************************/
-
-void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   struct FileMetadata FileMetadata;
-
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
-
-   /***** Begin form to go to file data *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActReqDatSeeMrkCrs);
-	 Brw_PutParamsFileBrowser (NULL,		// Not used
-				   NULL,		// Not used
-				   Brw_IS_UNKNOWN,	// Not used
-				   FileMetadata.FilCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeMrkCrs],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeMrkCrs);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write filename *****/
-   HTM_Txt (FileMetadata.FilFolLnk.Name);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/********************** Get file name from file code *************************/
-/*****************************************************************************/
-
-void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
-  {
-   struct FileMetadata FileMetadata;
-
-   /***** Return nothing on error *****/
-   FileName[0] = '\0';	// Return nothing on error
-
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
-
-   /***** Copy file name into summary string *****/
-   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
-  }
-
-/*****************************************************************************/
 /*********************** Which filename must be shown? ***********************/
 /*****************************************************************************/
 
@@ -5598,7 +5425,7 @@ static void Brw_WriteDatesAssignment (void)
 /****************** Write size and date of a file or folder ******************/
 /*****************************************************************************/
 
-static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
+static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata)
   {
    static unsigned UniqueId = 0;
    char *Id;
@@ -5649,7 +5476,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
    bool ShowUsr = false;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    if (Level && UsrCod > 0)
      {
@@ -5969,7 +5796,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Hie_Hierarchy Hie;
    struct GroupData GrpDat;
    struct Prj_Project Prj;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    char TxtClipboardZone[1024 +
 			 Cns_HIERARCHY_MAX_BYTES_SHRT_NAME +
 			 Grp_MAX_BYTES_GROUP_TYPE_NAME +
@@ -6525,12 +6352,12 @@ static void Brw_PasteClipboard (void)
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
    struct Hie_Hierarchy Hie;
    struct GroupData GrpDat;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    long PrjCod;
    char PathOrg[PATH_MAX + NAME_MAX + PATH_MAX + 128];
    struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
 
    Pasted.NumFiles =
    Pasted.NumLinks =
@@ -7545,7 +7372,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    bool AdminMarks;
    bool FileIsValid = true;
    long FilCod = -1L;	// Code of new file in database
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    struct Mrk_Properties Marks;
    char FileNameToShow[NAME_MAX + 1];
    bool UploadSucessful = false;
@@ -7729,7 +7556,7 @@ void Brw_RecLinkFileBrowser (void)
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 4 + 1];
    long FilCod = -1L;	// Code of new file in database
    char FileNameToShow[NAME_MAX + 1];
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8046,8 +7873,8 @@ void Brw_ShowFileMetadata (void)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
-   struct FileMetadata FileMetadata;
-   struct UsrData PublisherUsrDat;
+   struct Brw_FileMetadata FileMetadata;
+   struct Usr_Data PublisherUsrDat;
    char FileNameToShow[NAME_MAX + 1];
    char URL[PATH_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
@@ -8480,7 +8307,7 @@ static void Brw_PutParamsToGetLinkToFile (void *FileMetadata)
       Brw_PutParamsFileBrowser (NULL,		// Not used
 				NULL,		// Not used
 				Brw_IS_UNKNOWN,	// Not used
-				((struct FileMetadata *) FileMetadata)->FilCod);
+				((struct Brw_FileMetadata *) FileMetadata)->FilCod);
   }
 
 /*****************************************************************************/
@@ -8534,7 +8361,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 void Brw_DownloadFile (void)
   {
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    char URL[PATH_MAX + 1];
    bool Found;
    bool ICanView = false;
@@ -8749,7 +8576,7 @@ static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod)
 // FileType can be Brw_IS_FILE or Brw_IS_LINK
 
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
-                                            struct FileMetadata *FileMetadata,
+                                            struct Brw_FileMetadata *FileMetadata,
                                             const char *FileNameToShow)
   {
    extern const char *Txt_Check_marks_in_the_file;
@@ -8818,7 +8645,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 /*****************************************************************************/
 
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
-	                                      struct FileMetadata *FileMetadata,
+	                                      struct Brw_FileMetadata *FileMetadata,
                                               const char *FileNameToShow)
   {
    extern const char *Txt_Check_marks_in_the_file;
@@ -8868,7 +8695,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 void Brw_ChgFileMetadata (void)
   {
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    bool Found;
    bool IAmTheOwner;
    bool PublicFileBeforeEdition;
@@ -9008,7 +8835,7 @@ static Brw_License_t Brw_GetParLicense (void)
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
-void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
+void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -9132,7 +8959,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
-void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
+void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -9256,7 +9083,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 // This function only gets file name stored in table files,
 // The rest of the fields are not filled
 
-void Brw_GetFileNameByCod (struct FileMetadata *FileMetadata)
+void Brw_GetFileNameByCod (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -9284,7 +9111,7 @@ void Brw_GetFileNameByCod (struct FileMetadata *FileMetadata)
 /*****************************************************************************/
 // Return true if file exists
 
-bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
+bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
   {
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    struct stat FileStatus;
@@ -9325,7 +9152,7 @@ bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
            FileMetadata->NumViewsFromLoggedUsrs
            FileMetadata->NumLoggedUsrs
 */
-void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
+void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata)
   {
    if (FileMetadata->FilCod > 0)
      {
@@ -9378,7 +9205,7 @@ void Brw_UpdateMyFileViews (long FilCod)
    Output: FileMetadata->NumViewsFromLoggedUsrs
            FileMetadata->NumLoggedUsrs
 */
-static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
+static void Brw_GetFileViewsFromLoggedUsrs (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -9939,7 +9766,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 /***************** Remove the works of a user in a course ********************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs)
+void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Crs_Course *Crs)
   {
    char PathUsrInCrs[PATH_MAX + 1];
 
@@ -9958,7 +9785,7 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs)
 /************* Remove the works of a user in all of his courses **************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
+void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -10001,9 +9828,9 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    extern const char *Txt_Folder;
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    bool FileHasPublisher;
-   struct UsrData PublisherUsrDat;
+   struct Usr_Data PublisherUsrDat;
 
    /***** Return nothing on error *****/
    SummaryStr[0] = '\0';	// Return nothing on error
@@ -10145,7 +9972,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Folder;
    extern const char *Txt_Link;
-   struct FileMetadata FileMetadata;
+   struct Brw_FileMetadata FileMetadata;
    long InsCod;
    long CtrCod;
    long DegCod;

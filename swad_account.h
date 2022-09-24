@@ -56,7 +56,7 @@ void Acc_ShowFormChgMyAccount (void);
 void Acc_ShowFormChgOtherUsrAccount (void);
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
 bool Acc_CreateMyNewAccountAndLogIn (void);
-void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount);
+void Acc_CreateNewUsr (struct Usr_Data *UsrDat,bool CreatingMyOwnAccount);
 void Acc_AfterCreationNewAccount (void);
 
 void Acc_GetUsrCodAndRemUsrGbl (void);
@@ -65,7 +65,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
 bool Acc_CheckIfICanEliminateAccount (long UsrCod);
 void Acc_AskIfRemoveMyAccount (void);
 void Acc_RemoveMyAccount (void);
-void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
+void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose);
 
 void Acc_PutIconToChangeUsrAccount (void);

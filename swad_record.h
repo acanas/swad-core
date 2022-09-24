@@ -155,18 +155,18 @@ void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);
 
 void Rec_ShowFormSignUpInCrsWithMySharedRecord (void);
-void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole);
+void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t DefaultRole);
 void Rec_ShowOtherSharedRecordEditable (void);
 void Rec_ShowMySharedRecordUpd (void);
-void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
+void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat);
 void Rec_ShowPublicSharedRecordOtherUsr (void);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
-                              struct UsrData *UsrDat,const char *Anchor);
+                              struct Usr_Data *UsrDat,const char *Anchor);
 void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args);
 
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);
-void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat);
+void Rec_GetUsrNameFromRecordForm (struct Usr_Data *UsrDat);
 
 void Rec_ShowMySharedRecordAndMore (void);
 void Rec_ChgCountryOfMyInstitution (void);

@@ -140,7 +140,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 /************************** Show webs / social networks **********************/
 /*****************************************************************************/
 
-void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
+void Net_ShowWebsAndSocialNets (const struct Usr_Data *UsrDat)
   {
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];

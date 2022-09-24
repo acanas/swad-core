@@ -98,7 +98,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
 
 static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers);
 
-static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
+static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
 				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
@@ -118,31 +118,31 @@ static void TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestio
 static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
 //-----------------------------------------------------------------------------
-static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
-static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
-static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
-static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     const char *ClassTxt,
 				     const char *ClassFeedback);
-static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -150,13 +150,13 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 				     __attribute__((unused)) const char *ClassFeedback);
 //-----------------------------------------------------------------------------
 
-static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
+static void TstPrn_WriteHeadUserCorrect (struct Usr_Data *UsrDat);
 
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args);
 
 static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args);
 static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther);
-static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat);
+static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat);
 static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
                                          unsigned NumPrints,
                                          struct TstPrn_NumQuestions *NumTotalQsts,
@@ -581,7 +581,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 /********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
+static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				       struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
 				       unsigned QstInd,
 				       time_t TimeUTC[Dat_NUM_START_END_TIME],
@@ -1154,14 +1154,14 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade)
 /************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
+void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Qst_Question *Question,
 			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
 			      const char *ClassFeedback)
   {
-   void (*TstPrn_WriteAnsExam[Qst_NUM_ANS_TYPES]) (struct UsrData *UsrDat,
+   void (*TstPrn_WriteAnsExam[Qst_NUM_ANS_TYPES]) (struct Usr_Data *UsrDat,
                                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                   struct Qst_Question *Question,
 				                   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1185,7 +1185,7 @@ void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
 /******************* Write integer answer in a test print ********************/
 /*****************************************************************************/
 
-static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1249,7 +1249,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 /******************** Write float answer in an test print ********************/
 /*****************************************************************************/
 
-static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1313,7 +1313,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 /***************** Write false / true answer in a test print *****************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1365,7 +1365,7 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 /********** Write single or multiple choice answer in a test print ***********/
 /*****************************************************************************/
 
-static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1509,7 +1509,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 /************** Write text answer when assessing a test print ****************/
 /*****************************************************************************/
 
-static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
+static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
 				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
@@ -1636,7 +1636,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 /********* one for the user's answer and other for the correct answer ********/
 /*****************************************************************************/
 
-static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
+static void TstPrn_WriteHeadUserCorrect (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1841,7 +1841,7 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 /************ Show the test prints of a user in the current course ***********/
 /*****************************************************************************/
 
-static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
+static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
   {
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
@@ -2481,7 +2481,7 @@ static void TstPrn_ShowTagsPresentInAPrint (long PrnCod)
 /**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
-void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
+void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned NumQsts,
 			      struct TstPrn_PrintedQuestion PrintedQuestions[TstCfg_MAX_QUESTIONS_PER_TEST],
 			      time_t TimeUTC[Dat_NUM_START_END_TIME],

@@ -74,7 +74,7 @@ static const char *Mrk_HeadOrFootStr[2] =	// Names of fields in forms
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
-static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
+static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
                              const char *PathFileAllMarks,
                              struct Mrk_Properties *Marks);
 
@@ -362,7 +362,7 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
 /*************************** Show the marks of a user ************************/
 /*****************************************************************************/
 
-static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
+static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct Usr_Data *UsrDat,
                              const char *PathFileAllMarks,
                              struct Mrk_Properties *Marks)
   {
@@ -532,7 +532,7 @@ void Mrk_ShowMyMarks (void)
    FILE *FileUsrMarks;
    char PathPrivate[PATH_MAX + 1 +
 		    PATH_MAX + 1];
-   struct UsrData *UsrDat;
+   struct Usr_Data *UsrDat;
    bool UsrIsOK = true;
 
    /***** Get parameters related to file browser *****/
@@ -637,7 +637,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    unsigned UnsignedNum;
    Brw_FileBrowser_t FileBrowser;
    long Cod;

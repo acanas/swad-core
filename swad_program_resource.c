@@ -32,7 +32,7 @@
 
 #include "swad_assignment_resource.h"
 #include "swad_attendance.h"
-#include "swad_browser.h"
+#include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
 #include "swad_exam_resource.h"
@@ -42,7 +42,7 @@
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
-#include "swad_survey.h"
+#include "swad_survey_resource.h"
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/

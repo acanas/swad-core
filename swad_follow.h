@@ -51,7 +51,7 @@ void Fol_FlushCacheFollow (void);
 void Fol_GetNumFollow (long UsrCod,
                        unsigned *NumFollowing,unsigned *NumFollowers);
 unsigned Fol_GetNumFollowers (long UsrCod);
-void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
+void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr);
 void Fol_ListFollowing (void);

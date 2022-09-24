@@ -1086,7 +1086,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    unsigned NumPagesAfter;
    unsigned NumPagsTotal;
    char *Title;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
    MYSQL_ROW row;
    long LogCod;
    Rol_Role_t RoleFromLog;
@@ -1336,7 +1336,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    unsigned NumHit;
    struct Sta_Hits Hits;
    unsigned BarWidth;
-   struct UsrData UsrDat;
+   struct Usr_Data UsrDat;
 
    /***** Initialize user's data *****/
    Usr_UsrDataConstructor (&UsrDat);

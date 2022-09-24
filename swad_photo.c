@@ -89,11 +89,11 @@ static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Arg
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) void *Args);
 static void Pho_ReqOtherUsrPhoto (void);
 
-static void Pho_ReqPhoto (const struct UsrData *UsrDat);
+static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
 
-static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat);
+static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *UsrDat);
 
-static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
+static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat);
 static void Pho_UpdatePhoto2 (void);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
@@ -137,7 +137,7 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 /************** Check if I can change the photo of another user **************/
 /*****************************************************************************/
 
-bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
+bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
   {
    /***** I can change my photo *****/
    if (Usr_ItsMe (UsrDat->UsrCod))
@@ -270,7 +270,7 @@ static void Pho_ReqOtherUsrPhoto (void)
 /****************** Show a form for sending an user's photo ******************/
 /*****************************************************************************/
 
-static void Pho_ReqPhoto (const struct UsrData *UsrDat)
+static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
   {
    extern const char *Hlp_PROFILE_Photo;
    extern const char *Txt_Photo;
@@ -556,7 +556,7 @@ void Pho_RemoveUsrPhoto (void)
 /*****************************************************************************/
 // Return false if no "green" faces detected
 
-static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *UsrDat)
+static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_The_file_is_not_X;
    extern const char *Txt_Could_not_detect_any_face_in_front_position_;
@@ -828,7 +828,7 @@ void Pho_UpdateUsrPhoto2 (void)
 /*************** Update a user's photo with a selected face ******************/
 /*****************************************************************************/
 
-static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
+static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Photo_has_been_updated;
    char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the temporary file with the selected face
@@ -941,7 +941,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 /********************* Show a user's photo if allowed ************************/
 /*****************************************************************************/
 
-void Pho_ShowUsrPhotoIfAllowed (struct UsrData *UsrDat,
+void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom,
                                 bool FormUnique)
   {
@@ -959,7 +959,7 @@ void Pho_ShowUsrPhotoIfAllowed (struct UsrData *UsrDat,
 // Returns true if the photo can be shown and false if not.
 // Public photo means two different things depending on the user's type
 
-bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,
+bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
                                    char PhotoURL[PATH_MAX + 1])
   {
    bool ICanSeePhoto;
@@ -978,7 +978,7 @@ bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,
 // Returns false if photo does not exist
 // Returns true if link is created successfully
 
-bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char PhotoURL[PATH_MAX + 1])
+bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[PATH_MAX + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];
    char PathPrivPhoto[PATH_MAX + 1];
@@ -1032,7 +1032,7 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]
 /********************* Build HTML code for user's photo **********************/
 /*****************************************************************************/
 
-void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 			    const char *ClassPhoto,Pho_Zoom_t Zoom,
 			    char **ImgStr,
 			    char **CaptionStr)
@@ -1246,7 +1246,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 /*************************** Show a user's photo *****************************/
 /*****************************************************************************/
 
-void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique)
   {
@@ -1293,7 +1293,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 /*****************************************************************************/
 // Returns true on success, false on error
 
-bool Pho_RemovePhoto (struct UsrData *UsrDat)
+bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Photo_removed;
    char PathPrivRelPhoto[PATH_MAX + 1];
@@ -1353,7 +1353,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 /***************** Update photo name of an user in database ******************/
 /*****************************************************************************/
 
-void Pho_UpdatePhotoName (struct UsrData *UsrDat)
+void Pho_UpdatePhotoName (struct Usr_Data *UsrDat)
   {
    char PathPublPhoto[PATH_MAX + 1];
 

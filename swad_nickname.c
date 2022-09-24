@@ -59,7 +59,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 static void Nck_PutParamsRemoveMyNick (void *Nick);
 static void Nck_PutParamsRemoveOtherNick (void *Nick);
 
-static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
+static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /********* Check whether a nickname (with initial arroba) if valid ***********/
@@ -181,7 +181,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    unsigned NumNicks;
    unsigned NumNick;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
+   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
@@ -448,7 +448,7 @@ void Nck_UpdateOtherUsrNick (void)
 /*************************** Update user's nickname **************************/
 /*****************************************************************************/
 
-static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
+static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_The_nickname_matches_the_one_you_had_previously_registered;
    extern const char *Txt_The_nickname_had_been_registered_by_another_user;

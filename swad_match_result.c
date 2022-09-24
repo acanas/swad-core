@@ -717,7 +717,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   const char *GamesSelectedCommas)
   {
    MYSQL_RES *mysql_res;
-   struct UsrData *UsrDat;
+   struct Usr_Data *UsrDat;
    struct MchRes_ICanView ICanView;
    unsigned NumResults;
    unsigned NumResult;
@@ -1076,7 +1076,7 @@ void MchRes_ShowOneMchResult (void)
    struct Gam_Game Game;
    struct Mch_Match Match;
    Usr_MeOrOther_t MeOrOther;
-   struct UsrData *UsrDat;
+   struct Usr_Data *UsrDat;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
    struct MchPrn_Print Print;
