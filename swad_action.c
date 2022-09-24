@@ -62,6 +62,7 @@
 #include "swad_figure.h"
 #include "swad_follow.h"
 #include "swad_forum.h"
+#include "swad_forum_resource.h"
 #include "swad_game.h"
 #include "swad_game_resource.h"
 #include "swad_global.h"
@@ -1728,7 +1729,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActDisPstForSWAUsr	] = { 625,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
    [ActDisPstForSWATch	] = { 635,-1,TabUnk,ActSeeFor		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_DisablePost		,NULL},
 
-   [ActReqLnkForCrsUsr  ] = {1941,-1,TabUnk,ActSeeFor		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,For_GetLinkToThread		,NULL},
+   [ActReqLnkForCrsUsr  ] = {1941,-1,TabUnk,ActSeeFor		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ForRsc_GetLinkToThread		,NULL},
 
 // [ActCht		] = {  52,-1,TabUnk,ActSeeChtRms	,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},
    [ActCht		] = {  52,-1,TabUnk,ActSeeChtRms	,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_NEW_TAB,Cht_OpenChatWindow		,NULL				,NULL},

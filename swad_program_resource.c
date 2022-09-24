@@ -37,6 +37,7 @@
 #include "swad_error.h"
 #include "swad_exam_resource.h"
 #include "swad_form.h"
+#include "swad_forum_resource.h"
 #include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_program.h"

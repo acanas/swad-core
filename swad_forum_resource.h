@@ -1,9 +1,9 @@
-// swad_attendance_resource.h: links to attendance events as program resources
+// swad_forum_resource.h: links to course forum threads as program resources
 
-#ifndef _SWAD_ATT_RSC
-#define _SWAD_ATT_RSC
+#ifndef _SWAD_FOR_RSC
+#define _SWAD_FOR_RSC
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -33,9 +33,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void AttRsc_GetLinkToEvent (void);
-void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle);
-void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
+void ForRsc_GetLinkToThread (void);
+void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
+                                     const char *Icon,const char *IconTitle);
+void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize);
 
 #endif

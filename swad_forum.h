@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_alert.h"
 #include "swad_center.h"
 #include "swad_degree.h"
 #include "swad_institution.h"
@@ -110,6 +111,13 @@ struct For_Forums
 
 #define For_MAX_BYTES_FORUM_NAME (512 - 1)
 
+// Links to go to <section>
+#define For_REMOVE_THREAD_SECTION_ID	"remove_thread"
+#define For_FORUM_THREADS_SECTION_ID	"forum_threads"
+#define For_NEW_THREAD_SECTION_ID	"new_thread"
+#define For_FORUM_POSTS_SECTION_ID	"thread_posts"
+#define For_NEW_POST_SECTION_ID		"new_post"
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -120,6 +128,11 @@ void For_EnablePost (void);
 void For_DisablePost (void);
 
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
+
+void For_ShowPostsOfAThread (struct For_Forums *Forums,
+			     Ale_AlertType_t AlertType,const char *Message);
+
+void For_PutAllHiddenParamsNewPost (void *Forums);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
@@ -133,13 +146,20 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   long ThrCod,
                                   long PstCod);
 
+void For_ShowForumList (struct For_Forums *Forums);
+
 void For_SetForumName (const struct For_Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Lan_Language_t Language,bool UseHTMLEntities);
 
 void For_ShowForumTheads (void);
+void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
+                                                Ale_AlertType_t AlertType,const char *Message);
 
 void For_ShowThreadPosts (void);
+
+void For_GetParamsForums (struct For_Forums *Forums);
+
 void For_ReceiveForumPost (void);
 void For_RemovePost (void);
 void For_RequestRemoveThread (void);
@@ -149,11 +169,5 @@ void For_PasteThread (void);
 
 //-------------------------------- Figures ------------------------------------
 void For_GetAndShowForumStats (void);
-
-//--------------------------- Program resources -------------------------------
-void For_GetLinkToThread (void);
-void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle);
-void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize);
 
 #endif
