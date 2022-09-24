@@ -84,6 +84,9 @@ void Att_SeeAttEvents (void);
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 
+void Att_PutParamAttCod (long AttCod);
+long Att_GetParamAttCod (void);
+
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);
 void Att_RemoveAttEventFromDB (long AttCod);
@@ -100,6 +103,8 @@ unsigned Att_GetNumAttEvents (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 void Att_SeeOneAttEvent (void);
 
+void Att_PutParamsCodGrps (long AttCod);
+
 void Att_RegisterMeAsStdInAttEvent (void);
 void Att_RegisterStudentsInAttEvent (void);
 
@@ -108,11 +113,5 @@ void Att_ListMyAttendanceCrs (void);
 void Att_PrintMyAttendanceCrs (void);
 void Att_ListUsrsAttendanceCrs (void);
 void Att_PrintUsrsAttendanceCrs (void);
-
-//--------------------------- Program resources -------------------------------
-void AttRsc_GetLinkToEvent (void);
-void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle);
-void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

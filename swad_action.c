@@ -31,6 +31,7 @@
 #include "swad_announcement.h"
 #include "swad_assignment_resource.h"
 #include "swad_attendance.h"
+#include "swad_attendance_resource.h"
 #include "swad_banner.h"
 #include "swad_browser_resource.h"
 #include "swad_building.h"

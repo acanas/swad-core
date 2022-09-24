@@ -31,7 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_assignment_resource.h"
-#include "swad_attendance.h"
+#include "swad_attendance_resource.h"
 #include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"

@@ -109,8 +109,6 @@ static void Att_ResetAttendanceEvent (struct Att_Event *Event);
 static void Att_FreeListAttEvents (struct Att_Events *Events);
 
 static void Att_PutParamSelectedAttCod (void *Events);
-static void Att_PutParamAttCod (long AttCod);
-static long Att_GetParamAttCod (void);
 
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
 static void Att_CreateGroups (long AttCod);
@@ -127,7 +125,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Att_Event *Event);
 static void Att_PutLinkAttEvent (struct Att_Event *Event,
 				 const char *Title,const char *Txt);
-static void Att_PutParamsCodGrps (long AttCod);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 						         long LstSelectedUsrCods[],
 						         unsigned NumUsrsInList);
@@ -810,7 +807,7 @@ static void Att_PutParamSelectedAttCod (void *Events)
       Att_PutParamAttCod (((struct Att_Events *) Events)->AttCod);
   }
 
-static void Att_PutParamAttCod (long AttCod)
+void Att_PutParamAttCod (long AttCod)
   {
    Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
   }
@@ -819,9 +816,8 @@ static void Att_PutParamAttCod (long AttCod)
 /*************** Get parameter with code of attendance event *****************/
 /*****************************************************************************/
 
-static long Att_GetParamAttCod (void)
+long Att_GetParamAttCod (void)
   {
-   /***** Get code of attendance event *****/
    return Par_GetParToLong ("AttCod");
   }
 
@@ -1885,7 +1881,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
 /****** Put parameters with the default groups in an attendance event ********/
 /*****************************************************************************/
 
-static void Att_PutParamsCodGrps (long AttCod)
+void Att_PutParamsCodGrps (long AttCod)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    MYSQL_RES *mysql_res;
@@ -3294,88 +3290,4 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	}
 
    The_ChangeRowColor ();
-  }
-
-/*****************************************************************************/
-/************************ Get link to attendance event ***********************/
-/*****************************************************************************/
-
-void AttRsc_GetLinkToEvent (void)
-  {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   long AttCod;
-   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
-
-   /***** Get attendance event code *****/
-   if ((AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
-
-   /***** Get attendance event title *****/
-   Att_DB_GetAttEventTitle (AttCod,Title);
-
-   /***** Copy link to attendance event into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_ATTENDANCE_EVENT,AttCod);
-
-   /***** Write sucess message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
-
-   /***** Show attendance events again *****/
-   Att_SeeAttEvents ();
-  }
-
-/*****************************************************************************/
-/**************** Write attendance event in course program *******************/
-/*****************************************************************************/
-
-void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
-
-   /***** Get game title *****/
-   Att_DB_GetAttEventTitle (AttCod,Title);
-
-   /***** Begin form to go to game *****/
-   if (PutFormToGo)
-     {
-      Frm_BeginForm (ActSeeOneAtt);
-	 Att_PutParamAttCod (AttCod);
-	 Att_PutParamsCodGrps (AttCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAtt],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAtt);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write attendance event title *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo)
-     {
-      /* End form */
-         HTM_BUTTON_End ();
-
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/*************** Get attendance event title from game code *******************/
-/*****************************************************************************/
-
-void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
-  {
-   char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
-
-   /***** Get attendance event title *****/
-   Att_DB_GetAttEventTitle (AttCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
   }
