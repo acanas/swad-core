@@ -108,8 +108,8 @@ typedef enum
 #define Prj_ORDER_DEFAULT Prj_ORDER_START_TIME
 
 /***** Project title *****/
-#define Prj_MAX_CHARS_PROJECT_TITLE	(256 - 1)	// 255
-#define Prj_MAX_BYTES_PROJECT_TITLE	((Prj_MAX_CHARS_PROJECT_TITLE       + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+#define Prj_MAX_CHARS_TITLE	(256 - 1)	// 255
+#define Prj_MAX_BYTES_TITLE	((Prj_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /***** Type of proposal ******/
 #define Prj_NUM_PROPOSAL_TYPES 3
@@ -160,7 +160,7 @@ struct Prj_Project
    Prj_Proposal_t Proposal;
    time_t CreatTime;
    time_t ModifTime;
-   char Title[Prj_MAX_BYTES_PROJECT_TITLE + 1];
+   char Title[Prj_MAX_BYTES_TITLE + 1];
    long DptCod;
    char *Description;
    char *Knowledge;
@@ -175,14 +175,18 @@ struct Prj_Project
 void Prj_SetPrjCod (long PrjCod);
 long Prj_GetPrjCod (void);
 
+void Prj_ResetProjects (struct Prj_Projects *Projects);
+
 void Prj_ListUsrsToSelect (void);
 void Prj_SeeProjects (void);
+void Prj_ShowProjects (struct Prj_Projects *Projects);
 void Prj_ShowTableSelectedPrjs (void);
 
 void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod);
+void Prj_GetParams (struct Prj_Projects *Projects);
 
 void Prj_ShowOneUniqueProject (struct Prj_Project *Prj);
 

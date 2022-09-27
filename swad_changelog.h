@@ -606,11 +606,19 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.29 (2022-09-24)"
+#define Log_PLATFORM_VERSION	"SWAD 22.30 (2022-09-28)"
 #define CSS_FILE		"swad22.22.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 22.29:    Sep 24, 2022  New module swad_forum_resource. (? lines)
+	Version 22.31:    Sep 28, 2022  TODO: New action to view one project (similar to view project files, but accesible to students). (? lines)
+	Version 22.30:    Sep 28, 2022  New module swad_project_resource. (332490 lines)
+					2 changes necessary in database:
+ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';
+Copy the following icon to icon public directory:
+sudo cp icon/file-invoice.svg /var/www/html/swad/icon/
+
+	Version 22.29:    Sep 24, 2022  New module swad_forum_resource. (332274 lines)
 	Version 22.28:    Sep 24, 2022  New module swad_attendance_resource. (332236 lines)
 	Version 22.27:    Sep 24, 2022  New module swad_browser_resource. (332157 lines)
 	Version 22.26:    Sep 23, 2022  New module swad_survey_resource. (332095 lines)

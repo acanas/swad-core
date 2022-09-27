@@ -43,7 +43,7 @@ const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES] =
    // lnk LINKS			// Link to links
    // tmt TIMETABLE		// Link to timetable
    [PrgRsc_ASSIGNMENT      ] = "asg",
-   // prj PROJECT		// A project is only for some students
+   [PrgRsc_PROJECT         ] = "prj",
    [PrgRsc_CALL_FOR_EXAM   ] = "cfe",
    // tst TEST			// User selects tags, teacher should select
    [PrgRsc_EXAM            ] = "exa",

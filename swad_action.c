@@ -95,6 +95,7 @@
 #include "swad_program.h"
 #include "swad_program_resource.h"
 #include "swad_project.h"
+#include "swad_project_resource.h"
 #include "swad_question_import.h"
 #include "swad_QR.h"
 #include "swad_report.h"
@@ -647,6 +648,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemStdPrj	] = {1693,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
    [ActRemTutPrj	] = {1694,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
    [ActRemEvlPrj	] = {1695,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEvl			,NULL},
+   [ActReqLnkPrj	] = {1948,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjRsc_GetLinkToProject	,NULL},
 
    [ActAdmDocPrj	] = {1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
    [ActReqRemFilDocPrj	] = {1698,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
@@ -3814,6 +3816,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActConSeePrgItm,	// #1945
 	ActExpEdiPrgItm,	// #1946
 	ActConEdiPrgItm,	// #1947
+	ActReqLnkPrj,		// #1948
   };
 
 /*****************************************************************************/

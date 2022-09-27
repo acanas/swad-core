@@ -47,7 +47,7 @@ struct Prg_ResourceHierarchy
    bool Hidden;
   };
 
-#define PrgRsc_NUM_TYPES 10
+#define PrgRsc_NUM_TYPES 11
 typedef enum
   {
   PrgRsc_NONE,
@@ -57,7 +57,7 @@ typedef enum
   // lnk LINKS		// Link to links
   // tmt TIMETABLE	// Link to timetable
   PrgRsc_ASSIGNMENT,
-  // prj PROJECT	// A project is only for some students
+  PrgRsc_PROJECT,	// A project is only for some students
   PrgRsc_CALL_FOR_EXAM,
   // tst TEST		// User selects tags, teacher should select
   PrgRsc_EXAM,

@@ -32214,7 +32214,7 @@ const char *Txt_Project_X_removed =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Projeto <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"Project <strong>%s</strong> removed.";		// Çeviri lazim!
+	"<strong>%s</strong> projesi kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
@@ -35741,6 +35741,29 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Atividade"
 #elif L==10	// tr
 	"Atama"
+#endif
+	,
+	[PrgRsc_PROJECT] =
+#if   L==1	// ca
+	"Projecte"
+#elif L==2	// de
+	"Projekt"
+#elif L==3	// en
+	"Project"
+#elif L==4	// es
+	"Proyecto"
+#elif L==5	// fr
+	"Projet"
+#elif L==6	// gn
+	"Proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Progetto"
+#elif L==8	// pl
+	"Projekt"
+#elif L==9	// pt
+	"Projeto"
+#elif L==10	// tr
+	"Projesi"
 #endif
 	,
 	[PrgRsc_CALL_FOR_EXAM] =

@@ -43,6 +43,7 @@
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
+#include "swad_project_resource.h"
 #include "swad_survey_resource.h"
 
 /*****************************************************************************/
@@ -58,7 +59,7 @@ const char *Prg_ResourceTypesIcons[PrgRsc_NUM_TYPES] =
    // lnk LINKS			// Link to links
    // tmt TIMETABLE		// Link to timetable
    [PrgRsc_ASSIGNMENT      ] = "edit.svg",
-   // prj PROJECT		// A project is only for some students
+   [PrgRsc_PROJECT         ] = "file-invoice.svg",
    [PrgRsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
    // tst TEST			// User selects tags, teacher should select
    [PrgRsc_EXAM            ] = "file-signature.svg",
@@ -984,6 +985,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
      {
       [PrgRsc_NONE            ] = PrgRsc_WriteEmptyLinkInCrsProgram,
       [PrgRsc_ASSIGNMENT      ] = AsgRsc_WriteAssignmentInCrsProgram,
+      [PrgRsc_PROJECT         ] = PrjRsc_WriteProjectInCrsProgram,
       [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_WriteCallForExamInCrsProgram,
       [PrgRsc_EXAM            ] = ExaRsc_WriteExamInCrsProgram,
       [PrgRsc_GAME            ] = GamRsc_WriteGameInCrsProgram,
@@ -1033,6 +1035,7 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
      {
       [PrgRsc_NONE            ] = NULL,
       [PrgRsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
+      [PrgRsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
       [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
       [PrgRsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
       [PrgRsc_GAME            ] = GamRsc_GetTitleFromGamCod,

@@ -28,75 +28,78 @@
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_game.h"
-#include "swad_game_database.h"
 #include "swad_program_database.h"
+#include "swad_project.h"
+#include "swad_project_database.h"
 
 /*****************************************************************************/
 /***************************** Get link to game ******************************/
 /*****************************************************************************/
 
-void GamRsc_GetLinkToGame (void)
+void PrjRsc_GetLinkToProject (void)
   {
+   extern const char *Txt_Projects;
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Gam_Games Games;
-   long GamCod;
-   char Title[Gam_MAX_BYTES_TITLE + 1];
+   struct Prj_Projects Projects;
+   char Title[Prj_MAX_BYTES_TITLE + 1];
 
-   /***** Reset games context *****/
-   Gam_ResetGames (&Games);
+   /***** Reset projects context *****/
+   Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   if ((GamCod = Gam_GetParams (&Games)) <= 0)
-      Err_WrongGameExit ();
+   Prj_GetParams (&Projects);
+   Projects.PrjCod = Prj_GetParamPrjCod ();
 
-   /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,Title);
+   /***** Get project title *****/
+   if (Projects.PrjCod > 0)
+      Prj_DB_GetProjectTitle (Projects.PrjCod,Title);
+   else
+      Str_Copy (Title,Txt_Projects,sizeof (Title) - 1);
 
-   /***** Copy link to game into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_GAME,GamCod);
+   /***** Copy link to PROJECT into resource clipboard *****/
+   Prg_DB_CopyToClipboard (PrgRsc_PROJECT,Projects.PrjCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Title);
 
-   /***** Show games again *****/
-   Gam_ListAllGames (&Games);
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Projects);
   }
 
 /*****************************************************************************/
 /*********************** Write game in course program ************************/
 /*****************************************************************************/
 
-void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle)
+void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
+                                      const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   char Title[Gam_MAX_BYTES_TITLE + 1];
+   char Title[Prj_MAX_BYTES_TITLE + 1];
 
-   /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,Title);
+   /***** Get project title *****/
+   Prj_DB_GetProjectTitle (PrjCod,Title);
 
-   /***** Begin form to go to game *****/
+   /***** Begin form to go to project *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeGam);
-         Gam_PutParamGameCod (GamCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeGam],
+      Frm_BeginForm (ActPrnOnePrj);
+         Prj_PutParamPrjCod (PrjCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActPrnOnePrj],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeGam);
+      Ico_PutIconLink (Icon,Ico_BLACK,ActSeePrj);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write game title of exam *****/
+   /***** Write project title of exam *****/
    HTM_Txt (Title);
 
-   /***** End form to go to game *****/
+   /***** End form to go to project *****/
    if (PutFormToGo)
      {
       /* End form */
@@ -107,14 +110,14 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
   }
 
 /*****************************************************************************/
-/*********************** Get game title from game code ***********************/
+/******************* Get project title from project code *********************/
 /*****************************************************************************/
 
-void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
+void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize)
   {
-   char TitleFromDB[Gam_MAX_BYTES_TITLE + 1];
+   char TitleFromDB[Prj_MAX_BYTES_TITLE + 1];
 
-   /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,TitleFromDB);
+   /***** Get project title *****/
+   Prj_DB_GetProjectTitle (PrjCod,TitleFromDB);
    Str_Copy (Title,TitleFromDB,TitleSize);
   }

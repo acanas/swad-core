@@ -5802,7 +5802,7 @@ static void Brw_WriteCurrentClipboard (void)
 			 Grp_MAX_BYTES_GROUP_TYPE_NAME +
 			 Grp_MAX_BYTES_GROUP_NAME +
 			 Usr_MAX_BYTES_FULL_NAME +
-			 Prj_MAX_BYTES_PROJECT_TITLE];
+			 Prj_MAX_BYTES_TITLE];
    char FileNameToShow[NAME_MAX + 1];
    static const char **TxtFileType[Brw_NUM_FILE_TYPES] =
      {

@@ -150,11 +150,8 @@ static long Prj_PrjCod = -1L;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prj_ResetProjects (struct Prj_Projects *Projects);
-
 static void Prj_ReqUsrsToSelect (void *Projects);
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (struct Prj_Projects *Projects);
-static void Prj_ShowProjects (struct Prj_Projects *Projects);
 static void Prj_ShowPrjsInCurrentPage (void *Projects);
 
 static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects);
@@ -172,7 +169,6 @@ static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects);
 static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void);
 static unsigned Prj_GetHiddenParamFaulti (void);
 static long Prj_GetHiddenParamDptCod (void);
-static void Prj_GetParams (struct Prj_Projects *Projects);
 static Usr_Who_t Prj_GetParamWho (void);
 
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
@@ -283,7 +279,7 @@ long Prj_GetPrjCod (void)
 /******************************* Reset projects ******************************/
 /*****************************************************************************/
 
-static void Prj_ResetProjects (struct Prj_Projects *Projects)
+void Prj_ResetProjects (struct Prj_Projects *Projects)
   {
    Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
    Projects->Filter.Who      = Prj_FILTER_WHO_DEFAULT;
@@ -358,7 +354,7 @@ void Prj_SeeProjects (void)
 /******************************* Show projects *******************************/
 /*****************************************************************************/
 
-static void Prj_ShowProjects (struct Prj_Projects *Projects)
+void Prj_ShowProjects (struct Prj_Projects *Projects)
   {
    switch (Projects->Filter.Who)
      {
@@ -901,7 +897,7 @@ static long Prj_GetHiddenParamDptCod (void)
 /***************** Get generic parameters to list projects *******************/
 /*****************************************************************************/
 
-static void Prj_GetParams (struct Prj_Projects *Projects)
+void Prj_GetParams (struct Prj_Projects *Projects)
   {
    /***** Get filter (which projects to show) *****/
    Projects->Filter.Who = Prj_GetParamWho ();
@@ -1277,11 +1273,17 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL %s\"",
 	                  The_GetColorRows ());
-	       Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
-	    HTM_TD_End ();
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	    HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL\"");
+	    break;
+	 default:
+	    break;
+	}
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	 case Prj_FILE_BROWSER_PROJECT:
 	       Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
 	    HTM_TD_End ();
 	    break;
@@ -2751,6 +2753,12 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
    else
       /* Icon to inform about locked/unlocked project edition */
       Prj_PutIconOffLockedUnlocked (Prj);
+
+   /***** Link to get resource link *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
+				      Prj_PutCurrentParams,Projects);
   }
 
 /*****************************************************************************/
@@ -3332,7 +3340,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
+	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Prj->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
 			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -3579,7 +3587,7 @@ void Prj_ReceiveFormProject (void)
    if (ICanEditProject)
      {
       /* Get project title */
-      Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_PROJECT_TITLE);
+      Par_GetParToText ("Title",Prj.Title,Prj_MAX_BYTES_TITLE);
 
       /* Get department */
       Prj.DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);

@@ -501,6 +501,21 @@ unsigned Prj_DB_GetDataOfProjectByCod (MYSQL_RES **mysql_res,long PrjCod)
   }
 
 /*****************************************************************************/
+/********************* Get project title from database ***********************/
+/*****************************************************************************/
+
+void Prj_DB_GetProjectTitle (long PrjCod,char Title[Prj_MAX_BYTES_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Prj_MAX_BYTES_TITLE,"can not get project title",
+		         "SELECT Title"	// row[0]
+			  " FROM prj_projects"
+		         " WHERE PrjCod=%ld"
+		           " AND CrsCod=%ld",	// Extra check
+			 PrjCod,
+			 Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /******************* Get some project data to check faults *******************/
 /*****************************************************************************/
 

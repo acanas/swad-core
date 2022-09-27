@@ -9310,25 +9310,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqLnkAsg] =
 #if   L==1	// ca
-	"Copy link to  assignment"	// Necessita traducció
+	"Copy link to assignment"	// Necessita traducció
 #elif L==2	// de
-	"Copy link to  assignment"	// Need Übersetzung
+	"Copy link to assignment"	// Need Übersetzung
 #elif L==3	// en
-	"Copy link to  assignment"
+	"Copy link to assignment"
 #elif L==4	// es
 	"Copiar enlace a actividad"
 #elif L==5	// fr
-	"Copy link to  assignment"	// Besoin de traduction
+	"Copy link to assignment"	// Besoin de traduction
 #elif L==6	// gn
 	"Copiar enlace a actividad"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to  assignment"	// Bisogno di traduzione
+	"Copy link to assignment"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to  assignment"	// Potrzebujesz tlumaczenie
+	"Copy link to assignment"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to  assignment"	// Precisa de tradução
+	"Copy link to assignment"	// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to  assignment"	// Çeviri lazim!
+	"Copy link to assignment"	// Çeviri lazim!
 #endif
 	,
 	[ActReqUsrPrj] =
@@ -10042,6 +10042,29 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Remove evaluator from a project"	// Precisa de tradução
 #elif L==10	// tr
 	"Remove evaluator from a project"	// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkPrj] =
+#if   L==1	// ca
+	"Copy link to project"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to project"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to project"
+#elif L==4	// es
+	"Copiar enlace a proyecto"
+#elif L==5	// fr
+	"Copy link to project"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to project"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to project"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to project"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to project"		// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocPrj] =
