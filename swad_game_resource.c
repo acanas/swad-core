@@ -48,8 +48,7 @@ void GamRsc_GetLinkToGame (void)
    Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   if ((GamCod = Gam_GetParams (&Games)) <= 0)
-      Err_WrongGameExit ();
+   GamCod = Gam_GetParams (&Games);
 
    /***** Get game title *****/
    GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);

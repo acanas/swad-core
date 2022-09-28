@@ -393,6 +393,12 @@ static void Gam_PutIconsListGames (void *Games)
 	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],NULL,
 					     NULL,NULL);
 
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
+					 Gam_PutParams,Games);
+
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_GAMES);
      }
