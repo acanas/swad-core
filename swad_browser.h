@@ -207,6 +207,9 @@ void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree);
 void Brw_CreateDirDownloadTmp (void);
 
 void Brw_AskEditWorksCrs (void);
+
+void Brw_ShowFileBrowserProject (long PrjCod);
+
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);
 void Brw_RemFolderFromTree (void);
@@ -244,7 +247,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod);
 
-bool Brw_CheckIfICanViewProjectFiles (long PrjCod);
+bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
 
 long Brw_GetCodForFileBrowser (void);
 long Brw_GetZoneUsrCodForFileBrowser (void);

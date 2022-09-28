@@ -981,7 +981,8 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Asg_PutParamAsgCod (long AsgCod)
   {
-   Par_PutHiddenParamLong (NULL,"AsgCod",AsgCod);
+   if (AsgCod > 0)
+      Par_PutHiddenParamLong (NULL,"AsgCod",AsgCod);
   }
 
 /*****************************************************************************/

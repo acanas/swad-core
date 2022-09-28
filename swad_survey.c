@@ -1396,7 +1396,8 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Svy_PutParamSvyCod (long SvyCod)
   {
-   Par_PutHiddenParamLong (NULL,"SvyCod",SvyCod);
+   if (SvyCod > 0)
+      Par_PutHiddenParamLong (NULL,"SvyCod",SvyCod);
   }
 
 /*****************************************************************************/

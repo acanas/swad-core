@@ -606,11 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.30 (2022-09-28)"
+#define Log_PLATFORM_VERSION	"SWAD 22.31 (2022-09-28)"
 #define CSS_FILE		"swad22.22.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
-	Version 22.31:    Sep 28, 2022  TODO: New action to view one project (similar to view project files, but accesible to students). (? lines)
+	Version 22.31:    Sep 28, 2022  New action to view one project.
+					Code refactoring in program resources. (332570 lines)
 	Version 22.30:    Sep 28, 2022  New module swad_project_resource. (332490 lines)
 					2 changes necessary in database:
 ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';

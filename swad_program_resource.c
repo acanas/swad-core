@@ -126,6 +126,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
 static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
                                                __attribute__((unused)) bool PutFormToGo,
                                                const char *Icon,const char *IconTitle);
+static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item);
 static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
                                                MYSQL_RES **mysql_res);
 
@@ -996,11 +997,6 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
       [PrgRsc_FORUM_THREAD    ] = ForRsc_WriteThreadInCrsProgram,
      };
 
-   /***** Trivial check: code should be > 0 *****/
-   if (Link->Type != PrgRsc_NONE &&
-       Link->Cod <= 0)
-      return;
-
    /***** Write link name *****/
    if (WriteLinkName[Link->Type])
       WriteLinkName[Link->Type] (Link->Cod,PutFormToGo,Icon,IconTitle);
@@ -1048,10 +1044,6 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
 
    /***** Reset title *****/
    Item->Resource.Title[0] = '\0';
-
-   /***** Trivial check: code should be > 0 *****/
-   if (Item->Resource.Link.Cod <= 0)
-      return;
 
    /***** Get title *****/
    if (GetTitle[Item->Resource.Link.Type])

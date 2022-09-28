@@ -29,6 +29,7 @@
 #include "swad_error.h"
 #include "swad_exam.h"
 #include "swad_exam_database.h"
+#include "swad_exam_resource.h"
 #include "swad_form.h"
 #include "swad_program_database.h"
 
@@ -53,7 +54,7 @@ void ExaRsc_GetLinkToExam (void)
    ExaCod = Exams.ExaCod;
 
    /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,Title);
+   ExaRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to exam into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_EXAM,ExaCod);
@@ -74,24 +75,27 @@ void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Exa_MAX_BYTES_TITLE + 1];
 
    /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,Title);
+   ExaRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to exam *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeExa);
+      NextAction = (ExaCod > 0)	? ActSeeExa :	// Exam specified
+				  ActSeeAllExa;	// All exams
+      Frm_BeginForm (NextAction);
          Exa_PutParamExamCod (ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeExa],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeExa);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -116,7 +120,12 @@ void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
 
-   /***** Get exam title *****/
-   Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (ExaCod > 0)
+     {
+      /***** Get exam title *****/
+      Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

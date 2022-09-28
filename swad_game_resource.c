@@ -51,7 +51,7 @@ void GamRsc_GetLinkToGame (void)
       Err_WrongGameExit ();
 
    /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,Title);
+   GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to game into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_GAME,GamCod);
@@ -72,24 +72,27 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Gam_MAX_BYTES_TITLE + 1];
 
    /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,Title);
+   GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to game *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeGam);
+      NextAction = (GamCod > 0)	? ActSeeGam :	// Game specified
+				  ActSeeAllGam;	// All games
+      Frm_BeginForm (NextAction);
          Gam_PutParamGameCod (GamCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeGam],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeGam);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -114,7 +117,12 @@ void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Gam_MAX_BYTES_TITLE + 1];
 
-   /***** Get game title *****/
-   Gam_DB_GetGameTitle (GamCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (GamCod > 0)
+     {
+      /***** Get game title *****/
+      Gam_DB_GetGameTitle (GamCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

@@ -41,33 +41,24 @@ void Cfe_GetLinkToCallForExam (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
    long ExaCod;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
-
-   /***** Reset calls for exams context *****/
-   Cfe_ResetCallsForExams (CallsForExams);
+   char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
    /***** Get the code of the call for exam *****/
    if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
       Err_WrongCallForExamExit ();
 
-   /***** Get data of call for exam *****/
-   Cfe_AllocMemCallForExam (CallsForExams);
-   Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
-
-   /***** Session and date of the exam *****/
-   Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
+   /***** Get session and date of the exam *****/
+   CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to call for exam into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  SessionAndDate);
-
-   /***** Free memory of the call for exam *****/
-   Cfe_FreeMemCallForExam (CallsForExams);
+		  Title);
 
    /***** Set exam to be highlighted *****/
+   Cfe_ResetCallsForExams (CallsForExams);
    CallsForExams->HighlightExaCod = ExaCod;
 
    /***** Show again the list of calls for exams *****/
@@ -82,16 +73,12 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   struct Cfe_CallsForExams CallsForExams;
-   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
+   Act_Action_t NextAction;
+   char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
    char *Anchor = NULL;
 
    /***** Get session and date of the exam *****/
-   Cfe_ResetCallsForExams (&CallsForExams);
-   Cfe_AllocMemCallForExam (&CallsForExams);
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
-   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
-   Cfe_FreeMemCallForExam (&CallsForExams);
+   CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to download file *****/
    if (PutFormToGo)
@@ -100,9 +87,11 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
       Frm_SetAnchorStr (ExaCod,&Anchor);
 
       /* Begin form */
-      Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
+      NextAction = (ExaCod > 0)	? ActSeeOneCfe :	// Call for exam specified
+				  ActSeeAllCfe;		// All calls for exams
+      Frm_BeginFormAnchor (NextAction,Anchor);
          Cfe_PutHiddenParamExaCod (ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneCfe],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
 
@@ -112,12 +101,12 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneCfe);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write Name of the course and date of exam *****/
-   HTM_Txt (SessionAndDate);
+   HTM_Txt (Title);
 
    /***** End form to download file *****/
    if (PutFormToGo)
@@ -139,17 +128,22 @@ void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
    struct Cfe_CallsForExams CallsForExams;
    char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
-   /***** Reset calls for exams context *****/
-   Cfe_ResetCallsForExams (&CallsForExams);
+   if (ExaCod > 0)
+     {
+      /***** Reset calls for exams context *****/
+      Cfe_ResetCallsForExams (&CallsForExams);
 
-   /***** Get data of call for exam *****/
-   Cfe_AllocMemCallForExam (&CallsForExams);
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+      /***** Get data of call for exam *****/
+      Cfe_AllocMemCallForExam (&CallsForExams);
+      Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
 
-   /***** Session and date of the exam *****/
-   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
-   snprintf (Title,TitleSize,"%s: %s",Txt_Call_for_exam,SessionAndDate);
+      /***** Session and date of the exam *****/
+      Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
+      snprintf (Title,TitleSize,"%s: %s",Txt_Call_for_exam,SessionAndDate);
 
-   /***** Free memory of the call for exam *****/
-   Cfe_FreeMemCallForExam (&CallsForExams);
+      /***** Free memory of the call for exam *****/
+      Cfe_FreeMemCallForExam (&CallsForExams);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

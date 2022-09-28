@@ -1316,8 +1316,8 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
-static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod);
-static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod);
+static bool Prj_CheckIfICanViewProjectDocuments (long PrjCod);
+static bool Prj_CheckIfICanViewProjectAssessment (long PrjCod);
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 
@@ -1986,10 +1986,7 @@ void Brw_GetParAndInitFileBrowser (void)
    Brw_SetFullPathInTree ();
 
    /***** Get other parameters *****/
-   if (Brw_GetIfProjectFileBrowser ())
-      /* Get project code */
-      Prj_SetPrjCod (Prj_GetParamPrjCod ());
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */
       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -2204,7 +2201,8 @@ static void Brw_GetDataCurrentGrp (void)
 
 void Brw_PutHiddenParamFilCod (long FilCod)
   {
-   Par_PutHiddenParamLong (NULL,"FilCod",FilCod);
+   if (FilCod > 0)
+      Par_PutHiddenParamLong (NULL,"FilCod",FilCod);
   }
 
 /*****************************************************************************/
@@ -2254,8 +2252,7 @@ void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
       Par_PutHiddenParamString (NULL,"Path",PathInTree);
    if (FilFolLnkName)
       Par_PutHiddenParamString (NULL,Brw_FileTypeParamName[FileType],FilFolLnkName);
-   if (FilCod > 0)
-      Brw_PutHiddenParamFilCod (FilCod);
+   Brw_PutHiddenParamFilCod (FilCod);
   }
 
 /*****************************************************************************/
@@ -2989,55 +2986,25 @@ static void Brw_ShowFileBrowserNormal (void)
 /************* Show file browser with the documents of a project *************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowserProject (void)
+void Brw_ShowFileBrowserProject (long PrjCod)
   {
-   extern const char *Hlp_ASSESSMENT_Projects;
-   struct Prj_Project Prj;
+   Brw_WriteTopBeforeShowingFileBrowser ();
 
-   /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Prj);
+   if (Prj_CheckIfICanViewProjectDocuments (PrjCod))
+     {
+      /***** Show the tree with the project documents *****/
+      Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+      Brw_InitializeFileBrowser ();
+      Brw_ShowFileBrowser ();
+     }
 
-   /***** Get project data *****/
-   Prj.PrjCod = Prj_GetPrjCod ();
-   Prj_GetDataOfProjectByCod (&Prj);
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Prj.Title,
-                 NULL,NULL,
-		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
-
-      /***** Show the project *****/
-      Prj_ShowOneUniqueProject (&Prj);
-
-      /***** Show project file browsers *****/
-      if (Brw_CheckIfICanViewProjectFiles (Prj.PrjCod))
-	{
-	 Brw_WriteTopBeforeShowingFileBrowser ();
-
-	 if (Brw_CheckIfICanViewProjectDocuments (Prj.PrjCod))
-	   {
-	    /***** Show the tree with the project documents *****/
-	    Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
-	    Brw_InitializeFileBrowser ();
-	    Brw_ShowFileBrowser ();
-	   }
-
-	 if (Brw_CheckIfICanViewProjectAssessment (Prj.PrjCod))
-	   {
-	    /***** Show the tree with the project assessment *****/
-	    Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
-	    Brw_InitializeFileBrowser ();
-	    Brw_ShowFileBrowser ();
-	   }
-	}
-      else
-	 Ale_ShowAlert (Ale_WARNING,"You have no access to project files.");
-
-   /***** End box *****/
-   Box_BoxEnd ();
-
-   /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Prj);
+   if (Prj_CheckIfICanViewProjectAssessment (PrjCod))
+     {
+      /***** Show the tree with the project assessment *****/
+      Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
+      Brw_InitializeFileBrowser ();
+      Brw_ShowFileBrowser ();
+     }
   }
 
 /*****************************************************************************/
@@ -3353,7 +3320,7 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Brw_ShowFileBrowsersAsgWrkCrs ();
    else if (Brw_GetIfProjectFileBrowser ())
-      Brw_ShowFileBrowserProject ();
+      Prj_ShowProjectWithFileBrowser ();
    else
       Brw_ShowFileBrowserNormal ();
 
@@ -9605,7 +9572,7 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
 /******************** Can I view files of a given project? *******************/
 /*****************************************************************************/
 
-bool Brw_CheckIfICanViewProjectFiles (long PrjCod)
+bool Prj_CheckIfICanViewProjectFiles (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -9624,7 +9591,7 @@ bool Brw_CheckIfICanViewProjectFiles (long PrjCod)
 /******** Check if I have permission to view project documents zone **********/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod)
+static bool Prj_CheckIfICanViewProjectDocuments (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -9644,7 +9611,7 @@ static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod)
 /******** Check if I have permission to view project assessment zone *********/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod)
+static bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {

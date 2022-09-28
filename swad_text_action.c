@@ -8687,7 +8687,7 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"See projects"	// Çeviri lazim!
 #endif
 	,
-	[ActSeeAllExaAnn] =
+	[ActSeeAllCfe] =
 #if   L==1	// ca
 	"See exam announcements"	// Necessita traducció
 #elif L==2	// de
@@ -9561,27 +9561,50 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	"Edit a project"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeOnePrj] =
+#if   L==1	// ca
+	"Ver projecte"
+#elif L==2	// de
+	"Projekt anzeigen"
+#elif L==3	// en
+	"Show project"
+#elif L==4	// es
+	"Ver proyecto"
+#elif L==5	// fr
+	"Voir projet"
+#elif L==6	// gn
+	"Ver proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Ver progetto"
+#elif L==8	// pl
+	"Poka&zdot; projekt"
+#elif L==9	// pt
+	"Mostrar projeto"
+#elif L==10	// tr
+	"Projeyi g&ouml;ster"
+#endif
+	,
 	[ActPrnOnePrj] =
 #if   L==1	// ca
-	"Show primt view of a project"				// Necessita traducció
+	"Show print view of a project"				// Necessita traducció
 #elif L==2	// de
-	"Show primt view of a project"				// Need Übersetzung
+	"Show print view of a project"				// Need Übersetzung
 #elif L==3	// en
-	"Show primt view of a project"
+	"Show print view of a project"
 #elif L==4	// es
 	"Mostrar vista de impresi&oacute;n de un proyecto"
 #elif L==5	// fr
-	"Show primt view of a project"				// Besoin de traduction
+	"Show print view of a project"				// Besoin de traduction
 #elif L==6	// gn
 	"Mostrar vista de impresi&oacute;n de un proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Show primt view of a project"				// Bisogno di traduzione
+	"Show print view of a project"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Show primt view of a project"				// Potrzebujesz tlumaczenie
+	"Show print view of a project"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show primt view of a project"				// Precisa de tradução
+	"Show print view of a project"				// Precisa de tradução
 #elif L==10	// tr
-	"Show primt view of a project"				// Çeviri lazim!
+	"Show print view of a project"				// Çeviri lazim!
 #endif
 	,
 	[ActNewPrj] =
@@ -10069,25 +10092,25 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActAdmDocPrj] =
 #if   L==1	// ca
-	"Manage the documents of a project"		// Necessita traducció
+	"Administrar zona de documents de projecte"
 #elif L==2	// de
-	"Manage the documents of a project"		// Need Übersetzung
+	"Bereich Projektdokumente verwalten"
 #elif L==3	// en
-	"Manage the documents of a project"
+	"Manage project documents zone"
 #elif L==4	// es
-	"Administrar zona de documentos de un proyecto"
+	"Administrar zona de documentos de proyecto"
 #elif L==5	// fr
-	"Manage the documents of a project"		// Besoin de traduction
+	"G&eacute;rer la zone des documents du projet"
 #elif L==6	// gn
-	"Administrar zona de documentos de un proyecto"	// Okoteve traducción
+	"Administrar zona de documentos de proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Manage the documents of a project"		// Bisogno di traduzione
+	"Gestisci la zona dei documenti di progetto"
 #elif L==8	// pl
-	"Manage the documents of a project"		// Potrzebujesz tlumaczenie
+	"Zarz&oaogon;dzaj stref&aogon; dokument&oacute;w projektu"
 #elif L==9	// pt
-	"Manage the documents of a project"		// Precisa de tradução
+	"Gerenciar zona de documentos do projeto"
 #elif L==10	// tr
-	"Manage the documents of a project"		// Çeviri lazim!
+	"Proje belgeleri b&ouml;lgesini y&ouml;net"
 #endif
 	,
 	[ActReqRemFilDocPrj] =

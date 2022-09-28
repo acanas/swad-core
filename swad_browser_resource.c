@@ -95,6 +95,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    struct Brw_FileMetadata FileMetadata;
 
    /***** Get file metadata *****/
@@ -104,12 +105,14 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
    /***** Begin form to go to file data *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActReqDatSeeDocCrs);
+      NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeDocCrs :	// Document specified
+					       ActSeeAdmDocCrsGrp;	// All documents
+      Frm_BeginForm (NextAction);
 	 Brw_PutParamsFileBrowser (NULL,		// Not used
 				   NULL,		// Not used
 				   Brw_IS_UNKNOWN,	// Not used
 				   FileMetadata.FilCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeDocCrs],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
@@ -124,7 +127,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 	 break;
       case Brw_IS_LINK:
 	 if (PutFormToGo)
-	    Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeDocCrs);
+	    Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
 	 else
 	    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 	 break;
@@ -152,6 +155,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    struct Brw_FileMetadata FileMetadata;
 
    /***** Get file metadata *****/
@@ -161,19 +165,21 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
    /***** Begin form to go to file data *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActReqDatSeeMrkCrs);
+      NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeMrkCrs :	// Marks file specified
+					       ActSeeAdmMrk;		// All marks files
+      Frm_BeginForm (NextAction);
 	 Brw_PutParamsFileBrowser (NULL,		// Not used
 				   NULL,		// Not used
 				   Brw_IS_UNKNOWN,	// Not used
 				   FileMetadata.FilCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActReqDatSeeMrkCrs],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActReqDatSeeMrkCrs);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -197,13 +203,18 @@ void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSiz
   {
    struct Brw_FileMetadata FileMetadata;
 
-   /***** Return nothing on error *****/
-   FileName[0] = '\0';	// Return nothing on error
+   if (FilCod > 0)
+     {
+      /***** Return nothing on error *****/
+      FileName[0] = '\0';	// Return nothing on error
 
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
+      /***** Get file metadata *****/
+      FileMetadata.FilCod = FilCod;
+      Brw_GetFileMetadataByCod (&FileMetadata);
 
-   /***** Copy file name into summary string *****/
-   Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
+      /***** Copy file name into summary string *****/
+      Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
+     }
+   else
+      Str_Copy (FileName,"?",FileNameSize);
   }

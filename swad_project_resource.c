@@ -31,6 +31,7 @@
 #include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
+#include "swad_project_resource.h"
 
 /*****************************************************************************/
 /***************************** Get link to game ******************************/
@@ -38,7 +39,6 @@
 
 void PrjRsc_GetLinkToProject (void)
   {
-   extern const char *Txt_Projects;
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Prj_Projects Projects;
    char Title[Prj_MAX_BYTES_TITLE + 1];
@@ -51,10 +51,7 @@ void PrjRsc_GetLinkToProject (void)
    Projects.PrjCod = Prj_GetParamPrjCod ();
 
    /***** Get project title *****/
-   if (Projects.PrjCod > 0)
-      Prj_DB_GetProjectTitle (Projects.PrjCod,Title);
-   else
-      Str_Copy (Title,Txt_Projects,sizeof (Title) - 1);
+   PrjRsc_GetTitleFromPrjCod (Projects.PrjCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to PROJECT into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_PROJECT,Projects.PrjCod);
@@ -75,24 +72,27 @@ void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
                                       const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Prj_MAX_BYTES_TITLE + 1];
 
    /***** Get project title *****/
-   Prj_DB_GetProjectTitle (PrjCod,Title);
+   PrjRsc_GetTitleFromPrjCod (PrjCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to project *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActPrnOnePrj);
-         Prj_PutParamPrjCod (PrjCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActPrnOnePrj],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
+      NextAction = (PrjCod > 0)	? ActSeeOnePrj :	// Project specified
+				  ActSeePrj;		// All projects
+      Frm_BeginForm (NextAction);
+	 Prj_PutParamPrjCod (PrjCod);
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
+				  "class=\"LM BT_LINK PRG_LNK_%s\"",
+				  The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeePrj);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -115,9 +115,16 @@ void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
 
 void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Projects;
    char TitleFromDB[Prj_MAX_BYTES_TITLE + 1];
 
-   /***** Get project title *****/
-   Prj_DB_GetProjectTitle (PrjCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (PrjCod > 0)
+     {
+      /***** Get project title *****/
+      Prj_DB_GetProjectTitle (PrjCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      /***** Generic title for all projects *****/
+      Str_Copy (Title,Txt_Projects,TitleSize);
   }

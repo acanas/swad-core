@@ -809,7 +809,8 @@ static void Att_PutParamSelectedAttCod (void *Events)
 
 void Att_PutParamAttCod (long AttCod)
   {
-   Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
+   if (AttCod > 0)
+      Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
   }
 
 /*****************************************************************************/

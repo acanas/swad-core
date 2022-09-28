@@ -1541,7 +1541,8 @@ static void Cfe_PutParamExaCodToEdit (void *ExaCod)
 
 void Cfe_PutHiddenParamExaCod (long ExaCod)
   {
-   Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
+   if (ExaCod > 0)
+      Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
   }
 
 /*****************************************************************************/
@@ -1676,7 +1677,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
 /*****************************************************************************/
 
 void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
-                                     char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE])
+                              char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE])
   {
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 

@@ -28,6 +28,7 @@
 #include "swad_alert.h"
 #include "swad_assignment.h"
 #include "swad_assignment_database.h"
+#include "swad_assignment_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_pagination.h"
@@ -56,7 +57,7 @@ void AsgRsc_GetLinkToAssignment (void)
       Err_WrongAssignmentExit ();
 
    /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (Assignments.AsgCod,Title);
+   AsgRsc_GetTitleFromAsgCod (Assignments.AsgCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to assignment into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.AsgCod);
@@ -80,26 +81,29 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
                                          const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
 
    /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (AsgCod,Title);
+   AsgRsc_GetTitleFromAsgCod (AsgCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to assignment *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeOneAsg);
+      NextAction = (AsgCod > 0)	? ActSeeOneAsg :	// Assignment specified
+				  ActSeeAsg;		// All assignments
+      Frm_BeginForm (NextAction);
          Asg_PutParamAsgCod (AsgCod);
 	 // TODO: In the listing of assignments, the page is always the first.
 	 //       The page should be that corresponding to the selected assignment.
-         HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
+         HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAsg);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -124,7 +128,12 @@ void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
 
-   /***** Get assignment title *****/
-   Asg_DB_GetAssignmentTitleByCod (AsgCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (AsgCod > 0)
+     {
+      /***** Get assignment title *****/
+      Asg_DB_GetAssignmentTitleByCod (AsgCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

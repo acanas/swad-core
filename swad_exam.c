@@ -739,7 +739,8 @@ void Exa_PutParams (void *Exams)
 
 void Exa_PutParamExamCod (long ExaCod)
   {
-   Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
+   if (ExaCod > 0)
+      Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
   }
 
 /*****************************************************************************/

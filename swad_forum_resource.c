@@ -28,6 +28,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_forum_database.h"
+#include "swad_forum_resource.h"
 #include "swad_global.h"
 #include "swad_program_database.h"
 
@@ -54,7 +55,7 @@ void ForRsc_GetLinkToThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get thread subject *****/
-   For_DB_GetThreadSubject (Forums.Thread.Current,Subject);
+   ForRsc_GetTitleFromThrCod (Forums.Thread.Current,Subject,sizeof (Subject) - 1);
 
    /***** Copy link to thread into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_FORUM_THREAD,Forums.Thread.Current);
@@ -81,11 +82,12 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
                                      const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    struct For_Forums Forums;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get thread subject *****/
-   For_DB_GetThreadSubject (ThrCod,Subject);
+   ForRsc_GetTitleFromThrCod (ThrCod,Subject,sizeof (Subject) - 1);
 
    /***** Begin form to go to survey *****/
    if (PutFormToGo)
@@ -98,17 +100,18 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
       Forums.Thread.Selected = ThrCod;
       // TODO: In the listing of threads, the page is always the first.
       //       The page should be that corresponding to the selected thread.
-
-      Frm_BeginFormAnchor (ActSeePstForCrsUsr,For_FORUM_POSTS_SECTION_ID);
+      NextAction = (ThrCod > 0)	? ActSeePstForCrsUsr :	// Thread specified
+				  ActSeeForCrsUsr;	// All threads
+      Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 	 For_PutAllHiddenParamsNewPost (&Forums);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeePstForCrsUsr],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeePstForCrsUsr);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -133,8 +136,12 @@ void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
   {
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
-   /***** Get thread subject *****/
-   For_DB_GetThreadSubject (ThrCod,Subject);
-
-   Str_Copy (Title,Subject,TitleSize);
+   if (ThrCod > 0)
+     {
+      /***** Get thread subject *****/
+      For_DB_GetThreadSubject (ThrCod,Subject);
+      Str_Copy (Title,Subject,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

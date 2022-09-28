@@ -31,6 +31,7 @@
 #include "swad_program_database.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"
+#include "swad_survey_resource.h"
 
 /*****************************************************************************/
 /**************************** Get link to survey *****************************/
@@ -51,7 +52,7 @@ void SvyRsc_GetLinkToSurvey (void)
       Err_WrongSurveyExit ();
 
    /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,Title);
+   SvyRsc_GetTitleFromSvyCod (SvyCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to survey into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_SURVEY,SvyCod);
@@ -72,24 +73,27 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
                                      const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 
    /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,Title);
+   SvyRsc_GetTitleFromSvyCod (SvyCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to survey *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeSvy);
+      NextAction = (SvyCod > 0)	? ActSeeSvy :	// Survey specified
+				  ActSeeAllSvy;	// All surveys
+      Frm_BeginForm (NextAction);
          Svy_PutParamSvyCod (SvyCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeSvy],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeSvy);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -114,7 +118,12 @@ void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 
-   /***** Get survey title *****/
-   Svy_DB_GetSurveyTitle (SvyCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (SvyCod > 0)
+     {
+      /***** Get survey title *****/
+      Svy_DB_GetSurveyTitle (SvyCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

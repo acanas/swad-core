@@ -31981,29 +31981,6 @@ const char *Txt_project_documents =
 	"project documents";		// Çeviri lazim!
 #endif
 
-const char *Txt_Project_files =
-#if   L==1	// ca
-	"Fitxers del projecte";
-#elif L==2	// de
-	"Projektdateien";
-#elif L==3	// en
-	"Project files";
-#elif L==4	// es
-	"Archivos del proyecto";
-#elif L==5	// fr
-	"Fichiers du project";
-#elif L==6	// gn
-	"Archivos del proyecto";	// Okoteve traducción
-#elif L==7	// it
-	"File di progetto";
-#elif L==8	// pl
-	"Pliki projektowe";
-#elif L==9	// pt
-	"Arquivos do projeto";
-#elif L==10	// tr
-	"Project files";		// Çeviri lazim!
-#endif
-
 const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
 	{
 	[Prj_ORDER_START_TIME] =

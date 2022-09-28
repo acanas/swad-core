@@ -150,6 +150,8 @@ static long Prj_PrjCod = -1L;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prj_SetPrjCod (long PrjCod);
+
 static void Prj_ReqUsrsToSelect (void *Projects);
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (struct Prj_Projects *Projects);
 static void Prj_ShowPrjsInCurrentPage (void *Projects);
@@ -265,7 +267,7 @@ static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 /******* Set/get project code (used to pass parameter to file browser) *******/
 /*****************************************************************************/
 
-void Prj_SetPrjCod (long PrjCod)
+static void Prj_SetPrjCod (long PrjCod)
   {
    Prj_PrjCod = PrjCod;
   }
@@ -1093,6 +1095,12 @@ static void Prj_PutIconsListProjects (void *Projects)
 	 Ico_PutContextualIconToConfigure (ActCfgPrj,
 	                                   NULL,NULL);
 
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
+					 Prj_PutCurrentParams,Projects);
+
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_PROJECTS);
      }
@@ -1132,6 +1140,41 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
 			          "table.svg",Ico_BLACK);
+  }
+
+/*****************************************************************************/
+/***** Show a project and (if possible) a file browser with its documents ****/
+/*****************************************************************************/
+
+void Prj_ShowProjectWithFileBrowser (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   struct Prj_Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get project data *****/
+   Prj_SetPrjCod (Prj.PrjCod = Prj_GetParamPrjCod ());
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Prj.Title,
+                 NULL,NULL,
+		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
+
+      /***** Show the project *****/
+      Prj_ShowOneUniqueProject (&Prj);
+
+      /***** Show project file browsers *****/
+      if (Prj_CheckIfICanViewProjectFiles (Prj.PrjCod))
+	 Brw_ShowFileBrowserProject (Prj.PrjCod);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
   }
 
 /*****************************************************************************/
@@ -1208,7 +1251,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
                                 struct Prj_Project *Prj,
                                 Prj_ProjectView_t ProjectView)
   {
-   extern const char *Txt_Project_files;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -1221,8 +1264,9 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   Act_Action_t NextAction;
    char *Anchor = NULL;
-   bool ICanViewProjectFiles = Brw_CheckIfICanViewProjectFiles (Prj->PrjCod);
+   bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj->PrjCod);
    const char *ClassLabel;
    const char *ClassDate;
    const char *ClassData;
@@ -1352,21 +1396,18 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	 HTM_ARTICLE_Begin (Anchor);
 	    if (Prj->Title[0])
 	      {
-	       if (ICanViewProjectFiles)
-		 {
-		  Frm_BeginForm (ActAdmDocPrj);
-		     Prj_PutCurrentParams (Projects);
-		     HTM_BUTTON_Submit_Begin (Txt_Project_files,
-		                              "class=\"LT BT_LINK %s_%s\"",
-		                              Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
-					                                  "ASG_TITLE",
-					      The_GetSuffix ());
-			HTM_Txt (Prj->Title);
-		     HTM_BUTTON_End ();
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Prj->Title);
+	       NextAction = ICanViewProjectFiles ? ActAdmDocPrj :
+					           ActSeeOnePrj;
+	       Frm_BeginForm (NextAction);
+		  Prj_PutCurrentParams (Projects);
+		  HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
+					   "class=\"LT BT_LINK %s_%s\"",
+					   Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+								       "ASG_TITLE",
+					   The_GetSuffix ());
+		     HTM_Txt (Prj->Title);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
 	      }
 	    if (Faults.WrongTitle)
 	       Prj_PutWarningIcon ();
@@ -3004,7 +3045,8 @@ void Prj_FreeListProjects (struct Prj_Projects *Projects)
 
 void Prj_PutParamPrjCod (long PrjCod)
   {
-   Par_PutHiddenParamLong (NULL,"PrjCod",PrjCod);
+   if (PrjCod > 0)
+      Par_PutHiddenParamLong (NULL,"PrjCod",PrjCod);
   }
 
 /*****************************************************************************/

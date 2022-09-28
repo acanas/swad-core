@@ -585,7 +585,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActSeeAss		] = {  15, 0,TabAss,ActSeeAss		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Inf_ShowInfo			,"info"			},
    [ActSeeAsg		] = { 801, 1,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"edit"			},
    [ActSeePrj		] = {1674, 2,TabAss,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"file-invoice"		},
-   [ActSeeAllExaAnn	] = {  85, 3,TabAss,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsSee	,"bullhorn"		},
+   [ActSeeAllCfe	] = {  85, 3,TabAss,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsSee	,"bullhorn"		},
    [ActEdiTstQst	] = { 104, 4,TabAss,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Qst_RequestEditQsts		,"tasks"		},
    [ActReqTst		] = { 103, 5,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestTest		,"check"		},
    [ActSeeAllExa	] = {1848, 6,TabAss,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeAllExams		,"file-signature"	},
@@ -627,6 +627,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnlAllPrj	] = {1778,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnloSelectedPrjsEdition	,NULL},
    [ActFrmNewPrj	] = {1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    [ActEdiOnePrj	] = {1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
+   [ActSeeOnePrj	] = {1949,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProjectWithFileBrowser	,NULL},
    [ActPrnOnePrj	] = {1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
    [ActNewPrj		] = {1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
    [ActChgPrj		] = {1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
@@ -690,16 +691,16 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgDatAssPrj	] = {1733,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
    [ActDowAssPrj	] = {1734,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   [ActSeeOneCfe	] = {1572,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsCod	,NULL},
-   [ActSeeDatCfe	] = {1571,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsDay	,NULL},
-   [ActEdiCfe		] = {  91,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_PutFrmEditACallForExam	,NULL},
-   [ActRcvCfe		] = { 110,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_ReceiveCallForExam1	,Cfe_ReceiveCallForExam2	,NULL},
-   [ActPrnCfe		] = { 179,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cfe_PrintCallForExam		,NULL},
-   [ActReqRemCfe	] = {1619,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ReqRemoveCallForExam	,NULL},
-   [ActRemCfe		] = { 187,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_RemoveCallForExam1		,Cfe_RemoveCallForExam2		,NULL},
-   [ActHidCfe		] = {1620,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_HideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
-   [ActUnhCfe		] = {1621,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_UnhideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
-   [ActReqLnkCfe	] = {1934,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_GetLinkToCallForExam	,NULL},
+   [ActSeeOneCfe	] = {1572,-1,TabUnk,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsCod	,NULL},
+   [ActSeeDatCfe	] = {1571,-1,TabUnk,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsDay	,NULL},
+   [ActEdiCfe		] = {  91,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_PutFrmEditACallForExam	,NULL},
+   [ActRcvCfe		] = { 110,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_ReceiveCallForExam1	,Cfe_ReceiveCallForExam2	,NULL},
+   [ActPrnCfe		] = { 179,-1,TabUnk,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cfe_PrintCallForExam		,NULL},
+   [ActReqRemCfe	] = {1619,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ReqRemoveCallForExam	,NULL},
+   [ActRemCfe		] = { 187,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_RemoveCallForExam1		,Cfe_RemoveCallForExam2		,NULL},
+   [ActHidCfe		] = {1620,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_HideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
+   [ActUnhCfe		] = {1621,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_UnhideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
+   [ActReqLnkCfe	] = {1934,-1,TabUnk,ActSeeAllCfe	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_GetLinkToCallForExam	,NULL},
 
    [ActEdiOneTstQst	] = { 105,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ShowFormEditOneQst		,NULL},
    [ActReqImpTstQst	] = {1007,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,QstImp_ShowFormImpQstsFromXML	,NULL},
@@ -1953,7 +1954,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #82 (obsolete action)
 	-1,			// #83 (obsolete action)
 	ActSeeUseGbl,		// #84
-	ActSeeAllExaAnn,	// #85
+	ActSeeAllCfe,	// #85
 	-1,			// #86 (obsolete action)
 	ActRemAllStdCrs,	// #87
 	ActReqRemAllStdCrs,	// #88
@@ -3817,6 +3818,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActExpEdiPrgItm,	// #1946
 	ActConEdiPrgItm,	// #1947
 	ActReqLnkPrj,		// #1948
+	ActSeeOnePrj,		// #1949
   };
 
 /*****************************************************************************/

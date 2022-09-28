@@ -27,6 +27,7 @@
 #include "swad_alert.h"
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
+#include "swad_attendance_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_program_database.h"
@@ -46,7 +47,7 @@ void AttRsc_GetLinkToEvent (void)
       Err_WrongEventExit ();
 
    /***** Get attendance event title *****/
-   Att_DB_GetAttEventTitle (AttCod,Title);
+   AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to attendance event into resource clipboard *****/
    Prg_DB_CopyToClipboard (PrgRsc_ATTENDANCE_EVENT,AttCod);
@@ -67,25 +68,28 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
                                        const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   Act_Action_t NextAction;
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /***** Get game title *****/
-   Att_DB_GetAttEventTitle (AttCod,Title);
+   AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to game *****/
    if (PutFormToGo)
      {
-      Frm_BeginForm (ActSeeOneAtt);
+      NextAction = (AttCod > 0)	? ActSeeOneAtt :	// Attendance events specified
+				  ActSeeAtt;		// All attendance events
+      Frm_BeginForm (NextAction);
 	 Att_PutParamAttCod (AttCod);
 	 Att_PutParamsCodGrps (AttCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAtt],
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
    if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,ActSeeOneAtt);
+      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
@@ -110,7 +114,12 @@ void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
   {
    char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
-   /***** Get attendance event title *****/
-   Att_DB_GetAttEventTitle (AttCod,TitleFromDB);
-   Str_Copy (Title,TitleFromDB,TitleSize);
+   if (AttCod > 0)
+     {
+      /***** Get attendance event title *****/
+      Att_DB_GetAttEventTitle (AttCod,TitleFromDB);
+      Str_Copy (Title,TitleFromDB,TitleSize);
+     }
+   else
+      Str_Copy (Title,"?",TitleSize);
   }

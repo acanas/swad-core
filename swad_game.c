@@ -800,7 +800,8 @@ void Gam_PutParams (void *Games)
 
 void Gam_PutParamGameCod (long GamCod)
   {
-   Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
+   if (GamCod > 0)
+      Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
   }
 
 /*****************************************************************************/
