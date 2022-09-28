@@ -41,7 +41,6 @@ void ExaRsc_GetLinkToExam (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Exa_Exams Exams;
-   long ExaCod;
    char Title[Exa_MAX_BYTES_TITLE + 1];
 
    /***** Reset exams context *****/
@@ -49,15 +48,12 @@ void ExaRsc_GetLinkToExam (void)
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
-      Err_WrongExamExit ();
-   ExaCod = Exams.ExaCod;
 
    /***** Get exam title *****/
-   ExaRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
+   ExaRsc_GetTitleFromExaCod (Exams.ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_EXAM,ExaCod);
+   Prg_DB_CopyToClipboard (PrgRsc_EXAM,Exams.ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
