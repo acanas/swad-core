@@ -150,8 +150,6 @@ static long Prj_PrjCod = -1L;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prj_SetPrjCod (long PrjCod);
-
 static void Prj_ReqUsrsToSelect (void *Projects);
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (struct Prj_Projects *Projects);
 static void Prj_ShowPrjsInCurrentPage (void *Projects);
@@ -182,10 +180,10 @@ static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 
-static void Prj_ShowOneProject (struct Prj_Projects *Projects,
-				unsigned NumIndex,
-                                struct Prj_Project *Prj,
-                                Prj_ProjectView_t ProjectView);
+static void Prj_ShowProject (struct Prj_Projects *Projects,
+			     unsigned NumIndex,
+                             struct Prj_Project *Prj,
+                             Prj_ProjectView_t ProjectView);
 static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
@@ -267,7 +265,7 @@ static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 /******* Set/get project code (used to pass parameter to file browser) *******/
 /*****************************************************************************/
 
-static void Prj_SetPrjCod (long PrjCod)
+void Prj_SetPrjCod (long PrjCod)
   {
    Prj_PrjCod = PrjCod;
   }
@@ -383,7 +381,7 @@ static void Prj_GetSelectedUsrsAndShowTheirPrjs (struct Prj_Projects *Projects)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  Prj_ShowPrjsInCurrentPage,Projects,	// when user(s) selected
-                                  Prj_ReqUsrsToSelect,Projects);		// when no user selected
+                                  Prj_ReqUsrsToSelect,Projects);	// when no user selected
   }
 
 /*****************************************************************************/
@@ -529,7 +527,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		    }
 
 		  /* Show project */
-		  Prj_ShowOneProject ((struct Prj_Projects *) Projects,
+		  Prj_ShowProject ((struct Prj_Projects *) Projects,
 				      NumIndex,&Prj,Prj_LIST_PROJECTS);
 		 }
 
@@ -1143,19 +1141,45 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
   }
 
 /*****************************************************************************/
-/***** Show a project and (if possible) a file browser with its documents ****/
+/************* Show a project followed by the list of projects ***************/
 /*****************************************************************************/
 
-void Prj_ShowProjectWithFileBrowser (void)
+void Prj_ShowOneProject (void)
+  {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetProjects (&Projects);
+
+   /***** Get parameters *****/
+   Prj_GetParams (&Projects);
+   Projects.PrjCod = Prj_GetParamPrjCod ();
+
+   /***** Show project and (if possible) its file browser *****/
+   Prj_ShowOneProjectWithFileBrowser (&Projects);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Projects);
+  }
+
+/*****************************************************************************/
+/*** Show one project and (if possible) a file browser with its documents ****/
+/*****************************************************************************/
+
+void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    struct Prj_Project Prj;
+
+   /***** Trivial check: show project only if code > 0 *****/
+   if (Projects->PrjCod <= 0)
+      return;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
 
    /***** Get project data *****/
-   Prj_SetPrjCod (Prj.PrjCod = Prj_GetParamPrjCod ());
+   Prj.PrjCod = Projects->PrjCod;
    Prj_GetDataOfProjectByCod (&Prj);
 
    /***** Begin box *****/
@@ -1163,8 +1187,17 @@ void Prj_ShowProjectWithFileBrowser (void)
                  NULL,NULL,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-      /***** Show the project *****/
-      Prj_ShowOneUniqueProject (&Prj);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
+
+	 /***** Write project head *****/
+	 Prj_ShowProjectsHead (Projects,Prj_FILE_BROWSER_PROJECT);
+
+	 /***** Show project *****/
+	 Prj_ShowProject (Projects,0,&Prj,Prj_FILE_BROWSER_PROJECT);
+
+      /***** End table *****/
+      HTM_TABLE_End ();
 
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewProjectFiles (Prj.PrjCod))
@@ -1175,30 +1208,6 @@ void Prj_ShowProjectWithFileBrowser (void)
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
-  }
-
-/*****************************************************************************/
-/***************** View / edit file browser of one project *******************/
-/*****************************************************************************/
-
-void Prj_ShowOneUniqueProject (struct Prj_Project *Prj)
-  {
-   struct Prj_Projects Projects;
-
-   /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
-
-      /***** Write project head *****/
-      Prj_ShowProjectsHead (&Projects,Prj_FILE_BROWSER_PROJECT);
-
-      /***** Show project *****/
-      Prj_ShowOneProject (&Projects,0,Prj,Prj_FILE_BROWSER_PROJECT);
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1233,7 +1242,7 @@ void Prj_PrintOneProject (void)
       Prj_ShowProjectsHead (&Projects,Prj_PRINT_ONE_PROJECT);
 
       /***** Write project *****/
-      Prj_ShowOneProject (&Projects,0,&Prj,Prj_PRINT_ONE_PROJECT);
+      Prj_ShowProject (&Projects,0,&Prj,Prj_PRINT_ONE_PROJECT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1246,10 +1255,10 @@ void Prj_PrintOneProject (void)
 /***************************** Show one project ******************************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProject (struct Prj_Projects *Projects,
-				unsigned NumIndex,
-                                struct Prj_Project *Prj,
-                                Prj_ProjectView_t ProjectView)
+static void Prj_ShowProject (struct Prj_Projects *Projects,
+			     unsigned NumIndex,
+                             struct Prj_Project *Prj,
+                             Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Assigned_QUESTION;

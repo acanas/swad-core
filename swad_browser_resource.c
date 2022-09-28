@@ -196,25 +196,48 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
   }
 
 /*****************************************************************************/
-/********************** Get file name from file code *************************/
+/******************** Get document name from file code ***********************/
 /*****************************************************************************/
 
-void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize)
+void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Documents;
    struct Brw_FileMetadata FileMetadata;
 
    if (FilCod > 0)
      {
-      /***** Return nothing on error *****/
-      FileName[0] = '\0';	// Return nothing on error
-
-      /***** Get file metadata *****/
+      /***** Get file name *****/
       FileMetadata.FilCod = FilCod;
-      Brw_GetFileMetadataByCod (&FileMetadata);
+      Brw_GetFileNameByCod (&FileMetadata);
 
-      /***** Copy file name into summary string *****/
-      Str_Copy (FileName,FileMetadata.FilFolLnk.Name,FileNameSize);
+      /***** Copy file name into title *****/
+      Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
      }
    else
-      Str_Copy (FileName,"?",FileNameSize);
+      /***** Generic title for all documents *****/
+      Str_Copy (Title,Txt_Documents,TitleSize);
+  }
+
+
+/*****************************************************************************/
+/******************* Get marks file name from file code **********************/
+/*****************************************************************************/
+
+void BrwRsc_GetMrkTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
+  {
+   extern const char *Txt_Marks_area;
+   struct Brw_FileMetadata FileMetadata;
+
+   if (FilCod > 0)
+     {
+      /***** Get file name *****/
+      FileMetadata.FilCod = FilCod;
+      Brw_GetFileNameByCod (&FileMetadata);
+
+      /***** Copy file name into title *****/
+      Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
+     }
+   else
+      /***** Generic title for marks area *****/
+      Str_Copy (Title,Txt_Marks_area,TitleSize);
   }

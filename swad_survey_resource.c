@@ -116,6 +116,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
 
 void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Surveys;
    char TitleFromDB[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 
    if (SvyCod > 0)
@@ -125,5 +126,6 @@ void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all surveys *****/
+      Str_Copy (Title,Txt_Surveys,TitleSize);
   }

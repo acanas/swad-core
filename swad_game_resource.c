@@ -30,6 +30,7 @@
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_game_database.h"
+#include "swad_game_resource.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -115,6 +116,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
 
 void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Games;
    char TitleFromDB[Gam_MAX_BYTES_TITLE + 1];
 
    if (GamCod > 0)
@@ -124,5 +126,6 @@ void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all games *****/
+      Str_Copy (Title,Txt_Games,TitleSize);
   }

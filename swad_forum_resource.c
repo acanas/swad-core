@@ -134,6 +134,7 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
 
 void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Forum;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    if (ThrCod > 0)
@@ -143,5 +144,5 @@ void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
       Str_Copy (Title,Subject,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      Str_Copy (Title,Txt_Forum,TitleSize);
   }

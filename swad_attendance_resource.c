@@ -112,6 +112,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
 
 void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Control_of_class_attendance;
    char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    if (AttCod > 0)
@@ -121,5 +122,6 @@ void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all attendance events *****/
+      Str_Copy (Title,Txt_Control_of_class_attendance,TitleSize);
   }

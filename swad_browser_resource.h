@@ -38,6 +38,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle);
 void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle);
-void BrwRsc_GetFileNameFromFilCod (long FilCod,char *FileName,size_t FileNameSize);
+void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize);
+void BrwRsc_GetMrkTitleFromFilCod (long FilCod,char *Title,size_t TitleSize);
 
 #endif

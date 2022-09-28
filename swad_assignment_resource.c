@@ -53,8 +53,7 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   if ((Assignments.AsgCod = Asg_GetParamAsgCod ()) <= 0)
-      Err_WrongAssignmentExit ();
+   Assignments.AsgCod = Asg_GetParamAsgCod ();
 
    /***** Get assignment title *****/
    AsgRsc_GetTitleFromAsgCod (Assignments.AsgCod,Title,sizeof (Title) - 1);
@@ -67,7 +66,8 @@ void AsgRsc_GetLinkToAssignment (void)
    		  Title);
 
    /***** Show selected assignment in a box *****/
-   Asg_ShowOneAssignmentInBox (&Assignments);
+   if (Assignments.AsgCod > 0)
+      Asg_ShowOneAssignmentInBox (&Assignments);
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -126,6 +126,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
 
 void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Assignments;
    char TitleFromDB[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
 
    if (AsgCod > 0)
@@ -135,5 +136,6 @@ void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all assignments *****/
+      Str_Copy (Title,Txt_Assignments,TitleSize);
   }

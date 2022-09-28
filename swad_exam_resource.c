@@ -118,6 +118,7 @@ void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
 
 void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
+   extern const char *Txt_Exams;
    char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
 
    if (ExaCod > 0)
@@ -127,5 +128,6 @@ void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all exams *****/
+      Str_Copy (Title,Txt_Exams,TitleSize);
   }

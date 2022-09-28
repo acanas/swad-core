@@ -1022,7 +1022,7 @@ static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
   }
 
 /*****************************************************************************/
-/* Get the title for a new resource from link title */
+/************* Get the title for a new resource from link title **************/
 /*****************************************************************************/
 
 static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
@@ -1036,8 +1036,8 @@ static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
       [PrgRsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
       [PrgRsc_GAME            ] = GamRsc_GetTitleFromGamCod,
       [PrgRsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
-      [PrgRsc_DOCUMENT        ] = BrwRsc_GetFileNameFromFilCod,
-      [PrgRsc_MARKS           ] = BrwRsc_GetFileNameFromFilCod,
+      [PrgRsc_DOCUMENT        ] = BrwRsc_GetDocTitleFromFilCod,
+      [PrgRsc_MARKS           ] = BrwRsc_GetMrkTitleFromFilCod,
       [PrgRsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
       [PrgRsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
      };

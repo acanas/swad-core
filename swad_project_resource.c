@@ -43,7 +43,7 @@ void PrjRsc_GetLinkToProject (void)
    struct Prj_Projects Projects;
    char Title[Prj_MAX_BYTES_TITLE + 1];
 
-   /***** Reset projects context *****/
+   /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
@@ -59,6 +59,9 @@ void PrjRsc_GetLinkToProject (void)
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Title);
+
+   /***** Show project and (if possible) its file browser *****/
+   Prj_ShowOneProjectWithFileBrowser (&Projects);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);

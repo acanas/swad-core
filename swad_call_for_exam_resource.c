@@ -125,6 +125,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
 void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Call_for_exam;
+   extern const char *Txt_Calls_for_exams;
    struct Cfe_CallsForExams CallsForExams;
    char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
@@ -145,5 +146,6 @@ void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
       Cfe_FreeMemCallForExam (&CallsForExams);
      }
    else
-      Str_Copy (Title,"?",TitleSize);
+      /***** Generic title for all calls for exams *****/
+      Str_Copy (Title,Txt_Calls_for_exams,TitleSize);
   }

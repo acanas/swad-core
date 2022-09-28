@@ -4135,7 +4135,7 @@ const char *Txt_Calls_for_exams =
 #elif L==9	// pt
 	"Chamadas para exames";
 #elif L==10	// tr
-	"Calls for exams";			// Çeviri lazim!
+	"S&inodot;nav &ccedil;a&gbreve;r&inodot;lar&inodot;";
 #endif
 
 const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
@@ -11099,7 +11099,7 @@ const char *Txt_Document =
 #elif L==5	// fr
 	"Document";
 #elif L==6	// gn
-	"Documento";	// Okoteve traducción
+	"Terakuatia";
 #elif L==7	// it
 	"Documento";
 #elif L==8	// pl
@@ -11149,7 +11149,7 @@ const char *Txt_Documents =
 #elif L==7	// it
 	"Documenti";
 #elif L==8	// pl
-	"Documents";	// Potrzebujesz tlumaczenie
+	"Dokumenty";
 #elif L==9	// pt
 	"Documentos";
 #elif L==10	// tr
@@ -12877,7 +12877,7 @@ const char *Txt_Exam =
 #elif L==5	// fr
 	"Examen";
 #elif L==6	// gn
-	"Kuaara'&atilde;";
+	"Aranduchauka";
 #elif L==7	// it
 	"Esame";
 #elif L==8	// pl
@@ -13041,7 +13041,7 @@ const char *Txt_EXAM_Open =
 #elif L==5	// fr
 	"Ouvert";
 #elif L==6	// gn
-	"Abierto";	// Okoteve traducción
+	"Ojei";
 #elif L==7	// it
 	"Aperto";
 #elif L==8	// pl
@@ -13158,7 +13158,7 @@ const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS] =
 #elif L==5	// fr
 	"Examen"
 #elif L==6	// gn
-	"Kuaara'&atilde;"
+	"Aranduchauka"
 #elif L==7	// it
 	"Esame"
 #elif L==8	// pl
@@ -24133,7 +24133,7 @@ const char *Txt_MSG_Open =
 #elif L==5	// fr
 	"Ouvert";
 #elif L==6	// gn
-	"Abierto";	// Okoteve traducción
+	"Ojei";
 #elif L==7	// it
 	"Aperto";
 #elif L==8	// pl
@@ -25053,7 +25053,7 @@ const char *Txt_New_institution =
 #elif L==5	// fr
 	"Nouvel &eacute;tablissement (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...)";
 #elif L==6	// gn
-	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...)";	// Okoteve traducción
+	"Nueva instituci&oacute;n (universidad, instituto, mbo'ehao, academia, organizaci&oacute;n, empresa...)";	// Okoteve traducción
 #elif L==7	// it
 	"Nuova istituzione (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...)";
 #elif L==8	// pl
@@ -25720,7 +25720,7 @@ const char *Txt_Nickname =
 #elif L==5	// fr
 	"Surnom";
 #elif L==6	// gn
-	"Apodo";	// Okoteve traducción
+	"Hero";
 #elif L==7	// it
 	"Nome-utente";
 #elif L==8	// pl
@@ -28035,7 +28035,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==5	// fr
 	"Fichier de document"
 #elif L==6	// gn
-	"Documento"	// Okoteve traducción
+	"Terakuatia"
 #elif L==7	// it
 	"Documento"
 #elif L==8	// pl
@@ -35778,7 +35778,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 #elif L==5	// fr
 	"Examen"
 #elif L==6	// gn
-	"Kuaara'&atilde;"
+	"Aranduchauka"
 #elif L==7	// it
 	"Esame"
 #elif L==8	// pl
@@ -35847,7 +35847,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 #elif L==5	// fr
 	"Document"
 #elif L==6	// gn
-	"Documento"	// Okoteve traducción
+	"Terakuatia"
 #elif L==7	// it
 	"Documento"
 #elif L==8	// pl
@@ -44749,7 +44749,7 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 #elif L==5	// fr
 	"couleur"
 #elif L==6	// gn
-	"color"	// Okoteve traducción
+	"sa'y"
 #elif L==7	// it
 	"colore"
 #elif L==8	// pl

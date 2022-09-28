@@ -172,6 +172,7 @@ struct Prj_Project
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Prj_SetPrjCod (long PrjCod);
 long Prj_GetPrjCod (void);
 
 void Prj_ResetProjects (struct Prj_Projects *Projects);
@@ -187,8 +188,8 @@ void Prj_PutParams (struct Prj_Filter *Filter,
                     long PrjCod);
 void Prj_GetParams (struct Prj_Projects *Projects);
 
-void Prj_ShowProjectWithFileBrowser (void);
-void Prj_ShowOneUniqueProject (struct Prj_Project *Prj);
+void Prj_ShowOneProject (void);
+void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects);
 
 void Prj_PrintOneProject (void);
 

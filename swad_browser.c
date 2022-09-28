@@ -1986,7 +1986,10 @@ void Brw_GetParAndInitFileBrowser (void)
    Brw_SetFullPathInTree ();
 
    /***** Get other parameters *****/
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   if (Brw_GetIfProjectFileBrowser ())
+      /* Get project code */
+      Prj_SetPrjCod (Prj_GetParamPrjCod ());
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */
       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -3320,7 +3323,7 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Brw_ShowFileBrowsersAsgWrkCrs ();
    else if (Brw_GetIfProjectFileBrowser ())
-      Prj_ShowProjectWithFileBrowser ();
+      Prj_ShowOneProject ();
    else
       Brw_ShowFileBrowserNormal ();
 

@@ -284,8 +284,19 @@ static void Asg_PutIconsListAssignments (void *Assignments)
   {
    /***** Put icon to create a new assignment *****/
    if (Assignments)
+     {
       if (Asg_CheckIfICanCreateAssignments ())
 	 Asg_PutIconToCreateNewAsg (Assignments);
+
+      /***** Link to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+	{
+         ((struct Asg_Assignments *) Assignments)->AsgCod = -1L;
+	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
+					 Asg_PutParams,Assignments);
+	}
+     }
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_ASSIGNMENTS);
