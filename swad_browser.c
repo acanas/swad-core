@@ -1812,6 +1812,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Documents in project *****/
+      case ActSeeOnePrj:
       case ActAdmDocPrj:
       case ActReqRemFilDocPrj:
       case ActRemFilDocPrj:

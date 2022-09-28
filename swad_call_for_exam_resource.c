@@ -44,8 +44,7 @@ void Cfe_GetLinkToCallForExam (void)
    char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Cfe_GetParamExaCod ();
 
    /***** Get session and date of the exam *****/
    CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);

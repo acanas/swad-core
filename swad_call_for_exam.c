@@ -71,7 +71,7 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
 
 static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
                                    Cfe_TypeViewCallForExam_t TypeViewCallForExam);
-static void Cfe_PutIconToCreateNewCallForExam (__attribute__((unused)) void *Args);
+static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args);
 static void Cfe_PutButtonToCreateNewCallForExam (void);
 
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
@@ -628,7 +628,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    /***** Begin box *****/
    if (ICanEdit)
       Box_BoxBegin (NULL,Txt_Calls_for_exams,
-		    Cfe_PutIconToCreateNewCallForExam,NULL,
+		    Cfe_PutIconsCallsForExams,NULL,
 		    Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Calls_for_exams,
@@ -683,12 +683,19 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
   }
 
 /*****************************************************************************/
-/******************* Put icon to create a new call for exam ******************/
+/*********************** Put icons in calls for exams ************************/
 /*****************************************************************************/
 
-static void Cfe_PutIconToCreateNewCallForExam (__attribute__((unused)) void *Args)
+static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
   {
+   /***** Put icon to create a new call for exam *****/
    Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
+
+   /***** Link to get resource link *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
+				      NULL,NULL);
   }
 
 /*****************************************************************************/
