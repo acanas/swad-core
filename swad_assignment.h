@@ -46,17 +46,6 @@ typedef enum
    Asg_SEND_WORK        = 1,
   } Asg_SendWork_t;
 
-struct Asg_Assignments
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Number of assignments
-   long *LstAsgCods;		// List of assigment codes
-   Dat_StartEndTime_t SelectedOrder;
-   long AsgCod;			// Used as parameter in contextual links
-   unsigned CurrentPage;
-  };
-
 struct Asg_Assignment
   {
    long AsgCod;
@@ -71,6 +60,17 @@ struct Asg_Assignment
 				// (it is associated to no groups
 				// or, if associated to groups,
 				// I belong to any of the groups)
+  };
+
+struct Asg_Assignments
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Number of assignments
+   long *LstAsgCods;		// List of assigment codes
+   Dat_StartEndTime_t SelectedOrder;
+   unsigned CurrentPage;
+   struct Asg_Assignment Asg;	// Selected/current assignment
   };
 
 #define Asg_ORDER_DEFAULT Dat_STR_TIME

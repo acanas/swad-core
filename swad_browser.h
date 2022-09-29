@@ -195,7 +195,8 @@ void Brw_PutHiddenParamFilCod (long FilCod);
 long Brw_GetParamFilCod (void);
 void Brw_InitializeFileBrowser (void);
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
-bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,const char *NewFolderName);
+bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
+                                                   const char *NewFolderName);
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
 
 void Brw_GetSelectedUsrsAndShowWorks (void);

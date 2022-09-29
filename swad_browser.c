@@ -2649,7 +2649,8 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
-bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,const char *NewFolderName)
+bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
+                                                   const char *NewFolderName)
   {
    extern const char *Txt_Can_not_rename_a_folder_of_assignment;
    extern const char *Txt_Users;

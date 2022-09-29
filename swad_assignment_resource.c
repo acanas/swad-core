@@ -53,20 +53,20 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.AsgCod = Asg_GetParamAsgCod ();
+   Assignments.Asg.AsgCod = Asg_GetParamAsgCod ();
 
    /***** Get assignment title *****/
-   AsgRsc_GetTitleFromAsgCod (Assignments.AsgCod,Title,sizeof (Title) - 1);
+   AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to assignment into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.AsgCod);
+   Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.Asg.AsgCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Title);
 
    /***** Show selected assignment in a box *****/
-   if (Assignments.AsgCod > 0)
+   if (Assignments.Asg.AsgCod > 0)
       Asg_ShowOneAssignmentInBox (&Assignments);
 
    /***** Show current assignments, if any *****/
