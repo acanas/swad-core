@@ -8575,7 +8575,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	 /* Begin link */
 	 HTM_BUTTON_Submit_Begin (Txt_Check_marks_in_the_file,
-	                          "class=\"FILENAME_BIG_%s\"",The_GetSuffix ());
+	                          "class=\"BT_LINK ICO_HIGHLIGHT FILENAME_BIG_%s\"",
+	                          The_GetSuffix ());
 
 	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
@@ -8586,7 +8587,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	    /* Name of the file of marks, link end and form end */
 	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-	    Ico_PutIcon ("grades32x32.gif",Ico_UNCHANGED,Txt_Check_marks_in_the_file,"ICO40x40");
+	    Ico_PutIcon ("list-alt.svg",Ico_UNCHANGED,Txt_Check_marks_in_the_file,"ICO40x40");
 
 	 /* End link */
 	 HTM_BUTTON_End ();
