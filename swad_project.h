@@ -132,22 +132,6 @@ typedef enum
    Prj_ROLE_EVL	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
-/***** Struct to store context/status of projects *****/
-struct Prj_Projects
-  {
-   struct
-     {
-      bool Editable;
-     } Config;
-   struct Prj_Filter Filter;
-   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
-   unsigned Num;		// Number of projects
-   long *LstPrjCods;		// List of project codes
-   Prj_Order_t SelectedOrder;
-   unsigned CurrentPage;
-   long PrjCod;		// Current project
-  };
-
 /***** Struct to store a project *****/
 struct Prj_Project
   {
@@ -166,6 +150,22 @@ struct Prj_Project
    char *Knowledge;
    char *Materials;
    char URL[Cns_MAX_BYTES_WWW + 1];
+  };
+
+/***** Struct to store context/status of projects *****/
+struct Prj_Projects
+  {
+   struct
+     {
+      bool Editable;
+     } Config;
+   struct Prj_Filter Filter;
+   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   unsigned Num;		// Number of projects
+   long *LstPrjCods;		// List of project codes
+   Prj_Order_t SelectedOrder;
+   unsigned CurrentPage;
+   struct Prj_Project Prj;	// Selected/current project
   };
 
 /*****************************************************************************/

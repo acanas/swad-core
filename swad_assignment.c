@@ -468,7 +468,7 @@ static void Asg_PutIconsOneAsg (void *Assignments)
       /***** Set anchor string *****/
       Frm_SetAnchorStr (((struct Asg_Assignments *) Assignments)->Asg.AsgCod,&Anchor);
 
-      /***** Forms to remove/edit this assignment *****/
+      /***** Icons to remove/edit this assignment *****/
       Asg_PutIconsToRemEditOneAsg (Assignments,Anchor);
 
       /***** Free anchor string *****/

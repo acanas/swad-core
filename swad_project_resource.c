@@ -48,13 +48,13 @@ void PrjRsc_GetLinkToProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   Projects.PrjCod = Prj_GetParamPrjCod ();
+   Projects.Prj.PrjCod = Prj_GetParamPrjCod ();
 
    /***** Get project title *****/
-   PrjRsc_GetTitleFromPrjCod (Projects.PrjCod,Title,sizeof (Title) - 1);
+   PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to PROJECT into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_PROJECT,Projects.PrjCod);
+   Prg_DB_CopyToClipboard (PrgRsc_PROJECT,Projects.Prj.PrjCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

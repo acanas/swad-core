@@ -3245,6 +3245,10 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /******************************** Projects ***********************************/
+.PRJ_LOCK
+	{
+	display:inline-block;
+	}
 .PRJ_LST_USR
 	{
 	margin:0;
