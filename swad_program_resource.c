@@ -65,7 +65,7 @@ const char *Prg_ResourceTypesIcons[PrgRsc_NUM_TYPES] =
    [PrgRsc_EXAM            ] = "file-signature.svg",
    [PrgRsc_GAME            ] = "gamepad.svg",
    [PrgRsc_SURVEY          ] = "poll.svg",
-   [PrgRsc_DOCUMENT        ] = "up-right-from-square.svg",	// for links because each file type has its own icon
+   [PrgRsc_DOCUMENT        ] = "folder-open.svg",
    [PrgRsc_MARKS           ] = "list-alt.svg",
    // grp GROUPS		// ??? User select groups
    [PrgRsc_ATTENDANCE_EVENT] = "calendar-check.svg",

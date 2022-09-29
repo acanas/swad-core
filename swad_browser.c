@@ -3575,6 +3575,13 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
 	 break;
      }
 
+   /***** Put icon to get resource link *****/
+   if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
+       (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
+      Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
+				      NULL,NULL);
+
    /***** Put icon to show a figure *****/
    switch (Gbl.FileBrowser.Type)
      {
@@ -7855,7 +7862,6 @@ void Brw_ShowFileMetadata (void)
    bool ICanEdit;
    bool ICanChangePublic = false;
    bool FileHasPublisher;
-   bool PutIconToGetLink;
    Brw_License_t License;
    unsigned LicenseUnsigned;
 
@@ -7943,15 +7949,12 @@ void Brw_ShowFileMetadata (void)
 	                        FileNameToShow);
 
          /***** Begin box *****/
-	 PutIconToGetLink = (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||	// Only document zone
-		             Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS ||
-		             Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-		             Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS) &&
-		            (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
-	                     FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
-			    (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-			     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);		// or a superuser
-	 if (PutIconToGetLink)
+	 // Put icon to get link?
+	 if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
+	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
+	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
+	     (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))		// or a superuser
 	    Box_BoxShadowBegin (NULL,NULL,
 				Brw_PutIconToGetLinkToFile,&FileMetadata,
 				NULL);

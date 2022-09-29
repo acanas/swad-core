@@ -26,6 +26,7 @@
 
 #include "swad_action.h"
 #include "swad_browser.h"
+#include "swad_browser_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -46,42 +47,41 @@ extern struct Globals Gbl;
 void BrwRsc_GetLinkToFile (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Brw_FileMetadata FileMetadata;
-   bool Found;
+   long FilCod;
+   char Title[NAME_MAX + 1];	// File or link name
    PrgRsc_Type_t Type;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Get file name *****/
-   FileMetadata.FilCod = Brw_GetParamFilCod ();
-   Brw_GetFileNameByCod (&FileMetadata);
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   /***** Get file code *****/
+   FilCod = Brw_GetParamFilCod ();
 
-   if (Found)
+   /***** Get file title *****/
+   switch (Gbl.Action.Act)
      {
-      /***** Copy link to file into resource clipboard *****/
-      switch (Gbl.Action.Act)
-        {
-	 case ActReqLnkSeeDocCrs:
-	 case ActReqLnkAdmDocCrs:
-	    Type = PrgRsc_DOCUMENT;
-	    break;
-	 case ActReqLnkSeeMrkCrs:
-	 case ActReqLnkAdmMrkCrs:
-	    Type = PrgRsc_MARKS;
-	    break;
-	 default:
-	    Type = PrgRsc_NONE;	// Initialized to avoid warning
-            Err_WrongTypeExit ();
-            break;
-        }
-      Prg_DB_CopyToClipboard (Type,FileMetadata.FilCod);
-
-      /***** Write sucess message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		     FileMetadata.FilFolLnk.Name);
+      case ActReqLnkSeeDocCrs:
+      case ActReqLnkAdmDocCrs:
+	 Type = PrgRsc_DOCUMENT;
+         BrwRsc_GetDocTitleFromFilCod (FilCod,Title,sizeof (Title) - 1);
+	 break;
+      case ActReqLnkSeeMrkCrs:
+      case ActReqLnkAdmMrkCrs:
+	 Type = PrgRsc_MARKS;
+         BrwRsc_GetMrkTitleFromFilCod (FilCod,Title,sizeof (Title) - 1);
+	 break;
+      default:
+	 Type = PrgRsc_NONE;	// Initialized to avoid warning
+	 Err_WrongTypeExit ();
+	 break;
      }
+
+   /***** Copy link to file into resource clipboard *****/
+   Prg_DB_CopyToClipboard (Type,FilCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		  Title);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -94,13 +94,25 @@ void BrwRsc_GetLinkToFile (void)
 void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
+   extern const char *Txt_Documents;
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    Act_Action_t NextAction;
    struct Brw_FileMetadata FileMetadata;
+   char Title[NAME_MAX + 1];	// File or link name
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
+      // If file doesn't exist ==> file code is changed to -1
+
+   /***** Set title *****/
+   if (FileMetadata.FilCod > 0)
+      /***** Copy file name into title *****/
+      Str_Copy (Title,FileMetadata.FilFolLnk.Name,sizeof (Title) - 1);
+   else
+      /***** Generic title for all documents *****/
+      Str_Copy (Title,Txt_Documents,sizeof (Title) - 1);
 
    /***** Begin form to go to file data *****/
    if (PutFormToGo)
@@ -108,35 +120,44 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
       NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeDocCrs :	// Document specified
 					       ActSeeAdmDocCrsGrp;	// All documents
       Frm_BeginForm (NextAction);
-	 Brw_PutParamsFileBrowser (NULL,		// Not used
-				   NULL,		// Not used
-				   Brw_IS_UNKNOWN,	// Not used
-				   FileMetadata.FilCod);
+         if (FileMetadata.FilCod > 0)
+	    Brw_PutParamsFileBrowser (NULL,		// Not used
+				      NULL,		// Not used
+				      Brw_IS_UNKNOWN,	// Not used
+				      FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
      }
 
    /***** Icon depending on type ******/
-   switch (FileMetadata.FilFolLnk.Type)
+   if (FileMetadata.FilCod > 0)
+      switch (FileMetadata.FilFolLnk.Type)
+	{
+	 case Brw_IS_FILE:
+	    Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
+			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
+			     PutFormToGo);	// Put link to view metadata
+	    break;
+	 case Brw_IS_LINK:
+	    if (PutFormToGo)
+	       Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,NextAction);
+	    else
+	       Ico_PutIconOn ("up-right-from-square.svg",Ico_BLACK,IconTitle);
+	    break;
+	 default:
+	    break;
+	}
+   else	// Documents zone
      {
-      case Brw_IS_FILE:
-	 Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
-			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
-			  PutFormToGo);	// Put link to view metadata
-	 break;
-      case Brw_IS_LINK:
-	 if (PutFormToGo)
-	    Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 else
-	    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      default:
-	 break;
+      if (PutFormToGo)
+	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+      else
+	 Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
      }
 
-   /***** Write filename *****/
-   HTM_Txt (FileMetadata.FilFolLnk.Name);
+   /***** Write title *****/
+   HTM_Txt (Title);
 
    /***** End form to download file *****/
    if (PutFormToGo)
@@ -154,13 +175,25 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
+   extern const char *Txt_Marks_area;
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    Act_Action_t NextAction;
    struct Brw_FileMetadata FileMetadata;
+   char Title[NAME_MAX + 1];	// File or link name
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = FilCod;
-   Brw_GetFileMetadataByCod (&FileMetadata);
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
+      // If file doesn't exist ==> file code is changed to -1
+
+   /***** Set title *****/
+   if (FileMetadata.FilCod > 0)
+      /***** Copy file name into title *****/
+      Str_Copy (Title,FileMetadata.FilFolLnk.Name,sizeof (Title) - 1);
+   else
+      /***** Generic title for all documents *****/
+      Str_Copy (Title,Txt_Marks_area,sizeof (Title) - 1);
 
    /***** Begin form to go to file data *****/
    if (PutFormToGo)
@@ -168,10 +201,11 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
       NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeMrkCrs :	// Marks file specified
 					       ActSeeAdmMrk;		// All marks files
       Frm_BeginForm (NextAction);
-	 Brw_PutParamsFileBrowser (NULL,		// Not used
-				   NULL,		// Not used
-				   Brw_IS_UNKNOWN,	// Not used
-				   FileMetadata.FilCod);
+         if (FileMetadata.FilCod > 0)
+	    Brw_PutParamsFileBrowser (NULL,		// Not used
+				      NULL,		// Not used
+				      Brw_IS_UNKNOWN,	// Not used
+				      FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
@@ -184,7 +218,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
    /***** Write filename *****/
-   HTM_Txt (FileMetadata.FilFolLnk.Name);
+   HTM_Txt (Title);
 
    /***** End form to download file *****/
    if (PutFormToGo)
@@ -217,7 +251,6 @@ void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
       /***** Generic title for all documents *****/
       Str_Copy (Title,Txt_Documents,TitleSize);
   }
-
 
 /*****************************************************************************/
 /******************* Get marks file name from file code **********************/
