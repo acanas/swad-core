@@ -328,8 +328,7 @@ static void Svy_PutIconsListSurveys (void *Surveys)
       Svy_PutIconToCreateNewSvy ((struct Svy_Surveys *) Surveys);
 
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
 				      Svy_PutParams,Surveys);
 
@@ -731,8 +730,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 static void Svy_PutIconsOneSvy (void *Surveys)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
 				      Svy_PutParams,Surveys);
   }

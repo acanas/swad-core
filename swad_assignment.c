@@ -49,6 +49,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_program_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -289,8 +290,7 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	{
          ((struct Asg_Assignments *) Assignments)->AsgCod = -1L;
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
@@ -450,8 +450,7 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
 static void Asg_PutIconsOneAsg (void *Assignments)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
 				      Asg_PutParams,Assignments);
   }

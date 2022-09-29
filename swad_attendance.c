@@ -369,8 +369,7 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
 					 Att_PutParams,Events);
      }
@@ -1520,8 +1519,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
 static void Att_PutIconsOneAtt (void *Events)
   {
    /***** Put icon to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
                                       Att_PutParams,Events);
   }

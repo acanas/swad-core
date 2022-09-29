@@ -1147,3 +1147,18 @@ PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str)
 
    return PrgRsc_NONE;
   }
+
+/*****************************************************************************/
+/************************** Check if I can get link **************************/
+/*****************************************************************************/
+
+bool PrgRsc_CheckIfICanGetLink (void)
+  {
+   static const bool ICanGetLink[Rol_NUM_ROLES] =
+     {
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanGetLink[Gbl.Usrs.Me.Role.Logged];
+  }

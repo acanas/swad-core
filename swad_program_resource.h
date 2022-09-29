@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_program.h"
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
@@ -56,5 +62,7 @@ void PrgRsc_ShowClipboardToChgLink (void);
 void PrgRsc_ChangeLink (void);
 
 PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str);
+
+bool PrgRsc_CheckIfICanGetLink (void);
 
 #endif

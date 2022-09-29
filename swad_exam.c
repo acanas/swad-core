@@ -355,8 +355,7 @@ static void Exa_PutIconsListExams (void *Exams)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
 					 Exa_PutParams,Exams);
 
@@ -664,8 +663,7 @@ static void Exa_PutIconToShowResultsOfExam (void *Exams)
 					     Exa_PutParams,Exams);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
 					 Exa_PutParams,Exams);
      }

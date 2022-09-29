@@ -692,8 +692,7 @@ static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
 
    /***** Link to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 				      NULL,NULL);
   }
@@ -1528,8 +1527,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 					 Cfe_PutParamExaCodToEdit,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);

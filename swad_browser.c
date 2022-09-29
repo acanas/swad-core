@@ -3577,8 +3577,7 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
 
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
-       (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
+       PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
 				      NULL,NULL);
 
@@ -7953,8 +7952,7 @@ void Brw_ShowFileMetadata (void)
 	 if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
 	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
-	     (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))		// or a superuser
+	     PrgRsc_CheckIfICanGetLink ())
 	    Box_BoxShadowBegin (NULL,NULL,
 				Brw_PutIconToGetLinkToFile,&FileMetadata,
 				NULL);

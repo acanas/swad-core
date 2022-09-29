@@ -831,8 +831,7 @@ static void For_PutIconsOneThread (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
+          PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutAllHiddenParamsNewPost,Forums);
      }
@@ -2133,8 +2132,7 @@ static void For_PutIconsThreads (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
+          PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutAllHiddenParamsNewPost,Forums);
      }

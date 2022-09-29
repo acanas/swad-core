@@ -394,8 +394,7 @@ static void Gam_PutIconsListGames (void *Games)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
 					 Gam_PutParams,Games);
 
@@ -715,8 +714,7 @@ static void Gam_PutIconsOneGame (void *Games)
 					     Gam_PutParams,Games);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
 					 Gam_PutParams,Games);
      }

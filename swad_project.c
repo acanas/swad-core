@@ -48,6 +48,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_program_resource.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_role.h"
@@ -1094,8 +1095,7 @@ static void Prj_PutIconsListProjects (void *Projects)
 	                                   NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+      if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 					 Prj_PutCurrentParams,Projects);
 
@@ -2805,8 +2805,7 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
       Prj_PutIconOffLockedUnlocked (Prj);
 
    /***** Link to get resource link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
-       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+   if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 				      Prj_PutCurrentParams,Projects);
   }
