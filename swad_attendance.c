@@ -367,6 +367,12 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
 			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+
+      /***** Put icon to get resource link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// Only if I am a teacher
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// or a superuser
+	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
+					 Att_PutParams,Events);
      }
   }
 
