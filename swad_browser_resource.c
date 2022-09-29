@@ -232,6 +232,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 /*****************************************************************************/
 /******************** Get document name from file code ***********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
   {
@@ -255,6 +256,7 @@ void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
 /*****************************************************************************/
 /******************* Get marks file name from file code **********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void BrwRsc_GetMrkTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
   {

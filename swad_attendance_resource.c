@@ -108,6 +108,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
 /*****************************************************************************/
 /*************** Get attendance event title from game code *******************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
   {

@@ -363,7 +363,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 
 static void For_WriteNumberOfThrs (unsigned NumThrs);
 
-static void For_PutIconNewThread (void *Forums);
+static void For_PutIconsThreads (void *Forums);
 static void For_PutAllHiddenParamsNewThread (void *Forums);
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
@@ -2043,7 +2043,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
       /***** Begin box for threads of this forum *****/
       snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",Txt_Forum,ForumName);
       Box_BoxBegin (NULL,FrameTitle,
-		    For_PutIconNewThread,Forums,
+		    For_PutIconsThreads,Forums,
 		    Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
 
 	 /***** List the threads *****/
@@ -2119,15 +2119,25 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
   }
 
 /*****************************************************************************/
-/********************** Put icon to write a new thread ***********************/
+/***************** Put icons in list of threads of a forum *******************/
 /*****************************************************************************/
 
-static void For_PutIconNewThread (void *Forums)
+static void For_PutIconsThreads (void *Forums)
   {
    if (Forums)
+     {
+      /***** Put icon to write a new thread *****/
       Ico_PutContextualIconToAdd (For_ActionsSeeFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_THREAD_SECTION_ID,
 				  For_PutAllHiddenParamsNewThread,Forums);
+
+      /***** Put icon to get resource link *****/
+      if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
+          (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||	// Only if I am a teacher
+	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))	// or a superuser
+	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
+					 For_PutAllHiddenParamsNewPost,Forums);
+     }
   }
 
 static void For_PutAllHiddenParamsNewThread (void *Forums)

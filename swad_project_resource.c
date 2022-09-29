@@ -115,6 +115,7 @@ void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
 /*****************************************************************************/
 /******************* Get project title from project code *********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize)
   {

@@ -111,6 +111,7 @@ void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
 /*****************************************************************************/
 /*********************** Get exam title from exam code ***********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {

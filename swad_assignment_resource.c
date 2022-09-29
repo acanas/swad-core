@@ -123,6 +123,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
 /*****************************************************************************/
 /**************** Get assignment title from assignment code ******************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
   {

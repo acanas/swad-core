@@ -102,7 +102,8 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
       //       The page should be that corresponding to the selected thread.
       NextAction = (ThrCod > 0)	? ActSeePstForCrsUsr :	// Thread specified
 				  ActSeeForCrsUsr;	// All threads
-      Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
+      Frm_BeginFormAnchor (NextAction,ThrCod > 0 ? For_FORUM_POSTS_SECTION_ID :
+					           For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsNewPost (&Forums);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
@@ -131,6 +132,7 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
 /*****************************************************************************/
 /********************* Get survey title from survey code *********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
   {
@@ -144,5 +146,6 @@ void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
       Str_Copy (Title,Subject,TitleSize);
      }
    else
-      Str_Copy (Title,Txt_Forum,TitleSize);
+      snprintf (Title,TitleSize + 1,"%s %s",
+                Txt_Forum,Gbl.Hierarchy.Crs.ShrtName);
   }

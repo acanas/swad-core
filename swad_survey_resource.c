@@ -111,6 +111,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
 /*****************************************************************************/
 /********************* Get survey title from survey code *********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
   {

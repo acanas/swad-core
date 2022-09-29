@@ -112,6 +112,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
 /*****************************************************************************/
 /*********************** Get game title from game code ***********************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
   {

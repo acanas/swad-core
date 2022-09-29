@@ -120,6 +120,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
 /*****************************************************************************/
 /************** Get call for exam text from call for exam code ***************/
 /*****************************************************************************/
+// The trailing null character is not counted in TitleSize
 
 void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {

@@ -606,12 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.33.1 (2022-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 22.33.2 (2022-09-29)"
 #define CSS_FILE		"swad22.22.1.css"
 #define JS_FILE			"swad21.100.js"
 /*
 	Version 22.33.3:  Sep 29, 2022  TODO: Fix layout of marks file metadata. (? lines)
-	Version 22.33.2:  Sep 29, 2022  TODO: Changes in program resources and course forums. (? lines)
+	Version 22.33.2:  Sep 29, 2022  Changes in program resources and course forums. (332708 lines)
 	Version 22.33.1:  Sep 29, 2022  Changes in program resources and attendance events. (332687 lines)
 	Version 22.33:    Sep 29, 2022  Changes in program resources, documents and mark files. (332683 lines)
 	Version 22.32.4:  Sep 29, 2022  Changes in program resources and surveys. (332650 lines)
