@@ -41,21 +41,19 @@ void SvyRsc_GetLinkToSurvey (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Svy_Surveys Surveys;
-   long SvyCod;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 
    /***** Reset surveys context *****/
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   if ((SvyCod = Svy_GetParamSvyCod ()) <= 0)
-      Err_WrongSurveyExit ();
+   Surveys.SvyCod = Svy_GetParamSvyCod ();
 
    /***** Get survey title *****/
-   SvyRsc_GetTitleFromSvyCod (SvyCod,Title,sizeof (Title) - 1);
+   SvyRsc_GetTitleFromSvyCod (Surveys.SvyCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to survey into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_SURVEY,SvyCod);
+   Prg_DB_CopyToClipboard (PrgRsc_SURVEY,Surveys.SvyCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
