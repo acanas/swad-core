@@ -486,19 +486,14 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this exam *****/
-      if (Exa_CheckIfICanEditExams ())
-	{
-	 if (ShowOnlyThisExam)
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-	 else
+      if (!ShowOnlyThisExam)
+	 if (Exa_CheckIfICanEditExams ())
+	   {
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	                  The_GetColorRows ());
-
-	 /* Icons to remove/edit this exam */
-	 Exa_PutIconsToRemEditOneExam (Exams,Anchor);
-
-	 HTM_TD_End ();
-	}
+			  The_GetColorRows ());
+	       Exa_PutIconsToRemEditOneExam (Exams,Anchor);
+	    HTM_TD_End ();
+	   }
 
       /***** Start/end date/time *****/
       UniqueId++;
@@ -632,6 +627,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
 static void Exa_PutIconsOneExam (void *Exams)
   {
+   char *Anchor;
+   /*
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyExaResExa,
@@ -639,18 +636,28 @@ static void Exa_PutIconsOneExam (void *Exams)
       [Rol_TCH    ] = ActSeeUsrExaResExa,
       [Rol_SYS_ADM] = ActSeeUsrExaResExa,
      };
+   */
 
    if (Exams)
      {
       /***** Put icon to view results of sessions in exam *****/
-      if (NextAction[Gbl.Usrs.Me.Role.Logged])
-	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
-					     Exa_PutParams,Exams);
+      // if (NextAction[Gbl.Usrs.Me.Role.Logged])
+      //	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
+      //					     Exa_PutParams,Exams);
 
       /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-					 Exa_PutParams,Exams);
+      // if (PrgRsc_CheckIfICanGetLink ())
+      //	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
+      // 					 Exa_PutParams,Exams);
+
+      /***** Build anchor string *****/
+      Frm_SetAnchorStr (((struct Exa_Exams *) Exams)->Exam.ExaCod,&Anchor);
+
+      /***** Icons to remove/edit this exam *****/
+      Exa_PutIconsToRemEditOneExam ((struct Exa_Exams *) Exams,Anchor);
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (Anchor);
      }
   }
 
