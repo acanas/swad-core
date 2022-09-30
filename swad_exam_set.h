@@ -49,7 +49,6 @@ void ExaSet_ReqSelectQstsToAddToSet (void);
 void ExaSet_ListQstsToAddToSet (void);
 
 void ExaSet_ListExamSets (struct Exa_Exams *Exams,
-                          struct Exa_Exam *Exam,
 			  struct ExaSet_Set *Set);
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set);

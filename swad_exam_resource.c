@@ -50,10 +50,10 @@ void ExaRsc_GetLinkToExam (void)
    Exa_GetParams (&Exams);
 
    /***** Get exam title *****/
-   ExaRsc_GetTitleFromExaCod (Exams.ExaCod,Title,sizeof (Title) - 1);
+   ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_EXAM,Exams.ExaCod);
+   Prg_DB_CopyToClipboard (PrgRsc_EXAM,Exams.Exam.ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

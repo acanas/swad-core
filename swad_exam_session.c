@@ -64,7 +64,6 @@ static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
 
 static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-                                          const struct Exa_Exam *Exam,
                                           long SesCodToBeEdited,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res);
@@ -79,7 +78,6 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
                                                unsigned UniqueId);
 static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
-                                                   const struct Exa_Exam *Exam,
                                                    const struct ExaSes_Session *Session,
                                                    const char *Anchor);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
@@ -129,7 +127,6 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 /*****************************************************************************/
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
-                          struct Exa_Exam *Exam,
 		          struct ExaSes_Session *Session,
                           bool PutFormSession)
   {
@@ -139,7 +136,6 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
    unsigned NumSessions;
 
    /***** Begin box *****/
-   Exams->ExaCod = Exam->ExaCod;
    Box_BoxBegin ("100%",Txt_Sessions,
                  ExaSes_PutIconsInListOfSessions,Exams,
                  Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
@@ -163,8 +159,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
      }
 
    /***** Show the table with the sessions *****/
-   if ((NumSessions = Exa_DB_GetSessions (&mysql_res,Exam->ExaCod)))
-      ExaSes_ListOneOrMoreSessions (Exams,Exam,
+   if ((NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod)))
+      ExaSes_ListOneOrMoreSessions (Exams,
                                     PutFormSession &&
 				    Session->SesCod > 0 ? Session->SesCod :
 							  -1L,
@@ -183,16 +179,16 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	   {
 	    /* Reset session */
 	    ExaSes_ResetSession (Session);
-	    Session->ExaCod = Exam->ExaCod;
+	    Session->ExaCod = Exams->Exam.ExaCod;
 	    Session->TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;			// Now
 	    Session->TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
-            Str_Copy (Session->Title,Exam->Title,sizeof (Session->Title) - 1);
+            Str_Copy (Session->Title,Exams->Exam.Title,sizeof (Session->Title) - 1);
 
 	    /* Put form to create new session */
 	    ExaSes_PutFormSession (Session);	// Form to create session
 	   }
 	 else
-	    ExaSes_PutButtonNewSession (Exams,Exam->ExaCod);	// Button to create a new exam session
+	    ExaSes_PutButtonNewSession (Exams);	// Button to create a new exam session
 	 break;
       default:
 	 break;
@@ -262,7 +258,6 @@ static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-                                          const struct Exa_Exam *Exam,
                                           long SesCodToBeEdited,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res)
@@ -297,7 +292,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod))
 	   {
 	    /***** Build anchor string *****/
-	    if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Session.SesCod) < 0)
+	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** Begin row for this exam session ****/
@@ -315,7 +310,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
 
 	       /* Title and groups */
-	       ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,Exam,&Session,Anchor);
+	       ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,&Session,Anchor);
 
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
@@ -434,8 +429,8 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
       [true ] = ActUnhExaSes,	// Hidden ==> action to unhide
      };
 
-   Exams->ExaCod = Session->ExaCod;
-   Exams->SesCod = Session->SesCod;
+   Exams->Exam.ExaCod = Session->ExaCod;
+   Exams->SesCod      = Session->SesCod;
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
@@ -506,7 +501,6 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
-                                                   const struct Exa_Exam *Exam,
                                                    const struct ExaSes_Session *Session,
                                                    const char *Anchor)
   {
@@ -517,7 +511,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
-	 if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
+	 if (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session))
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutParams (Exams);
@@ -644,8 +638,8 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
    if (Session->ShowUsrResults)
      {
       /* Result is visible by me */
-      Exams->ExaCod = Session->ExaCod;
-      Exams->SesCod = Session->SesCod;
+      Exams->Exam.ExaCod = Session->ExaCod;
+      Exams->SesCod      = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",Ico_BLACK);
@@ -661,8 +655,8 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
 
-   Exams->ExaCod = Session->ExaCod;
-   Exams->SesCod = Session->SesCod;
+   Exams->Exam.ExaCod = Session->ExaCod;
+   Exams->SesCod      = Session->SesCod;
 
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
@@ -700,16 +694,15 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 void ExaSes_ToggleVisResultsSesUsr (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Check if visibility of session results can be changed *****/
    if (!ExaSes_CheckIfVisibilityOfResultsCanBeChanged (&Session))
@@ -720,7 +713,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -790,20 +783,19 @@ void ExaSes_RequestRemoveSession (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_session_X;
    extern const char *Txt_Remove_session;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Show question and button to remove question *****/
-   Exams.ExaCod = Session.ExaCod;
-   Exams.SesCod = Session.SesCod;
+   Exams.Exam.ExaCod = Session.ExaCod;
+   Exams.SesCod      = Session.SesCod;
    Ale_ShowAlertAndButton (ActRemExaSes,NULL,NULL,
                            ExaSes_PutParamsEdit,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_session,
@@ -811,7 +803,7 @@ void ExaSes_RequestRemoveSession (void)
 	                   Session.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -823,16 +815,15 @@ void ExaSes_RemoveSession (void)
   {
    extern const char *Txt_Session_X_removed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
@@ -855,10 +846,10 @@ void ExaSes_RemoveSession (void)
 		  Session.Title);
 
    /***** Get exam data again to update it after changes in session *****/
-   Exa_GetDataOfExamByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -869,16 +860,15 @@ void ExaSes_RemoveSession (void)
 void ExaSes_HideSession (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
@@ -888,7 +878,7 @@ void ExaSes_HideSession (void)
    Exa_DB_HideUnhideSession (&Session,true);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -899,16 +889,15 @@ void ExaSes_HideSession (void)
 void ExaSes_UnhideSession (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
@@ -918,7 +907,7 @@ void ExaSes_UnhideSession (void)
    Exa_DB_HideUnhideSession (&Session,false);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -949,27 +938,24 @@ void ExaSes_PutParamSesCod (long SesCod)
 /*****************************************************************************/
 
 void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                   struct Exa_Exam *Exam,
                                    struct ExaSes_Session *Session)
   {
    /***** Get parameters *****/
    Exa_GetParams (Exams);
-   if (Exams->ExaCod <= 0)
+   if (Exams->Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam->ExaCod = Exams->ExaCod;
    Grp_GetParamWhichGroups ();
    if ((Session->SesCod = ExaSes_GetParamSesCod ()) <= 0)
       Err_WrongExamSessionExit ();
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (Exam);
-   if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   Exa_GetDataOfExamByCod (&Exams->Exam);
+   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
-   Exams->ExaCod = Exam->ExaCod;
 
    /***** Get set data from database *****/
    ExaSes_GetDataOfSessionByCod (Session);
-   if (Session->ExaCod != Exam->ExaCod)
+   if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SesCod = Session->SesCod;
   }
@@ -1122,11 +1108,10 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 /******************** Put button to create a new session *********************/
 /*****************************************************************************/
 
-void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
+void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams)
   {
    extern const char *Txt_New_session;
 
-   Exams->ExaCod = ExaCod;
    Frm_BeginFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
       Exa_PutParams (Exams);
       Btn_PutConfirmButton (Txt_New_session);
@@ -1140,29 +1125,26 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
 void ExaSes_RequestCreatOrEditSes (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    bool ItsANewSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
    Grp_GetParamWhichGroups ();
    Session.SesCod = ExaSes_GetParamSesCod ();
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   Exa_GetDataOfExamByCod (&Exams.Exam);
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
-   Exams.ExaCod = Exam.ExaCod;
 
    /***** Get session data *****/
    if (ItsANewSession)
@@ -1172,13 +1154,13 @@ void ExaSes_RequestCreatOrEditSes (void)
      {
       /* Get session data from database */
       ExaSes_GetDataOfSessionByCod (&Session);
-      if (Exam.ExaCod != Session.ExaCod)
+      if (Exams.Exam.ExaCod != Session.ExaCod)
 	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
      }
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
                         true);	// Put form for session
   }
 
@@ -1191,42 +1173,39 @@ void ExaSes_ReceiveFormSession (void)
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    bool ItsANewSession;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get main parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
    Grp_GetParamWhichGroups ();
    Session.SesCod = ExaSes_GetParamSesCod ();
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   Exa_GetDataOfExamByCod (&Exams.Exam);
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
-   Exams.ExaCod = Exam.ExaCod;
 
    /***** Get session data from database *****/
    if (ItsANewSession)
      {
       /* Initialize to empty session */
       ExaSes_ResetSession (&Session);
-      Session.ExaCod = Exam.ExaCod;
+      Session.ExaCod = Exams.Exam.ExaCod;
      }
    else
      {
       /* Get session data from database */
       ExaSes_GetDataOfSessionByCod (&Session);
-      if (Session.ExaCod != Exam.ExaCod)
+      if (Session.ExaCod != Exams.Exam.ExaCod)
 	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
      }
@@ -1263,10 +1242,10 @@ void ExaSes_ReceiveFormSession (void)
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 
    /***** Get exam data again to update it after changes in session *****/
-   Exa_GetDataOfExamByCod (&Exam);
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 

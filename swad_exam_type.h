@@ -62,6 +62,24 @@ struct Exa_ExamSelected
    bool Selected;	// Is this exam selected when seeing match results?
   };
 
+struct Exa_Exam
+  {
+   long ExaCod;			// Exam code
+   long CrsCod;			// Course code
+   long UsrCod;			// Author code
+   double MaxGrade;		// Score range [0...max.score]
+				// will be converted to
+				// grade range [0...max.grade]
+   unsigned Visibility;		// Visibility of results
+   char Title[Exa_MAX_BYTES_TITLE + 1];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Hidden;			// Exam is hidden
+   unsigned NumSets;		// Number of sets in the exam
+   unsigned NumQsts;		// Number of questions in the exam
+   unsigned NumSess;		// Number of sessions in the exam
+   unsigned NumOpenSess;	// Number of open sessions in the exam
+  };
+
 /* Exams context */
 struct Exa_Exams
   {
@@ -74,7 +92,8 @@ struct Exa_Exams
    unsigned CurrentPage;
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
-   long ExaCod;			// Selected/current exam code
+   struct Exa_Exam Exam;	// Selected/current exam
+   // long ExaCod;			// Selected/current exam code
    long SetCod;			// Selected/current set code
    long SesCod;			// Selected/current session code
    unsigned SetInd;		// Current set index
@@ -98,24 +117,6 @@ struct Exa_Exams
    |+--------------+|                       | * Question 5 |   | * Question 5 |
    +----------------+                       +--------------+   +--------------+
            ...                                              ...              */
-
-struct Exa_Exam
-  {
-   long ExaCod;			// Exam code
-   long CrsCod;			// Course code
-   long UsrCod;			// Author code
-   double MaxGrade;		// Score range [0...max.score]
-				// will be converted to
-				// grade range [0...max.grade]
-   unsigned Visibility;		// Visibility of results
-   char Title[Exa_MAX_BYTES_TITLE + 1];
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Hidden;			// Exam is hidden
-   unsigned NumSets;		// Number of sets in the exam
-   unsigned NumQsts;		// Number of questions in the exam
-   unsigned NumSess;		// Number of sessions in the exam
-   unsigned NumOpenSess;	// Number of open sessions in the exam
-  };
 
 struct ExaSet_Set
   {

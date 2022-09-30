@@ -43,11 +43,9 @@ bool Exa_CheckIfICanEditExams (void);
 
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
-			  struct Exa_Exam *Exam,
 			  struct ExaSes_Session *Session,
 			  bool PutFormSession);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
-			       struct Exa_Exam *Exam,
 			       struct ExaSes_Session *Session,
 			       bool PutFormSession);
 void Exa_ShowOnlyOneExamEnd (void);
@@ -73,11 +71,9 @@ void Exa_UnhideExam (void);
 
 void Exa_RequestCreatOrEditExam (void);
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  struct Exa_Exam *Exam,
 			  struct ExaSet_Set *Set,
 			  bool ItsANewExam);
 void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
-			     struct Exa_Exam *Exam,
 			     char Txt[Cns_MAX_BYTES_TEXT + 1],
 			     bool ItsANewExam);
 

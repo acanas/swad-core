@@ -74,13 +74,13 @@ struct ExaRes_ICanView
 /*****************************************************************************/
 
 static void ExaRes_ListMyResultsInCrs (struct Exa_Exams *Exams);
-static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams,long ExaCod);
+static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams);
 static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod);
 
 static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *Args);
 static void ExaRes_ShowAllResultsInSelectedExams (void *Exams);
 static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams);
-static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod);
+static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams);
 static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod);
 
 static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
@@ -182,49 +182,46 @@ void ExaRes_ShowMyResultsInExa (void)
   {
    extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
 	                     false);	// Do not put form to start new session
 
    /***** List my sessions results in exam *****/
-   if (asprintf (&Title,Txt_Results_of_exam_X,Exam.Title) < 0)
+   if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
       Err_NotEnoughMemoryExit ();
    ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
    free (Title);
-   ExaRes_ListMyResultsInExa (&Exams,Exam.ExaCod);
+   ExaRes_ListMyResultsInExa (&Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams,long ExaCod)
+static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderResults (Usr_ME);
 
    /***** List my sessions results in exam *****/
    TstCfg_GetConfig ();	// Get feedback type
-   ExaRes_ShowResults (Exams,Usr_ME,-1L,ExaCod,NULL);
+   ExaRes_ShowResults (Exams,Usr_ME,-1L,Exams->Exam.ExaCod,NULL);
   }
 
 /*****************************************************************************/
@@ -235,28 +232,25 @@ void ExaRes_ShowMyResultsInSes (void)
   {
    extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
    if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
       Err_WrongExamSessionExit ();
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
    ExaSes_GetDataOfSessionByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
 	                     false);	// Do not put form to start new session
 
    /***** List my sessions results in session *****/
@@ -387,40 +381,37 @@ void ExaRes_ShowAllResultsInExa (void)
   {
    extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
 	                     false);	// Do not put form to start new session
 
    /***** List sessions results in exam *****/
-   if (asprintf (&Title,Txt_Results_of_exam_X,Exam.Title) < 0)
+   if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
       Err_NotEnoughMemoryExit ();
    ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
    free (Title);
-   ExaRes_ListAllResultsInExa (&Exams,Exam.ExaCod);
+   ExaRes_ListAllResultsInExa (&Exams);
    ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
+static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
@@ -430,7 +421,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
    ExaRes_ShowHeaderResults (Usr_OTHER);
 
    /***** Get all users who have answered any session question in this exam *****/
-   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeExam (&mysql_res,ExaCod);
+   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeExam (&mysql_res,Exams->Exam.ExaCod);
 
    /***** List sessions results for each user *****/
    for (NumUsr = 0;
@@ -445,7 +436,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 	      {
 	       /***** Show sessions results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       ExaRes_ShowResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
+	       ExaRes_ShowResults (Exams,Usr_OTHER,-1L,Exams->Exam.ExaCod,NULL);
 	      }
 
    /***** Free structure that stores the query result *****/
@@ -460,30 +451,27 @@ void ExaRes_ShowAllResultsInSes (void)
   {
    extern const char *Txt_Results_of_session_X;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
    if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
       Err_WrongExamSessionExit ();
 
    /***** Get exam data and session *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
    ExaSes_GetDataOfSessionByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
 	                     false);	// Do not put form to start new session
 
    /***** List sessions results in session *****/
@@ -584,10 +572,9 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
    extern const char *Txt_Update_results;
    unsigned UniqueId;
    unsigned NumExam;
-   struct Exa_Exam Exam;
 
    /***** Reset exam *****/
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams->Exam);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Exams,
@@ -615,9 +602,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		 NumExam++, UniqueId++, The_ChangeRowColor ())
 	      {
 	       /* Get data of this exam */
-	       Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
-	       Exa_GetDataOfExamByCod (&Exam);
-	       Exams->ExaCod = Exam.ExaCod;
+	       Exams->Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
+	       Exa_GetDataOfExamByCod (&Exams->Exam);
 
 	       /* Write a row for this session */
 	       HTM_TR_Begin (NULL);
@@ -643,7 +629,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
-		     HTM_Txt (Exam.Title);
+		     HTM_Txt (Exams->Exam.Title);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -1041,8 +1027,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	                  The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
-		  Exams->ExaCod = Session.ExaCod;
-		  Exams->SesCod = Session.SesCod;
+		  Exams->Exam.ExaCod = Session.ExaCod;
+		  Exams->SesCod      = Session.SesCod;
 		  switch (MeOrOther)
 		    {
 		     case Usr_ME:
@@ -1248,7 +1234,6 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 void ExaRes_ShowExaResultAfterFinish (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
    struct ExaRes_ICanView ICanView =
@@ -1260,11 +1245,11 @@ void ExaRes_ShowExaResultAfterFinish (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Get exam print data *****/
    Print.SesCod = Session.SesCod;
@@ -1275,13 +1260,13 @@ void ExaRes_ShowExaResultAfterFinish (void)
    // The user has clicked on the "I have finished" button in an exam print
    ExaLog_SetAction (ExaLog_FINISH_EXAM);
    ExaLog_SetPrnCod (Print.PrnCod);
-   ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session));
+   ExaLog_SetIfCanAnswer (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session));
 
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
    /***** Show exam result *****/
-   ExaRes_ShowExamResult (&Exam,&Session,&Print,
+   ExaRes_ShowExamResult (&Exams.Exam,&Session,&Print,
                           &Gbl.Usrs.Me.UsrDat,&ICanView,Visibility);
   }
 
@@ -1292,7 +1277,6 @@ void ExaRes_ShowExaResultAfterFinish (void)
 void ExaRes_ShowOneExaResult (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    Usr_MeOrOther_t MeOrOther;
    struct Usr_Data *UsrDat;
@@ -1301,11 +1285,11 @@ void ExaRes_ShowOneExaResult (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
@@ -1331,11 +1315,11 @@ void ExaRes_ShowOneExaResult (void)
    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
    /***** Check if I can view this print result and its score *****/
-   ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
+   ExaRes_CheckIfICanViewResult (&Exams.Exam,&Session,UsrDat->UsrCod,&ICanView);
 
    /***** Show exam result *****/
-   ExaRes_ShowExamResult (&Exam,&Session,&Print,
-                          UsrDat,&ICanView,Exam.Visibility);
+   ExaRes_ShowExamResult (&Exams.Exam,&Session,&Print,
+                          UsrDat,&ICanView,Exams.Exam.Visibility);
 
    /***** Show exam log *****/
    switch (Gbl.Usrs.Me.Role.Logged)

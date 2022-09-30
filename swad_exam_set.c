@@ -73,7 +73,6 @@ extern struct Globals Gbl;
 static void ExaSet_PutParamsOneQst (void *Exams);
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
-				  struct Exa_Exam *Exam,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd);
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set);
@@ -86,10 +85,8 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
 static void ExaSet_PutParamSetCod (long SetCod);
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
-                                     const struct Exa_Exam *Exam,
                                      const struct ExaSet_Set *Set);
 static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
-					        const struct Exa_Exam *Exam,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
@@ -114,7 +111,6 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod);
 static void ExaSet_ChangeValidityQst (Qst_Validity_t Valid);
 
 static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                          struct Exa_Exam *Exam,
                                           struct ExaSet_Set *Set);
 
 static long ExaSet_GetParamQstCod (void);
@@ -218,7 +214,6 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 /*****************************************************************************/
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
-				  struct Exa_Exam *Exam,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
@@ -226,7 +221,6 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
    extern const char *Txt_Create_set_of_questions;
 
    /***** Begin form *****/
-   Exams->ExaCod = Exam->ExaCod;
    Frm_BeginForm (ActNewExaSet);
       Exa_PutParams (Exams);
 
@@ -289,29 +283,27 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 void ExaSet_ReceiveFormSet (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    bool ItsANewSet;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Set.ExaCod = Exam.ExaCod = Exams.ExaCod;
+   Set.ExaCod = Exams.Exam.ExaCod;
    Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** If I can edit exams ==> receive set from form *****/
@@ -326,7 +318,7 @@ void ExaSet_ReceiveFormSet (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -381,7 +373,6 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 void ExaSet_ChangeSetTitle (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    char NewTitle[ExaSet_MAX_BYTES_TITLE + 1];
 
@@ -391,14 +382,14 @@ void ExaSet_ChangeSetTitle (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
@@ -415,9 +406,10 @@ void ExaSet_ChangeSetTitle (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
+
 /*****************************************************************************/
 /***** Receive form to change number of questions to appear in the exam ******/
 /*****************************************************************************/
@@ -425,7 +417,6 @@ void ExaSet_ChangeSetTitle (void)
 void ExaSet_ChangeNumQstsToExam (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    unsigned NumQstsToPrint;
 
@@ -435,14 +426,14 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Get number of questions in set to appear in exam print *****/
@@ -462,7 +453,7 @@ void ExaSet_ChangeNumQstsToExam (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -508,7 +499,6 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
 void ExaSet_RequestCreatOrEditSet (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    bool ItsANewSet;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -519,21 +509,19 @@ void ExaSet_RequestCreatOrEditSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
    Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
-   Exa_DB_GetExamTxt (Exam.ExaCod,Txt);
+   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_DB_GetExamTxt (Exams.Exam.ExaCod,Txt);
 
    /***** Get set data *****/
    if (ItsANewSet)
@@ -547,7 +535,7 @@ void ExaSet_RequestCreatOrEditSet (void)
      }
 
    /***** Put form to edit the exam created or updated *****/
-   Exa_PutFormEditionExam (&Exams,&Exam,Txt,
+   Exa_PutFormEditionExam (&Exams,Txt,
 			   false);	// No new exam
   }
 
@@ -558,22 +546,21 @@ void ExaSet_RequestCreatOrEditSet (void)
 void ExaSet_ReqSelectQstsToAddToSet (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Show form to select questions for set *****/
    Qst_RequestSelectQstsForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -584,16 +571,15 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
 void ExaSet_ListQstsToAddToSet (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -603,7 +589,7 @@ void ExaSet_ListQstsToAddToSet (void)
    Qst_ListQuestionsToSelectForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -621,7 +607,6 @@ static void ExaSet_PutParamSetCod (long SetCod)
 /*****************************************************************************/
 
 void ExaSet_ListExamSets (struct Exa_Exams *Exams,
-                          struct Exa_Exam *Exam,
 			  struct ExaSet_Set *Set)
   {
    extern const char *Hlp_ASSESSMENT_Exams_question_sets;
@@ -629,13 +614,13 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
    MYSQL_RES *mysql_res;
    unsigned MaxSetInd;
    unsigned NumSets;
-   bool ICanEditSets = Exa_CheckIfEditable (Exam);
+   bool ICanEditSets = Exa_CheckIfEditable (&Exams->Exam);
 
    /***** Get maximum set index *****/
-   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam->ExaCod);
+   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exams->Exam.ExaCod);
 
    /***** Get data of set of questions from database *****/
-   NumSets = Exa_DB_GetExamSets (&mysql_res,Exam->ExaCod);
+   NumSets = Exa_DB_GetExamSets (&mysql_res,Exams->Exam.ExaCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Sets_of_questions,
@@ -643,9 +628,8 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 		 Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
 
    /***** Show table with sets *****/
-   Exams->ExaCod = Exam->ExaCod;
    if (NumSets)
-      ExaSet_ListOneOrMoreSetsForEdition (Exams,Exam,
+      ExaSet_ListOneOrMoreSetsForEdition (Exams,
                                           MaxSetInd,
                                           NumSets,mysql_res,
 				          ICanEditSets);
@@ -655,7 +639,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 
    /***** Put forms to create/edit a set *****/
    if (ICanEditSets)
-      ExaSet_PutFormNewSet (Exams,Exam,Set,MaxSetInd);
+      ExaSet_PutFormNewSet (Exams,Set,MaxSetInd);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -666,14 +650,13 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
-                                     const struct Exa_Exam *Exam,
                                      const struct ExaSet_Set *Set)
   {
    extern const char *Hlp_ASSESSMENT_Exams_questions;
    extern const char *Txt_Questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   bool ICanEditQuestions = Exa_CheckIfEditable (Exam);
+   bool ICanEditQuestions = Exa_CheckIfEditable (&Exams->Exam);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
@@ -704,7 +687,6 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
-					        const struct Exa_Exam *Exam,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
@@ -865,7 +847,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	                  The_GetColorRows ());
 
 	       /* List questions */
-	       ExaSet_ListSetQuestions (Exams,Exam,&Set);
+	       ExaSet_ListSetQuestions (Exams,&Set);
 
 	    HTM_TD_End ();
 
@@ -1225,7 +1207,6 @@ void ExaSet_AddQstsToSet (void)
   {
    extern const char *Txt_No_questions_have_been_added;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -1233,11 +1214,11 @@ void ExaSet_AddQstsToSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -1273,7 +1254,7 @@ void ExaSet_AddQstsToSet (void)
    ExaSet_FreeListsSelectedQuestions (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1382,19 +1363,18 @@ void ExaSet_RequestRemoveSet (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X;
    extern const char *Txt_Remove_set_of_questions;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
@@ -1405,7 +1385,7 @@ void ExaSet_RequestRemoveSet (void)
 			   Set.Title);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1417,19 +1397,18 @@ void ExaSet_RemoveSet (void)
   {
    extern const char *Txt_Set_of_questions_removed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Remove the set from all tables *****/
@@ -1446,7 +1425,7 @@ void ExaSet_RemoveSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1458,42 +1437,41 @@ void ExaSet_MoveUpSet (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    unsigned SetIndTop;
    unsigned SetIndBottom;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndBottom = Exa_DB_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+   SetIndBottom = Exa_DB_GetSetIndFromSetCod (Exams.Exam.ExaCod,Set.SetCod);
 
    /***** Move up set *****/
    if (SetIndBottom > 1)
      {
       /* Indexes of sets to be exchanged */
-      SetIndTop = Exa_DB_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
+      SetIndTop = Exa_DB_GetPrevSetIndexInExam (Exams.Exam.ExaCod,SetIndBottom);
       if (SetIndTop == 0)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
-      ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
+      ExaSet_ExchangeSets (Exams.Exam.ExaCod,SetIndTop,SetIndBottom);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1505,7 +1483,6 @@ void ExaSet_MoveDownSet (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    unsigned SetIndTop;
    unsigned SetIndBottom;
@@ -1513,38 +1490,38 @@ void ExaSet_MoveDownSet (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (!Exa_CheckIfEditable (&Exam))
+   if (!Exa_CheckIfEditable (&Exams.Exam))
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndTop = Exa_DB_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+   SetIndTop = Exa_DB_GetSetIndFromSetCod (Exams.Exam.ExaCod,Set.SetCod);
 
    /***** Get maximum set index *****/
-   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam.ExaCod);
+   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exams.Exam.ExaCod);
 
    /***** Move down set *****/
    if (SetIndTop < MaxSetInd)
      {
       /* Indexes of sets to be exchanged */
-      SetIndBottom = Exa_DB_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
+      SetIndBottom = Exa_DB_GetNextSetIndexInExam (Exams.Exam.ExaCod,SetIndTop);
       if (SetIndBottom == 0)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
-      ExaSet_ExchangeSets (Exam.ExaCod,SetIndTop,SetIndBottom);
+      ExaSet_ExchangeSets (Exams.Exam.ExaCod,SetIndTop,SetIndBottom);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1557,17 +1534,16 @@ void ExaSet_RequestRemoveQstFromSet (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    char *Anchor;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Get question index *****/
    Exams.QstCod = ExaSet_GetParamQstCod ();
@@ -1586,7 +1562,7 @@ void ExaSet_RequestRemoveQstFromSet (void)
    Frm_FreeAnchorStr (Anchor);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1598,17 +1574,16 @@ void ExaSet_RemoveQstFromSet (void)
   {
    extern const char *Txt_Question_removed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    long QstCod;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Get question index *****/
    QstCod = ExaSet_GetParamQstCod ();
@@ -1624,7 +1599,7 @@ void ExaSet_RemoveQstFromSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1680,27 +1655,26 @@ void ExaSet_InvalidateQst (void)
 static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    long QstCod;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Exam,&Set);
+   ExaSet_GetAndCheckParameters (&Exams,&Set);
 
    /***** Get question index *****/
    QstCod = ExaSet_GetParamQstCod ();
 
    /***** Validate/unvalidate question *****/
-   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exam.ExaCod,Gbl.Hierarchy.Crs.CrsCod,
+   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Crs.CrsCod,
                              Validity);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
   }
 
@@ -1709,27 +1683,24 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
 /*****************************************************************************/
 
 static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                          struct Exa_Exam *Exam,
                                           struct ExaSet_Set *Set)
   {
    /***** Get parameters *****/
    Exa_GetParams (Exams);
-   if (Exams->ExaCod <= 0)
+   if (Exams->Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam->ExaCod = Exams->ExaCod;
    Grp_GetParamWhichGroups ();
    if ((Set->SetCod = ExaSet_GetParamSetCod ()) <= 0)
       Err_WrongSetExit ();
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (Exam);
-   if (Exam->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   Exa_GetDataOfExamByCod (&Exams->Exam);
+   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
-   Exams->ExaCod = Exam->ExaCod;
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (Set);
-   if (Set->ExaCod != Exam->ExaCod)
+   if (Set->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SetCod = Set->SetCod;
   }

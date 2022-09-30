@@ -71,7 +71,6 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print);
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
-                                          const struct Exa_Exam *Exam,
                                           struct ExaPrn_Print *Print);
 static void ExaPrn_GetAndWriteDescription (long ExaCod);
 static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
@@ -163,20 +162,19 @@ void ExaPrn_ShowExamPrint (void)
   {
    extern const char *Txt_You_dont_have_access_to_the_exam;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
+   ExaSes_GetAndCheckParameters (&Exams,&Session);
 
    /***** Check if I can access to this session *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
       /***** Set basic data of exam print *****/
       Print.SesCod = Session.SesCod;
@@ -192,7 +190,7 @@ void ExaPrn_ShowExamPrint (void)
 	 Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
 	 /***** Get questions from database *****/
-	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exam.ExaCod);
+	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exams.Exam.ExaCod);
 
 	 if (Print.NumQsts.All)
 	   {
@@ -220,7 +218,7 @@ void ExaPrn_ShowExamPrint (void)
 	}
 
       /***** Show test to be answered *****/
-      ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
+      ExaPrn_ShowExamPrintToFillIt (&Exams,&Print);
      }
    else	// Session not open or accessible
       /***** Show warning *****/
@@ -583,13 +581,12 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
 /*****************************************************************************/
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
-                                          const struct Exa_Exam *Exam,
                                           struct ExaPrn_Print *Print)
   {
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Exam->Title,
+   Box_BoxBegin (NULL,Exams->Exam.Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
@@ -607,7 +604,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
       HTM_TABLE_End ();
 
       /***** Exam description *****/
-      ExaPrn_GetAndWriteDescription (Exam->ExaCod);
+      ExaPrn_GetAndWriteDescription (Exams->Exam.ExaCod);
 
       if (Print->NumQsts.All)
 	{
@@ -961,14 +958,13 @@ void ExaPrn_ReceivePrintAnswer (void)
    extern const char *Txt_You_dont_have_access_to_the_exam;
    extern const char *Txt_Continue;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
    struct ExaPrn_Print Print;
    unsigned QstInd;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get session code *****/
@@ -988,13 +984,12 @@ void ExaPrn_ReceivePrintAnswer (void)
    Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
-   Exam.ExaCod = Session.ExaCod;
-   Exa_GetDataOfExamByCod (&Exam);
-   if (Exam.ExaCod <= 0)
+   Exams.Exam.ExaCod = Session.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   if (Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
-   Exams.ExaCod = Exam.ExaCod;
 
    /***** Get question index from form *****/
    QstInd = ExaPrn_GetParamQstInd ();
@@ -1005,7 +1000,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exam,&Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
       /***** Set log open to true ****/
       ExaLog_SetIfCanAnswer (true);

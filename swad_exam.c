@@ -112,16 +112,14 @@ static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutParamsToCreateNewExam (void *Exams);
 
-static void Exa_ShowOneExam (struct Exa_Exams *Exams,
-                             struct Exa_Exam *Exam,bool ShowOnlyThisExam);
+static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam);
 
-static void Exa_PutIconToShowResultsOfExam (void *Exams);
+static void Exa_PutIconsOneExam (void *Exams);
 static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
 static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder);
 
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
-					  const struct Exa_Exam *Exam,
 					  const char *Anchor);
 
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
@@ -157,7 +155,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->CurrentPage       = 0;
    Exams->ListQuestions     = NULL;
    Exams->ExaCodsSelected   = NULL;	// String with selected exam codes separated by separator multiple
-   Exams->ExaCod            = -1L;	// Selected/current exam code
+   Exams->Exam.ExaCod       = -1L;	// Selected/current exam code
    Exams->SesCod            = -1L;	// Selected/current session code
    Exams->SetInd            = 0;	// Current set index
    Exams->QstCod            = -1L;	// Current question code
@@ -218,7 +216,6 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    Exa_Order_t Order;
    struct Pagination Pagination;
    unsigned NumExam;
-   struct Exa_Exam Exam;
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
@@ -283,13 +280,11 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 		 NumExam++)
 	      {
 	       /* Get data of this exam */
-	       Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
-	       Exa_GetDataOfExamByCod (&Exam);
-	       Exams->ExaCod = Exam.ExaCod;
+	       Exams->Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
+	       Exa_GetDataOfExamByCod (&Exams->Exam);
 
 	       /* Show exam */
 	       Exa_ShowOneExam (Exams,
-				&Exam,
 				false);	// Do not show only this exam
 	      }
 
@@ -408,26 +403,23 @@ static void Exa_PutParamsToCreateNewExam (void *Exams)
 void Exa_SeeOneExam (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSes_Session Session;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
 
    /***** Get exam data *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Exam,&Session,
+   Exa_ShowOnlyOneExam (&Exams,&Session,
 	                false);	// Do not put form for session
   }
 
@@ -436,16 +428,14 @@ void Exa_SeeOneExam (void)
 /*****************************************************************************/
 
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
-			  struct Exa_Exam *Exam,
 			  struct ExaSes_Session *Session,
 			  bool PutFormSession)
   {
-   Exa_ShowOnlyOneExamBegin (Exams,Exam,Session,PutFormSession);
+   Exa_ShowOnlyOneExamBegin (Exams,Session,PutFormSession);
    Exa_ShowOnlyOneExamEnd ();
   }
 
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
-			       struct Exa_Exam *Exam,
 			       struct ExaSes_Session *Session,
 			       bool PutFormSession)
   {
@@ -453,18 +443,16 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    extern const char *Txt_Exam;
 
    /***** Begin box *****/
-   Exams->ExaCod = Exam->ExaCod;
    Box_BoxBegin (NULL,Txt_Exam,
-                 Exa_PutIconToShowResultsOfExam,Exams,
+                 Exa_PutIconsOneExam,Exams,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
    /***** Show exam *****/
    Exa_ShowOneExam (Exams,
-                    Exam,
 		    true);	// Show only this exam
 
    /***** List sessions *****/
-   ExaSes_ListSessions (Exams,Exam,Session,PutFormSession);
+   ExaSes_ListSessions (Exams,Session,PutFormSession);
   }
 
 void Exa_ShowOnlyOneExamEnd (void)
@@ -473,8 +461,7 @@ void Exa_ShowOnlyOneExamEnd (void)
    Box_BoxEnd ();
   }
 
-static void Exa_ShowOneExam (struct Exa_Exams *Exams,
-                             struct Exa_Exam *Exam,bool ShowOnlyThisExam)
+static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
   {
    extern const char *Txt_View_exam;
    extern const char *Txt_Sets_of_questions;
@@ -489,7 +476,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Build anchor string *****/
-   Frm_SetAnchorStr (Exam->ExaCod,&Anchor);
+   Frm_SetAnchorStr (Exams->Exam.ExaCod,&Anchor);
 
    /***** Begin box and table *****/
    if (ShowOnlyThisExam)
@@ -508,7 +495,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	                  The_GetColorRows ());
 
 	 /* Icons to remove/edit this exam */
-	 Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
+	 Exa_PutIconsToRemEditOneExam (Exams,Anchor);
 
 	 HTM_TD_End ();
 	}
@@ -521,18 +508,18 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	{
 	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Color = Exam->NumOpenSess ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
-						     "DATE_GREEN") :
-				     (Exam->Hidden ? "DATE_RED_LIGHT":
-						     "DATE_RED");
+	 Color = Exams->Exam.NumOpenSess ? (Exams->Exam.Hidden ? "DATE_GREEN_LIGHT":
+								 "DATE_GREEN") :
+					   (Exams->Exam.Hidden ? "DATE_RED_LIGHT":
+								 "DATE_RED");
 	 if (ShowOnlyThisExam)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,Color,The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,Color,The_GetSuffix (),The_GetColorRows ());
-	 if (Exam->TimeUTC[Dat_STR_TIME])
-	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
+	 if (Exams->Exam.TimeUTC[Dat_STR_TIME])
+	    Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x6);
 	 HTM_TD_End ();
@@ -546,32 +533,31 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Exam title */
-      Exams->ExaCod = Exam->ExaCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
 	    Exa_PutParams (Exams);
 	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
-				     Exam->Hidden ? "ASG_TITLE_LIGHT":
-						    "ASG_TITLE",
+				     Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
+							  "ASG_TITLE",
 				     The_GetSuffix ());
-	       HTM_Txt (Exam->Title);
+	       HTM_Txt (Exams->Exam.Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_ARTICLE_End ();
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Exam->Hidden ? "ASG_GRP_LIGHT" :
-				    "ASG_GRP",
+                     Exams->Exam.Hidden ? "ASG_GRP_LIGHT" :
+					  "ASG_GRP",
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Sets_of_questions);
-	 HTM_Unsigned (Exam->NumSets);
+	 HTM_Unsigned (Exams->Exam.NumSets);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Maximum_grade);
-	 HTM_Double (Exam->MaxGrade);
+	 HTM_Double (Exams->Exam.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
+	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
       HTM_DIV_End ();
 
       /***** Number of sessions in exam *****/
@@ -580,16 +566,15 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
-      Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
 	 Exa_PutParams (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
-				  Exam->Hidden ? "ASG_TITLE_LIGHT":
-						 "ASG_TITLE",
+				  Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
+						       "ASG_TITLE",
 				  The_GetSuffix ());
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
-	    HTM_Unsigned (Exam->NumSess);
+	    HTM_Unsigned (Exams->Exam.NumSess);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
 
@@ -607,7 +592,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 	               The_GetColorRows ());
-      Exa_WriteAuthor (Exam);
+      Exa_WriteAuthor (&Exams->Exam);
       HTM_TD_End ();
 
       /***** Text of the exam *****/
@@ -616,13 +601,13 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 	               The_GetColorRows ());
-      Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
+      Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Exam->Hidden ? "DAT_LIGHT" :
-				    "DAT",
+                     Exams->Exam.Hidden ? "DAT_LIGHT" :
+					  "DAT",
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -645,7 +630,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 /************ Put icon to show results of sessions in an exam ****************/
 /*****************************************************************************/
 
-static void Exa_PutIconToShowResultsOfExam (void *Exams)
+static void Exa_PutIconsOneExam (void *Exams)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -657,7 +642,7 @@ static void Exa_PutIconToShowResultsOfExam (void *Exams)
 
    if (Exams)
      {
-      /***** Put icon to view sessions results *****/
+      /***** Put icon to view results of sessions in exam *****/
       if (NextAction[Gbl.Usrs.Me.Role.Logged])
 	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
 					     Exa_PutParams,Exams);
@@ -692,7 +677,6 @@ static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder)
 /*****************************************************************************/
 
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
-					  const struct Exa_Exam *Exam,
 					  const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[2] =
@@ -700,8 +684,13 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [false] = ActHidExa,	// Visible ==> action to hide
       [true ] = ActUnhExa,	// Hidden ==> action to unhide
      };
-
-   Exams->ExaCod = Exam->ExaCod;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_STD    ] = ActSeeMyExaResExa,
+      [Rol_NET    ] = ActSeeUsrExaResExa,
+      [Rol_TCH    ] = ActSeeUsrExaResExa,
+      [Rol_SYS_ADM] = ActSeeUsrExaResExa,
+     };
 
    /***** Icon to remove exam *****/
    Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
@@ -710,11 +699,21 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
    /***** Icon to hide/unhide exam *****/
    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 				      Exa_PutParams,Exams,
-				      Exam->Hidden);
+				      Exams->Exam.Hidden);
 
    /***** Icon to edit exam *****/
    Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
                                 Exa_PutParams,Exams);
+
+   /***** Put icon to view results of sessions in exam *****/
+   if (NextAction[Gbl.Usrs.Me.Role.Logged])
+      Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
+					  Exa_PutParams,Exams);
+
+   /***** Link to get resource link *****/
+   if (PrgRsc_CheckIfICanGetLink ())
+      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
+				      Exa_PutParams,Exams);
   }
 
 /*****************************************************************************/
@@ -727,8 +726,8 @@ void Exa_PutParams (void *Exams)
 
    if (Exams)
      {
-      if (((struct Exa_Exams *) Exams)->ExaCod > 0)
-	 Exa_PutParamExamCod (((struct Exa_Exams *) Exams)->ExaCod);
+      if (((struct Exa_Exams *) Exams)->Exam.ExaCod > 0)
+	 Exa_PutParamExamCod (((struct Exa_Exams *) Exams)->Exam.ExaCod);
       Exa_PutHiddenParamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -767,7 +766,7 @@ void Exa_GetParams (struct Exa_Exams *Exams)
    Exams->CurrentPage = Pag_GetParamPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
-   Exams->ExaCod = Exa_GetParamExamCod ();
+   Exams->Exam.ExaCod = Exa_GetParamExamCod ();
   }
 
 /*****************************************************************************/
@@ -1004,7 +1003,6 @@ void Exa_AskRemExam (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_exam_X;
    extern const char *Txt_Remove_exam;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1012,25 +1010,22 @@ void Exa_AskRemExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Show question and button to remove exam *****/
-   Exams.ExaCod = Exam.ExaCod;
    Ale_ShowAlertAndButton (ActRemExa,NULL,NULL,
                            Exa_PutParams,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_exam,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_exam_X,
-                           Exam.Title);
+                           Exams.Exam.Title);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
@@ -1044,7 +1039,6 @@ void Exa_RemoveExam (void)
   {
    extern const char *Txt_Exam_X_removed;
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1052,22 +1046,21 @@ void Exa_RemoveExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
 
    /***** Get exam code *****/
-   if ((Exam.ExaCod = Exa_GetParamExamCod ()) <= 0)
+   if ((Exams.Exam.ExaCod = Exa_GetParamExamCod ()) <= 0)
       Err_WrongExamExit ();
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Remove exam from all tables *****/
-   Exa_RemoveExamFromAllTables (Exam.ExaCod);
+   Exa_RemoveExamFromAllTables (Exams.Exam.ExaCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Exam_X_removed,
-                  Exam.Title);
+                  Exams.Exam.Title);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
@@ -1235,7 +1228,6 @@ void Exa_UnhideExam (void)
 static void Exa_HideUnhideExam (bool Hide)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1243,20 +1235,18 @@ static void Exa_HideUnhideExam (bool Hide)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   if (Exams.ExaCod <= 0)
+   if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   Exam.ExaCod = Exams.ExaCod;
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exam);
-   Exams.ExaCod = Exam.ExaCod;
+   Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Unhide exam *****/
-   Exa_DB_HideOrUnhideExam (Exam.ExaCod,Hide);
+   Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,Hide);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
@@ -1269,7 +1259,6 @@ static void Exa_HideUnhideExam (bool Hide)
 void Exa_RequestCreatOrEditExam (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    bool ItsANewExam;
 
@@ -1279,27 +1268,23 @@ void Exa_RequestCreatOrEditExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   Exam.ExaCod = Exams.ExaCod;
-   ItsANewExam = (Exam.ExaCod <= 0);
+   ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get exam data *****/
    if (ItsANewExam)
       /* Initialize to empty exam */
-      Exa_ResetExam (&Exam);
+      Exa_ResetExam (&Exams.Exam);
    else
-     {
       /* Get exam data from database */
-      Exa_GetDataOfExamByCod (&Exam);
-      Exams.ExaCod = Exam.ExaCod;
-     }
+      Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Put form to create/edit an exam and show sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,ItsANewExam);
+   Exa_PutFormsOneExam (&Exams,&Set,ItsANewExam);
   }
 
 /*****************************************************************************/
@@ -1307,7 +1292,6 @@ void Exa_RequestCreatOrEditExam (void)
 /*****************************************************************************/
 
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  struct Exa_Exam *Exam,
 			  struct ExaSet_Set *Set,
 			  bool ItsANewExam)
   {
@@ -1317,10 +1301,10 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    if (ItsANewExam)
       Txt[0] = '\0';
    else
-      Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
+      Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
 
    /***** Put form to create/edit an exam *****/
-   Exa_PutFormEditionExam (Exams,Exam,Txt,ItsANewExam);
+   Exa_PutFormEditionExam (Exams,Txt,ItsANewExam);
 
    /***** Show other lists *****/
    if (ItsANewExam)
@@ -1328,7 +1312,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
       Exa_ListAllExams (Exams);
    else
       /* Show list of sets */
-      ExaSet_ListExamSets (Exams,Exam,Set);
+      ExaSet_ListExamSets (Exams,Set);
   }
 
 /*****************************************************************************/
@@ -1336,7 +1320,6 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
-			     struct Exa_Exam *Exam,
 			     char Txt[Cns_MAX_BYTES_TEXT + 1],
 			     bool ItsANewExam)
   {
@@ -1352,7 +1335,6 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Save_changes;
 
    /***** Begin form *****/
-   Exams->ExaCod = Exam->ExaCod;
    Frm_BeginForm (ItsANewExam ? ActNewExa :
 				ActChgExa);
       Exa_PutParams (Exams);
@@ -1364,8 +1346,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 			    Hlp_ASSESSMENT_Exams_new_exam,Box_NOT_CLOSABLE,2);
       else
 	 Box_BoxTableBegin (NULL,
-			    Exam->Title[0] ? Exam->Title :
-					     Txt_Edit_exam,
+			    Exams->Exam.Title[0] ? Exams->Exam.Title :
+						   Txt_Edit_exam,
 			    NULL,NULL,
 			    Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
 
@@ -1377,7 +1359,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
+	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
 			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -1395,7 +1377,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
+	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,false,
 			     " class=\"INPUT_%s\" required=\"required\"",
 			     The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1410,7 +1392,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LB\"");
-	    TstVis_PutVisibilityCheckboxes (Exam->Visibility);
+	    TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1449,7 +1431,6 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 void Exa_ReceiveFormExam (void)
   {
    struct Exa_Exams Exams;
-   struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    bool ItsANewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1460,40 +1441,36 @@ void Exa_ReceiveFormExam (void)
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exam);
+   Exa_ResetExam (&Exams.Exam);
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetParams (&Exams);
-   Exam.ExaCod = Exams.ExaCod;
-   ItsANewExam = (Exam.ExaCod <= 0);
+   ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get all current exam data from database *****/
    // Some data, not received from form,
    // are necessary to show exam and sets of questions again
    if (!ItsANewExam)
-     {
-      Exa_GetDataOfExamByCod (&Exam);
-      Exams.ExaCod = Exam.ExaCod;
-     }
+      Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** If I can edit exams ==>
           overwrite some exam data with the data received from form *****/
-   Exa_ReceiveExamFieldsFromForm (&Exam,Txt);
-   if (Exa_CheckExamFieldsReceivedFromForm (&Exam))
+   Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);
+   if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam))
      {
       /***** Create a new exam or update an existing one *****/
       if (ItsANewExam)
 	{
-	 Exa_CreateExam (&Exam,Txt);	// Add new exam to database
+	 Exa_CreateExam (&Exams.Exam,Txt);	// Add new exam to database
 	 ItsANewExam = false;
 	}
       else
-	 Exa_UpdateExam (&Exam,Txt);	// Update exam data in database
+	 Exa_UpdateExam (&Exams.Exam,Txt);	// Update exam data in database
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Exam,&Set,
+   Exa_PutFormsOneExam (&Exams,&Set,
 			ItsANewExam);	// It's not a new exam
   }
 

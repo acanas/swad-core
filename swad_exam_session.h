@@ -51,7 +51,6 @@ struct ExaSes_UsrAnswer
 void ExaSes_ResetSession (struct ExaSes_Session *Session);
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
-                          struct Exa_Exam *Exam,
 		          struct ExaSes_Session *Session,
                           bool PutFormSession);
 void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session);
@@ -67,11 +66,10 @@ void ExaSes_UnhideSession (void);
 void ExaSes_PutParamsEdit (void *Exams);
 void ExaSes_PutParamSesCod (long SesCod);
 void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                   struct Exa_Exam *Exam,
                                    struct ExaSes_Session *Session);
 long ExaSes_GetParamSesCod (void);
 
-void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod);
+void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams);
 void ExaSes_RequestCreatOrEditSes (void);
 void ExaSes_ReceiveFormSession (void);
 
