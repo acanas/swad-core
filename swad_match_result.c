@@ -70,11 +70,11 @@ struct MchRes_ICanView
 static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
 
 static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games);
-static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games,long GamCod);
+static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games);
 static void MchRes_ListMyMchResultsInMch (struct Gam_Games *Games,long MchCod);
 static void MchRes_ShowAllMchResultsInSelectedGames (void *Games);
 static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games);
-static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod);
+static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games);
 static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod);
 
 static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
@@ -149,45 +149,44 @@ void MchRes_ShowMyMchResultsInGam (void)
   {
    extern const char *Txt_Results_of_game_X;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Games,&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in game *****/
-   if (asprintf (&Title,Txt_Results_of_game_X,Game.Title) < 0)
+   if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
       Err_NotEnoughMemoryExit ();
    MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
    free (Title);
-      MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
+      MchRes_ListMyMchResultsInGam (&Games);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games,long GamCod)
+static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games)
   {
    /***** Table header *****/
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
    TstCfg_GetConfig ();	// Get feedback type
-   MchRes_ShowMchResults (Games,Usr_ME,-1L,GamCod,NULL);
+   MchRes_ShowMchResults (Games,Usr_ME,-1L,Games->Game.GamCod,NULL);
   }
 
 /*****************************************************************************/
@@ -198,7 +197,6 @@ void MchRes_ShowMyMchResultsInMch (void)
   {
    extern const char *Txt_Results_of_match_X;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
    char *Title;
 
@@ -206,19 +204,19 @@ void MchRes_ShowMyMchResultsInMch (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
       Err_WrongMatchExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Games,&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
@@ -356,38 +354,37 @@ void MchRes_ShowAllMchResultsInGam (void)
   {
    extern const char *Txt_Results_of_game_X;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Games,&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in game *****/
-   if (asprintf (&Title,Txt_Results_of_game_X,Game.Title) < 0)
+   if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
       Err_NotEnoughMemoryExit ();
    MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
    free (Title);
-      MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
+      MchRes_ListAllMchResultsInGam (&Games);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
   }
 
-static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
+static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
@@ -397,7 +394,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
    MchRes_ShowHeaderMchResults (Usr_OTHER);
 
    /***** Get all users who have answered any match question in this game *****/
-   NumUsrs = Mch_DB_GetUsrsWhoHavePlayedGam (&mysql_res,GamCod);
+   NumUsrs = Mch_DB_GetUsrsWhoHavePlayedGam (&mysql_res,Games->Game.GamCod);
 
    /***** List matches results for each user *****/
    for (NumUsr = 0;
@@ -412,7 +409,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 	      {
 	       /***** Show matches results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       MchRes_ShowMchResults (Games,Usr_OTHER,-1L,GamCod,NULL);
+	       MchRes_ShowMchResults (Games,Usr_OTHER,-1L,Games->Game.GamCod,NULL);
 	      }
 
    /***** Free structure that stores the query result *****/
@@ -427,7 +424,6 @@ void MchRes_ShowAllMchResultsInMch (void)
   {
    extern const char *Txt_Results_of_match_X;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
    char *Title;
 
@@ -435,19 +431,19 @@ void MchRes_ShowAllMchResultsInMch (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
    if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
       Err_WrongMatchExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Game begin *****/
-   Gam_ShowOnlyOneGameBegin (&Games,&Game,
+   Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
 	                     false);	// Do not put form to start new match
 
@@ -541,10 +537,9 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
    extern const char *Txt_Update_results;
    unsigned UniqueId;
    unsigned NumGame;
-   struct Gam_Game Game;
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games->Game);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Games,
@@ -572,8 +567,8 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		 NumGame++, UniqueId++, The_ChangeRowColor ())
 	      {
 	       /* Get data of this game */
-	       Game.GamCod = Games->Lst[NumGame].GamCod;
-	       Gam_GetDataOfGameByCod (&Game);
+	       Games->Game.GamCod = Games->Lst[NumGame].GamCod;
+	       Gam_GetDataOfGameByCod (&Games->Game);
 
 	       /* Write a row for this event */
 	       HTM_TR_Begin (NULL);
@@ -599,7 +594,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
-		     HTM_Txt (Game.Title);
+		     HTM_Txt (Games->Game.Title);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -727,7 +722,6 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    struct MchPrn_Print Print;
    unsigned NumQstsBlank;
    struct Mch_Match Match;
-   struct Gam_Game Game;
    double Grade;
    struct MchPrn_NumQuestions NumTotalQsts;
    double TotalScore;
@@ -769,11 +763,11 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Get data of match and game */
 	 Match.MchCod = Print.MchCod;
 	 Mch_GetDataOfMatchByCod (&Match);
-	 Game.GamCod = Match.GamCod;
-	 Gam_GetDataOfGameByCod (&Game);
+	 Games->Game.GamCod = Match.GamCod;
+	 Gam_GetDataOfGameByCod (&Games->Game);
 
 	 /* Check if I can view this match result and score */
-	 MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
+	 MchRes_CheckIfICanSeeMatchResult (&Games->Game,&Match,UsrDat->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -885,8 +879,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	               The_GetColorRows ());
 	    if (ICanView.Score)
 	      {
-	       Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
-	       TstPrn_ShowGrade (Grade,Game.MaxGrade);
+	       Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Games->Game.MaxGrade);
+	       TstPrn_ShowGrade (Grade,Games->Game.MaxGrade);
 	       TotalGrade += Grade;
 	      }
 	    else
@@ -898,7 +892,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	               The_GetColorRows ());
 	    if (ICanView.Result)
 	      {
-	       Games->GamCod         = Match.GamCod;
+	       Games->Game.GamCod    = Match.GamCod;
 	       Games->MchCod.Current = Match.MchCod;
 	       switch (MeOrOther)
 		 {
@@ -1073,7 +1067,6 @@ void MchRes_ShowOneMchResult (void)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
    Usr_MeOrOther_t MeOrOther;
    struct Usr_Data *UsrDat;
@@ -1086,11 +1079,11 @@ void MchRes_ShowOneMchResult (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
@@ -1113,7 +1106,7 @@ void MchRes_ShowOneMchResult (void)
    MchPrn_GetMatchPrintDataByMchCodAndUsrCod (&Print);
 
    /***** Check if I can view this match result and score *****/
-   MchRes_CheckIfICanSeeMatchResult (&Game,&Match,UsrDat->UsrCod,&ICanView);
+   MchRes_CheckIfICanSeeMatchResult (&Games.Game,&Match,UsrDat->UsrCod,&ICanView);
 
    if (ICanView.Result)	// I am allowed to view this match result
      {
@@ -1260,7 +1253,7 @@ void MchRes_ShowOneMchResult (void)
 		  if (ICanView.Score)
 		    {
 		     HTM_STRONG_Begin ();
-			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
+			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Games.Game.MaxGrade);
 		     HTM_STRONG_End ();
 		    }
 		  else
@@ -1289,7 +1282,7 @@ void MchRes_ShowOneMchResult (void)
 				     Print.NumQsts.All,
 				     Print.PrintedQuestions,
 				     Print.TimeUTC,
-				     Game.Visibility);
+				     Games.Game.Visibility);
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();

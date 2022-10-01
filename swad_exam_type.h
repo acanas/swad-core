@@ -93,7 +93,6 @@ struct Exa_Exams
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    struct Exa_Exam Exam;	// Selected/current exam
-   // long ExaCod;			// Selected/current exam code
    long SetCod;			// Selected/current set code
    long SesCod;			// Selected/current session code
    unsigned SetInd;		// Current set index

@@ -113,16 +113,15 @@ static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutParamsToCreateNewGame (void *Games);
 
-static void Gam_ShowOneGame (struct Gam_Games *Games,
-                             struct Gam_Game *Game,bool ShowOnlyThisGame);
+static void Gam_ShowGameMainData (struct Gam_Games *Games,
+                                  bool ShowOnlyThisGame);
 
 static void Gam_PutIconsOneGame (void *Games);
 static void Gam_WriteAuthor (struct Gam_Game *Game);
 
 static void Gam_PutHiddenParamGameOrder (Gam_Order_t SelectedOrder);
 
-static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
-					  const struct Gam_Game *Game,
+static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor);
 
 static void Gam_PutParamsOneQst (void *Games);
@@ -132,7 +131,6 @@ static Gam_Order_t Gam_GetParamOrder (void);
 static void Gam_RemoveGameFromAllTables (long GamCod);
 
 static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
-				     struct Gam_Game *Game,
 				     char Txt[Cns_MAX_BYTES_TEXT + 1],
 				     bool ItsANewGame);
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
@@ -142,7 +140,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
 static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
 
-static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game);
+static void Gam_ListGameQuestions (struct Gam_Games *Games);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
@@ -173,7 +171,7 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->CurrentPage       = 0;
    Games->ListQuestions     = NULL;
    Games->GamCodsSelected   = NULL;	// String with selected game codes separated by separator multiple
-   Games->GamCod            = -1L;	// Current/selected game code
+   Games->Game.GamCod       = -1L;	// Current/selected game code
    Games->MchCod.Current    =
    Games->MchCod.Selected   = -1L;	// Current/selected match code
    Games->QstInd            = 0;	// Current question index
@@ -233,10 +231,9 @@ void Gam_ListAllGames (struct Gam_Games *Games)
    Gam_Order_t Order;
    struct Pagination Pagination;
    unsigned NumGame;
-   struct Gam_Game Game;
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games->Game);
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
@@ -307,13 +304,12 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 		 NumGame++)
 	      {
 	       /* Get data of this game */
-	       Game.GamCod = Games->Lst[NumGame - 1].GamCod;
-	       Gam_GetDataOfGameByCod (&Game);
+	       Games->Game.GamCod = Games->Lst[NumGame - 1].GamCod;
+	       Gam_GetDataOfGameByCod (&Games->Game);
 
-	       /* Show game */
-	       Gam_ShowOneGame (Games,
-				&Game,
-				false);	// Do not show only this game
+	       /* Show a pair of rows with the main data of this game */
+	       Gam_ShowGameMainData (Games,
+				     false);	// Do not show only this game
 	      }
 
 	 /***** End table *****/
@@ -369,7 +365,7 @@ static bool Gam_CheckIfICanListGameQuestions (void)
   }
 
 /*****************************************************************************/
-/***************** Put contextual icons in list of games *******************/
+/****************** Put contextual icons in list of games ********************/
 /*****************************************************************************/
 
 static void Gam_PutIconsListGames (void *Games)
@@ -404,7 +400,7 @@ static void Gam_PutIconsListGames (void *Games)
   }
 
 /*****************************************************************************/
-/********************** Put icon to create a new game **********************/
+/*********************** Put icon to create a new game ***********************/
 /*****************************************************************************/
 
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
@@ -414,7 +410,7 @@ static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
   }
 
 /*****************************************************************************/
-/********************* Put button to create a new game *********************/
+/********************* Put button to create a new game ***********************/
 /*****************************************************************************/
 
 static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
@@ -430,7 +426,7 @@ static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
   }
 
 /*****************************************************************************/
-/******************* Put parameters to create a new game *******************/
+/******************** Put parameters to create a new game ********************/
 /*****************************************************************************/
 
 static void Gam_PutParamsToCreateNewGame (void *Games)
@@ -443,27 +439,26 @@ static void Gam_PutParamsToCreateNewGame (void *Games)
   }
 
 /*****************************************************************************/
-/****************************** Show one game ******************************/
+/******************************* Show one game *******************************/
 /*****************************************************************************/
 
 void Gam_SeeOneGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Show game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -473,16 +468,14 @@ void Gam_SeeOneGame (void)
 /*****************************************************************************/
 
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
-			  struct Gam_Game *Game,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch)
   {
-   Gam_ShowOnlyOneGameBegin (Games,Game,ListGameQuestions,PutFormNewMatch);
+   Gam_ShowOnlyOneGameBegin (Games,ListGameQuestions,PutFormNewMatch);
    Gam_ShowOnlyOneGameEnd ();
   }
 
 void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
-			       struct Gam_Game *Game,
 			       bool ListGameQuestions,
 			       bool PutFormNewMatch)
   {
@@ -490,22 +483,20 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    extern const char *Txt_Game;
 
    /***** Begin box *****/
-   Games->GamCod = Game->GamCod;
    Box_BoxBegin (NULL,Txt_Game,
                  Gam_PutIconsOneGame,Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
-      /***** Show game *****/
-      Gam_ShowOneGame (Games,
-		       Game,
-		       true);	// Show only this game
+      /***** Show main data of this game *****/
+      Gam_ShowGameMainData (Games,
+		            true);	// Show only this game
 
       if (ListGameQuestions)
-	  /***** Write questions of this game *****/
-	 Gam_ListGameQuestions (Games,Game);
+	 /***** Write questions of this game *****/
+	 Gam_ListGameQuestions (Games);
       else
 	 /***** List matches *****/
-	 Mch_ListMatches (Games,Game,PutFormNewMatch);
+	 Mch_ListMatches (Games,PutFormNewMatch);
   }
 
 void Gam_ShowOnlyOneGameEnd (void)
@@ -514,8 +505,12 @@ void Gam_ShowOnlyOneGameEnd (void)
    Box_BoxEnd ();
   }
 
-static void Gam_ShowOneGame (struct Gam_Games *Games,
-                             struct Gam_Game *Game,bool ShowOnlyThisGame)
+/*****************************************************************************/
+/********** Show a pair of rows with the main data of a given game ***********/
+/*****************************************************************************/
+
+static void Gam_ShowGameMainData (struct Gam_Games *Games,
+                                  bool ShowOnlyThisGame)
   {
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
@@ -528,11 +523,9 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    Dat_StartEndTime_t StartEndTime;
    const char *Color;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   bool ICanEditGames     = Gam_CheckIfICanEditGames ();
-   bool ICanListQuestions = Gam_CheckIfICanListGameQuestions ();
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Game->GamCod,&Anchor);
+   Frm_SetAnchorStr (Games->Game.GamCod,&Anchor);
 
    /***** Begin box and table *****/
    if (ShowOnlyThisGame)
@@ -542,27 +535,15 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this game *****/
-      if (ICanEditGames ||
-	  ICanListQuestions)
-	{
-	 Games->GamCod = Game->GamCod;
-
-	 if (ShowOnlyThisGame)
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-	 else
+      if (!ShowOnlyThisGame)
+	 if (Gam_CheckIfICanEditGames () ||
+	     Gam_CheckIfICanListGameQuestions ())
+	   {
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	                  The_GetColorRows ());
-
-	 if (ICanEditGames)
-	    /* Icons to remove/edit this game */
-	    Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
-	 else
-	    /* Put icon to view game listing its questions */
-	    Ico_PutContextualIconToView (ActLstOneGam,NULL,
-					 Gam_PutParams,Games);
-
-	 HTM_TD_End ();
-	}
+	       Gam_PutIconsToRemEditOneGame (Games,Anchor);
+	    HTM_TD_End ();
+	   }
 
       /***** Start/end date/time *****/
       UniqueId++;
@@ -572,18 +553,18 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	{
 	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Color = Game->NumUnfinishedMchs ? (Game->Hidden ? "DATE_GREEN_LIGHT":
-							   "DATE_GREEN") :
-					   (Game->Hidden ? "DATE_RED_LIGHT":
-							   "DATE_RED");
+	 Color = Games->Game.NumUnfinishedMchs ? (Games->Game.Hidden ? "DATE_GREEN_LIGHT":
+								       "DATE_GREEN") :
+						 (Games->Game.Hidden ? "DATE_RED_LIGHT":
+								       "DATE_RED");
 	 if (ShowOnlyThisGame)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,Color,The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,Color,The_GetSuffix (),The_GetColorRows ());
-	 if (Game->TimeUTC[Dat_STR_TIME])
-	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
+	 if (Games->Game.TimeUTC[Dat_STR_TIME])
+	    Dat_WriteLocalDateHMSFromUTC (Id,Games->Game.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x7);
 	 HTM_TD_End ();
@@ -597,32 +578,31 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Game title */
-      Games->GamCod = Game->GamCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
 	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
-				     Game->Hidden ? "ASG_TITLE_LIGHT":
-						    "ASG_TITLE",
+				     Games->Game.Hidden ? "ASG_TITLE_LIGHT":
+							  "ASG_TITLE",
 				     The_GetSuffix ());
-	       HTM_Txt (Game->Title);
+	       HTM_Txt (Games->Game.Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_ARTICLE_End ();
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Game->Hidden ? "ASG_GRP_LIGHT" :
+                     Games->Game.Hidden ? "ASG_GRP_LIGHT" :
 				    "ASG_GRP",
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
-	 HTM_Unsigned (Game->NumQsts);
+	 HTM_Unsigned (Games->Game.NumQsts);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Maximum_grade);
-	 HTM_Double (Game->MaxGrade);
+	 HTM_Double (Games->Game.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Game->Visibility,Game->Hidden);
+	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,Games->Game.Hidden);
       HTM_DIV_End ();
 
       /***** Number of matches in game *****/
@@ -631,16 +611,15 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
-      Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
 	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
-	                          Game->Hidden ? "ASG_TITLE_LIGHT":
-				                 "ASG_TITLE",
+	                          Games->Game.Hidden ? "ASG_TITLE_LIGHT":
+						       "ASG_TITLE",
 				  The_GetSuffix ());
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
-	    HTM_Unsigned (Game->NumMchs);
+	    HTM_Unsigned (Games->Game.NumMchs);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
 
@@ -658,7 +637,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 	               The_GetColorRows ());
-      Gam_WriteAuthor (Game);
+      Gam_WriteAuthor (&Games->Game);
       HTM_TD_End ();
 
       /***** Text of the game *****/
@@ -667,13 +646,13 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 	               The_GetColorRows ());
-      Gam_DB_GetGameTxt (Game->GamCod,Txt);
+      Gam_DB_GetGameTxt (Games->Game.GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Game->Hidden ? "DAT_LIGHT" :
-				    "DAT",
+                     Games->Game.Hidden ? "DAT_LIGHT" :
+					  "DAT",
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -693,30 +672,23 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
   }
 
 /*****************************************************************************/
-/************* Put icon to show results of matches in a game *****************/
+/******************** Put icons to remove/edit one game **********************/
 /*****************************************************************************/
 
 static void Gam_PutIconsOneGame (void *Games)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
-     {
-      [Rol_STD    ] = ActSeeMyMchResGam,
-      [Rol_NET    ] = ActSeeUsrMchResGam,
-      [Rol_TCH    ] = ActSeeUsrMchResGam,
-      [Rol_SYS_ADM] = ActSeeUsrMchResGam,
-     };
+   char *Anchor = NULL;
 
    if (Games)
      {
-      /***** Put icon to view matches results *****/
-      if (NextAction[Gbl.Usrs.Me.Role.Logged])
-	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],MchRes_RESULTS_BOX_ID,
-					     Gam_PutParams,Games);
+      /***** Set anchor string *****/
+      Frm_SetAnchorStr (((struct Gam_Games *) Games)->Game.GamCod,&Anchor);
 
-      /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
-					 Gam_PutParams,Games);
+      /***** Icons to remove/edit this game *****/
+      Gam_PutIconsToRemEditOneGame (Games,Anchor);
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (Anchor);
      }
   }
 
@@ -739,11 +711,10 @@ static void Gam_PutHiddenParamGameOrder (Gam_Order_t SelectedOrder)
   }
 
 /*****************************************************************************/
-/******************** Put a link (form) to edit one game *********************/
+/******************** Put icons to remove/edit one game **********************/
 /*****************************************************************************/
 
-static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
-					  const struct Gam_Game *Game,
+static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[2] =
@@ -751,19 +722,45 @@ static void Gam_PutFormsToRemEditOneGame (struct Gam_Games *Games,
       [false] = ActHidGam,	// Visible ==> action to hide
       [true ] = ActUnhGam,	// Hidden ==> action to unhide
      };
+   static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
+     {
+      [Rol_STD    ] = ActSeeMyMchResGam,
+      [Rol_NET    ] = ActSeeUsrMchResGam,
+      [Rol_TCH    ] = ActSeeUsrMchResGam,
+      [Rol_SYS_ADM] = ActSeeUsrMchResGam,
+     };
 
-   /***** Icon to remove game *****/
-   Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
-                                  Gam_PutParams,Games);
+   if (Gam_CheckIfICanEditGames ())
+     {
+      /***** Icon to remove game *****/
+      Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
+				     Gam_PutParams,Games);
 
-   /***** Icon to unhide/hide game *****/
-   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-				      Gam_PutParams,Games,
-				      Game->Hidden);
+      /***** Icon to unhide/hide game *****/
+      Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					 Gam_PutParams,Games,
+					 Games->Game.Hidden);
 
-   /***** Icon to edit game *****/
-   Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
-                                Gam_PutParams,Games);
+      /***** Icon to edit game *****/
+      Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
+				   Gam_PutParams,Games);
+     }
+
+   if (Gam_CheckIfICanListGameQuestions ())
+      /***** Icon to view game listing its questions *****/
+      Ico_PutContextualIconToView (ActLstOneGam,NULL,
+				   Gam_PutParams,Games);
+
+   /***** Put icon to view matches results *****/
+   if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
+      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],MchRes_RESULTS_BOX_ID,
+					  Gam_PutParams,Games);
+
+   /***** Link to get resource link *****/
+   if (PrgRsc_CheckIfICanGetLink ())
+      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
+				      Gam_PutParams,Games);
+
   }
 
 /*****************************************************************************/
@@ -789,8 +786,8 @@ void Gam_PutParams (void *Games)
 
    if (Games)
      {
-      if (((struct Gam_Games *) Games)->GamCod > 0)
-	 Gam_PutParamGameCod (((struct Gam_Games *) Games)->GamCod);
+      if (((struct Gam_Games *) Games)->Game.GamCod > 0)
+	 Gam_PutParamGameCod (((struct Gam_Games *) Games)->Game.GamCod);
       Gam_PutHiddenParamOrder (((struct Gam_Games *) Games)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -1065,30 +1062,28 @@ void Gam_AskRemGame (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
    extern const char *Txt_Remove_game;
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
-   Games.GamCod = Game.GamCod;
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,
                            Gam_PutParams,&Games,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
-                           Game.Title);
+                           Games.Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1102,29 +1097,28 @@ void Gam_RemoveGame (void)
   {
    extern const char *Txt_Game_X_removed;
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParamGameCod ()) <= 0)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Remove game from all tables *****/
-   Gam_RemoveGameFromAllTables (Game.GamCod);
+   Gam_RemoveGameFromAllTables (Games.Game.GamCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_removed,
-                  Game.Title);
+                  Games.Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1169,25 +1163,24 @@ void Gam_RemoveCrsGames (long CrsCod)
 void Gam_HideGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Hide game *****/
-   Gam_DB_HideOrUnhideGame (Game.GamCod,true);
+   Gam_DB_HideOrUnhideGame (Games.Game.GamCod,true);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1200,25 +1193,24 @@ void Gam_HideGame (void)
 void Gam_UnhideGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Unhide game *****/
-   Gam_DB_HideOrUnhideGame (Game.GamCod,false);
+   Gam_DB_HideOrUnhideGame (Games.Game.GamCod,false);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1231,29 +1223,28 @@ void Gam_UnhideGame (void)
 void Gam_ListGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Check if I can list game questions *****/
    if (!Gam_CheckIfICanListGameQuestions ())
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
 
    /***** Get game data *****/
-   Gam_GetDataOfGameByCod (&Game);
-   Gam_DB_GetGameTxt (Game.GamCod,Txt);
+   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
 
    /***** Show game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -1265,7 +1256,6 @@ void Gam_ListGame (void)
 void Gam_RequestCreatOrEditGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1273,31 +1263,31 @@ void Gam_RequestCreatOrEditGame (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   ItsANewGame = ((Game.GamCod = Gam_GetParams (&Games)) <= 0);
+   ItsANewGame = ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0);
 
    /***** Get game data *****/
    if (ItsANewGame)
      {
       /* Initialize to empty game */
-      Gam_ResetGame (&Game);
+      Gam_ResetGame (&Games.Game);
       Txt[0] = '\0';
      }
    else
      {
       /* Get game data from database */
-      Gam_GetDataOfGameByCod (&Game);
-      Gam_DB_GetGameTxt (Game.GamCod,Txt);
+      Gam_GetDataOfGameByCod (&Games.Game);
+      Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
      }
 
    /***** Put forms to create/edit a game *****/
-   Gam_PutFormsEditionGame (&Games,&Game,Txt,ItsANewGame);
+   Gam_PutFormsEditionGame (&Games,Txt,ItsANewGame);
 
    /***** Show games or questions *****/
    if (ItsANewGame)
@@ -1305,7 +1295,7 @@ void Gam_RequestCreatOrEditGame (void)
       Gam_ListAllGames (&Games);
    else
       /* Show questions of the game ready to be edited */
-      Gam_ListGameQuestions (&Games,&Game);
+      Gam_ListGameQuestions (&Games);
   }
 
 /*****************************************************************************/
@@ -1313,7 +1303,6 @@ void Gam_RequestCreatOrEditGame (void)
 /*****************************************************************************/
 
 static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
-				     struct Gam_Game *Game,
 				     char Txt[Cns_MAX_BYTES_TEXT + 1],
 				     bool ItsANewGame)
   {
@@ -1329,7 +1318,6 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Save_changes;
 
    /***** Begin form *****/
-   Games->GamCod = Game->GamCod;
    Frm_BeginForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
       Gam_PutParams (Games);
@@ -1341,8 +1329,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 			    Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
       else
 	 Box_BoxTableBegin (NULL,
-			    Game->Title[0] ? Game->Title :
-					     Txt_Edit_game,
+			    Games->Game.Title[0] ? Games->Game.Title :
+					           Txt_Edit_game,
 			    NULL,NULL,
 			    Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
@@ -1354,7 +1342,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
+	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
 			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -1372,7 +1360,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
+	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,false,
 			     " class=\"INPUT_%s\" required=\"required\"",
 			     The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1387,7 +1375,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LB\"");
-	    TstVis_PutVisibilityCheckboxes (Game->Visibility);
+	    TstVis_PutVisibilityCheckboxes (Games->Game.Visibility);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1426,7 +1414,6 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 void Gam_ReceiveFormGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1434,38 +1421,38 @@ void Gam_ReceiveFormGame (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Check if I can edit games *****/
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   ItsANewGame = ((Game.GamCod = Gam_GetParams (&Games)) <= 0);
+   ItsANewGame = ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0);
 
    /***** If I can edit games ==> receive game from form *****/
    if (Gam_CheckIfICanEditGames ())
      {
-      Gam_ReceiveGameFieldsFromForm (&Game,Txt);
-      if (Gam_CheckGameFieldsReceivedFromForm (&Game))
+      Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
+      if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
 	{
          /***** Create a new game or update an existing one *****/
 	 if (ItsANewGame)
-	    Gam_CreateGame (&Game,Txt);	// Add new game to database
+	    Gam_CreateGame (&Games.Game,Txt);	// Add new game to database
 	 else
-	    Gam_UpdateGame (&Game,Txt);	// Update game data in database
+	    Gam_UpdateGame (&Games.Game,Txt);	// Update game data in database
 
          /***** Put forms to edit the game created or updated *****/
-         Gam_PutFormsEditionGame (&Games,&Game,Txt,
+         Gam_PutFormsEditionGame (&Games,Txt,
                                   false);	// No new game
 
          /***** Show questions of the game ready to be edited ******/
-         Gam_ListGameQuestions (&Games,&Game);
+         Gam_ListGameQuestions (&Games);
 	}
       else
 	{
          /***** Put forms to create/edit the game *****/
-         Gam_PutFormsEditionGame (&Games,&Game,Txt,ItsANewGame);
+         Gam_PutFormsEditionGame (&Games,Txt,ItsANewGame);
 
          /***** Show games or questions *****/
          if (ItsANewGame)
@@ -1473,7 +1460,7 @@ void Gam_ReceiveFormGame (void)
             Gam_ListAllGames (&Games);
          else
             /* Show questions of the game ready to be edited */
-            Gam_ListGameQuestions (&Games,&Game);
+            Gam_ListGameQuestions (&Games);
 	}
      }
    else
@@ -1565,29 +1552,27 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
 void Gam_ReqSelectQstsToAddToGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Show form to create a new question in this game *****/
-   Games.GamCod = Game.GamCod;
    Qst_RequestSelectQstsForGame (&Games);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -1599,25 +1584,23 @@ void Gam_ReqSelectQstsToAddToGame (void)
 void Gam_ListQstsToAddToGame (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** List several test questions for selection *****/
-   Games.GamCod = Game.GamCod;
    Qst_ListQuestionsToSelectForGame (&Games);
   }
 
@@ -1648,19 +1631,18 @@ unsigned Gam_GetParamQstInd (void)
 /************************ List the questions of a game ***********************/
 /*****************************************************************************/
 
-static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game)
+static void Gam_ListGameQuestions (struct Gam_Games *Games)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   bool ICanEditQuestions = Gam_CheckIfEditable (Game);
+   bool ICanEditQuestions = Gam_CheckIfEditable (&Games->Game);
 
    /***** Get data of questions from database *****/
-   NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Game->GamCod);
+   NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
-   Games->GamCod = Game->GamCod;
    if (ICanEditQuestions)
       Box_BoxBegin (NULL,Txt_Questions,
 		    Gam_PutIconToAddNewQuestions,Games,
@@ -1673,7 +1655,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
    /***** Show table with questions *****/
    if (NumQsts)
       Gam_ListOneOrMoreQuestionsForEdition (Games,
-                                            Game->GamCod,NumQsts,mysql_res,
+                                            Games->Game.GamCod,NumQsts,mysql_res,
 					    ICanEditQuestions);
 
    /***** Put button to add a new question in this game *****/
@@ -1751,8 +1733,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
 
 	 /* Initialize context */
-	 Games->GamCod = GamCod;
-	 Games->QstInd = QstInd;
+	 Games->Game.GamCod = GamCod;
+	 Games->QstInd      = QstInd;
 
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Question.QstCod,&Anchor);
@@ -1848,7 +1830,6 @@ void Gam_AddQstsToGame (void)
    extern const char *Txt_A_question_has_been_added;
    extern const char *Txt_X_questions_have_been_added;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    long QstCod;
@@ -1859,15 +1840,15 @@ void Gam_AddQstsToGame (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Get selected questions *****/
@@ -1892,13 +1873,13 @@ void Gam_AddQstsToGame (void)
 	    Err_WrongQuestionExit ();
 
 	 /* Check if question is already present in game */
-	 if (Gam_DB_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
+	 if (Gam_DB_GetQstIndFromQstCod (Games.Game.GamCod,QstCod) == 0)	// This question is not yet in this game
 	   {
 	    /* Get current maximum index */
-	    MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
+	    MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Games.Game.GamCod);	// 0 is no questions in game
 
 	    /* Insert question in the table of questions */
-            Gam_DB_InsertQstInGame (Game.GamCod,MaxQstInd + 1,QstCod);
+            Gam_DB_InsertQstInGame (Games.Game.GamCod,MaxQstInd + 1,QstCod);
 
 	    NumQstsAdded++;
 	   }
@@ -1917,7 +1898,7 @@ void Gam_AddQstsToGame (void)
    Gam_FreeListsSelectedQuestions (&Games);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -1958,29 +1939,27 @@ void Gam_RequestRemoveQstFromGame (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    unsigned QstInd;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstInd = Gam_GetParamQstInd ();
 
    /***** Show question and button to remove question *****/
-   Games.GamCod = Game.GamCod;
    Games.QstInd = QstInd;
    Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
 			   Gam_PutParamsOneQst,&Games,
@@ -1989,7 +1968,7 @@ void Gam_RequestRemoveQstFromGame (void)
 			   QstInd);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2002,22 +1981,21 @@ void Gam_RemoveQstFromGame (void)
   {
    extern const char *Txt_Question_removed;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    unsigned QstInd;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -2025,20 +2003,20 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Remove the question from all tables *****/
    /* Remove answers from this test question */
-   Mch_DB_RemUsrAnswersOfAQuestion (Game.GamCod,QstInd);
+   Mch_DB_RemUsrAnswersOfAQuestion (Games.Game.GamCod,QstInd);
 
    /* Remove the question itself */
-   Gam_DB_RemoveQstFromGame (Game.GamCod,QstInd);
+   Gam_DB_RemoveQstFromGame (Games.Game.GamCod,QstInd);
 
    /* Change indexes of questions greater than this */
-   Mch_DB_UpdateIndexesOfQstsGreaterThan (Game.GamCod,QstInd);
-   Gam_DB_UpdateIndexesOfQstsGreaterThan (Game.GamCod,QstInd);
+   Mch_DB_UpdateIndexesOfQstsGreaterThan (Games.Game.GamCod,QstInd);
+   Gam_DB_UpdateIndexesOfQstsGreaterThan (Games.Game.GamCod,QstInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2051,7 +2029,6 @@ void Gam_MoveUpQst (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    unsigned QstIndTop;
    unsigned QstIndBottom;
 
@@ -2059,15 +2036,15 @@ void Gam_MoveUpQst (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -2077,18 +2054,18 @@ void Gam_MoveUpQst (void)
    if (QstIndBottom > 1)	// 2, 3, 4...
      {
       /* Indexes of questions to be exchanged */
-      QstIndTop = Gam_DB_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
+      QstIndTop = Gam_DB_GetPrevQuestionIndexInGame (Games.Game.GamCod,QstIndBottom);
       if (QstIndTop == 0)
 	 Err_WrongQuestionIndexExit ();
 
       /* Exchange questions */
-      Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
+      Gam_ExchangeQuestions (Games.Game.GamCod,QstIndTop,QstIndBottom);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2101,7 +2078,6 @@ void Gam_MoveDownQst (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    unsigned QstIndTop;
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
@@ -2110,39 +2086,39 @@ void Gam_MoveDownQst (void)
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Game))
+   if (!Gam_CheckIfEditable (&Games.Game))
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
    QstIndTop = Gam_GetParamQstInd ();
 
    /***** Get maximum question index *****/
-   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
+   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Games.Game.GamCod);	// 0 is no questions in game
 
    /***** Move down question *****/
    if (QstIndTop < MaxQstInd)
      {
       /* Indexes of questions to be exchanged */
-      QstIndBottom = Gam_DB_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+      QstIndBottom = Gam_DB_GetNextQuestionIndexInGame (Games.Game.GamCod,QstIndTop);
       if (QstIndBottom == Gam_AFTER_LAST_QUESTION)
 	 Err_WrongQuestionIndexExit ();
 
       /* Exchange questions */
-      Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
+      Gam_ExchangeQuestions (Games.Game.GamCod,QstIndTop,QstIndBottom);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
 	                false);	// Do not put form to start new match
   }
@@ -2210,12 +2186,11 @@ static bool Gam_CheckIfEditable (const struct Gam_Game *Game)
 /********************* Put button to create a new match **********************/
 /*****************************************************************************/
 
-void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod)
+void Gam_PutButtonNewMatch (struct Gam_Games *Games)
   {
    extern const char *Txt_New_match;
 
    Frm_BeginFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
-      Games->GamCod = GamCod;
       Gam_PutParams (Games);
 
       Btn_PutConfirmButton (Txt_New_match);
@@ -2230,21 +2205,20 @@ void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod)
 void Gam_RequestNewMatch (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetDataOfGameByCod (&Games.Game);
 
    /***** Show game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
                         true);	// Put form to start new match
   }

@@ -4463,7 +4463,6 @@ int swad__answerMatchQuestion (struct soap *soap,
                                struct swad__answerMatchQuestionOutput *answerMatchQuestionOut)				// output
   {
    int ReturnCode;
-   // unsigned NumOpt;
    struct Gam_Game Game;
    struct Mch_Match Match;
    unsigned QstInd;	// 0 means that the game has not started. First question has index 1.

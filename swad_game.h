@@ -62,26 +62,6 @@ struct Gam_GameSelected
    bool Selected;	// Is this game selected when seeing match results?
   };
 
-struct Gam_Games
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Total number of games
-   unsigned NumSelected;	// Number of games selected
-   struct Gam_GameSelected *Lst;// List of games
-   Gam_Order_t SelectedOrder;
-   unsigned CurrentPage;
-   char *ListQuestions;
-   char *GamCodsSelected;	// String with selected game codes separated by separator multiple
-   long GamCod;			// Selected/current game code
-   struct
-     {
-      long Selected;		// Current match code
-      long Current;
-     } MchCod;
-   unsigned QstInd;		// Current question index
-  };
-
 struct Gam_Game
   {
    long GamCod;			// Game code
@@ -99,6 +79,26 @@ struct Gam_Game
    unsigned NumUnfinishedMchs;	// Number of unfinished matches in the game
   };
 
+struct Gam_Games
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Total number of games
+   unsigned NumSelected;	// Number of games selected
+   struct Gam_GameSelected *Lst;// List of games
+   Gam_Order_t SelectedOrder;
+   unsigned CurrentPage;
+   char *ListQuestions;
+   char *GamCodsSelected;	// String with selected game codes separated by separator multiple
+   struct Gam_Game Game;	// Selected/current game
+   struct
+     {
+      long Selected;		// Current match code
+      long Current;
+     } MchCod;
+   unsigned QstInd;		// Current question index
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -110,11 +110,9 @@ void Gam_SeeAllGames (void);
 void Gam_ListAllGames (struct Gam_Games *Games);
 void Gam_SeeOneGame (void);
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
-			  struct Gam_Game *Game,
 			  bool ListGameQuestions,
 			  bool PutFormNewMatch);
 void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
-			       struct Gam_Game *Game,
 			       bool ListGameQuestions,
 			       bool PutFormNewMatch);
 void Gam_ShowOnlyOneGameEnd (void);
@@ -158,7 +156,7 @@ void Gam_RemoveQstFromGame (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod);
+void Gam_PutButtonNewMatch (struct Gam_Games *Games);
 void Gam_RequestNewMatch (void);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);

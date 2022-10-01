@@ -13243,48 +13243,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeMyMchResGam] =
 #if   L==1	// ca
-	"See all my matches results in a given game"		// Necessita traducció
+	"See all my matches results in game"		// Necessita traducció
 #elif L==2	// de
-	"See all my matches results in a given game"		// Need Übersetzung
+	"See all my matches results in game"		// Need Übersetzung
 #elif L==3	// en
-	"See all my matches results in a given game"
+	"See all my matches results in game"
 #elif L==4	// es
-	"Ver todos mis resultados en partidas de un juego"
+	"Ver todos mis resultados en partidas de juego"
 #elif L==5	// fr
-	"See all my matches results in a given game"		// Besoin de traduction
+	"See all my matches results in game"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos mis resultados en partidas de un juego"	// Okoteve traducción
+	"Ver todos mis resultados en partidas de juego"	// Okoteve traducción
 #elif L==7	// it
-	"See all my matches results in a given game"		// Bisogno di traduzione
+	"See all my matches results in game"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See all my matches results in a given game"		// Potrzebujesz tlumaczenie
+	"See all my matches results in game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all my matches results in a given game"		// Precisa de tradução
+	"See all my matches results in game"		// Precisa de tradução
 #elif L==10	// tr
-	"See all my matches results in a given game"		// Çeviri lazim!
+	"See all my matches results in game"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeMyMchResMch] =
 #if   L==1	// ca
-	"See my results in a given match"	// Necessita traducció
+	"See my results in match"	// Necessita traducció
 #elif L==2	// de
-	"See my results in a given match"	// Need Übersetzung
+	"See my results in match"	// Need Übersetzung
 #elif L==3	// en
-	"See my results in a given match"
+	"See my results in match"
 #elif L==4	// es
-	"Ver mis resultados en una partida"
+	"Ver mis resultados en partida"
 #elif L==5	// fr
-	"See my results in a given match"	// Besoin de traduction
+	"See my results in match"	// Besoin de traduction
 #elif L==6	// gn
-	"Ver mis resultados en una partida"	// Okoteve traducción
+	"Ver mis resultados en partida"	// Okoteve traducción
 #elif L==7	// it
-	"See my results in a given match"	// Bisogno di traduzione
+	"See my results in match"	// Bisogno di traduzione
 #elif L==8	// pl
-	"See my results in a given match"	// Potrzebujesz tlumaczenie
+	"See my results in match"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See my results in a given match"	// Precisa de tradução
+	"See my results in match"	// Precisa de tradução
 #elif L==10	// tr
-	"See my results in a given match"	// Çeviri lazim!
+	"See my results in match"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneMchResMe] =
@@ -13358,48 +13358,48 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeUsrMchResGam] =
 #if   L==1	// ca
-	"See all matches results in a given game"		// Necessita traducció
+	"See all matches results in game"		// Necessita traducció
 #elif L==2	// de
-	"See all matches results in a given game"		// Need Übersetzung
+	"See all matches results in game"		// Need Übersetzung
 #elif L==3	// en
-	"See all matches results in a given game"
+	"See all matches results in game"
 #elif L==4	// es
 	"Ver resultados de todas las partidas de un juego"
 #elif L==5	// fr
-	"See all matches results in a given game"		// Besoin de traduction
+	"See all matches results in game"		// Besoin de traduction
 #elif L==6	// gn
 	"Ver resultados de todas las partidas de un juego"	// Okoteve traducción
 #elif L==7	// it
-	"See all matches results in a given game"		// Bisogno di traduzione
+	"See all matches results in game"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See all matches results in a given game"		// Potrzebujesz tlumaczenie
+	"See all matches results in game"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all matches results in a given game"		// Precisa de tradução
+	"See all matches results in game"		// Precisa de tradução
 #elif L==10	// tr
-	"See all matches results in a given game"		// Çeviri lazim!
+	"See all matches results in game"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrMchResMch] =
 #if   L==1	// ca
-	"See results de usuario in a given match"	// Necessita traducció
+	"See user's results in match"		// Necessita traducció
 #elif L==2	// de
-	"See results de usuario in a given match"	// Need Übersetzung
+	"See user's results in match"		// Need Übersetzung
 #elif L==3	// en
-	"See results de usuario in a given match"
+	"See user's results in match"
 #elif L==4	// es
-	"Ver los resultados de usuario en una partida"
+	"Ver resultados de usuario en partida"
 #elif L==5	// fr
-	"See results de usuario in a given match"	// Besoin de traduction
+	"See user's results in match"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver los resultados de usuario en una partida"	// Okoteve traducción
+	"Ver resultados de usuario en partida"	// Okoteve traducción
 #elif L==7	// it
-	"See results de usuario in a given match"	// Bisogno di traduzione
+	"See user's results in match"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See results de usuario in a given match"	// Potrzebujesz tlumaczenie
+	"See user's results in match"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See results de usuario in a given match"	// Precisa de tradução
+	"See user's results in match"		// Precisa de tradução
 #elif L==10	// tr
-	"See results de usuario in a given match"	// Çeviri lazim!
+	"See user's results in match"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneMchResOth] =

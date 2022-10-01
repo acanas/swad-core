@@ -628,28 +628,9 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 static void Exa_PutIconsOneExam (void *Exams)
   {
    char *Anchor;
-   /*
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
-     {
-      [Rol_STD    ] = ActSeeMyExaResExa,
-      [Rol_NET    ] = ActSeeUsrExaResExa,
-      [Rol_TCH    ] = ActSeeUsrExaResExa,
-      [Rol_SYS_ADM] = ActSeeUsrExaResExa,
-     };
-   */
 
    if (Exams)
      {
-      /***** Put icon to view results of sessions in exam *****/
-      // if (NextAction[Gbl.Usrs.Me.Role.Logged])
-      //	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
-      //					     Exa_PutParams,Exams);
-
-      /***** Link to get resource link *****/
-      // if (PrgRsc_CheckIfICanGetLink ())
-      //	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-      // 					 Exa_PutParams,Exams);
-
       /***** Build anchor string *****/
       Frm_SetAnchorStr (((struct Exa_Exams *) Exams)->Exam.ExaCod,&Anchor);
 
@@ -691,7 +672,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [false] = ActHidExa,	// Visible ==> action to hide
       [true ] = ActUnhExa,	// Hidden ==> action to unhide
      };
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyExaResExa,
       [Rol_NET    ] = ActSeeUsrExaResExa,
@@ -713,8 +694,8 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
                                 Exa_PutParams,Exams);
 
    /***** Put icon to view results of sessions in exam *****/
-   if (NextAction[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
+   if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
+      Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
 					  Exa_PutParams,Exams);
 
    /***** Link to get resource link *****/

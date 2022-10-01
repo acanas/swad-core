@@ -96,7 +96,6 @@ static void Mch_PutIconsInListOfMatches (void *Games);
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games);
 
 static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
-                                      const struct Gam_Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
@@ -258,7 +257,6 @@ void Mch_ResetMatch (struct Mch_Match *Match)
 /*****************************************************************************/
 
 void Mch_ListMatches (struct Gam_Games *Games,
-                      struct Gam_Game *Game,
                       bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
@@ -267,10 +265,9 @@ void Mch_ListMatches (struct Gam_Games *Games,
    unsigned NumMatches;
 
    /***** Get data of matches from database *****/
-   NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Game->GamCod);
+   NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
-   Games->GamCod = Game->GamCod;
    Box_BoxBegin ("100%",Txt_Matches,
                  Mch_PutIconsInListOfMatches,Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
@@ -295,7 +292,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
 
       /***** Show the table with the matches *****/
       if (NumMatches)
-	 Mch_ListOneOrMoreMatches (Games,Game,NumMatches,mysql_res);
+	 Mch_ListOneOrMoreMatches (Games,NumMatches,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -307,9 +304,9 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    if (PutFormNewMatch)
-	       Mch_PutFormNewMatch (Game);	// Form to fill in data and start playing a new match
+	       Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
 	    else
-	       Gam_PutButtonNewMatch (Games,Game->GamCod);	// Button to create a new match
+	       Gam_PutButtonNewMatch (Games);	// Button to create a new match
 	    break;
 	 default:
 	    break;
@@ -371,7 +368,6 @@ static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games)
 /*****************************************************************************/
 
 static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
-                                      const struct Gam_Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res)
   {
@@ -429,7 +425,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
 	       /* Match status */
-	       Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
+	       Mch_ListOneOrMoreMatchesStatus (&Match,Games->Game.NumQsts);
 
 	       /* Match result visible? */
 	       Mch_ListOneOrMoreMatchesResult (Games,&Match);
@@ -558,7 +554,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 
       if (Mch_CheckIfICanEditThisMatch (Match))
 	{
-	 Games->GamCod         = Match->GamCod;
+	 Games->Game.GamCod    = Match->GamCod;
 	 Games->MchCod.Current = Match->MchCod;
 
 	 /***** Put icon to remove the match *****/
@@ -783,7 +779,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
    if (Match->Status.ShowUsrResults)
      {
       /* Result is visible by me */
-      Games->GamCod = Match->GamCod;
+      Games->Game.GamCod = Match->GamCod;
       Games->MchCod.Current = Match->MchCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
@@ -800,7 +796,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
 
-   Games->GamCod = Match->GamCod;
+   Games->Game.GamCod = Match->GamCod;
    Games->MchCod.Current = Match->MchCod;
 
    /***** Show match results *****/
@@ -839,18 +835,17 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 void Mch_ToggleVisResultsMchUsr (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Check if visibility of match results can be changed *****/
    if (!Mch_CheckIfVisibilityOfResultsCanBeChanged (&Match))
@@ -861,7 +856,7 @@ void Mch_ToggleVisResultsMchUsr (void)
    Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.ShowUsrResults);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -961,18 +956,17 @@ void Mch_RequestRemoveMatch (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
    extern const char *Txt_Remove_match;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,
@@ -982,7 +976,7 @@ void Mch_RequestRemoveMatch (void)
 	                   Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -995,18 +989,17 @@ void Mch_RemoveMatch (void)
   {
    extern const char *Txt_Match_X_removed;
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Check if I can remove this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1020,7 +1013,7 @@ void Mch_RemoveMatch (void)
 		  Match.Title);
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -1094,25 +1087,24 @@ void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod)
 void Mch_EditMatch (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Check if I can edit this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
       Err_NoPermissionExit ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
@@ -1157,15 +1149,14 @@ static void Mch_PutParamMchCod (long MchCod)
 /*****************************************************************************/
 
 void Mch_GetAndCheckParameters (struct Gam_Games *Games,
-                                struct Gam_Game *Game,
                                 struct Mch_Match *Match)
   {
    /***** Get parameters *****/
    /* Get parameters of game */
-   if ((Game->GamCod = Gam_GetParams (Games)) <= 0)
+   if ((Games->Game.GamCod = Gam_GetParams (Games)) <= 0)
       Err_WrongGameExit ();
    Grp_GetParamWhichGroups ();
-   Gam_GetDataOfGameByCod (Game);
+   Gam_GetDataOfGameByCod (&Games->Game);
 
    /* Get match code */
    if ((Match->MchCod = Mch_GetParamMchCod ()) <= 0)
@@ -1173,13 +1164,12 @@ void Mch_GetAndCheckParameters (struct Gam_Games *Games,
    Mch_GetDataOfMatchByCod (Match);
 
    /***** Ensure parameters are correct *****/
-   if (Game->GamCod != Match->GamCod)
+   if (Games->Game.GamCod != Match->GamCod)
       Err_WrongGameExit ();
-   if (Game->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   if (Games->Game.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongGameExit ();
 
    /***** Initialize context *****/
-   Games->GamCod = Game->GamCod;
    Games->MchCod.Current  =
    Games->MchCod.Selected = Match->MchCod;
   }
@@ -1409,18 +1399,17 @@ void Mch_CreateNewMatch (void)
 void Mch_ChangeMatch (void)
   {
    struct Gam_Games Games;
-   struct Gam_Game Game;
    struct Mch_Match Match;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Reset game and match *****/
-   Gam_ResetGame (&Game);
+   Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Game,&Match);
+   Mch_GetAndCheckParameters (&Games,&Match);
 
    /***** Check if I can update this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1440,7 +1429,7 @@ void Mch_ChangeMatch (void)
    Grp_FreeListCodSelectedGrps ();
 
    /***** Show current game *****/
-   Gam_ShowOnlyOneGame (&Games,&Game,
+   Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
   }
