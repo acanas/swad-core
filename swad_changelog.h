@@ -606,10 +606,12 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.37.2 (2022-10-01)"
+#define Log_PLATFORM_VERSION	"SWAD 22.38 (2022-10-02)"
 #define CSS_FILE		"swad22.35.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.38.1:  Oct 02, 2022  TODO: El botón de "Poner encuesta a cero" debería salir dentro del diálogo, igual que el de borrar encuesta. (? lines)
+	Version 22.38:    Oct 02, 2022  Code refactoring and changes in layout of surveys. (332518 lines)
 	Version 22.37.2:  Oct 01, 2022  Fixed minor issues in layout. (332526 lines)
 	Version 22.37.1:  Oct 01, 2022  Fixed issues in exams and games. (332525 lines)
 	Version 22.37:    Oct 01, 2022  Code refactoring and changes in layout of games. (? lines)

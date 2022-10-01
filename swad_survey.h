@@ -40,17 +40,6 @@
 
 #define Svy_ORDER_DEFAULT Dat_STR_TIME
 
-struct Svy_Surveys
-  {
-   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-   unsigned Num;	// Number of surveys
-   long *LstSvyCods;	// List of survey codes
-   Dat_StartEndTime_t SelectedOrder;
-   unsigned CurrentPage;
-   long SvyCod;
-   long QstCod;
-  };
-
 struct Svy_Survey
   {
    long SvyCod;
@@ -73,6 +62,17 @@ struct Svy_Survey
       bool ICanViewResults;
       bool ICanEdit;
      } Status;
+  };
+
+struct Svy_Surveys
+  {
+   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   unsigned Num;		// Number of surveys
+   long *LstSvyCods;		// List of survey codes
+   Dat_StartEndTime_t SelectedOrder;
+   unsigned CurrentPage;
+   struct Svy_Survey Svy;	// Selected/current survey
+   long QstCod;
   };
 
 #define Svy_NUM_ANS_TYPES	2
