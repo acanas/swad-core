@@ -142,7 +142,7 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
 
 static void Gam_ListGameQuestions (struct Gam_Games *Games);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
-						  long GamCod,unsigned NumQsts,
+						  unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions);
 
@@ -265,9 +265,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 	    /***** Table head *****/
 	    HTM_TR_Begin (NULL);
 
-	       if (Gam_CheckIfICanEditGames () ||
-		   Gam_CheckIfICanListGameQuestions ())
-		  HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
+               HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Gam_Order_t) 0;
 		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
@@ -536,14 +534,12 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       /***** Icons related to this game *****/
       if (!ShowOnlyThisGame)
-	 if (Gam_CheckIfICanEditGames () ||
-	     Gam_CheckIfICanListGameQuestions ())
-	   {
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	                  The_GetColorRows ());
-	       Gam_PutIconsToRemEditOneGame (Games,Anchor);
-	    HTM_TD_End ();
-	   }
+	{
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+		       The_GetColorRows ());
+	    Gam_PutIconsToRemEditOneGame (Games,Anchor);
+	 HTM_TD_End ();
+	}
 
       /***** Start/end date/time *****/
       UniqueId++;
@@ -1654,8 +1650,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
 
    /***** Show table with questions *****/
    if (NumQsts)
-      Gam_ListOneOrMoreQuestionsForEdition (Games,
-                                            Games->Game.GamCod,NumQsts,mysql_res,
+      Gam_ListOneOrMoreQuestionsForEdition (Games,NumQsts,mysql_res,
 					    ICanEditQuestions);
 
    /***** Put button to add a new question in this game *****/
@@ -1674,7 +1669,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
 /*****************************************************************************/
 
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
-						  long GamCod,unsigned NumQsts,
+						  unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
 						  bool ICanEditQuestions)
   {
@@ -1698,7 +1693,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       return;
 
    /***** Get maximum question index *****/
-   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
+   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Games->Game.GamCod);	// 0 is no questions in game
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -1733,8 +1728,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
 
 	 /* Initialize context */
-	 Games->Game.GamCod = GamCod;
-	 Games->QstInd      = QstInd;
+	 Games->QstInd = QstInd;
 
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Question.QstCod,&Anchor);

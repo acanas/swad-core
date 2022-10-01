@@ -300,8 +300,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	       /* Icons */
 	       if (ICanEditSessions)
-		  if (ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
-		     ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
+		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
 
 	       /* Session participant */
 	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
@@ -435,18 +434,21 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
-      /***** Icon to remove the exam session *****/
-      Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
-				     ExaSes_PutParamsEdit,Exams);
+      if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
+	{
+	 /***** Icon to remove the exam session *****/
+	 Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
+					ExaSes_PutParamsEdit,Exams);
 
-      /***** Icon to hide/unhide the exam session *****/
-      Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 ExaSes_PutParamsEdit,Exams,
-					 Session->Hidden);
+	 /***** Icon to hide/unhide the exam session *****/
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					    ExaSes_PutParamsEdit,Exams,
+					    Session->Hidden);
 
-      /***** Icon to edit the exam session *****/
-      Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
-				   ExaSes_PutParamsEdit,Exams);
+	 /***** Icon to edit the exam session *****/
+	 Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
+				      ExaSes_PutParamsEdit,Exams);
+	}
 
    /***** End cell *****/
    HTM_TD_End ();

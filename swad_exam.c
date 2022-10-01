@@ -244,8 +244,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 /***** Table head *****/
 	 HTM_TABLE_BeginWideMarginPadding (5);
 	    HTM_TR_Begin (NULL);
-	       if (Exa_CheckIfICanEditExams ())
-		  HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
+               HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Exa_Order_t) 0;
 		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
@@ -487,13 +486,12 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
       /***** Icons related to this exam *****/
       if (!ShowOnlyThisExam)
-	 if (Exa_CheckIfICanEditExams ())
-	   {
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-			  The_GetColorRows ());
-	       Exa_PutIconsToRemEditOneExam (Exams,Anchor);
-	    HTM_TD_End ();
-	   }
+	{
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+		       The_GetColorRows ());
+	    Exa_PutIconsToRemEditOneExam (Exams,Anchor);
+	 HTM_TD_End ();
+	}
 
       /***** Start/end date/time *****/
       UniqueId++;
@@ -680,18 +678,21 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ActSeeUsrExaResExa,
      };
 
-   /***** Icon to remove exam *****/
-   Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
-                                  Exa_PutParams,Exams);
+   if (Exa_CheckIfICanEditExams ())
+     {
+      /***** Icon to remove exam *****/
+      Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
+				     Exa_PutParams,Exams);
 
-   /***** Icon to hide/unhide exam *****/
-   Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-				      Exa_PutParams,Exams,
-				      Exams->Exam.Hidden);
+      /***** Icon to hide/unhide exam *****/
+      Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
+					 Exa_PutParams,Exams,
+					 Exams->Exam.Hidden);
 
-   /***** Icon to edit exam *****/
-   Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
-                                Exa_PutParams,Exams);
+      /***** Icon to edit exam *****/
+      Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
+				   Exa_PutParams,Exams);
+     }
 
    /***** Put icon to view results of sessions in exam *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])

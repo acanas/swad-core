@@ -12668,71 +12668,71 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActSeeUsrExaResCrs] =
 #if   L==1	// ca
-	"See all exam results of a user"			// Necessita traducció
+	"See all exam results of selected users"			// Necessita traducció
 #elif L==2	// de
-	"See all exam results of a user"			// Need Übersetzung
+	"See all exam results of selected users"			// Need Übersetzung
 #elif L==3	// en
-	"See all exam results of a user"
+	"See all exam results of selected users"
 #elif L==4	// es
-	"Ver todos los resultados de examen de un usuario"
+	"Ver todos los resultados de examen de usuarios seleccionados"
 #elif L==5	// fr
-	"See all exam results of a user"			// Besoin de traduction
+	"See all exam results of selected users"			// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los resultados de examen de un usuario"	// Okoteve traducción
+	"Ver todos los resultados de examen de usuarios seleccionados"	// Okoteve traducción
 #elif L==7	// it
-	"See all exam results of a user"			// Bisogno di traduzione
+	"See all exam results of selected users"			// Bisogno di traduzione
 #elif L==8	// pl
-	"See all exam results of a user"			// Potrzebujesz tlumaczenie
+	"See all exam results of selected users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all exam results of a user"			// Precisa de tradução
+	"See all exam results of selected users"			// Precisa de tradução
 #elif L==10	// tr
-	"See all exam results of a user"			// Çeviri lazim!
+	"See all exam results of selected users"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrExaResExa] =
 #if   L==1	// ca
-	"See all results of a user in exam"			// Necessita traducció
+	"See results of selected users in exam"			// Necessita traducció
 #elif L==2	// de
-	"See all results of a user in exam"			// Need Übersetzung
+	"See results of selected users in exam"			// Need Übersetzung
 #elif L==3	// en
-	"See all results of a user in exam"
+	"See results of selected users in exam"
 #elif L==4	// es
-	"Ver todos los resultados de un usuario en examen"
+	"Ver resultados de usuarios seleccionados en examen"
 #elif L==5	// fr
-	"See all results of a user in exam"			// Besoin de traduction
+	"See results of selected users in exam"			// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los resultados de un usuario en examen"	// Okoteve traducción
+	"Ver resultados de usuarios seleccionados en examen"	// Okoteve traducción
 #elif L==7	// it
-	"See all results of a user in exam"			// Bisogno di traduzione
+	"See results of selected users in exam"			// Bisogno di traduzione
 #elif L==8	// pl
-	"See all results of a user in exam"			// Potrzebujesz tlumaczenie
+	"See results of selected users in exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all results of a user in exam"			// Precisa de tradução
+	"See results of selected users in exam"			// Precisa de tradução
 #elif L==10	// tr
-	"See all results of a user in exam"			// Çeviri lazim!
+	"See results of selected users in exam"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeUsrExaResSes] =
 #if   L==1	// ca
-	"See all results of a user in exam session"				// Necessita traducció
+	"See results of selected users in exam session"				// Necessita traducció
 #elif L==2	// de
-	"See all results of a user in exam session"				// Need Übersetzung
+	"See results of selected users in exam session"				// Need Übersetzung
 #elif L==3	// en
-	"See all results of a user in exam session"
+	"See results of selected users in exam session"
 #elif L==4	// es
-	"Ver todos los resultados de un usuario en una sesi&oacute;n de examen"
+	"Ver resultados de usuarios seleccionados en sesi&oacute;n de examen"
 #elif L==5	// fr
-	"See all results of a user in exam session"				// Besoin de traduction
+	"See results of selected users in exam session"				// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los resultados de un usuario en una sesi&oacute;n de examen"	// Okoteve traducción
+	"Ver resultados de usuarios seleccionados en sesi&oacute;n de examen"	// Okoteve traducción
 #elif L==7	// it
-	"See all results of a user in exam session"				// Bisogno di traduzione
+	"See results of selected users in exam session"				// Bisogno di traduzione
 #elif L==8	// pl
-	"See all results of a user in exam session"				// Potrzebujesz tlumaczenie
+	"See results of selected users in exam session"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all results of a user in exam session"				// Precisa de tradução
+	"See results of selected users in exam session"				// Precisa de tradução
 #elif L==10	// tr
-	"See all results of a user in exam session"				// Çeviri lazim!
+	"See results of selected users in exam session"				// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneExaResOth] =
