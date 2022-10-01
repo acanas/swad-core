@@ -6420,7 +6420,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,
-	                          "class=\"BT_LINK MSG_AUT_%s\"",
+	                          "class=\"LT BT_LINK MSG_AUT_%s\"",
 	                          The_GetSuffix ());
      }
 
@@ -6680,31 +6680,31 @@ void Usr_GetAndShowUsersRanking (void)
       /***** Rankings *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingClicks ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingClicksPerDay ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingTimelinePubs ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Fol_GetAndShowRankingFollowers ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingFileViews ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingForPsts ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Prf_GetAndShowRankingMsgsSnt ();
 	 HTM_TD_End ();
 
