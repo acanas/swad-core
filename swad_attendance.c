@@ -847,7 +847,6 @@ void Att_AskRemAttEvent (void)
    extern const char *Txt_Remove_event;
    struct Att_Events Events;
    struct Att_Event Event;
-   Grp_WhichGroups_t WhichGroups;
 
    /***** Reset attendance events *****/
    Att_ResetEvents (&Events);
@@ -864,20 +863,12 @@ void Att_AskRemAttEvent (void)
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
-   /***** Button of confirmation of removing *****/
-   Frm_BeginForm (ActRemAtt);
-      Att_PutParamAttCod (Event.AttCod);
-      Dat_PutHiddenParamOrder (Events.SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
-
-      /* Ask for confirmation of removing */
-      Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
-		     Event.Title);
-
-      Btn_PutRemoveButton (Txt_Remove_event);
-   Frm_EndForm ();
+   /***** Show question and button to remove event *****/
+   Ale_ShowAlertAndButton (ActRemAtt,NULL,NULL,
+                           Att_PutParams,&Events,
+			   Btn_REMOVE_BUTTON,Txt_Remove_event,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
+	                   Event.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
