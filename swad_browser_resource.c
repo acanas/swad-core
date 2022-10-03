@@ -96,7 +96,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
   {
    extern const char *Txt_Documents;
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   Act_Action_t NextAction;
+   Act_Action_t NextAction = ActUnk;	// Initialized to avoid warning
    struct Brw_FileMetadata FileMetadata;
    char Title[NAME_MAX + 1];	// File or link name
 

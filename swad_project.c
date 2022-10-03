@@ -1546,7 +1546,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s_%s\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
 	 break;
       default:
@@ -1894,7 +1894,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s_%s\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
 	 break;
       case Prj_PRINT_ONE_PROJECT:
@@ -1994,7 +1994,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s_%s\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
 	 break;
       case Prj_PRINT_ONE_PROJECT:
@@ -2128,11 +2128,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
 	    case Prj_FILE_BROWSER_PROJECT:
-	       HTM_TD_Begin ("colspan=\"3\" class=\"RT %s_%s\"",
-	                     ClassLabel,The_GetSuffix ());
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
-	       break;
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                     ClassLabel,The_GetSuffix ());
