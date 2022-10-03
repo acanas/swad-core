@@ -110,8 +110,6 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys);
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
-static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys);
-
 static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
@@ -1526,6 +1524,7 @@ void Svy_RemoveSurvey (void)
 void Svy_AskResetSurvey (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_survey_X;
+   extern const char *Txt_Reset_survey;
    struct Svy_Surveys Surveys;
 
    /***** Reset surveys *****/
@@ -1545,29 +1544,15 @@ void Svy_AskResetSurvey (void)
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
-   /***** Ask for confirmation of reset *****/
-   Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_reset_the_survey_X,
-                  Surveys.Svy.Title);
-
-   /***** Button of confirmation of reset *****/
-   Svy_PutButtonToResetSurvey (&Surveys);
+   /***** Show question and button to reset survey *****/
+   Ale_ShowAlertAndButton (ActRstSvy,NULL,NULL,
+                           Svy_PutParams,&Surveys,
+			   Btn_REMOVE_BUTTON,Txt_Reset_survey,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_reset_the_survey_X,
+			   Surveys.Svy.Title);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
-  }
-
-/*****************************************************************************/
-/************************* Put button to reset survey ************************/
-/*****************************************************************************/
-
-static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys)
-  {
-   extern const char *Txt_Reset_survey;
-
-   Frm_BeginForm (ActRstSvy);
-      Svy_PutParams (Surveys);
-      Btn_PutRemoveButton (Txt_Reset_survey);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
