@@ -128,6 +128,9 @@ void Cfe_ListCallsForExamsCod (void);
 void Cfe_ListCallsForExamsDay (void);
 
 void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
+
+bool Cfe_CheckIfICanEditCallsForExams (void);
+
 void Cfe_PutHiddenParamExaCod (long ExaCod);
 long Cfe_GetParamExaCod (void);
 

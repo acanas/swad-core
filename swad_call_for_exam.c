@@ -79,6 +79,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			         Cfe_TypeViewCallForExam_t TypeViewCallForExam,
 			         bool HighLight);
 static void Cfe_PutIconsCallForExam (void *CallsForExams);
+
 static void Cfe_PutParamExaCodToEdit (void *ExaCod);
 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
@@ -618,65 +619,58 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    unsigned NumExaAnn;
    long ExaCod;
    bool HighLight;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
-   NumExaAnns = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res,ICanEdit);
+   NumExaAnns = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res);
 
    /***** Begin box *****/
-   if (ICanEdit)
-      Box_BoxBegin (NULL,Txt_Calls_for_exams,
-		    Cfe_PutIconsCallsForExams,NULL,
-		    Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Calls_for_exams,
-		    NULL,NULL,
-		    Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Calls_for_exams,
+		 Cfe_PutIconsCallsForExams,NULL,
+		 Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
 
-   if (NumExaAnns)
       /***** List the existing calls for exams *****/
-      for (NumExaAnn = 0;
-	   NumExaAnn < NumExaAnns;
-	   NumExaAnn++)
-	{
-	 /***** Get the code of the call for exam (row[0]) *****/
-	 if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)
-	    Err_WrongCallForExamExit ();
-
-	 /***** Allocate memory for the call for exam *****/
-	 Cfe_AllocMemCallForExam (CallsForExams);
-
-	 /***** Read the data of the call for exam *****/
-	 Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
-
-	 /***** Show call for exam *****/
-	 HighLight = false;
-	 if (ExaCod == CallsForExams->HighlightExaCod)
-	    HighLight = true;
-	 else if (CallsForExams->HighlightDate[0])
+      if (NumExaAnns)
+	 for (NumExaAnn = 0;
+	      NumExaAnn < NumExaAnns;
+	      NumExaAnn++)
 	   {
-	    if (!strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
-			 CallsForExams->HighlightDate))
+	    /***** Get the code of the call for exam (row[0]) *****/
+	    if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)
+	       Err_WrongCallForExamExit ();
+
+	    /***** Allocate memory for the call for exam *****/
+	    Cfe_AllocMemCallForExam (CallsForExams);
+
+	    /***** Read the data of the call for exam *****/
+	    Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
+
+	    /***** Show call for exam *****/
+	    HighLight = false;
+	    if (ExaCod == CallsForExams->HighlightExaCod)
 	       HighLight = true;
+	    else if (CallsForExams->HighlightDate[0])
+	      {
+	       if (!strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
+			    CallsForExams->HighlightDate))
+		  HighLight = true;
+	      }
+	    Cfe_ShowCallForExam (CallsForExams,ExaCod,TypeViewCallForExam,
+				      HighLight);
+
+	    /***** Free memory of the call for exam *****/
+	    Cfe_FreeMemCallForExam (CallsForExams);
 	   }
-	 Cfe_ShowCallForExam (CallsForExams,ExaCod,TypeViewCallForExam,
-				   HighLight);
+      else
+	 Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
+			Gbl.Hierarchy.Crs.FullName);
 
-	 /***** Free memory of the call for exam *****/
-	 Cfe_FreeMemCallForExam (CallsForExams);
-	}
-   else
-      Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
-                     Gbl.Hierarchy.Crs.FullName);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Button to create a new call for exam *****/
-   if (ICanEdit)
-      Cfe_PutButtonToCreateNewCallForExam ();
+      /***** Button to create a new call for exam *****/
+      if (Cfe_CheckIfICanEditCallsForExams ())
+	 Cfe_PutButtonToCreateNewCallForExam ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -688,10 +682,11 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
   {
-   /***** Put icon to create a new call for exam *****/
-   Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
+   /***** Icon to create a new call for exam *****/
+   if (Cfe_CheckIfICanEditCallsForExams ())
+      Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
 
-   /***** Link to get resource link *****/
+   /***** Icon to get resource link *****/
    if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 				      NULL,NULL);
@@ -1493,8 +1488,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 
    if (CallsForExams)
      {
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      if (Cfe_CheckIfICanEditCallsForExams ())
 	{
 	 /***** Icon to remove call for exam *****/
 	 Ico_PutContextualIconToRemove (ActReqRemCfe,NULL,
@@ -1532,6 +1526,21 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 					 Cfe_PutParamExaCodToEdit,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
      }
+  }
+
+/*****************************************************************************/
+/******************* Check if I can edit calls for exams *********************/
+/*****************************************************************************/
+
+bool Cfe_CheckIfICanEditCallsForExams (void)
+  {
+   static const bool ICanEditCallsForExams[Rol_NUM_ROLES] =
+     {
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanEditCallsForExams[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/

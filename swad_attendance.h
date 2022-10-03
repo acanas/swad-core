@@ -58,19 +58,22 @@ struct Att_Event
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;
 
-   /* Fields computed, not associated to the event in database */
+   /* Field computed, not associated to the event in database */
    unsigned NumStdsTotal;	// Number total of students who have assisted to the event
-   unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
-   bool Selected;		// I have selected this attendance event
   };
 
 struct Att_Events
   {
-   bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-   unsigned Num;	// Number of attendance events
-   struct Att_Event *Lst;	// List of attendance events
+   bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+   unsigned Num;		// Number of attendance events
+   struct
+     {
+      long AttCod;		// Attendance event code
+      unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
+      bool Selected;		// I have selected this attendance event
+     } *Lst;			// List of attendance events
    Dat_StartEndTime_t SelectedOrder;
-   long AttCod;
+   struct Att_Event Event;	// Selected/current event
    bool ShowDetails;
    char *StrAttCodsSelected;
    unsigned CurrentPage;
@@ -81,6 +84,9 @@ struct Att_Events
 /*****************************************************************************/
 
 void Att_SeeAttEvents (void);
+
+bool Att_CheckIfICanEditAttEvents (void);
+
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 

@@ -80,12 +80,12 @@ long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam)
 /**************** Get all calls for exams in current course ******************/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res,bool ICanEdit)
+unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
   {
    char SubQueryStatus[64];
 
    /***** Build subquery about status depending on my role *****/
-   if (ICanEdit)
+   if (Cfe_CheckIfICanEditCallsForExams ())
       sprintf (SubQueryStatus,"Status<>%u",
 	       (unsigned) Cfe_DELETED_CALL_FOR_EXAM);
    else
