@@ -149,7 +149,8 @@ static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           unsigned NumItem,
-                                          struct Prg_Item *Item);
+                                          struct Prg_Item *Item,
+                                          bool HighlightItem);
 static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
@@ -551,7 +552,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	   {
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
 			  The_GetColorRows ());
-	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item);
+	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item,HighlightItem);
 	    HTM_TD_End ();
 	   }
 
@@ -978,7 +979,8 @@ static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
 
 static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           unsigned NumItem,
-                                          struct Prg_Item *Item)
+                                          struct Prg_Item *Item,
+                                          bool HighlightItem)
   {
    extern const char *Txt_Movement_not_allowed;
    static Act_Action_t ActionHideUnhide[2] =
@@ -1005,17 +1007,12 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 					    Item->Hierarchy.Hidden);
 
 	 /***** Icon to edit program item *****/
-	 switch (ListingType)
-	   {
-	    case Prg_FORM_EDIT_ITEM:
-	       Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
-	       break;
-	    default:
-	       Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
-					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
-	       break;
-	   }
+	 if (ListingType == Prg_FORM_EDIT_ITEM && HighlightItem)
+	    Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
+					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+	 else
+	    Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
+					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
