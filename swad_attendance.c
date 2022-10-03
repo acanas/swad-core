@@ -846,7 +846,6 @@ void Att_AskRemAttEvent (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    extern const char *Txt_Remove_event;
    struct Att_Events Events;
-   struct Att_Event Event;
 
    /***** Reset attendance events *****/
    Att_ResetEvents (&Events);
@@ -857,18 +856,18 @@ void Att_AskRemAttEvent (void)
    Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
+   if ((Events.Event.AttCod = Att_GetParamAttCod ()) < 0)
       Err_WrongEventExit ();
 
    /***** Get data of the attendance event from database *****/
-   Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
+   Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);
 
    /***** Show question and button to remove event *****/
    Ale_ShowAlertAndButton (ActRemAtt,NULL,NULL,
                            Att_PutParams,&Events,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
-	                   Event.Title);
+	                   Events.Event.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -980,7 +979,6 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Create_event;
    extern const char *Txt_Save_changes;
    struct Att_Events Events;
-   struct Att_Event Event;
    bool ItsANewAttEvent;
    Grp_WhichGroups_t WhichGroups;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -999,30 +997,30 @@ void Att_RequestCreatOrEditAttEvent (void)
    Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   Event.AttCod = Att_GetParamAttCod ();
-   ItsANewAttEvent = (Event.AttCod <= 0);
+   Events.Event.AttCod = Att_GetParamAttCod ();
+   ItsANewAttEvent = (Events.Event.AttCod <= 0);
 
    /***** Get from the database the data of the attendance event *****/
    if (ItsANewAttEvent)
      {
       /* Reset attendance event data */
-      Event.AttCod = -1L;
-      Att_ResetAttendanceEvent (&Event);
+      Events.Event.AttCod = -1L;
+      Att_ResetAttendanceEvent (&Events.Event);
 
       /* Initialize some fields */
-      Event.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
-      Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Event.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-      Event.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      Event.Open = true;
+      Events.Event.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
+      Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Events.Event.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      Events.Event.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Events.Event.Open = true;
      }
    else
      {
       /* Get data of the attendance event from database */
-      Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
+      Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);
 
       /* Get text of the attendance event from database */
-      Att_DB_GetAttEventDescription (Event.AttCod,Description);
+      Att_DB_GetAttEventDescription (Events.Event.AttCod,Description);
      }
 
    /***** Begin form *****/
@@ -1031,7 +1029,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    else
      {
       Frm_BeginForm (ActChgAtt);
-	 Att_PutParamAttCod (Event.AttCod);
+	 Att_PutParamAttCod (Events.Event.AttCod);
      }
       Dat_PutHiddenParamOrder (Events.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
@@ -1045,8 +1043,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 			    Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
       else
 	 Box_BoxTableBegin (NULL,
-			    Event.Title[0] ? Event.Title :
-					     Txt_Edit_event,
+			    Events.Event.Title[0] ? Events.Event.Title :
+						    Txt_Edit_event,
 			    NULL,NULL,
 			    Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
 
@@ -1058,7 +1056,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,
+	    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			    " required=\"required\"",
@@ -1068,7 +1066,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       HTM_TR_End ();
 
       /***** Assignment start and end dates *****/
-      Dat_PutFormStartEndClientLocalDateTimes (Event.TimeUTC,
+      Dat_PutFormStartEndClientLocalDateTimes (Events.Event.TimeUTC,
 					       Dat_FORM_SECONDS_ON,
 					       SetHMS);
 
@@ -1084,9 +1082,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 			      "id=\"ComTchVisible\" name=\"ComTchVisible\""
 			      " class=\"INPUT_%s\"",
 			      The_GetSuffix ());
-	       HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
+	       HTM_OPTION (HTM_Type_STRING,"N",!Events.Event.CommentTchVisible,false,
 			   "%s",Txt_Hidden_MALE_PLURAL);
-	       HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,
+	       HTM_OPTION (HTM_Type_STRING,"Y", Events.Event.CommentTchVisible,false,
 			   "%s",Txt_Visible_MALE_PLURAL);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -1112,7 +1110,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       HTM_TR_End ();
 
       /***** Groups *****/
-      Att_ShowLstGrpsToEditAttEvent (Event.AttCod);
+      Att_ShowLstGrpsToEditAttEvent (Events.Event.AttCod);
 
       /***** End table, send button and end box *****/
       if (ItsANewAttEvent)
