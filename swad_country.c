@@ -562,7 +562,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
      }
    else
       Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,
-                   Cty->Name[Gbl.Prefs.Language],Class);
+		   Cty->Name[Gbl.Prefs.Language],Class);
   }
 
 /*****************************************************************************/

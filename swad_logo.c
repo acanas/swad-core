@@ -57,7 +57,7 @@ static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args);
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 
 /*****************************************************************************/
-/****************************** Draw degree logo *****************************/
+/***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
 void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
@@ -65,13 +65,9 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
   {
    static const char *HieIcon[HieLvl_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = "sitemap.svg",	// not applicable here
-      [HieLvl_SYS] = "sitemap.svg",	// not applicable here
-      [HieLvl_CTY] = "sitemap.svg",	// not applicable here
       [HieLvl_INS] = "university.svg",
       [HieLvl_CTR] = "building.svg",
       [HieLvl_DEG] = "graduation-cap.svg",
-      [HieLvl_CRS] = "sitemap.svg",	// not applicable here
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
@@ -167,16 +163,11 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 					"",
 			ClassNotEmpty ? Class :
 					"");
-
+	       free (Icon);
+	       free (URL);
 	      }
 	    else
-	      {
-	       if (asprintf (&URL,"%s",Cfg_URL_ICON_PUBLIC) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       if (asprintf (&Icon,"%s",HieIcon[Scope]) < 0)
-		  Err_NotEnoughMemoryExit ();
-
-	       HTM_IMG (URL,Icon,AltText,
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Scope],AltText,
 			"class=\"ICO%ux%u ICO_%s_%s"
 			        "%s%s\"",
 			Size,Size,
@@ -185,10 +176,6 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 					"",
 			ClassNotEmpty ? Class :
 					"");
-	      }
-
-	    free (Icon);
-            free (URL);
 	   }
 	}
      }

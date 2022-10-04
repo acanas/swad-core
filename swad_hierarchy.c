@@ -52,6 +52,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Hie_DrawLogo (const char *ShrtText);
+
 static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
 
@@ -410,78 +412,101 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 void Hie_WriteBigNameCtyInsCtrDegCrs (void)
   {
-   extern const char *Txt_TAGLINE;
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   static Act_Action_t NextAction[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_UNK] = ActUnk,	// Unknown
+      [HieLvl_SYS] = ActSeeCty,	// System      ==> list countries
+      [HieLvl_CTY] = ActSeeIns,	// Country     ==> list institutions
+      [HieLvl_INS] = ActSeeCtr,	// Institution ==> list centers
+      [HieLvl_CTR] = ActSeeDeg,	// Center      ==> list degrees
+      [HieLvl_DEG] = ActSeeCrs,	// Degree      ==> list courses
+      [HieLvl_CRS] = ActSeePrg,	// Course      ==> see program
+     };
+   const char *FullText[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_INS] = Gbl.Hierarchy.Ins.FullName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.FullName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Deg.FullName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Crs.FullName,
+     };
+   const char *ShrtText[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Crs.ShrtName,
+     };
 
    HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
 	     The_GetSuffix ());
+
+      /***** Logo and text *****/
+      HTM_DIV_Begin ("id=\"big_name_container\"");
+
+	 Frm_BeginFormGoTo (NextAction[Gbl.Hierarchy.Level]);
+	    HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction[Gbl.Hierarchy.Level]],
+				     "class=\"BT_LINK ICO_HIGHLIGHT\"");
+
+	       HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
+		     Hie_DrawLogo (ShrtText[Gbl.Hierarchy.Level]);
+		     HTM_Txt (FullText[Gbl.Hierarchy.Level]);
+	       HTM_DIV_End ();
+
+	       HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
+		     Hie_DrawLogo (ShrtText[Gbl.Hierarchy.Level]);
+		     HTM_Txt (ShrtText[Gbl.Hierarchy.Level]);
+	       HTM_DIV_End ();
+
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+
+      HTM_DIV_End ();
+
+   HTM_TxtF ("</h1>");
+  }
+
+/*****************************************************************************/
+/********************** Draw logo in the top of the page *********************/
+/*****************************************************************************/
+
+static void Hie_DrawLogo (const char *ShrtText)
+  {
+   static HieLvl_Level_t LogoScope[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_INS] = HieLvl_INS,
+      [HieLvl_CTR] = HieLvl_CTR,
+      [HieLvl_DEG] = HieLvl_DEG,
+      [HieLvl_CRS] = HieLvl_DEG,	// Draw logo of degree
+     };
+   static const long *LogoCode[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_INS] = &Gbl.Hierarchy.Ins.InsCod,
+      [HieLvl_CTR] = &Gbl.Hierarchy.Ctr.CtrCod,
+      [HieLvl_DEG] = &Gbl.Hierarchy.Deg.DegCod,
+      [HieLvl_CRS] = &Gbl.Hierarchy.Deg.DegCod,
+     };
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
      {
       case HieLvl_SYS:	// System
-	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
-	              Cfg_PLATFORM_FULL_NAME,"ICO40x40 TOP_LOGO");
-         break;
+	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ShrtText,"TOP_LOGO");
+	 break;
       case HieLvl_CTY:	// Country
-         Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TITLE");
-         break;
-      case HieLvl_INS:	// Institution
-	 Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,
-		       Gbl.Hierarchy.Ins.ShrtName,40,"TOP_LOGO",false);
-         break;
-      case HieLvl_CTR:	// Center
-	 Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,
-		       Gbl.Hierarchy.Ctr.ShrtName,40,"TOP_LOGO",false);
-         break;
-      case HieLvl_DEG:	// Degree
-      case HieLvl_CRS:	// Course
-	 Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
-		       Gbl.Hierarchy.Deg.ShrtName,40,"TOP_LOGO",false);
-         break;
+	 Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"TOP_LOGO");
+	 break;
       default:
+	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
+		       *LogoCode[Gbl.Hierarchy.Level],
+		       ShrtText,40,"TOP_LOGO",
+		       false);	// Don't put icon if not exists
 	 break;
      }
-
-   /***** Text *****/
-   HTM_DIV_Begin ("id=\"big_name_container\"");
-      if (Gbl.Hierarchy.Cty.CtyCod > 0)
-	{
-	 HTM_DIV_Begin ("id=\"big_full_name\"");
-	    HTM_Txt ( (Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
-		     ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.FullName :
-		     ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.FullName :
-		     ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.FullName :
-							    Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
-	 HTM_DIV_End ();
-
-	 HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-	    HTM_Txt (" / ");	// To separate
-	 HTM_DIV_End ();
-
-	 HTM_DIV_Begin ("id=\"big_short_name\"");
-	    HTM_Txt ( (Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
-		     ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
-		     ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
-		     ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.ShrtName :
-							    Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
-	 HTM_DIV_End ();
-	}
-      else	// No country specified ==> home page
-	{
-	 HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
-	    HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
-	 HTM_DIV_End ();
-
-	 HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-	    HTM_Txt (" / ");	// To separate
-	 HTM_DIV_End ();
-
-	 HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
-	    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-	 HTM_DIV_End ();
-	}
-   HTM_DIV_End ();
-   HTM_TxtF ("</h1>");
   }
 
 /*****************************************************************************/
