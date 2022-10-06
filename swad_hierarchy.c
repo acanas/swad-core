@@ -412,16 +412,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 void Hie_WriteBigNameCtyInsCtrDegCrs (void)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   static Act_Action_t NextAction[HieLvl_NUM_LEVELS] =
+   static Tab_Tab_t NextTab[HieLvl_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = ActUnk,	// Unknown
-      [HieLvl_SYS] = ActSeeCty,	// System      ==> list countries
-      [HieLvl_CTY] = ActSeeIns,	// Country     ==> list institutions
-      [HieLvl_INS] = ActSeeCtr,	// Institution ==> list centers
-      [HieLvl_CTR] = ActSeeDeg,	// Center      ==> list degrees
-      [HieLvl_DEG] = ActSeeCrs,	// Degree      ==> list courses
-      [HieLvl_CRS] = ActSeePrg,	// Course      ==> see program
+      [HieLvl_UNK] = TabUnk,
+      [HieLvl_SYS] = TabSys,
+      [HieLvl_CTY] = TabCty,
+      [HieLvl_INS] = TabIns,
+      [HieLvl_CTR] = TabCtr,
+      [HieLvl_DEG] = TabDeg,
+      [HieLvl_CRS] = TabCrs,
      };
    const char *FullText[HieLvl_NUM_LEVELS] =
      {
@@ -448,8 +447,9 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       /***** Logo and text *****/
       HTM_DIV_Begin ("id=\"big_name_container\"");
 
-	 Frm_BeginFormGoTo (NextAction[Gbl.Hierarchy.Level]);
-	    HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction[Gbl.Hierarchy.Level]],
+	 Frm_BeginForm (ActMnu);
+	    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.Level]);
+	    HTM_BUTTON_Submit_Begin (ShrtText[Gbl.Hierarchy.Level],
 				     "class=\"BT_LINK ICO_HIGHLIGHT\"");
 
 	       HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name

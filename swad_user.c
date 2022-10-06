@@ -1730,7 +1730,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
 
 	 Gbl.Action.Act = (Action == ActUnk) ? ((Gbl.Usrs.Me.Logged) ? ActSeeGblTL :	// Default action if logged
-								       ActFrmLogIn) :		// Default action if not logged
+								       ActFrmLogIn) :	// Default action if not logged
 					       Action;
 	 Tab_SetCurrentTab ();
 	}
