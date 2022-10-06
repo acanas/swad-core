@@ -118,7 +118,6 @@ static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
-                              bool HasChildren,
                               bool Expanded,
                               long SelectedItmCod,
                               long SelectedRscCod);
@@ -227,7 +226,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    unsigned FormLevel = 0;	// Initialized to avoid warning
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
-   bool HasChildren;
    bool Expanded;
    char *Title;
    static bool FirstTBodyOpen = false;
@@ -307,14 +305,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	    /* Get data of this program item */
 	    Item.Hierarchy.ItmCod = Prg_GetItmCodFromNumItem (NumItem);
 	    Prg_GetDataOfItemByCod (&Item);
-	    if (NumItem == Prg_Gbl.List.NumItems - 1)
-	       // The last item
-	       HasChildren = false;	// Last item has no children
-	    else
-	       // Not the last item
-	       // This item has children if its level is lower than the level of the following item
-	       HasChildren = (Prg_GetLevelFromNumItem (NumItem) <
-			      Prg_GetLevelFromNumItem (NumItem + 1));
 
 	    /* Begin range to highlight? */
 	    if (Item.Hierarchy.ItmInd == ToHighlight.Begin)	// Begin of the highlighted range
@@ -336,7 +326,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	    if (Prg_CheckIfAllHigherLevelsAreExpanded (Item.Hierarchy.Level))
 	      {
 	       /* Write row with this item */
-	       Prg_WriteRowItem (ListingType,NumItem,&Item,HasChildren,Expanded,
+	       Prg_WriteRowItem (ListingType,NumItem,&Item,Expanded,
 				 SelectedItmCod,SelectedRscCod);
                The_ChangeRowColor ();
 
@@ -479,13 +469,12 @@ static void Prg_PutButtonToCreateNewItem (void)
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
-                              bool HasChildren,
                               bool Expanded,
                               long SelectedItmCod,
                               long SelectedRscCod)
   {
    static unsigned UniqueId = 0;
-   static bool Editing[Prg_NUM_LISTING_TYPES] =
+   static bool EditingProgram[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = false,
       [Prg_VIEW                ] = false,
@@ -499,6 +488,11 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       [Prg_EDIT_RESOURCE_LINK  ] = true,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
+     };
+   static const char *RowSpan[2] =
+     {
+      [false] = "",			// Not expanded
+      [true ] = " rowspan=\"2\"",	// Expanded
      };
    bool IsHidden;
    char *Id;
@@ -515,11 +509,8 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    else				// this item is not marked as hidden
       IsHidden = Prg_CheckIfAnyHigherLevelIsHidden (Item->Hierarchy.Level);
 
-   if (Editing[ListingType] || !IsHidden)
+   if (EditingProgram[ListingType] || !IsHidden)
      {
-      /***** Title CSS class *****/
-      Prg_SetTitleClass (&TitleClass,Item->Hierarchy.Level);
-
       /***** Increase number in level *****/
       Prg_IncreaseNumberInLevel (Item->Hierarchy.Level);
 
@@ -528,36 +519,40 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 		      (ListingType == Prg_FORM_EDIT_ITEM ||
 		       ListingType == Prg_END_EDIT_ITEM);
 
-      /***** Begin row *****/
+      /***** First row (title and dates) *****/
       HTM_TR_Begin (NULL);
 
-	 /***** Indent depending on the level *****/
+	 /* Title CSS class */
+	 Prg_SetTitleClass (&TitleClass,Item->Hierarchy.Level);
+
+	 /* Indent depending on the level */
 	 for (NumCol = 1;
 	      NumCol < Item->Hierarchy.Level;
 	      NumCol++)
 	   {
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"%s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"%s\"%s",
+	                  The_GetColorRows (),RowSpan[Expanded]);
 	    HTM_TD_End ();
 	   }
 
-	 /***** Expand/contract this program item *****/
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    /* Only if this item has children ==> show icon to contract/expand */
-	    if (HasChildren)
-	       Prg_PutIconToContractExpandItem (Item,Expanded,Editing[ListingType]);
+	 /* Expand/contract this program item */
+	 HTM_TD_Begin ("class=\"LT %s\"%s",
+	               The_GetColorRows (),RowSpan[Expanded]);
+	    Prg_PutIconToContractExpandItem (Item,Expanded,EditingProgram[ListingType]);
 	 HTM_TD_End ();
 
-	 /***** Forms to remove/edit this program item *****/
-	 if (Editing[ListingType])
+	 /* Forms to remove/edit this program item */
+	 if (EditingProgram[ListingType])
 	   {
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_COL1 LT %s\"",
-			  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"%s",
+			  The_GetColorRows (),RowSpan[Expanded]);
 	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item,HighlightItem);
 	    HTM_TD_End ();
 	   }
 
-	 /***** Item number *****/
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"PRG_NUM %s\"",The_GetColorRows ());
+	 /* Item number */
+	 HTM_TD_Begin ("class=\"PRG_NUM %s\"%s",
+	               The_GetColorRows (),RowSpan[Expanded]);
 	    HTM_DIV_Begin ("class=\"RT %s%s\"",
 			   TitleClass,
 			   IsHidden ? " PRG_HIDDEN" :
@@ -566,7 +561,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	    HTM_DIV_End ();
 	 HTM_TD_End ();
 
-	 /***** Title *****/
+	 /* Title */
 	 ColSpan = (Prg_GetMaxItemLevel () + 2) - Item->Hierarchy.Level;
 	 switch (ListingType)
 	   {
@@ -592,7 +587,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	       HTM_ARTICLE_End ();
 	 HTM_TD_End ();
 
-	 /***** Start/end date/time *****/
+	 /* Start/end date/time */
 	 switch (ListingType)
 	   {
 	    case Prg_PRINT:
@@ -624,44 +619,45 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	   }
 	 HTM_TD_End ();
 
-      /***** End row *****/
+	 /* Free title CSS class */
+	 Prg_FreeTitleClass (TitleClass);
+
       HTM_TR_End ();
 
-      /***** Begin row *****/
-      HTM_TR_Begin (NULL);
+      /***** Second row (text and resources) *****/
+      if (Expanded)
+	{
+	 HTM_TR_Begin (NULL);
 
-	 /* Begin text and resources */
-	 ColSpan++;
-	 switch (ListingType)
-	   {
-	    case Prg_PRINT:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
-	       break;
-	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-			     ColSpan,The_GetColorRows ());
-	       break;
-	   }
+	    /* Begin text and resources */
+	    ColSpan++;
+	    switch (ListingType)
+	      {
+	       case Prg_PRINT:
+		  HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN\"",ColSpan);
+		  break;
+	       default:
+		  HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
+				ColSpan,The_GetColorRows ());
+		  break;
+	      }
 
-	 /* Item text / form */
-	 if (ListingType == Prg_FORM_EDIT_ITEM && HighlightItem)
-	    /* Form to change item title, dates and text */
-	    Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
-	 else
-	    /* Text */
-	    Prg_WriteItemText (Item->Hierarchy.ItmCod,IsHidden);
+	    /* Item text / form */
+	    if (ListingType == Prg_FORM_EDIT_ITEM && HighlightItem)
+	       /* Form to change item title, dates and text */
+	       Prg_ShowFormToChangeItem (Item->Hierarchy.ItmCod);
+	    else
+	       /* Text */
+	       Prg_WriteItemText (Item->Hierarchy.ItmCod,IsHidden);
 
-	 /* List of resources */
-	 PrgRsc_ListItemResources (ListingType,Item,SelectedItmCod,SelectedRscCod);
+	    /* List of resources */
+	    PrgRsc_ListItemResources (ListingType,Item,SelectedItmCod,SelectedRscCod);
 
-	 /* End text and resources */
-	 HTM_TD_End ();
+	    /* End text and resources */
+	    HTM_TD_End ();
 
-      /***** End row *****/
-      HTM_TR_End ();
-
-      /***** Free title CSS class *****/
-      Prg_FreeTitleClass (TitleClass);
+	 HTM_TR_End ();
+	}
      }
   }
 
