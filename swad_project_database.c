@@ -279,6 +279,39 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	 break;
      }
 
+   /* Review status subquery */
+   switch (Projects->Filter.Review)
+     {
+      case (1 << Prj_UNREVIEWED):	// Unreviewed projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='unreviewed'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_UNAPPROVED):	// Unapproved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='unapproved'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_APPROVED):		// Approved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='approved'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_UNREVIEWED | 1 << Prj_UNAPPROVED):	// Unreviewed and unapproved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unreviewed','unapproved')") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_UNREVIEWED | 1 << Prj_APPROVED):	// Unreviewed and approved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unreviewed','approved')") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_UNAPPROVED | 1 << Prj_APPROVED):	// Unapproved and approved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unapproved','approved')") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      default:			// All projects
+	 if (asprintf (&AssignSubQuery,"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+     }
+
    /* Department subquery */
    if (Projects->Filter.DptCod >= 0)
      {

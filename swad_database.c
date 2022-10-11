@@ -2595,26 +2595,29 @@ mysql> DESCRIBE prj_config;
    /***** Table prj_projects *****/
 /*
 mysql> DESCRIBE prj_projects;
-+-------------+-------------------------------------+------+-----+---------+----------------+
-| Field       | Type                                | Null | Key | Default | Extra          |
-+-------------+-------------------------------------+------+-----+---------+----------------+
-| PrjCod      | int(11)                             | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)                             | NO   | MUL | -1      |                |
-| DptCod      | int(11)                             | NO   |     | -1      |                |
-| Locked      | enum('N','Y')                       | NO   |     | N       |                |
-| Hidden      | enum('N','Y')                       | NO   |     | N       |                |
-| Assigned    | enum('N','Y')                       | NO   |     | N       |                |
-| NumStds     | int(11)                             | NO   |     | 1       |                |
-| Proposal    | enum('new','modified','unmodified') | NO   |     | new     |                |
-| CreatTime   | datetime                            | NO   |     | NULL    |                |
-| ModifTime   | datetime                            | NO   |     | NULL    |                |
-| Title       | varchar(4095)                       | NO   |     | NULL    |                |
-| Description | text                                | NO   |     | NULL    |                |
-| Knowledge   | text                                | NO   |     | NULL    |                |
-| Materials   | text                                | NO   |     | NULL    |                |
-| URL         | varchar(255)                        | NO   |     | NULL    |                |
-+-------------+-------------------------------------+------+-----+---------+----------------+
-15 rows in set (0.00 sec)
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+| Field        | Type                                       | Null | Key | Default             | Extra          |
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+| PrjCod       | int                                        | NO   | PRI | NULL                | auto_increment |
+| CrsCod       | int                                        | NO   | MUL | -1                  |                |
+| DptCod       | int                                        | NO   |     | -1                  |                |
+| Locked       | enum('N','Y')                              | NO   |     | N                   |                |
+| Hidden       | enum('N','Y')                              | NO   |     | N                   |                |
+| Assigned     | enum('N','Y')                              | NO   |     | N                   |                |
+| NumStds      | int                                        | NO   |     | 1                   |                |
+| Proposal     | enum('new','modified','unmodified')        | NO   |     | new                 |                |
+| CreatTime    | datetime                                   | NO   |     | NULL                |                |
+| ModifTime    | datetime                                   | NO   |     | NULL                |                |
+| Title        | varchar(4095)                              | NO   |     | NULL                |                |
+| Description  | text                                       | NO   |     | NULL                |                |
+| Knowledge    | text                                       | NO   |     | NULL                |                |
+| Materials    | text                                       | NO   |     | NULL                |                |
+| URL          | varchar(255)                               | NO   |     | NULL                |                |
+| ReviewStatus | enum('unreviewed','unapproved','approved') | NO   |     | unreviewed          |                |
+| ReviewTime   | datetime                                   | NO   |     | 1970-01-01 01:00:00 |                |
+| ReviewTxt    | text                                       | NO   |     | NULL                |                |
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+18 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
@@ -2632,11 +2635,36 @@ mysql> DESCRIBE prj_projects;
 			"Knowledge TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Materials TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"ReviewStatus ENUM('unreviewed','unapproved','approved') NOT NULL DEFAULT 'unreviewed',"
+			"ReviewTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00',"
+			"ReviewTxt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(PrjCod),"
 		   "INDEX(CrsCod,Hidden),"
 		   "INDEX(CrsCod,CreatTime),"
 		   "INDEX(CrsCod,ModifTime),"
-		   "INDEX(CrsCod,DptCod))");
+		   "INDEX(CrsCod,DptCod),"
+		   "INDEX(CrsCod,ReviewStatus))");
+
+   /***** Table prj_reviews *****/
+/*
+mysql> DESCRIBE prj_reviews;
++------------+--------------------------------------+------+-----+----------+-------+
+| Field      | Type                                 | Null | Key | Default  | Extra |
++------------+--------------------------------------+------+-----+----------+-------+
+| PrjCod     | int                                  | NO   | MUL | NULL     |       |
+| ReviewTime | datetime                             | NO   |     | NULL     |       |
+| Result     | enum('negative','solved','positive') | NO   |     | negative |       |
+| Txt        | text                                 | NO   |     | NULL     |       |
++------------+--------------------------------------+------+-----+----------+-------+
+4 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_reviews ("
+			"PrjCod INT NOT NULL,"
+			"ReviewTime DATETIME NOT NULL,"
+			"Result ENUM('negative','solved','positive') NOT NULL DEFAULT 'negative',"
+			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "INDEX(PrjCod,ReviewTime),"
+		   "INDEX(PrjCod,Result))");
 
    /***** Table prj_users *****/
 /*

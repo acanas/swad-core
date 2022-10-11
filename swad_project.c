@@ -69,6 +69,7 @@ extern struct Globals Gbl;
 #define Prj_PARAM_PRE_NON_NAME	"PreNon"
 #define Prj_PARAM_HID_VIS_NAME	"HidVis"
 #define Prj_PARAM_FAULTIN_NAME	"Faulti"
+#define Prj_PARAM_REVIEW_NAME	"Review"
 
 /***** Type of view when writing one project *****/
 typedef enum
@@ -159,16 +160,19 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
 static void Prj_PutCurrentParams (void *Projects);
 static void Prj_PutHiddenParamAssign (unsigned Assign);
 static void Prj_PutHiddenParamHidden (unsigned Hidden);
 static void Prj_PutHiddenParamFaulti (unsigned Faulti);
+static void Prj_PutHiddenParamReview (unsigned Review);
 static void Prj_PutHiddenParamDptCod (long DptCod);
 static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects);
 static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void);
 static unsigned Prj_GetHiddenParamFaulti (void);
+static unsigned Prj_GetHiddenParamReview (void);
 static long Prj_GetHiddenParamDptCod (void);
 static Usr_Who_t Prj_GetParamWho (void);
 
@@ -464,19 +468,22 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	 /***** Put filters to choice which projects to show *****/
 	 /* 1st. row */
 	 Set_BeginSettingsHead ();
-	 Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
-	 Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
-	       break;
-	    default:	// Students will see only visible projects
-	       break;
-	   }
-	 Prj_ShowFormToFilterByWarning ((struct Prj_Projects *) Projects);
+
+	    Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
+	    Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
+	    switch (Gbl.Usrs.Me.Role.Logged)
+	      {
+	       case Rol_NET:
+	       case Rol_TCH:
+	       case Rol_SYS_ADM:
+		  Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
+		  break;
+	       default:	// Students will see only visible projects
+		  break;
+	      }
+	    Prj_ShowFormToFilterByWarning ((struct Prj_Projects *) Projects);
+	    Prj_ShowFormToFilterByReview ((struct Prj_Projects *) Projects);
+
 	 Set_EndSettingsHead ();
 
 	 /* 2nd. row */
@@ -575,6 +582,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	       Filter.Assign = Projects->Filter.Assign;
 	       Filter.Hidden = Projects->Filter.Hidden;
 	       Filter.Faulti = Projects->Filter.Faulti;
+	       Filter.Review = Projects->Filter.Review;
 	       Filter.DptCod = Projects->Filter.DptCod;
 	       Prj_PutParams (&Filter,
 			      Projects->SelectedOrder,
@@ -608,6 +616,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	    Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
 	    Filter.Hidden = Projects->Filter.Hidden;
 	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutParams (&Filter,
 			   Projects->SelectedOrder,
@@ -651,6 +660,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	    Filter.Assign = Projects->Filter.Assign;
 	    Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
 	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutParams (&Filter,
 			   Projects->SelectedOrder,
@@ -681,7 +691,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
      } FaultinessIcon[Prj_NUM_FAULTINESS] =
      {
       [Prj_FAULTY   ] = {"exclamation-triangle.svg",Ico_YELLOW},
-      [Prj_FAULTLESS] = {"check-circle.svg"        ,Ico_GREEN},
+      [Prj_FAULTLESS] = {"check-circle.svg"        ,Ico_GREEN },
      };
 
    Set_BeginOneSettingSelector ();
@@ -695,6 +705,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	    Filter.Assign = Projects->Filter.Assign;
 	    Filter.Hidden = Projects->Filter.Hidden;
 	    Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
+	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutParams (&Filter,
 			   Projects->SelectedOrder,
@@ -703,6 +714,52 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness].Icon,
 				    FaultinessIcon[Faultiness].Color,
 				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
+	 Frm_EndForm ();
+      Set_EndPref ();
+     }
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/********** Show form to select projects depending on review status **********/
+/*****************************************************************************/
+
+static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
+  {
+   extern const char *Txt_PROJECT_REVIEWED_PROJECTS[Prj_NUM_REVIEW_STATUS];
+   struct Prj_Filter Filter;
+   Prj_ReviewStatus_t ReviewStatus;
+   struct
+     {
+      const char *Icon;
+      Ico_Color_t Color;
+     } ReviewIcon[Prj_NUM_REVIEW_STATUS] =
+     {
+      [Prj_UNREVIEWED] = {"comment-slash.svg",Ico_BLACK},
+      [Prj_UNAPPROVED] = {"thumbs-down.svg"  ,Ico_RED  },
+      [Prj_APPROVED  ] = {"thumbs-up.svg"    ,Ico_GREEN},
+     };
+
+   Set_BeginOneSettingSelector ();
+   for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
+	ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
+	ReviewStatus++)
+     {
+      Set_BeginPref ((Projects->Filter.Review & (1 << ReviewStatus)));
+	 Frm_BeginForm (ActSeePrj);
+	    Filter.Who    = Projects->Filter.Who;
+	    Filter.Assign = Projects->Filter.Assign;
+	    Filter.Hidden = Projects->Filter.Hidden;
+	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.Review = Projects->Filter.Review ^ (1 << ReviewStatus);	// Toggle
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
+	    Ico_PutSettingIconLink (ReviewIcon[ReviewStatus].Icon,
+				    ReviewIcon[ReviewStatus].Color,
+				    Txt_PROJECT_REVIEWED_PROJECTS[ReviewStatus]);
 	 Frm_EndForm ();
       Set_EndPref ();
      }
@@ -726,6 +783,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 Filter.Assign = Projects->Filter.Assign;
 	 Filter.Hidden = Projects->Filter.Hidden;
 	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.Review = Projects->Filter.Review;
 	 Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
 	 Prj_PutParams (&Filter,
 			Projects->SelectedOrder,
@@ -787,6 +845,11 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 	                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT))
       Prj_PutHiddenParamFaulti (Filter->Faulti);
 
+   if (Filter->Review != ((unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
+	                  (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
+	                  (unsigned) Prj_FILTER_APPROVED_DEFAULT))
+      Prj_PutHiddenParamReview (Filter->Review);
+
    if (Filter->DptCod != Prj_FILTER_DPT_DEFAULT)
       Prj_PutHiddenParamDptCod (Filter->DptCod);
 
@@ -828,6 +891,11 @@ static void Prj_PutHiddenParamHidden (unsigned Hidden)
 static void Prj_PutHiddenParamFaulti (unsigned Faulti)
   {
    Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FAULTIN_NAME,Faulti);
+  }
+
+static void Prj_PutHiddenParamReview (unsigned Review)
+  {
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_REVIEW_NAME,Review);
   }
 
 static void Prj_PutHiddenParamDptCod (long DptCod)
@@ -882,6 +950,19 @@ static unsigned Prj_GetHiddenParamFaulti (void)
                                     (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
   }
 
+static unsigned Prj_GetHiddenParamReview (void)
+  {
+   return (unsigned)
+	  Par_GetParToUnsignedLong (Prj_PARAM_REVIEW_NAME,
+                                    0,
+                                    (1 << Prj_UNREVIEWED) |
+                                    (1 << Prj_UNAPPROVED) |
+                                    (1 << Prj_APPROVED),
+                                    (unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
+                                    (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
+                                    (unsigned) Prj_FILTER_APPROVED_DEFAULT);
+  }
+
 static long Prj_GetHiddenParamDptCod (void)
   {
    return Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);
@@ -898,6 +979,7 @@ void Prj_GetParams (struct Prj_Projects *Projects)
    Prj_GetHiddenParamPreNon (Projects);
    Projects->Filter.Hidden = Prj_GetHiddenParamHidVis ();
    Projects->Filter.Faulti = Prj_GetHiddenParamFaulti ();
+   Projects->Filter.Review = Prj_GetHiddenParamReview ();
    Projects->Filter.DptCod = Prj_GetHiddenParamDptCod ();
 
    /***** Get order and page *****/
@@ -2833,7 +2915,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 
    if (Projects->Filter.Assign &&	// Any selector is on
        Projects->Filter.Hidden &&	// Any selector is on
-       Projects->Filter.Faulti)		// Any selector is on
+       Projects->Filter.Faulti &&	// Any selector is on
+       Projects->Filter.Review)		// Any selector is on
      {
       /****** Get users selected *****/
       if (Projects->Filter.Who == Usr_WHO_SELECTED)

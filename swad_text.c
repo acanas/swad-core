@@ -32921,7 +32921,6 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	"Project proposed in previous calls, without modifications"		// Çeviri lazim!
 #endif
 	};
-
 const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 	{
 	[Prj_FAULTY] =
@@ -32944,7 +32943,7 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 #elif L==9	// pt
 	"Projetos defeituosos"
 #elif L==10	// tr
-	"Faulty projects"	// Çeviri lazim!
+	"Hatal&inodot; projeler"
 #endif
 	,
 	[Prj_FAULTLESS] =
@@ -32967,7 +32966,79 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 #elif L==9	// pt
 	"Projetos sem falhas"
 #elif L==10	// tr
-	"Faultless projects"	// Çeviri lazim!
+	"Kusursuz projeler"
+#endif
+	};
+
+const char *Txt_PROJECT_REVIEWED_PROJECTS[Prj_NUM_REVIEW_STATUS] =
+	{
+	[Prj_UNREVIEWED] =
+#if   L==1	// ca
+	"Projectes sense revisar"
+#elif L==2	// de
+	"Ungepr&uuml;fte Projekte"
+#elif L==3	// en
+	"Unreviewed projects"
+#elif L==4	// es
+	"Proyectos sin revisar"
+#elif L==5	// fr
+	"Projets non revus"
+#elif L==6	// gn
+	"Proyectos sin revisar"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti non recensiti"
+#elif L==8	// pl
+	"Niesprawdzone projekty"
+#elif L==9	// pt
+	"Projetos n&atilde;o revisados"
+#elif L==10	// tr
+	"&Idot;ncelenmemi&scedil; projeler"
+#endif
+	,
+	[Prj_UNAPPROVED] =
+#if   L==1	// ca
+	"Projectes sense aprovar"
+#elif L==2	// de
+	"Nicht genehmigte Projekte"
+#elif L==3	// en
+	"Unapproved projects"
+#elif L==4	// es
+	"Proyectos sin aprobar"
+#elif L==5	// fr
+	"Projets non approuv&eacute;s"
+#elif L==6	// gn
+	"Proyectos sin aprobar"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti non approvati"
+#elif L==8	// pl
+	"Niezatwierdzone projekty"
+#elif L==9	// pt
+	"Projetos n&atilde;o aprovados"
+#elif L==10	// tr
+	"Onaylanmam&inodot;&scedil; projeler"
+#endif
+	,
+	[Prj_APPROVED] =
+#if   L==1	// ca
+	"Projectes aprovats"
+#elif L==2	// de
+	"Genehmigte Projekte"
+#elif L==3	// en
+	"Approved projects"
+#elif L==4	// es
+	"Proyectos aprobados"
+#elif L==5	// fr
+	"Projets approuv&eacute;s"
+#elif L==6	// gn
+	"Proyectos aprobados"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti approvati"
+#elif L==8	// pl
+	"Zatwierdzone projekty"
+#elif L==9	// pt
+	"Projetos aprovados"
+#elif L==10	// tr
+	"Onaylanm&inodot;&scedil; projeler"
 #endif
 	};
 

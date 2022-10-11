@@ -83,6 +83,18 @@ typedef enum
 #define Prj_FILTER_FAULTY_DEFAULT	(1 << Prj_FAULTY)	// on
 #define Prj_FILTER_FAULTLESS_DEFAULT	(1 << Prj_FAULTLESS)	// on
 
+/* Review status project */
+#define Prj_NUM_REVIEW_STATUS 3
+typedef enum
+  {
+   Prj_UNREVIEWED = 0,
+   Prj_UNAPPROVED = 1,
+   Prj_APPROVED   = 2,
+  } Prj_ReviewStatus_t;
+#define Prj_FILTER_UNREVIEWED_DEFAULT	(1 << Prj_UNREVIEWED)	// on
+#define Prj_FILTER_UNAPPROVED_DEFAULT	(1 << Prj_UNAPPROVED)	// on
+#define Prj_FILTER_APPROVED_DEFAULT	(1 << Prj_APPROVED)	// on
+
 /* Project department */
 #define Prj_FILTER_DPT_DEFAULT -1L	// Any department
 
@@ -93,6 +105,7 @@ struct Prj_Filter
    unsigned Assign;		// Show assigned / non assigned projects
    unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects
+   unsigned Review;		// Show projects depending on review status
    long DptCod;			// Show projects of this department
   };
 
