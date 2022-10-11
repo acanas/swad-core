@@ -2469,7 +2469,7 @@ const char *Txt_Assigned_QUESTION =
 #elif L==9	// pt
 	"Atribu&iacute;do?";
 #elif L==10	// tr
-	"Assigned?";		// Çeviri lazim!
+	"Atand&inodot; m&inodot;?";
 #endif
 
 const char *Txt_Assignment =
@@ -32970,7 +32970,79 @@ const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
 #endif
 	};
 
-const char *Txt_PROJECT_REVIEWED_PROJECTS[Prj_NUM_REVIEW_STATUS] =
+const char *Txt_PROJECT_REVIEW_PLURAL[Prj_NUM_REVIEW_STATUS] =
+	{
+	[Prj_UNREVIEWED] =
+#if   L==1	// ca
+	"Projectes sense revisar"
+#elif L==2	// de
+	"Ungepr&uuml;fte Projekte"
+#elif L==3	// en
+	"Unreviewed projects"
+#elif L==4	// es
+	"Proyectos sin revisar"
+#elif L==5	// fr
+	"Projets non revus"
+#elif L==6	// gn
+	"Proyectos sin revisar"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti non recensiti"
+#elif L==8	// pl
+	"Niesprawdzone projekty"
+#elif L==9	// pt
+	"Projetos n&atilde;o revisados"
+#elif L==10	// tr
+	"&Idot;ncelenmemi&scedil; projeler"
+#endif
+	,
+	[Prj_UNAPPROVED] =
+#if   L==1	// ca
+	"Projectes sense aprovar"
+#elif L==2	// de
+	"Nicht genehmigte Projekte"
+#elif L==3	// en
+	"Unapproved projects"
+#elif L==4	// es
+	"Proyectos sin aprobar"
+#elif L==5	// fr
+	"Projets non approuv&eacute;s"
+#elif L==6	// gn
+	"Proyectos sin aprobar"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti non approvati"
+#elif L==8	// pl
+	"Niezatwierdzone projekty"
+#elif L==9	// pt
+	"Projetos n&atilde;o aprovados"
+#elif L==10	// tr
+	"Onaylanmam&inodot;&scedil; projeler"
+#endif
+	,
+	[Prj_APPROVED] =
+#if   L==1	// ca
+	"Projectes aprovats"
+#elif L==2	// de
+	"Genehmigte Projekte"
+#elif L==3	// en
+	"Approved projects"
+#elif L==4	// es
+	"Proyectos aprobados"
+#elif L==5	// fr
+	"Projets approuv&eacute;s"
+#elif L==6	// gn
+	"Proyectos aprobados"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti approvati"
+#elif L==8	// pl
+	"Zatwierdzone projekty"
+#elif L==9	// pt
+	"Projetos aprovados"
+#elif L==10	// tr
+	"Onaylanm&inodot;&scedil; projeler"
+#endif
+	};
+
+const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS] =
 	{
 	[Prj_UNREVIEWED] =
 #if   L==1	// ca
@@ -36250,6 +36322,29 @@ const char *Txt_Retype_new_password =
 	"Redigite a nova senha";
 #elif L==10	// tr
 	"Yeni &scedil;ifrenizi tekrar yaz&inodot;n&inodot;z";
+#endif
+
+const char *Txt_Review =
+#if   L==1	// ca
+	"Revisi&oacute;";
+#elif L==2	// de
+	"&Uuml;berpr&uuml;fungs";
+#elif L==3	// en
+	"Review";
+#elif L==4	// es
+	"Revisi&oacute;n";
+#elif L==5	// fr
+	"Examen";
+#elif L==6	// gn
+	"Revisi&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Revisione";
+#elif L==8	// pl
+	"Recenzja";
+#elif L==9	// pt
+	"Revis&atilde;o";
+#elif L==10	// tr
+	"G&ouml;zden ge&ccedil;ir";
 #endif
 
 const char *Txt_Role =

@@ -52,6 +52,14 @@ const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
    [Prj_PROPOSAL_UNMODIFIED] = "unmodified",
   };
 
+/***** Enum field in database for review status *****/
+const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS] =
+  {
+   [Prj_UNREVIEWED] = "unreviewed",
+   [Prj_UNAPPROVED] = "unapproved",
+   [Prj_APPROVED  ] = "approved",
+  };
+
 /*****************************************************************************/
 /************ Update configuration of projects for current course ************/
 /*****************************************************************************/
@@ -109,11 +117,13 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				"INSERT INTO prj_projects"
 				" (CrsCod,DptCod,Hidden,Assigned,NumStds,Proposal,"
 				  "CreatTime,ModifTime,"
-				  "Title,Description,Knowledge,Materials,URL)"
+				  "Title,Description,Knowledge,Materials,URL,"
+				  "ReviewStatus,ReviewTime,ReviewTxt)"
 				" VALUES"
 				" (%ld,%ld,'%c','%c',%u,'%s',"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%s','%s','%s','%s','%s')",
+				  "'%s','%s','%s','%s','%s',"
+				  "'%s',FROM_UNIXTIME(%ld),'%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Prj->DptCod,
 				Prj->Hidden == Prj_HIDDEN ? 'Y' :
@@ -128,7 +138,10 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				Prj->Description,
 				Prj->Knowledge,
 				Prj->Materials,
-				Prj->URL);
+				Prj->URL,
+				Prj_ReviewStatus_DB[Prj->ReviewStatus],
+				Prj->ReviewTime,
+				Prj->ReviewTxt);
   }
 
 /*****************************************************************************/
@@ -283,30 +296,42 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
    switch (Projects->Filter.Review)
      {
       case (1 << Prj_UNREVIEWED):	// Unreviewed projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='unreviewed'") < 0)
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	               Prj_ReviewStatus_DB[Prj_UNREVIEWED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNAPPROVED):	// Unapproved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='unapproved'") < 0)
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_APPROVED):		// Approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='approved'") < 0)
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
-      case (1 << Prj_UNREVIEWED | 1 << Prj_UNAPPROVED):	// Unreviewed and unapproved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unreviewed','unapproved')") < 0)
+      case (1 << Prj_UNREVIEWED |
+	    1 << Prj_UNAPPROVED):	// Unreviewed and unapproved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
+	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
-      case (1 << Prj_UNREVIEWED | 1 << Prj_APPROVED):	// Unreviewed and approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unreviewed','approved')") < 0)
+      case (1 << Prj_UNREVIEWED |
+	    1 << Prj_APPROVED):		// Unreviewed and approved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
+	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
-      case (1 << Prj_UNAPPROVED | 1 << Prj_APPROVED):	// Unapproved and approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('unapproved','approved')") < 0)
+      case (1 << Prj_UNAPPROVED |
+	    1 << Prj_APPROVED):		// Unapproved and approved projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	               Prj_ReviewStatus_DB[Prj_UNAPPROVED],
+	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
-      default:			// All projects
+      default:				// All projects
 	 if (asprintf (&AssignSubQuery,"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
@@ -525,7 +550,10 @@ unsigned Prj_DB_GetDataOfProjectByCod (MYSQL_RES **mysql_res,long PrjCod)
 			  "Description,"		// row[11]
 			  "Knowledge,"			// row[12]
 			  "Materials,"			// row[13]
-			  "URL"				// row[14]
+			  "URL,"			// row[14]
+			  "ReviewStatus,"		// row[15]
+			  "UNIX_TIMESTAMP(ReviewTime),"	// row[16]
+			  "ReviewTxt"			// row[17]
 		    " FROM prj_projects"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check

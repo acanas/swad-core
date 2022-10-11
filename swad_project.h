@@ -91,6 +91,7 @@ typedef enum
    Prj_UNAPPROVED = 1,
    Prj_APPROVED   = 2,
   } Prj_ReviewStatus_t;
+#define Prj_REVIEW_STATUS_DEFAULT Prj_UNREVIEWED
 #define Prj_FILTER_UNREVIEWED_DEFAULT	(1 << Prj_UNREVIEWED)	// on
 #define Prj_FILTER_UNAPPROVED_DEFAULT	(1 << Prj_UNAPPROVED)	// on
 #define Prj_FILTER_APPROVED_DEFAULT	(1 << Prj_APPROVED)	// on
@@ -163,6 +164,9 @@ struct Prj_Project
    char *Knowledge;
    char *Materials;
    char URL[Cns_MAX_BYTES_WWW + 1];
+   Prj_ReviewStatus_t ReviewStatus;
+   time_t ReviewTime;
+   char *ReviewTxt;
   };
 
 /***** Struct to store context/status of projects *****/

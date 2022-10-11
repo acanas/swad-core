@@ -91,10 +91,22 @@ static const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
                                               sizeof (Prj_RolesToShow[0]);
 
 /***** Assigned/non-assigned project *****/
-static const char *AssignedNonassigImage[Prj_NUM_ASSIGNED_NONASSIG] =
+static const char *AssignedNonassigIcon[Prj_NUM_ASSIGNED_NONASSIG] =
   {
    [Prj_ASSIGNED] = "user.svg",
    [Prj_NONASSIG] = "user-slash.svg",
+  };
+
+/***** Review status *****/
+static struct
+  {
+   const char *Icon;
+   Ico_Color_t Color;
+  } ReviewIcon[Prj_NUM_REVIEW_STATUS] =
+  {
+   [Prj_UNREVIEWED] = {"file-circle-question.svg"   ,Ico_BLACK},
+   [Prj_UNAPPROVED] = {"file-circle-exclamation.svg",Ico_RED  },
+   [Prj_APPROVED  ] = {"file-circle-check.svg"      ,Ico_GREEN},
   };
 
 /***** Locked/unlocked project edition *****/
@@ -622,7 +634,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 			   Projects->SelectedOrder,
 			   Projects->CurrentPage,
 			   -1L);
-	    Ico_PutSettingIconLink (AssignedNonassigImage[Assign],Ico_BLACK,
+	    Ico_PutSettingIconLink (AssignedNonassigIcon[Assign],Ico_BLACK,
 				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
 	 Frm_EndForm ();
       Set_EndPref ();
@@ -726,19 +738,9 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
   {
-   extern const char *Txt_PROJECT_REVIEWED_PROJECTS[Prj_NUM_REVIEW_STATUS];
+   extern const char *Txt_PROJECT_REVIEW_PLURAL[Prj_NUM_REVIEW_STATUS];
    struct Prj_Filter Filter;
    Prj_ReviewStatus_t ReviewStatus;
-   struct
-     {
-      const char *Icon;
-      Ico_Color_t Color;
-     } ReviewIcon[Prj_NUM_REVIEW_STATUS] =
-     {
-      [Prj_UNREVIEWED] = {"comment-slash.svg",Ico_BLACK},
-      [Prj_UNAPPROVED] = {"thumbs-down.svg"  ,Ico_RED  },
-      [Prj_APPROVED  ] = {"thumbs-up.svg"    ,Ico_GREEN},
-     };
 
    Set_BeginOneSettingSelector ();
    for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
@@ -759,7 +761,7 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 			   -1L);
 	    Ico_PutSettingIconLink (ReviewIcon[ReviewStatus].Icon,
 				    ReviewIcon[ReviewStatus].Color,
-				    Txt_PROJECT_REVIEWED_PROJECTS[ReviewStatus]);
+				    Txt_PROJECT_REVIEW_PLURAL[ReviewStatus]);
 	 Frm_EndForm ();
       Set_EndPref ();
      }
@@ -1352,6 +1354,8 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
                                 Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Review;
+   extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -1395,7 +1399,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("rowspan=\"3\" class=\"RT BIG_INDEX_%s %s\"",
+	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
 	                  The_GetSuffix (),
 			  The_GetColorRows ());
 	       HTM_Unsigned (NumIndex);
@@ -1414,7 +1418,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL %s\"",
+	    HTM_TD_Begin ("rowspan=\"4\" class=\"CONTEXT_COL %s\"",
 	                  The_GetColorRows ());
 	       Prj_PutIconsToRemEditOnePrj (Projects,Anchor);
 	    HTM_TD_End ();
@@ -1505,8 +1509,51 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       /* Department */
       Prj_ShowOneProjectDepartment (&Projects->Prj,ProjectView);
 
-      /***** Assigned? *****/
-      HTM_TR_Begin (NULL);
+   HTM_TR_End ();
+
+   /***** Review status *****/
+   HTM_TR_Begin (NULL);
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
+			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+			  ClassLabel,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtColon (Txt_Review);
+      HTM_TD_End ();
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
+	 Ico_PutIconOff (ReviewIcon[Projects->Prj.ReviewStatus].Icon,
+	                 ReviewIcon[Projects->Prj.ReviewStatus].Color,
+			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
+         /*
+	 if (Faults.WrongAssigned)
+	    Prj_PutWarningIcon ();
+	 */
+
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Assigned? *****/
+   HTM_TR_Begin (NULL);
 
       switch (ProjectView)
 	{
@@ -1535,7 +1582,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	}
 	 HTM_TxtF ("%s&nbsp;",Projects->Prj.Assigned == Prj_ASSIGNED ? Txt_Yes :
 								       Txt_No);
-	 Ico_PutIconOff (AssignedNonassigImage[Projects->Prj.Assigned],Ico_BLACK,
+	 Ico_PutIconOff (AssignedNonassigIcon[Projects->Prj.Assigned],Ico_BLACK,
 			 Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Projects->Prj.Assigned]);
 
 	 if (Faults.WrongAssigned)
@@ -1924,7 +1971,6 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 	 if (PutLink)
 	    HTM_A_End ();
       HTM_TD_End ();
-   HTM_TR_End ();
   }
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
@@ -2999,9 +3045,11 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
   {
    extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
+   extern const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Prj_Proposal_t Proposal;
+   Prj_ReviewStatus_t ReviewStatus;
 
    if (Prj->PrjCod > 0)
      {
@@ -3057,6 +3105,20 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 	 Str_Copy (Prj->Knowledge  ,row[12],Cns_MAX_BYTES_TEXT);
 	 Str_Copy (Prj->Materials  ,row[13],Cns_MAX_BYTES_TEXT);
 	 Str_Copy (Prj->URL        ,row[14],sizeof (Prj->URL  ) - 1);
+
+	 /* Get review status (row[15]), review time (row[16])
+	    and review text (row[17]) */
+	 Prj->ReviewStatus = Prj_REVIEW_STATUS_DEFAULT;
+	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
+	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
+	      ReviewStatus++)
+	    if (!strcmp (Prj_ReviewStatus_DB[Proposal],row[15]))
+	      {
+	       Prj->ReviewStatus = ReviewStatus;
+	       break;
+	      }
+	 Prj->ReviewTime = Dat_GetUNIXTimeFromStr (row[16]);
+	 Str_Copy (Prj->ReviewTxt  ,row[17],Cns_MAX_BYTES_TEXT);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -3092,6 +3154,10 @@ static void Prj_ResetProject (struct Prj_Project *Prj)
    Prj->Knowledge[0]   = '\0';
    Prj->Materials[0]   = '\0';
    Prj->URL[0]         = '\0';
+
+   Prj->ReviewStatus = Prj_REVIEW_STATUS_DEFAULT;
+   Prj->ReviewTime   = (time_t) 0;
+   Prj->ReviewTxt[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -3620,6 +3686,9 @@ void Prj_AllocMemProject (struct Prj_Project *Prj)
 
    if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
+
+   if ((Prj->ReviewTxt   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
@@ -3642,6 +3711,11 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
      {
       free (Prj->Materials);
       Prj->Materials = NULL;
+     }
+   if (Prj->ReviewTxt)
+     {
+      free (Prj->ReviewTxt);
+      Prj->ReviewTxt = NULL;
      }
   }
 
