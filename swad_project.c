@@ -145,11 +145,13 @@ struct Usr_SelectedUsrs Prj_MembersToAdd =
 
 struct Prj_Faults
   {
+   bool PrjIsFaulty;
    bool WrongTitle;
    bool WrongDescription;
    bool WrongNumStds;
    bool WrongAssigned;
   };
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -197,6 +199,9 @@ static void Prj_PutIconsOnePrj (void *Projects);
 //---------------------- Show one project in a row ----------------------------
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 			        unsigned NumIndex);
+static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
+                                     const struct Prj_Faults *Faults,
+                                     unsigned NumIndex,unsigned UniqueId);
 static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects);
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
                                      const struct Prj_Faults *Faults);
@@ -211,7 +216,7 @@ static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
                                         unsigned UniqueId);
 
 //------------------------------------------------ ----------------------------
-static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
+static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
@@ -1351,24 +1356,74 @@ void Prj_PrintOneProject (void)
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 			        unsigned NumIndex)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   struct Prj_Faults Faults;
+   static unsigned UniqueId = 0;
+
+   /***** Check project faults *****/
+   Prj_CheckIfPrjIsFaulty (Projects->Prj.PrjCod,&Faults);
+
+   /***** First row with main data (dates, title...) *****/
+   UniqueId++;
+   Prj_ShowProjectFirstRow (Projects,&Faults,NumIndex,UniqueId);
+
+   /***** Review status *****/
+   Prj_ShowProjectReviewStatus (Projects);
+
+   /***** Assigned? *****/
+   Prj_ShowProjectAssigned (Projects,&Faults);
+
+   /***** Number of students *****/
+   Prj_ShowProjectNumStds (Projects,&Faults);
+
+   /***** Project members *****/
+   Prj_ShowProjectMembers (Projects);
+
+   /***** Link to show hidden info *****/
+   Prj_ShowOneProjectLinkToShowHiddenInfo (Projects,UniqueId);
+
+   /***** Proposal *****/
+   Prj_ShowOneProjectProposal (Projects,UniqueId);
+
+   /***** Write rows of data of this project *****/
+   /* Description of the project */
+   Prj_ShowOneProjectTxtField (Projects,"prj_dsc_",UniqueId,
+                               Txt_Description,Projects->Prj.Description,
+			       Faults.WrongDescription);
+
+   /* Required knowledge to carry out the project */
+   Prj_ShowOneProjectTxtField (Projects,"prj_knw_",UniqueId,
+                               Txt_Required_knowledge,Projects->Prj.Knowledge,
+			       false);	// No warning
+
+   /* Required materials to carry out the project */
+   Prj_ShowOneProjectTxtField (Projects,"prj_mtr_",UniqueId,
+                               Txt_Required_materials,Projects->Prj.Materials,
+			       false);	// No warning
+
+   /* Link to view more info about the project */
+   Prj_ShowOneProjectURL (Projects,"prj_url_",UniqueId);
+  }
+
+/*****************************************************************************/
+/** When listing a project, show first row with main data (dates, title...) **/
+/*****************************************************************************/
+
+static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
+                                     const struct Prj_Faults *Faults,
+                                     unsigned NumIndex,unsigned UniqueId)
+  {
+   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   char *Id;
    Act_Action_t NextAction;
    char *Anchor = NULL;
    const char *ClassDate = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
 						                  "DATE_BLUE";
-   struct Prj_Faults Faults;
-   bool PrjIsFaulty;
-   static unsigned UniqueId = 0;
-   char *Id;
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Projects->Prj.PrjCod,&Anchor);
-
-   /***** Check if project is faulty or faultless *****/
-   PrjIsFaulty = Prj_CheckIfPrjIsFaulty (Projects->Prj.PrjCod,&Faults);
 
    /***** Write first row of data of this project *****/
    HTM_TR_Begin (NULL);
@@ -1381,7 +1436,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	                  The_GetSuffix (),
 			  The_GetColorRows ());
 	       HTM_Unsigned (NumIndex);
-	       if (PrjIsFaulty)
+	       if (Faults->PrjIsFaulty)
 		 {
 		  HTM_BR ();
 		  Prj_PutWarningIcon ();
@@ -1406,7 +1461,6 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	}
 
       /* Creation date/time */
-      UniqueId++;
       if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       switch (Projects->View)
@@ -1479,7 +1533,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	      }
-	    if (Faults.WrongTitle)
+	    if (Faults->WrongTitle)
 	       Prj_PutWarningIcon ();
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
@@ -1488,43 +1542,6 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       Prj_ShowOneProjectDepartment (Projects);
 
    HTM_TR_End ();
-
-   /***** Review status *****/
-   Prj_ShowProjectReviewStatus (Projects);
-
-   /***** Assigned? *****/
-   Prj_ShowProjectAssigned (Projects,&Faults);
-
-   /***** Number of students *****/
-   Prj_ShowProjectNumStds (Projects,&Faults);
-
-   /***** Project members *****/
-   Prj_ShowProjectMembers (Projects);
-
-   /***** Link to show hidden info *****/
-   Prj_ShowOneProjectLinkToShowHiddenInfo (Projects,UniqueId);
-
-   /***** Proposal *****/
-   Prj_ShowOneProjectProposal (Projects,UniqueId);
-
-   /***** Write rows of data of this project *****/
-   /* Description of the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_dsc_",UniqueId,
-                               Txt_Description,Projects->Prj.Description,
-			       Faults.WrongDescription);
-
-   /* Required knowledge to carry out the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_knw_",UniqueId,
-                               Txt_Required_knowledge,Projects->Prj.Knowledge,
-			       false);	// No warning
-
-   /* Required materials to carry out the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_mtr_",UniqueId,
-                               Txt_Required_materials,Projects->Prj.Materials,
-			       false);	// No warning
-
-   /* Link to view more info about the project */
-   Prj_ShowOneProjectURL (Projects,"prj_url_",UniqueId);
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1983,7 +2000,7 @@ static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
 /********************** Check if a project has faults ************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
+static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2048,10 +2065,10 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return Faults->WrongTitle       ||
-	  Faults->WrongDescription ||
-	  Faults->WrongNumStds     ||
-	  Faults->WrongAssigned;
+   Faults->PrjIsFaulty = Faults->WrongTitle       ||
+	                 Faults->WrongDescription ||
+	                 Faults->WrongNumStds     ||
+	                 Faults->WrongAssigned;
   }
 
 /*****************************************************************************/
@@ -3069,11 +3086,13 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 	    switch (Projects->Filter.Faulti)
 	      {
 	       case (1 << Prj_FAULTY):		// Faulty projects
-		  if (Prj_CheckIfPrjIsFaulty (PrjCod,&Faults))
+		  Prj_CheckIfPrjIsFaulty (PrjCod,&Faults);
+		  if (Faults.PrjIsFaulty)
 		     Projects->LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
 		  break;
 	       case (1 << Prj_FAULTLESS):	// Faultless projects
-		  if (!Prj_CheckIfPrjIsFaulty (PrjCod,&Faults))
+		  Prj_CheckIfPrjIsFaulty (PrjCod,&Faults);
+		  if (!Faults.PrjIsFaulty)
 		     Projects->LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
 		  break;
 	       default:				// All projects
