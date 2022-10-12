@@ -207,7 +207,10 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
                                              Prj_RoleInProject_t RoleInPrj);
 static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
                                                     unsigned UniqueId);
+static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
+                                        unsigned UniqueId);
 
+//------------------------------------------------ ----------------------------
 static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
@@ -1349,28 +1352,17 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 			        unsigned NumIndex)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_Proposal;
-   extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    Act_Action_t NextAction;
    char *Anchor = NULL;
-   const char *ClassLabel;
-   const char *ClassDate;
-   const char *ClassData;
+   const char *ClassDate = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
+						                  "DATE_BLUE";
    struct Prj_Faults Faults;
    bool PrjIsFaulty;
    static unsigned UniqueId = 0;
    char *Id;
-
-   /***** Set CSS classes *****/
-   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						       "ASG_LABEL";
-   ClassDate  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
-						       "DATE_BLUE";
-   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						       "DAT";
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Projects->Prj.PrjCod,&Anchor);
@@ -1513,43 +1505,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    Prj_ShowOneProjectLinkToShowHiddenInfo (Projects,UniqueId);
 
    /***** Proposal *****/
-   switch (Projects->View)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-      default:
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-     }
-	 HTM_TxtColon (Txt_Proposal);
-      HTM_TD_End ();
-
-      switch (Projects->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 HTM_Txt (Txt_PROJECT_STATUS[Projects->Prj.Proposal]);
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   Prj_ShowOneProjectProposal (Projects,UniqueId);
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1782,14 +1738,10 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
    bool WriteRow;
    unsigned NumUsr;
    unsigned NumUsrs;
-   const char *ClassLabel;
-   const char *ClassData;
-
-   /***** Set CSS classes *****/
-   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						       "ASG_LABEL";
-   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						       "DAT";
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
@@ -1972,6 +1924,59 @@ static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *P
       default:
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/********* When listing a project, show one row with type of proposal ********/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
+                                        unsigned UniqueId)
+  {
+   extern const char *Txt_Proposal;
+   extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
+
+   switch (Projects->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
+			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 break;
+      case Prj_FILE_BROWSER_PROJECT:
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+      default:
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+     }
+	 HTM_TxtColon (Txt_Proposal);
+      HTM_TD_End ();
+
+      switch (Projects->View)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),
+			  The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_Txt (Txt_PROJECT_STATUS[Projects->Prj.Proposal]);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
