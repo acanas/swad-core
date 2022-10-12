@@ -146,6 +146,15 @@ typedef enum
    Prj_ROLE_EVL	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
+/***** Type of view when writing one project *****/
+typedef enum
+  {
+   Prj_LIST_PROJECTS,
+   Prj_FILE_BROWSER_PROJECT,
+   Prj_PRINT_ONE_PROJECT,
+   Prj_EDIT_ONE_PROJECT,
+  } Prj_ProjectView_t;
+
 /***** Struct to store a project *****/
 struct Prj_Project
   {
@@ -172,6 +181,7 @@ struct Prj_Project
 /***** Struct to store context/status of projects *****/
 struct Prj_Projects
   {
+   Prj_ProjectView_t View;
    struct
      {
       bool Editable;

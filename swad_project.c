@@ -71,15 +71,6 @@ extern struct Globals Gbl;
 #define Prj_PARAM_FAULTIN_NAME	"Faulti"
 #define Prj_PARAM_REVIEW_NAME	"Review"
 
-/***** Type of view when writing one project *****/
-typedef enum
-  {
-   Prj_LIST_PROJECTS,
-   Prj_FILE_BROWSER_PROJECT,
-   Prj_PRINT_ONE_PROJECT,
-   Prj_EDIT_ONE_PROJECT,
-  } Prj_ProjectView_t;
-
 /***** User roles are shown in this order *****/
 static const Prj_RoleInProject_t Prj_RolesToShow[] =
   {
@@ -87,7 +78,7 @@ static const Prj_RoleInProject_t Prj_RolesToShow[] =
    Prj_ROLE_STD,	// Student
    Prj_ROLE_EVL,	// Evaluator
   };
-static const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
+static const unsigned Prj_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
                                               sizeof (Prj_RolesToShow[0]);
 
 /***** Assigned/non-assigned project *****/
@@ -193,8 +184,7 @@ static unsigned Prj_GetHiddenParamReview (void);
 static long Prj_GetHiddenParamDptCod (void);
 static Usr_Who_t Prj_GetParamWho (void);
 
-static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
-                                  Prj_ProjectView_t ProjectView);
+static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
 static bool Prj_CheckIfICanCreateProjects (void);
 static void Prj_PutIconsListProjects (void *Projects);
@@ -204,42 +194,36 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 
 static void Prj_PutIconsOnePrj (void *Projects);
 
+//---------------------- Show one project in a row ----------------------------
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-                                Prj_ProjectView_t ProjectView,
 			        unsigned NumIndex);
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
-                                         Prj_ProjectView_t ProjectView);
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects);
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
-                                     Prj_ProjectView_t ProjectView,
                                      const struct Prj_Faults *Faults);
 static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
-                                    Prj_ProjectView_t ProjectView,
                                     const struct Prj_Faults *Faults);
+static void Prj_ShowProjectMembers (struct Prj_Projects *Projects);
+static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
+                                             Prj_RoleInProject_t RoleInPrj);
+static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
+                                                    unsigned UniqueId);
 
 static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj);
-static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
-                                          Prj_ProjectView_t ProjectView);
+static void Prj_ShowOneProjectDepartment (const struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj);
-static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
-                                        Prj_ProjectView_t ProjectView,
+static void Prj_ShowOneProjectTxtField (const struct Prj_Projects *Projects,
                                         const char *id,unsigned UniqueId,
                                         const char *Label,char *TxtField,
 					bool Warning);
 static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField);
-static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
-                                   Prj_ProjectView_t ProjectView,
+static void Prj_ShowOneProjectURL (const struct Prj_Projects *Projects,
                                    const char *id,unsigned UniqueId);
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj);
-static void Prj_ShowOneProjectMembers (struct Prj_Projects *Projects,
-                                       Prj_ProjectView_t ProjectView);
-static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
-                                                Prj_ProjectView_t ProjectView,
-                                                Prj_RoleInProject_t RoleInPrj);
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
                                                       Prj_RoleInProject_t RoleInPrj);
 
@@ -528,7 +512,8 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	    HTM_TABLE_BeginWideMarginPadding (2);
 
 	       /***** Table head *****/
-	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
+	       ((struct Prj_Projects *) Projects)->View = Prj_LIST_PROJECTS;
+	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects);
 
 	       /***** Write all projects *****/
 	       for (NumPrj  = Pagination.FirstItemVisible, The_ResetRowColor ();
@@ -554,8 +539,8 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		    }
 
 		  /* Show project */
-		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects,
-				      Prj_LIST_PROJECTS,NumIndex);
+		  ((struct Prj_Projects *) Projects)->View = Prj_LIST_PROJECTS;
+		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects,NumIndex);
 		 }
 
 	    /***** End table *****/
@@ -1029,8 +1014,7 @@ static Usr_Who_t Prj_GetParamWho (void)
 /******************* Write header with fields of a project *******************/
 /*****************************************************************************/
 
-static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
-                                  Prj_ProjectView_t ProjectView)
+static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS];
@@ -1040,7 +1024,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
       /***** Column for number of project *****/
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
@@ -1050,7 +1034,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	}
 
       /***** Column for contextual icons *****/
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
             HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");
@@ -1066,7 +1050,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	{
          HTM_TH_Begin (HTM_HEAD_LEFT);
 
-	    switch (ProjectView)
+	    switch (Projects->View)
 	      {
 	       case Prj_LIST_PROJECTS:
 	       case Prj_FILE_BROWSER_PROJECT:
@@ -1118,7 +1102,7 @@ static void Prj_ShowTableAllProjectsHead (void)
       HTM_TH (Txt_Assigned_QUESTION ,HTM_HEAD_LEFT);
       HTM_TH (Txt_Number_of_students,HTM_HEAD_LEFT);
       for (NumRoleToShow = 0;
-	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	   NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
 	   NumRoleToShow++)
 	 HTM_TH (Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]],HTM_HEAD_LEFT);
       HTM_TH (Txt_Proposal          ,HTM_HEAD_LEFT);
@@ -1278,11 +1262,10 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
       /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Write project head *****/
-	 Prj_ShowProjectsHead (Projects,Prj_FILE_BROWSER_PROJECT);
-
-	 /***** Show project *****/
-	 Prj_ShowProjectRow (Projects,Prj_FILE_BROWSER_PROJECT,0);
+         /***** Table head and project *****/
+         Projects->View = Prj_FILE_BROWSER_PROJECT;
+	 Prj_ShowProjectsHead (Projects);
+	 Prj_ShowProjectRow (Projects,0);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1346,11 +1329,10 @@ void Prj_PrintOneProject (void)
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
 
-      /***** Table head *****/
-      Prj_ShowProjectsHead (&Projects,Prj_PRINT_ONE_PROJECT);
-
-      /***** Write project *****/
-      Prj_ShowProjectRow (&Projects,Prj_PRINT_ONE_PROJECT,0);
+      /***** Table head and project *****/
+      Projects.View = Prj_PRINT_ONE_PROJECT;
+      Prj_ShowProjectsHead (&Projects);
+      Prj_ShowProjectRow (&Projects,0);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1364,12 +1346,9 @@ void Prj_PrintOneProject (void)
 /*****************************************************************************/
 
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-                                Prj_ProjectView_t ProjectView,
 			        unsigned NumIndex)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_See_more;
-   extern const char *Txt_See_less;
    extern const char *Txt_Proposal;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
    extern const char *Txt_Description;
@@ -1403,7 +1382,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
       /* Number of project */
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
@@ -1422,7 +1401,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	}
 
       /* Forms to remove/edit this project */
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("rowspan=\"4\" class=\"CONTEXT_COL %s\"",
@@ -1438,7 +1417,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       UniqueId++;
       if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
@@ -1462,7 +1441,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       UniqueId++;
       if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
@@ -1483,7 +1462,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       free (Id);
 
       /* Project title */
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
@@ -1514,59 +1493,27 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
       HTM_TD_End ();
 
       /* Department */
-      Prj_ShowOneProjectDepartment (&Projects->Prj,ProjectView);
+      Prj_ShowOneProjectDepartment (Projects);
 
    HTM_TR_End ();
 
    /***** Review status *****/
-   Prj_ShowProjectReviewStatus (Projects,ProjectView);
+   Prj_ShowProjectReviewStatus (Projects);
 
    /***** Assigned? *****/
-   Prj_ShowProjectAssigned (Projects,ProjectView,&Faults);
+   Prj_ShowProjectAssigned (Projects,&Faults);
 
    /***** Number of students *****/
-   Prj_ShowProjectNumStds (Projects,ProjectView,&Faults);
+   Prj_ShowProjectNumStds (Projects,&Faults);
 
    /***** Project members *****/
-   Prj_ShowOneProjectMembers (Projects,ProjectView);
+   Prj_ShowProjectMembers (Projects);
 
    /***** Link to show hidden info *****/
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
-	                  The_GetColorRows ());
-	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-
-	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
-	                  The_GetColorRows ());
-	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-
-	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-	 break;
-      default:
-	 break;
-     }
+   Prj_ShowOneProjectLinkToShowHiddenInfo (Projects,UniqueId);
 
    /***** Proposal *****/
-   switch (ProjectView)
+   switch (Projects->View)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
@@ -1587,7 +1534,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 	 HTM_TxtColon (Txt_Proposal);
       HTM_TD_End ();
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -1606,22 +1553,22 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
-   Prj_ShowOneProjectTxtField (&Projects->Prj,ProjectView,"prj_dsc_",UniqueId,
+   Prj_ShowOneProjectTxtField (Projects,"prj_dsc_",UniqueId,
                                Txt_Description,Projects->Prj.Description,
 			       Faults.WrongDescription);
 
    /* Required knowledge to carry out the project */
-   Prj_ShowOneProjectTxtField (&Projects->Prj,ProjectView,"prj_knw_",UniqueId,
+   Prj_ShowOneProjectTxtField (Projects,"prj_knw_",UniqueId,
                                Txt_Required_knowledge,Projects->Prj.Knowledge,
 			       false);	// No warning
 
    /* Required materials to carry out the project */
-   Prj_ShowOneProjectTxtField (&Projects->Prj,ProjectView,"prj_mtr_",UniqueId,
+   Prj_ShowOneProjectTxtField (Projects,"prj_mtr_",UniqueId,
                                Txt_Required_materials,Projects->Prj.Materials,
 			       false);	// No warning
 
    /* Link to view more info about the project */
-   Prj_ShowOneProjectURL (&Projects->Prj,ProjectView,"prj_url_",UniqueId);
+   Prj_ShowOneProjectURL (Projects,"prj_url_",UniqueId);
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1631,8 +1578,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 /********* When listing a project, show one row with review status ***********/
 /*****************************************************************************/
 
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
-                                         Prj_ProjectView_t ProjectView)
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects)
   {
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
@@ -1643,7 +1589,7 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
 
    HTM_TR_Begin (NULL);
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
@@ -1657,7 +1603,7 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
 	 HTM_TxtColon (Txt_Review);
       HTM_TD_End ();
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -1687,7 +1633,6 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
 /*****************************************************************************/
 
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
-                                     Prj_ProjectView_t ProjectView,
                                      const struct Prj_Faults *Faults)
   {
    extern const char *Txt_Assigned_QUESTION;
@@ -1701,7 +1646,7 @@ static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
 
    HTM_TR_Begin (NULL);
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
@@ -1715,7 +1660,7 @@ static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
 	 HTM_TxtColon (Txt_Assigned_QUESTION);
       HTM_TD_End ();
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -1744,7 +1689,6 @@ static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
 /*****************************************************************************/
 
 static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
-                                    Prj_ProjectView_t ProjectView,
                                     const struct Prj_Faults *Faults)
   {
    extern const char *Txt_Number_of_students;
@@ -1755,7 +1699,7 @@ static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
 
    HTM_TR_Begin (NULL);
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
@@ -1769,7 +1713,7 @@ static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
 	 HTM_TxtColon (Txt_Number_of_students);
       HTM_TD_End ();
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -1786,6 +1730,248 @@ static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
       HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****** When listing a project, show several rows with projects members ******/
+/*****************************************************************************/
+
+static void Prj_ShowProjectMembers (struct Prj_Projects *Projects)
+  {
+   unsigned NumRoleToShow;
+
+   for (NumRoleToShow = 0;
+	NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
+	NumRoleToShow++)
+      Prj_ShowProjectMembersWithARole (Projects,Prj_RolesToShow[NumRoleToShow]);
+  }
+
+/*****************************************************************************/
+/*** When listing a project, show one row with projects members with a role **/
+/*****************************************************************************/
+
+static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
+                                             Prj_RoleInProject_t RoleInPrj)
+  {
+   ;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
+   extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
+   static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActReqRemStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActReqRemTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActReqRemEvlPrj,	// Evaluator
+     };
+   static const Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+     {
+      [Prj_ROLE_UNK] = ActUnk,		// Unknown
+      [Prj_ROLE_STD] = ActReqAddStdPrj,	// Student
+      [Prj_ROLE_TUT] = ActReqAddTutPrj,	// Tutor
+      [Prj_ROLE_EVL] = ActReqAddEvlPrj,	// Evaluator
+     };
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
+     {
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
+     };
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool WriteRow;
+   unsigned NumUsr;
+   unsigned NumUsrs;
+   const char *ClassLabel;
+   const char *ClassData;
+
+   /***** Set CSS classes *****/
+   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						       "ASG_LABEL";
+   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						       "DAT";
+
+   /***** Get users in project from database *****/
+   NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
+   WriteRow = (NumUsrs != 0 ||
+	       Projects->View == Prj_EDIT_ONE_PROJECT);
+
+   if (WriteRow)
+     {
+      /***** Begin row with label and listing of users *****/
+      HTM_TR_Begin (NULL);
+
+	 /* Column for label */
+	 switch (Projects->View)
+	   {
+	    case Prj_LIST_PROJECTS:
+	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
+			     ClassLabel,The_GetSuffix (),The_GetColorRows ());
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+	       break;
+	    case Prj_FILE_BROWSER_PROJECT:
+	    case Prj_PRINT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                     ClassLabel,The_GetSuffix ());
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+	       break;
+	    case Prj_EDIT_ONE_PROJECT:
+	       HTM_TD_Begin ("class=\"RT %s_%s\"",
+	                     ClassLabel,The_GetSuffix ());
+		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
+	       break;
+	   }
+	 HTM_TD_End ();
+
+	 /* Begin column with list of users */
+	 switch (Projects->View)
+	   {
+	    case Prj_LIST_PROJECTS:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			     ClassData,The_GetSuffix (),
+			     The_GetColorRows ());
+	       break;
+	    case Prj_FILE_BROWSER_PROJECT:
+	    case Prj_PRINT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			     ClassData,The_GetSuffix ());
+	       break;
+	    case Prj_EDIT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT_%s\"",
+	                     The_GetSuffix ());
+	       break;
+	   }
+
+	    /***** Begin table with all members with this role *****/
+	    HTM_TABLE_BeginPadding (2);
+
+	       /***** Write users *****/
+	       for (NumUsr = 0;
+		    NumUsr < NumUsrs;
+		    NumUsr++)
+		 {
+		  /* Get user's code */
+		  row = mysql_fetch_row (mysql_res);
+		  Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+		  /* Get user's data */
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							       Usr_DONT_GET_PREFS,
+							       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		    {
+		     /* Begin row for this user */
+		     HTM_TR_Begin (NULL);
+
+			/* Icon to remove user */
+			if (Projects->View == Prj_EDIT_ONE_PROJECT)
+			  {
+			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
+							     Prj_PutCurrentParams,Projects,
+							     "trash.svg",Ico_RED);
+			   HTM_TD_End ();
+			  }
+
+			/* Put user's photo */
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
+			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
+			                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
+			                              false);
+			HTM_TD_End ();
+
+			/* Write user's name */
+			HTM_TD_Begin ("class=\"LM %s_%s\"",
+			              Projects->Prj.Hidden == Prj_HIDDEN ? "MSG_AUT_LIGHT" :
+									   "MSG_AUT",
+			              The_GetSuffix ());
+			   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
+			HTM_TD_End ();
+
+		     /* End row for this user */
+		     HTM_TR_End ();
+		    }
+		 }
+
+	       /***** Row to add a new user *****/
+	       switch (Projects->View)
+		 {
+		  case Prj_EDIT_ONE_PROJECT:
+		     HTM_TR_Begin (NULL);
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
+						       Prj_PutCurrentParams,Projects);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"LM MSG_AUT_%s\"",	// Column for name
+			              The_GetSuffix ());
+			HTM_TD_End ();
+
+		     HTM_TR_End ();
+		     break;
+		  default:
+		     break;
+		 }
+
+	    /***** End table with all members with this role *****/
+	    HTM_TABLE_End ();
+
+	 /***** End row with label and listing of users *****/
+	 HTM_TD_End ();
+      HTM_TR_End ();
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/***** When listing a project, show one row with link to show hidden info ****/
+/*****************************************************************************/
+
+static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
+                                                    unsigned UniqueId)
+  {
+   extern const char *Txt_See_more;
+   extern const char *Txt_See_less;
+
+   switch (Projects->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
+	                  The_GetColorRows ());
+	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+
+	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
+	                  The_GetColorRows ());
+	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+	 break;
+      case Prj_FILE_BROWSER_PROJECT:
+	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+
+	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+	 break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -1963,7 +2149,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
       /***** Project members *****/
       for (NumRoleToShow = 0;
-	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	   NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
 	   NumRoleToShow++)
 	 Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
@@ -1994,27 +2180,26 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 /****************** Show department associated to project ********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
-                                          Prj_ProjectView_t ProjectView)
+static void Prj_ShowOneProjectDepartment (const struct Prj_Projects *Projects)
   {
    struct Dpt_Department Dpt;
    bool PutLink;
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					              "DAT";
 
    /***** Get data of department *****/
-   Dpt.DptCod = Prj->DptCod;
+   Dpt.DptCod = Projects->Prj.DptCod;
    Dpt_GetDataOfDepartmentByCod (&Dpt);
 
    /***** Show department *****/
    PutLink = (Dpt.WWW[0] &&
-	      (ProjectView == Prj_LIST_PROJECTS ||
-	       ProjectView == Prj_FILE_BROWSER_PROJECT));
+	      (Projects->View == Prj_LIST_PROJECTS ||
+	       Projects->View == Prj_FILE_BROWSER_PROJECT));
 
-   switch (ProjectView)
+   switch (Projects->View)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
@@ -2058,8 +2243,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
 /********************** Show text field about a project **********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
-                                        Prj_ProjectView_t ProjectView,
+static void Prj_ShowOneProjectTxtField (const struct Prj_Projects *Projects,
                                         const char *id,unsigned UniqueId,
                                         const char *Label,char *TxtField,
 					bool Warning)
@@ -2068,13 +2252,13 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-					      "ASG_LABEL";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+					               "ASG_LABEL";
+   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					               "DAT";
 
    /***** Label *****/
-   switch (ProjectView)
+   switch (Projects->View)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -2101,7 +2285,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
       /***** Change text format *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
@@ -2112,7 +2296,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 	}
 
       /***** Text *****/
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -2156,25 +2340,24 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
 /********************** Show URL associated to project ***********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
-                                   Prj_ProjectView_t ProjectView,
+static void Prj_ShowOneProjectURL (const struct Prj_Projects *Projects,
                                    const char *id,unsigned UniqueId)
   {
    extern const char *Txt_URL;
    const char *ClassLabel;
    const char *ClassData;
-   bool PutLink = (Prj->URL[0] &&
-	           (ProjectView == Prj_LIST_PROJECTS ||
-	            ProjectView == Prj_FILE_BROWSER_PROJECT));
+   bool PutLink = (Projects->Prj.URL[0] &&
+	           (Projects->View == Prj_LIST_PROJECTS ||
+	            Projects->View == Prj_FILE_BROWSER_PROJECT));
 
    /***** Set CSS classes *****/
-   ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-					      "ASG_LABEL";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+					               "ASG_LABEL";
+   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					               "DAT";
 
    /***** Write row with label and text *****/
-   switch (ProjectView)
+   switch (Projects->View)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -2198,7 +2381,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 	 HTM_TxtColon (Txt_URL);
       HTM_TD_End ();
 
-      switch (ProjectView)
+      switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
@@ -2211,8 +2394,8 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 	    break;
 	}
 	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prj->URL);
-	 HTM_Txt (Prj->URL);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Projects->Prj.URL);
+	 HTM_Txt (Projects->Prj.URL);
 	 if (PutLink)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -2236,204 +2419,8 @@ static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
   }
 
 /*****************************************************************************/
-/************** Show projects members when showing one project ***************/
+/***** Show table cell for members with a role in table with all projects ****/
 /*****************************************************************************/
-
-static void Prj_ShowOneProjectMembers (struct Prj_Projects *Projects,
-                                       Prj_ProjectView_t ProjectView)
-  {
-   unsigned NumRoleToShow;
-
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      Prj_ShowOneProjectMembersWithARole (Projects,ProjectView,
-                                          Prj_RolesToShow[NumRoleToShow]);
-  }
-
-/*****************************************************************************/
-/************************* Show users row in a project ***********************/
-/*****************************************************************************/
-
-static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
-                                                Prj_ProjectView_t ProjectView,
-                                                Prj_RoleInProject_t RoleInPrj)
-  {
-   ;
-   extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-   static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
-     {
-      [Prj_ROLE_UNK] = ActUnk,		// Unknown
-      [Prj_ROLE_STD] = ActReqRemStdPrj,	// Student
-      [Prj_ROLE_TUT] = ActReqRemTutPrj,	// Tutor
-      [Prj_ROLE_EVL] = ActReqRemEvlPrj,	// Evaluator
-     };
-   static const Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
-     {
-      [Prj_ROLE_UNK] = ActUnk,		// Unknown
-      [Prj_ROLE_STD] = ActReqAddStdPrj,	// Student
-      [Prj_ROLE_TUT] = ActReqAddTutPrj,	// Tutor
-      [Prj_ROLE_EVL] = ActReqAddEvlPrj,	// Evaluator
-     };
-   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
-     {
-      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
-     };
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool WriteRow;
-   unsigned NumUsr;
-   unsigned NumUsrs;
-   const char *ClassLabel;
-   const char *ClassData;
-
-   /***** Set CSS classes *****/
-   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						       "ASG_LABEL";
-   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						       "DAT";
-
-   /***** Get users in project from database *****/
-   NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
-   WriteRow = (NumUsrs != 0 ||
-	       ProjectView == Prj_EDIT_ONE_PROJECT);
-
-   if (WriteRow)
-     {
-      /***** Begin row with label and listing of users *****/
-      HTM_TR_Begin (NULL);
-
-	 /* Column for label */
-	 switch (ProjectView)
-	   {
-	    case Prj_LIST_PROJECTS:
-	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-			     ClassLabel,The_GetSuffix (),The_GetColorRows ());
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
-	       break;
-	    case Prj_FILE_BROWSER_PROJECT:
-	    case Prj_PRINT_ONE_PROJECT:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                     ClassLabel,The_GetSuffix ());
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
-	       break;
-	    case Prj_EDIT_ONE_PROJECT:
-	       HTM_TD_Begin ("class=\"RT %s_%s\"",
-	                     ClassLabel,The_GetSuffix ());
-		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
-	       break;
-	   }
-	 HTM_TD_End ();
-
-	 /* Begin column with list of users */
-	 switch (ProjectView)
-	   {
-	    case Prj_LIST_PROJECTS:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			     ClassData,The_GetSuffix (),
-			     The_GetColorRows ());
-	       break;
-	    case Prj_FILE_BROWSER_PROJECT:
-	    case Prj_PRINT_ONE_PROJECT:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			     ClassData,The_GetSuffix ());
-	       break;
-	    case Prj_EDIT_ONE_PROJECT:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT_%s\"",
-	                     The_GetSuffix ());
-	       break;
-	   }
-
-	    /***** Begin table with all members with this role *****/
-	    HTM_TABLE_BeginPadding (2);
-
-	       /***** Write users *****/
-	       for (NumUsr = 0;
-		    NumUsr < NumUsrs;
-		    NumUsr++)
-		 {
-		  /* Get user's code */
-		  row = mysql_fetch_row (mysql_res);
-		  Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-		  /* Get user's data */
-		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-							       Usr_DONT_GET_PREFS,
-							       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-		    {
-		     /* Begin row for this user */
-		     HTM_TR_Begin (NULL);
-
-			/* Icon to remove user */
-			if (ProjectView == Prj_EDIT_ONE_PROJECT)
-			  {
-			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
-							     Prj_PutCurrentParams,Projects,
-							     "trash.svg",Ico_RED);
-			   HTM_TD_End ();
-			  }
-
-			/* Put user's photo */
-			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
-			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-			                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-			                              false);
-			HTM_TD_End ();
-
-			/* Write user's name */
-			HTM_TD_Begin ("class=\"LM %s_%s\"",
-			              Projects->Prj.Hidden == Prj_HIDDEN ? "MSG_AUT_LIGHT" :
-									   "MSG_AUT",
-			              The_GetSuffix ());
-			   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
-			HTM_TD_End ();
-
-		     /* End row for this user */
-		     HTM_TR_End ();
-		    }
-		 }
-
-	       /***** Row to add a new user *****/
-	       switch (ProjectView)
-		 {
-		  case Prj_EDIT_ONE_PROJECT:
-		     HTM_TR_Begin (NULL);
-			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
-						       Prj_PutCurrentParams,Projects);
-			HTM_TD_End ();
-
-			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
-			HTM_TD_End ();
-
-			HTM_TD_Begin ("class=\"LM MSG_AUT_%s\"",	// Column for name
-			              The_GetSuffix ());
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-		     break;
-		  default:
-		     break;
-		 }
-
-	    /***** End table with all members with this role *****/
-	    HTM_TABLE_End ();
-
-	 /***** End row with label and listing of users *****/
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
 
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
                                                       Prj_RoleInProject_t RoleInPrj)
@@ -3540,11 +3527,11 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
       Box_BoxTableBegin (NULL,Txt_Members,
                          NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      for (NumRoleToShow = 0;
-	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	   NumRoleToShow++)
-	 Prj_ShowOneProjectMembersWithARole (Projects,Prj_EDIT_ONE_PROJECT,
-	                                     Prj_RolesToShow[NumRoleToShow]);
+         Projects->View = Prj_EDIT_ONE_PROJECT;
+	 for (NumRoleToShow = 0;
+	      NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
+	      NumRoleToShow++)
+	    Prj_ShowProjectMembersWithARole (Projects,Prj_RolesToShow[NumRoleToShow]);
       Box_BoxTableEnd ();
      }
 
