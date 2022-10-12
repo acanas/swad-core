@@ -205,10 +205,17 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 static void Prj_PutIconsOnePrj (void *Projects);
 
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-			        unsigned NumIndex,
-                                Prj_ProjectView_t ProjectView);
-static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
+                                Prj_ProjectView_t ProjectView,
+			        unsigned NumIndex);
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
                                          Prj_ProjectView_t ProjectView);
+static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
+                                     Prj_ProjectView_t ProjectView,
+                                     const struct Prj_Faults *Faults);
+static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
+                                    Prj_ProjectView_t ProjectView,
+                                    const struct Prj_Faults *Faults);
+
 static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
@@ -548,7 +555,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
 		  /* Show project */
 		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects,
-				      NumIndex,Prj_LIST_PROJECTS);
+				      Prj_LIST_PROJECTS,NumIndex);
 		 }
 
 	    /***** End table *****/
@@ -1275,7 +1282,7 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
 	 Prj_ShowProjectsHead (Projects,Prj_FILE_BROWSER_PROJECT);
 
 	 /***** Show project *****/
-	 Prj_ShowProjectRow (Projects,0,Prj_FILE_BROWSER_PROJECT);
+	 Prj_ShowProjectRow (Projects,Prj_FILE_BROWSER_PROJECT,0);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1343,7 +1350,7 @@ void Prj_PrintOneProject (void)
       Prj_ShowProjectsHead (&Projects,Prj_PRINT_ONE_PROJECT);
 
       /***** Write project *****/
-      Prj_ShowProjectRow (&Projects,0,Prj_PRINT_ONE_PROJECT);
+      Prj_ShowProjectRow (&Projects,Prj_PRINT_ONE_PROJECT,0);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1357,15 +1364,10 @@ void Prj_PrintOneProject (void)
 /*****************************************************************************/
 
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-			        unsigned NumIndex,
-                                Prj_ProjectView_t ProjectView)
+                                Prj_ProjectView_t ProjectView,
+			        unsigned NumIndex)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_Assigned_QUESTION;
-   extern const char *Txt_Yes;
-   extern const char *Txt_No;
-   extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG];
-   extern const char *Txt_Number_of_students;
    extern const char *Txt_See_more;
    extern const char *Txt_See_less;
    extern const char *Txt_Proposal;
@@ -1520,79 +1522,10 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    Prj_ShowProjectReviewStatus (Projects,ProjectView);
 
    /***** Assigned? *****/
-   HTM_TR_Begin (NULL);
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
-	 HTM_TxtColon (Txt_Assigned_QUESTION);
-      HTM_TD_End ();
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 HTM_TxtF ("%s&nbsp;",Projects->Prj.Assigned == Prj_ASSIGNED ? Txt_Yes :
-								       Txt_No);
-	 Ico_PutIconOff (AssignedNonassigIcon[Projects->Prj.Assigned],Ico_BLACK,
-			 Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Projects->Prj.Assigned]);
-
-	 if (Faults.WrongAssigned)
-	    Prj_PutWarningIcon ();
-
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   Prj_ShowProjectAssigned (Projects,ProjectView,&Faults);
 
    /***** Number of students *****/
-   HTM_TR_Begin (NULL);
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
-	 HTM_TxtColon (Txt_Number_of_students);
-      HTM_TD_End ();
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 HTM_Unsigned (Projects->Prj.NumStds);
-	 if (Faults.WrongNumStds)
-	    Prj_PutWarningIcon ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   Prj_ShowProjectNumStds (Projects,ProjectView,&Faults);
 
    /***** Project members *****/
    Prj_ShowOneProjectMembers (Projects,ProjectView);
@@ -1698,7 +1631,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 /********* When listing a project, show one row with review status ***********/
 /*****************************************************************************/
 
-static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
                                          Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Review;
@@ -1708,7 +1641,6 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
    const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 						                   "DAT";
 
-   /***** Review status *****/
    HTM_TR_Begin (NULL);
 
       switch (ProjectView)
@@ -1745,6 +1677,112 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 	    Prj_PutWarningIcon ();
 	 */
 
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******** When listing a project, show one row with assigned status **********/
+/*****************************************************************************/
+
+static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
+                                     Prj_ProjectView_t ProjectView,
+                                     const struct Prj_Faults *Faults)
+  {
+   extern const char *Txt_Assigned_QUESTION;
+   extern const char *Txt_Yes;
+   extern const char *Txt_No;
+   extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG];
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
+
+   HTM_TR_Begin (NULL);
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
+			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+			  ClassLabel,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtColon (Txt_Assigned_QUESTION);
+      HTM_TD_End ();
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtF ("%s&nbsp;",Projects->Prj.Assigned == Prj_ASSIGNED ? Txt_Yes :
+								       Txt_No);
+	 Ico_PutIconOff (AssignedNonassigIcon[Projects->Prj.Assigned],Ico_BLACK,
+			 Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Projects->Prj.Assigned]);
+
+	 if (Faults->WrongAssigned)
+	    Prj_PutWarningIcon ();
+
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******* When listing a project, show one row with number of students ********/
+/*****************************************************************************/
+
+static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
+                                    Prj_ProjectView_t ProjectView,
+                                    const struct Prj_Faults *Faults)
+  {
+   extern const char *Txt_Number_of_students;
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
+
+   HTM_TR_Begin (NULL);
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
+			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+			  ClassLabel,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtColon (Txt_Number_of_students);
+      HTM_TD_End ();
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_Unsigned (Projects->Prj.NumStds);
+	 if (Faults->WrongNumStds)
+	    Prj_PutWarningIcon ();
       HTM_TD_End ();
 
    HTM_TR_End ();
