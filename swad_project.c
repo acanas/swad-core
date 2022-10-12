@@ -200,20 +200,41 @@ static void Prj_PutIconsOnePrj (void *Projects);
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 			        unsigned NumIndex);
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
+                                     const char *ClassData,
                                      const struct Prj_Faults *Faults,
                                      unsigned NumIndex,unsigned UniqueId);
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects);
+static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
+                                       const char *ClassData);
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
+                                         const char *ClassLabel,
+                                         const char *ClassData);
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
                                      const struct Prj_Faults *Faults);
 static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
+                                    const char *ClassLabel,
+                                    const char *ClassData,
                                     const struct Prj_Faults *Faults);
 static void Prj_ShowProjectMembers (struct Prj_Projects *Projects);
 static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
                                              Prj_RoleInProject_t RoleInPrj);
-static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
-                                                    unsigned UniqueId);
-static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
-                                        unsigned UniqueId);
+static void Prj_ShowProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
+                                                 unsigned UniqueId);
+static void Prj_ShowProjectProposal (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
+                                     unsigned UniqueId);
+static void Prj_ShowProjectTxtField (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
+                                     const char *id,unsigned UniqueId,
+                                     const char *Label,char *TxtField,
+				     bool Warning);
+static void Prj_ShowProjectURL (const struct Prj_Projects *Projects,
+                                const char *ClassLabel,
+                                const char *ClassData,
+                                const char *id,unsigned UniqueId);
 
 //------------------------------------------------ ----------------------------
 static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
@@ -221,16 +242,9 @@ static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj);
-static void Prj_ShowOneProjectDepartment (const struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj);
-static void Prj_ShowOneProjectTxtField (const struct Prj_Projects *Projects,
-                                        const char *id,unsigned UniqueId,
-                                        const char *Label,char *TxtField,
-					bool Warning);
 static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField);
-static void Prj_ShowOneProjectURL (const struct Prj_Projects *Projects,
-                                   const char *id,unsigned UniqueId);
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj);
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
                                                       Prj_RoleInProject_t RoleInPrj);
@@ -1361,50 +1375,57 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    extern const char *Txt_Required_materials;
    struct Prj_Faults Faults;
    static unsigned UniqueId = 0;
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
 
    /***** Check project faults *****/
    Prj_CheckIfPrjIsFaulty (Projects->Prj.PrjCod,&Faults);
 
    /***** First row with main data (dates, title...) *****/
    UniqueId++;
-   Prj_ShowProjectFirstRow (Projects,&Faults,NumIndex,UniqueId);
+   Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,NumIndex,UniqueId);
 
    /***** Review status *****/
-   Prj_ShowProjectReviewStatus (Projects);
+   Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData);
 
    /***** Assigned? *****/
-   Prj_ShowProjectAssigned (Projects,&Faults);
+   Prj_ShowProjectAssigned (Projects,ClassLabel,ClassData,&Faults);
 
    /***** Number of students *****/
-   Prj_ShowProjectNumStds (Projects,&Faults);
+   Prj_ShowProjectNumStds (Projects,ClassLabel,ClassData,&Faults);
 
    /***** Project members *****/
    Prj_ShowProjectMembers (Projects);
 
    /***** Link to show hidden info *****/
-   Prj_ShowOneProjectLinkToShowHiddenInfo (Projects,UniqueId);
+   Prj_ShowProjectLinkToShowHiddenInfo (Projects,UniqueId);
 
    /***** Proposal *****/
-   Prj_ShowOneProjectProposal (Projects,UniqueId);
+   Prj_ShowProjectProposal (Projects,ClassLabel,ClassData,UniqueId);
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_dsc_",UniqueId,
-                               Txt_Description,Projects->Prj.Description,
-			       Faults.WrongDescription);
+   Prj_ShowProjectTxtField (Projects,ClassLabel,ClassData,"prj_dsc_",UniqueId,
+                            Txt_Description,
+                            Projects->Prj.Description,
+			    Faults.WrongDescription);
 
    /* Required knowledge to carry out the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_knw_",UniqueId,
-                               Txt_Required_knowledge,Projects->Prj.Knowledge,
-			       false);	// No warning
+   Prj_ShowProjectTxtField (Projects,ClassLabel,ClassData,"prj_knw_",UniqueId,
+                            Txt_Required_knowledge,
+                            Projects->Prj.Knowledge,
+			    false);	// No warning
 
    /* Required materials to carry out the project */
-   Prj_ShowOneProjectTxtField (Projects,"prj_mtr_",UniqueId,
-                               Txt_Required_materials,Projects->Prj.Materials,
-			       false);	// No warning
+   Prj_ShowProjectTxtField (Projects,ClassLabel,ClassData,"prj_mtr_",UniqueId,
+                            Txt_Required_materials,
+                            Projects->Prj.Materials,
+			    false);	// No warning
 
    /* Link to view more info about the project */
-   Prj_ShowOneProjectURL (Projects,"prj_url_",UniqueId);
+   Prj_ShowProjectURL (Projects,ClassLabel,ClassData,"prj_url_",UniqueId);
   }
 
 /*****************************************************************************/
@@ -1412,6 +1433,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 /*****************************************************************************/
 
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
+                                     const char *ClassData,
                                      const struct Prj_Faults *Faults,
                                      unsigned NumIndex,unsigned UniqueId)
   {
@@ -1539,7 +1561,7 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
       HTM_TD_End ();
 
       /* Department */
-      Prj_ShowOneProjectDepartment (Projects);
+      Prj_ShowProjectDepartment (Projects,ClassData);
 
    HTM_TR_End ();
 
@@ -1548,17 +1570,54 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
   }
 
 /*****************************************************************************/
+/********** When listing a project, show first row with department ***********/
+/*****************************************************************************/
+
+static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
+                                       const char *ClassData)
+  {
+   struct Dpt_Department Dpt;
+   bool PutLink;
+
+   /***** Get data of department *****/
+   Dpt.DptCod = Projects->Prj.DptCod;
+   Dpt_GetDataOfDepartmentByCod (&Dpt);
+
+   /***** Show department *****/
+   PutLink = (Dpt.WWW[0] &&
+	      (Projects->View == Prj_LIST_PROJECTS ||
+	       Projects->View == Prj_FILE_BROWSER_PROJECT));
+
+   switch (Projects->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+	               ClassData,The_GetSuffix (),The_GetColorRows ());
+	 break;
+      default:
+	 HTM_TD_Begin ("class=\"LT %s_%s\"",
+	               ClassData,The_GetSuffix ());
+	 break;
+     }
+	 if (PutLink)
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
+			 Dpt.WWW,ClassData,The_GetSuffix ());
+	 HTM_Txt (Dpt.FullName);
+	 if (PutLink)
+	    HTM_A_End ();
+      HTM_TD_End ();
+  }
+
+/*****************************************************************************/
 /********* When listing a project, show one row with review status ***********/
 /*****************************************************************************/
 
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects)
+static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
+                                         const char *ClassLabel,
+                                         const char *ClassData)
   {
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
 
    HTM_TR_Begin (NULL);
 
@@ -1587,10 +1646,10 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects)
 			  ClassData,The_GetSuffix ());
 	    break;
 	}
-	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
-	 Ico_PutIconOff (ReviewIcon[Projects->Prj.ReviewStatus].Icon,
-	                 ReviewIcon[Projects->Prj.ReviewStatus].Color,
-			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
+	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
+	 Ico_PutIconOff (ReviewIcon[Projects->Prj.Review.Status].Icon,
+	                 ReviewIcon[Projects->Prj.Review.Status].Color,
+			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
          /*
 	 if (Faults.WrongAssigned)
 	    Prj_PutWarningIcon ();
@@ -1606,16 +1665,14 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects)
 /*****************************************************************************/
 
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
                                      const struct Prj_Faults *Faults)
   {
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG];
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
 
    HTM_TR_Begin (NULL);
 
@@ -1662,13 +1719,11 @@ static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
 /*****************************************************************************/
 
 static void Prj_ShowProjectNumStds (const struct Prj_Projects *Projects,
+                                    const char *ClassLabel,
+                                    const char *ClassData,
                                     const struct Prj_Faults *Faults)
   {
    extern const char *Txt_Number_of_students;
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
 
    HTM_TR_Begin (NULL);
 
@@ -1902,8 +1957,8 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 /***** When listing a project, show one row with link to show hidden info ****/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
-                                                    unsigned UniqueId)
+static void Prj_ShowProjectLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
+                                                 unsigned UniqueId)
   {
    extern const char *Txt_See_more;
    extern const char *Txt_See_less;
@@ -1947,15 +2002,13 @@ static void Prj_ShowOneProjectLinkToShowHiddenInfo (const struct Prj_Projects *P
 /********* When listing a project, show one row with type of proposal ********/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
-                                        unsigned UniqueId)
+static void Prj_ShowProjectProposal (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
+                                     unsigned UniqueId)
   {
    extern const char *Txt_Proposal;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
 
    switch (Projects->View)
      {
@@ -1991,6 +2044,137 @@ static void Prj_ShowOneProjectProposal (const struct Prj_Projects *Projects,
 	    break;
 	}
 	 HTM_Txt (Txt_PROJECT_STATUS[Projects->Prj.Proposal]);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********** When listing a project, show one row with a text field ***********/
+/*****************************************************************************/
+
+static void Prj_ShowProjectTxtField (const struct Prj_Projects *Projects,
+                                     const char *ClassLabel,
+                                     const char *ClassData,
+                                     const char *id,unsigned UniqueId,
+                                     const char *Label,char *TxtField,
+				     bool Warning)
+  {
+   /***** Label *****/
+   switch (Projects->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
+	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 break;
+      case Prj_FILE_BROWSER_PROJECT:
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+      case Prj_PRINT_ONE_PROJECT:
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+      default:
+	 // Not applicable
+	 break;
+     }
+	 HTM_TxtColon (Label);
+      HTM_TD_End ();
+
+      /***** Change text format *****/
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+      switch (Projects->View)
+	{
+	 case Prj_LIST_PROJECTS:
+	 case Prj_FILE_BROWSER_PROJECT:
+	    ALn_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    break;
+	 default:
+	    break;
+	}
+
+      /***** Text *****/
+      switch (Projects->View)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),
+			  The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_Txt (TxtField);
+	 if (Warning)
+	    Prj_PutWarningIcon ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************** When listing a project, show one row with URL ****************/
+/*****************************************************************************/
+
+static void Prj_ShowProjectURL (const struct Prj_Projects *Projects,
+                                const char *ClassLabel,
+                                const char *ClassData,
+                                const char *id,unsigned UniqueId)
+  {
+   extern const char *Txt_URL;
+   bool PutLink = (Projects->Prj.URL[0] &&
+	           (Projects->View == Prj_LIST_PROJECTS ||
+	            Projects->View == Prj_FILE_BROWSER_PROJECT));
+
+   /***** Write row with label and text *****/
+   switch (Projects->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
+	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 break;
+      case Prj_FILE_BROWSER_PROJECT:
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+      case Prj_PRINT_ONE_PROJECT:
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
+	 break;
+      default:
+	 // Not applicable
+	 break;
+     }
+	 HTM_TxtColon (Txt_URL);
+      HTM_TD_End ();
+
+      switch (Projects->View)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),
+			  The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 if (PutLink)
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Projects->Prj.URL);
+	 HTM_Txt (Projects->Prj.URL);
+	 if (PutLink)
+	    HTM_A_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2202,45 +2386,6 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 /****************** Show department associated to project ********************/
 /*****************************************************************************/
 
-static void Prj_ShowOneProjectDepartment (const struct Prj_Projects *Projects)
-  {
-   struct Dpt_Department Dpt;
-   bool PutLink;
-   const char *ClassData;
-
-   /***** Set CSS classes *****/
-   ClassData = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					              "DAT";
-
-   /***** Get data of department *****/
-   Dpt.DptCod = Projects->Prj.DptCod;
-   Dpt_GetDataOfDepartmentByCod (&Dpt);
-
-   /***** Show department *****/
-   PutLink = (Dpt.WWW[0] &&
-	      (Projects->View == Prj_LIST_PROJECTS ||
-	       Projects->View == Prj_FILE_BROWSER_PROJECT));
-
-   switch (Projects->View)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	               ClassData,The_GetSuffix (),The_GetColorRows ());
-	 break;
-      default:
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               ClassData,The_GetSuffix ());
-	 break;
-     }
-	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
-			 Dpt.WWW,ClassData,The_GetSuffix ());
-	 HTM_Txt (Dpt.FullName);
-	 if (PutLink)
-	    HTM_A_End ();
-      HTM_TD_End ();
-  }
-
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   {
    struct Dpt_Department Dpt;
@@ -2262,81 +2407,8 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   }
 
 /*****************************************************************************/
-/********************** Show text field about a project **********************/
+/*********************** Show text field in a project ************************/
 /*****************************************************************************/
-
-static void Prj_ShowOneProjectTxtField (const struct Prj_Projects *Projects,
-                                        const char *id,unsigned UniqueId,
-                                        const char *Label,char *TxtField,
-					bool Warning)
-  {
-   const char *ClassLabel;
-   const char *ClassData;
-
-   /***** Set CSS classes *****/
-   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-					               "ASG_LABEL";
-   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					               "DAT";
-
-   /***** Label *****/
-   switch (Projects->View)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-      case Prj_PRINT_ONE_PROJECT:
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-      default:
-	 // Not applicable
-	 break;
-     }
-	 HTM_TxtColon (Label);
-      HTM_TD_End ();
-
-      /***** Change text format *****/
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      switch (Projects->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	 case Prj_FILE_BROWSER_PROJECT:
-	    ALn_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	    break;
-	 default:
-	    break;
-	}
-
-      /***** Text *****/
-      switch (Projects->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 HTM_Txt (TxtField);
-	 if (Warning)
-	    Prj_PutWarningIcon ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
 
 static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField)
@@ -2361,69 +2433,6 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
 /*****************************************************************************/
 /********************** Show URL associated to project ***********************/
 /*****************************************************************************/
-
-static void Prj_ShowOneProjectURL (const struct Prj_Projects *Projects,
-                                   const char *id,unsigned UniqueId)
-  {
-   extern const char *Txt_URL;
-   const char *ClassLabel;
-   const char *ClassData;
-   bool PutLink = (Projects->Prj.URL[0] &&
-	           (Projects->View == Prj_LIST_PROJECTS ||
-	            Projects->View == Prj_FILE_BROWSER_PROJECT));
-
-   /***** Set CSS classes *****/
-   ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-					               "ASG_LABEL";
-   ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					               "DAT";
-
-   /***** Write row with label and text *****/
-   switch (Projects->View)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-      case Prj_PRINT_ONE_PROJECT:
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-	                  ClassLabel,The_GetSuffix ());
-	 break;
-      default:
-	 // Not applicable
-	 break;
-     }
-	 HTM_TxtColon (Txt_URL);
-      HTM_TD_End ();
-
-      switch (Projects->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Projects->Prj.URL);
-	 HTM_Txt (Projects->Prj.URL);
-	 if (PutLink)
-	    HTM_A_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
 
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
   {
@@ -3180,17 +3189,17 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 
 	 /* Get review status (row[15]), review time (row[16])
 	    and review text (row[17]) */
-	 Prj->ReviewStatus = Prj_REVIEW_STATUS_DEFAULT;
+	 Prj->Review.Status = Prj_REVIEW_STATUS_DEFAULT;
 	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	      ReviewStatus++)
 	    if (!strcmp (Prj_ReviewStatus_DB[ReviewStatus],row[15]))
 	      {
-	       Prj->ReviewStatus = ReviewStatus;
+	       Prj->Review.Status = ReviewStatus;
 	       break;
 	      }
-	 Prj->ReviewTime = Dat_GetUNIXTimeFromStr (row[16]);
-	 Str_Copy (Prj->ReviewTxt  ,row[17],Cns_MAX_BYTES_TEXT);
+	 Prj->Review.Time = Dat_GetUNIXTimeFromStr (row[16]);
+	 Str_Copy (Prj->Review.Txt  ,row[17],Cns_MAX_BYTES_TEXT);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -3227,9 +3236,9 @@ static void Prj_ResetProject (struct Prj_Project *Prj)
    Prj->Materials[0]   = '\0';
    Prj->URL[0]         = '\0';
 
-   Prj->ReviewStatus = Prj_REVIEW_STATUS_DEFAULT;
-   Prj->ReviewTime   = (time_t) 0;
-   Prj->ReviewTxt[0] = '\0';
+   Prj->Review.Status = Prj_REVIEW_STATUS_DEFAULT;
+   Prj->Review.Time   = (time_t) 0;
+   Prj->Review.Txt[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -3759,7 +3768,7 @@ void Prj_AllocMemProject (struct Prj_Project *Prj)
    if ((Prj->Materials   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
-   if ((Prj->ReviewTxt   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+   if ((Prj->Review.Txt  = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
   }
 
@@ -3784,10 +3793,10 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
       free (Prj->Materials);
       Prj->Materials = NULL;
      }
-   if (Prj->ReviewTxt)
+   if (Prj->Review.Txt)
      {
-      free (Prj->ReviewTxt);
-      Prj->ReviewTxt = NULL;
+      free (Prj->Review.Txt);
+      Prj->Review.Txt = NULL;
      }
   }
 

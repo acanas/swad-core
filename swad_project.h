@@ -173,9 +173,12 @@ struct Prj_Project
    char *Knowledge;
    char *Materials;
    char URL[Cns_MAX_BYTES_WWW + 1];
-   Prj_ReviewStatus_t ReviewStatus;
-   time_t ReviewTime;
-   char *ReviewTxt;
+   struct
+     {
+      Prj_ReviewStatus_t Status;
+      time_t Time;
+      char *Txt;
+     } Review;
   };
 
 /***** Struct to store context/status of projects *****/

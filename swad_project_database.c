@@ -139,9 +139,9 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				Prj->Knowledge,
 				Prj->Materials,
 				Prj->URL,
-				Prj_ReviewStatus_DB[Prj->ReviewStatus],
-				Prj->ReviewTime,
-				Prj->ReviewTxt);
+				Prj_ReviewStatus_DB[Prj->Review.Status],
+				Prj->Review.Time,
+				Prj->Review.Txt);
   }
 
 /*****************************************************************************/
