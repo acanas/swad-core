@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.43 (2022-10-11)"
+#define Log_PLATFORM_VERSION	"SWAD 22.43.1 (2022-10-12)"
 #define CSS_FILE		"swad22.40.css"
 #define JS_FILE			"swad21.100.js"
 /*
+	Version 22.43.1:  Oct 12, 2022  Code refactoring in projects. (332952 lines)
 	Version 22.43:    Oct 11, 2022  Review of projects (not finished). (332930 lines)
 	Version 22.42:    Oct 11, 2022  Review of projects (not finished). (332738 lines)
 					3 changes necessary in database:
@@ -617,12 +618,13 @@ ALTER TABLE prj_projects ADD COLUMN ReviewStatus ENUM('unreviewed','unapproved',
 ALTER TABLE prj_projects ADD COLUMN ReviewTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00' AFTER ReviewStatus;
 ALTER TABLE prj_projects ADD COLUMN ReviewTxt TEXT NOT NULL AFTER ReviewTime;
 Copy the following icons to icon public directory:
-// sudo cp icon/comment-slash.svg /var/www/html/swad/icon/
+sudo cp icon/comment-slash.svg /var/www/html/swad/icon/
 sudo cp icon/file-circle-check.svg /var/www/html/swad/icon/
 sudo cp icon/file-circle-exclamation.svg /var/www/html/swad/icon/
 sudo cp icon/file-circle-question.svg /var/www/html/swad/icon/
-// sudo cp icon/thumbs-down.svg /var/www/html/swad/icon/
-// sudo cp icon/thumbs-up.svg /var/www/html/swad/icon/
+sudo cp icon/filter-circle-xmark.svg /var/www/html/swad/icon/
+sudo cp icon/thumbs-down.svg /var/www/html/swad/icon/
+sudo cp icon/thumbs-up.svg /var/www/html/swad/icon/
 
 	Version 22.41.1:  Oct 07, 2022  Fixed issue in main title. (332512 lines)
 	Version 22.41:    Oct 06, 2022  Changes in the behavior of the expansion/contraction of program items. (332511 lines)

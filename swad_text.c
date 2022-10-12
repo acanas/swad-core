@@ -32997,25 +32997,25 @@ const char *Txt_PROJECT_REVIEW_PLURAL[Prj_NUM_REVIEW_STATUS] =
 	,
 	[Prj_UNAPPROVED] =
 #if   L==1	// ca
-	"Projectes sense aprovar"
+	"Projectes pendents d'esmena"
 #elif L==2	// de
-	"Nicht genehmigte Projekte"
+	"Projekte mit ausstehender Korrektur"
 #elif L==3	// en
-	"Unapproved projects"
+	"Projects pending correction"
 #elif L==4	// es
-	"Proyectos sin aprobar"
+	"Proyectos pendientes de subsanaci&oacute;n"
 #elif L==5	// fr
-	"Projets non approuv&eacute;s"
+	"Projets en attente de correction"
 #elif L==6	// gn
-	"Proyectos sin aprobar"	// Okoteve traducción
+	"Proyectos pendientes de subsanaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti non approvati"
+	"Progetti in attesa di correzione"
 #elif L==8	// pl
-	"Niezatwierdzone projekty"
+	"Projekty oczekuj&aogon;ce na korekt&eogon;"
 #elif L==9	// pt
-	"Projetos n&atilde;o aprovados"
+	"Projetos pendentes de corre&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Onaylanmam&inodot;&scedil; projeler"
+	"D&uuml;zeltilmeyi bekleyen projeler"
 #endif
 	,
 	[Prj_APPROVED] =
@@ -33046,71 +33046,71 @@ const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS] =
 	{
 	[Prj_UNREVIEWED] =
 #if   L==1	// ca
-	"Projectes sense revisar"
+	"Sense revisar"
 #elif L==2	// de
-	"Ungepr&uuml;fte Projekte"
+	"Ungepr&uuml;ftes"
 #elif L==3	// en
-	"Unreviewed projects"
+	"Unreviewed"
 #elif L==4	// es
-	"Proyectos sin revisar"
+	"Sin revisar"
 #elif L==5	// fr
-	"Projets non revus"
+	"Non revu"
 #elif L==6	// gn
-	"Proyectos sin revisar"	// Okoteve traducción
+	"Sin revisar"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti non recensiti"
+	"Non recensito"
 #elif L==8	// pl
-	"Niesprawdzone projekty"
+	"Niesprawdzony"
 #elif L==9	// pt
-	"Projetos n&atilde;o revisados"
+	"N&atilde;o revisado"
 #elif L==10	// tr
-	"&Idot;ncelenmemi&scedil; projeler"
+	"&Idot;ncelenmemi&scedil;"
 #endif
 	,
 	[Prj_UNAPPROVED] =
 #if   L==1	// ca
-	"Projectes sense aprovar"
+	"Pendent d'esmena"
 #elif L==2	// de
-	"Nicht genehmigte Projekte"
+	"Ausstehende Korrektur"
 #elif L==3	// en
-	"Unapproved projects"
+	"Pending correction"
 #elif L==4	// es
-	"Proyectos sin aprobar"
+	"Pendiente de subsanación"
 #elif L==5	// fr
-	"Projets non approuv&eacute;s"
+	"En attente de correction"
 #elif L==6	// gn
-	"Proyectos sin aprobar"	// Okoteve traducción
+	"Pendiente de subsanación"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti non approvati"
+	"In attesa di correzione"
 #elif L==8	// pl
-	"Niezatwierdzone projekty"
+	"Oczekuje na korekt&eogon;"
 #elif L==9	// pt
-	"Projetos n&atilde;o aprovados"
+	"Corre&ccedil;&atilde;o pendente"
 #elif L==10	// tr
-	"Onaylanmam&inodot;&scedil; projeler"
+	"D&uuml;zeltme bekleniyor"
 #endif
 	,
 	[Prj_APPROVED] =
 #if   L==1	// ca
-	"Projectes aprovats"
+	"Aprovat"
 #elif L==2	// de
-	"Genehmigte Projekte"
+	"Genehmigtes"
 #elif L==3	// en
-	"Approved projects"
+	"Approved"
 #elif L==4	// es
-	"Proyectos aprobados"
+	"Aprobado"
 #elif L==5	// fr
-	"Projets approuv&eacute;s"
+	"Approuv&eacute;"
 #elif L==6	// gn
-	"Proyectos aprobados"	// Okoteve traducción
+	"Aprobado"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti approvati"
+	"Approvato"
 #elif L==8	// pl
-	"Zatwierdzone projekty"
+	"Zatwierdzony"
 #elif L==9	// pt
-	"Projetos aprovados"
+	"Aprovado"
 #elif L==10	// tr
-	"Onaylanm&inodot;&scedil; projeler"
+	"Onaylanm&inodot;&scedil;"
 #endif
 	};
 

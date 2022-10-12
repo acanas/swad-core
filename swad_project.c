@@ -104,9 +104,14 @@ static struct
    Ico_Color_t Color;
   } ReviewIcon[Prj_NUM_REVIEW_STATUS] =
   {
+/*
    [Prj_UNREVIEWED] = {"file-circle-question.svg"   ,Ico_BLACK},
    [Prj_UNAPPROVED] = {"file-circle-exclamation.svg",Ico_RED  },
    [Prj_APPROVED  ] = {"file-circle-check.svg"      ,Ico_GREEN},
+*/
+   [Prj_UNREVIEWED] = {"filter-circle-xmark.svg",Ico_BLACK},
+   [Prj_UNAPPROVED] = {"thumbs-down.svg"        ,Ico_RED  },
+   [Prj_APPROVED  ] = {"thumbs-up.svg"          ,Ico_GREEN},
   };
 
 /***** Locked/unlocked project edition *****/
@@ -202,6 +207,8 @@ static void Prj_PutIconsOnePrj (void *Projects);
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 			        unsigned NumIndex,
                                 Prj_ProjectView_t ProjectView);
+static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
+                                         Prj_ProjectView_t ProjectView);
 static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
@@ -1346,7 +1353,7 @@ void Prj_PrintOneProject (void)
   }
 
 /*****************************************************************************/
-/***************************** Show one project ******************************/
+/*********** When listing projects, show one row with one project ************/
 /*****************************************************************************/
 
 static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
@@ -1354,8 +1361,6 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
                                 Prj_ProjectView_t ProjectView)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_Review;
-   extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
@@ -1512,45 +1517,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    HTM_TR_End ();
 
    /***** Review status *****/
-   HTM_TR_Begin (NULL);
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
-	 HTM_TxtColon (Txt_Review);
-      HTM_TD_End ();
-
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
-	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
-	 Ico_PutIconOff (ReviewIcon[Projects->Prj.ReviewStatus].Icon,
-	                 ReviewIcon[Projects->Prj.ReviewStatus].Color,
-			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
-         /*
-	 if (Faults.WrongAssigned)
-	    Prj_PutWarningIcon ();
-	 */
-
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   Prj_ShowProjectReviewStatus (Projects,ProjectView);
 
    /***** Assigned? *****/
    HTM_TR_Begin (NULL);
@@ -1725,6 +1692,62 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
+  }
+
+/*****************************************************************************/
+/********* When listing a project, show one row with review status ***********/
+/*****************************************************************************/
+
+static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
+                                         Prj_ProjectView_t ProjectView)
+  {
+   extern const char *Txt_Review;
+   extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
+   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                   "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+						                   "DAT";
+
+   /***** Review status *****/
+   HTM_TR_Begin (NULL);
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
+			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
+			  ClassLabel,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtColon (Txt_Review);
+      HTM_TD_End ();
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			  ClassData,The_GetSuffix ());
+	    break;
+	}
+	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
+	 Ico_PutIconOff (ReviewIcon[Projects->Prj.ReviewStatus].Icon,
+	                 ReviewIcon[Projects->Prj.ReviewStatus].Color,
+			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.ReviewStatus]);
+         /*
+	 if (Faults.WrongAssigned)
+	    Prj_PutWarningIcon ();
+	 */
+
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -3112,7 +3135,7 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	      ReviewStatus++)
-	    if (!strcmp (Prj_ReviewStatus_DB[Proposal],row[15]))
+	    if (!strcmp (Prj_ReviewStatus_DB[ReviewStatus],row[15]))
 	      {
 	       Prj->ReviewStatus = ReviewStatus;
 	       break;
