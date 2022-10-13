@@ -216,6 +216,25 @@ void Prj_DB_HideOrUnhideProject (long PrjCod,bool Hide)
   }
 
 /*****************************************************************************/
+/******************* Update review of an existing project ********************/
+/*****************************************************************************/
+
+void Prj_DB_UpdateReview (const struct Prj_Project *Prj)
+  {
+   DB_QueryUPDATE ("can not update project review",
+		   "UPDATE prj_projects"
+		     " SET ReviewStatus='%s',"
+		          "ReviewTime=NOW(),"
+		          "ReviewTxt='%s'"
+		   " WHERE PrjCod=%ld"
+		     " AND CrsCod=%ld",	// Extra check
+	           Prj_ReviewStatus_DB[Prj->Review.Status],
+		   Prj->Review.Txt,
+	           Prj->PrjCod,
+	           Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /******************************** Get projects *******************************/
 /*****************************************************************************/
 

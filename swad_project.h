@@ -269,6 +269,8 @@ void Prj_UnloSelectedPrjsEdition (void);
 void Prj_LockProjectEdition (void);
 void Prj_UnloProjectEdition (void);
 
+void Prj_ChangeReviewStatus (void);
+
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 

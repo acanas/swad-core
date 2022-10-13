@@ -637,6 +637,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnhPrj		] = {1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
    [ActLckPrj		] = {1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
    [ActUnlPrj		] = {1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnloProjectEdition		,NULL},
+   [ActChgPrjRev	] = {1950,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ChangeReviewStatus		,NULL},
    [ActReqAddStdPrj	] = {1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
    [ActReqAddTutPrj	] = {1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
    [ActReqAddEvlPrj	] = {1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
@@ -3819,6 +3820,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActConEdiPrgItm,	// #1947
 	ActReqLnkPrj,		// #1948
 	ActSeeOnePrj,		// #1949
+	ActChgPrjRev,		// #1950
   };
 
 /*****************************************************************************/

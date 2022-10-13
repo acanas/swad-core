@@ -1123,7 +1123,7 @@ function updateDivHiddenComments (form,Params) {
 }
 
 /*****************************************************************************/
-/********** Update fav or share area in social timeline using AJAX ***********/
+/************** Update lock/unlock area in project using AJAX ****************/
 /*****************************************************************************/
 
 // This function is called when user submit a form just inside a parent div
@@ -1151,7 +1151,7 @@ function updateDivLockUnlockProject (form,Params) {
 }
 
 /*****************************************************************************/
-/************** Update lock/unlock area in project using AJAX ****************/
+/********** Update fav or share area in social timeline using AJAX ***********/
 /*****************************************************************************/
 
 // This function is called when user submit a form inside two parent divs

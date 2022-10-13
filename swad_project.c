@@ -202,12 +202,17 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
                                      const char *ClassData,
                                      const struct Prj_Faults *Faults,
-                                     unsigned NumIndex,unsigned UniqueId);
+                                     unsigned NumIndex,unsigned UniqueId,
+                                     const char *Anchor);
 static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
                                        const char *ClassData);
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
+static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
                                          const char *ClassLabel,
-                                         const char *ClassData);
+                                         const char *ClassData,
+                                         const char *Anchor);
+static void Prj_FormChangeReviewStatus (struct Prj_Projects *Projects,
+                                        const char *Anchor);
+static bool Prj_CheckIfICanReviewProjects (void);
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
                                      const char *ClassLabel,
                                      const char *ClassData,
@@ -292,6 +297,9 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects);
 
 static void Prj_FormLockUnlock (const struct Prj_Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
+
+//---------------------------- Review status ----------------------------------
+static Prj_ReviewStatus_t Prj_GetHiddenParamReviewStatus (void);
 
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
@@ -1375,20 +1383,24 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    extern const char *Txt_Required_materials;
    struct Prj_Faults Faults;
    static unsigned UniqueId = 0;
+   char *Anchor = NULL;
    const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 						                   "ASG_LABEL";
    const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 						                   "DAT";
+
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Projects->Prj.PrjCod,&Anchor);
 
    /***** Check project faults *****/
    Prj_CheckIfPrjIsFaulty (Projects->Prj.PrjCod,&Faults);
 
    /***** First row with main data (dates, title...) *****/
    UniqueId++;
-   Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,NumIndex,UniqueId);
+   Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,NumIndex,UniqueId,Anchor);
 
    /***** Review status *****/
-   Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData);
+   Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData,Anchor);
 
    /***** Assigned? *****/
    Prj_ShowProjectAssigned (Projects,ClassLabel,ClassData,&Faults);
@@ -1426,6 +1438,9 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 
    /* Link to view more info about the project */
    Prj_ShowProjectURL (Projects,ClassLabel,ClassData,"prj_url_",UniqueId);
+
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -1435,17 +1450,14 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
                                      const char *ClassData,
                                      const struct Prj_Faults *Faults,
-                                     unsigned NumIndex,unsigned UniqueId)
+                                     unsigned NumIndex,unsigned UniqueId,
+                                     const char *Anchor)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
    char *Id;
    Act_Action_t NextAction;
-   char *Anchor = NULL;
    const char *ClassDate = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
 						                  "DATE_BLUE";
-
-   /***** Set anchor string *****/
-   Frm_SetAnchorStr (Projects->Prj.PrjCod,&Anchor);
 
    /***** Write first row of data of this project *****/
    HTM_TR_Begin (NULL);
@@ -1564,9 +1576,6 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
       Prj_ShowProjectDepartment (Projects,ClassData);
 
    HTM_TR_End ();
-
-   /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -1612,9 +1621,10 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
 /********* When listing a project, show one row with review status ***********/
 /*****************************************************************************/
 
-static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
+static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
                                          const char *ClassLabel,
-                                         const char *ClassData)
+                                         const char *ClassData,
+                                         const char *Anchor)
   {
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
@@ -1646,18 +1656,74 @@ static void Prj_ShowProjectReviewStatus (const struct Prj_Projects *Projects,
 			  ClassData,The_GetSuffix ());
 	    break;
 	}
+
+      if (Prj_CheckIfICanReviewProjects ())
+	 /* Form to change review status */
+	 Prj_FormChangeReviewStatus (Projects,Anchor);
+      else
 	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
-	 Ico_PutIconOff (ReviewIcon[Projects->Prj.Review.Status].Icon,
-	                 ReviewIcon[Projects->Prj.Review.Status].Color,
-			 Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
-         /*
-	 if (Faults.WrongAssigned)
-	    Prj_PutWarningIcon ();
-	 */
+
+      /*
+      if (Faults.WrongAssigned)
+	 Prj_PutWarningIcon ();
+      */
+      Ico_PutIconOff (ReviewIcon[Projects->Prj.Review.Status].Icon,
+		      ReviewIcon[Projects->Prj.Review.Status].Color,
+		      Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
 
       HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******************** Form to lock/unlock project edition ********************/
+/*****************************************************************************/
+
+static void Prj_FormChangeReviewStatus (struct Prj_Projects *Projects,
+                                        const char *Anchor)
+  {
+   extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
+   Prj_ReviewStatus_t ReviewStatus;
+   unsigned ReviewStatusUnsigned;
+
+   /***** Form to change review status and text *****/
+   Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
+      Prj_PutCurrentParams (Projects);
+
+      /* Selector for review status */
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			"id=\"ReviewStatus\" name=\"ReviewStatus\""
+			" class=\"INPUT_%s\"",
+			The_GetSuffix ());
+	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
+	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
+	      ReviewStatus++)
+	   {
+	    ReviewStatusUnsigned = (unsigned) ReviewStatus;
+	    HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
+			ReviewStatus == Projects->Prj.Review.Status,false,
+			"%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
+	   }
+      HTM_SELECT_End ();
+
+      // Btn_PutConfirmButtonInline ("Cambiar");
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/**************************** Can I review projects? *************************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanReviewProjects (void)
+  {
+   static bool ICanReviewProjects[Rol_NUM_ROLES] =
+     {
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanReviewProjects[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -4386,6 +4452,61 @@ void Prj_UnloProjectEdition (void)
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
+  }
+
+/*****************************************************************************/
+/********************** Change review status of a project ********************/
+/*****************************************************************************/
+
+void Prj_ChangeReviewStatus (void)
+  {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetProjects (&Projects);
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Projects.Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParams (&Projects);
+   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
+      Err_WrongProjectExit ();
+
+   /***** Get data of the project from database *****/
+   Prj_GetDataOfProjectByCod (&Projects.Prj);
+
+   /***** Hide project *****/
+   if (Prj_CheckIfICanReviewProjects ())
+     {
+      Projects.Prj.Review.Status = Prj_GetHiddenParamReviewStatus ();
+      Projects.Prj.Review.Txt[0] = '\0';	// TODO: Get from parameter
+      Prj_DB_UpdateReview (&Projects.Prj);
+      /*
+      Ale_ShowAlert (Ale_INFO,"Recibida nueva revisi&oacute;n del proyecto = %u.",
+                     (unsigned) Projects.Prj.Review.Status); */
+     }
+   else
+      Err_NoPermissionExit ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Projects.Prj);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Projects);
+  }
+
+/*****************************************************************************/
+/********************** Get parameter with review status *********************/
+/*****************************************************************************/
+
+static Prj_ReviewStatus_t Prj_GetHiddenParamReviewStatus (void)
+  {
+   return (Prj_ReviewStatus_t)
+	  Par_GetParToUnsignedLong ("ReviewStatus",
+				    0,
+				    Prj_NUM_REVIEW_STATUS - 1,
+				    (unsigned long) Prj_REVIEW_STATUS_DEFAULT);
   }
 
 /*****************************************************************************/

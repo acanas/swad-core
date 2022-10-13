@@ -40,6 +40,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj);
 void Prj_DB_UpdateProject (const struct Prj_Project *Prj);
 void Prj_DB_AddUsrToPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,long UsrCod);
 void Prj_DB_HideOrUnhideProject (long PrjCod,bool Hide);
+void Prj_DB_UpdateReview (const struct Prj_Project *Prj);
 
 unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const struct Prj_Projects *Projects,
