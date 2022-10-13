@@ -95,14 +95,14 @@ static struct
    Ico_Color_t Color;
   } ReviewIcon[Prj_NUM_REVIEW_STATUS] =
   {
-/*
    [Prj_UNREVIEWED] = {"file-circle-question.svg"   ,Ico_BLACK},
    [Prj_UNAPPROVED] = {"file-circle-exclamation.svg",Ico_RED  },
    [Prj_APPROVED  ] = {"file-circle-check.svg"      ,Ico_GREEN},
-*/
+/*
    [Prj_UNREVIEWED] = {"filter-circle-xmark.svg",Ico_BLACK},
    [Prj_UNAPPROVED] = {"thumbs-down.svg"        ,Ico_RED  },
    [Prj_APPROVED  ] = {"thumbs-up.svg"          ,Ico_GREEN},
+*/
   };
 
 /***** Locked/unlocked project edition *****/
@@ -150,6 +150,8 @@ struct Prj_Faults
    bool WrongDescription;
    bool WrongNumStds;
    bool WrongAssigned;
+   bool WrongReviewStatus;
+   bool WrongModifTime;
   };
 
 /*****************************************************************************/
@@ -209,9 +211,9 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
 static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
                                          const char *ClassLabel,
                                          const char *ClassData,
+                                         const struct Prj_Faults *Faults,
                                          const char *Anchor);
-static void Prj_FormChangeReviewStatus (struct Prj_Projects *Projects,
-                                        const char *Anchor);
+static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects);
 static bool Prj_CheckIfICanReviewProjects (void);
 static void Prj_ShowProjectAssigned (const struct Prj_Projects *Projects,
                                      const char *ClassLabel,
@@ -1400,7 +1402,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
    Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,NumIndex,UniqueId,Anchor);
 
    /***** Review status *****/
-   Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData,Anchor);
+   Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData,&Faults,Anchor);
 
    /***** Assigned? *****/
    Prj_ShowProjectAssigned (Projects,ClassLabel,ClassData,&Faults);
@@ -1624,10 +1626,26 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
 static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
                                          const char *ClassLabel,
                                          const char *ClassData,
+                                         const struct Prj_Faults *Faults,
                                          const char *Anchor)
   {
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
+   extern const char *Txt_Comments;
+   bool PutForm;
+   static unsigned UniqueId = 0;
+   char *Id;
+
+   /***** Check if put form to change review *****/
+   switch (Projects->View)
+     {
+      case Prj_PRINT_ONE_PROJECT:
+	 PutForm = false;
+	 break;
+      default:
+	 PutForm = Prj_CheckIfICanReviewProjects ();
+	 break;
+     }
 
    HTM_TR_Begin (NULL);
 
@@ -1657,19 +1675,84 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 	    break;
 	}
 
-      if (Prj_CheckIfICanReviewProjects ())
-	 /* Form to change review status */
-	 Prj_FormChangeReviewStatus (Projects,Anchor);
-      else
-	 HTM_TxtF ("%s&nbsp;",Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
+      if (PutForm)
+	{
+	 /***** Begin form to change review status and text *****/
+	 Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
+	    Prj_PutCurrentParams (Projects);
 
-      /*
-      if (Faults.WrongAssigned)
-	 Prj_PutWarningIcon ();
-      */
+	    /***** Selector to change review status *****/
+	    Prj_PutSelectorReviewStatus (Projects);
+	}
+      else
+	 HTM_Txt (Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
+
+      HTM_NBSP ();
       Ico_PutIconOff (ReviewIcon[Projects->Prj.Review.Status].Icon,
 		      ReviewIcon[Projects->Prj.Review.Status].Color,
 		      Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
+
+      /***** Show warning icon depending on review status *****/
+      if (Faults->WrongReviewStatus)
+	 Prj_PutWarningIcon ();
+
+      if (Projects->Prj.Review.Status != Prj_UNREVIEWED)
+	{
+         /***** Revision time *****/
+         HTM_NBSP ();
+	 UniqueId++;
+	 if (asprintf (&Id,"prj_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_DIV_Begin ("id=\"%s\" class=\"PRJ_DATE\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Projects->Prj.Review.Time,
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,true,false,0x6);
+	 HTM_DIV_End ();
+	 free (Id);
+
+	 /***** Show warning icon depending on modify time *****/
+	 if (Faults->WrongModifTime)
+	    Prj_PutWarningIcon ();
+
+	 /***** Revision text *****/
+	 if (PutForm)
+	   {
+	    /* Show text form */
+	    HTM_BR ();
+	    HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			        " placeholder=\"%s&hellip;\""
+				" onchange=\"document.getElementById('%s').submit();return false;\"",
+				The_GetSuffix (),
+				Txt_Comments,
+				Gbl.Form.Id);
+	       HTM_Txt (Projects->Prj.Review.Txt);
+	    HTM_TEXTAREA_End ();
+	   }
+	 else if (Projects->Prj.Review.Status != Prj_UNREVIEWED &&
+		  Projects->Prj.Review.Txt[0])
+	   {
+	    /* Change text format */
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+	    switch (Projects->View)
+	      {
+	       case Prj_PRINT_ONE_PROJECT:
+		  break;
+	       default:
+		  ALn_InsertLinks (Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+		  break;
+	      }
+
+	    /* Show text */
+	    HTM_BR ();
+	    HTM_Txt (Projects->Prj.Review.Txt);
+	   }
+	}
+
+      /****** End form *****/
+      if (PutForm)
+	 Frm_EndForm ();
 
       HTM_TD_End ();
 
@@ -1680,35 +1763,27 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 /******************** Form to lock/unlock project edition ********************/
 /*****************************************************************************/
 
-static void Prj_FormChangeReviewStatus (struct Prj_Projects *Projects,
-                                        const char *Anchor)
+static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
   {
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    Prj_ReviewStatus_t ReviewStatus;
    unsigned ReviewStatusUnsigned;
 
-   /***** Form to change review status and text *****/
-   Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
-      Prj_PutCurrentParams (Projects);
-
-      /* Selector for review status */
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"ReviewStatus\" name=\"ReviewStatus\""
-			" class=\"INPUT_%s\"",
-			The_GetSuffix ());
-	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
-	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
-	      ReviewStatus++)
-	   {
-	    ReviewStatusUnsigned = (unsigned) ReviewStatus;
-	    HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
-			ReviewStatus == Projects->Prj.Review.Status,false,
-			"%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
-	   }
-      HTM_SELECT_End ();
-
-      // Btn_PutConfirmButtonInline ("Cambiar");
-   Frm_EndForm ();
+   /* Selector for review status */
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
+		     " class=\"INPUT_%s\"",
+		     The_GetSuffix ());
+      for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
+	   ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
+	   ReviewStatus++)
+	{
+	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
+	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
+		     ReviewStatus == Projects->Prj.Review.Status,false,
+		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
+	}
+   HTM_SELECT_End ();
   }
 
 /*****************************************************************************/
@@ -2257,6 +2332,8 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
    bool IsAssigned;
    bool HasTitle;
    bool HasDescription;
+   bool IsUnapproved;
+   bool ModifiedAfterReview;
    unsigned NumProposedStds;
    unsigned NumStdsRegisteredInPrj;
 
@@ -2287,6 +2364,12 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 	 HasTitle       = (row[2][0] != '0');
 	 HasDescription = (row[3][0] != '0');
 
+	 /* Get if project is unnaproved (row[4]) */
+	 IsUnapproved = (row[4][0] != '0');
+
+	 /* Get if project has been modified after review (row[5]) */
+	 ModifiedAfterReview = (row[5][0] != '0');
+
 	 /***** Check faults *****/
 	 /* 1. Check title */
 	 Faults->WrongTitle       = !HasTitle;
@@ -2309,16 +2392,22 @@ static void Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 	       // A non assigned project should not have students registered in it
 	       Faults->WrongAssigned = (NumStdsRegisteredInPrj != 0);
 	   }
+
+	 /* 4. Check review status */
+	 Faults->WrongReviewStatus = IsUnapproved;
+	 Faults->WrongModifTime    = ModifiedAfterReview;
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   Faults->PrjIsFaulty = Faults->WrongTitle       ||
-	                 Faults->WrongDescription ||
-	                 Faults->WrongNumStds     ||
-	                 Faults->WrongAssigned;
+   Faults->PrjIsFaulty = Faults->WrongTitle        ||
+	                 Faults->WrongDescription  ||
+	                 Faults->WrongNumStds      ||
+	                 Faults->WrongAssigned     ||
+	                 Faults->WrongReviewStatus ||
+	                 Faults->WrongModifTime;
   }
 
 /*****************************************************************************/
@@ -4480,11 +4569,8 @@ void Prj_ChangeReviewStatus (void)
    if (Prj_CheckIfICanReviewProjects ())
      {
       Projects.Prj.Review.Status = Prj_GetHiddenParamReviewStatus ();
-      Projects.Prj.Review.Txt[0] = '\0';	// TODO: Get from parameter
+      Par_GetParToHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
       Prj_DB_UpdateReview (&Projects.Prj);
-      /*
-      Ale_ShowAlert (Ale_INFO,"Recibida nueva revisi&oacute;n del proyecto = %u.",
-                     (unsigned) Projects.Prj.Review.Status); */
      }
    else
       Err_NoPermissionExit ();

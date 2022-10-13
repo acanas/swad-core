@@ -603,12 +603,16 @@ unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get project data",
-		   "SELECT Assigned='Y',"		// row[0] = 0 / 1
-			  "NumStds,"			// row[1] =
-			  "Title<>'',"			// row[2] = 0 / 1
-			  "Description<>''"		// row[3] = 0 / 1
+		   "SELECT Assigned='Y',"					// row[0] = 0 / 1
+			  "NumStds,"						// row[1] =
+			  "Title<>'',"						// row[2] = 0 / 1
+			  "Description<>'',"					// row[3] = 0 / 1
+			  "ReviewStatus='%s',"					// row[4] = 0 / 1
+			  "ReviewStatus<>'%s' AND ModifTime>ReviewTime"		// row[5] = 0 / 1
 		    " FROM prj_projects"
 		   " WHERE PrjCod=%ld",
+		   Prj_ReviewStatus_DB[Prj_UNAPPROVED],
+		   Prj_ReviewStatus_DB[Prj_UNREVIEWED],
 		   PrjCod);
   }
 

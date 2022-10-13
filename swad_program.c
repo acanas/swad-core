@@ -602,7 +602,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
 	   {
-	    if (asprintf (&Id,"scd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
 			   Id,
