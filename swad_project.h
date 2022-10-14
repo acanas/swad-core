@@ -195,6 +195,7 @@ struct Prj_Projects
    long *LstPrjCods;		// List of project codes
    Prj_Order_t SelectedOrder;
    unsigned CurrentPage;
+   unsigned NumIndex;		// Index shown in first column of projects list
    struct Prj_Project Prj;	// Selected/current project
   };
 

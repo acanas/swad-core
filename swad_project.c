@@ -200,12 +200,11 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 static void Prj_PutIconsOnePrj (void *Projects);
 
 //---------------------- Show one project in a row ----------------------------
-static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-			        unsigned NumIndex);
+static void Prj_ShowProjectRow (struct Prj_Projects *Projects);
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
                                      const char *ClassData,
                                      const struct Prj_Faults *Faults,
-                                     unsigned NumIndex,unsigned UniqueId,
+                                     unsigned UniqueId,
                                      const char *Anchor);
 static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
                                        const char *ClassData);
@@ -490,7 +489,6 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
    extern const char *Txt_No_projects;
    struct Pagination Pagination;
    unsigned NumPrj;
-   unsigned NumIndex;
 
    if (Projects)
      {
@@ -563,17 +561,17 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		     case Prj_ORDER_START_TIME:
 		     case Prj_ORDER_END_TIME:
 			// NumPrj: 1, 2, 3 ==> NumIndex = 3, 2, 1
-			NumIndex = ((struct Prj_Projects *) Projects)->Num + 1 - NumPrj;
+			((struct Prj_Projects *) Projects)->NumIndex = ((struct Prj_Projects *) Projects)->Num + 1 - NumPrj;
 			break;
 		     default:
 			// NumPrj: 1, 2, 3 ==> NumIndex = 1, 2, 3
-			NumIndex = NumPrj;
+			((struct Prj_Projects *) Projects)->NumIndex = NumPrj;
 			break;
 		    }
 
 		  /* Show project */
 		  ((struct Prj_Projects *) Projects)->View = Prj_LIST_PROJECTS;
-		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects,NumIndex);
+		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects);
 		 }
 
 	    /***** End table *****/
@@ -1298,8 +1296,9 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
 
          /***** Table head and project *****/
          Projects->View = Prj_FILE_BROWSER_PROJECT;
+	 Projects->NumIndex = 0;
 	 Prj_ShowProjectsHead (Projects);
-	 Prj_ShowProjectRow (Projects,0);
+	 Prj_ShowProjectRow (Projects);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -1326,7 +1325,7 @@ static void Prj_PutIconsOnePrj (void *Projects)
    if (Projects)
      {
       /***** Set anchor string *****/
-      Frm_SetAnchorStr (((struct Prj_Projects *) Projects)->Prj.PrjCod,&Anchor);
+      Frm_SetAnchorStr ((long) ((struct Prj_Projects *) Projects)->NumIndex,&Anchor);
 
       /***** Icons to remove/edit this project *****/
       Prj_PutIconsToRemEditOnePrj (Projects,Anchor);
@@ -1365,8 +1364,9 @@ void Prj_PrintOneProject (void)
 
       /***** Table head and project *****/
       Projects.View = Prj_PRINT_ONE_PROJECT;
+      Projects.NumIndex = 0;
       Prj_ShowProjectsHead (&Projects);
-      Prj_ShowProjectRow (&Projects,0);
+      Prj_ShowProjectRow (&Projects);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1379,8 +1379,7 @@ void Prj_PrintOneProject (void)
 /*********** When listing projects, show one row with one project ************/
 /*****************************************************************************/
 
-static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
-			        unsigned NumIndex)
+static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
   {
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
@@ -1394,14 +1393,14 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 						                   "DAT";
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Projects->Prj.PrjCod,&Anchor);
+   Frm_SetAnchorStr ((long) Projects->NumIndex,&Anchor);
 
    /***** Check project faults *****/
    Prj_CheckIfPrjIsFaulty (Projects->Prj.PrjCod,&Faults);
 
    /***** First row with main data (dates, title...) *****/
    UniqueId++;
-   Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,NumIndex,UniqueId,Anchor);
+   Prj_ShowProjectFirstRow (Projects,ClassData,&Faults,UniqueId,Anchor);
 
    /***** Review status *****/
    Prj_ShowProjectReviewStatus (Projects,ClassLabel,ClassData,&Faults,Anchor);
@@ -1454,7 +1453,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects,
 static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
                                      const char *ClassData,
                                      const struct Prj_Faults *Faults,
-                                     unsigned NumIndex,unsigned UniqueId,
+                                     unsigned UniqueId,
                                      const char *Anchor)
   {
    extern const char *Txt_Actions[Act_NUM_ACTIONS];
@@ -1473,7 +1472,7 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
 	                  The_GetSuffix (),
 			  The_GetColorRows ());
-	       HTM_Unsigned (NumIndex);
+	       HTM_Unsigned (Projects->NumIndex);
 	       if (Faults->PrjIsFaulty)
 		 {
 		  HTM_BR ();
