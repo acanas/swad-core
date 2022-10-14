@@ -3907,6 +3907,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
+						  Dpt_PARAM_DPT_COD_NAME,		// Parameter name
 						  SelectClass,				// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected

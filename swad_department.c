@@ -998,6 +998,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*****************************************************************************/
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
+                                  const char *ParamName,
 		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,
@@ -1018,7 +1019,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    /* Begin selector */
    HTM_SELECT_Begin (SubmitFormOnChange,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
-		     Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,SelectClass);
+		     ParamName,ParamName,SelectClass);
 
       if (FirstOption <= 0)
 	{

@@ -166,6 +166,7 @@ void Ind_ReqIndicatorsCourses (void)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
+					       Dpt_PARAM_DPT_COD_NAME,		// Parameter name
 					       SelectClass,			// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected

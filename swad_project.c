@@ -66,10 +66,11 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /***** Parameters used to filter listing of projects *****/
-#define Prj_PARAM_PRE_NON_NAME	"PreNon"
-#define Prj_PARAM_HID_VIS_NAME	"HidVis"
-#define Prj_PARAM_FAULTIN_NAME	"Faulti"
-#define Prj_PARAM_REVIEW_NAME	"Review"
+#define Prj_PARAM_FILTER_PRE_NON_NAME	"FilPreNon"
+#define Prj_PARAM_FILTER_HID_VIS_NAME	"FilHidVis"
+#define Prj_PARAM_FILTER_FAULTIN_NAME	"FilFaulti"
+#define Prj_PARAM_FILTER_REVIEW_NAME	"FilReview"
+#define Prj_PARAM_FILTER_DPT_COD_NAME	"FilDptCod"
 
 /***** User roles are shown in this order *****/
 static const Prj_RoleInProject_t Prj_RolesToShow[] =
@@ -180,12 +181,12 @@ static void Prj_PutHiddenParamAssign (unsigned Assign);
 static void Prj_PutHiddenParamHidden (unsigned Hidden);
 static void Prj_PutHiddenParamFaulti (unsigned Faulti);
 static void Prj_PutHiddenParamReview (unsigned Review);
-static void Prj_PutHiddenParamDptCod (long DptCod);
+static void Prj_PutHiddenParamFilterDptCod (long DptCod);
 static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects);
 static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void);
 static unsigned Prj_GetHiddenParamFaulti (void);
 static unsigned Prj_GetHiddenParamReview (void);
-static long Prj_GetHiddenParamDptCod (void);
+static long Prj_GetHiddenParamFilterDptCod (void);
 static Usr_Who_t Prj_GetParamWho (void);
 
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
@@ -827,12 +828,13 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
-				      Projects->Filter.DptCod,	// Selected department
-				      SelectClass,		// Selector class
-				      -1L,			// First option
-				      Txt_Any_department,	// Text when no department selected
-				      true);			// Submit on change
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
+				      Projects->Filter.DptCod,		// Selected department
+				      Prj_PARAM_FILTER_DPT_COD_NAME,	// Parameter name
+				      SelectClass,			// Selector class
+				      -1L,				// First option
+				      Txt_Any_department,		// Text when no department selected
+				      true);				// Submit on change
 	 free (SelectClass);
 
       /***** End form *****/
@@ -884,7 +886,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
       Prj_PutHiddenParamReview (Filter->Review);
 
    if (Filter->DptCod != Prj_FILTER_DPT_DEFAULT)
-      Prj_PutHiddenParamDptCod (Filter->DptCod);
+      Prj_PutHiddenParamFilterDptCod (Filter->DptCod);
 
    /***** Put order field *****/
    if (Order != Prj_ORDER_DEFAULT)
@@ -913,27 +915,27 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
 static void Prj_PutHiddenParamAssign (unsigned Assign)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_PRE_NON_NAME,Assign);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_PRE_NON_NAME,Assign);
   }
 
 static void Prj_PutHiddenParamHidden (unsigned Hidden)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_HID_VIS_NAME,Hidden);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_HID_VIS_NAME,Hidden);
   }
 
 static void Prj_PutHiddenParamFaulti (unsigned Faulti)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FAULTIN_NAME,Faulti);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_FAULTIN_NAME,Faulti);
   }
 
 static void Prj_PutHiddenParamReview (unsigned Review)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_REVIEW_NAME,Review);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_REVIEW_NAME,Review);
   }
 
-static void Prj_PutHiddenParamDptCod (long DptCod)
+static void Prj_PutHiddenParamFilterDptCod (long DptCod)
   {
-   Par_PutHiddenParamUnsigned (NULL,Dpt_PARAM_DPT_COD_NAME,DptCod);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/
@@ -942,7 +944,7 @@ static void Prj_PutHiddenParamDptCod (long DptCod)
 
 static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects)
   {
-   Projects->Filter.Assign = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_PRE_NON_NAME,
+   Projects->Filter.Assign = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_FILTER_PRE_NON_NAME,
                                                                   0,
                                                                   (1 << Prj_ASSIGNED) |
                                                                   (1 << Prj_NONASSIG),
@@ -960,7 +962,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return (Prj_HiddenVisibl_t)
-         Par_GetParToUnsignedLong (Prj_PARAM_HID_VIS_NAME,
+         Par_GetParToUnsignedLong (Prj_PARAM_FILTER_HID_VIS_NAME,
 				   0,
 				   (1 << Prj_HIDDEN) |
 				   (1 << Prj_VISIBL),
@@ -975,7 +977,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
 static unsigned Prj_GetHiddenParamFaulti (void)
   {
    return (unsigned)
-	  Par_GetParToUnsignedLong (Prj_PARAM_FAULTIN_NAME,
+	  Par_GetParToUnsignedLong (Prj_PARAM_FILTER_FAULTIN_NAME,
                                     0,
                                     (1 << Prj_FAULTY) |
                                     (1 << Prj_FAULTLESS),
@@ -986,7 +988,7 @@ static unsigned Prj_GetHiddenParamFaulti (void)
 static unsigned Prj_GetHiddenParamReview (void)
   {
    return (unsigned)
-	  Par_GetParToUnsignedLong (Prj_PARAM_REVIEW_NAME,
+	  Par_GetParToUnsignedLong (Prj_PARAM_FILTER_REVIEW_NAME,
                                     0,
                                     (1 << Prj_UNREVIEWED) |
                                     (1 << Prj_UNAPPROVED) |
@@ -996,9 +998,9 @@ static unsigned Prj_GetHiddenParamReview (void)
                                     (unsigned) Prj_FILTER_APPROVED_DEFAULT);
   }
 
-static long Prj_GetHiddenParamDptCod (void)
+static long Prj_GetHiddenParamFilterDptCod (void)
   {
-   return Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);
+   return Par_GetParToLong (Prj_PARAM_FILTER_DPT_COD_NAME);
   }
 
 /*****************************************************************************/
@@ -1013,7 +1015,7 @@ void Prj_GetParams (struct Prj_Projects *Projects)
    Projects->Filter.Hidden = Prj_GetHiddenParamHidVis ();
    Projects->Filter.Faulti = Prj_GetHiddenParamFaulti ();
    Projects->Filter.Review = Prj_GetHiddenParamReview ();
-   Projects->Filter.DptCod = Prj_GetHiddenParamDptCod ();
+   Projects->Filter.DptCod = Prj_GetHiddenParamFilterDptCod ();
 
    /***** Get order and page *****/
    Projects->SelectedOrder = Prj_GetParamPrjOrder ();
@@ -3765,6 +3767,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Projects->Prj.DptCod,	// Selected department
+					    Dpt_PARAM_DPT_COD_NAME,	// Parameter name
 					    SelectClass,		// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
