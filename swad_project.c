@@ -1723,10 +1723,9 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 	    HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
 				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
 			        " placeholder=\"%s&hellip;\""
-				" onchange=\"document.getElementById('%s').submit();return false;\"",
+				" onchange=\"this.form.submit();return false;\"",
 				The_GetSuffix (),
-				Txt_Comments,
-				Gbl.Form.Id);
+				Txt_Comments);
 	       HTM_Txt (Projects->Prj.Review.Txt);
 	    HTM_TEXTAREA_End ();
 	   }

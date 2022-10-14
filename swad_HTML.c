@@ -1064,8 +1064,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }
@@ -1129,8 +1128,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }
@@ -1194,8 +1192,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }
@@ -1229,8 +1226,7 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
    HTM_Txt (" />");
   }
 
@@ -1348,8 +1344,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }
@@ -1424,8 +1419,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
      }
 
    if (SubmitOnClick)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
    HTM_Txt (" />");
   }
 
@@ -1456,8 +1450,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
      }
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }
@@ -1627,8 +1620,7 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
       HTM_SELECT_BeginWithoutAttr ();
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_TxtF (" onchange=\"document.getElementById('%s').submit();return false;\"",
-	        Gbl.Form.Id);
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
    HTM_SELECT_NestingLevel++;

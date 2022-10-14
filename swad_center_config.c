@@ -465,8 +465,7 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActChgCtrPhoAtt);
 	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-				" onchange=\"document.getElementById('%s').submit();return false;\"",
-				Gbl.Form.Id);
+				" onchange=\"this.form.submit();return false;\"");
 	       if (PhotoAttribution)
 		  HTM_Txt (PhotoAttribution);
 	    HTM_TEXTAREA_End ();

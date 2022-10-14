@@ -334,8 +334,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActChgCtyMapAtt);
 	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-				" onchange=\"document.getElementById('%s').submit();return false;\"",
-				Gbl.Form.Id);
+				" onchange=\"this.form.submit();return false;\"");
 	       if (MapAttribution)
 		  HTM_Txt (MapAttribution);
 	    HTM_TEXTAREA_End ();

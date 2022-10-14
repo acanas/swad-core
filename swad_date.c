@@ -587,11 +587,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,ParamName,
 				 The_GetSuffix (),
-				 Id,Id,
-				 Gbl.Form.Id);
+				 Id,Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
@@ -619,11 +618,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,ParamName,
 				 The_GetSuffix (),
-				 Id,Id,
-				 Gbl.Form.Id);
+				 Id,Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""
@@ -649,10 +647,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sDay\" name=\"%sDay\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,ParamName,
 				 The_GetSuffix (),
-				 Id,Gbl.Form.Id);
+				 Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sDay\" name=\"%sDay\""
@@ -676,10 +674,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sHour\" name=\"%sHour\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,ParamName,
 				 The_GetSuffix (),
-				 Id,Gbl.Form.Id);
+				 Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sHour\" name=\"%sHour\""
@@ -703,10 +701,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sMinute\" name=\"%sMinute\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,ParamName,
 				 The_GetSuffix (),
-				 Id,Gbl.Form.Id);
+				 Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMinute\" name=\"%sMinute\""
@@ -732,10 +730,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				    "id=\"%sSecond\" name=\"%sSecond\""
 				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				    "document.getElementById('%s').submit();return false;\"",
+				    "this.form.submit();return false;\"",
 				    Id,ParamName,
 				    The_GetSuffix (),
-				    Id,Gbl.Form.Id);
+				    Id);
 	       else
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "id=\"%sSecond\" name=\"%sSecond\""
@@ -907,12 +905,11 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,Id,
 				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
-				 Id,
-				 Gbl.Form.Id);
+				 Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sYear\" name=\"%sYear\""
@@ -942,12 +939,11 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                         " class=\"INPUT_%s\""
 	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
-				 "document.getElementById('%s').submit();return false;\"",
+				 "this.form.submit();return false;\"",
 				 Id,Id,
 				 The_GetSuffix (),
 				 Disabled ? " disabled=\"disabled\"" : "",
-				 Id,
-				 Gbl.Form.Id);
+				 Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "id=\"%sMonth\" name=\"%sMonth\""

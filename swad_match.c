@@ -2704,9 +2704,8 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 
 	    HTM_BUTTON_Submit_Begin (Txt_View_my_answer,
 	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
-	                             " onmousedown=\"document.getElementById('%s').submit();return false;\"",
-	                             The_GetSuffix (),
-	                             Gbl.Form.Id);
+	                             " onmousedown=\"this.form.submit();return false;\"",
+	                             The_GetSuffix ());
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
 	       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
 	    HTM_BUTTON_End ();
@@ -2753,8 +2752,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
 	    HTM_BUTTON_Submit_Begin (Txt_Delete_my_answer,
 	                             "BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
-	                             " onmousedown=\"document.getElementById('%s').submit();return false;\"",
-	                             Gbl.Form.Id);
+	                             " onmousedown=\"this.form.submit();return false;\"");
 	       HTM_Txt ("<i class=\"fas fa-trash\"></i>");
 	    HTM_BUTTON_End ();
 	 HTM_DIV_End ();
@@ -3009,12 +3007,11 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 
 		  HTM_BUTTON_Submit_Begin (NULL,
 					   "class=\"MCH_STD_BUTTON%s BT_%c\""
-					   " onmousedown=\"document.getElementById('%s').submit();return false;\"",
+					   " onmousedown=\"this.form.submit();return false;\"",
 				           UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
 					   Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
 										    "",
-					   'A' + (char) NumOpt,
-					   Gbl.Form.Id);
+					   'A' + (char) NumOpt);
 		     HTM_TxtF ("%c",'a' + (char) NumOpt);
 		  HTM_BUTTON_End ();
 
