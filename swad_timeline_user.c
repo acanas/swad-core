@@ -225,8 +225,7 @@ static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 
 	    /* User's photo */
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               true);	// Use unique id
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
 	 /* End container */
 	 HTM_DIV_End ();

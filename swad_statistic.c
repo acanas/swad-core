@@ -1375,8 +1375,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 /* Show the photo */
 	 HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student in current course */

@@ -1783,8 +1783,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	{
 	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -2993,8 +2992,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 	{
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -3165,8 +3163,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
       HTM_TD_Begin ("colspan=\"2\" class=\"RM %s\"",
                     The_GetColorRows ());
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());

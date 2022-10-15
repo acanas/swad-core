@@ -3235,8 +3235,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                                 false);
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** Begin form to send a message to this user *****/
@@ -5473,8 +5472,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       if (ShowUsr)
 	 /***** Show photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       else
 	 Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
 	              ClassPhoto[Gbl.Prefs.PhotoShape]);
@@ -8026,8 +8024,7 @@ void Brw_ShowFileMetadata (void)
 		    {
 		     /* Show photo */
 		     Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-						ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-						false);
+						ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
 		     /* Write name */
 		     HTM_NBSP ();

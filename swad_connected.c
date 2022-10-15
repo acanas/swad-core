@@ -174,11 +174,6 @@ void Con_ShowGlobalConnectedUsrs (void)
 
       /***** Number of sessions *****/
       /* Link to view more details about connected users */
-      /*
-      Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-					// the list of connected users
-					// is dynamically updated via AJAX
-      */
       Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 
@@ -329,11 +324,6 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 
       /***** Number of connected users who belong to course *****/
       /* Link to view more details about connected users */
-      /*
-      Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-					// the list of connected users
-					// is dynamically updated via AJAX
-      */
       Frm_BeginForm (ActLstCon);
 	 HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
@@ -420,11 +410,6 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	{
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
-	       /*
-	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-						// the list of connected users
-						// is dynamically updated via AJAX
-	       */
 	       Frm_BeginForm (ActLstCon);
 		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
@@ -605,8 +590,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       /***** Show photo *****/
       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            true);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
       /***** Write full name and link *****/
@@ -615,11 +599,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
-         /*
-         Frm_BeginFormUnique (NextAction[Role]);	// The form must be unique because
-							// the list of connected users
-							// is dynamically updated via AJAX
-         */
          Frm_BeginForm (NextAction[Role]);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
@@ -715,8 +694,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       /***** Show photo *****/
 	       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
 		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-		                             false);
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 
 	       /***** Write full name and link *****/

@@ -2042,8 +2042,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 			/* Put user's photo */
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
 			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-			                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-			                              false);
+			                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 			HTM_TD_End ();
 
 			/* Write user's name */

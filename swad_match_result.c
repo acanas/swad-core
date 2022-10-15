@@ -1155,8 +1155,7 @@ void MchRes_ShowOneMchResult (void)
 		     HTM_TxtF (", %s",UsrDat->FrstName);
 		  HTM_BR ();
 		  Pho_ShowUsrPhotoIfAllowed (UsrDat,
-		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-		                             false);
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

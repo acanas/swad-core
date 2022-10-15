@@ -224,7 +224,6 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      // Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
       Frm_BeginFormAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
       free (OnSubmit);
 	 Ico_PutIconLink (Form->Icon,Form->Color,
@@ -239,7 +238,6 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Err_NotEnoughMemoryExit ();
-      // Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
       Frm_BeginFormAnchorOnSubmit (ActUnk,NULL,OnSubmit);
       free (OnSubmit);
 	 Ico_PutIconLink (Form->Icon,Form->Color,
@@ -301,7 +299,6 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 	       Err_NotEnoughMemoryExit ();
 	    Anchor = NULL;
 	   }
-	 // Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
 	 Frm_BeginFormAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
 	 free (OnSubmit);
 

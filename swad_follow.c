@@ -610,8 +610,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
    HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
       if (Visible)
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** Show user's name and icon to follow/unfollow *****/
@@ -673,8 +672,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
 	 if (Visible)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
       /***** User's name *****/

@@ -79,7 +79,6 @@ struct Globals
      {
       int Num;			// Number of form, used in form submit links
       char Id[32];		// Identifier string used in forms
-      // char UniqueId[32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
    struct

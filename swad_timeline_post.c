@@ -159,7 +159,7 @@ void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
       HTM_LI_Begin ("class=\"Tml_WIDTH\"");
 
 	 /***** Left: write author's photo (my photo) *****/
-         TmlNot_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
+         TmlNot_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat);
 
 	 /***** Right: author's name, time, textarea *****/
          TmlPst_PutFormToWriteNewPost (Timeline);

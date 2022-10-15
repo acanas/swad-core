@@ -273,7 +273,7 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Left top: author's photo *****/
-   TmlNot_ShowAuthorPhoto (&UsrDat,true);	// Use unique id
+   TmlNot_ShowAuthorPhoto (&UsrDat);
 
    /***** Right top: author's name, time, and content *****/
    TmlNot_WriteAuthorTimeAndContent (Not,&UsrDat);
@@ -289,7 +289,7 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
 /*********************** Show photo of author of a note **********************/
 /*****************************************************************************/
 
-void TmlNot_ShowAuthorPhoto (struct Usr_Data *UsrDat,bool FormUnique)
+void TmlNot_ShowAuthorPhoto (struct Usr_Data *UsrDat)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -304,8 +304,7 @@ void TmlNot_ShowAuthorPhoto (struct Usr_Data *UsrDat,bool FormUnique)
 
       /***** Photo *****/
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                                 FormUnique);
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -352,7 +351,6 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
-   // Frm_BeginFormUnique (ActSeeOthPubPrf);
    Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
@@ -624,7 +622,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	   {
 	    case TmlNot_INS_DOC_PUB_FILE:
 	    case TmlNot_INS_SHA_PUB_FILE:
-	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
@@ -632,7 +629,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
-	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
@@ -640,7 +636,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
-	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
@@ -648,7 +643,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
-	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
@@ -656,8 +650,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       break;
 	    case TmlNot_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       // Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
-	       //			     Anchor);	// Locate on this specific exam
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],
 				    Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
@@ -668,7 +660,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_POST:	// Not applicable
 	       return;
 	    case TmlNot_FORUM_POST:
-	       // Frm_BeginFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
 	       Frm_BeginForm (For_ActionsSeeFor[Forums->Forum.Type]);
 		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
 					       1,	// Page of posts   = first
@@ -682,8 +673,6 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       break;
 	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       // Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
-	       //			     Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
 	       Frm_FreeAnchorStr (Anchor);
 		  Not_PutHiddenParamNotCod (Not->Cod);

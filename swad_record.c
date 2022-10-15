@@ -2585,8 +2585,7 @@ static void Rec_ShowPhoto (struct Usr_Data *UsrDat)
    /***** User's photo *****/
    HTM_TD_Begin ("rowspan=\"3\" class=\"REC_C3_TOP CT\"");
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                                 false);
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
   }
 

@@ -1384,8 +1384,7 @@ void Usr_WriteLoggedUsrHead (void)
 
       /***** Show my photo *****/
       Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,
-                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                                 false);
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
       /***** User's name *****/
       if (Gbl.Usrs.Me.UsrDat.FrstName[0])
@@ -2208,8 +2207,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 	 /***** Show user's photo *****/
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -2260,8 +2258,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 	 /***** Show guest's photo *****/
 	 HTM_TD_Begin ("class=\"%s LM\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -2355,8 +2352,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 	 /***** Show student's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -2465,8 +2461,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 	 /***** Show teacher's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -2550,8 +2545,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
 	 /***** Show administrator's photo *****/
 	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
@@ -6162,8 +6156,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /***** Show photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                            ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
@@ -6357,7 +6350,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-	             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,false);
+	             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s_%s\"",
@@ -6398,8 +6391,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                              false);
+                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** User's IDs and name *****/

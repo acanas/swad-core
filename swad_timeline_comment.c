@@ -199,8 +199,7 @@ static void TmlCom_ShowAuthorPhoto (struct Usr_Data *UsrDat)
 
       /* Author's photo */
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                                 true);	// Use unique id
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
    /* End container */
    HTM_DIV_End ();
@@ -617,7 +616,6 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
-   // Frm_BeginFormUnique (ActSeeOthPubPrf);
    Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 

@@ -1329,8 +1329,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool Its
       if (Visible)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/

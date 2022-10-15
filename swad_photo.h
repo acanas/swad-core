@@ -116,8 +116,7 @@ void Pho_UpdateUsrPhoto2 (void);
 unsigned Pho_UpdateMyClicksWithoutPhoto (void);
 
 void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
-                                const char *ClassPhoto,Pho_Zoom_t Zoom,
-                                bool FormUnique);
+                                const char *ClassPhoto,Pho_Zoom_t Zoom);
 bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
                                    char PhotoURL[PATH_MAX + 1]);
 bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[PATH_MAX + 1]);
@@ -127,8 +126,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 			    char **ImgStr,
 			    char **CaptionStr);
 void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,Pho_Zoom_t Zoom,
-                       bool FormUnique);
+                       const char *ClassPhoto,Pho_Zoom_t Zoom);
 
 bool Pho_RemovePhoto (struct Usr_Data *UsrDat);
 void Pho_UpdatePhotoName (struct Usr_Data *UsrDat);

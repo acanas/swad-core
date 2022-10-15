@@ -416,8 +416,7 @@ void Pho_ReqRemoveMyPhoto (void)
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
-			ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
-			false);
+			ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
       /* End alert */
       Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
@@ -505,8 +504,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 	    /* Show current photo */
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-			      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
-			      false);
+			      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
@@ -942,15 +940,14 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 /*****************************************************************************/
 
 void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
-                                const char *ClassPhoto,Pho_Zoom_t Zoom,
-                                bool FormUnique)
+                                const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
 
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					NULL,
-		     ClassPhoto,Zoom,FormUnique);
+		     ClassPhoto,Zoom);
   }
 
 /*****************************************************************************/
@@ -1247,8 +1244,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 /*****************************************************************************/
 
 void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,Pho_Zoom_t Zoom,
-                       bool FormUnique)
+                       const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
    bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
@@ -1262,12 +1258,8 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    /***** Begin form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
-      if (FormUnique)
-	 // Frm_BeginFormUnique (ActSeeOthPubPrf);
- 	 Frm_BeginForm (ActSeeOthPubPrf);
-     else
-	 Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Frm_BeginForm (ActSeeOthPubPrf);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_LINK\"");
      }
 

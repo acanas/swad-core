@@ -2275,8 +2275,7 @@ void TstPrn_ShowOnePrint (void)
 		     HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
 		  HTM_BR ();
 		  Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-		                             false);
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

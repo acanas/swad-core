@@ -50,10 +50,7 @@ void Frm_BeginFormGoTo (Act_Action_t NextAction);
 void Frm_BeginForm (Act_Action_t NextAction);
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
 void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
-// void Frm_BeginFormUnique (Act_Action_t NextAction);
 void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor);
-// void Frm_BeginFormUniqueAnchor (Act_Action_t NextAction,const char *Anchor);
-// void Frm_BeginFormUniqueAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id);
 void Frm_BeginFormNoAction (void);
 void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,

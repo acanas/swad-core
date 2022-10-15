@@ -2245,8 +2245,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"CT DAT_%s\" style=\"width:22px;\"",
 		                   The_GetSuffix ());
 			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-			                           ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-			                           false);
+			                           ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 		     HTM_TD_End ();
 
 		     /***** User name *****/

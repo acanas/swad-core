@@ -1554,8 +1554,7 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
 	    HTM_TxtF (", %s",UsrDat->FrstName);
 	 HTM_BR ();
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                            false);
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
    /***** Row end *****/

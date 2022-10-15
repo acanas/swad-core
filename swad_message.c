@@ -492,8 +492,7 @@ static void Msg_ShowOneUniqueRecipient (void)
 
    /***** Show user's photo *****/
    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-                              false);
+                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
    /****** Write user's IDs ******/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s_%s\"",
@@ -2328,8 +2327,7 @@ void Msg_WriteMsgAuthor (struct Usr_Data *UsrDat,bool Enabled)
 	 HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 	    if (WriteAuthor)
 	       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-					  false);
+					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	    else
 	       Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
 			    ClassPhoto[Gbl.Prefs.PhotoShape]);
@@ -2470,8 +2468,7 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 	 /***** Put user's photo *****/
 	 HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-	                               false);
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 
 	 /***** Write user's name *****/
@@ -2614,8 +2611,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 					  false);
 		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							NULL,
-				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-				    false);
+				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 
 	       /* Write user's name */
@@ -2921,8 +2917,7 @@ void Msg_ListBannedUsrs (void)
 		  /* Show photo */
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
 		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
-		                                false);
+		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 		  HTM_TD_End ();
 
 		  /* Write user's full name */
