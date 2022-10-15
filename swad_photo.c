@@ -1263,8 +1263,9 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
-	 Frm_BeginFormUnique (ActSeeOthPubPrf);
-      else
+	 // Frm_BeginFormUnique (ActSeeOthPubPrf);
+ 	 Frm_BeginForm (ActSeeOthPubPrf);
+     else
 	 Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_LINK\"");

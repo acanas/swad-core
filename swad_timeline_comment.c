@@ -617,7 +617,8 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
-   Frm_BeginFormUnique (ActSeeOthPubPrf);
+   // Frm_BeginFormUnique (ActSeeOthPubPrf);
+   Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */

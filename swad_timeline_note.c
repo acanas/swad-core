@@ -352,7 +352,8 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
-   Frm_BeginFormUnique (ActSeeOthPubPrf);
+   // Frm_BeginFormUnique (ActSeeOthPubPrf);
+   Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
@@ -623,36 +624,42 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	   {
 	    case TmlNot_INS_DOC_PUB_FILE:
 	    case TmlNot_INS_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 		     Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
 		     Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 		     Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       // Frm_BeginFormUnique (Tml_DefaultActions[Not->Type]);
+	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Brw_PutHiddenParamFilCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
 	    case TmlNot_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
-					  Anchor);	// Locate on this specific exam
+	       // Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
+	       //			     Anchor);	// Locate on this specific exam
+	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],
+				    Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
 		  Cfe_PutHiddenParamExaCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
@@ -661,7 +668,8 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_POST:	// Not applicable
 	       return;
 	    case TmlNot_FORUM_POST:
-	       Frm_BeginFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
+	       // Frm_BeginFormUnique (For_ActionsSeeFor[Forums->Forum.Type]);
+	       Frm_BeginForm (For_ActionsSeeFor[Forums->Forum.Type]);
 		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
 					       1,	// Page of posts   = first
 					       Forums->ForumSet,
@@ -674,8 +682,9 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       break;
 	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
-					  Anchor);
+	       // Frm_BeginFormUniqueAnchor (Tml_DefaultActions[Not->Type],
+	       //			     Anchor);
+	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
 	       Frm_FreeAnchorStr (Anchor);
 		  Not_PutHiddenParamNotCod (Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course

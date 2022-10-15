@@ -539,25 +539,14 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     (*Link)->NickAnchor[1].Str =
 		     (*Link)->NickAnchor[2].Str = NULL;
 
-		     /***** Create id for this form *****/
-		     Gbl.Form.Num++;
-		     if (Gbl.Usrs.Me.Logged)
-			snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-				  "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-		     else
-			snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-				  "form_%d",Gbl.Form.Num);
-
 		     /***** Store first part of anchor *****/
 		     Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
 		     if (asprintf (&(*Link)->NickAnchor[0].Str,
-				   "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+				   "<form method=\"post\" action=\"%s/%s\">"
 				   "%s"	// Parameters
 				   "<input type=\"hidden\" name=\"usr\" value=\"",
 				   Cfg_URL_SWAD_CGI,
 				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-				   Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-							Gbl.Form.Id,
 				   ParamsStr) < 0)
 			Err_NotEnoughMemoryExit ();
 		     (*Link)->NickAnchor[0].Len = strlen ((*Link)->NickAnchor[0].Str);
@@ -566,9 +555,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     if (asprintf (&(*Link)->NickAnchor[1].Str,
 				   "\">"
 				   "<a href=\"\""
-				   " onclick=\"document.getElementById('%s').submit();return false;\">",
-				   Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-							Gbl.Form.Id) < 0)
+				   " onclick=\"this.closest('form').submit();return false;\">") < 0)
 			Err_NotEnoughMemoryExit ();
 		     (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
 

@@ -174,10 +174,13 @@ void Con_ShowGlobalConnectedUsrs (void)
 
       /***** Number of sessions *****/
       /* Link to view more details about connected users */
+      /*
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-	 HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
+      */
+      Frm_BeginForm (ActLstCon);
+      HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 
 	    /* Write total number of sessions */
 	    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -326,9 +329,12 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 
       /***** Number of connected users who belong to course *****/
       /* Link to view more details about connected users */
+      /*
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
+      */
+      Frm_BeginForm (ActLstCon);
 	 HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
 	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
@@ -414,9 +420,12 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	{
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
+	       /*
 	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
+	       */
+	       Frm_BeginForm (ActLstCon);
 		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
 		                   Txt_Connected_users,
@@ -604,12 +613,14 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs) ? "CON_NAME_NARROW CON_CRS" :
 									       "CON_NAME_NARROW CON_NO_CRS";
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
-	 // The form must be unique because
-	 // the list of connected users
-	 // is dynamically updated via AJAX
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
-         Frm_BeginFormUnique (NextAction[Role]);
+         /*
+         Frm_BeginFormUnique (NextAction[Role]);	// The form must be unique because
+							// the list of connected users
+							// is dynamically updated via AJAX
+         */
+         Frm_BeginForm (NextAction[Role]);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width

@@ -80,7 +80,7 @@ void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,con
    snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
    Frm_BeginFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
-
+/*
 void Frm_BeginFormUnique (Act_Action_t NextAction)
   {
    Frm_BeginFormUniqueAnchor (NextAction,NULL);
@@ -101,7 +101,7 @@ void Frm_BeginFormUniqueAnchorOnSubmit (Act_Action_t NextAction,const char *Anch
              Gbl.UniqueNameEncrypted,Gbl.Form.Num);
    Frm_BeginFormInternal (NextAction,true,Gbl.Form.UniqueId,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
-
+*/
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
   {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
