@@ -202,7 +202,7 @@ static const char *Mch_GetClassBorder (unsigned NumRow);
 static void Mch_PutParamNumOpt (unsigned NumOpt);
 static unsigned Mch_GetParamNumOpt (void);
 
-static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
+static void Mch_PutBigButton (Act_Action_t NextAction,
 			      long MchCod,const char *Icon,const char *Txt);
 static void Mch_PutBigButtonHidden (const char *Icon);
 static void Mch_PutBigButtonClose (void);
@@ -2536,7 +2536,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 	       break;
 	    default:
 	       /* Put button to go back */
-	       Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
+	       Mch_PutBigButton (ActBckMch,Match->MchCod,
 				 Mch_ICON_PREVIOUS,Txt_Go_back);
 	       break;
 	   }
@@ -2546,7 +2546,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
       HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONT\"");
 	 if (Match->Status.Playing)					// Match is being played
 	    /* Put button to pause match */
-	    Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
+	    Mch_PutBigButton (ActPlyPauMch,Match->MchCod,
 			      Mch_ICON_PAUSE,Txt_Pause);
 	 else								// Match is paused, not being played
 	   {
@@ -2554,7 +2554,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 	      {
 	       case Mch_START:	// Match just started, before first question
 		  /* Put button to start playing match */
-		  Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
+		  Mch_PutBigButton (ActPlyPauMch,Match->MchCod,
 				    Mch_ICON_PLAY,Txt_Start);
 		  break;
 	       case Mch_END:	// Match over
@@ -2563,7 +2563,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 		  break;
 	       default:
 		  /* Put button to resume match */
-		  Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
+		  Mch_PutBigButton (ActPlyPauMch,Match->MchCod,
 				    Mch_ICON_PLAY,Txt_Resume);
 	      }
 	   }
@@ -2576,7 +2576,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 	    Mch_PutBigButtonClose ();
 	 else						// Match not over
 	    /* Put button to show answers */
-	    Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
+	    Mch_PutBigButton (ActFwdMch,Match->MchCod,
 			      Mch_ICON_NEXT,Txt_Go_forward);
       HTM_DIV_End ();
 
@@ -3261,11 +3261,11 @@ static unsigned Mch_GetParamNumOpt (void)
 /*********************** Put a big button to do action ***********************/
 /*****************************************************************************/
 
-static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
+static void Mch_PutBigButton (Act_Action_t NextAction,
 			      long MchCod,const char *Icon,const char *Txt)
   {
    /***** Begin form *****/
-   Frm_BeginFormId (NextAction,Id);
+   Frm_BeginForm (NextAction);
       Mch_PutParamMchCod (MchCod);
 
       /***** Put icon with link *****/

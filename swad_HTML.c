@@ -1486,10 +1486,6 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...)
 	 free (Attr);
 	}
      }
-/*
-   if (OnSubmit)	// JavaScript function to be called before submitting the form
-      if (OnSubmit[0])
-         HTM_TxtF (" onsubmit=\"%s;\"",OnSubmit); */
    HTM_Txt (">");
 
    HTM_BUTTON_NestingLevel++;

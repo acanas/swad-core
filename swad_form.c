@@ -54,9 +54,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
 
 void Frm_BeginFormGoTo (Act_Action_t NextAction)
   {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
-   Frm_BeginFormInternal (NextAction,false,Gbl.Form.Id,NULL,NULL);	// Do not put now parameter location
+   Frm_BeginFormInternal (NextAction,false,NULL,NULL,NULL);	// Do not put now parameter location
   }
 
 void Frm_BeginForm (Act_Action_t NextAction)
@@ -76,18 +74,14 @@ void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
 
 void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),"form_%d",Gbl.Form.Num);
-   Frm_BeginFormInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
   {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    Frm_BeginFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
-// Id can not be NULL
 static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
@@ -103,7 +97,15 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       if (Anchor)
 	 if (Anchor[0])
             HTM_TxtF ("#%s",Anchor);
-      HTM_TxtF ("\" id=\"%s\"",Id);
+      if (Id)
+	{
+	 if (Id[0])
+            HTM_TxtF ("\" id=\"%s\"",Id);
+	 else
+            HTM_Txt ("\"");
+	}
+      else
+         HTM_Txt ("\"");
       if (OnSubmit)
          if (OnSubmit[0])
             HTM_TxtF (" onsubmit=\"%s\"",OnSubmit);

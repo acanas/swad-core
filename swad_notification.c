@@ -1682,7 +1682,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
       NumNewNtfs = Ntf_DB_GetNumMyNewUnseenNtfs ();
 
    /***** Begin form *****/
-   Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
+   Frm_BeginForm (ActSeeNewNtf);
 
       /***** Begin link *****/
       HTM_BUTTON_Submit_Begin (Txt_See_notifications,"class=\"BT_LINK\"");

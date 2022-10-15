@@ -137,11 +137,10 @@ The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="ht
 
 /*
 
-<form id="form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53"
-action="https://localhost/swad/es" method="post">
+<form action="https://localhost/swad/es" method="post">
 <input type="hidden" name="ses" value="2jb9CGhIJ81_qhDyeQ6MWDFKQ5ZaA_F68tq22ZAjYww">
 <input type="hidden" name="usr" value="@acanas">
-<a href="" onclick="document.getElementById('form_z7FY4oFr-yot9R9xRVwDhIntnod3geLj36nyQ6jlJJs_53').submit();return false;">
+<a href="" onclick="this.closest('form').submit();return false;">
 @acanas
 </a>
 </form>
@@ -554,8 +553,8 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     /***** Store second part of anchor *****/
 		     if (asprintf (&(*Link)->NickAnchor[1].Str,
 				   "\">"
-				   "<a href=\"\""
-				   " onclick=\"this.closest('form').submit();return false;\">") < 0)
+		                   "<button type=\"submit\" class=\"NICK_%s\">",
+		                   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
 		     (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
 
@@ -567,7 +566,10 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 					    &CaptionStr,
 					    &ImgStr);
 		     if (asprintf (&(*Link)->NickAnchor[2].Str,
-				   "</a></form>%s%s",
+				   "</button>"
+				   "</form>"
+				   "%s"
+				   "%s",
 				   CaptionStr,
 				   ImgStr) < 0)
 			Err_NotEnoughMemoryExit ();

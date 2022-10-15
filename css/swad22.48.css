@@ -113,6 +113,40 @@ a:hover						/* Default ==> underlined */
 	text-decoration:underline; opacity:1;
 	}
 
+.NICK_WHITE,
+.NICK_GREY,
+.NICK_PURPLE,
+.NICK_BLUE,
+.NICK_YELLOW,
+.NICK_PINK
+	{
+	background:transparent;
+	border:none;
+	padding:0;
+	font:inherit;
+	color:#4d88a1;
+	text-decoration:none;
+	}
+.NICK_DARK
+	{
+	background:transparent;
+	border:none;
+	padding:0;
+	font:inherit;
+	color:#afc4cc;
+	}
+.NICK_WHITE:hover,
+.NICK_GREY:hover,
+.NICK_PURPLE:hover,
+.NICK_BLUE:hover,
+.NICK_YELLOW:hover,
+.NICK_PINK:hover,
+.NICK_DARK:hover
+	{
+	cursor:pointer;
+	text-decoration:underline;
+	}
+
 /****************** Layout (the whole page with a background) ****************/
 #whole_page
 	{

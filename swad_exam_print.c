@@ -676,7 +676,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    HTM_TABLE_End ();
 
    /***** Form to end/close this exam print *****/
-   Frm_BeginFormId (ActEndExaPrn,"finished");
+   Frm_BeginForm (ActEndExaPrn);
       ExaSes_PutParamsEdit (Exams);
       Btn_PutCreateButton (Txt_I_have_finished);
    Frm_EndForm ();

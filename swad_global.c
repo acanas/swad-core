@@ -106,7 +106,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
-   Gbl.Form.Num = -1;		// Number of form. It's increased by 1 at the begin of each form
    Gbl.Form.Inside = false;	// Set to true inside a form to avoid nested forms
 
    Gbl.Box.Nested = -1;	// -1 means no box open

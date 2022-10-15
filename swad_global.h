@@ -77,8 +77,6 @@ struct Globals
    pid_t PID;	// PID of current process
    struct
      {
-      int Num;			// Number of form, used in form submit links
-      char Id[32];		// Identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
    struct

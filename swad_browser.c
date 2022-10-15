@@ -6890,7 +6890,6 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
 	 /***** Form to upload files using the library Dropzone.js *****/
 	 // Use min-height:125px; or other number to stablish the height?
-	 Gbl.Form.Num++;
 	 HTM_TxtF ("<form method=\"post\" action=\"%s/%s\""
 		   " class=\"dropzone\""
 		   " enctype=\"multipart/form-data\""

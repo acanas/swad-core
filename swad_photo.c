@@ -577,12 +577,13 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    bool WrongType = false;
    char Command[256 + PATH_MAX];	// Command to call the program of preprocessing of photos
    int ReturnCode;
-   int NumLastForm = 0;	// Initialized to avoid warning
    char FormId[32];
-   unsigned NumFacesTotal = 0;
-   unsigned NumFacesGreen = 0;
-   unsigned NumFacesRed = 0;
-   unsigned NumFace;
+   struct
+     {
+      unsigned Green;
+      unsigned Red;
+      unsigned Total;
+     } NumFaces;
    unsigned X;
    unsigned Y;
    unsigned Radius;
@@ -661,6 +662,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
 
    /***** Write message depending on return code *****/
    ReturnCode = WEXITSTATUS(ReturnCode);
+   NumFaces.Green = NumFaces.Red = 0;
    switch (ReturnCode)
      {
       case 0:        // Faces detected
@@ -671,32 +673,29 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
             Err_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
          /***** Read file with coordinates for image map and compute the number of faces *****/
-         NumLastForm = Gbl.Form.Num;
-         while (!feof (FileTxtMap))
+	 while (!feof (FileTxtMap))
            {
             if (fscanf (FileTxtMap,"%u %u %u %u %s\n",&X,&Y,&Radius,&BackgroundCode,StrFileName) != 5)        // Example of StrFileName = "4924a838630e_016"
 
                break;
             if (BackgroundCode == 1)
               {
-               NumFacesGreen++;
+	       snprintf (FormId,sizeof (FormId),"photo_%u",++NumFaces.Green);
                if (ItsMe)
-        	  Frm_BeginForm (ActUpdMyPho);
+        	  Frm_BeginFormId (ActUpdMyPho,FormId);
                else
         	 {
-		  Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
+		  Frm_BeginFormId (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],FormId);
 		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
 		  Par_PutHiddenParamString (NULL,"FileName",StrFileName);
 		  Frm_EndForm ();
               }
             else
-               NumFacesRed++;
+               NumFaces.Red++;
            }
-         NumFacesTotal = NumFacesGreen + NumFacesRed;
          break;
       case 1:        // No faces detected
-         NumFacesTotal = NumFacesGreen = NumFacesRed = 0;
          break;
       default:        // Error
          snprintf (ErrorTxt,sizeof (ErrorTxt),
@@ -706,53 +705,54 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
          Err_ShowErrorAndExit (ErrorTxt);
          break;
      }
+   NumFaces.Total = NumFaces.Green + NumFaces.Red;
 
    /***** Begin alert to the user about the number of faces detected in the image*****/
-   if (NumFacesTotal == 0)
+   if (NumFaces.Total == 0)
       Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
-   else if (NumFacesTotal == 1)
+   else if (NumFaces.Total == 1)
      {
-      if (NumFacesGreen == 1)
+      if (NumFaces.Green == 1)
          Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
       else
          Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
      }
    else        // NumFacesTotal > 1
      {
-      if (NumFacesRed == 0)
+      if (NumFaces.Red == 0)
          Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_marked_in_green_have_been_detected_,
-                                  NumFacesGreen);
-      else if (NumFacesGreen == 0)
+                                  NumFaces.Green);
+      else if (NumFaces.Green == 0)
          Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_X_faces_marked_in_red_have_been_detected_,
-                                  NumFacesRed);
-      else        // NumFacesGreen > 0
+                                  NumFaces.Red);
+      else        // NumFaces.Green > 0
         {
-         if (NumFacesGreen == 1)
+         if (NumFaces.Green == 1)
             Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
-                                     NumFacesTotal,NumFacesRed);
+                                     NumFaces.Total,NumFaces.Red);
          else
             Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
-                                     NumFacesTotal,NumFacesGreen,NumFacesRed);
+                                     NumFaces.Total,NumFaces.Green,NumFaces.Red);
         }
      }
 
    /***** Create map *****/
    HTM_Txt ("<map name=\"faces_map\">\n");
-   if (NumFacesTotal)
+   if (NumFaces.Total)
      {
       /***** Read again the file with coordinates and create area shapes *****/
       rewind (FileTxtMap);
-      for (NumFace = 0; !feof (FileTxtMap);)
+      NumFaces.Green = 0;
+      while (!feof (FileTxtMap))
         {
          if (fscanf (FileTxtMap,"%u %u %u %u %s\n",&X,&Y,&Radius,&BackgroundCode,StrFileName) != 5)
             break;
          if (BackgroundCode == 1)
            {
-            NumFace++;
-            snprintf (FormId,sizeof (FormId),"form_%d",NumLastForm + NumFace);
+	    snprintf (FormId,sizeof (FormId),"photo_%u",++NumFaces.Green);
             HTM_TxtF ("<area shape=\"circle\""
                       " href=\"\""
-                      " onclick=\"javascript:document.getElementById('%s').submit();return false;\""
+                      " onclick=\"document.getElementById('%s').submit();return false;\""
                       " coords=\"%u,%u,%u\">\n",
                       FormId,X,Y,Radius);
            }
@@ -778,7 +778,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
                             Btn_NO_BUTTON,NULL);
 
    /***** Button to send another photo *****/
-   return (NumFacesGreen != 0);
+   return (NumFaces.Green != 0);
   }
 
 /*****************************************************************************/
