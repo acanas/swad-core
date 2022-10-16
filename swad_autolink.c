@@ -140,9 +140,9 @@ The web site of <a href="https://openswad.org/?usr=@rms">@rms</a> is <a href="ht
 <form action="https://localhost/swad/es" method="post">
 <input type="hidden" name="ses" value="2jb9CGhIJ81_qhDyeQ6MWDFKQ5ZaA_F68tq22ZAjYww">
 <input type="hidden" name="usr" value="@acanas">
-<a href="" onclick="this.closest('form').submit();return false;">
+<button type="submit" class="NICK_WHITE">
 @acanas
-</a>
+</button>
 </form>
 
 */

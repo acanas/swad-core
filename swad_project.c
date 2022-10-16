@@ -1633,6 +1633,7 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
    extern const char *Txt_Review;
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Comments;
+   extern const char *Txt_Save_changes;
    bool PutForm;
    static unsigned UniqueId = 0;
    char *Id;
@@ -1710,49 +1711,54 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 					  true,true,false,0x6);
 	 HTM_DIV_End ();
 	 free (Id);
+	}
 
-	 /***** Show warning icon depending on modify time *****/
-	 if (Faults->WrongModifTime)
-	    Prj_PutWarningIcon ();
+      /***** Show warning icon depending on modify time *****/
+      if (Faults->WrongModifTime)
+	 Prj_PutWarningIcon ();
 
-	 /***** Revision text *****/
-	 if (PutForm)
-	   {
+      /***** Revision text *****/
+      if (PutForm)
+	{
 	    /* Show text form */
 	    HTM_BR ();
 	    HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
 				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			        " placeholder=\"%s&hellip;\""
-				" onchange=\"this.form.submit();return false;\"",
-				The_GetSuffix (),
-				Txt_Comments);
+				" placeholder=\"%s&hellip;\""
+				" onchange=\"unhideElement('prj_rev_%ld');return false;\"",
+				The_GetSuffix (),Txt_Comments,
+				Projects->Prj.PrjCod);
 	       HTM_Txt (Projects->Prj.Review.Txt);
 	    HTM_TEXTAREA_End ();
-	   }
-	 else if (Projects->Prj.Review.Status != Prj_UNREVIEWED &&
-		  Projects->Prj.Review.Txt[0])
-	   {
-	    /* Change text format */
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-	    switch (Projects->View)
-	      {
-	       case Prj_PRINT_ONE_PROJECT:
-		  break;
-	       default:
-		  ALn_InsertLinks (Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-		  break;
-	      }
 
-	    /* Show text */
-	    HTM_BR ();
-	    HTM_Txt (Projects->Prj.Review.Txt);
-	   }
-	}
+            /* Button to save changes.
+               Initially hidden, is shown when clicking on selector or text */
+	    HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
+			   Projects->Prj.PrjCod);
+	       Btn_PutConfirmButtonInline (Txt_Save_changes);
+	    HTM_DIV_End ();
 
-      /****** End form *****/
-      if (PutForm)
+         /* End form */
 	 Frm_EndForm ();
+	}
+      else if (Projects->Prj.Review.Txt[0])
+	{
+	 /* Change text format */
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+	 switch (Projects->View)
+	   {
+	    case Prj_PRINT_ONE_PROJECT:
+	       break;
+	    default:
+	       ALn_InsertLinks (Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	       break;
+	   }
+
+	 /* Show text */
+	 HTM_BR ();
+	 HTM_Txt (Projects->Prj.Review.Txt);
+	}
 
       HTM_TD_End ();
 
@@ -1770,10 +1776,11 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
    unsigned ReviewStatusUnsigned;
 
    /* Selector for review status */
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
-		     " class=\"INPUT_%s\"",
-		     The_GetSuffix ());
+		     " class=\"INPUT_%s\""
+		     " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
+		     The_GetSuffix (),Projects->Prj.PrjCod);
       for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	   ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	   ReviewStatus++)
