@@ -598,7 +598,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
      };
 
    if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
-       Gbl.Form.Inside)		// Inside another form
+       Frm_CheckIfInside ())	// Inside another form
      {
       /***** Do not put form *****/
       /* Begin container */

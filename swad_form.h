@@ -64,4 +64,6 @@ void Frm_FreeAnchorStr (char *Anchor);
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
 
+bool Frm_CheckIfInside (void);
+
 #endif

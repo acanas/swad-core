@@ -1831,7 +1831,7 @@ static void Med_AlertThirdPartyCookies (void)
    Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
    /* Put form to change cookies preferences */
-   if (!Gbl.Form.Inside)
+   if (!Frm_CheckIfInside ())
       Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
                                      NULL,NULL,
 				     "cog.svg",Ico_BLACK,

@@ -77,10 +77,6 @@ struct Globals
    pid_t PID;	// PID of current process
    struct
      {
-      bool Inside;		// Set to true inside a form to avoid nested forms
-     } Form;
-   struct
-     {
       int Nested;			// Index of top open box
       char *Ids[Box_MAX_NESTED];	// 0 <= box index < Box_MAX_NESTED
      } Box;

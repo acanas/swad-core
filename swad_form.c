@@ -42,11 +42,19 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static bool Frm_Inside = false;
+
+/*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
+
+static inline void Frm_SetInside (bool Inside);
 
 /*****************************************************************************/
 /******************************** Begin a form *******************************/
@@ -88,7 +96,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
-   if (!Gbl.Form.Inside)
+   if (!Frm_CheckIfInside ())
      {
       /* Begin form */
       HTM_TxtF ("<form method=\"post\" action=\"%s/%s",
@@ -126,7 +134,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       Frm_SetParamsForm (ParamsStr,NextAction,PutParameterLocationIfNoSesion);
       HTM_Txt (ParamsStr);
 
-      Gbl.Form.Inside = true;
+      Frm_SetInside (true);
      }
   }
 
@@ -139,13 +147,13 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
 */
 void Frm_BeginFormNoAction (void)
   {
-   if (!Gbl.Form.Inside)
+   if (!Frm_CheckIfInside ())
      {
       /* Begin form */
       HTM_Txt ("<form accept-charset=\"UTF-8\""
 	       " onsubmit=\"return false;\">");	// Form that can not be submitted, to avoid enter key to send it
 
-      Gbl.Form.Inside = true;
+      Frm_SetInside (true);
      }
   }
 
@@ -215,10 +223,10 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 
 void Frm_EndForm (void)
   {
-   if (Gbl.Form.Inside)
+   if (Frm_CheckIfInside ())
      {
       HTM_Txt ("</form>");
-      Gbl.Form.Inside = false;
+      Frm_SetInside (false);
      }
   }
 
@@ -298,4 +306,18 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 
    /***** Column/cell end *****/
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/************** Set to true inside a form to avoid nested forms **************/
+/*****************************************************************************/
+
+static inline void Frm_SetInside (bool Inside)
+  {
+   Frm_Inside = Inside;
+  }
+
+bool Frm_CheckIfInside (void)
+  {
+   return Frm_Inside;
   }

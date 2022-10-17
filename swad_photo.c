@@ -1250,8 +1250,8 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
 	                      BrowserTab == Act_AJAX_NORMAL ||
 			      BrowserTab == Act_AJAX_RFRESH);
-   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
-                                 BrowserTabIs1stTab;	// Only in main browser tab (or AJAX)
+   bool PutLinkToPublicProfile = !Frm_CheckIfInside () &&	// Only if not inside another form
+                                 BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char *CaptionStr;
    char *ImgStr;
 

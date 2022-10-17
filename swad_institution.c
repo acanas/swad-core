@@ -205,7 +205,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
   {
-   bool PutLink = !Gbl.Form.Inside;	// Don't put link to institution if already inside a form
+   bool PutLink = !Frm_CheckIfInside ();	// Don't put link to institution if already inside a form
 
    if (PutLink)
      {

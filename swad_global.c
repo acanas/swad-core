@@ -106,8 +106,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
-   Gbl.Form.Inside = false;	// Set to true inside a form to avoid nested forms
-
    Gbl.Box.Nested = -1;	// -1 means no box open
 
    Gbl.Alerts.Num = 0;	// No pending alerts to be shown

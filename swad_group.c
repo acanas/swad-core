@@ -362,7 +362,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
       return;
 
    /***** Begin box *****/
-   ICanEdit = !Gbl.Form.Inside &&
+   ICanEdit = !Frm_CheckIfInside () &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    if (ICanEdit)
@@ -1706,8 +1706,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpTyp;
    unsigned NumGrpsThisTypeIBelong;
    unsigned NumGrpsIBelong = 0;
-   bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
-   bool ICanEdit = !Gbl.Form.Inside &&
+   bool PutFormToChangeGrps = !Frm_CheckIfInside ();	// Not inside another form (record card)
+   bool ICanEdit = !Frm_CheckIfInside () &&
 	           (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    bool ICanChangeMyGrps = false;

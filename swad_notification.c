@@ -486,7 +486,7 @@ void Ntf_ShowMyNotifications (void)
 		     if (PutLink)
 		       {
 			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-			PutLink = Gbl.Form.Inside;
+			PutLink = Frm_CheckIfInside ();
 		       }
 
 		     if (PutLink)
@@ -504,7 +504,7 @@ void Ntf_ShowMyNotifications (void)
 		     if (PutLink)
 		       {
 			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-			PutLink = Gbl.Form.Inside;
+			PutLink = Frm_CheckIfInside ();
 
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
 			                            "class=\"LT %s_%s\"",
@@ -537,7 +537,7 @@ void Ntf_ShowMyNotifications (void)
 			if (PutLink)
 			  {
 			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-			   PutLink = Gbl.Form.Inside;
+			   PutLink = Frm_CheckIfInside ();
 		          }
 
 			if (PutLink)
@@ -561,7 +561,7 @@ void Ntf_ShowMyNotifications (void)
 			if (PutLink)
 			  {
 			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-			   PutLink = Gbl.Form.Inside;
+			   PutLink = Frm_CheckIfInside ();
 		          }
 
 			if (PutLink)
@@ -815,7 +815,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Parameter to go to another course/degree/center/institution *****/
-   if (Gbl.Form.Inside)
+   if (Frm_CheckIfInside ())
      {
       if (CrsCod > 0)					// Course specified
 	{
