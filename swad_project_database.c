@@ -244,6 +244,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
   {
    char *AssignSubQuery;
    char *HidVisSubQuery;
+   char *ReviewSubQuery;
    char *DptCodSubQuery;
    static const char *OrderBySubQuery[Prj_NUM_ORDERS] =
      {
@@ -315,43 +316,43 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
    switch (Projects->Filter.Review)
      {
       case (1 << Prj_UNREVIEWED):	// Unreviewed projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
 	               Prj_ReviewStatus_DB[Prj_UNREVIEWED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNAPPROVED):	// Unapproved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
 	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_APPROVED):		// Approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus='%s'",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
 	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNREVIEWED |
 	    1 << Prj_UNAPPROVED):	// Unreviewed and unapproved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
 	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
 	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNREVIEWED |
 	    1 << Prj_APPROVED):		// Unreviewed and approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
 	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
 	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNAPPROVED |
 	    1 << Prj_APPROVED):		// Unapproved and approved projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
+	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
 	               Prj_ReviewStatus_DB[Prj_UNAPPROVED],
 	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       default:				// All projects
-	 if (asprintf (&AssignSubQuery,"%s","") < 0)
+	 if (asprintf (&ReviewSubQuery,"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
      }
@@ -388,6 +389,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 "%s"
 				 "%s"
+				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -395,6 +397,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
+			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       OrderBySubQuery[Projects->SelectedOrder]);
@@ -411,6 +414,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 "%s"
 				 "%s"
+				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -418,6 +422,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
+			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       OrderBySubQuery[Projects->SelectedOrder]);
@@ -442,6 +447,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    "%s"
 				    "%s"
 				    "%s"
+				    "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
 				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -449,6 +455,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				  Gbl.Hierarchy.Crs.CrsCod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
+			          ReviewSubQuery,
 				  DptCodSubQuery,
 				  UsrsSubQuery,
 				  OrderBySubQuery[Projects->SelectedOrder]);
@@ -465,6 +472,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    "%s"
 				    "%s"
 				    "%s"
+				    "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
 				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
@@ -472,6 +480,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				  Gbl.Hierarchy.Crs.CrsCod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
+			          ReviewSubQuery,
 				  DptCodSubQuery,
 				  UsrsSubQuery,
 				  OrderBySubQuery[Projects->SelectedOrder]);
@@ -494,10 +503,12 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 "%s"
 				 "%s"
+				 "%s"
 			       " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
+			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
@@ -511,10 +522,12 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 "%s"
 				 "%s"
+				 "%s"
 			       " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
+			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
@@ -526,9 +539,10 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
      }
 
    /* Free allocated memory for subqueries */
-   free (AssignSubQuery);
-   free (HidVisSubQuery);
    free (DptCodSubQuery);
+   free (ReviewSubQuery);
+   free (HidVisSubQuery);
+   free (AssignSubQuery);
 
    return NumPrjsFromDB;
   }
