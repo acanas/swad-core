@@ -54,14 +54,42 @@ extern struct Globals Gbl;
 const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 31
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+#define Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF	(128 - 1)
+#define Par_MAX_BYTES_BOUNDARY_WITH_CR_LF	(2 + Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF)
+
+/*****************************************************************************/
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-/* Content send by the form and received by the CGI:
-   Act_CONTENT_NORM (if CONTENT_TYPE==text/plain)
-   Act_CONT_DATA    (if CONTENT_TYPE==multipart/form-data)
-*/
-static Act_Content_t Par_ContentReceivedByCGI = Act_CONT_NORM;
+static struct
+  {
+   /* Content send by the form and received by the CGI:
+      Act_CONTENT_NORM (if CONTENT_TYPE==text/plain)
+      Act_CONT_DATA    (if CONTENT_TYPE==multipart/form-data) */
+   Act_Content_t ContentReceivedByCGI;
+   size_t ContentLength;
+   char *QueryString;	// String allocated dynamically with the arguments sent to the CGI
+   struct Param *List;	// Linked list of parameters
+   Par_Method_t Method;
+   bool GetMethod;	// Am I accessing using GET method?
+   struct
+     {
+      char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF + 1];
+      char StrWithCRLF   [Par_MAX_BYTES_BOUNDARY_WITH_CR_LF    + 1];
+      size_t LengthWithoutCRLF;
+      size_t LengthWithCRLF;
+     } Boundary;
+  } Par_Params =
+  {
+   .ContentReceivedByCGI = Act_CONT_NORM,
+   .ContentLength = 0,
+   .QueryString = NULL,
+   .List = NULL,
+   .Method = Par_METHOD_POST,
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -84,12 +112,12 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
 
 static inline void Par_SetContentReceivedByCGI (Act_Content_t ContentReceivedByCGI)
   {
-   Par_ContentReceivedByCGI = ContentReceivedByCGI;
+   Par_Params.ContentReceivedByCGI = ContentReceivedByCGI;
   }
 
 Act_Content_t Par_GetContentReceivedByCGI (void)
   {
-   return Par_ContentReceivedByCGI;
+   return Par_Params.ContentReceivedByCGI;
   }
 
 /*****************************************************************************/
@@ -111,23 +139,25 @@ bool Par_GetQueryString (void)
    if (!strcmp (Method,"GET"))
      {
       /***** GET method *****/
-      Gbl.Params.GetMethod = true;
+      Par_Params.Method = Par_METHOD_GET;
       Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
       /* Get content length */
-      Gbl.Params.ContentLength = strlen (getenv ("QUERY_STRING"));
+      Par_Params.ContentLength = strlen (getenv ("QUERY_STRING"));
 
       /* Allocate memory for query string */
-      if ((Gbl.Params.QueryString = malloc (Gbl.Params.ContentLength + 1)) == NULL)
+      if ((Par_Params.QueryString = malloc (Par_Params.ContentLength + 1)) == NULL)
 	 return false;
 
       /* Copy query string from environment variable */
-      Str_Copy (Gbl.Params.QueryString,getenv ("QUERY_STRING"),
-                Gbl.Params.ContentLength);
+      Str_Copy (Par_Params.QueryString,getenv ("QUERY_STRING"),
+                Par_Params.ContentLength);
      }
    else
      {
       /***** POST method *****/
+      Par_Params.Method = Par_METHOD_POST;
+
       /* Get content length */
       if (getenv ("CONTENT_LENGTH"))
 	{
@@ -135,7 +165,7 @@ bool Par_GetQueryString (void)
                    sizeof (UnsignedLongStr) - 1);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
-         Gbl.Params.ContentLength = (size_t) UnsignedLong;
+         Par_Params.ContentLength = (size_t) UnsignedLong;
 	}
       else
          return false;
@@ -163,20 +193,26 @@ bool Par_GetQueryString (void)
          Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
 	 /* Allocate memory for query string */
-	 if ((Gbl.Params.QueryString = malloc (Gbl.Params.ContentLength + 1)) == NULL)
+	 if ((Par_Params.QueryString = malloc (Par_Params.ContentLength + 1)) == NULL)
 	    return false;
 
 	 /* Copy query string from stdin */
-         if (fread (Gbl.Params.QueryString,sizeof (char),Gbl.Params.ContentLength,stdin) != Gbl.Params.ContentLength)
+         if (fread (Par_Params.QueryString,sizeof (char),
+                    Par_Params.ContentLength,stdin) != Par_Params.ContentLength)
            {
-            Gbl.Params.QueryString[0] = '\0';
+            Par_Params.QueryString[0] = '\0';
             return false;
            }
-	 Gbl.Params.QueryString[Gbl.Params.ContentLength] = '\0';
+	 Par_Params.QueryString[Par_Params.ContentLength] = '\0';
         }
      }
 
    return true;
+  }
+
+Par_Method_t Par_GetMethod (void)
+  {
+   return Par_Params.Method;
   }
 
 /*****************************************************************************/
@@ -202,14 +238,14 @@ static void Par_GetBoundary (void)
       Err_ShowErrorAndExit ("Delimiter string too long.");
 
    /***** Create boundary strings *****/
-   snprintf (Gbl.Boundary.StrWithoutCRLF,sizeof (Gbl.Boundary.StrWithoutCRLF),
+   snprintf (Par_Params.Boundary.StrWithoutCRLF,sizeof (Par_Params.Boundary.StrWithoutCRLF),
 	     "--%s",PtrToBoundary);
-   snprintf (Gbl.Boundary.StrWithCRLF,sizeof (Gbl.Boundary.StrWithCRLF),
-	     "%c%c%s",0x0D,0x0A,Gbl.Boundary.StrWithoutCRLF);
+   snprintf (Par_Params.Boundary.StrWithCRLF,sizeof (Par_Params.Boundary.StrWithCRLF),
+	     "%c%c%s",0x0D,0x0A,Par_Params.Boundary.StrWithoutCRLF);
 
    /***** Compute lengths *****/
-   Gbl.Boundary.LengthWithoutCRLF = strlen (Gbl.Boundary.StrWithoutCRLF);
-   Gbl.Boundary.LengthWithCRLF    = 2 + Gbl.Boundary.LengthWithoutCRLF;
+   Par_Params.Boundary.LengthWithoutCRLF = strlen (Par_Params.Boundary.StrWithoutCRLF);
+   Par_Params.Boundary.LengthWithCRLF    = 2 + Par_Params.Boundary.LengthWithoutCRLF;
   }
 
 /*****************************************************************************/
@@ -247,10 +283,10 @@ void Par_CreateListOfParams (void)
      };
 
    /***** Initialize empty list of parameters *****/
-   Gbl.Params.List = NULL;
+   Par_Params.List = NULL;
 
    /***** Get list *****/
-   if (Gbl.Params.ContentLength)
+   if (Par_Params.ContentLength)
       CreateListOfParams[Par_GetContentReceivedByCGI ()] ();
   }
 
@@ -265,13 +301,13 @@ static void Par_CreateListOfParamsFromQueryString (void)
    struct Param *NewParam;
 
    /***** Check if query string is empty *****/
-   if (!Gbl.Params.QueryString)    return;
-   if (!Gbl.Params.QueryString[0]) return;
+   if (!Par_Params.QueryString)    return;
+   if (!Par_Params.QueryString[0]) return;
 
    /***** Go over the query string
           getting start positions and lengths of parameters *****/
    for (CurPos = 0;
-	CurPos < Gbl.Params.ContentLength;
+	CurPos < Par_Params.ContentLength;
 	)
      {
       /* Allocate space for a new parameter initialized to 0 */
@@ -280,7 +316,7 @@ static void Par_CreateListOfParamsFromQueryString (void)
 
       /* Link the previous element in list with the current element */
       if (CurPos == 0)
-	 Gbl.Params.List = NewParam;	// Pointer to first param
+	 Par_Params.List = NewParam;	// Pointer to first param
       else
 	 Param->Next = NewParam;	// Pointer from former param to new param
 
@@ -289,21 +325,21 @@ static void Par_CreateListOfParamsFromQueryString (void)
 
       /* Get parameter name */
       Param->Name.Start = CurPos;
-      Param->Name.Length = strcspn (&Gbl.Params.QueryString[CurPos],"=");
+      Param->Name.Length = strcspn (&Par_Params.QueryString[CurPos],"=");
       CurPos += Param->Name.Length;
 
       /* Get parameter value */
-      if (CurPos < Gbl.Params.ContentLength)
-	 if (Gbl.Params.QueryString[CurPos] == '=')
+      if (CurPos < Par_Params.ContentLength)
+	 if (Par_Params.QueryString[CurPos] == '=')
 	   {
 	    CurPos++;	// Skip '='
-	    if (CurPos < Gbl.Params.ContentLength)
+	    if (CurPos < Par_Params.ContentLength)
 	      {
 	       Param->Value.Start = CurPos;
-	       Param->Value.Length = strcspn (&Gbl.Params.QueryString[CurPos],"&");
+	       Param->Value.Length = strcspn (&Par_Params.QueryString[CurPos],"&");
 	       CurPos += Param->Value.Length;
-	       if (CurPos < Gbl.Params.ContentLength)
-		  if (Gbl.Params.QueryString[CurPos] == '&')
+	       if (CurPos < Par_Params.ContentLength)
+		  if (Par_Params.QueryString[CurPos] == '&')
 		     CurPos++;	// Skip '&'
 	      }
 	   }
@@ -334,12 +370,12 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    /***** Go over the file
           getting start positions and lengths of parameters *****/
    if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
-                                     Gbl.Boundary.StrWithoutCRLF,
-                                     Gbl.Boundary.LengthWithoutCRLF,
+                                     Par_Params.Boundary.StrWithoutCRLF,
+                                     Par_Params.Boundary.LengthWithoutCRLF,
                                      Fil_MAX_FILE_SIZE) == 1)	// Delimiter string found
 
       for (CurPos = 0;
-	   CurPos < Gbl.Params.ContentLength;
+	   CurPos < Par_Params.ContentLength;
 	  )
 	{
 	 /***** Skip \r\n after delimiter string *****/
@@ -356,7 +392,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
 	    /* Link the previous element in list with the current element */
 	    if (CurPos == 0)
-	       Gbl.Params.List = NewParam;	// Pointer to first param
+	       Par_Params.List = NewParam;	// Pointer to first param
 	    else
 	       Param->Next = NewParam;	// Pointer from former param to new param
 
@@ -424,14 +460,14 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    /***** Get parameter value or file content *****/
 	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of value or file content
 	    if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
-					      Gbl.Boundary.StrWithCRLF,
-					      Gbl.Boundary.LengthWithCRLF,
+					      Par_Params.Boundary.StrWithCRLF,
+					      Par_Params.Boundary.LengthWithCRLF,
 					      Fil_MAX_FILE_SIZE) != 1) break;	// Boundary string not found
 
 	    // Delimiter string found
 	    Param->Value.Start = CurPos;
 	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after delimiter string
-	    Param->Value.Length = CurPos - Gbl.Boundary.LengthWithCRLF -
+	    Param->Value.Length = CurPos - Par_Params.Boundary.LengthWithCRLF -
 		                  Param->Value.Start;
 	   }
         }
@@ -481,7 +517,7 @@ void Par_FreeParams (void)
    struct Param *NextParam;
 
    /***** Free list of parameters *****/
-   for (Param = Gbl.Params.List;
+   for (Param = Par_Params.List;
 	Param != NULL;
 	Param = NextParam)
      {
@@ -490,8 +526,8 @@ void Par_FreeParams (void)
      }
 
    /***** Free query string *****/
-   if (Gbl.Params.QueryString)
-      free (Gbl.Params.QueryString);
+   if (Par_Params.QueryString)
+      free (Par_Params.QueryString);
   }
 
 /*****************************************************************************/
@@ -501,7 +537,7 @@ void Par_FreeParams (void)
 // If ParamPtr is not NULL, on return it will point to the first ocurrence in list of parameters
 // ParamValue can be NULL (if so, no value is copied)
 
-unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
+unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes,
                            struct Param **ParamPtr)	// NULL if not used
   {
@@ -521,7 +557,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
       ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
 
    /***** Only some selected parameters can be passed by GET method *****/
-   if (Gbl.Params.GetMethod)
+   if (Par_GetMethod () == Par_METHOD_GET)
       if (!Par_CheckIsParamCanBeUsedInGETMethod (ParamName))
 	 return 0;	// Return no-parameters-found
 
@@ -532,7 +568,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 
    /***** For multiple parameters, loop for any ocurrence of the parameter
           For unique parameter, find only the first ocurrence *****/
-   for (Param = Gbl.Params.List, NumTimes = 0;
+   for (Param = Par_Params.List, NumTimes = 0;
 	Param != NULL && (FindMoreThanOneOcurrence || NumTimes == 0);
 	)
       /***** Find next ocurrence of parameter in list of parameters *****/
@@ -547,7 +583,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	    switch (Par_GetContentReceivedByCGI ())
 	      {
 	       case Act_CONT_NORM:
-		  ParamFound = !strncmp (ParamName,&Gbl.Params.QueryString[Param->Name.Start],
+		  ParamFound = !strncmp (ParamName,&Par_Params.QueryString[Param->Name.Start],
 					 Param->Name.Length);
 		  break;
 	       case Act_CONT_DATA:
@@ -610,7 +646,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		    {
 		     case Act_CONT_NORM:
 			if (PtrDst)
-			   strncpy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
+			   strncpy (PtrDst,&Par_Params.QueryString[Param->Value.Start],
 				    Param->Value.Length);
 			break;
 		     case Act_CONT_DATA:

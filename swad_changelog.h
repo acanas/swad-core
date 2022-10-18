@@ -610,6 +610,7 @@ TODO: Attach pdf files in multimedia.
 #define CSS_FILE		"swad22.49.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.49.8:  Oct 18, 2022  Code refactoring related to parameters. (333253 lines)
 	Version 22.49.7:  Oct 18, 2022  Code refactoring related to database. (333218 lines)
 	Version 22.49.6:  Oct 18, 2022  Code refactoring related to alerts. (333197 lines)
 	Version 22.49.5:  Oct 18, 2022  Code refactoring related to boxes. (333190 lines)

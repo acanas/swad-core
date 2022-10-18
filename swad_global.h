@@ -74,21 +74,6 @@ struct Globals
      } Config;
    struct Files F;
    pid_t PID;	// PID of current process
-   struct
-     {
-      size_t ContentLength;
-      char *QueryString;	// String allocated dynamically with the arguments sent to the CGI
-      struct Param *List;	// Linked list of parameters
-      bool GetMethod;		// Am I accessing using GET method?
-     } Params;
-
-   struct
-     {
-      char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF + 1];
-      char StrWithCRLF   [Par_MAX_BYTES_BOUNDARY_WITH_CR_LF    + 1];
-      size_t LengthWithoutCRLF;
-      size_t LengthWithCRLF;
-     } Boundary;
 
    struct
      {

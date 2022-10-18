@@ -36,14 +36,12 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF	(128 - 1)
-#define Par_MAX_BYTES_BOUNDARY_WITH_CR_LF	(2 + Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF)
-
 struct StartLength
   {
    unsigned long Start;
    size_t Length;
   };
+
 struct Param
   {
    struct StartLength Name;		// Parameter name
@@ -55,9 +53,15 @@ struct Param
 
 typedef enum
   {
+   Par_METHOD_GET,
+   Par_METHOD_POST
+  } Par_Method_t;
+
+typedef enum
+  {
    Par_PARAM_SINGLE,
    Par_PARAM_MULTIPLE,
-  } tParamType; // Parameter is present only one time / multiple times
+  } Par_ParamType_t; // Parameter is present only one time / multiple times
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -66,9 +70,10 @@ typedef enum
 Act_Content_t Par_GetContentReceivedByCGI (void);
 
 bool Par_GetQueryString (void);
+Par_Method_t Par_GetMethod (void);
 void Par_CreateListOfParams (void);
 void Par_FreeParams (void);
-unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
+unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes,
                            struct Param **ParamPtr);
 

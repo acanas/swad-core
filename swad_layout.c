@@ -442,18 +442,21 @@ static void Lay_WritePageTitle (void)
   {
    extern const char *Txt_TAGLINE;
 
-   HTM_Txt ("<title>");
+   HTM_TITLE_Begin ();
 
-   if (Gbl.Params.GetMethod && Gbl.Hierarchy.Deg.DegCod > 0)
-     {
-      HTM_TxtF ("%s &gt; %s",Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
-      if (Gbl.Hierarchy.Level == HieLvl_CRS)
-         HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
-     }
-   else
-      HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+      if (Par_GetMethod () == Par_METHOD_GET &&
+	  Gbl.Hierarchy.Deg.DegCod > 0)
+	{
+	 HTM_TxtF ("%s &gt; %s",
+	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)
+	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
+	}
+      else
+	 HTM_TxtF ("%s: %s",
+	           Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
 
-   HTM_Txt ("</title>\n");
+   HTM_TITLE_End ();
   }
 
 /*****************************************************************************/

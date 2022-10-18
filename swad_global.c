@@ -96,11 +96,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.WebService.IsWebService = false;
 
-   Gbl.Params.ContentLength = 0;
-   Gbl.Params.QueryString = NULL;
-   Gbl.Params.List = NULL;
-   Gbl.Params.GetMethod = false;
-
    Gbl.F.Out = stdout;
    Gbl.F.Tmp = NULL;
    Gbl.F.XML = NULL;

@@ -58,6 +58,9 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void HTM_TITLE_Begin (void);
+void HTM_TITLE_End (void);
+
 void HTM_TABLE_Begin (const char *fmt,...);
 void HTM_TABLE_BeginPadding (unsigned CellPadding);
 void HTM_TABLE_BeginCenterPadding (unsigned CellPadding);
