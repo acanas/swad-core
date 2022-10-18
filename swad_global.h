@@ -76,16 +76,6 @@ struct Globals
    pid_t PID;	// PID of current process
    struct
      {
-      size_t Num;		// Number of alert
-      struct
-        {
-	 Ale_AlertType_t Type;
-	 char *Text;		// Message to be displayed
-	 char *Section;		// Where to display the alert
-        } List[Ale_MAX_ALERTS];
-     } Alerts;		// Alert message created in a function and printed in a subsequent function.
-   struct
-     {
       size_t ContentLength;
       char *QueryString;	// String allocated dynamically with the arguments sent to the CGI
       struct Param *List;	// Linked list of parameters

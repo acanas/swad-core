@@ -45,6 +45,24 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct
+  {
+   size_t Num;		// Number of alert
+   struct
+     {
+      Ale_AlertType_t Type;
+      char *Text;	// Message to be displayed
+      char *Section;	// Where to display the alert
+     } List[Ale_MAX_ALERTS];
+  } Ale_Alerts =	// Alert message created in a function and printed in a subsequent function
+  {
+   .Num = 0,		// No pending alerts to be shown
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -66,23 +84,23 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
    int NumBytesPrinted;
    size_t i;
 
-   if (Gbl.Alerts.Num + 1 > Ale_MAX_ALERTS)
+   if (Ale_Alerts.Num + 1 > Ale_MAX_ALERTS)
       Err_ShowErrorAndExit ("Too many alerts.");
 
-   i = Gbl.Alerts.Num;
-   Gbl.Alerts.Num++;
+   i = Ale_Alerts.Num;
+   Ale_Alerts.Num++;
 
-   Gbl.Alerts.List[i].Type = Type;
+   Ale_Alerts.List[i].Type = Type;
 
-   Gbl.Alerts.List[i].Section = NULL;
+   Ale_Alerts.List[i].Section = NULL;
    if (Section)
       if (Section[0])
-	 if (asprintf (&Gbl.Alerts.List[i].Section,"%s",
+	 if (asprintf (&Ale_Alerts.List[i].Section,"%s",
 	               Section) < 0)
 	    Err_NotEnoughMemoryExit ();
 
    va_start (ap,fmt);
-   NumBytesPrinted = vasprintf (&Gbl.Alerts.List[i].Text,fmt,ap);
+   NumBytesPrinted = vasprintf (&Ale_Alerts.List[i].Text,fmt,ap);
    va_end (ap);
    if (NumBytesPrinted < 0)	// -1 if no memory or any other error
       Err_NotEnoughMemoryExit ();
@@ -94,7 +112,7 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
 
 size_t Ale_GetNumAlerts (void)
   {
-   return Gbl.Alerts.Num;
+   return Ale_Alerts.Num;
   }
 
 /*****************************************************************************/
@@ -103,7 +121,7 @@ size_t Ale_GetNumAlerts (void)
 
 Ale_AlertType_t Ale_GetTypeOfLastAlert (void)
   {
-   return Gbl.Alerts.Num ? Gbl.Alerts.List[Gbl.Alerts.Num - 1].Type :
+   return Ale_Alerts.Num ? Ale_Alerts.List[Ale_Alerts.Num - 1].Type :
 			   Ale_NONE;
   }
 
@@ -113,7 +131,7 @@ Ale_AlertType_t Ale_GetTypeOfLastAlert (void)
 
 const char *Ale_GetTextOfLastAlert (void)
   {
-   return Gbl.Alerts.Num ? Gbl.Alerts.List[Gbl.Alerts.Num - 1].Text :
+   return Ale_Alerts.Num ? Ale_Alerts.List[Ale_Alerts.Num - 1].Text :
 			   NULL;
   }
 
@@ -126,7 +144,7 @@ void Ale_ResetAllAlerts (void)
    size_t NumAlert;
 
    for (NumAlert = 0;
-	NumAlert < Gbl.Alerts.Num;
+	NumAlert < Ale_Alerts.Num;
 	NumAlert++)
       Ale_ResetAlert (NumAlert);
   }
@@ -137,8 +155,8 @@ void Ale_ResetAllAlerts (void)
 
 static void Ale_ResetLastAlert (void)
   {
-   if (Gbl.Alerts.Num)	// There are pending alerts not shown
-      Ale_ResetAlert (Gbl.Alerts.Num - 1);	// Reset the last one
+   if (Ale_Alerts.Num)	// There are pending alerts not shown
+      Ale_ResetAlert (Ale_Alerts.Num - 1);	// Reset the last one
   }
 
 /*****************************************************************************/
@@ -150,24 +168,24 @@ static void Ale_ResetAlert (size_t NumAlert)
    bool NoMoreAlertsPending;
    size_t i;
 
-   if (NumAlert < Gbl.Alerts.Num)
-      if (Gbl.Alerts.List[NumAlert].Type != Ale_NONE)
+   if (NumAlert < Ale_Alerts.Num)
+      if (Ale_Alerts.List[NumAlert].Type != Ale_NONE)
 	{
 	 /***** Reset alert *****/
-	 Gbl.Alerts.List[NumAlert].Type = Ale_NONE;	// Reset alert
+	 Ale_Alerts.List[NumAlert].Type = Ale_NONE;	// Reset alert
 
 	 /***** Free memory allocated for text *****/
-	 if (Gbl.Alerts.List[NumAlert].Text)
+	 if (Ale_Alerts.List[NumAlert].Text)
 	   {
-	    free (Gbl.Alerts.List[NumAlert].Text);
-	    Gbl.Alerts.List[NumAlert].Text = NULL;
+	    free (Ale_Alerts.List[NumAlert].Text);
+	    Ale_Alerts.List[NumAlert].Text = NULL;
 	   }
 
 	 /***** Free memory allocated for section *****/
-	 if (Gbl.Alerts.List[NumAlert].Section)
+	 if (Ale_Alerts.List[NumAlert].Section)
 	   {
-	    free (Gbl.Alerts.List[NumAlert].Section);
-	    Gbl.Alerts.List[NumAlert].Section = NULL;
+	    free (Ale_Alerts.List[NumAlert].Section);
+	    Ale_Alerts.List[NumAlert].Section = NULL;
 	   }
 	}
 
@@ -176,13 +194,13 @@ static void Ale_ResetAlert (size_t NumAlert)
           pending to be shown *****/
    NoMoreAlertsPending = true;
    for (i = 0;
-	NoMoreAlertsPending && i < Gbl.Alerts.Num;
+	NoMoreAlertsPending && i < Ale_Alerts.Num;
 	i++)
-      if (Gbl.Alerts.List[i].Type != Ale_NONE)
+      if (Ale_Alerts.List[i].Type != Ale_NONE)
 	 NoMoreAlertsPending = false;
 
    if (NoMoreAlertsPending)
-      Gbl.Alerts.Num = 0;
+      Ale_Alerts.Num = 0;
   }
 
 /*****************************************************************************/
@@ -210,17 +228,17 @@ void Ale_ShowAlerts (const char *Section)
    for (NumAlert = 0;
 	NumAlert < NumAlerts;
 	NumAlert++)
-      if (Gbl.Alerts.List[NumAlert].Type != Ale_NONE)
+      if (Ale_Alerts.List[NumAlert].Type != Ale_NONE)
         {
 	 if (Section)
-	    ShowAlert = (bool) !strcmp (Gbl.Alerts.List[NumAlert].Section,Section);
+	    ShowAlert = (bool) !strcmp (Ale_Alerts.List[NumAlert].Section,Section);
 	 else
 	    ShowAlert = true;
 
 	 if (ShowAlert)
 	   {
-	    Ale_ShowFixAlert (Gbl.Alerts.List[NumAlert].Type,
-			      Gbl.Alerts.List[NumAlert].Text);
+	    Ale_ShowFixAlert (Ale_Alerts.List[NumAlert].Type,
+			      Ale_Alerts.List[NumAlert].Text);
 	    Ale_ResetAlert (NumAlert);
 	   }
         }

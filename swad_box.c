@@ -47,7 +47,7 @@ static struct
   {
    int Nested;			// Index of top open box
    char *Ids[Box_MAX_NESTED];	// 0 <= box index < Box_MAX_NESTED
-  } Box =
+  } Box_Boxes =
   {
    .Nested = -1,	// -1 means no box open
   };
@@ -130,28 +130,29 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    extern const char *Txt_Close;
 
    /***** Check level of nesting *****/
-   if (Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
+   if (Box_Boxes.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
       Err_ShowErrorAndExit ("Box nesting limit reached.");
 
    /***** Increase level of nesting *****/
-   Box.Nested++;
+   Box_Boxes.Nested++;
 
    /***** Create unique identifier for this box *****/
    if (Closable == Box_CLOSABLE)
      {
-      if ((Box.Ids[Box.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
+      if ((Box_Boxes.Ids[Box_Boxes.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
      }
    else
-      Box.Ids[Box.Nested] = NULL;
+      Box_Boxes.Ids[Box_Boxes.Nested] = NULL;
 
    /***** Begin box container *****/
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
-      Frm_SetUniqueId (Box.Ids[Box.Nested]);
+      Frm_SetUniqueId (Box_Boxes.Ids[Box_Boxes.Nested]);
 
-      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",Box.Ids[Box.Nested]);
+      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",
+                     Box_Boxes.Ids[Box_Boxes.Nested]);
      }
    else
       HTM_DIV_Begin ("class=\"FRAME_CONT\"");
@@ -192,7 +193,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 	    if (Closable == Box_CLOSABLE)	// Icon to close the box
 	      {
 	       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
-			    Box.Ids[Box.Nested]);
+			    Box_Boxes.Ids[Box_Boxes.Nested]);
 		  Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 				  "times.svg",Ico_BLACK,Txt_Close);
 	       HTM_A_End ();
@@ -208,8 +209,8 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    if (Title)
      {
       HTM_DIV_Begin ("class=\"FRAME_TITLE %s FRAME_TITLE_%s\"",
-	             Box.Nested ? "FRAME_TITLE_SMALL" :
-		                  "FRAME_TITLE_BIG",
+	             Box_Boxes.Nested ? "FRAME_TITLE_SMALL" :
+		                        "FRAME_TITLE_BIG",
 		     The_GetSuffix ());
 	 HTM_Txt (Title);
       HTM_DIV_End ();
@@ -237,17 +238,17 @@ void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
 void Box_BoxEnd (void)
   {
 	 /***** Check level of nesting *****/
-	 if (Box.Nested < 0)
+	 if (Box_Boxes.Nested < 0)
 	    Err_ShowErrorAndExit ("Trying to end a box not open.");
 
 	 /***** Free memory allocated for box id string *****/
-	 if (Box.Ids[Box.Nested])
-	    free (Box.Ids[Box.Nested]);
+	 if (Box_Boxes.Ids[Box_Boxes.Nested])
+	    free (Box_Boxes.Ids[Box_Boxes.Nested]);
 
       /***** End box and box container *****/
       HTM_DIV_End ();
    HTM_DIV_End ();
 
    /***** Decrease level of nesting *****/
-   Box.Nested--;
+   Box_Boxes.Nested--;
   }

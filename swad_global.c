@@ -106,8 +106,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
-   Gbl.Alerts.Num = 0;	// No pending alerts to be shown
-
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;
 
