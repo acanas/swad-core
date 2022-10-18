@@ -43,6 +43,12 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static const char *XML_Ptr;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -92,7 +98,7 @@ void XML_GetTree (const char *XMLBuffer,struct XMLElement **XMLRootElem)
    if ((*XMLRootElem = calloc (1,sizeof (**XMLRootElem))) == NULL)
       Err_NotEnoughMemoryExit ();
 
-   Gbl.XMLPtr = XMLBuffer;
+   XML_Ptr = XMLBuffer;
    XML_GetElement (*XMLRootElem);
   }
 
@@ -113,33 +119,33 @@ static void XML_GetElement (struct XMLElement *ParentElem)
    /*
    <parent...>  element content  </parent>
               ^
-             Gbl.XMLPtr
+             XML_Ptr
    */
    /* Skip spaces */
    XML_SkipSpaces ();
 
-   StartContent = Gbl.XMLPtr;
+   StartContent = XML_Ptr;
    ContentLength = strcspn (StartContent,"<");
-   Gbl.XMLPtr += ContentLength;
+   XML_Ptr += ContentLength;
 
-   while (*Gbl.XMLPtr == '<')	// For each child until parent end tag
+   while (*XML_Ptr == '<')	// For each child until parent end tag
      {
-      Gbl.XMLPtr++;
-      if (*Gbl.XMLPtr == '/')	// Parent end tag
+      XML_Ptr++;
+      if (*XML_Ptr == '/')	// Parent end tag
         {
          /*
          <parent>  element content  </parent>
                                      ^
-                                    Gbl.XMLPtr
+                                    XML_Ptr
          */
          /***** Check tag name *****/
-         Gbl.XMLPtr++;
+         XML_Ptr++;
          /*
          <parent>  element content  </parent>
                                       ^
-                                     Gbl.XMLPtr
+                                     XML_Ptr
          */
-         EndTagNameLength = strcspn (Gbl.XMLPtr,">");
+         EndTagNameLength = strcspn (XML_Ptr,">");
          if (ParentElem->TagNameLength != EndTagNameLength)
            {
             snprintf (ErrorTxt,sizeof (ErrorTxt),
@@ -147,7 +153,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
 		      ParentElem->TagName);
             Err_ShowErrorAndExit (ErrorTxt);
            }
-         if (strncmp (ParentElem->TagName,Gbl.XMLPtr,EndTagNameLength))	// XML tags are case sensitive
+         if (strncmp (ParentElem->TagName,XML_Ptr,EndTagNameLength))	// XML tags are case sensitive
            {
             snprintf (ErrorTxt,sizeof (ErrorTxt),
 	              "XML syntax error. Expect end tag &lt;/%s&gt;.",
@@ -156,12 +162,12 @@ static void XML_GetElement (struct XMLElement *ParentElem)
            }
 
          // End of parent element found!
-         Gbl.XMLPtr += EndTagNameLength;
-         Gbl.XMLPtr++;
+         XML_Ptr += EndTagNameLength;
+         XML_Ptr++;
          /*
          <parent>  element content  </parent>
                                              ^
-                                            Gbl.XMLPtr
+                                            XML_Ptr
          */
          /* Remove trailing spaces in content */
          for (Ptr = StartContent + ContentLength - 1;
@@ -182,20 +188,20 @@ static void XML_GetElement (struct XMLElement *ParentElem)
 
          return;
         }
-      else if (*Gbl.XMLPtr == '!' ||
-               *Gbl.XMLPtr == '?')	// Skip <!...> and <?...>
+      else if (*XML_Ptr == '!' ||
+               *XML_Ptr == '?')	// Skip <!...> and <?...>
         {
-         TagLength = strcspn (Gbl.XMLPtr,">");
-         Gbl.XMLPtr += TagLength;
-         if (*Gbl.XMLPtr == '>')
-           Gbl.XMLPtr++;
+         TagLength = strcspn (XML_Ptr,">");
+         XML_Ptr += TagLength;
+         if (*XML_Ptr == '>')
+           XML_Ptr++;
         }
       else		// New start tag
         {
          /*
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                   ^
-                 Gbl.XMLPtr
+                 XML_Ptr
          */
          /***** Allocate space for the child element *****/
          if ((ChildElem = calloc (1,sizeof (*ChildElem))) == NULL)
@@ -209,44 +215,44 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          ParentElem->LastChild = ChildElem;
 
          /***** Get child tag name *****/
-         ChildElem->TagNameLength = strcspn (Gbl.XMLPtr,">/ \t");
+         ChildElem->TagNameLength = strcspn (XML_Ptr,">/ \t");
          if ((ChildElem->TagName = malloc (ChildElem->TagNameLength + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
-         strncpy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
+         strncpy (ChildElem->TagName,XML_Ptr,ChildElem->TagNameLength);
          ChildElem->TagName[ChildElem->TagNameLength] = '\0';
-         Gbl.XMLPtr += ChildElem->TagNameLength;
+         XML_Ptr += ChildElem->TagNameLength;
 
          /*
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                        ^
-                      Gbl.XMLPtr
+                      XML_Ptr
          */
          /* Check if end of start tag found */
-         if (*Gbl.XMLPtr == '>')	// End of start tag
+         if (*XML_Ptr == '>')	// End of start tag
            {
-            Gbl.XMLPtr++;
+            XML_Ptr++;
             /*
             <parent><child>...</child>...</parent>
                            ^
-                          Gbl.XMLPtr
+                          XML_Ptr
             */
             XML_GetElement (ChildElem);
            }
-         else if (*Gbl.XMLPtr == '/')	// Unary tag?
+         else if (*XML_Ptr == '/')	// Unary tag?
            {
-            Gbl.XMLPtr++;
+            XML_Ptr++;
             /*
             <parent><child/>...</parent>
                            ^
-                          Gbl.XMLPtr
+                          XML_Ptr
             */
-            if (*Gbl.XMLPtr != '>')	// Here it should be the end of start tag
+            if (*XML_Ptr != '>')	// Here it should be the end of start tag
                Err_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag.");
-            Gbl.XMLPtr++;
+            XML_Ptr++;
             /*
             <parent><child/>...</parent>
                             ^
-                           Gbl.XMLPtr
+                           XML_Ptr
             */
            }
          else	// Begin of an attribute
@@ -254,13 +260,13 @@ static void XML_GetElement (struct XMLElement *ParentElem)
             /*
             <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                           ^
-                         Gbl.XMLPtr
+                         XML_Ptr
             */
             XML_GetAttributes (ChildElem);
             /*
             <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                                                                  ^
-                                                                Gbl.XMLPtr
+                                                                XML_Ptr
             */
             XML_GetElement (ChildElem);
            }
@@ -285,30 +291,30 @@ static void XML_GetAttributes (struct XMLElement *Elem)
    <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                  ^
                  |
-                Gbl.XMLPtr
+                XML_Ptr
    */
    do
      {
       /* Skip spaces */
       XML_SkipSpaces ();
 
-      if (*Gbl.XMLPtr == '/')	// End of unary tag?
+      if (*XML_Ptr == '/')	// End of unary tag?
         {
-         Gbl.XMLPtr++;
-         if (*Gbl.XMLPtr == '>')
+         XML_Ptr++;
+         if (*XML_Ptr == '>')
            {
-            Gbl.XMLPtr++;
+            XML_Ptr++;
             EndOfStartTag = true;
            }
          else
             Err_ShowErrorAndExit ("XML syntax error. Expect &gt; ending unary tag with attributes.");
         }
-      else if (*Gbl.XMLPtr == '>')	// End of start tag?
+      else if (*XML_Ptr == '>')	// End of start tag?
         {
-         Gbl.XMLPtr++;
+         XML_Ptr++;
          EndOfStartTag = true;
         }
-      else if (*Gbl.XMLPtr == '\0')
+      else if (*XML_Ptr == '\0')
          Err_ShowErrorAndExit ("XML syntax error. Unexpected end of file.");
       else
         {
@@ -316,7 +322,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                         ^
                         |
-                       Gbl.XMLPtr
+                       XML_Ptr
          */
          /***** Allocate space for the attribute *****/
          if ((Attribute = calloc (1,sizeof (*Attribute))) == NULL)
@@ -330,29 +336,29 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          Elem->LastAttribute = Attribute;
 
          /***** Get attribute name *****/
-         Attribute->AttributeNameLength = strcspn (Gbl.XMLPtr,"=");
+         Attribute->AttributeNameLength = strcspn (XML_Ptr,"=");
          if ((Attribute->AttributeName = malloc (Attribute->AttributeNameLength + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
-         strncpy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
+         strncpy (Attribute->AttributeName,XML_Ptr,Attribute->AttributeNameLength);
          Attribute->AttributeName[Attribute->AttributeNameLength] = '\0';
-         Gbl.XMLPtr += Attribute->AttributeNameLength;
+         XML_Ptr += Attribute->AttributeNameLength;
          /* End of attribute name:
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                                   ^
                                   |
-                                 Gbl.XMLPtr
+                                 XML_Ptr
          */
          /***** Get attribute content *****/
-         Gbl.XMLPtr++;
-         if (*Gbl.XMLPtr == '\"')
+         XML_Ptr++;
+         if (*XML_Ptr == '\"')
            {
-            Gbl.XMLPtr++;
-            Attribute->ContentLength = strcspn (Gbl.XMLPtr,"\"");
+            XML_Ptr++;
+            Attribute->ContentLength = strcspn (XML_Ptr,"\"");
            }
-         else if (*Gbl.XMLPtr == '\'')
+         else if (*XML_Ptr == '\'')
            {
-            Gbl.XMLPtr++;
-            Attribute->ContentLength = strcspn (Gbl.XMLPtr,"'");
+            XML_Ptr++;
+            Attribute->ContentLength = strcspn (XML_Ptr,"'");
            }
          else
            {
@@ -365,16 +371,16 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 
          if ((Attribute->Content = malloc (Attribute->ContentLength + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
-         strncpy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
+         strncpy (Attribute->Content,XML_Ptr,Attribute->ContentLength);
          Attribute->Content[Attribute->ContentLength] = '\0';
-         Gbl.XMLPtr += Attribute->ContentLength;
+         XML_Ptr += Attribute->ContentLength;
 
-         Gbl.XMLPtr++;
+         XML_Ptr++;
          /* End of attribute content
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                                           ^
                                           |
-                                         Gbl.XMLPtr
+                                         XML_Ptr
          */
         }
      }
@@ -387,8 +393,8 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 
 static void XML_SkipSpaces (void)
   {
-   while (isspace ((int) *Gbl.XMLPtr))
-      Gbl.XMLPtr++;
+   while (isspace ((int) *XML_Ptr))
+      XML_Ptr++;
   }
 
 /*****************************************************************************/

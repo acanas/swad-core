@@ -124,10 +124,11 @@ struct Globals
       bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
+
    time_t StartExecutionTimeUTC;
    struct Dat_DateTime Now;
    struct Dat_Date Yesterday;
-   const char *XMLPtr;
+
    struct
      {
       char FileName[PATH_MAX + 1];
