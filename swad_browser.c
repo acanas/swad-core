@@ -4482,7 +4482,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Check if is a recent file or folder *****/
    // If less than a week since last modify ==> indicate the file is recent by writting its name in green
-   if (Gbl.StartExecutionTimeUTC < FileMetadata.Time + (7L * 24L * 60L * 60L))
+   if (Dat_GetStartExecutionTimeUTC () < FileMetadata.Time + (7L * 24L * 60L * 60L))
       IsRecent = true;
 
    /* Style of the text in this row */
@@ -10318,7 +10318,7 @@ static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *
 
    /***** Compute time in seconds
           (files older than this time will be removed) *****/
-   TimeRemoveFilesOlder = Gbl.StartExecutionTimeUTC -
+   TimeRemoveFilesOlder = Dat_GetStartExecutionTimeUTC () -
 	                  (time_t) Months * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Remove old files recursively *****/

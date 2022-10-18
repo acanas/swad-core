@@ -126,6 +126,20 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Dat_SetStartExecutionTimeval (void);
+void Dat_SetStartExecutionTimeUTC (void);
+time_t Dat_GetStartExecutionTimeUTC (void);
+struct Dat_Date *Dat_GetCurrentDate (void);
+unsigned Dat_GetCurrentDay (void);
+unsigned Dat_GetCurrentMonth (void);
+unsigned Dat_GetCurrentYear (void);
+long Dat_GetTimeGenerationInMicroseconds (void);
+long Dat_GetTimeSendInMicroseconds (void);
+void Dat_ComputeTimeToGeneratePage (void);
+void Dat_ComputeTimeToSendPage (void);
+void Dat_WriteTimeToGenerateAndSendPage (void);
+void Dat_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds);
+
 void Dat_ResetDate (struct Dat_Date *Date);
 void Dat_ResetHour (struct Dat_Hour *Hour);
 
@@ -137,7 +151,6 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format);
 void Dat_ChangeDateFormat (void);
 Dat_Format_t Dat_GetDateFormatFromStr (const char *Str);
 
-void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str);

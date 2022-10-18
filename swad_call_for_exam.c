@@ -195,9 +195,9 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
        CallsForExams->CallForExam.ExamDate.Month == 0 ||
        CallsForExams->CallForExam.ExamDate.Year  == 0)
      {
-      CallsForExams->CallForExam.ExamDate.Day   = Gbl.Now.Date.Day;
-      CallsForExams->CallForExam.ExamDate.Month = Gbl.Now.Date.Month;
-      CallsForExams->CallForExam.ExamDate.Year  = Gbl.Now.Date.Year;
+      CallsForExams->CallForExam.ExamDate.Day   = Dat_GetCurrentDay ();
+      CallsForExams->CallForExam.ExamDate.Month = Dat_GetCurrentMonth ();
+      CallsForExams->CallForExam.ExamDate.Year  = Dat_GetCurrentYear ();
      }
 
    /***** Get the hour of the exam *****/
@@ -898,6 +898,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_Publish_call_FOR_EXAM;
    struct Ins_Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
+   unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned Year;
    unsigned Hour;
    unsigned Minute;
@@ -1103,9 +1104,9 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
 	      {
 	       HTM_TD_Begin ("class=\"LB\"");
-		  Dat_WriteFormDate (CallsForExams->CallForExam.ExamDate.Year < Gbl.Now.Date.Year ? CallsForExams->CallForExam.ExamDate.Year :
-												    Gbl.Now.Date.Year,
-				     Gbl.Now.Date.Year + 1,"Exam",
+		  Dat_WriteFormDate (CallsForExams->CallForExam.ExamDate.Year < CurrentYear ? CallsForExams->CallForExam.ExamDate.Year :
+											      CurrentYear,
+				     CurrentYear + 1,"Exam",
 				     &(CallsForExams->CallForExam.ExamDate),
 				     false,false);
 	       HTM_TD_End ();

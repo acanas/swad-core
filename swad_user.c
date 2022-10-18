@@ -1207,6 +1207,9 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_Check;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    char URLIconSet[PATH_MAX + 1];
+   unsigned CurrentDay   = Dat_GetCurrentDay ();
+   unsigned CurrentMonth = Dat_GetCurrentMonth ();
+   unsigned CurrentYear  = Dat_GetCurrentYear ();
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -1215,14 +1218,13 @@ void Usr_WelcomeUsr (void)
          if (Gbl.Usrs.Me.UsrDat.FrstName[0])
            {
 	    /***** New year greeting *****/
-	    if (Gbl.Now.Date.Day   == 1 &&
-		Gbl.Now.Date.Month == 1)
+	    if (CurrentDay == 1 && CurrentMonth == 1)
 	       Ale_ShowAlert (Ale_INFO,Txt_NEW_YEAR_GREETING,
-			      Gbl.Now.Date.Year);
+			      CurrentYear);
 
             /***** Birthday congratulation *****/
-            if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == Gbl.Now.Date.Day &&
-                Gbl.Usrs.Me.UsrDat.Birthday.Month == Gbl.Now.Date.Month)
+            if (Gbl.Usrs.Me.UsrDat.Birthday.Day   == CurrentDay &&
+                Gbl.Usrs.Me.UsrDat.Birthday.Month == CurrentMonth)
                if (Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated ())
                  {
                   /* Mark my birthday as already congratulated */
@@ -1322,9 +1324,11 @@ void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
 
 void Usr_FilterUsrBirthday (struct Dat_Date *Birthday)
   {
+   unsigned CurrentYear = Dat_GetCurrentYear ();
+
    /***** Fix birthday *****/
-   if (Birthday->Year < Gbl.Now.Date.Year-99 ||
-       Birthday->Year > Gbl.Now.Date.Year-16)
+   if (Birthday->Year < CurrentYear - 99 ||
+       Birthday->Year > CurrentYear - 16)
       Birthday->Year  =
       Birthday->Month =
       Birthday->Day   = 0;
@@ -2006,7 +2010,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
 
 	 /* Last action is really got only if last access is recent */
-	 if (Gbl.Usrs.Me.UsrLast.LastTime >= Gbl.StartExecutionTimeUTC -
+	 if (Gbl.Usrs.Me.UsrLast.LastTime >= Dat_GetStartExecutionTimeUTC () -
 	                                     Cfg_MAX_TIME_TO_REMEMBER_LAST_ACTION_ON_LOGIN)
 	   {
 	    /* Get action from last data */

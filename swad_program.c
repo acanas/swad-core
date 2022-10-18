@@ -1967,8 +1967,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Initialize to empty program item *****/
    Prg_ResetItem (&Item);
-   Item.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-   Item.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+   Item.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Item.TimeUTC[Dat_END_TIME] = Item.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
    Item.Open = true;
 
    /***** Show pending alerts */
@@ -2122,7 +2122,7 @@ void Prg_ReceiveFormChgItem (void)
 
    /***** Adjust dates *****/
    if (Item.TimeUTC[Dat_STR_TIME] == 0)
-      Item.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      Item.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (Item.TimeUTC[Dat_END_TIME] == 0)
       Item.TimeUTC[Dat_END_TIME] = Item.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
@@ -2169,7 +2169,7 @@ void Prg_ReceiveFormNewItem (void)
 
    /***** Adjust dates *****/
    if (NewItem.TimeUTC[Dat_STR_TIME] == 0)
-      NewItem.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (NewItem.TimeUTC[Dat_END_TIME] == 0)
       NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 

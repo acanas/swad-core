@@ -1415,7 +1415,7 @@ void Pho_CalcPhotoDegree (void)
      {
       /***** Prevent the computing of an average photo too recently updated *****/
       if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
-	  Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
+	  Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
 	 Err_ShowErrorAndExit ("Average photo has been computed recently.");
 
       /***** Get list of students in this degree *****/
@@ -1513,7 +1513,7 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
    /***** Get time to compute average photo from database *****/
    if (Pho_DB_GetTimeToComputeAvgPhoto (&mysql_res,DegCod) == Usr_NUM_SEXS)
      {
-      TotalTimeToComputeAvgPhoto = 0;
+      TotalTimeToComputeAvgPhoto = 0L;
       for (Sex  = (Usr_Sex_t) 0;
 	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	   Sex++)
@@ -2014,7 +2014,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		     Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
 			       sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
 		  else
-		     Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
+		     Dat_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
 				    EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
 		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
@@ -2023,7 +2023,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		  else
 		     // Too recently computed ?
 		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
-				Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
+				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
 		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
 			      "%s (%s: %s)",
 			      Degs.Lst[NumDeg].ShrtName,

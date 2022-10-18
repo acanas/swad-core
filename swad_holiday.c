@@ -511,6 +511,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
    struct Hld_Holiday *Hld;
    Hld_HolidayType_t HolidayType;
    unsigned HolidayTypeUnsigned;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Holidays,
@@ -584,8 +585,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldStrDat);
 		  Hld_PutParamHldCod (&Hld->HldCod);
-		  Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
-				     Gbl.Now.Date.Year + 1,
+		  Dat_WriteFormDate (CurrentYear - 1,
+				     CurrentYear + 1,
 				     "Start",
 				     &(Holidays->Lst[NumHld].StartDate),
 				     true,false);
@@ -596,8 +597,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldEndDat);
 		  Hld_PutParamHldCod (&Hld->HldCod);
-		  Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
-				     Gbl.Now.Date.Year + 1,
+		  Dat_WriteFormDate (CurrentYear - 1,
+				     CurrentYear + 1,
 				     "End",
 				     &(Holidays->Lst[NumHld].EndDate),
 				     true,(Hld->HldTyp == Hld_HOLIDAY));
@@ -788,7 +789,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
          if (NewDate.Day   == 0 ||
              NewDate.Month == 0 ||
              NewDate.Year  == 0)
-            Dat_AssignDate (&NewDate,&Gbl.Now.Date);
+            Dat_AssignDate (&NewDate,Dat_GetCurrentDate ());
          break;
       case Hld_END_DATE:
          StrStartOrEndDate = "EndDate";
@@ -804,7 +805,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
                if (NewDate.Day   == 0 ||
         	   NewDate.Month == 0 ||
         	   NewDate.Year  == 0)
-        	  Dat_AssignDate (&NewDate,&Gbl.Now.Date);
+        	  Dat_AssignDate (&NewDate,Dat_GetCurrentDate ());
                break;
            }
          break;
@@ -905,6 +906,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
    unsigned NumPlc;
    Hld_HolidayType_t HolidayType;
    unsigned HolidayTypeUnsigned;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewHld);
@@ -961,8 +963,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	    /***** Holiday date / Non school period start date *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
-				  Gbl.Now.Date.Year + 1,
+	       Dat_WriteFormDate (CurrentYear - 1,
+				  CurrentYear + 1,
 				  "Start",
 				  &Hld_EditingHld->StartDate,
 				  false,false);
@@ -970,8 +972,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	    /***** Non school period end date *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
-				  Gbl.Now.Date.Year + 1,
+	       Dat_WriteFormDate (CurrentYear - 1,
+				  CurrentYear + 1,
 				  "End",
 				  &Hld_EditingHld->EndDate,
 				  false,false);
@@ -1046,7 +1048,7 @@ void Hld_ReceiveFormNewHoliday (void)
    if (Hld_EditingHld->StartDate.Day   == 0 ||
        Hld_EditingHld->StartDate.Month == 0 ||
        Hld_EditingHld->StartDate.Year  == 0)
-      Dat_AssignDate (&Hld_EditingHld->StartDate,&Gbl.Now.Date);
+      Dat_AssignDate (&Hld_EditingHld->StartDate,Dat_GetCurrentDate ());
 
    /***** Set end date *****/
    switch (Hld_EditingHld->HldTyp)
@@ -1064,7 +1066,7 @@ void Hld_ReceiveFormNewHoliday (void)
 	 if (Hld_EditingHld->EndDate.Day   == 0 ||
              Hld_EditingHld->EndDate.Month == 0 ||
              Hld_EditingHld->EndDate.Year  == 0)
-            Dat_AssignDate (&Hld_EditingHld->EndDate,&Gbl.Now.Date);
+            Dat_AssignDate (&Hld_EditingHld->EndDate,Dat_GetCurrentDate ());
          break;
      }
 
@@ -1107,9 +1109,9 @@ static void Hld_EditingHolidayConstructor (void)
    Hld_EditingHld->PlcCod = -1L;
    Hld_EditingHld->PlaceFullName[0] = '\0';
    Hld_EditingHld->HldTyp = Hld_HOLIDAY;
-   Hld_EditingHld->StartDate.Year  = Hld_EditingHld->EndDate.Year  = Gbl.Now.Date.Year;
-   Hld_EditingHld->StartDate.Month = Hld_EditingHld->EndDate.Month = Gbl.Now.Date.Month;
-   Hld_EditingHld->StartDate.Day   = Hld_EditingHld->EndDate.Day   = Gbl.Now.Date.Day;
+   Hld_EditingHld->StartDate.Year  = Hld_EditingHld->EndDate.Year  = Dat_GetCurrentYear ();
+   Hld_EditingHld->StartDate.Month = Hld_EditingHld->EndDate.Month = Dat_GetCurrentMonth ();
+   Hld_EditingHld->StartDate.Day   = Hld_EditingHld->EndDate.Day   = Dat_GetCurrentDay ();
    Hld_EditingHld->Name[0] = '\0';
   }
 

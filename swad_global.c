@@ -79,20 +79,19 @@ void Gbl_InitializeGlobals (void)
    if (!setlocale (LC_ALL,"es_ES.utf8"))   // TODO: this should be internationalized!!!!!!!
       exit (1);
 
-   gettimeofday (&Gbl.tvStart, &Gbl.tz);
-   Dat_GetStartExecutionTimeUTC ();
+   Dat_SetStartExecutionTimeval ();
+   Dat_SetStartExecutionTimeUTC ();
    Dat_GetAndConvertCurrentDateTime ();
 
    Gbl.Config.DatabasePassword[0] = '\0';
    Gbl.Config.SMTPPassword[0] = '\0';
 
-   Gbl.TimeGenerationInMicroseconds = Gbl.TimeSendInMicroseconds = 0L;
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
 
    Cry_CreateUniqueNameEncrypted (Gbl.UniqueNameEncrypted);
 
-   srand ((unsigned int) Gbl.StartExecutionTimeUTC);	// Initialize seed for rand()
+   srand ((unsigned int) Dat_GetStartExecutionTimeUTC ());	// Initialize seed for rand()
 
    Gbl.WebService.IsWebService = false;
 

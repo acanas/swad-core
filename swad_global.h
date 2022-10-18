@@ -72,6 +72,7 @@ struct Globals
       char DatabasePassword[Cfg_MAX_BYTES_DATABASE_PASSWORD + 1];
       char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
      } Config;
+
    struct Files F;
    pid_t PID;	// PID of current process
 
@@ -83,13 +84,12 @@ struct Globals
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
 
-   /* To compute execution time of the program */
-   struct timeval tvStart;
-   struct timeval tvPageCreated;
-   struct timeval tvPageSent;
-   struct timezone tz;
-   long TimeGenerationInMicroseconds;
-   long TimeSendInMicroseconds;
+   struct
+     {
+      struct Dat_DateTime DateIni;	// TODO: Remove in future versions
+      struct Dat_DateTime DateEnd;	// TODO: Remove in future versions
+      time_t TimeUTC[Dat_NUM_START_END_TIME];
+     } DateRange;	// TODO: Move to swad_date.c
 
    char IP[Cns_MAX_BYTES_IP + 1];
    char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
@@ -125,14 +125,6 @@ struct Globals
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
 
-   time_t StartExecutionTimeUTC;
-   struct Dat_DateTime Now;
-   struct Dat_Date Yesterday;
-
-   struct
-     {
-      char FileName[PATH_MAX + 1];
-     } HTMLOutput;
    struct
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
@@ -382,12 +374,6 @@ struct Globals
          char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
-   struct
-     {
-      struct Dat_DateTime DateIni;	// TODO: Remove in future versions
-      struct Dat_DateTime DateEnd;	// TODO: Remove in future versions
-      time_t TimeUTC[Dat_NUM_START_END_TIME];
-     } DateRange;
 
    /* Cache */
    struct

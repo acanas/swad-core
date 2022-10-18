@@ -575,12 +575,12 @@ void Err_ShowErrorAndExit (const char *Txt)
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
    if (!Gbl.Action.IsAJAXAutoRefresh)
-      Gbl.TimeGenerationInMicroseconds = (long) Sta_ComputeTimeToGeneratePage ();
+      Dat_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
      {
       /***** Log access *****/
-      Gbl.TimeSendInMicroseconds = 0L;
+      // Gbl.TimeSendInMicroseconds = 0L;
       Log_LogAccess (Txt);
      }
    else
@@ -595,7 +595,7 @@ void Err_ShowErrorAndExit (const char *Txt)
       if (!Gbl.Action.IsAJAXAutoRefresh)
 	{
 	 /***** Compute time to send page *****/
-	 Sta_ComputeTimeToSendPage ();
+	 Dat_ComputeTimeToSendPage ();
 
 	 /***** Log access *****/
 	 Log_LogAccess (Txt);

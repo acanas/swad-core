@@ -63,6 +63,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    FILE *FileRSS;
    char RSSLink[Cns_MAX_BYTES_WWW + 1];
    struct tm *tm;
+   time_t t = Dat_GetStartExecutionTimeUTC ();
 
    /***** Create RSS directory if not exists *****/
    snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%ld/%s",
@@ -111,12 +112,12 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
 
    // All date-times in RSS conform to the Date and Time Specification of RFC 822, with the exception that the year may be expressed with two characters or four characters (four preferred)
    fprintf (FileRSS,"<pubDate>");	
-   tm = gmtime (&Gbl.StartExecutionTimeUTC);
+   tm = gmtime (&t);
    Dat_WriteRFC822DateFromTM (FileRSS,tm);
    fprintf (FileRSS,"</pubDate>\n");
 
    fprintf (FileRSS,"<lastBuildDate>");	
-   tm = gmtime (&Gbl.StartExecutionTimeUTC);
+   tm = gmtime (&t);
    Dat_WriteRFC822DateFromTM (FileRSS,tm);
    fprintf (FileRSS,"</lastBuildDate>\n");
 

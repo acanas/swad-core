@@ -1407,8 +1407,8 @@ void Agd_RequestCreatOrEditEvent (void)
      {
       /* Initialize to empty event */
       AgdEvent.AgdCod = -1L;
-      AgdEvent.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-      AgdEvent.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
       AgdEvent.TimeStatus = Dat_FUTURE;
       AgdEvent.Event[0]    = '\0';
       AgdEvent.Location[0] = '\0';
@@ -1562,7 +1562,7 @@ void Agd_ReceiveFormEvent (void)
 
    /***** Adjust dates *****/
    if (AgdEvent.TimeUTC[Dat_STR_TIME] == 0)
-      AgdEvent.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (AgdEvent.TimeUTC[Dat_END_TIME] == 0)
       AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 

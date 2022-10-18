@@ -1105,7 +1105,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    FirstYear = 1900 + Report->tm_FirstClickTime.tm_year;
 
    /***** Initialize LastYear *****/
-   LastYear = Gbl.Now.Date.Year;
+   LastYear = Dat_GetCurrentYear ();
 
    /***** Set maximum number of hits per year *****/
    if (Report->MaxHitsPerYear)

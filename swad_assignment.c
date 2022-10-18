@@ -1210,8 +1210,8 @@ void Asg_RequestCreatOrEditAsg (void)
      {
       /* Initialize to empty assignment */
       Assignments.Asg.AsgCod = -1L;
-      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-      Assignments.Asg.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
       Assignments.Asg.Open = true;
       Assignments.Asg.Title[0] = '\0';
       Assignments.Asg.SendWork = Asg_DO_NOT_SEND_WORK;
@@ -1454,7 +1454,7 @@ void Asg_ReceiveFormAssignment (void)
 
    /***** Adjust dates *****/
    if (Assignments.Asg.TimeUTC[Dat_STR_TIME] == 0)
-      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (Assignments.Asg.TimeUTC[Dat_END_TIME] == 0)
       Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 

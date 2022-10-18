@@ -1227,6 +1227,7 @@ static void Grp_ListGroupTypesForEdition (void)
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
    unsigned NumGrpTyp;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned UniqueId;
    char Id[32];
 
@@ -1320,8 +1321,8 @@ static void Grp_ListGroupTypesForEdition (void)
 			   Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id,
 									"Open",
 									Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
-									Gbl.Now.Date.Year,
-									Gbl.Now.Date.Year + 1,
+									CurrentYear,
+									CurrentYear + 1,
 									Dat_FORM_SECONDS_ON,
 									Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 									true);			// Submit on change
@@ -2405,6 +2406,7 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
    extern const char *Txt_Create_type_of_group;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_TYPE_SECTION_ID);
@@ -2483,8 +2485,8 @@ static void Grp_PutFormToCreateGroupType (void)
 			   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
 									"Open",
 									Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
-									Gbl.Now.Date.Year,
-									Gbl.Now.Date.Year + 1,
+									CurrentYear,
+									CurrentYear + 1,
 									Dat_FORM_SECONDS_ON,
 									Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 									false);			// Don't submit on change
@@ -3277,7 +3279,7 @@ static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
       return false;
 
    /***** Is open time in the future? *****/
-   return (OpenTimeUTC > Gbl.StartExecutionTimeUTC);
+   return (OpenTimeUTC > Dat_GetStartExecutionTimeUTC ());
   }
 
 /*****************************************************************************/

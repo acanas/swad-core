@@ -3195,6 +3195,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *Txt_Date_of_birth;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Date of birth *****/
    HTM_TR_Begin (NULL);
@@ -3210,8 +3211,8 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutF
 	 if (ShowData)
 	   {
 	    if (PutForm)
-	       Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
-				  Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
+	       Dat_WriteFormDate (CurrentYear - Rec_USR_MAX_AGE,
+				  CurrentYear - Rec_USR_MIN_AGE,
 				  "Birth",
 				  &(UsrDat->Birthday),
 				  false,false);

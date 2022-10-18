@@ -1707,8 +1707,8 @@ void Svy_RequestCreatOrEditSvy (void)
       Surveys.Svy.Scope  = HieLvl_UNK;
       Surveys.Svy.Roles  = (1 << Rol_STD);
       Surveys.Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Surveys.Svy.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-      Surveys.Svy.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
+      Surveys.Svy.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      Surveys.Svy.TimeUTC[Dat_END_TIME] = Surveys.Svy.TimeUTC[Dat_STR_TIME] + (24 * 60 * 60);	// +24 hours
       Surveys.Svy.Title[0] = '\0';
       Surveys.Svy.NumQsts = 0;
       Surveys.Svy.NumUsrs = 0;
@@ -2081,7 +2081,7 @@ void Svy_ReceiveFormSurvey (void)
 
    /***** Adjust dates *****/
    if (NewSvy.TimeUTC[Dat_STR_TIME] == 0)
-      NewSvy.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      NewSvy.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (NewSvy.TimeUTC[Dat_END_TIME] == 0)
       NewSvy.TimeUTC[Dat_END_TIME] = NewSvy.TimeUTC[Dat_STR_TIME] + 24 * 60 * 60;	// +24 hours
 

@@ -215,7 +215,7 @@ void Cal_DrawCurrentMonth (void)
       HTM_Txt ("\tGbl_HTMLContent = '';");
       HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s','%s/%s',",
 		Gbl.Prefs.FirstDayOfWeek,
-		(long) Gbl.StartExecutionTimeUTC,
+		(long) Dat_GetStartExecutionTimeUTC (),
 		Gbl.Hierarchy.Ctr.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
@@ -284,7 +284,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	 HTM_Txt ("\tGbl_HTMLContent = '';");
 	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s','%s/%s',",
 		   Gbl.Prefs.FirstDayOfWeek,
-		   (long) Gbl.StartExecutionTimeUTC,
+		   (long) Dat_GetStartExecutionTimeUTC (),
 		   Gbl.Hierarchy.Ctr.PlcCod,
 		   PrintView ? "true" :
 			       "false",

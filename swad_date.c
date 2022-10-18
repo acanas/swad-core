@@ -90,12 +90,158 @@ static const unsigned Dat_NumDaysMonth[1 + 12] =
    [12] = 31,	// December
   };
 
+static struct
+  {
+   struct timeval tvStart;
+   struct timeval tvPageCreated;
+   time_t StartExecutionTimeUTC;
+   struct Dat_DateTime Now;
+   long TimeGenerationInMicroseconds;
+   long TimeSendInMicroseconds;
+  } Dat_Time =
+  {
+   .TimeGenerationInMicroseconds = 0L,
+   .TimeSendInMicroseconds       = 0L,
+  };
+
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
 static unsigned Dat_GetParamDateFormat (void);
+
+/*****************************************************************************/
+/*********************** Set/get start execution time ************************/
+/*****************************************************************************/
+
+void Dat_SetStartExecutionTimeval (void)
+  {
+   struct timezone tz;
+
+   gettimeofday (&Dat_Time.tvStart, &tz);
+  }
+
+void Dat_SetStartExecutionTimeUTC (void)
+  {
+   Dat_Time.StartExecutionTimeUTC = time (NULL);
+  }
+
+time_t Dat_GetStartExecutionTimeUTC (void)
+  {
+   return Dat_Time.StartExecutionTimeUTC;
+  }
+
+struct Dat_Date *Dat_GetCurrentDate (void)
+  {
+   return &Dat_Time.Now.Date;
+  }
+
+unsigned Dat_GetCurrentDay (void)
+  {
+   return Dat_Time.Now.Date.Day;
+  }
+
+unsigned Dat_GetCurrentMonth (void)
+  {
+   return Dat_Time.Now.Date.Month;
+  }
+
+unsigned Dat_GetCurrentYear (void)
+  {
+   return Dat_Time.Now.Date.Year;
+  }
+
+/*****************************************************************************/
+/************** Get time to generate/send page in microseconds ***************/
+/*****************************************************************************/
+
+long Dat_GetTimeGenerationInMicroseconds (void)
+  {
+   return Dat_Time.TimeGenerationInMicroseconds;
+  }
+
+long Dat_GetTimeSendInMicroseconds (void)
+  {
+   return Dat_Time.TimeSendInMicroseconds;
+  }
+
+/*****************************************************************************/
+/**************** Compute the time used to generate the page *****************/
+/*****************************************************************************/
+
+void Dat_ComputeTimeToGeneratePage (void)
+  {
+   struct timezone tz;
+
+   if (gettimeofday (&Dat_Time.tvPageCreated, &tz))
+      // Error in gettimeofday
+      Dat_Time.TimeGenerationInMicroseconds = 0L;
+   else
+      Dat_Time.TimeGenerationInMicroseconds = (long) ((Dat_Time.tvPageCreated.tv_sec  - Dat_Time.tvStart.tv_sec) * 1000000L +
+						       Dat_Time.tvPageCreated.tv_usec - Dat_Time.tvStart.tv_usec);
+  }
+
+/*****************************************************************************/
+/****************** Compute the time used to send the page *******************/
+/*****************************************************************************/
+
+void Dat_ComputeTimeToSendPage (void)
+  {
+   struct timeval tvPageSent;
+   struct timezone tz;
+
+   if (gettimeofday (&tvPageSent, &tz))
+      // Error in gettimeofday
+      Dat_Time.TimeSendInMicroseconds = 0;
+   else
+     {
+      if (tvPageSent.tv_usec < Dat_Time.tvPageCreated.tv_usec)
+	{
+	 tvPageSent.tv_sec--;
+	 tvPageSent.tv_usec += 1000000;
+	}
+      Dat_Time.TimeSendInMicroseconds = (tvPageSent.tv_sec  - Dat_Time.tvPageCreated.tv_sec) * 1000000L +
+                                         tvPageSent.tv_usec - Dat_Time.tvPageCreated.tv_usec;
+     }
+  }
+
+/*****************************************************************************/
+/************** Write the time to generate and send the page *****************/
+/*****************************************************************************/
+
+void Dat_WriteTimeToGenerateAndSendPage (void)
+  {
+   extern const char *Txt_PAGE1_Page_generated_in;
+   extern const char *Txt_PAGE2_and_sent_in;
+   char StrTimeGenerationInMicroseconds[Dat_MAX_BYTES_TIME + 1];
+   char StrTimeSendInMicroseconds[Dat_MAX_BYTES_TIME + 1];
+
+   Dat_WriteTime (StrTimeGenerationInMicroseconds,Dat_GetTimeGenerationInMicroseconds ());
+   Dat_WriteTime (StrTimeSendInMicroseconds      ,Dat_GetTimeSendInMicroseconds ());
+   HTM_TxtF ("%s %s %s %s",
+             Txt_PAGE1_Page_generated_in,StrTimeGenerationInMicroseconds,
+             Txt_PAGE2_and_sent_in,StrTimeSendInMicroseconds);
+  }
+
+/*****************************************************************************/
+/********* Write time (given in microseconds) depending on amount ************/
+/*****************************************************************************/
+
+void Dat_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds)
+  {
+   if (TimeInMicroseconds < 1000L)
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld &micro;s",TimeInMicroseconds);
+   else if (TimeInMicroseconds < 1000000L)
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld ms",TimeInMicroseconds / 1000);
+   else if (TimeInMicroseconds < (60 * 1000000L))
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%.1f s",
+                (double) TimeInMicroseconds / 1E6);
+   else
+      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld min, %ld s",
+                TimeInMicroseconds / (60 * 1000000L),
+                (TimeInMicroseconds / 1000000L) % 60);
+  }
 
 /*****************************************************************************/
 /******************************** Reset date *********************************/
@@ -195,7 +341,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 
    if (asprintf (&Id,"date_format_%u",(unsigned) Format) < 0)
       Err_NotEnoughMemoryExit ();
-   Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
+   Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetStartExecutionTimeUTC (),
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);
    free (Id);
@@ -246,45 +392,34 @@ Dat_Format_t Dat_GetDateFormatFromStr (const char *Str)
   }
 
 /*****************************************************************************/
-/************************** Get current time UTC *****************************/
-/*****************************************************************************/
-
-void Dat_GetStartExecutionTimeUTC (void)
-  {
-   Gbl.StartExecutionTimeUTC = time (NULL);
-  }
-
-/*****************************************************************************/
 /********************** Get and convert current time *************************/
 /*****************************************************************************/
 
 void Dat_GetAndConvertCurrentDateTime (void)
   {
    struct tm *tm_ptr;
+   time_t t = Dat_GetStartExecutionTimeUTC ();
 
    /***** Convert current local time to a struct tblock *****/
-   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.StartExecutionTimeUTC);
+   tm_ptr = Dat_GetLocalTimeFromClock (&t);
 
-   Gbl.Now.Date.Year   = tm_ptr->tm_year + 1900;
-   Gbl.Now.Date.Month  = tm_ptr->tm_mon  + 1;
-   Gbl.Now.Date.Day    = tm_ptr->tm_mday;
-   Gbl.Now.Time.Hour   = tm_ptr->tm_hour;
-   Gbl.Now.Time.Minute = tm_ptr->tm_min;
-   Gbl.Now.Time.Second = tm_ptr->tm_sec;
+   Dat_Time.Now.Date.Year   = tm_ptr->tm_year + 1900;
+   Dat_Time.Now.Date.Month  = tm_ptr->tm_mon  + 1;
+   Dat_Time.Now.Date.Day    = tm_ptr->tm_mday;
+   Dat_Time.Now.Time.Hour   = tm_ptr->tm_hour;
+   Dat_Time.Now.Time.Minute = tm_ptr->tm_min;
+   Dat_Time.Now.Time.Second = tm_ptr->tm_sec;
 
    /***** Initialize current date in format YYYYMMDD *****/
-   snprintf (Gbl.Now.Date.YYYYMMDD,sizeof (Gbl.Now.Date.YYYYMMDD),
+   snprintf (Dat_Time.Now.Date.YYYYMMDD,sizeof (Dat_Time.Now.Date.YYYYMMDD),
 	     "%04u%02u%02u",
-             Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day);
+             Dat_Time.Now.Date.Year,Dat_Time.Now.Date.Month,Dat_Time.Now.Date.Day);
 
    /***** Initialize current time in format YYYYMMDDHHMMSS *****/
-   snprintf (Gbl.Now.YYYYMMDDHHMMSS,sizeof (Gbl.Now.YYYYMMDDHHMMSS),
+   snprintf (Dat_Time.Now.YYYYMMDDHHMMSS,sizeof (Dat_Time.Now.YYYYMMDDHHMMSS),
 	     "%04u%02u%02u%02u%02u%02u",
-             Gbl.Now.Date.Year,Gbl.Now.Date.Month,Gbl.Now.Date.Day,
-             Gbl.Now.Time.Hour,Gbl.Now.Time.Minute,Gbl.Now.Time.Second);
-
-   /***** Compute what day was yesterday *****/
-   Dat_GetDateBefore (&Gbl.Now.Date,&Gbl.Yesterday);
+             Dat_Time.Now.Date.Year,Dat_Time.Now.Date.Month ,Dat_Time.Now.Date.Day,
+             Dat_Time.Now.Time.Hour,Dat_Time.Now.Time.Minute,Dat_Time.Now.Time.Second);
   }
 
 /*****************************************************************************/
@@ -376,7 +511,7 @@ void Dat_ShowClientLocalTime (void)
    HTM_SCRIPT_Begin (NULL,NULL);
       HTM_TxtF ("secondsSince1970UTC = %ld;\n"
 		"writeLocalClock();\n",
-		(long) Gbl.StartExecutionTimeUTC);
+		(long) Dat_GetStartExecutionTimeUTC ());
    HTM_SCRIPT_End ();
   }
 
@@ -449,6 +584,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
+   unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Start date-time *****/
    HTM_TR_Begin (NULL);
@@ -462,7 +598,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
 						      "Start",
 						      Gbl.DateRange.TimeUTC[Dat_STR_TIME],
 						      Cfg_LOG_START_YEAR,
-						      Gbl.Now.Date.Year,
+						      CurrentYear,
 						      Dat_FORM_SECONDS_ON,
 						      SetHMS[Dat_STR_TIME],
 						      false);	// Don't submit on change
@@ -489,7 +625,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
 						      "End",
 						      Gbl.DateRange.TimeUTC[Dat_END_TIME],
 						      Cfg_LOG_START_YEAR,
-						      Gbl.Now.Date.Year,
+						      CurrentYear,
 						      Dat_FORM_SECONDS_ON,
 						      SetHMS[Dat_END_TIME],
 						      false);	// Don't submit on change
@@ -530,7 +666,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START
 							 Id[StartEndTime],
 							 TimeUTC[StartEndTime],
 							 Cfg_LOG_START_YEAR,
-							 Gbl.Now.Date.Year + 1,
+							 Dat_GetCurrentYear () + 1,
 							 FormSeconds,
 							 SetHMS[StartEndTime],	// Set hour, minute and second?
 							 false);			// Don't submit on change
@@ -1017,7 +1153,7 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 void Dat_SetIniEndDates (void)
   {
    Gbl.DateRange.TimeUTC[Dat_STR_TIME] = (time_t) 0;
-   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
   }
 
 /*****************************************************************************/
@@ -1071,7 +1207,7 @@ void Dat_GetIniEndDatesFromForm (void)
    /***** Get end date *****/
    Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
    if (Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0)	// Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0 ==> end date not specified
-      Gbl.DateRange.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC;
+      Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
 
    /* Convert current time UTC to a local date */
    tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[Dat_END_TIME]);

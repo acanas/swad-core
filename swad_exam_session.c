@@ -180,8 +180,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	    /* Reset session */
 	    ExaSes_ResetSession (Session);
 	    Session->ExaCod = Exams->Exam.ExaCod;
-	    Session->TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;			// Now
-	    Session->TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
+	    Session->TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();			// Now
+	    Session->TimeUTC[Dat_END_TIME] = Session->TimeUTC[Dat_STR_TIME] + (1 * 60 * 60);	// Now + 1 hour
             Str_Copy (Session->Title,Exams->Exam.Title,sizeof (Session->Title) - 1);
 
 	    /* Put form to create new session */
@@ -406,8 +406,8 @@ static bool ExaSes_CheckIfICanEditThisSession (long UsrCod)
 
 static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session)
   {
-   if (Session->ShowUsrResults ||					// Results are currently visible
-       Session->TimeUTC[Dat_END_TIME] < Gbl.StartExecutionTimeUTC)	// End of time is in the past
+   if (Session->ShowUsrResults ||						// Results are currently visible
+       Session->TimeUTC[Dat_END_TIME] < Dat_GetStartExecutionTimeUTC ())	// End of time is in the past
       if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
 	 return true;
 
@@ -1228,7 +1228,7 @@ void ExaSes_ReceiveFormSession (void)
       ExaSes_CreateSession (&Session);
    else
      {
-      if (Session.TimeUTC[Dat_END_TIME] >= Gbl.StartExecutionTimeUTC)	// End of time is in the future
+      if (Session.TimeUTC[Dat_END_TIME] >= Dat_GetStartExecutionTimeUTC ())	// End of time is in the future
          Session.ShowUsrResults = false;	// Force results to be hidden
       ExaSes_UpdateSession (&Session);
      }

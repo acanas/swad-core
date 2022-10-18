@@ -113,7 +113,7 @@ void Con_ShowConnectedUsrs (void)
    free (Title);
 
       /***** Current time *****/
-      Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
+      Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Dat_GetStartExecutionTimeUTC (),
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    false,false,true,0x7);
 

@@ -57,6 +57,11 @@ extern struct Globals Gbl;
 
 #define NUM_BYTES_PER_CHUNK 4096
 
+static struct
+  {
+   char FileName[PATH_MAX + 1];
+  } Fil_HTMLOutput;
+
 /*****************************************************************************/
 /******** Create HTML output file for the web page sent by this CGI **********/
 /*****************************************************************************/
@@ -67,11 +72,11 @@ void Fil_CreateFileForHTMLOutput (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /***** Create a unique name for the file *****/
-   snprintf (Gbl.HTMLOutput.FileName,sizeof (Gbl.HTMLOutput.FileName),
+   snprintf (Fil_HTMLOutput.FileName,sizeof (Fil_HTMLOutput.FileName),
              "%s/%s.html",Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
    /***** Open file for writing and reading *****/
-   if ((Gbl.F.Out = fopen (Gbl.HTMLOutput.FileName,"w+t")) == NULL)
+   if ((Gbl.F.Out = fopen (Fil_HTMLOutput.FileName,"w+t")) == NULL)
      {
       Gbl.F.Out = stdout;
       Err_ShowErrorAndExit ("Can not create output file.");
@@ -87,7 +92,7 @@ void Fil_CloseAndRemoveFileForHTMLOutput (void)
    if (Gbl.F.Out)
      {
       fclose (Gbl.F.Out);
-      unlink (Gbl.HTMLOutput.FileName);
+      unlink (Fil_HTMLOutput.FileName);
      }
    Gbl.F.Out = stdout;
   }
@@ -116,7 +121,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
       if (TmpFileSize < Fil_MAX_FILE_SIZE)
         {
          if (!(TmpFileSize % (64ULL * 1024ULL)))	// Check timeout from time to time
-            if (time (NULL) - Gbl.StartExecutionTimeUTC >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
+            if (time (NULL) - Dat_GetStartExecutionTimeUTC () >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
                TimeExceeded = true;
          fputc (fgetc (stdin),Gbl.F.Tmp);
         }
@@ -502,14 +507,14 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 
 	    if (RemoveDirectory)
 	       /* Remove the directory itself */
-	       if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+	       if (FileStatus.st_mtime < Dat_GetStartExecutionTimeUTC () - TimeToRemove)
 		  rmdir (Path);
 	   }
 	 else
 	    Err_ShowErrorAndExit ("Error while scanning directory.");
 	}
       else					// Not a directory
-	 if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+	 if (FileStatus.st_mtime < Dat_GetStartExecutionTimeUTC () - TimeToRemove)
 	    unlink (Path);
      }
   }

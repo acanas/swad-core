@@ -725,8 +725,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 
 void Sta_SetIniEndDates (void)
   {
-   Gbl.DateRange.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
-   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Gbl.DateRange.TimeUTC[Dat_STR_TIME] = Gbl.DateRange.TimeUTC[Dat_END_TIME] - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
   }
 
 /*****************************************************************************/
@@ -783,7 +783,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /* If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG,
       then use recent log table, else use historic log table */
    LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,
-                                           &Gbl.Now.Date)
+                                           Dat_GetCurrentDate ())
 	       <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
 	                                    "log";
 
@@ -3433,76 +3433,4 @@ static void Sta_DrawBarNumHits (char Color,
       HTM_Txt ("%)&nbsp;");
 
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/**************** Compute the time used to generate the page *****************/
-/*****************************************************************************/
-
-time_t Sta_ComputeTimeToGeneratePage (void)
-  {
-   if (gettimeofday (&Gbl.tvPageCreated, &Gbl.tz))
-      // Error in gettimeofday
-      return (time_t) 0;
-
-   return (time_t) ((Gbl.tvPageCreated.tv_sec  - Gbl.tvStart.tv_sec) * 1000000L +
-                     Gbl.tvPageCreated.tv_usec - Gbl.tvStart.tv_usec);
-  }
-
-/*****************************************************************************/
-/****************** Compute the time used to send the page *******************/
-/*****************************************************************************/
-
-void Sta_ComputeTimeToSendPage (void)
-  {
-   if (gettimeofday (&Gbl.tvPageSent, &Gbl.tz))
-      // Error in gettimeofday
-      Gbl.TimeSendInMicroseconds = 0;
-   else
-     {
-      if (Gbl.tvPageSent.tv_usec < Gbl.tvPageCreated.tv_usec)
-	{
-	 Gbl.tvPageSent.tv_sec--;
-	 Gbl.tvPageSent.tv_usec += 1000000;
-	}
-      Gbl.TimeSendInMicroseconds = (Gbl.tvPageSent.tv_sec  - Gbl.tvPageCreated.tv_sec) * 1000000L +
-                                    Gbl.tvPageSent.tv_usec - Gbl.tvPageCreated.tv_usec;
-     }
-  }
-
-/*****************************************************************************/
-/************** Write the time to generate and send the page *****************/
-/*****************************************************************************/
-
-void Sta_WriteTimeToGenerateAndSendPage (void)
-  {
-   extern const char *Txt_PAGE1_Page_generated_in;
-   extern const char *Txt_PAGE2_and_sent_in;
-   char StrTimeGenerationInMicroseconds[Dat_MAX_BYTES_TIME + 1];
-   char StrTimeSendInMicroseconds[Dat_MAX_BYTES_TIME + 1];
-
-   Sta_WriteTime (StrTimeGenerationInMicroseconds,Gbl.TimeGenerationInMicroseconds);
-   Sta_WriteTime (StrTimeSendInMicroseconds,Gbl.TimeSendInMicroseconds);
-   HTM_TxtF ("%s %s %s %s",
-             Txt_PAGE1_Page_generated_in,StrTimeGenerationInMicroseconds,
-             Txt_PAGE2_and_sent_in,StrTimeSendInMicroseconds);
-  }
-
-/*****************************************************************************/
-/********* Write time (given in microseconds) depending on amount ************/
-/*****************************************************************************/
-
-void Sta_WriteTime (char Str[Dat_MAX_BYTES_TIME],long TimeInMicroseconds)
-  {
-   if (TimeInMicroseconds < 1000L)
-      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld &micro;s",TimeInMicroseconds);
-   else if (TimeInMicroseconds < 1000000L)
-      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld ms",TimeInMicroseconds / 1000);
-   else if (TimeInMicroseconds < (60 * 1000000L))
-      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%.1f s",
-                (double) TimeInMicroseconds / 1E6);
-   else
-      snprintf (Str,Dat_MAX_BYTES_TIME + 1,"%ld min, %ld s",
-                TimeInMicroseconds / (60 * 1000000L),
-                (TimeInMicroseconds / 1000000L) % 60);
   }

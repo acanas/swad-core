@@ -1010,8 +1010,8 @@ void Att_RequestCreatOrEditAttEvent (void)
       /* Initialize some fields */
       Events.Event.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
       Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Events.Event.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
-      Events.Event.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
       Events.Event.Open = true;
      }
    else
@@ -1230,7 +1230,7 @@ void Att_ReceiveFormAttEvent (void)
 
    /***** Adjust dates *****/
    if (ReceivedAtt.TimeUTC[Dat_STR_TIME] == 0)
-      ReceivedAtt.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      ReceivedAtt.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    if (ReceivedAtt.TimeUTC[Dat_END_TIME] == 0)
       ReceivedAtt.TimeUTC[Dat_END_TIME] = ReceivedAtt.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours // TODO: 2 * 60 * 60 should be in a #define in swad_config.h
 

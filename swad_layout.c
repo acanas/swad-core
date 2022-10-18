@@ -1346,7 +1346,7 @@ void Lay_WriteAboutZone (void)
 	    HTM_NBSP ();
 
 	 /* Time to generate and send page */
-	 Sta_WriteTimeToGenerateAndSendPage ();
+	 Dat_WriteTimeToGenerateAndSendPage ();
 
       HTM_DIV_End ();
 

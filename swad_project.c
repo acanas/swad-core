@@ -3654,8 +3654,8 @@ static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects)
      {
       /* Initialize to empty project */
       Prj_ResetProject (&Projects->Prj);
-      Projects->Prj.CreatTime = Gbl.StartExecutionTimeUTC;
-      Projects->Prj.ModifTime = Gbl.StartExecutionTimeUTC;
+      Projects->Prj.CreatTime =
+      Projects->Prj.ModifTime = Dat_GetStartExecutionTimeUTC ();
       Projects->Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
      }
    else
@@ -4083,7 +4083,7 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
   {
    /***** Set dates to now *****/
    Prj->CreatTime =
-   Prj->ModifTime = Gbl.StartExecutionTimeUTC;
+   Prj->ModifTime = Dat_GetStartExecutionTimeUTC ();
 
    /***** Create a new project *****/
    Prj->PrjCod = Prj_DB_CreateProject (Prj);
@@ -4102,7 +4102,7 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
 static void Prj_UpdateProject (struct Prj_Project *Prj)
   {
    /***** Adjust date of last edition to now *****/
-   Prj->ModifTime = Gbl.StartExecutionTimeUTC;
+   Prj->ModifTime = Dat_GetStartExecutionTimeUTC ();
 
    /***** Update the data of the project *****/
    Prj_DB_UpdateProject (Prj);

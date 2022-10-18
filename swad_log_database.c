@@ -60,8 +60,8 @@ long Log_DB_LogAccessInHistoricalLog (long ActCod,Rol_Role_t RoleToStore)
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				(unsigned) RoleToStore,
-				Gbl.TimeGenerationInMicroseconds,
-				Gbl.TimeSendInMicroseconds,
+				Dat_GetTimeGenerationInMicroseconds (),
+				Dat_GetTimeSendInMicroseconds (),
 				Gbl.IP);
   }
 
@@ -89,8 +89,8 @@ void Log_DB_LogAccessInRecentLog (long LogCod,long ActCod,Rol_Role_t RoleToStore
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) RoleToStore,
-		   Gbl.TimeGenerationInMicroseconds,
-		   Gbl.TimeSendInMicroseconds,
+		   Dat_GetTimeGenerationInMicroseconds (),
+		   Dat_GetTimeSendInMicroseconds (),
 		   Gbl.IP);
    }
 

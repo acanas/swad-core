@@ -93,7 +93,7 @@ unsigned Ban_DB_GetRandomBanners (MYSQL_RES **mysql_res)
 		   " WHERE Hidden='N'"
 		   " ORDER BY RAND(%lu)"
 		   " LIMIT %u",
-		   (unsigned long) (Gbl.StartExecutionTimeUTC /
+		   (unsigned long) (Dat_GetStartExecutionTimeUTC () /
 				    Cfg_TIME_TO_CHANGE_BANNER),
 		   Cfg_NUMBER_OF_BANNERS);
   }
