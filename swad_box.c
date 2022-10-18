@@ -34,15 +34,23 @@
 #include "swad_box.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_global.h"
 #include "swad_help.h"
 #include "swad_HTML.h"
+#include "swad_icon.h"
+#include "swad_theme.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
+/************************* Private global variables **************************/
 /*****************************************************************************/
 
-extern struct Globals Gbl;
+static struct
+  {
+   int Nested;			// Index of top open box
+   char *Ids[Box_MAX_NESTED];	// 0 <= box index < Box_MAX_NESTED
+  } Box =
+  {
+   .Nested = -1,	// -1 means no box open
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -122,28 +130,28 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    extern const char *Txt_Close;
 
    /***** Check level of nesting *****/
-   if (Gbl.Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
+   if (Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
       Err_ShowErrorAndExit ("Box nesting limit reached.");
 
    /***** Increase level of nesting *****/
-   Gbl.Box.Nested++;
+   Box.Nested++;
 
    /***** Create unique identifier for this box *****/
    if (Closable == Box_CLOSABLE)
      {
-      if ((Gbl.Box.Ids[Gbl.Box.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
+      if ((Box.Ids[Box.Nested] = malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
      }
    else
-      Gbl.Box.Ids[Gbl.Box.Nested] = NULL;
+      Box.Ids[Box.Nested] = NULL;
 
    /***** Begin box container *****/
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
-      Frm_SetUniqueId (Gbl.Box.Ids[Gbl.Box.Nested]);
+      Frm_SetUniqueId (Box.Ids[Box.Nested]);
 
-      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
+      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",Box.Ids[Box.Nested]);
      }
    else
       HTM_DIV_Begin ("class=\"FRAME_CONT\"");
@@ -184,7 +192,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 	    if (Closable == Box_CLOSABLE)	// Icon to close the box
 	      {
 	       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
-			    Gbl.Box.Ids[Gbl.Box.Nested]);
+			    Box.Ids[Box.Nested]);
 		  Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 				  "times.svg",Ico_BLACK,Txt_Close);
 	       HTM_A_End ();
@@ -200,8 +208,8 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    if (Title)
      {
       HTM_DIV_Begin ("class=\"FRAME_TITLE %s FRAME_TITLE_%s\"",
-	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
-		                      "FRAME_TITLE_BIG",
+	             Box.Nested ? "FRAME_TITLE_SMALL" :
+		                  "FRAME_TITLE_BIG",
 		     The_GetSuffix ());
 	 HTM_Txt (Title);
       HTM_DIV_End ();
@@ -229,17 +237,17 @@ void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
 void Box_BoxEnd (void)
   {
 	 /***** Check level of nesting *****/
-	 if (Gbl.Box.Nested < 0)
+	 if (Box.Nested < 0)
 	    Err_ShowErrorAndExit ("Trying to end a box not open.");
 
 	 /***** Free memory allocated for box id string *****/
-	 if (Gbl.Box.Ids[Gbl.Box.Nested])
-	    free (Gbl.Box.Ids[Gbl.Box.Nested]);
+	 if (Box.Ids[Box.Nested])
+	    free (Box.Ids[Box.Nested]);
 
       /***** End box and box container *****/
       HTM_DIV_End ();
    HTM_DIV_End ();
 
    /***** Decrease level of nesting *****/
-   Gbl.Box.Nested--;
+   Box.Nested--;
   }

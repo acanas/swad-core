@@ -73,13 +73,7 @@ struct Globals
       char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
      } Config;
    struct Files F;
-   MYSQL mysql;
    pid_t PID;	// PID of current process
-   struct
-     {
-      int Nested;			// Index of top open box
-      char *Ids[Box_MAX_NESTED];	// 0 <= box index < Box_MAX_NESTED
-     } Box;
    struct
      {
       size_t Num;		// Number of alert

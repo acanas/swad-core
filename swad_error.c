@@ -554,10 +554,7 @@ void Err_ShowErrorAndExit (const char *Txt)
   {
    /***** Unlock tables if locked *****/
    if (Gbl.DB.LockedTables)
-     {
-      Gbl.DB.LockedTables = false;
-      mysql_query (&Gbl.mysql,"UNLOCK TABLES");
-     }
+      DB_UnlockTables ();
 
    if (!Gbl.WebService.IsWebService)
      {

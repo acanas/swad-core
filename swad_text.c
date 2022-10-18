@@ -14786,7 +14786,7 @@ const char *Txt_Force_students_to_read_this_information =
 #elif L==9	// pt
 	"For&ccedil;ar os estudantes a ler esta informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Force students to read this information";			// Çeviri lazim!
+	"&Ouml;&gbreve;rencileri bu bilgileri okumaya zorla";
 #endif
 
 const char *Txt_Forgotten_password =
