@@ -46,6 +46,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+bool Frm_CheckIfInside (void);
+
 void Frm_BeginFormGoTo (Act_Action_t NextAction);
 void Frm_BeginForm (Act_Action_t NextAction);
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
@@ -63,7 +65,5 @@ void Frm_SetAnchorStr (long Cod,char **Anchor);
 void Frm_FreeAnchorStr (char *Anchor);
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
-
-bool Frm_CheckIfInside (void);
 
 #endif

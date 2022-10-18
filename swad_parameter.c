@@ -54,8 +54,20 @@ extern struct Globals Gbl;
 const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 31
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+/* Content send by the form and received by the CGI:
+   Act_CONTENT_NORM (if CONTENT_TYPE==text/plain)
+   Act_CONT_DATA    (if CONTENT_TYPE==multipart/form-data)
+*/
+static Act_Content_t Par_ContentReceivedByCGI = Act_CONT_NORM;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static inline void Par_SetContentReceivedByCGI (Act_Content_t ContentReceivedByCGI);
 
 static void Par_GetBoundary (void);
 
@@ -65,6 +77,20 @@ static int Par_ReadTmpFileUntilQuote (void);
 static int Par_ReadTmpFileUntilReturn (void);
 
 static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
+
+/*****************************************************************************/
+/********************** Type of content received by CGI **********************/
+/*****************************************************************************/
+
+static inline void Par_SetContentReceivedByCGI (Act_Content_t ContentReceivedByCGI)
+  {
+   Par_ContentReceivedByCGI = ContentReceivedByCGI;
+  }
+
+Act_Content_t Par_GetContentReceivedByCGI (void)
+  {
+   return Par_ContentReceivedByCGI;
+  }
 
 /*****************************************************************************/
 /*** Read all parameters passed to this CGI and store for later processing ***/
@@ -86,7 +112,7 @@ bool Par_GetQueryString (void)
      {
       /***** GET method *****/
       Gbl.Params.GetMethod = true;
-      Gbl.ContentReceivedByCGI = Act_CONT_NORM;
+      Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
       /* Get content length */
       Gbl.Params.ContentLength = strlen (getenv ("QUERY_STRING"));
@@ -124,7 +150,7 @@ bool Par_GetQueryString (void)
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
-         Gbl.ContentReceivedByCGI = Act_CONT_DATA;
+         Par_SetContentReceivedByCGI (Act_CONT_DATA);
          Par_GetBoundary ();
          return Fil_ReadStdinIntoTmpFile ();
         }
@@ -134,7 +160,7 @@ bool Par_GetQueryString (void)
         }
       else
         {
-         Gbl.ContentReceivedByCGI = Act_CONT_NORM;
+         Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
 	 /* Allocate memory for query string */
 	 if ((Gbl.Params.QueryString = malloc (Gbl.Params.ContentLength + 1)) == NULL)
@@ -225,7 +251,7 @@ void Par_CreateListOfParams (void)
 
    /***** Get list *****/
    if (Gbl.Params.ContentLength)
-      CreateListOfParams[Gbl.ContentReceivedByCGI] ();
+      CreateListOfParams[Par_GetContentReceivedByCGI ()] ();
   }
 
 /*****************************************************************************/
@@ -518,7 +544,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 	   {
 	    // The current element in the list has the length of the searched parameter
 	    // Check if the name of the parameter is the same
-	    switch (Gbl.ContentReceivedByCGI)
+	    switch (Par_GetContentReceivedByCGI ())
 	      {
 	       case Act_CONT_NORM:
 		  ParamFound = !strncmp (ParamName,&Gbl.Params.QueryString[Param->Name.Start],
@@ -580,7 +606,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		    }
 
 		  /* Copy parameter value */
-		  switch (Gbl.ContentReceivedByCGI)
+		  switch (Par_GetContentReceivedByCGI ())
 		    {
 		     case Act_CONT_NORM:
 			if (PtrDst)

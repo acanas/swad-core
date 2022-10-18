@@ -98,9 +98,6 @@ struct Globals
       bool GetMethod;		// Am I accessing using GET method?
      } Params;
 
-   Act_Content_t ContentReceivedByCGI;	/* Content send by the form and received by the CGI:
-						Act_CONTENT_NORM (if CONTENT_TYPE==text/plain) or
-						Act_CONT_DATA (if CONTENT_TYPE==multipart/form-data) */
    struct
      {
       char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITHOUT_CR_LF + 1];

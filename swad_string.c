@@ -753,88 +753,93 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
          switch (ChangeFrom)
            {
             case Str_FROM_FORM:
-               if (Gbl.ContentReceivedByCGI == Act_CONT_DATA)
-        	  // The form contained data and was sent with content type multipart/form-data
-		  switch (Ch)
-		    {
-		     case 0x20:	/* Space */
-		     case 0x22:	/* Change double comilla --> "&#34;" */
-		     case 0x23:	/* '#' */
-		     case 0x26:	/* Change '&' --> "&#38;" */
-		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
-		     case 0x2C:	/* ',' */
-		     case 0x2F:	/* '/' */
-		     case 0x3A:	/* ':' */
-		     case 0x3B:	/* ';' */
-		     case 0x3C:	/* '<' --> "&#60;" */
-		     case 0x3E:	/* '>' --> "&#62;" */
-		     case 0x3F:	/* '?' */
-		     case 0x40:	/* '@' */
-		     case 0x5C:	/* '\\' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = (unsigned int) Ch;
-                        break;
-		     default:
-			if (Ch < 0x20 || Ch > 0x7F)
-			  {
+               switch (Par_GetContentReceivedByCGI ())
+                 {
+		  case Act_CONT_NORM:
+		     // The form contained text and was sent with content type application/x-www-form-urlencoded
+		     switch (Ch)
+		       {
+			case '+':	/* Change every '+' to a space */
+			   IsSpecialChar = true;
+			   LengthSpecStrSrc = 1;
+			   SpecialChar = 0x20;
+			   break;
+			case '%':	/* Change "%XX" --> "&#decimal_number;" (from 0 to 255) */
+				   /* Change "%uXXXX" --> "&#decimal number;  (from 0 to 65535) */
+			   IsSpecialChar = true;
+			   if (*(PtrSrc + 1) == 'u')
+			     {
+			      sscanf (PtrSrc + 2,"%4X",&SpecialChar);
+			      LengthSpecStrSrc = 6;
+			     }
+			   else
+			     {
+			      sscanf (PtrSrc + 1,"%2X",&SpecialChar);
+			      LengthSpecStrSrc = 3;
+			     }
+			   /* Some special characters, like a chinese character,
+			      can be received from a form in a format like this:
+			      %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
+						  ^   ^             ^
+						  |   |             |
+					 SpecialChar SpecialChar SpecialChar
+			      Here one chinese character is converted
+			      to 2 special chars + 5 normal chars + 1 special char,
+			      and finally is stored as the following 8 bytes: &#35753;
+			   */
+			   break;
+			case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
+			case 0x5C:	/* '\\' */
 			   IsSpecialChar = true;
 			   LengthSpecStrSrc = 1;
 			   SpecialChar = (unsigned int) Ch;
-			  }
-			else
-			  {
+			   break;
+			default:
 			   IsSpecialChar = false;
 			   NumPrintableCharsFromReturn++;
 			   ThereIsSpaceChar = false;
-			  }
-			break;
-		    }
-               else // Gbl.ContentReceivedByCGI == Act_CONTENT_NORM
-        	  // The form contained text and was sent with content type application/x-www-form-urlencoded
-		  switch (Ch)
-		    {
-		     case '+':	/* Change every '+' to a space */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = 0x20;
-			break;
-		     case '%':	/* Change "%XX" --> "&#decimal_number;" (from 0 to 255) */
-				/* Change "%uXXXX" --> "&#decimal number;  (from 0 to 65535) */
-			IsSpecialChar = true;
-			if (*(PtrSrc + 1) == 'u')
-			  {
-			   sscanf (PtrSrc + 2,"%4X",&SpecialChar);
-			   LengthSpecStrSrc = 6;
-			  }
-			else
-			  {
-			   sscanf (PtrSrc + 1,"%2X",&SpecialChar);
-			   LengthSpecStrSrc = 3;
-			  }
-			/* Some special characters, like a chinese character,
-			   can be received from a form in a format like this:
-                           %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
-                                               ^   ^             ^
-                                               |   |             |
-                                      SpecialChar SpecialChar SpecialChar
-			   Here one chinese character is converted
-			   to 2 special chars + 5 normal chars + 1 special char,
-			   and finally is stored as the following 8 bytes: &#35753;
-			*/
-			break;
-		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
-		     case 0x5C:	/* '\\' */
-			IsSpecialChar = true;
-			LengthSpecStrSrc = 1;
-			SpecialChar = (unsigned int) Ch;
-			break;
-		     default:
-			IsSpecialChar = false;
-			NumPrintableCharsFromReturn++;
-			ThereIsSpaceChar = false;
-			break;
-		    }
+			   break;
+		       }
+                     break;
+		  case Act_CONT_DATA:
+		     // The form contained data and was sent with content type multipart/form-data
+		     switch (Ch)
+		       {
+			case 0x20:	/* Space */
+			case 0x22:	/* Change double comilla --> "&#34;" */
+			case 0x23:	/* '#' */
+			case 0x26:	/* Change '&' --> "&#38;" */
+			case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
+			case 0x2C:	/* ',' */
+			case 0x2F:	/* '/' */
+			case 0x3A:	/* ':' */
+			case 0x3B:	/* ';' */
+			case 0x3C:	/* '<' --> "&#60;" */
+			case 0x3E:	/* '>' --> "&#62;" */
+			case 0x3F:	/* '?' */
+			case 0x40:	/* '@' */
+			case 0x5C:	/* '\\' */
+			   IsSpecialChar = true;
+			   LengthSpecStrSrc = 1;
+			   SpecialChar = (unsigned int) Ch;
+			   break;
+			default:
+			   if (Ch < 0x20 || Ch > 0x7F)
+			     {
+			      IsSpecialChar = true;
+			      LengthSpecStrSrc = 1;
+			      SpecialChar = (unsigned int) Ch;
+			     }
+			   else
+			     {
+			      IsSpecialChar = false;
+			      NumPrintableCharsFromReturn++;
+			      ThereIsSpaceChar = false;
+			     }
+			   break;
+		       }
+		     break;
+                 }
                break;
             case Str_FROM_HTML:
             case Str_FROM_TEXT:

@@ -51,10 +51,24 @@ static bool Frm_Inside = false;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
+static inline void Frm_SetInside (bool Inside);
+
 static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
-static inline void Frm_SetInside (bool Inside);
+/*****************************************************************************/
+/************** Set to true inside a form to avoid nested forms **************/
+/*****************************************************************************/
+
+static inline void Frm_SetInside (bool Inside)
+  {
+   Frm_Inside = Inside;
+  }
+
+bool Frm_CheckIfInside (void)
+  {
+   return Frm_Inside;
+  }
 
 /*****************************************************************************/
 /******************************** Begin a form *******************************/
@@ -306,18 +320,4 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 
    /***** Column/cell end *****/
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/************** Set to true inside a form to avoid nested forms **************/
-/*****************************************************************************/
-
-static inline void Frm_SetInside (bool Inside)
-  {
-   Frm_Inside = Inside;
-  }
-
-bool Frm_CheckIfInside (void)
-  {
-   return Frm_Inside;
   }

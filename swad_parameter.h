@@ -63,6 +63,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+Act_Content_t Par_GetContentReceivedByCGI (void);
+
 bool Par_GetQueryString (void);
 void Par_CreateListOfParams (void);
 void Par_FreeParams (void);
