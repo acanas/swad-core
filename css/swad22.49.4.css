@@ -595,10 +595,7 @@ a:hover						/* Default ==> underlined */
 	}
 
 /******************************** Search *************************************/
-.WHAT_TO_SEARCH
-	{
-	width:186px;
-	}
+.WHAT_TO_SEARCH	{width:186px;}
 	
 /***************************** Notifications *********************************/
 #msg	/* Notifications, used for AJAX based refresh */
@@ -1021,7 +1018,7 @@ a:hover						/* Default ==> underlined */
 #main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{
 	opacity:1;
-	transform:scale(1.286,1.286);
+	transform:scale(1.2,1.2);
 	}
 
 #main_horizontal .MENU_ICO_TXT
@@ -1199,7 +1196,7 @@ a:hover						/* Default ==> underlined */
 	{	/* For mobile-phones */
 	.MENU_TXT
 		{
-		display:inline;
+		display:inline-block;
 		font-size:12pt;
 		font-weight:bold;
 		line-height:110%;
@@ -1214,7 +1211,7 @@ a:hover						/* Default ==> underlined */
 	{	/* For tablets and desktop */
 	.MENU_TXT
 		{
-		display:inline;
+		display:inline-block;
 		font-size:12pt;
 		font-weight:bold;
 		line-height:110%;
@@ -1493,16 +1490,10 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 
 /*********************************** Places **********************************/
-.PLC_SEL
-	{
-	width:60px;
-	}
+.PLC_SEL	{width:60px;}
 
 /***************************** Buildings and rooms ***************************/
-.BLD_SEL, .ROOM_TYPE_SEL
-	{
-	width:80px;
-	}
+.BLD_SEL, .ROOM_TYPE_SEL	{width:80px;}
 
 /*********************************** Month ***********************************/
 .CALENDAR
@@ -1799,8 +1790,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 @keyframes itemfadein
 	{
-	/* from	{outline:thick solid #4d88a1;}
-	to	{outline:thick solid transparent;} */
 	from	{opacity:0;}
 	to	{opacity:1;}
 	}
@@ -1843,17 +1832,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-/*
-.PRG_CLIPBOARD li
-	{
-	text-align:left;
-	vertical-align:middle;
-	}
-.PRG_CLIPBOARD label
-	{
-	font-size:13pt;
-	}
-*/
+
 /********************************** Notice ***********************************/
 .NOTICE_CONT
 	{
@@ -2075,7 +2054,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	display:inline-block;
 	margin-left:2px;
 	margin-right:2px;
-	white-space:nowrap;
 	}
 .CONTEXT_COL
 	{
@@ -2158,7 +2136,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	margin:2px 0;
 	padding:10px;
-	/* padding:8px 12px 12px 12px; */
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	text-align:center;
@@ -2458,7 +2435,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	display:inline-block;
 	margin:0 auto;
-	/*padding:0 0 0 20px;*/
 	width:16px;
 	background-size:16px 16px;
 	background-repeat:no-repeat;
@@ -2560,7 +2536,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .COLOR0_PURPLE,
 .COLOR0_BLUE,
 .COLOR0_YELLOW,
-.COLOR0_PINK	{background-color:#f4f2ea;}
+.COLOR0_PINK	{background-color:#f8f7f2;}
 .COLOR0_DARK	{background-color:#404040;}
 
 .COLOR1_WHITE,
@@ -2568,7 +2544,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .COLOR1_PURPLE,
 .COLOR1_BLUE,
 .COLOR1_YELLOW,
-.COLOR1_PINK	{background-color:#fbfaf7;}
+.COLOR1_PINK	{background-color:#fdfcfa;}
 .COLOR1_DARK	{background-color:#484848;}
 
 .LIGHT_GREEN	{background-color:#C0FF40;}
@@ -3860,10 +3836,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
 
 /********************************* Surveys ***********************************/
-.SVY_OPT
-	{
-	width:50px;
-	}
+.SVY_OPT {width:50px;}
 
 /******************************* Time table **********************************/
 .TT
@@ -3948,7 +3921,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Tmt_FREE0_PURPLE,
 .Tmt_FREE0_BLUE,
 .Tmt_FREE0_YELLOW,
-.Tmt_FREE0_PINK		{background-color:#f4f2ea; border-color:#f4f2ea #e0d9c2 #eeeadc #f4f2ea;}
+.Tmt_FREE0_PINK		{background-color:#f8f7f2; border-color:#f8f7f2 #e0d9c2 #eeeadc #f8f7f2;}
 .Tmt_FREE0_DARK		{background-color:#404040; border-color:#404040 #686868 #505050 #404040;}
 
 .Tmt_FREE1_WHITE,
@@ -3956,7 +3929,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Tmt_FREE1_PURPLE,
 .Tmt_FREE1_BLUE,
 .Tmt_FREE1_YELLOW,
-.Tmt_FREE1_PINK		{background-color:#f4f2ea; border-color:#f4f2ea #e0d9c2 #e0d9c2 #f4f2ea;}
+.Tmt_FREE1_PINK		{background-color:#f8f7f2; border-color:#f8f7f2 #e0d9c2 #e0d9c2 #f8f7f2;}
 .Tmt_FREE1_DARK		{background-color:#404040; border-color:#404040 #686868 #686868 #404040;}
 
 .Tmt_FREE2_WHITE,
@@ -3964,7 +3937,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Tmt_FREE2_PURPLE,
 .Tmt_FREE2_BLUE,
 .Tmt_FREE2_YELLOW,
-.Tmt_FREE2_PINK		{background-color:#fbfaf7; border-color:#fbfaf7 #e0d9c2 #f5f2e9 #fbfaf7;}
+.Tmt_FREE2_PINK		{background-color:#fdfcfa; border-color:#fdfcfa #e0d9c2 #f5f2e9 #fdfcfa;}
 .Tmt_FREE2_DARK		{background-color:#484848; border-color:#484848 #686868 #585858 #484848;}
 
 .Tmt_FREE3_WHITE,
@@ -3972,7 +3945,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .Tmt_FREE3_PURPLE,
 .Tmt_FREE3_BLUE,
 .Tmt_FREE3_YELLOW,
-.Tmt_FREE3_PINK		{background-color:#fbfaf7; border-color:#fbfaf7 #e0d9c2 #e0d9c2 #fbfaf7;}
+.Tmt_FREE3_PINK		{background-color:#fdfcfa; border-color:#fdfcfa #e0d9c2 #e0d9c2 #fdfcfa;}
 .Tmt_FREE3_DARK		{background-color:#484848; border-color:#484848 #686868 #686868 #484848;}
 
 .Tmt_LECT	{background-color:#c0dae4; border-color:#d5f1fc #aac1c9 #aac1c9 #d5f1fc;}
