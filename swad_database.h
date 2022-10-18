@@ -37,6 +37,7 @@
 
 void DB_CreateTablesIfNotExist (void);
 void DB_OpenDBConnection (void);
+bool DB_CheckIfDatabaseIsOpen (void);
 void DB_CloseDBConnection (void);
 
 void DB_BuildQuery (char **Query,const char *fmt,...);
@@ -77,6 +78,7 @@ void DB_Query (const char *MsgError,const char *fmt,...);
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res);
 void DB_ExitOnMySQLError (const char *Message);
 
+void DB_SetThereAreLockedTables (void);
 void DB_UnlockTables (void);
 
 #endif

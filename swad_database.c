@@ -51,7 +51,16 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static MYSQL DB_mysql;
+static struct
+  {
+   MYSQL mysql;
+   bool IsOpen;
+   bool ThereAreLockedTables;
+  } DB_Database =
+  {
+   .IsOpen = false,
+   .ThereAreLockedTables = false,
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -3896,7 +3905,7 @@ static void DB_CreateTable (const char *Query)
       HTM_Txt (Query);
    HTM_LI_End ();
 
-   if (mysql_query (&DB_mysql,Query))
+   if (mysql_query (&DB_Database.mysql,Query))
       DB_ExitOnMySQLError ("can not create table");
   }
 
@@ -3906,15 +3915,24 @@ static void DB_CreateTable (const char *Query)
 
 void DB_OpenDBConnection (void)
   {
-   if (mysql_init (&DB_mysql) == NULL)
+   if (mysql_init (&DB_Database.mysql) == NULL)
       Err_ShowErrorAndExit ("Can not init MySQL.");
 
-   if (mysql_real_connect (&DB_mysql,Cfg_DATABASE_HOST,
+   if (mysql_real_connect (&DB_Database.mysql,Cfg_DATABASE_HOST,
 	                   Cfg_DATABASE_USER,Gbl.Config.DatabasePassword,
 	                   Cfg_DATABASE_DBNAME,0,NULL,0) == NULL)
       DB_ExitOnMySQLError ("can not connect to database");
 
-   Gbl.DB.DatabaseIsOpen = true;
+   DB_Database.IsOpen = true;
+  }
+
+/*****************************************************************************/
+/************************ Check if database is open **************************/
+/*****************************************************************************/
+
+bool DB_CheckIfDatabaseIsOpen (void)
+  {
+   return DB_Database.IsOpen;
   }
 
 /*****************************************************************************/
@@ -3923,10 +3941,10 @@ void DB_OpenDBConnection (void)
 
 void DB_CloseDBConnection (void)
   {
-   if (Gbl.DB.DatabaseIsOpen)
+   if (DB_CheckIfDatabaseIsOpen ())
      {
-      mysql_close (&DB_mysql);	// Close the connection to the database
-      Gbl.DB.DatabaseIsOpen = false;
+      mysql_close (&DB_Database.mysql);	// Close the connection to the database
+      DB_Database.IsOpen = false;
      }
   }
 
@@ -4171,13 +4189,13 @@ static unsigned long DB_QuerySELECTusingQueryStr (char *Query,
       Err_ShowErrorAndExit ("Wrong query string.");
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
    /***** Store query result *****/
-   if ((*mysql_res = mysql_store_result (&DB_mysql)) == NULL)
+   if ((*mysql_res = mysql_store_result (&DB_Database.mysql)) == NULL)
       DB_ExitOnMySQLError (MsgError);
 
    /***** Return number of rows of result *****/
@@ -4288,7 +4306,7 @@ void DB_QueryINSERT (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
@@ -4312,13 +4330,13 @@ long DB_QueryINSERTandReturnCode (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
 
    /***** Return the code of the inserted item *****/
-   return (long) mysql_insert_id (&DB_mysql);
+   return (long) mysql_insert_id (&DB_Database.mysql);
   }
 
 /*****************************************************************************/
@@ -4339,7 +4357,7 @@ void DB_QueryREPLACE (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
@@ -4363,7 +4381,7 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
@@ -4387,7 +4405,7 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
@@ -4411,7 +4429,7 @@ void DB_CreateTmpTable (const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError ("can not create temporary table");
@@ -4441,7 +4459,7 @@ void DB_Query (const char *MsgError,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /***** Query database and free query string pointer *****/
-   Result = mysql_query (&DB_mysql,Query);	// Returns 0 on success
+   Result = mysql_query (&DB_Database.mysql,Query);	// Returns 0 on success
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
@@ -4470,8 +4488,17 @@ void DB_ExitOnMySQLError (const char *Message)
    char BigErrorMsg[64 * 1024];
 
    snprintf (BigErrorMsg,sizeof (BigErrorMsg),"Database error: %s (%s).",
-             Message,mysql_error (&DB_mysql));
+             Message,mysql_error (&DB_Database.mysql));
    Err_ShowErrorAndExit (BigErrorMsg);
+  }
+
+/*****************************************************************************/
+/*********** Set variable that indicates there are locked tables *************/
+/*****************************************************************************/
+
+void DB_SetThereAreLockedTables (void)
+  {
+   DB_Database.ThereAreLockedTables = true;
   }
 
 /*****************************************************************************/
@@ -4480,8 +4507,11 @@ void DB_ExitOnMySQLError (const char *Message)
 
 void DB_UnlockTables (void)
   {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables",
-	     "UNLOCK TABLES");
+   if (DB_Database.ThereAreLockedTables)
+     {
+      DB_Database.ThereAreLockedTables = false;	// Set to false before the following unlock...
+					// ...to not retry the unlock if error in unlocking
+      DB_Query ("can not unlock tables",
+		"UNLOCK TABLES");
+     }
   }

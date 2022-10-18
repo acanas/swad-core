@@ -282,7 +282,7 @@ void Lnk_GetListLinks (void)
    MYSQL_RES *mysql_res;
    unsigned NumLnk;
 
-   if (Gbl.DB.DatabaseIsOpen)
+   if (DB_CheckIfDatabaseIsOpen ())
      {
       /***** Get institutional links from database *****/
       if ((Gbl.Links.Num = Lnk_DB_GetLinks (&mysql_res))) // Links found...

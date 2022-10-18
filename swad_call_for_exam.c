@@ -716,7 +716,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    unsigned NumExaAnns;
    unsigned NumExaAnn;
 
-   if (Gbl.DB.DatabaseIsOpen)
+   if (DB_CheckIfDatabaseIsOpen ())
      {
       /***** Get exam dates (ordered from more recent to older)
              of visible calls for exams

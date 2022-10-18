@@ -313,7 +313,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
    unsigned NumHld;
    struct Hld_Holiday *Hld;
 
-   if (Gbl.DB.DatabaseIsOpen)
+   if (DB_CheckIfDatabaseIsOpen ())
      {
       if (Holidays->LstIsRead)
 	 Hld_FreeListHolidays (Holidays);

@@ -153,7 +153,7 @@ void Prg_DB_LockTableItems (void)
   {
    DB_Query ("can not lock table",
 	     "LOCK TABLES prg_items WRITE");
-   Gbl.DB.LockedTables = true;
+   DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/
@@ -635,7 +635,7 @@ void Prg_DB_LockTableResources (void)
   {
    DB_Query ("can not lock table",
 	     "LOCK TABLES prg_resources WRITE");
-   Gbl.DB.LockedTables = true;
+   DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/

@@ -631,7 +631,7 @@ void Exa_DB_LockTables (void)
   {
    DB_Query ("can not lock tables to exchange sets of questions",
 	     "LOCK TABLES exa_sets WRITE");
-   Gbl.DB.LockedTables = true;
+   DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/

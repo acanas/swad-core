@@ -106,9 +106,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
-   Gbl.DB.DatabaseIsOpen = false;
-   Gbl.DB.LockedTables = false;
-
    Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format

@@ -54,7 +54,7 @@ void Grp_DB_LockTables (void)
 	          "crs_users READ,"
 	          "crs_user_settings READ,"
 	          "roo_rooms READ");
-   Gbl.DB.LockedTables = true;
+   DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/

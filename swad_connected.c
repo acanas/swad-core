@@ -429,7 +429,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
   {
-   if (!Gbl.DB.DatabaseIsOpen)
+   if (!DB_CheckIfDatabaseIsOpen ())
       return 0;
 
    /***** Get number of connected users with a role from database *****/

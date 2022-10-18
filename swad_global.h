@@ -97,11 +97,6 @@ struct Globals
       bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
-   struct
-     {
-      bool DatabaseIsOpen;
-      bool LockedTables;
-     } DB;
 
    /* To compute execution time of the program */
    struct timeval tvStart;

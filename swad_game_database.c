@@ -498,7 +498,7 @@ void Gam_DB_LockTable (void)
   {
    DB_Query ("can not lock tables to move game question",
 	     "LOCK TABLES gam_questions WRITE");
-   Gbl.DB.LockedTables = true;
+   DB_SetThereAreLockedTables ();
   }
 
 /*****************************************************************************/

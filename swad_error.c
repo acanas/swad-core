@@ -553,8 +553,7 @@ void Err_NoPermissionExit (void)
 void Err_ShowErrorAndExit (const char *Txt)
   {
    /***** Unlock tables if locked *****/
-   if (Gbl.DB.LockedTables)
-      DB_UnlockTables ();
+   DB_UnlockTables ();
 
    if (!Gbl.WebService.IsWebService)
      {

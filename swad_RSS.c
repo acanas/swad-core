@@ -245,7 +245,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
    unsigned NumExams;
    unsigned NumExa;
 
-   if (Gbl.DB.DatabaseIsOpen)
+   if (DB_CheckIfDatabaseIsOpen ())
      {
       /***** Write exam announcements (only future exams) in current course *****/
       if ((NumExams = Cfe_DB_GetFutureCallsForExamsInCurrentCrs (&mysql_res)))
