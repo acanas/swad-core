@@ -84,13 +84,6 @@ struct Globals
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
 
-   struct
-     {
-      struct Dat_DateTime DateIni;	// TODO: Remove in future versions
-      struct Dat_DateTime DateEnd;	// TODO: Remove in future versions
-      time_t TimeUTC[Dat_NUM_START_END_TIME];
-     } DateRange;	// TODO: Move to swad_date.c
-
    char IP[Cns_MAX_BYTES_IP + 1];
    char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 

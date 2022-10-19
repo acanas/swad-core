@@ -289,8 +289,8 @@ unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
 		   " ORDER BY ExaCod",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   UsrCod,
-		   (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
-		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+		   (long) Dat_GetRangeTimeUTC (Dat_STR_TIME),
+		   (long) Dat_GetRangeTimeUTC (Dat_END_TIME));
   }
 
 /*****************************************************************************/

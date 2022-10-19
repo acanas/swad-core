@@ -158,7 +158,7 @@ void Sta_AskShowCrsHits (void);
 void Sta_AskShowGblHits (void);
 void Sta_PutLinkToCourseHits (void);
 void Sta_PutLinkToGlobalHits (void);
-void Sta_SetIniEndDates (void);
+
 void Sta_SeeGblAccesses (void);
 void Sta_SeeCrsAccesses (void);
 

@@ -161,6 +161,9 @@ void Dat_ShowClientLocalTime (void);
 struct tm *Dat_GetLocalTimeFromClock (const time_t *timep);
 void Dat_ConvDateToDateStr (const struct Dat_Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1]);
 
+time_t Dat_GetRangeTimeUTC (Dat_StartEndTime_t StartEndTime);
+struct Dat_Date *Dat_GetRangeDate (Dat_StartEndTime_t StartEndTime);
+
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME]);
 void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START_END_TIME],
                                               Dat_FormSeconds FormSeconds,
@@ -186,7 +189,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 
-void Dat_SetIniEndDates (void);
+void Dat_SetIniEndDatesToDistantPastToNow (void);
+void Dat_SetIniEndDatesToRecentWeeks (void);
 void Dat_WriteParamsIniEndDates (void);
 void Dat_GetIniEndDatesFromForm (void);
 
@@ -197,13 +201,13 @@ void Dat_GetDateBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
 void Dat_GetWeekBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
 void Dat_GetMonthBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
 void Dat_GetYearBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
-unsigned Dat_GetNumDaysBetweenDates   (struct Dat_Date *DateIni,
+unsigned Dat_GetNumDaysBetweenDates   (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd);
-unsigned Dat_GetNumWeeksBetweenDates  (struct Dat_Date *DateIni,
+unsigned Dat_GetNumWeeksBetweenDates  (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd);
-unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateIni,
+unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd);
-unsigned Dat_GetNumYearsBetweenDates  (struct Dat_Date *DateIni,
+unsigned Dat_GetNumYearsBetweenDates  (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd);
 unsigned Dat_GetNumDaysInYear (unsigned Year);
 unsigned Dat_GetNumDaysFebruary (unsigned Year);

@@ -266,8 +266,8 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	             " BETWEEN FROM_UNIXTIME(%ld)"
 	                 " AND FROM_UNIXTIME(%ld)",
             LogTable,
-            (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
-            (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+            (long) Dat_GetRangeTimeUTC (Dat_STR_TIME),
+            (long) Dat_GetRangeTimeUTC (Dat_END_TIME));
    Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 
    switch (Stats->GlobalOrCourse)

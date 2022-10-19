@@ -293,12 +293,12 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    Str_Concat (Query," AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (LongStr,sizeof (LongStr),"%ld",
-             (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
+             (long) Dat_GetRangeTimeUTC (Dat_STR_TIME));
    Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (LongStr,sizeof (LongStr),"%ld",
-	     (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+	     (long) Dat_GetRangeTimeUTC (Dat_END_TIME));
    Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
    Str_Concat (Query,"')",Qst_MAX_BYTES_QUERY_QUESTIONS);
 

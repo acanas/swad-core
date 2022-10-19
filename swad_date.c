@@ -95,9 +95,14 @@ static struct
    struct timeval tvStart;
    struct timeval tvPageCreated;
    time_t StartExecutionTimeUTC;
-   struct Dat_DateTime Now;
    long TimeGenerationInMicroseconds;
    long TimeSendInMicroseconds;
+   struct Dat_DateTime Now;
+   struct
+     {
+      struct Dat_DateTime DateTime[Dat_NUM_START_END_TIME];	// TODO: Remove in future versions?
+      time_t TimeUTC[Dat_NUM_START_END_TIME];
+     } Range;
   } Dat_Time =
   {
    .TimeGenerationInMicroseconds = 0L,
@@ -576,6 +581,20 @@ void Dat_ConvDateToDateStr (const struct Dat_Date *Date,char StrDate[Cns_MAX_BYT
   }
 
 /*****************************************************************************/
+/**************************** Get start/end date *****************************/
+/*****************************************************************************/
+
+time_t Dat_GetRangeTimeUTC (Dat_StartEndTime_t StartEndTime)
+  {
+   return Dat_Time.Range.TimeUTC[StartEndTime];
+  }
+
+struct Dat_Date *Dat_GetRangeDate (Dat_StartEndTime_t StartEndTime)
+  {
+   return &Dat_Time.Range.DateTime[StartEndTime].Date;
+  }
+
+/*****************************************************************************/
 /*************** Show forms to enter initial and ending dates ****************/
 /*****************************************************************************/
 
@@ -596,7 +615,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
       HTM_TD_Begin ("class=\"LM\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
 						      "Start",
-						      Gbl.DateRange.TimeUTC[Dat_STR_TIME],
+						      Dat_Time.Range.TimeUTC[Dat_STR_TIME],
 						      Cfg_LOG_START_YEAR,
 						      CurrentYear,
 						      Dat_FORM_SECONDS_ON,
@@ -623,7 +642,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
       HTM_TD_Begin ("class=\"LM\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
 						      "End",
-						      Gbl.DateRange.TimeUTC[Dat_END_TIME],
+						      Dat_Time.Range.TimeUTC[Dat_END_TIME],
 						      Cfg_LOG_START_YEAR,
 						      CurrentYear,
 						      Dat_FORM_SECONDS_ON,
@@ -1150,10 +1169,22 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 /******* Set initial date to distant past and end date to current date *******/
 /*****************************************************************************/
 
-void Dat_SetIniEndDates (void)
+void Dat_SetIniEndDatesToDistantPastToNow (void)
   {
-   Gbl.DateRange.TimeUTC[Dat_STR_TIME] = (time_t) 0;
-   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Dat_Time.Range.TimeUTC[Dat_STR_TIME] = (time_t) 0;
+   Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
+  }
+
+/*****************************************************************************/
+/************ Set end date to current date                        ************/
+/************ and set initial date to end date minus several days ************/
+/*****************************************************************************/
+
+void Dat_SetIniEndDatesToRecentWeeks (void)
+  {
+   Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Dat_Time.Range.TimeUTC[Dat_STR_TIME] = Dat_Time.Range.TimeUTC[Dat_END_TIME] -
+	                                  ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
   }
 
 /*****************************************************************************/
@@ -1162,8 +1193,8 @@ void Dat_SetIniEndDates (void)
 
 void Dat_WriteParamsIniEndDates (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"StartTimeUTC",Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
-   Par_PutHiddenParamUnsigned (NULL,"EndTimeUTC"  ,Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+   Par_PutHiddenParamUnsigned (NULL,"StartTimeUTC",Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
+   Par_PutHiddenParamUnsigned (NULL,"EndTimeUTC"  ,Dat_Time.Range.TimeUTC[Dat_END_TIME]);
   }
 
 /*****************************************************************************/
@@ -1176,11 +1207,11 @@ void Dat_GetIniEndDatesFromForm (void)
    struct tm *tm_ptr;
 
    /***** Get initial date *****/
-   Gbl.DateRange.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   if (Gbl.DateRange.TimeUTC[Dat_STR_TIME])
+   Dat_Time.Range.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   if (Dat_Time.Range.TimeUTC[Dat_STR_TIME])
       /* Convert time UTC to a local date */
-      tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
-   else	// Gbl.DateRange.TimeUTC[Dat_STR_TIME] == 0 ==> initial date not specified
+      tm_ptr = Dat_GetLocalTimeFromClock (&Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
+   else	// Dat_Time.Range.TimeUTC[Dat_STR_TIME] == 0 ==> initial date not specified
      {
       tm.tm_year  = Cfg_LOG_START_YEAR - 1900;
       tm.tm_mon   =  0;	// January
@@ -1192,32 +1223,32 @@ void Dat_GetIniEndDatesFromForm (void)
 			// (use timezone information and system databases to)
 			// attempt to determine whether DST
 			// is in effect at the specified time.
-      if ((Gbl.DateRange.TimeUTC[Dat_STR_TIME] = mktime (&tm)) < 0)
-	 Gbl.DateRange.TimeUTC[Dat_STR_TIME] = (time_t) 0;
+      if ((Dat_Time.Range.TimeUTC[Dat_STR_TIME] = mktime (&tm)) < 0)
+	 Dat_Time.Range.TimeUTC[Dat_STR_TIME] = (time_t) 0;
       tm_ptr = &tm;
      }
 
-   Gbl.DateRange.DateIni.Date.Year   = tm_ptr->tm_year + 1900;
-   Gbl.DateRange.DateIni.Date.Month  = tm_ptr->tm_mon  + 1;
-   Gbl.DateRange.DateIni.Date.Day    = tm_ptr->tm_mday;
-   Gbl.DateRange.DateIni.Time.Hour   = tm_ptr->tm_hour;
-   Gbl.DateRange.DateIni.Time.Minute = tm_ptr->tm_min;
-   Gbl.DateRange.DateIni.Time.Second = tm_ptr->tm_sec;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Date.Year   = tm_ptr->tm_year + 1900;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Date.Month  = tm_ptr->tm_mon  + 1;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Date.Day    = tm_ptr->tm_mday;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Time.Hour   = tm_ptr->tm_hour;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Time.Minute = tm_ptr->tm_min;
+   Dat_Time.Range.DateTime[Dat_STR_TIME].Time.Second = tm_ptr->tm_sec;
 
    /***** Get end date *****/
-   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
-   if (Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0)	// Gbl.DateRange.TimeUTC[Dat_END_TIME] == 0 ==> end date not specified
-      Gbl.DateRange.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
+   Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
+   if (Dat_Time.Range.TimeUTC[Dat_END_TIME] == 0)	// Dat_Time.Range.TimeUTC[Dat_END_TIME] == 0 ==> end date not specified
+      Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
 
    /* Convert current time UTC to a local date */
-   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+   tm_ptr = Dat_GetLocalTimeFromClock (&Dat_Time.Range.TimeUTC[Dat_END_TIME]);
 
-   Gbl.DateRange.DateEnd.Date.Year   = tm_ptr->tm_year + 1900;
-   Gbl.DateRange.DateEnd.Date.Month  = tm_ptr->tm_mon  + 1;
-   Gbl.DateRange.DateEnd.Date.Day    = tm_ptr->tm_mday;
-   Gbl.DateRange.DateEnd.Time.Hour   = tm_ptr->tm_hour;
-   Gbl.DateRange.DateEnd.Time.Minute = tm_ptr->tm_min;
-   Gbl.DateRange.DateEnd.Time.Second = tm_ptr->tm_sec;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Date.Year   = tm_ptr->tm_year + 1900;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Date.Month  = tm_ptr->tm_mon  + 1;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Date.Day    = tm_ptr->tm_mday;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Time.Hour   = tm_ptr->tm_hour;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Time.Minute = tm_ptr->tm_min;
+   Dat_Time.Range.DateTime[Dat_END_TIME].Time.Second = tm_ptr->tm_sec;
   }
 
 /*****************************************************************************/
@@ -1377,7 +1408,7 @@ void Dat_GetYearBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
 // If the old date is the day before the new data, return 2
 // ...
 
-unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateIni,
+unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateStr,
                                      struct Dat_Date *DateEnd)
   {
    int DiffDays;
@@ -1385,12 +1416,12 @@ unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateIni,
 
    /***** If initial year is less than end year, return 0
           (actually the difference in days should be negative) *****/
-   if (DateIni->Year > DateEnd->Year)
+   if (DateStr->Year > DateEnd->Year)
       return 0;
 
    /***** Initial year is less or equal than end year ==> compute difference in days *****/
-   DiffDays = (int) Dat_GetDayOfYear (DateEnd) - (int) Dat_GetDayOfYear (DateIni) + 1;
-   for (Year = DateIni->Year;
+   DiffDays = (int) Dat_GetDayOfYear (DateEnd) - (int) Dat_GetDayOfYear (DateStr) + 1;
+   for (Year = DateStr->Year;
 	Year < DateEnd->Year;
 	Year++)
       DiffDays += (int) Dat_GetNumDaysInYear (Year);
@@ -1403,7 +1434,7 @@ unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same week, return 1
 
-unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateIni,
+unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateStr,
                                       struct Dat_Date *DateEnd)
   {
    int DiffWeeks;
@@ -1411,13 +1442,13 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateIni,
 
    /***** If initial year is lower than the ending year, return 0
           (actually the difference should be negative) *****/
-   if (DateIni->Year > DateEnd->Year)
+   if (DateStr->Year > DateEnd->Year)
       return 0;
 
    /***** Initial year is lower or equal to ending year ==>
           compute difference in weeks *****/
-   DiffWeeks = (int) DateEnd->Week - (int) DateIni->Week + 1;
-   for (Year = DateIni->Year;
+   DiffWeeks = (int) DateEnd->Week - (int) DateStr->Week + 1;
+   for (Year = DateStr->Year;
 	Year < DateEnd->Year;
 	Year++)
       DiffWeeks += (int) Dat_GetNumWeeksInYear (Year);
@@ -1430,14 +1461,14 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same month, return 1
 
-unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateIni,
+unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateStr,
                                        struct Dat_Date *DateEnd)
   {
    int DiffMonths;
 
    /***** Compute the difference in months *****/
-   DiffMonths = ((int) DateEnd->Year  - (int) DateIni->Year) * 12 +
-	         (int) DateEnd->Month - (int) DateIni->Month + 1;
+   DiffMonths = ((int) DateEnd->Year  - (int) DateStr->Year) * 12 +
+	         (int) DateEnd->Month - (int) DateStr->Month + 1;
    return (DiffMonths > 0) ? (unsigned) DiffMonths :
 	                     0;
   }
@@ -1447,13 +1478,13 @@ unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same year, return 1
 
-unsigned Dat_GetNumYearsBetweenDates (struct Dat_Date *DateIni,
+unsigned Dat_GetNumYearsBetweenDates (struct Dat_Date *DateStr,
                                       struct Dat_Date *DateEnd)
   {
    int DiffYears;
 
    /***** Compute the difference in years *****/
-   DiffYears = (int) DateEnd->Year - (int) DateIni->Year + 1;
+   DiffYears = (int) DateEnd->Year - (int) DateStr->Year + 1;
    return (DiffYears > 0) ? (unsigned) DiffYears :
 	                    0;
   }
