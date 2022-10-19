@@ -61,7 +61,6 @@
 /*********************************** TODO ************************************/
 /*****************************************************************************/
 
-// TODO: Víctor Cabrita Gómez, 2019-02-27: "Para cuando un tema oscuro de SWAD?"
 // TODO: Is it necessary FileType in table "files"?
 // TODO: When notifications are marked as seen, do it in a priori function
 // TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
@@ -606,10 +605,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.50.2 (2022-10-19)"
+#define Log_PLATFORM_VERSION	"SWAD 22.50.3 (2022-10-19)"
 #define CSS_FILE		"swad22.49.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.50.3:  Oct 19, 2022  Fixed bug in keys when playing matches. (333456 lines)
 	Version 22.50.2:  Oct 19, 2022  Code refactoring related to dates. (333456 lines)
 	Version 22.50.1:  Oct 19, 2022  Code refactoring related to dates. (333332 lines)
 	Version 22.50:    Oct 19, 2022  Code refactoring related to dates. (333318 lines)
