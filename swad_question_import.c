@@ -30,6 +30,7 @@
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"

@@ -38,6 +38,7 @@
 #include <time.h>		// For time
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"

@@ -30,11 +30,13 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_box.h"
 #include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_message.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"

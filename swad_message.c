@@ -49,6 +49,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_media.h"
 #include "swad_message.h"
 #include "swad_message_database.h"
 #include "swad_nickname_database.h"

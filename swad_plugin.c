@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plugin being edited
+static struct Plg_Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plugin being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -88,7 +88,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugins;
    extern const char *Txt_Plugin;
    unsigned NumPlg;
-   struct Plugin *Plg;
+   struct Plg_Plugin *Plg;
    char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
    char *Icon;
 
@@ -219,7 +219,7 @@ static void Plg_GetListPlugins (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumPlg;
-   struct Plugin *Plg;
+   struct Plg_Plugin *Plg;
 
    /***** Get plugins from database *****/
    if ((Gbl.Plugins.Num = Plg_DB_GetListPlugins (&mysql_res))) // Plugins found...
@@ -262,7 +262,7 @@ static void Plg_GetListPlugins (void)
 /*************************** Get data of a plugin ****************************/
 /*****************************************************************************/
 
-bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
+bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -328,7 +328,7 @@ void Plg_FreeListPlugins (void)
 static void Plg_ListPluginsForEdition (void)
   {
    unsigned NumPlg;
-   struct Plugin *Plg;
+   struct Plg_Plugin *Plg;
    char *Icon;
 
    /***** Begin table *****/

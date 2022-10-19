@@ -32,34 +32,17 @@
 #include <sys/time.h>		// For tz
 #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_alert.h"
 #include "swad_API.h"
 #include "swad_assignment.h"
-#include "swad_box.h"
 #include "swad_browser.h"
-#include "swad_center.h"
 #include "swad_connected.h"
 #include "swad_config.h"
-#include "swad_country.h"
 #include "swad_course.h"
-#include "swad_cryptography.h"
-#include "swad_degree_type.h"
 #include "swad_enrolment.h"
 #include "swad_file.h"
-#include "swad_icon.h"
-#include "swad_institution.h"
-#include "swad_layout.h"
+#include "swad_group.h"
 #include "swad_mail.h"
-#include "swad_mark.h"
-#include "swad_media.h"
-#include "swad_menu.h"
-#include "swad_parameter.h"
-#include "swad_password.h"
-#include "swad_plugin.h"
 #include "swad_record.h"
-#include "swad_search.h"
-#include "swad_session.h"
-#include "swad_setting.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -72,10 +55,10 @@ struct Globals
       char DatabasePassword[Cfg_MAX_BYTES_DATABASE_PASSWORD + 1];
       char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
      } Config;
-
-   struct Files F;
+   struct Fil_Files F;
    pid_t PID;	// PID of current process
-
+   char IP[Cns_MAX_BYTES_IP + 1];
+   char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
    struct
      {
       bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error
@@ -83,9 +66,6 @@ struct Globals
       bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
-
-   char IP[Cns_MAX_BYTES_IP + 1];
-   char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 
    struct
      {
@@ -98,7 +78,6 @@ struct Globals
       unsigned SideCols;
       PhoSha_Shape_t PhotoShape;
      } Prefs;
-
    struct
      {
       unsigned NumSessions;
@@ -108,7 +87,6 @@ struct Globals
       long UsrCod;
       bool ParamsInsertedIntoDB;	// If parameters are inserted in the database in this session
      } Session;
-
    struct
      {
       Tab_Tab_t Tab;
@@ -117,7 +95,6 @@ struct Globals
       bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
-
    struct
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
@@ -130,7 +107,7 @@ struct Globals
       struct Ctr_Center Ctr;	// Current center
       struct ListDegrees Degs;	// List of degrees in current center
       struct Deg_Degree Deg;	// Current degree
-      struct ListCourses Crss;	// List of courses in current degree
+      struct Crs_ListCourses Crss;	// List of courses in current degree
       struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
    struct
@@ -155,10 +132,10 @@ struct Globals
       char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
       bool LogSearch;
      } Search;
-  struct
+   struct
      {
       unsigned Num;		// Number of plugins
-      struct Plugin *Lst;	// List of plugins
+      struct Plg_Plugin *Lst;	// List of plugins
      } Plugins;
    struct
      {
@@ -276,7 +253,7 @@ struct Globals
          unsigned NumUsr;
          unsigned NumUsrs;
          unsigned NumUsrsToList;
-         struct ConnectedUsrs Usrs[Rol_NUM_ROLES];
+         struct Con_ConnectedUsrs Usrs[Rol_NUM_ROLES];
          struct
            {
             long UsrCod;

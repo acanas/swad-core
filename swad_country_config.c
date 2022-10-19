@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_box.h"
 #include "swad_country_config.h"
 #include "swad_country_database.h"
 #include "swad_database.h"
@@ -44,6 +45,7 @@
 #include "swad_hierarchy_config.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

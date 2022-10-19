@@ -35,7 +35,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Plg_DB_CreatePlugin (const struct Plugin *Plg);
+void Plg_DB_CreatePlugin (const struct Plg_Plugin *Plg);
 void Plg_DB_ChangeName (long PlgCod,
                         const char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1]);
 void Plg_DB_ChangeDescription (long PlgCod,

@@ -120,6 +120,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_hierarchy_level.h"
 #include "swad_ID.h"
 #include "swad_mail_database.h"
+#include "swad_mark.h"
 #include "swad_match.h"
 #include "swad_match_database.h"
 #include "swad_message_database.h"

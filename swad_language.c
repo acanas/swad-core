@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For strcasecmp
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -38,6 +39,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
+#include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_user_database.h"

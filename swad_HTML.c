@@ -30,6 +30,7 @@
 #include <stdio.h>		// For vasprintf
 #include <stdlib.h>		// For free
 
+#include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"

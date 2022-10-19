@@ -83,6 +83,7 @@
 #include "swad_record.h"
 #include "swad_record_database.h"
 #include "swad_role.h"
+#include "swad_session.h"
 #include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_tab.h"

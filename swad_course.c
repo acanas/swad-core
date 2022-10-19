@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_attendance.h"
+#include "swad_box.h"
 #include "swad_browser_database.h"
 #include "swad_call_for_exam_database.h"
 #include "swad_center_database.h"
@@ -60,6 +61,7 @@
 #include "swad_notice.h"
 #include "swad_notice_database.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_project.h"
 #include "swad_record_database.h"
 #include "swad_search.h"

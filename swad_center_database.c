@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_database.h"
+#include "swad_media.h"
 #include "swad_search.h"
 
 /*****************************************************************************/

@@ -34,6 +34,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For strlen
 
+#include "swad_alert.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_error.h"

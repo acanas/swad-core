@@ -36,6 +36,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink, lstat
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_config.h"
@@ -48,6 +49,7 @@
 #include "swad_HTML.h"
 #include "swad_media.h"
 #include "swad_media_database.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/

@@ -33,10 +33,13 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 #include "swad_tag.h"
 #include "swad_tag_database.h"
 #include "swad_theme.h"

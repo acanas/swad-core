@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink
 
+#include "swad_alert.h"
 #include "swad_database.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"

@@ -33,9 +33,11 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_string.h"
 
 /*****************************************************************************/

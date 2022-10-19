@@ -35,6 +35,7 @@
 #include "swad_account.h"
 #include "swad_account_database.h"
 #include "swad_action.h"
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"

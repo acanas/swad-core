@@ -29,6 +29,7 @@
 
 #include "swad_admin.h"
 #include "swad_admin_database.h"
+#include "swad_alert.h"
 #include "swad_global.h"
 #include "swad_user_database.h"
 

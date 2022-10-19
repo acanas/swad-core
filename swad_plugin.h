@@ -43,7 +43,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct Plugin
+struct Plg_Plugin
   {
    long PlgCod;
    char Name[Plg_MAX_BYTES_PLUGIN_NAME + 1];
@@ -60,7 +60,7 @@ struct Plugin
 
 void Plg_ListPlugins (void);
 void Plg_EditPlugins (void);
-bool Plg_GetDataOfPluginByCod (struct Plugin *Plg);
+bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg);
 void Plg_FreeListPlugins (void);
 long Plg_GetParamPlgCod (void);
 void Plg_RemovePlugin (void);

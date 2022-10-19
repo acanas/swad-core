@@ -30,8 +30,10 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_assignment_resource.h"
 #include "swad_attendance_resource.h"
+#include "swad_box.h"
 #include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
@@ -40,6 +42,7 @@
 #include "swad_forum_resource.h"
 #include "swad_game_resource.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"

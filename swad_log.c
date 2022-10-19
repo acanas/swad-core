@@ -30,6 +30,7 @@
 
 #include "swad_action.h"
 #include "swad_banner.h"
+#include "swad_box.h"
 #include "swad_center_database.h"
 #include "swad_config.h"
 #include "swad_database.h"

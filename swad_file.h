@@ -45,7 +45,7 @@
 #define Fil_MAX_FILE_SIZE (2000ULL * 1024ULL * 1024ULL)	// 2000 MiB = 1.95 GiB
 
 // Global files
-struct Files
+struct Fil_Files
   {
    FILE *Out;		// File with the HTML output of this CGI
    FILE *Tmp;		// Temporary file to save stdin

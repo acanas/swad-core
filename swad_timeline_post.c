@@ -29,12 +29,14 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_alert.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_info.h"
 #include "swad_media.h"
 #include "swad_message.h"
+#include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

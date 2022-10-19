@@ -33,6 +33,8 @@
 #include <string.h>		// For string functions
 #include <unistd.h>		// For unlink
 
+#include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_center.h"
 #include "swad_center_database.h"
 #include "swad_database.h"
@@ -46,6 +48,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
+#include "swad_parameter.h"
 #include "swad_place.h"
 
 /*****************************************************************************/

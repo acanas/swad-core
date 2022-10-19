@@ -34,6 +34,7 @@
 #include "swad_account_database.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
+#include "swad_alert.h"
 #include "swad_announcement.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"

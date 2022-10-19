@@ -30,6 +30,7 @@
 #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -41,6 +42,7 @@
 #include "swad_HTML.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"

@@ -34,12 +34,15 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_question.h"
 #include "swad_question_database.h"

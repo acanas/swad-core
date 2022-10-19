@@ -31,6 +31,8 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_center_database.h"
 #include "swad_database.h"
 #include "swad_department_database.h"
@@ -46,6 +48,7 @@
 #include "swad_institution.h"
 #include "swad_institution_database.h"
 #include "swad_logo.h"
+#include "swad_parameter.h"
 #include "swad_place.h"
 
 /*****************************************************************************/

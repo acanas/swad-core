@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_call_for_exam.h"
 #include "swad_call_for_exam_database.h"

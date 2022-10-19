@@ -40,7 +40,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct ConnectedUsrs
+struct Con_ConnectedUsrs
   {
    unsigned NumUsrs;
    Usr_Sex_t Sex;

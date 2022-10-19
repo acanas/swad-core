@@ -36,6 +36,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_action.h"
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_config.h"

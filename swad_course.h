@@ -64,7 +64,7 @@ struct Crs_Course
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of course
   };
 
-struct ListCourses
+struct Crs_ListCourses
   {
    unsigned Num;	// Number of courses
    struct Crs_Course *Lst;	// List of courses

@@ -29,6 +29,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_center_database.h"
 #include "swad_constant.h"

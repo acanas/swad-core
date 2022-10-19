@@ -32,7 +32,7 @@
 /***************************** Create a new plugin ***************************/
 /*****************************************************************************/
 
-void Plg_DB_CreatePlugin (const struct Plugin *Plg)
+void Plg_DB_CreatePlugin (const struct Plg_Plugin *Plg)
   {
    DB_QueryINSERT ("can not create plugin",
 		   "INSERT INTO plg_plugins"

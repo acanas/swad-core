@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_admin_database.h"
+#include "swad_box.h"
 #include "swad_browser_database.h"
 #include "swad_center.h"
 #include "swad_center_config.h"
@@ -50,6 +51,7 @@
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_message.h"
+#include "swad_parameter.h"
 #include "swad_place.h"
 #include "swad_room_database.h"
 #include "swad_survey.h"

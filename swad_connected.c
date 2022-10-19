@@ -72,7 +72,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role);
 
 static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
-                                                                 struct ConnectedUsrs *Usrs);
+                                                                 struct Con_ConnectedUsrs *Usrs);
 static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
@@ -267,7 +267,7 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
    extern const char *Txt_from;
-   struct ConnectedUsrs Usrs;
+   struct Con_ConnectedUsrs Usrs;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CON CON_%s\"",
@@ -312,7 +312,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
    char CourseName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   struct ConnectedUsrs Usrs;
+   struct Con_ConnectedUsrs Usrs;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
@@ -354,7 +354,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   struct ConnectedUsrs Usrs;
+   struct Con_ConnectedUsrs Usrs;
 
    /***** Write number of connected users who belong to current course *****/
    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Role,&Usrs);
@@ -442,7 +442,7 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
 // Return user's sex in UsrSex
 
 static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
-                                                                 struct ConnectedUsrs *Usrs)
+                                                                 struct Con_ConnectedUsrs *Usrs)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;

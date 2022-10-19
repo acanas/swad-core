@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For getenv, malloc
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
 #include "swad_banner.h"
 #include "swad_box.h"
 #include "swad_database.h"
@@ -43,6 +44,8 @@
 #include "swad_ID.h"
 #include "swad_log.h"
 #include "swad_log_database.h"
+#include "swad_parameter.h"
+#include "swad_plugin.h"
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_statistic.h"
@@ -2729,7 +2732,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
    unsigned NumHit;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
-   struct Plugin Plg;
+   struct Plg_Plugin Plg;
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);

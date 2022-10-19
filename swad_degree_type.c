@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"

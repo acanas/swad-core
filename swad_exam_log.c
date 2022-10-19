@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_database.h"

@@ -128,6 +128,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_box.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_global.h"

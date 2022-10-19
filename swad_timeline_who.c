@@ -25,6 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include "swad_alert.h"
 #include "swad_database.h"
 #include "swad_follow.h"
 #include "swad_global.h"

@@ -34,6 +34,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_autolink.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam.h"
@@ -51,6 +52,7 @@
 #include "swad_match.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"

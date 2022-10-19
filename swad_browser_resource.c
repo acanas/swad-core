@@ -25,6 +25,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_alert.h"
 #include "swad_browser.h"
 #include "swad_browser_resource.h"
 #include "swad_error.h"
