@@ -3920,7 +3920,7 @@ void DB_OpenDBConnection (void)
       Err_ShowErrorAndExit ("Can not init MySQL.");
 
    if (mysql_real_connect (&DB_Database.mysql,Cfg_DATABASE_HOST,
-	                   Cfg_DATABASE_USER,Gbl.Config.DatabasePassword,
+	                   Cfg_DATABASE_USER,Cfg_GetDatabasePassword (),
 	                   Cfg_DATABASE_DBNAME,0,NULL,0) == NULL)
       DB_ExitOnMySQLError ("can not connect to database");
 

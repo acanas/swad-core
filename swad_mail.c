@@ -1711,7 +1711,7 @@ int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject)
              Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
 	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
              Cfg_AUTOMATIC_EMAIL_FROM,
-             Gbl.Config.SMTPPassword,
+             Cfg_GetSMTPPassword (),
              Gbl.Usrs.Me.UsrDat.Email,
              Cfg_PLATFORM_SHORT_NAME,Subject,
              FileNameMail);

@@ -545,4 +545,7 @@
 
 void Cfg_GetConfigFromFile (void);
 
+const char *Cfg_GetDatabasePassword (void);
+const char *Cfg_GetSMTPPassword (void);
+
 #endif

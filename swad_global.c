@@ -85,9 +85,6 @@ void Gbl_InitializeGlobals (void)
    Dat_SetStartExecutionTimeUTC ();
    Dat_GetAndConvertCurrentDateTime ();
 
-   Gbl.Config.DatabasePassword[0] = '\0';
-   Gbl.Config.SMTPPassword[0] = '\0';
-
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
 

@@ -32,15 +32,18 @@
 
 #include "swad_config.h"
 #include "swad_error.h"
-#include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
-/************** External global variables from others modules ****************/
+/************************* Private global variables **************************/
 /*****************************************************************************/
 
-extern struct Globals Gbl;
+static struct
+  {
+   char Database[Cfg_MAX_BYTES_DATABASE_PASSWORD + 1];
+   char SMTP[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
+  } Cfg_Passwords;
 
 /*****************************************************************************/
 /******************* Get SMTP password from config file **********************/
@@ -84,18 +87,29 @@ void Cfg_GetConfigFromFile (void)
    /* Close config file */
    fclose (FileCfg);
 
-   /***** Search SMTP password *****/
+   /***** Search passwords *****/
+   Cfg_Passwords.Database[0] =
+   Cfg_Passwords.SMTP[0]     = '\0';
    Ptr = Config;
    while (*Ptr)
      {
       Str_GetNextStringUntilSpace (&Ptr,Str,Cfg_MAX_BYTES_STR);
       if (!strcasecmp (Str,"DATABASE_PASSWORD"))
-          Str_GetNextStringUntilSpace (&Ptr,Gbl.Config.DatabasePassword,Cfg_MAX_BYTES_DATABASE_PASSWORD);
+          Str_GetNextStringUntilSpace (&Ptr,Cfg_Passwords.Database,Cfg_MAX_BYTES_DATABASE_PASSWORD);
       else if (!strcasecmp (Str,"SMTP_PASSWORD"))
-          Str_GetNextStringUntilSpace (&Ptr,Gbl.Config.SMTPPassword,Cfg_MAX_BYTES_SMTP_PASSWORD);
+          Str_GetNextStringUntilSpace (&Ptr,Cfg_Passwords.SMTP    ,Cfg_MAX_BYTES_SMTP_PASSWORD);
      }
-
-   if (!Gbl.Config.DatabasePassword[0] ||
-       !Gbl.Config.SMTPPassword[0])
+   if (!Cfg_Passwords.Database[0] ||
+       !Cfg_Passwords.SMTP[0])
       Err_ShowErrorAndExit ("Bad config format.");
+  }
+
+const char *Cfg_GetDatabasePassword (void)
+  {
+   return Cfg_Passwords.Database;
+  }
+
+const char *Cfg_GetSMTPPassword (void)
+  {
+   return Cfg_Passwords.SMTP;
   }

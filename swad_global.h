@@ -50,11 +50,6 @@
 
 struct Globals
   {
-   struct
-     {
-      char DatabasePassword[Cfg_MAX_BYTES_DATABASE_PASSWORD + 1];
-      char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
-     } Config;
    struct Fil_Files F;
    pid_t PID;	// PID of current process
    char IP[Cns_MAX_BYTES_IP + 1];
