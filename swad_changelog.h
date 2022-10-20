@@ -605,10 +605,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.50.3 (2022-10-19)"
+#define Log_PLATFORM_VERSION	"SWAD 22.50.4 (2022-10-20)"
 #define CSS_FILE		"swad22.49.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.50.4:  Oct 20, 2022  Code refactoring in email sending. (333438 lines)
 	Version 22.50.3:  Oct 19, 2022  Fixed bug in keys when playing matches. (333456 lines)
 	Version 22.50.2:  Oct 19, 2022  Code refactoring related to dates. (333456 lines)
 	Version 22.50.1:  Oct 19, 2022  Code refactoring related to dates. (333332 lines)

@@ -100,4 +100,6 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language);
 
 bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat);
 
+int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject);
+
 #endif

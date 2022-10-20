@@ -1431,10 +1431,6 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
-   char Command[2048 +
-		Cfg_MAX_BYTES_SMTP_PASSWORD +
-		Cns_MAX_BYTES_EMAIL_ADDRESS +
-		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -1460,25 +1456,13 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    fclose (FileMail);
 
    /***** Call the script to send an email *****/
-   snprintf (Command,sizeof (Command),
-	     "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-             Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
-             Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
-	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
-             Cfg_AUTOMATIC_EMAIL_FROM,
-             Gbl.Config.SMTPPassword,
-             Gbl.Usrs.Me.UsrDat.Email,
-             Cfg_PLATFORM_SHORT_NAME,Txt_Confirmation_of_your_email_NO_HTML,
-             FileNameMail);
-   ReturnCode = system (Command);
-   if (ReturnCode == -1)
-      Err_ShowErrorAndExit ("Error when running script to send email.");
+   ReturnCode = Mai_SendMailMsg (FileNameMail,
+                                 Txt_Confirmation_of_your_email_NO_HTML);
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);
 
    /***** Write message depending on return code *****/
-   ReturnCode = WEXITSTATUS(ReturnCode);
    switch (ReturnCode)
      {
       case 0: // Message sent successfully
@@ -1704,4 +1688,37 @@ static void Mai_EditingMailDomainDestructor (void)
       free (Mai_EditingMai);
       Mai_EditingMai = NULL;
      }
+  }
+
+/*****************************************************************************/
+/***************************** Send mail message *****************************/
+/*****************************************************************************/
+// Return 0 on success
+// Return != 0 on error
+
+int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject)
+  {
+   char Command[2048 +
+		Cfg_MAX_BYTES_SMTP_PASSWORD +
+		Cns_MAX_BYTES_EMAIL_ADDRESS +
+		PATH_MAX]; // Command to execute for sending an email
+   int ReturnCode;
+
+   /***** Call the script to send an email *****/
+   snprintf (Command,sizeof (Command),
+	     "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
+             Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
+             Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
+	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
+             Cfg_AUTOMATIC_EMAIL_FROM,
+             Gbl.Config.SMTPPassword,
+             Gbl.Usrs.Me.UsrDat.Email,
+             Cfg_PLATFORM_SHORT_NAME,Subject,
+             FileNameMail);
+   ReturnCode = system (Command);
+   if (ReturnCode == -1)	// The value returned is -1 on error
+      Err_ShowErrorAndExit ("Error when running script to send email.");
+
+   /* The exit code of the command will be WEXITSTATUS (ReturnCode) */
+   return WEXITSTATUS (ReturnCode);
   }

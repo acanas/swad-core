@@ -1275,10 +1275,6 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
-   char Command[2048 +
-		Cfg_MAX_BYTES_SMTP_PASSWORD +
-		Cns_MAX_BYTES_EMAIL_ADDRESS +
-		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Return 0 notifications and 0 mails when error *****/
@@ -1419,26 +1415,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 	 fclose (FileMail);
 
 	 /***** Call the command to send an email *****/
-	 snprintf (Command,sizeof (Command),
-	           "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-		   Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
-		   Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
-		   Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
-		   Cfg_AUTOMATIC_EMAIL_FROM,
-		   Gbl.Config.SMTPPassword,
-		   ToUsrDat->Email,
-		   Cfg_PLATFORM_SHORT_NAME,
-		   Txt_Notifications_NO_HTML[ToUsrLanguage],
-		   FileNameMail);
-	 ReturnCode = system (Command);
-	 if (ReturnCode == -1)
-	    Err_ShowErrorAndExit ("Error when running script to send email.");
+         ReturnCode = Mai_SendMailMsg (FileNameMail,
+                                       Txt_Notifications_NO_HTML[ToUsrLanguage]);
 
 	 /***** Remove temporary file *****/
 	 unlink (FileNameMail);
 
 	 /***** Update number of notifications, number of mails and statistics *****/
-	 ReturnCode = WEXITSTATUS(ReturnCode);
 	 if (ReturnCode == 0)	// Message sent successfully
 	   {
 	    *NumNotif = NumNtfs;

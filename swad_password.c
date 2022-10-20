@@ -404,10 +404,6 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    extern const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES];
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
-   char Command[2048 +
-		Cfg_MAX_BYTES_SMTP_PASSWORD +
-		Cns_MAX_BYTES_EMAIL_ADDRESS +
-		PATH_MAX]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -432,26 +428,14 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    fclose (FileMail);
 
    /***** Call the script to send an email *****/
-   snprintf (Command,sizeof (Command),
-	     "%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-	     Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
-	     Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
-	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
-	     Cfg_AUTOMATIC_EMAIL_FROM,
-             Gbl.Config.SMTPPassword,
-	     Gbl.Usrs.Me.UsrDat.Email,
-	     Cfg_PLATFORM_SHORT_NAME,
-	     Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	     FileNameMail);
-   ReturnCode = system (Command);
-   if (ReturnCode == -1)
-      Err_ShowErrorAndExit ("Error when running script to send email.");
+   ReturnCode = Mai_SendMailMsg (FileNameMail,
+                                 Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);
 
    /***** Write message depending on return code *****/
-   return WEXITSTATUS (ReturnCode);
+   return ReturnCode;
   }
 
 /*****************************************************************************/
