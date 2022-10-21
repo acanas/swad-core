@@ -223,7 +223,6 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 /*****************************************************************************/
 // Returns true if the format of the HTML file of marks is correct
 // Returns true if the format of the HTML file of marks is wrong
-// Gbl.Alert.Txt will contain feedback text
 
 bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
   {
@@ -590,7 +589,7 @@ void Mrk_ShowMyMarks (void)
 
       /* Create a new temporary file *****/
       snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
-		Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
+		Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
       if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
          Err_ShowErrorAndExit ("Can not open file for my marks.");
 
@@ -720,7 +719,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 	    /* Create a new temporary file *****/
 	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),"%s/%s.html",
-		      Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
+		      Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
 	    if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
 	      {
 	       /***** Get user's marks *****/

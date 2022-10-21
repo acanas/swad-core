@@ -292,9 +292,11 @@ static int API_GetTstQuestionTags (struct soap *soap,
 static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 					  long MchCod,char **ListGroups);
 
-static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree);
-static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,const char *FileName);
-static void API_IndentXMLLine (unsigned Level);
+static void API_ListDir (FILE *XML,unsigned Level,const char *Path,const char *PathInTree);
+static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
+                                     Brw_FileType_t FileType,
+                                     const char *FileName);
+static void API_IndentXMLLine (FILE *XML,unsigned Level);
 
 static void API_GetDataOfLocation (struct soap *soap,
                                    struct swad__location *location,
@@ -4598,6 +4600,7 @@ int swad__getDirectoryTree (struct soap *soap,
    extern const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER];
    int ReturnCode;
    char XMLFileName[PATH_MAX + 1];
+   FILE *XML;
    unsigned long FileSize;
    unsigned long NumBytesRead;
 
@@ -4708,30 +4711,32 @@ int swad__getDirectoryTree (struct soap *soap,
              Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /* Open file for writing and reading */
-   if ((Gbl.F.XML = fopen (XMLFileName,"w+t")) == NULL)
+   if ((XML = fopen (XMLFileName,"w+t")) == NULL)
       return soap_receiver_fault (soap,
 	                          "Can not get tree",
 	                          "Can not create temporary XML file");
 
    /* Get directory tree into XML file */
-   XML_WriteStartFile (Gbl.F.XML,"tree",false);
+   XML_WriteStartFile (XML,"tree",false);
    if (!Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
                                                   Gbl.FileBrowser.FilFolLnk.Full)) // If root folder is visible
-      API_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-   XML_WriteEndFile (Gbl.F.XML,"tree");
+      API_ListDir (XML,1,
+                   Gbl.FileBrowser.Priv.PathRootFolder,
+                   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+   XML_WriteEndFile (XML,"tree");
 
    /* Compute file size */
-   // fseek (Gbl.F.XML,0L,SEEK_END);
-   FileSize = (unsigned long) ftell (Gbl.F.XML);
-   fseek (Gbl.F.XML,0L,SEEK_SET);
+   // fseek (XML,0L,SEEK_END);
+   FileSize = (unsigned long) ftell (XML);
+   fseek (XML,0L,SEEK_SET);
 
    /* Copy XML content from file to memory */
    getDirectoryTreeOut->tree = soap_malloc (soap,FileSize + 1);
-   NumBytesRead = fread (getDirectoryTreeOut->tree,1,FileSize,Gbl.F.XML);
+   NumBytesRead = fread (getDirectoryTreeOut->tree,1,FileSize,XML);
    getDirectoryTreeOut->tree[NumBytesRead] = '\0';
 
    /* Close and remove XML file */
-   Fil_CloseXMLFile ();
+   fclose (XML);
    unlink (XMLFileName);
 
    return SOAP_OK;
@@ -4741,7 +4746,8 @@ int swad__getDirectoryTree (struct soap *soap,
 /************************ List a directory recursively ***********************/
 /*****************************************************************************/
 
-static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree)
+static void API_ListDir (FILE *XML,unsigned Level,
+                         const char *Path,const char *PathInTree)
   {
    extern const char *Txt_NEW_LINE;
    struct dirent **FileList;
@@ -4780,18 +4786,21 @@ static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
 		  /***** Write a row for the subdirectory *****/
-		  if (API_WriteRowFileBrowser (Level,Brw_IS_FOLDER,FileList[NumFile]->d_name))
+		  if (API_WriteRowFileBrowser (XML,Level,
+		                               Brw_IS_FOLDER,
+		                               FileList[NumFile]->d_name))
 		    {
 		     /* List subtree starting at this this directory */
-		     API_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+		     API_ListDir (XML,Level + 1,
+		                  PathFileRel,PathFileInExplTree);
 
 		     /* Indent and end dir */
-		     API_IndentXMLLine (Level);
-		     fprintf (Gbl.F.XML,"</dir>%s",Txt_NEW_LINE);
+		     API_IndentXMLLine (XML,Level);
+		     fprintf (XML,"</dir>%s",Txt_NEW_LINE);
 		    }
 		 }
 	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-		  API_WriteRowFileBrowser (Level,
+		  API_WriteRowFileBrowser (XML,Level,
 					   Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
 											  Brw_IS_FILE,
 					   FileList[NumFile]->d_name);
@@ -4811,7 +4820,9 @@ static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 // If it is not the first row, it is shown or not depending on whether it is hidden or not
 // If the row is visible, return true. If it is hidden, return false
 
-static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,const char *FileName)
+static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
+                                     Brw_FileType_t FileType,
+                                     const char *FileName)
   {
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
@@ -4827,11 +4838,11 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 
    /***** XML row *****/
    /* Indent */
-   API_IndentXMLLine (Level);
+   API_IndentXMLLine (XML,Level);
 
    /* Write file or folder data */
    if (FileType == Brw_IS_FOLDER)
-      fprintf (Gbl.F.XML,"<dir name=\"%s\">%s",
+      fprintf (XML,"<dir name=\"%s\">%s",
 	       FileName,Txt_NEW_LINE);
    else	// File or link
      {
@@ -4850,14 +4861,14 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
-      fprintf (Gbl.F.XML,"<file name=\"%s\">"
-			 "<code>%ld</code>"
-		         "<size>%lu</size>"
-		         "<time>%lu</time>"
-		         "<license>%s</license>"
-		         "<publisher>%s</publisher>"
-		         "<photo>%s</photo>"
-		         "</file>%s",
+      fprintf (XML,"<file name=\"%s\">"
+		   "<code>%ld</code>"
+		   "<size>%lu</size>"
+		   "<time>%lu</time>"
+		   "<license>%s</license>"
+		   "<publisher>%s</publisher>"
+		   "<photo>%s</photo>"
+		   "</file>%s",
 	       FileName,
 	       FileMetadata.FilCod,
 	       (unsigned long) FileMetadata.Size,
@@ -4875,12 +4886,12 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 /******************************* Indent XML line *****************************/
 /*****************************************************************************/
 
-static void API_IndentXMLLine (unsigned Level)
+static void API_IndentXMLLine (FILE *XML,unsigned Level)
   {
    for ( ;
 	Level;
 	Level--)
-      fprintf (Gbl.F.XML,"\t");
+      fprintf (XML,"\t");
   }
 
 /*****************************************************************************/

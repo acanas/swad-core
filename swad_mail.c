@@ -1431,6 +1431,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -1441,13 +1442,13 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat);
 
    /* Store encrypted key in database */
-   Mai_InsertMailKey (Gbl.Usrs.Me.UsrDat.Email,Gbl.UniqueNameEncrypted);
+   Mai_InsertMailKey (Gbl.Usrs.Me.UsrDat.Email,UniqueNameEncrypted);
 
    /* Message body */
    fprintf (FileMail,
 	    Txt_If_you_just_requested_from_X_the_confirmation_of_your_email_Y_NO_HTML,
 	    Cfg_URL_SWAD_CGI,Gbl.Usrs.Me.UsrDat.Email,
-            Cfg_URL_SWAD_CGI,Act_GetActCod (ActCnfMai),Gbl.UniqueNameEncrypted,
+            Cfg_URL_SWAD_CGI,Act_GetActCod (ActCnfMai),UniqueNameEncrypted,
             Cfg_URL_SWAD_CGI);
 
    /* Footer note */
@@ -1576,7 +1577,7 @@ void Mai_ConfirmEmail (void)
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
   {
    snprintf (FileNameMail,PATH_MAX + 1,"%s/%s_mail.txt",
-             Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
    if ((*FileMail = fopen (FileNameMail,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open file to send email.");
   }

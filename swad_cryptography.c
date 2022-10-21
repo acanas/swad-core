@@ -130,7 +130,7 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,
 /*** Create a unique name encrypted, different each time function is called **/
 /*****************************************************************************/
 
-void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
+void Cry_CreateUniqueNameEncrypted (char *UniqueNameEncrypted)
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
    char UniqueNamePlain[Cns_MAX_BYTES_IP +
@@ -147,7 +147,7 @@ void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED
    Cry_EncryptSHA256Base64 (UniqueNamePlain,UniqueNameEncrypted);	// Make difficult to guess a unique name
   }
 
-const char *Cry_GetUniqueNameEncrypted (void)
+char *Cry_GetUniqueNameEncrypted (void)
   {
    return Cry_UniqueNameEncrypted;
   }

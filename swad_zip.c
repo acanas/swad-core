@@ -225,7 +225,7 @@ static void ZIP_CreateTmpDirForCompression (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_ZIP_PRIVATE);
 
    /***** Create a new temporary directory *****/
-   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,
+   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Cry_GetUniqueNameEncrypted (),
              sizeof (Gbl.FileBrowser.ZIP.TmpDir) - 1);
    snprintf (PathDirTmp,sizeof (PathDirTmp),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);

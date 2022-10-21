@@ -2947,15 +2947,6 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
 
 static void Usr_AllocateUsrsList (Rol_Role_t Role)
   {
-/*
-if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-   {
-    snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	      "Memory used by list = %lu",
-	      (long) sizeof (struct UsrInList) * NumUsrs);
-    Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
-   }
-*/
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
       if ((Gbl.Usrs.LstUsrs[Role].Lst = calloc (Gbl.Usrs.LstUsrs[Role].NumUsrs,
                                                 sizeof (*Gbl.Usrs.LstUsrs[Role].Lst))) == NULL)

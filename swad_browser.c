@@ -6664,7 +6664,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	      {
 	       /* Check extension of the file */
 	       if (Str_FileIsHTML (FileNameOrg))
-		  Mrk_CheckFileOfMarks (PathOrg,&Marks);	// Gbl.Alert.Txt contains feedback text
+		  Mrk_CheckFileOfMarks (PathOrg,&Marks);
 	       else
 		 {
 		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
@@ -7362,7 +7362,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    /***** Check if creating a new file is allowed *****/
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
-      /***** First, we save in disk the file from stdin (really from Gbl.F.Tmp) *****/
+      /***** First, we save in disk the file received *****/
       Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                         SrcFileName,MIMEType);
 
@@ -7374,7 +7374,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
       if (Gbl.FileBrowser.NewFilFolLnkName[0])
         {
          /***** Check if uploading this kind of file is allowed *****/
-	 if (Brw_CheckIfUploadIsAllowed (MIMEType))	// Gbl.Alert.Txt contains feedback text
+	 if (Brw_CheckIfUploadIsAllowed (MIMEType))
            {
             if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
               {
@@ -7398,12 +7398,12 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                  {
                   /* End receiving the file */
                   snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
-                  FileIsValid = Fil_EndReceptionOfFile (PathTmp,Param);	// Gbl.Alert.Txt contains feedback text
+                  FileIsValid = Fil_EndReceptionOfFile (PathTmp,Param);
 
                   /* Check if the content of the file of marks is valid */
                   if (FileIsValid)
                      if (AdminMarks)
-                        if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))	// Gbl.Alert.Txt contains feedback text
+                        if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))
                            FileIsValid = false;
 
                   if (FileIsValid)
@@ -7575,7 +7575,7 @@ void Brw_RecLinkFileBrowser (void)
 					       FileName);
 
 	 /* Convert the last name in URL to a valid filename */
-	 if (Str_ConvertFilFolLnkNameToValid (FileName))	// Gbl.Alert.Txt contains feedback text
+	 if (Str_ConvertFilFolLnkNameToValid (FileName))
 	   {
 	    /* The name of the file with the link will be the FileName.url */
 	    snprintf (Path,sizeof (Path),"%s/%s",

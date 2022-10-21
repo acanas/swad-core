@@ -102,8 +102,8 @@ static void Par_GetBoundary (void);
 
 static void Par_CreateListOfParamsFromQueryString (void);
 static void Par_CreateListOfParamsFromTmpFile (void);
-static int Par_ReadTmpFileUntilQuote (void);
-static int Par_ReadTmpFileUntilReturn (void);
+static int Par_ReadTmpFileUntilQuote (FILE *QueryFile);
+static int Par_ReadTmpFileUntilReturn (FILE *QueryFile);
 
 static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
 
@@ -350,7 +350,6 @@ static void Par_CreateListOfParamsFromQueryString (void)
 /*****************************************************************************/
 /*************** Create list of parameters from temporary file ***************/
 /*****************************************************************************/
-// TODO: Rename Gbl.F.Tmp to Gbl.F.In (InFile, QueryFile)?
 
 #define Par_LENGTH_OF_STR_BEFORE_PARAM	38		// Length of "Content-Disposition: form-data; name=\""
 #define Par_LENGTH_OF_STR_FILENAME	12		// Length of "; filename=\""
@@ -367,10 +366,11 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    struct Param *NewParam;
    int Ch;
    char StrAux[Par_MAX_BYTES_STR_AUX + 1];
+   FILE *QueryFile = Fil_GetQueryFile ();
 
    /***** Go over the file
           getting start positions and lengths of parameters *****/
-   if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
+   if (Str_ReadFileUntilBoundaryStr (QueryFile,NULL,
                                      Par_Params.Boundary.StrWithoutCRLF,
                                      Par_Params.Boundary.LengthWithoutCRLF,
                                      Fil_MAX_FILE_SIZE) == 1)	// Delimiter string found
@@ -380,10 +380,10 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	  )
 	{
 	 /***** Skip \r\n after delimiter string *****/
-	 if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
-	 if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
+	 if (fgetc (QueryFile) != 0x0D) break;	// '\r'
+	 if (fgetc (QueryFile) != 0x0A) break;	// '\n'
 
-	 Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
+	 Str_GetNextStrFromFileConvertingToLower (QueryFile,StrAux,
 	                                          Par_LENGTH_OF_STR_BEFORE_PARAM);
 	 if (!strcasecmp (StrAux,StringBeforeParam)) // Start of a parameter
 	   {
@@ -401,49 +401,49 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    Param = NewParam;
 
 	    /***** Get parameter name *****/
-	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of parameter name
+	    CurPos = (unsigned long) ftell (QueryFile);	// At start of parameter name
 	    Param->Name.Start = CurPos;
-	    Ch = Par_ReadTmpFileUntilQuote ();
-	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after quote
+	    Ch = Par_ReadTmpFileUntilQuote (QueryFile);
+	    CurPos = (unsigned long) ftell (QueryFile);	// Just after quote
 	    Param->Name.Length = CurPos - 1 - Param->Name.Start;
 
 	    /* Check if last character read after parameter name is a quote */
 	    if (Ch != (int) '\"') break;		// '\"'
 
 	    /* Get next char after parameter name */
-	    Ch = fgetc (Gbl.F.Tmp);
+	    Ch = fgetc (QueryFile);
 
 	    /***** Check if filename is present *****/
 	    if (Ch == (int) StringFilename[0])
 	      {
-	       Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
+	       Str_GetNextStrFromFileConvertingToLower (QueryFile,StrAux,
 	                                                Par_LENGTH_OF_STR_FILENAME-1);
 	       if (!strcasecmp (StrAux,StringFilename + 1))	// Start of filename
 		 {
 		  /* Get filename */
-		  CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of filename
+		  CurPos = (unsigned long) ftell (QueryFile);	// At start of filename
 		  Param->FileName.Start = CurPos;
-		  Ch = Par_ReadTmpFileUntilQuote ();
-		  CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after quote
+		  Ch = Par_ReadTmpFileUntilQuote (QueryFile);
+		  CurPos = (unsigned long) ftell (QueryFile);	// Just after quote
 		  Param->FileName.Length = CurPos - 1 - Param->FileName.Start;
 
 		  /* Check if last character read after filename is a quote */
 		  if (Ch != (int) '\"') break;		// '\"'
 
 		  /* Skip \r\n */
-		  if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
-		  if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
+		  if (fgetc (QueryFile) != 0x0D) break;	// '\r'
+		  if (fgetc (QueryFile) != 0x0A) break;	// '\n'
 
 		  /* Check if Content-Type is present */
-		  Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
+		  Str_GetNextStrFromFileConvertingToLower (QueryFile,StrAux,
 		                                           Par_LENGTH_OF_STR_CONTENT_TYPE);
 		  if (!strcasecmp (StrAux,StringContentType)) // Start of Content-Type
 		    {
 		     /* Get content type */
-		     CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of content type
+		     CurPos = (unsigned long) ftell (QueryFile);	// At start of content type
 		     Param->ContentType.Start = CurPos;
-		     Ch = Par_ReadTmpFileUntilReturn ();
-		     CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after return
+		     Ch = Par_ReadTmpFileUntilReturn (QueryFile);
+		     CurPos = (unsigned long) ftell (QueryFile);	// Just after return
 		     Param->ContentType.Length = CurPos - 1 - Param->ContentType.Start;
 		    }
 		 }
@@ -454,20 +454,20 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    if (Ch != 0x0D) break;			// '\r'
 
 	    /* Skip \n\r\n */
-	    if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
-	    if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
-	    if (fgetc (Gbl.F.Tmp) != 0x0A) break;	// '\n'
+	    if (fgetc (QueryFile) != 0x0A) break;	// '\n'
+	    if (fgetc (QueryFile) != 0x0D) break;	// '\r'
+	    if (fgetc (QueryFile) != 0x0A) break;	// '\n'
 
 	    /***** Get parameter value or file content *****/
-	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of value or file content
-	    if (Str_ReadFileUntilBoundaryStr (Gbl.F.Tmp,NULL,
+	    CurPos = (unsigned long) ftell (QueryFile);	// At start of value or file content
+	    if (Str_ReadFileUntilBoundaryStr (QueryFile,NULL,
 					      Par_Params.Boundary.StrWithCRLF,
 					      Par_Params.Boundary.LengthWithCRLF,
 					      Fil_MAX_FILE_SIZE) != 1) break;	// Boundary string not found
 
 	    // Delimiter string found
 	    Param->Value.Start = CurPos;
-	    CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// Just after delimiter string
+	    CurPos = (unsigned long) ftell (QueryFile);	// Just after delimiter string
 	    Param->Value.Length = CurPos - Par_Params.Boundary.LengthWithCRLF -
 		                  Param->Value.Start;
 	   }
@@ -479,13 +479,13 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 /*****************************************************************************/
 // Return last char read
 
-static int Par_ReadTmpFileUntilQuote (void)
+static int Par_ReadTmpFileUntilQuote (FILE *QueryFile)
   {
    int Ch;
 
    /***** Read until quote if found *****/
    do
-      Ch = fgetc (Gbl.F.Tmp);
+      Ch = fgetc (QueryFile);
    while (Ch != EOF && Ch != (int) '\"');
 
    return Ch;
@@ -496,13 +496,13 @@ static int Par_ReadTmpFileUntilQuote (void)
 /*****************************************************************************/
 // Return last char read
 
-static int Par_ReadTmpFileUntilReturn (void)
+static int Par_ReadTmpFileUntilReturn (FILE *QueryFile)
   {
    int Ch;
 
    /***** Read until \r if found *****/
    do
-      Ch = fgetc (Gbl.F.Tmp);
+      Ch = fgetc (QueryFile);
    while (Ch != EOF && Ch != 0x0D);	// '\r'
 
    return Ch;
@@ -543,6 +543,7 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
                            struct Param **ParamPtr)	// NULL if not used
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
+   FILE *QueryFile = Fil_GetQueryFile ();
    size_t BytesAlreadyCopied = 0;
    unsigned i;
    struct Param *Param;
@@ -588,11 +589,11 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 					 Param->Name.Length);
 		  break;
 	       case Act_CONT_DATA:
-		  fseek (Gbl.F.Tmp,Param->Name.Start,SEEK_SET);
+		  fseek (QueryFile,Param->Name.Start,SEEK_SET);
 		  for (i = 0, ParamFound = true;
 		       i < Param->Name.Length && ParamFound;
 		       i++)
-		     if (ParamName[i] != (char) fgetc (Gbl.F.Tmp))
+		     if (ParamName[i] != (char) fgetc (QueryFile))
 			ParamFound = false;
 		  break;
 	      }
@@ -654,8 +655,8 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 		        if (Param->FileName.Start == 0 &&	// Copy into destination only if it's not a file
 		            PtrDst)
 		          {
-			   fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
-			   if (fread (PtrDst,sizeof (char),Param->Value.Length,Gbl.F.Tmp) !=
+			   fseek (QueryFile,Param->Value.Start,SEEK_SET);
+			   if (fread (PtrDst,sizeof (char),Param->Value.Length,QueryFile) !=
 			       Param->Value.Length)
 			      Err_ShowErrorAndExit ("Error while getting value of parameter.");
 		          }

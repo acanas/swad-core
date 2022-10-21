@@ -173,7 +173,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 
    /***** Store report entry into database *****/
    Rep_DB_CreateNewReport (Gbl.Usrs.Me.UsrDat.UsrCod,Report,
-                           Gbl.UniqueNameEncrypted);
+                           Cry_GetUniqueNameEncrypted ());
 
    /***** Begin file *****/
    Lay_BeginHTMLFile (Gbl.F.Rep,Report->FilenameReport);
@@ -344,6 +344,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    char PathUniqueDirL[PATH_MAX + 1];
    char PathUniqueDirR[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char PathFileReport[PATH_MAX + 1 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + NAME_MAX + 1];
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    char Permalink[128 +
 		  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 		  NAME_MAX];
@@ -355,14 +356,14 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
    snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),"%s/%c%c",
              Cfg_PATH_REP_PUBLIC,
-             Gbl.UniqueNameEncrypted[0],
-             Gbl.UniqueNameEncrypted[1]);
+             UniqueNameEncrypted[0],
+             UniqueNameEncrypted[1]);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
    snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
              PathUniqueDirL,
-             &Gbl.UniqueNameEncrypted[2]);
+             &UniqueNameEncrypted[2]);
    if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
       Err_ShowErrorAndExit ("Can not create directory for report.");
 
@@ -378,9 +379,9 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    /***** Permalink *****/
    snprintf (Permalink,sizeof (Permalink),"%s/%c%c/%s/%s",
              Cfg_URL_REP_PUBLIC,
-             Gbl.UniqueNameEncrypted[0],
-             Gbl.UniqueNameEncrypted[1],
-             &Gbl.UniqueNameEncrypted[2],
+             UniqueNameEncrypted[0],
+             UniqueNameEncrypted[1],
+             &UniqueNameEncrypted[2],
              Report->FilenameReport);
    Str_Copy (Report->Permalink,Permalink,sizeof (Report->Permalink) - 1);
   }

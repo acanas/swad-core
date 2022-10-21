@@ -255,10 +255,10 @@ void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1])
    /***** Create Id. The id must be unique,
           the page content may be updated via AJAX.
           So, Id uses:
-          - a name for this execution (Gbl.UniqueNameEncrypted)
-          - a number for each element in this execution (CountForThisExecution) *****/
+          - a name for this execution
+          - a number for each element in this execution *****/
    snprintf (UniqueId,Frm_MAX_BYTES_ID + 1,"id_%s_%u",
-             Gbl.UniqueNameEncrypted,
+             Cry_GetUniqueNameEncrypted (),
              ++CountForThisExecution);
   }
 

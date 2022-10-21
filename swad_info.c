@@ -1528,6 +1528,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
    char PathFileMD[PATH_MAX + 1];
    char PathFileHTML[PATH_MAX + 1];
+   const char *UniqueNameEncrypted;
    FILE *FileMD;		// Temporary Markdown file
    FILE *FileHTML;		// Temporary HTML file
    char MathJaxURL[PATH_MAX + 1];
@@ -1573,10 +1574,11 @@ static bool Inf_CheckAndShowRichTxt (void)
 	 /***** Store text into a temporary .md file in HTML output directory *****/
 	 // TODO: change to another directory?
 	 /* Create a unique name for the .md file */
+         UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 	 snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
-		   Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
 	 snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-		   Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
 
 	 /* Open Markdown file for writing */
 	 if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
@@ -1931,7 +1933,7 @@ void Inf_ReceivePagInfo (void)
    /***** Set info type *****/
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
-   /***** First of all, store in disk the file from stdin (really from Gbl.F.Tmp) *****/
+   /***** First of all, store in disk the file received *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      SourceFileName,MIMEType);
 

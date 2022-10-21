@@ -382,7 +382,7 @@ void QstImp_ImpQstsFromXML (void)
    /***** Creates directory if not exists *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_TEST_PRIVATE);
 
-   /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   /***** First of all, copy in disk the file received *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNameXMLSrc,MIMEType);
 
@@ -401,7 +401,7 @@ void QstImp_ImpQstsFromXML (void)
      {
       /* End the reception of XML in a temporary file */
       snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
-		Cfg_PATH_TEST_PRIVATE,Gbl.UniqueNameEncrypted);
+		Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
       if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
          /***** Get questions from XML file and store them in database *****/
          QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);

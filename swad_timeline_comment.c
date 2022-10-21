@@ -670,7 +670,7 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",
-		     Gbl.UniqueNameEncrypted,NumDiv);
+		     Cry_GetUniqueNameEncrypted (),NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
 	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
 			       TmlUsr_SHOW_FEW_USRS);

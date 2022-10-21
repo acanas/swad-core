@@ -357,7 +357,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
 	     (unsigned)  Cod);
    Fil_CreateDirIfNotExists (Path);
 
-   /***** Copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   /***** Copy in disk the file received *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNameLogoSrc,MIMEType);
 

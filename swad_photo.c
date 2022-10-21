@@ -572,6 +572,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    char FileNamePhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
    char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
    char FileNameTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    char PathRelPhoto[PATH_MAX + 1];
    FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
@@ -620,7 +621,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    /* Create temporary directory for photos */
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PUBLIC);
 
-   /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
+   /***** First of all, copy in disk the file received *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNamePhotoSrc,MIMEType);
 
@@ -640,7 +641,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
 
    /* End the reception of photo in a temporary file */
    snprintf (FileNamePhotoTmp,sizeof (FileNamePhotoTmp),"%s/%s.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
       Ale_ShowAlert (Ale_ERROR,"Error copying file.");
@@ -669,7 +670,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
       case 0:        // Faces detected
          /***** Open text file with text for image map *****/
          snprintf (FileNameTxtMap,sizeof (FileNameTxtMap),"%s/%s_map.txt",
-                   Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
+                   Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
          if ((FileTxtMap = fopen (FileNameTxtMap,"rb")) == NULL)
             Err_ShowErrorAndExit ("Can not read text file with coordinates of detected faces.");
 
@@ -765,9 +766,9 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
 
    /***** Show map photo *****/
    snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),"%s/%s_map.jpg",
-             Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
-      if (asprintf (&Icon,"%s_map.jpg",Gbl.UniqueNameEncrypted) < 0)
+      if (asprintf (&Icon,"%s_map.jpg",UniqueNameEncrypted) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Icon,Txt_Faces_detected,"usemap=\"#faces_map\"");
       free (Icon);
@@ -1350,9 +1351,10 @@ bool Pho_RemovePhoto (struct Usr_Data *UsrDat)
 void Pho_UpdatePhotoName (struct Usr_Data *UsrDat)
   {
    char PathPublPhoto[PATH_MAX + 1];
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 
    /***** Update photo name in database *****/
-   Pho_DB_UpdatePhotoName (UsrDat->UsrCod,Gbl.UniqueNameEncrypted);
+   Pho_DB_UpdatePhotoName (UsrDat->UsrCod,UniqueNameEncrypted);
 
    /***** Remove the old symbolic link to photo *****/
    snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
@@ -1360,7 +1362,7 @@ void Pho_UpdatePhotoName (struct Usr_Data *UsrDat)
    unlink (PathPublPhoto);                // Remove public link
 
    /***** Update photo name in user's data *****/
-   Str_Copy (UsrDat->Photo,Gbl.UniqueNameEncrypted,sizeof (UsrDat->Photo) - 1);
+   Str_Copy (UsrDat->Photo,UniqueNameEncrypted,sizeof (UsrDat->Photo) - 1);
   }
 
 /*****************************************************************************/

@@ -818,6 +818,7 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
                                    const struct Usr_Data *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 
    NumDiv++;
 
@@ -827,7 +828,7 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
 	             " class=\"Tml_FAV_NOT Tml_FAV_NOT_WIDTH\"",
-		     Gbl.UniqueNameEncrypted,NumDiv);
+		     UniqueNameEncrypted,NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
 	                       Not->NotCod,Not->UsrCod,Not->NumFavs,
 			       TmlUsr_SHOW_FEW_USRS);
@@ -836,7 +837,7 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
       /***** Foot column 2: share zone *****/
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\""
 	             " class=\"Tml_SHA_NOT Tml_SHA_NOT_WIDTH\"",
-		     Gbl.UniqueNameEncrypted,NumDiv);
+		     UniqueNameEncrypted,NumDiv);
 	 TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
 	                       Not->NotCod,Not->UsrCod,Not->NumShared,
 	                       TmlUsr_SHOW_FEW_USRS);

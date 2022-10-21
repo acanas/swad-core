@@ -75,7 +75,7 @@ void Ses_GetNumSessions (void)
 void Ses_CreateSession (void)
   {
    /***** Create a unique name for the session *****/
-   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,sizeof (Gbl.Session.Id) - 1);
+   Str_Copy (Gbl.Session.Id,Cry_GetUniqueNameEncrypted (),sizeof (Gbl.Session.Id) - 1);
 
    /***** Check that session is not open *****/
    if (Ses_DB_CheckIfSessionExists (Gbl.Session.Id))

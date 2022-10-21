@@ -64,6 +64,21 @@ static struct
   } Fil_HTMLOutput;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static FILE *Fil_QueryFile = NULL;	// Temporary file to save stdin
+
+/*****************************************************************************/
+/***************************** Get query file ********************************/
+/*****************************************************************************/
+
+FILE *Fil_GetQueryFile (void)
+  {
+   return Fil_QueryFile;
+  }
+
+/*****************************************************************************/
 /******** Create HTML output file for the web page sent by this CGI **********/
 /*****************************************************************************/
 
@@ -74,7 +89,7 @@ void Fil_CreateFileForHTMLOutput (void)
 
    /***** Create a unique name for the file *****/
    snprintf (Fil_HTMLOutput.FileName,sizeof (Fil_HTMLOutput.FileName),
-             "%s/%s.html",Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+             "%s/%s.html",Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /***** Open file for writing and reading *****/
    if ((Gbl.F.Out = fopen (Fil_HTMLOutput.FileName,"w+t")) == NULL)
@@ -101,7 +116,6 @@ void Fil_CloseAndRemoveFileForHTMLOutput (void)
 /*****************************************************************************/
 /********** Open temporary file and write on it reading from stdin ***********/
 /*****************************************************************************/
-// On error, Gbl.Alert.Txt will contain feedback
 
 bool Fil_ReadStdinIntoTmpFile (void)
   {
@@ -111,7 +125,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
    bool FileIsTooBig = false;
    bool TimeExceeded = false;
 
-   if ((Gbl.F.Tmp = tmpfile ()) == NULL)
+   if ((Fil_QueryFile = tmpfile ()) == NULL)
      {
       Fil_EndOfReadingStdin ();
       Err_ShowErrorAndExit ("Can not create temporary file.");
@@ -124,7 +138,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
          if (!(TmpFileSize % (64ULL * 1024ULL)))	// Check timeout from time to time
             if (time (NULL) - Dat_GetStartExecutionTimeUTC () >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
                TimeExceeded = true;
-         fputc (fgetc (stdin),Gbl.F.Tmp);
+         fputc (fgetc (stdin),Fil_QueryFile);
         }
       else
          FileIsTooBig = true;
@@ -152,7 +166,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
 
       return false;
      }
-   rewind (Gbl.F.Tmp);
+   rewind (Fil_QueryFile);
 
    return true;
   }
@@ -213,6 +227,7 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
                                         char *FileName,char *MIMEType)
   {
    struct Param *Param;
+   FILE *QueryFile = Fil_GetQueryFile ();
 
    /***** Set default values *****/
    FileName[0] = 0;
@@ -232,8 +247,8 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
       Err_ShowErrorAndExit ("Error while getting filename.");
 
    /* Copy filename */
-   fseek (Gbl.F.Tmp,Param->FileName.Start,SEEK_SET);
-   if (fread (FileName,sizeof (char),Param->FileName.Length,Gbl.F.Tmp) !=
+   fseek (QueryFile,Param->FileName.Start,SEEK_SET);
+   if (fread (FileName,sizeof (char),Param->FileName.Length,QueryFile) !=
        Param->FileName.Length)
       Err_ShowErrorAndExit ("Error while getting filename.");
    FileName[Param->FileName.Length] = '\0';
@@ -246,8 +261,8 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
       Err_ShowErrorAndExit ("Error while getting content type.");
 
    /* Copy MIME type */
-   fseek (Gbl.F.Tmp,Param->ContentType.Start,SEEK_SET);
-   if (fread (MIMEType,sizeof (char),Param->ContentType.Length,Gbl.F.Tmp) !=
+   fseek (QueryFile,Param->ContentType.Start,SEEK_SET);
+   if (fread (MIMEType,sizeof (char),Param->ContentType.Length,QueryFile) !=
        Param->ContentType.Length)
       Err_ShowErrorAndExit ("Error while getting content type.");
    MIMEType[Param->ContentType.Length] = '\0';
@@ -265,6 +280,7 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
    unsigned char Bytes[NUM_BYTES_PER_CHUNK];
    size_t RemainingBytesToCopy;
    size_t BytesToCopy;
+   FILE *QueryFile = Fil_GetQueryFile ();
 
    /***** Open destination file *****/
    if ((FileDataTmp = fopen (FileNameDataTmp,"wb")) == NULL)
@@ -274,16 +290,16 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
    /* Go to start of source */
    if (Param->Value.Start == 0)
       Err_ShowErrorAndExit ("Error while copying file.");
-   fseek (Gbl.F.Tmp,Param->Value.Start,SEEK_SET);
+   fseek (QueryFile,Param->Value.Start,SEEK_SET);
 
-   /* Copy part of Gbl.F.Tmp to FileDataTmp */
-   for (RemainingBytesToCopy = Param->Value.Length;
+   /* Copy part of query file to FileDataTmp */
+   for (RemainingBytesToCopy  = Param->Value.Length;
 	RemainingBytesToCopy != 0;
 	RemainingBytesToCopy -= BytesToCopy)
      {
       BytesToCopy = (RemainingBytesToCopy >= NUM_BYTES_PER_CHUNK) ? NUM_BYTES_PER_CHUNK :
 	                                                            RemainingBytesToCopy;
-      if (fread (Bytes,1,BytesToCopy,Gbl.F.Tmp) != BytesToCopy)
+      if (fread (Bytes,1,BytesToCopy,QueryFile) != BytesToCopy)
 	{
          fclose (FileDataTmp);
 	 return false;
@@ -556,19 +572,6 @@ void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt)
 
    while ((NumBytesRead = fread (Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_CHUNK,FileSrc)))
       fwrite (Bytes,sizeof (Bytes[0]),NumBytesRead,FileTgt);
-  }
-
-/*****************************************************************************/
-/**************************** Close XML file *********************************/
-/*****************************************************************************/
-
-void Fil_CloseXMLFile (void)
-  {
-   if (Gbl.F.XML)
-     {
-      fclose (Gbl.F.XML);
-      Gbl.F.XML = NULL;	// To indicate that it is not open
-     }
   }
 
 /*****************************************************************************/

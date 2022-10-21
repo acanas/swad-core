@@ -48,8 +48,6 @@
 struct Fil_Files
   {
    FILE *Out;		// File with the HTML output of this CGI
-   FILE *Tmp;		// Temporary file to save stdin
-   FILE *XML;		// XML file for syllabus, for directory tree
    FILE *Rep;		// Temporary file to save report
   };
 
@@ -59,6 +57,7 @@ struct Fil_Files
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+FILE *Fil_GetQueryFile (void);
 void Fil_CreateFileForHTMLOutput (void);
 void Fil_CloseAndRemoveFileForHTMLOutput (void);
 bool Fil_ReadStdinIntoTmpFile (void);
@@ -85,7 +84,6 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
 
-void Fil_CloseXMLFile (void);
 void Fil_CloseReportFile (void);
 
 void Fil_WriteFileSizeBrief (double SizeInBytes,

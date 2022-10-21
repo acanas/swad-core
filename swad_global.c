@@ -88,15 +88,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.PID = getpid ();
    Sta_GetRemoteAddr ();
 
-   Cry_CreateUniqueNameEncrypted (Gbl.UniqueNameEncrypted);
+   Cry_CreateUniqueNameEncrypted (Cry_GetUniqueNameEncrypted ());
 
    srand ((unsigned int) Dat_GetStartExecutionTimeUTC ());	// Initialize seed for rand()
 
    Gbl.WebService.IsWebService = false;
 
    Gbl.F.Out = stdout;
-   Gbl.F.Tmp = NULL;
-   Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
    Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
@@ -338,9 +336,6 @@ void Gbl_Cleanup (void)
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
-   if (Gbl.F.Tmp)
-      fclose (Gbl.F.Tmp);
-   Fil_CloseXMLFile ();
    Fil_CloseReportFile ();
    Par_FreeParams ();
    Ale_ResetAllAlerts ();
