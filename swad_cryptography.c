@@ -34,6 +34,18 @@
 #include "swad_global.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+/***** SHA-256 algorithm *****/
+#define BITS_SHA256_ENCRYPTION 256
+#define BYTES_SHA256_ENCRYPTION (BITS_SHA256_ENCRYPTION/8)
+
+/***** SHA-512 algorithm *****/
+#define BITS_SHA512_ENCRYPTION 512
+#define BYTES_SHA512_ENCRYPTION (BITS_SHA512_ENCRYPTION/8)
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -44,15 +56,7 @@ extern const char Str_BIN_TO_BASE64URL[64 + 1];
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-/***** SHA-256 algorithm *****/
-
-#define BITS_SHA256_ENCRYPTION 256
-#define BYTES_SHA256_ENCRYPTION (BITS_SHA256_ENCRYPTION/8)
-
-/***** SHA-512 algorithm *****/
-
-#define BITS_SHA512_ENCRYPTION 512
-#define BYTES_SHA512_ENCRYPTION (BITS_SHA512_ENCRYPTION/8)
+static char Cry_UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 
 /*****************************************************************************/
 /*************** Encrypt a plain text using SHA=256 algorithm ****************/
@@ -129,10 +133,21 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,
 void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
-   char UniqueNamePlain[Cns_MAX_BYTES_IP + Cns_MAX_DECIMAL_DIGITS_LONG + Cns_MAX_DECIMAL_DIGITS_LONG + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UniqueNamePlain[Cns_MAX_BYTES_IP +
+                        Cns_MAX_DECIMAL_DIGITS_LONG +
+                        Cns_MAX_DECIMAL_DIGITS_LONG +
+                        Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    NumCall++;
-   snprintf (UniqueNamePlain,sizeof (UniqueNamePlain),"%s-%lx-%x-%x",
-             Gbl.IP,Dat_GetStartExecutionTimeUTC (),Gbl.PID,NumCall);
+   snprintf (UniqueNamePlain,sizeof (UniqueNamePlain),"%s-%lx-%lx-%x",
+             Gbl.IP,
+             (long) Dat_GetStartExecutionTimeUTC (),
+             (long) Gbl.PID,
+             NumCall);
    Cry_EncryptSHA256Base64 (UniqueNamePlain,UniqueNameEncrypted);	// Make difficult to guess a unique name
+  }
+
+const char *Cry_GetUniqueNameEncrypted (void)
+  {
+   return Cry_UniqueNameEncrypted;
   }

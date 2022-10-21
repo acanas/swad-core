@@ -91,7 +91,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
                                           long CrsCod);
 void Syl_FreeListItemsSyllabus (void);
 
-int Syl_ReadLevelItemSyllabus (void);
+int Syl_ReadLevelItemSyllabus (FILE *XML);
 
 void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
 

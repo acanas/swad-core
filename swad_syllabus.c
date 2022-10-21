@@ -123,7 +123,9 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos);
 static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel);
 
 static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
-                                  char PathFile[PATH_MAX + 1]);
+                                  char PathFile[PATH_MAX + 1],
+                                  FILE **XML);
+static void Syl_CloseXMLFile (FILE **XML);
 
 /*****************************************************************************/
 /************************** Reset syllabus context ***************************/
@@ -347,6 +349,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
                                           long CrsCod)
   {
    char PathFile[PATH_MAX + 1];
+   FILE *XML = NULL;	// XML file for syllabus
    long PostBeginList;
    unsigned NumItem = 0;
    int N;
@@ -361,18 +364,18 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 		                                       Cfg_SYLLABUS_FOLDER_PRACTICALS);
 
    /***** Open the file with the syllabus *****/
-   Syl_OpenSyllabusFile (Syllabus,PathFile);
+   Syl_OpenSyllabusFile (Syllabus,PathFile,&XML);
 
    /***** Go to the start of the list of items *****/
-   if (!Str_FindStrInFile (Gbl.F.XML,"<lista>",Str_NO_SKIP_HTML_COMMENTS))
+   if (!Str_FindStrInFile (XML,"<lista>",Str_NO_SKIP_HTML_COMMENTS))
       Err_WrongSyllabusFormatExit ();
 
    /***** Save the position of the start of the list *****/
-   PostBeginList = ftell (Gbl.F.XML);
+   PostBeginList = ftell (XML);
 
    /***** Loop to count the number of items *****/
    for (Syl_LstItemsSyllabus.NumItems = 0;
-	Str_FindStrInFile (Gbl.F.XML,"<item",Str_NO_SKIP_HTML_COMMENTS);
+	Str_FindStrInFile (XML,"<item",Str_NO_SKIP_HTML_COMMENTS);
 	Syl_LstItemsSyllabus.NumItems++);
 
    /***** Allocate memory for the list of items *****/
@@ -381,7 +384,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
       Err_NotEnoughMemoryExit ();
 
    /***** Return to the start of the list *****/
-   fseek (Gbl.F.XML,PostBeginList,SEEK_SET);
+   fseek (XML,PostBeginList,SEEK_SET);
 
    for (N  = 1;
 	N <= Syl_MAX_LEVELS_SYLLABUS;
@@ -412,11 +415,11 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	   NumItem++)
 	{
 	 /* Go to the start of the item */
-	 if (!Str_FindStrInFile (Gbl.F.XML,"<item",Str_NO_SKIP_HTML_COMMENTS))
+	 if (!Str_FindStrInFile (XML,"<item",Str_NO_SKIP_HTML_COMMENTS))
 	    Err_WrongSyllabusFormatExit ();
 
 	 /* Get the level */
-	 Syl_LstItemsSyllabus.Lst[NumItem].Level = Syl_ReadLevelItemSyllabus ();
+	 Syl_LstItemsSyllabus.Lst[NumItem].Level = Syl_ReadLevelItemSyllabus (XML);
 	 if (Syl_LstItemsSyllabus.Lst[NumItem].Level > Syl_LstItemsSyllabus.NumLevels)
 	    Syl_LstItemsSyllabus.NumLevels = Syl_LstItemsSyllabus.Lst[NumItem].Level;
 
@@ -432,12 +435,12 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	    Syl_LstItemsSyllabus.Lst[NumItem].CodItem[N] = CodItem[N];
 
 	 /* Get the text of the item */
-	 Result = Str_ReadFileUntilBoundaryStr (Gbl.F.XML,Syl_LstItemsSyllabus.Lst[NumItem].Text,
+	 Result = Str_ReadFileUntilBoundaryStr (XML,Syl_LstItemsSyllabus.Lst[NumItem].Text,
 	                                        "</item>",strlen ("</item>"),
 	                                        (unsigned long long) Syl_MAX_BYTES_TEXT_ITEM);
 	 if (Result == 0) // Str too long
 	   {
-	    if (!Str_FindStrInFile (Gbl.F.XML,"</item>",Str_NO_SKIP_HTML_COMMENTS)) // End the search
+	    if (!Str_FindStrInFile (XML,"</item>",Str_NO_SKIP_HTML_COMMENTS)) // End the search
 	       Err_WrongSyllabusFormatExit ();
 	   }
 	 else if (Result == -1)
@@ -445,7 +448,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	}
 
    /***** Close the file with the syllabus *****/
-   Fil_CloseXMLFile ();
+   Syl_CloseXMLFile (&XML);
 
    /***** Initialize other fields in the list *****/
    if (Syl_LstItemsSyllabus.NumItems)
@@ -485,19 +488,19 @@ void Syl_FreeListItemsSyllabus (void)
 // XML file with the syllabus must be positioned after <item
 // XML with the syllabus becomes positioned after <item nivel="x">
 
-int Syl_ReadLevelItemSyllabus (void)
+int Syl_ReadLevelItemSyllabus (FILE *XML)
   {
    int Level;
    char StrlLevel[11 + 1];
 
-   if (!Str_FindStrInFile (Gbl.F.XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
+   if (!Str_FindStrInFile (XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
       Err_WrongSyllabusFormatExit ();
-   if (Str_ReadFileUntilBoundaryStr (Gbl.F.XML,StrlLevel,"\"",1,
+   if (Str_ReadFileUntilBoundaryStr (XML,StrlLevel,"\"",1,
    	                             (unsigned long long) (11 + 1)) != 1)
       Err_WrongSyllabusFormatExit ();
    if (sscanf (StrlLevel,"%d",&Level) != 1)
       Err_WrongSyllabusFormatExit ();
-   Str_FindStrInFile (Gbl.F.XML,">",Str_NO_SKIP_HTML_COMMENTS);
+   Str_FindStrInFile (XML,">",Str_NO_SKIP_HTML_COMMENTS);
    if (Level < 1)
       Level = 1;
    else if (Level > Syl_MAX_LEVELS_SYLLABUS)
@@ -1371,16 +1374,17 @@ void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
 /*****************************************************************************/
 
 static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
-                                  char PathFile[PATH_MAX + 1])
+                                  char PathFile[PATH_MAX + 1],
+                                  FILE **XML)
   {
-   if (Gbl.F.XML == NULL) // If it's not open in this moment...
+   if (*XML == NULL) // If it's not open in this moment...
      {
       /* If the directory does not exist, create it */
       Fil_CreateDirIfNotExists (Syllabus->PathDir);
 
       /* Open the file for reading */
       Syl_BuildPathFileSyllabus (Syllabus,PathFile);
-      if ((Gbl.F.XML = fopen (PathFile,"rb")) == NULL)
+      if ((*XML = fopen (PathFile,"rb")) == NULL)
 	{
 	 /* Can't open the file */
 	 if (!Fil_CheckIfPathExists (Syllabus->PathDir)) // Strange error, since it is just created
@@ -1388,19 +1392,33 @@ static void Syl_OpenSyllabusFile (const struct Syl_Syllabus *Syllabus,
 	 else
 	   {
 	    /* Create a new empty syllabus */
-	    if ((Gbl.F.XML = fopen (PathFile,"wb")) == NULL)
+	    if ((*XML = fopen (PathFile,"wb")) == NULL)
 	       Err_ShowErrorAndExit ("Can not create syllabus file.");
-	    Syl_WriteStartFileSyllabus (Gbl.F.XML);
-	    Syl_WriteEndFileSyllabus (Gbl.F.XML);
-	    Fil_CloseXMLFile ();
+	    Syl_WriteStartFileSyllabus (*XML);
+	    Syl_WriteEndFileSyllabus (*XML);
+            Syl_CloseXMLFile (XML);
+
 	    /* Open of new the file for reading */
-	    if ((Gbl.F.XML = fopen (PathFile,"rb")) == NULL)
+	    if ((*XML = fopen (PathFile,"rb")) == NULL)
 	       Err_ShowErrorAndExit ("Can not open syllabus file.");
 	   }
 	}
      }
    else  // Go to the start of the file
-      rewind (Gbl.F.XML);
+      rewind (*XML);
+  }
+
+/*****************************************************************************/
+/**************************** Close XML file *********************************/
+/*****************************************************************************/
+
+static void Syl_CloseXMLFile (FILE **XML)
+  {
+   if (*XML)
+     {
+      fclose (*XML);
+      *XML = NULL;	// To indicate that it is not open
+     }
   }
 
 /*****************************************************************************/

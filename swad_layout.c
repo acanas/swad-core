@@ -1370,29 +1370,37 @@ void Lay_RefreshNotifsAndConnected (void)
    if      (!(Gbl.PID %  11))
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
    else if (!(Gbl.PID %  19))
-      Fir_DB_PurgeFirewallLog ();			// Remove old clicks from firewall
+      Fir_DB_PurgeFirewallLog ();		// Remove old clicks from firewall
    else if (!(Gbl.PID %  23))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
+      Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
+                             Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,false);	// Remove the oldest temporary public directories used for downloading
    else if (!(Gbl.PID % 101))
       Brw_DB_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 103))
-      Set_DB_RemoveOldSettingsFromIP ();		// Remove old settings from IP
+      Set_DB_RemoveOldSettingsFromIP ();	// Remove old settings from IP
    else if (!(Gbl.PID % 107))
       Log_DB_RemoveOldEntriesRecentLog ();	// Remove old entries in recent log table, it's a slow query
    else if (!(Gbl.PID % 109))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE		,Cfg_TIME_TO_DELETE_HTML_OUTPUT		,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE,
+                             Cfg_TIME_TO_DELETE_HTML_OUTPUT      ,false);
    else if (!(Gbl.PID % 113))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC,
+                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
    else if (!(Gbl.PID % 127))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE,
+                             Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
    else if (!(Gbl.PID % 131))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE,
+                             Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	 ,false);
    else if (!(Gbl.PID % 137))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE		,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE,
+                             Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
    else if (!(Gbl.PID % 139))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE		,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE,
+                             Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	 ,false);
    else if (!(Gbl.PID % 149))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE		,Cfg_TIME_TO_DELETE_TEST_TMP_FILES	,false);
+      Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE,
+                             Cfg_TIME_TO_DELETE_TEST_TMP_FILES	 ,false);
 
    /***** Send, before the HTML, the refresh time *****/
    HTM_TxtF ("%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);

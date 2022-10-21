@@ -53,7 +53,6 @@ struct Globals
    struct Fil_Files F;
    pid_t PID;	// PID of current process
    char IP[Cns_MAX_BYTES_IP + 1];
-   char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
    struct
      {
       bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error
@@ -61,7 +60,6 @@ struct Globals
       bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
      } Layout;
-
    struct
      {
       Lan_Language_t Language;

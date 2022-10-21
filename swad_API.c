@@ -516,7 +516,7 @@ static int API_GenerateNewAPIKey (struct soap *soap,
    API_DB_RemoveOldAPIKeys ();
 
    /***** Create a unique name for the key *****/
-   Str_Copy (APIKey,Gbl.UniqueNameEncrypted,API_BYTES_KEY);
+   Str_Copy (APIKey,Cry_GetUniqueNameEncrypted (),API_BYTES_KEY);
 
    /***** Check that key does not exist in database *****/
    if (API_DB_CheckIfAPIKeyExists (APIKey))
@@ -1334,7 +1334,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_syllabus.html",
-	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
@@ -1411,7 +1411,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_info.html",
-	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
@@ -4705,7 +4705,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Create a unique name for the file */
    snprintf (XMLFileName,sizeof (XMLFileName),"%s/%s.xml",
-             Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /* Open file for writing and reading */
    if ((Gbl.F.XML = fopen (XMLFileName,"w+t")) == NULL)

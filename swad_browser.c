@@ -4105,6 +4105,7 @@ void Brw_CreateDirDownloadTmp (void)
 				// This happens when the trees of assignments and works of several users are being listed
    char PathUniqueDirL[PATH_MAX + 1];
    char PathUniqueDirR[PATH_MAX + 1 + NAME_MAX + 1];
+   const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 
    /* Example: /var/www/html/swad/tmp/SS/ujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
@@ -4116,15 +4117,15 @@ void Brw_CreateDirDownloadTmp (void)
           is limited to 32K in Linux ==> create directories in two levels *****/
    /* 1. Build the name of the directory, splitted in two parts: */
    /* 1a: 2 leftmost chars */
-   Gbl.FileBrowser.TmpPubDir.L[0] = Gbl.UniqueNameEncrypted[0];
-   Gbl.FileBrowser.TmpPubDir.L[1] = Gbl.UniqueNameEncrypted[1];
+   Gbl.FileBrowser.TmpPubDir.L[0] = UniqueNameEncrypted[0];
+   Gbl.FileBrowser.TmpPubDir.L[1] = UniqueNameEncrypted[1];
    Gbl.FileBrowser.TmpPubDir.L[2] = '\0';
    /* 1b: rest of chars */
    if (NumDir)
       snprintf (Gbl.FileBrowser.TmpPubDir.R,sizeof (Gbl.FileBrowser.TmpPubDir.R),
-	        "%s_%u",&Gbl.UniqueNameEncrypted[2],NumDir);
+	        "%s_%u",&UniqueNameEncrypted[2],NumDir);
    else
-      Str_Copy (Gbl.FileBrowser.TmpPubDir.R,&Gbl.UniqueNameEncrypted[2],
+      Str_Copy (Gbl.FileBrowser.TmpPubDir.R,&UniqueNameEncrypted[2],
                 sizeof (Gbl.FileBrowser.TmpPubDir.R) - 1);
 
    /* 2. Create the left directory */
