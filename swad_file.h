@@ -44,13 +44,6 @@
 // Must be < 2 GiB, because off_t type is of type long int
 #define Fil_MAX_FILE_SIZE (2000ULL * 1024ULL * 1024ULL)	// 2000 MiB = 1.95 GiB
 
-// Global files
-struct Fil_Files
-  {
-   FILE *Out;		// File with the HTML output of this CGI
-   FILE *Rep;		// Temporary file to save report
-  };
-
 #define Fil_MAX_BYTES_FILE_SIZE_STRING (32 - 1)
 
 /*****************************************************************************/
@@ -58,6 +51,9 @@ struct Fil_Files
 /*****************************************************************************/
 
 FILE *Fil_GetQueryFile (void);
+void Fil_SetOutputFileToStdout (void);
+FILE *Fil_GetOutputFile (void);
+
 void Fil_CreateFileForHTMLOutput (void);
 void Fil_CloseAndRemoveFileForHTMLOutput (void);
 bool Fil_ReadStdinIntoTmpFile (void);
@@ -83,8 +79,6 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
                             bool RemoveDirectory);
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
-
-void Fil_CloseReportFile (void);
 
 void Fil_WriteFileSizeBrief (double SizeInBytes,
                              char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1]);

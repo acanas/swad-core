@@ -841,7 +841,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
 	 if (Level == 1)
 	    HTM_NBSP ();
-	 Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
+	 Syl_WriteNumItem (NULL,Fil_GetOutputFile (),Level,CodItem);
 	 HTM_NBSP ();
       HTM_TD_End ();
      }

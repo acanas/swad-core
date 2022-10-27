@@ -386,6 +386,7 @@ void Cht_OpenChatWindow (void)
    char ListRoomShrtNames[Cht_MAX_BYTES_ROOM_SHRT_NAMES + 1];
    char ListRoomFullNames [Cht_MAX_BYTES_ROOM_FULL_NAMES + 1];
    FILE *FileChat;
+   FILE *FileOut = Fil_GetOutputFile ();
 
    /***** Get the code and the nombre of the room *****/
    Par_GetParToText ("RoomCode",RoomCode,Cht_MAX_BYTES_ROOM_CODE);
@@ -525,15 +526,15 @@ void Cht_OpenChatWindow (void)
    Gbl.Layout.HTMLStartWritten = true;
 
    /***** Copy index.html file until the end of the applet code *****/
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"<applet",
+   Str_WriteUntilStrFoundInFileIncludingStr (FileOut,FileChat,"<applet",
                                              Str_NO_SKIP_HTML_COMMENTS);
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,">",
+   Str_WriteUntilStrFoundInFileIncludingStr (FileOut,FileChat,">",
                                              Str_NO_SKIP_HTML_COMMENTS);
 
    /***** Write parameters *****/
    HTM_PARAM ("nick","N%s",Gbl.Session.Id);
    HTM_PARAM ("realname","%s",UsrName);
-   HTM_PARAM ("host","%s",Gbl.IP);
+   HTM_PARAM ("host","%s",Par_GetIP ());
    HTM_PARAM ("server_name","%s",Cfg_PLATFORM_SERVER);
    HTM_PARAM ("port","%u",5000);
    HTM_PARAM ("image_bl","%s/usr_bl.jpg",Cfg_URL_ICON_PUBLIC);
@@ -543,7 +544,7 @@ void Cht_OpenChatWindow (void)
    HTM_PARAM ("topic","%s",ListRoomFullNames);
 
    /***** Copy index.html file until the end *****/
-   Str_WriteUntilStrFoundInFileIncludingStr (Gbl.F.Out,FileChat,"</html>",
+   Str_WriteUntilStrFoundInFileIncludingStr (FileOut,FileChat,"</html>",
                                              Str_NO_SKIP_HTML_COMMENTS);
 
    /***** Close index.html file *****/

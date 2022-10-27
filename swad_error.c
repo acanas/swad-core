@@ -553,6 +553,8 @@ void Err_NoPermissionExit (void)
 
 void Err_ShowErrorAndExit (const char *Txt)
   {
+   FILE *FileOut;
+
    /***** Unlock tables if locked *****/
    DB_UnlockTables ();
 
@@ -587,11 +589,13 @@ void Err_ShowErrorAndExit (const char *Txt)
    else
      {
       /***** Send page.
-             The HTML output is now in Gbl.F.Out file ==>
+             The HTML output is now in output file ==>
              ==> copy it to standard output *****/
-      rewind (Gbl.F.Out);
-      Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
+      FileOut = Fil_GetOutputFile ();
+      rewind (FileOut);
+      Fil_FastCopyOfOpenFiles (FileOut,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
+      // Now output file is stdout
 
       if (!Gbl.Action.IsAJAXAutoRefresh)
 	{
@@ -611,7 +615,6 @@ void Err_ShowErrorAndExit (const char *Txt)
 	 /***** End the output *****/
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
-	    // Here Gbl.F.Out is stdout
 	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	       Lay_WriteAboutZone ();
 

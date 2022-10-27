@@ -609,7 +609,7 @@ void Mrk_ShowMyMarks (void)
          Gbl.Layout.HTMLStartWritten = true;
 
          /* Copy HTML to output file */
-         Fil_FastCopyOfOpenFiles (FileUsrMarks,Gbl.F.Out);
+         Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
          fclose (FileUsrMarks);
 
          Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;

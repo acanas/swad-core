@@ -29,6 +29,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_log.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -62,7 +63,7 @@ long Log_DB_LogAccessInHistoricalLog (long ActCod,Rol_Role_t RoleToStore)
 				(unsigned) RoleToStore,
 				Dat_GetTimeGenerationInMicroseconds (),
 				Dat_GetTimeSendInMicroseconds (),
-				Gbl.IP);
+				Par_GetIP ());
   }
 
 /*****************************************************************************/
@@ -91,7 +92,7 @@ void Log_DB_LogAccessInRecentLog (long LogCod,long ActCod,Rol_Role_t RoleToStore
 		   (unsigned) RoleToStore,
 		   Dat_GetTimeGenerationInMicroseconds (),
 		   Dat_GetTimeSendInMicroseconds (),
-		   Gbl.IP);
+		   Par_GetIP ());
    }
 
 /*****************************************************************************/

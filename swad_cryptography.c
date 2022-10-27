@@ -32,6 +32,8 @@
 #include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
+#include "swad_process.h"
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
@@ -133,16 +135,16 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,
 void Cry_CreateUniqueNameEncrypted (char *UniqueNameEncrypted)
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
-   char UniqueNamePlain[Cns_MAX_BYTES_IP +
+   char UniqueNamePlain[Par_MAX_BYTES_IP +
                         Cns_MAX_DECIMAL_DIGITS_LONG +
                         Cns_MAX_DECIMAL_DIGITS_LONG +
                         Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    NumCall++;
    snprintf (UniqueNamePlain,sizeof (UniqueNamePlain),"%s-%lx-%lx-%x",
-             Gbl.IP,
+             Par_GetIP (),
              (long) Dat_GetStartExecutionTimeUTC (),
-             (long) Gbl.PID,
+             (long) Prc_GetPID (),
              NumCall);
    Cry_EncryptSHA256Base64 (UniqueNamePlain,UniqueNameEncrypted);	// Make difficult to guess a unique name
   }

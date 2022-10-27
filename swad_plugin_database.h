@@ -47,7 +47,7 @@ void Plg_DB_ChangeAppKey (long PlgCod,
 void Plg_DB_ChangeURL (long PlgCod,
                        const char NewURL[Cns_MAX_BYTES_WWW + 1]);
 void Plg_DB_ChangeIP (long PlgCod,
-                      const char NewIP[Cns_MAX_BYTES_IP + 1]);
+                      const char NewIP[Par_MAX_BYTES_IP + 1]);
 
 unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res);
 unsigned Plg_DB_GetDataOfPluginByCod (MYSQL_RES **mysql_res,long PlgCod);

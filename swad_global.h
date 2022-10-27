@@ -50,9 +50,6 @@
 
 struct Globals
   {
-   struct Fil_Files F;
-   pid_t PID;	// PID of current process
-   char IP[Cns_MAX_BYTES_IP + 1];
    struct
      {
       bool WritingHTMLStart;	// Used to avoid writing the HTML head when aborting program on error

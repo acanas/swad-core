@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_firewall.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -48,7 +49,7 @@ void Fir_DB_LogAccess (void)
 		   " (ClickTime,IP)"
 		   " VALUES"
 		   " (NOW(),'%s')",
-		   Gbl.IP);
+		   Par_GetIP ());
   }
 
 /*****************************************************************************/
@@ -63,7 +64,7 @@ unsigned Fir_DB_GetNumClicksFromLog (void)
 		   " FROM fir_log"
 		  " WHERE IP='%s'"
 		    " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		  Gbl.IP,
+		  Par_GetIP (),
 		  Fw_CHECK_INTERVAL);
   }
 
@@ -90,7 +91,7 @@ void Fir_DB_BanIP (void)
 		   " (IP,BanTime,UnbanTime)"
 		   " VALUES"
 		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
-		   Gbl.IP,
+		   Par_GetIP (),
 		   (unsigned long) Fw_TIME_BANNED);
   }
 
@@ -106,5 +107,5 @@ unsigned Fir_DB_GetNumBansIP (void)
 		   " FROM fir_banned"
 		  " WHERE IP='%s'"
 		    " AND UnbanTime>NOW()",
-		  Gbl.IP);
+		  Par_GetIP ());
   }

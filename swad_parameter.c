@@ -83,6 +83,7 @@ static struct
       size_t LengthWithoutCRLF;
       size_t LengthWithCRLF;
      } Boundary;
+   char IP[Par_MAX_BYTES_IP + 1];
   } Par_Params =
   {
    .ContentReceivedByCGI = Act_CONT_NORM,
@@ -1144,4 +1145,25 @@ void Par_PutHiddenParamString (const char *Id,const char *ParamName,
    HTM_TxtF (" name=\"%s\" value=\"%s\" />",
              ParamName,Value ? Value :
 	                       "");
+  }
+
+/*****************************************************************************/
+/****************************** Set/Get current IP ***************************/
+/*****************************************************************************/
+/*
+CGI Environment Variables:
+REMOTE_ADDR
+The IP address of the remote host making the request.
+*/
+void Par_SetIP (void)
+  {
+   if (getenv ("REMOTE_ADDR"))
+      Str_Copy (Par_Params.IP,getenv ("REMOTE_ADDR"),sizeof (Par_Params.IP) - 1);
+   else
+      Par_Params.IP[0] = '\0';
+  }
+
+const char *Par_GetIP (void)
+  {
+   return Par_Params.IP;
   }

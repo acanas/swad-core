@@ -426,7 +426,7 @@ static void Plg_ListPluginsForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgIP);
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
-		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_TEXT ("IP",Par_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -718,7 +718,7 @@ void Plg_ChangePlgURL (void)
 void Plg_ChangePlgIP (void)
   {
    extern const char *Txt_The_new_IP_address_is_X;
-   char NewIP[Cns_MAX_BYTES_IP + 1];
+   char NewIP[Par_MAX_BYTES_IP + 1];
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -729,7 +729,7 @@ void Plg_ChangePlgIP (void)
       Err_WrongPluginExit ();
 
    /* Get the new IP for the plugin */
-   Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
+   Par_GetParToText ("IP",NewIP,Par_MAX_BYTES_IP);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -851,7 +851,7 @@ static void Plg_PutFormToCreatePlugin (void)
 
 	    /***** Plugin IP address *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
+	       HTM_INPUT_TEXT ("IP",Par_MAX_CHARS_IP,Plg_EditingPlg->IP,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"10\" class=\"INPUT_%s\""
 			       " required=\"required\"",
@@ -926,7 +926,7 @@ void Plg_ReceiveFormNewPlg (void)
    Par_GetParToText ("URL",Plg_EditingPlg->URL,Cns_MAX_BYTES_WWW);
 
    /* Get plugin IP address */
-   Par_GetParToText ("IP",Plg_EditingPlg->IP,Cns_MAX_BYTES_IP);
+   Par_GetParToText ("IP",Plg_EditingPlg->IP,Par_MAX_BYTES_IP);
 
    if (Plg_EditingPlg->Name[0])	// If there's a plugin name
      {

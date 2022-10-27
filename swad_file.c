@@ -56,7 +56,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define NUM_BYTES_PER_CHUNK 4096
+#define Fil_NUM_BYTES_PER_CHUNK 4096
 
 static struct
   {
@@ -68,6 +68,7 @@ static struct
 /*****************************************************************************/
 
 static FILE *Fil_QueryFile = NULL;	// Temporary file to save stdin
+static FILE *Fil_Out = NULL;		// Temporary file to save output to be written to stdout
 
 /*****************************************************************************/
 /***************************** Get query file ********************************/
@@ -76,6 +77,20 @@ static FILE *Fil_QueryFile = NULL;	// Temporary file to save stdin
 FILE *Fil_GetQueryFile (void)
   {
    return Fil_QueryFile;
+  }
+
+/*****************************************************************************/
+/*************************** Set/Get output file *****************************/
+/*****************************************************************************/
+
+void Fil_SetOutputFileToStdout (void)
+  {
+   Fil_Out = stdout;
+  }
+
+FILE *Fil_GetOutputFile (void)
+  {
+   return Fil_Out;
   }
 
 /*****************************************************************************/
@@ -92,9 +107,9 @@ void Fil_CreateFileForHTMLOutput (void)
              "%s/%s.html",Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /***** Open file for writing and reading *****/
-   if ((Gbl.F.Out = fopen (Fil_HTMLOutput.FileName,"w+t")) == NULL)
+   if ((Fil_Out = fopen (Fil_HTMLOutput.FileName,"w+t")) == NULL)
      {
-      Gbl.F.Out = stdout;
+      Fil_SetOutputFileToStdout ();
       Err_ShowErrorAndExit ("Can not create output file.");
      }
   }
@@ -105,12 +120,12 @@ void Fil_CreateFileForHTMLOutput (void)
 
 void Fil_CloseAndRemoveFileForHTMLOutput (void)
   {
-   if (Gbl.F.Out)
+   if (Fil_Out)
      {
-      fclose (Gbl.F.Out);
+      fclose (Fil_Out);
       unlink (Fil_HTMLOutput.FileName);
      }
-   Gbl.F.Out = stdout;
+   Fil_SetOutputFileToStdout ();
   }
 
 /*****************************************************************************/
@@ -277,7 +292,7 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
 bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
   {
    FILE *FileDataTmp;
-   unsigned char Bytes[NUM_BYTES_PER_CHUNK];
+   unsigned char Bytes[Fil_NUM_BYTES_PER_CHUNK];
    size_t RemainingBytesToCopy;
    size_t BytesToCopy;
    FILE *QueryFile = Fil_GetQueryFile ();
@@ -297,8 +312,8 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
 	RemainingBytesToCopy != 0;
 	RemainingBytesToCopy -= BytesToCopy)
      {
-      BytesToCopy = (RemainingBytesToCopy >= NUM_BYTES_PER_CHUNK) ? NUM_BYTES_PER_CHUNK :
-	                                                            RemainingBytesToCopy;
+      BytesToCopy = (RemainingBytesToCopy >= Fil_NUM_BYTES_PER_CHUNK) ? Fil_NUM_BYTES_PER_CHUNK :
+	                                                                RemainingBytesToCopy;
       if (fread (Bytes,1,BytesToCopy,QueryFile) != BytesToCopy)
 	{
          fclose (FileDataTmp);
@@ -567,24 +582,12 @@ void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt)
 
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt)
   {
-   unsigned char Bytes[NUM_BYTES_PER_CHUNK];
+   unsigned char Bytes[Fil_NUM_BYTES_PER_CHUNK];
    size_t NumBytesRead;
 
-   while ((NumBytesRead = fread (Bytes,sizeof (Bytes[0]),(size_t) NUM_BYTES_PER_CHUNK,FileSrc)))
+   while ((NumBytesRead = fread (Bytes,sizeof (Bytes[0]),
+                                 (size_t) Fil_NUM_BYTES_PER_CHUNK,FileSrc)))
       fwrite (Bytes,sizeof (Bytes[0]),NumBytesRead,FileTgt);
-  }
-
-/*****************************************************************************/
-/***************************** Close report file *****************************/
-/*****************************************************************************/
-
-void Fil_CloseReportFile (void)
-  {
-   if (Gbl.F.Rep)
-     {
-      fclose (Gbl.F.Rep);
-      Gbl.F.Rep = NULL;	// To indicate that it is not open
-     }
   }
 
 /*****************************************************************************/

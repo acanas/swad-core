@@ -63,6 +63,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_process.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_tab.h"
@@ -1363,42 +1364,43 @@ void Lay_RefreshNotifsAndConnected (void)
    unsigned NumUsr;
    bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
                         Gbl.Hierarchy.Level == HieLvl_CRS;	// Right column visible && There is a course selected
+   pid_t PID = Prc_GetPID ();
 
    /***** Sometimes, someone must do this work,
           so who best than processes that refresh via AJAX? *****/
    // We use (PID % prime-number) to do only one action as much
-   if      (!(Gbl.PID %  11))
+   if      (!(PID %  11))
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
-   else if (!(Gbl.PID %  19))
+   else if (!(PID %  19))
       Fir_DB_PurgeFirewallLog ();		// Remove old clicks from firewall
-   else if (!(Gbl.PID %  23))
+   else if (!(PID %  23))
       Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
                              Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,false);	// Remove the oldest temporary public directories used for downloading
-   else if (!(Gbl.PID % 101))
+   else if (!(PID % 101))
       Brw_DB_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
-   else if (!(Gbl.PID % 103))
+   else if (!(PID % 103))
       Set_DB_RemoveOldSettingsFromIP ();	// Remove old settings from IP
-   else if (!(Gbl.PID % 107))
+   else if (!(PID % 107))
       Log_DB_RemoveOldEntriesRecentLog ();	// Remove old entries in recent log table, it's a slow query
-   else if (!(Gbl.PID % 109))
+   else if (!(PID % 109))
       Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE,
                              Cfg_TIME_TO_DELETE_HTML_OUTPUT      ,false);
-   else if (!(Gbl.PID % 113))
+   else if (!(PID % 113))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC,
                              Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
-   else if (!(Gbl.PID % 127))
+   else if (!(PID % 127))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE,
                              Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES ,false);
-   else if (!(Gbl.PID % 131))
+   else if (!(PID % 131))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE,
                              Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	 ,false);
-   else if (!(Gbl.PID % 137))
+   else if (!(PID % 137))
       Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE,
                              Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
-   else if (!(Gbl.PID % 139))
+   else if (!(PID % 139))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE,
                              Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	 ,false);
-   else if (!(Gbl.PID % 149))
+   else if (!(PID % 149))
       Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE,
                              Cfg_TIME_TO_DELETE_TEST_TMP_FILES	 ,false);
 
@@ -1455,7 +1457,7 @@ static void Lay_WriteFootFromHTMLFile (void)
       HTM_Txt ("<footer id=\"foot_zone\">");
 
 	 /***** Copy HTML to output file *****/
-	 Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
+	 Fil_FastCopyOfOpenFiles (FileHTML,Fil_GetOutputFile ());
 	 fclose (FileHTML);
 
       HTM_Txt ("</footer>");

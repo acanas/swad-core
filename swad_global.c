@@ -49,6 +49,7 @@
 #include "swad_link.h"
 #include "swad_parameter.h"
 #include "swad_plugin.h"
+#include "swad_process.h"
 #include "swad_program.h"
 #include "swad_project.h"
 #include "swad_role.h"
@@ -85,8 +86,8 @@ void Gbl_InitializeGlobals (void)
    Dat_SetStartExecutionTimeUTC ();
    Dat_GetAndConvertCurrentDateTime ();
 
-   Gbl.PID = getpid ();
-   Sta_GetRemoteAddr ();
+   Prc_SetPID ();
+   Par_SetIP ();
 
    Cry_CreateUniqueNameEncrypted (Cry_GetUniqueNameEncrypted ());
 
@@ -94,8 +95,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.WebService.IsWebService = false;
 
-   Gbl.F.Out = stdout;
-   Gbl.F.Rep = NULL;	// Report
+   Fil_SetOutputFileToStdout ();
 
    Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
@@ -336,7 +336,6 @@ void Gbl_Cleanup (void)
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
-   Fil_CloseReportFile ();
    Par_FreeParams ();
    Ale_ResetAllAlerts ();
   }

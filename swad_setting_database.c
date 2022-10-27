@@ -27,6 +27,7 @@
 
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -435,7 +436,7 @@ void Set_DB_UpdateMyIPSettingsForCurrentIP (void)
 		    " VALUES"
 		    " ('%s',%ld,NOW(),"
 		      "%u,%u,'%s','%s',%u,%u,%u)",
-	            Gbl.IP,
+	            Par_GetIP (),
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            Gbl.Prefs.FirstDayOfWeek,
 	            (unsigned) Gbl.Prefs.DateFormat,
@@ -492,7 +493,7 @@ unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res)
 			  "PhotoShape"		// row[6]
 		    " FROM set_ip_settings"
 		   " WHERE IP='%s'",
-		   Gbl.IP);
+		   Par_GetIP ());
   }
 
 /*****************************************************************************/

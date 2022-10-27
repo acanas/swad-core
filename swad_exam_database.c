@@ -36,6 +36,7 @@
 #include "swad_exam_print.h"
 #include "swad_exam_set.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -2158,8 +2159,8 @@ void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
 		   ExaLog_GetQstInd (),
 		   ExaLog_GetIfCanAnswer () ? 'Y' :
 					      'N',
-		   // NOW()   	   Redundant, for speed
-		   Gbl.IP);	// Redundant, for speed
+		   // NOW()   	  	   Redundant, for speed
+		   Par_GetIP ());	// Redundant, for speed
   }
 
 /*****************************************************************************/

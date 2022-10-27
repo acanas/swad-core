@@ -114,12 +114,12 @@ static void HTM_SPTxt (const char *Txt);
 
 void HTM_TITLE_Begin (void)
   {
-   fputs ("<title>",Gbl.F.Out);
+   HTM_Txt ("<title>");
   }
 
 void HTM_TITLE_End (void)
   {
-   fputs ("</title>\n",Gbl.F.Out);
+   HTM_Txt ("</title>\n");
   }
 
 /*****************************************************************************/
@@ -1871,7 +1871,7 @@ void HTM_Txt (const char *Txt)
   {
    if (Txt)
       if (Txt[0])
-         fputs (Txt,Gbl.F.Out);
+         fputs (Txt,Fil_GetOutputFile ());
   }
 
 void HTM_TxtColon (const char *Txt)

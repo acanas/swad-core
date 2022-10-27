@@ -191,22 +191,6 @@ void Sta_ResetStats (struct Sta_Stats *Stats)
   }
 
 /*****************************************************************************/
-/**************** Read CGI environment variable REMOTE_ADDR ******************/
-/*****************************************************************************/
-/*
-CGI Environment Variables:
-REMOTE_ADDR
-The IP address of the remote host making the request.
-*/
-void Sta_GetRemoteAddr (void)
-  {
-   if (getenv ("REMOTE_ADDR"))
-      Str_Copy (Gbl.IP,getenv ("REMOTE_ADDR"),sizeof (Gbl.IP) - 1);
-   else
-      Gbl.IP[0] = '\0';
-  }
-
-/*****************************************************************************/
 /******************** Show a form to make a query of clicks ******************/
 /*****************************************************************************/
 

@@ -76,7 +76,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_pagination.o swad_parameter.o swad_password.o \
        swad_password_database.o swad_photo.o swad_photo_database.o \
        swad_photo_shape.o swad_place.o swad_place_database.o swad_plugin.o \
-       swad_plugin_database.o swad_privacy.o swad_profile.o \
+       swad_plugin_database.o swad_privacy.o swad_process.o swad_profile.o \
        swad_profile_database.o swad_program.o swad_program_database.o \
        swad_program_resource.o swad_project.o swad_project_database.o \
        swad_project_resource.o \

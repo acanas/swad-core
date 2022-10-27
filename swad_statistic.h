@@ -152,8 +152,6 @@ struct Sta_Stats
 
 void Sta_ResetStats (struct Sta_Stats *Stats);
 
-void Sta_GetRemoteAddr (void);
-
 void Sta_AskShowCrsHits (void);
 void Sta_AskShowGblHits (void);
 void Sta_PutLinkToCourseHits (void);

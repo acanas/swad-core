@@ -1636,7 +1636,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 	    Err_ShowErrorAndExit ("Can not open temporary HTML file.");
 
 	 /* Copy from temporary HTML file to output file */
-	 Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
+	 Fil_FastCopyOfOpenFiles (FileHTML,Fil_GetOutputFile ());
 
 	 /* Close and remove temporary HTML file */
 	 fclose (FileHTML);

@@ -150,8 +150,9 @@ void Set_GetSettingsFromIP (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   const char *IP = Par_GetIP ();
 
-   if (Gbl.IP[0])
+   if (IP[0])
      {
       /***** Get settings from database *****/
       if (Set_DB_GetSettingsFromIP (&mysql_res))

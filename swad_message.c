@@ -2724,7 +2724,7 @@ void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
 
    /***** Write message to file *****/
    if (ChangeBRToRet)
-      Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Gbl.F.Out,Content);
+      Str_FilePrintStrChangingBRToRetAndNBSPToSpace (Fil_GetOutputFile (),Content);
    else
       HTM_Txt (Content);
   }

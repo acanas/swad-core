@@ -37,6 +37,7 @@
 #include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -234,7 +235,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    int QstInd;
    bool UsrCouldAnswer;
    time_t ClickTimeUTC;
-   char IP[Cns_MAX_BYTES_IP + 1];
+   char IP[Par_MAX_BYTES_IP + 1];
    char *Id;
    size_t Length;
    char Anonymized[14 + 1];	// ***&hellip;***
