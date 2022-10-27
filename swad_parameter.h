@@ -63,12 +63,6 @@ typedef enum
    Par_PARAM_MULTIPLE,
   } Par_ParamType_t; // Parameter is present only one time / multiple times
 
-#define Par_MAX_CHARS_IP	(3 + 1 + 3 + 1 + 3 + 1 + 3)	// 15: max. number of chars of an IP address
-				// Example: 255.255.255.255
-				//           3+1+3+1+3+1+3
-				//          123456789012345
-#define Par_MAX_BYTES_IP	Par_MAX_CHARS_IP	// 15
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

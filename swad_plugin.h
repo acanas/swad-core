@@ -57,7 +57,7 @@ struct Plg_Plugin
    char Logo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
    char AppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
    char URL[Cns_MAX_BYTES_WWW + 1];
-   char IP[Par_MAX_BYTES_IP + 1];
+   char IP[Cns_MAX_BYTES_IP + 1];
   };
 
 /*****************************************************************************/
@@ -67,7 +67,6 @@ struct Plg_Plugin
 void Plg_ListPlugins (void);
 void Plg_EditPlugins (void);
 bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg);
-void Plg_FreeListPlugins (void);
 long Plg_GetParamPlgCod (void);
 void Plg_RemovePlugin (void);
 void Plg_RenamePlugin (void);

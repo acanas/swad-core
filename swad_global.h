@@ -124,11 +124,6 @@ struct Globals
      } Search;
    struct
      {
-      unsigned Num;		// Number of plugins
-      struct Plg_Plugin *Lst;	// List of plugins
-     } Plugins;
-   struct
-     {
       bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?
       long PlgCod;
       API_Function_t Function;

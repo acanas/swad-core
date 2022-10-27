@@ -83,7 +83,7 @@ static struct
       size_t LengthWithoutCRLF;
       size_t LengthWithCRLF;
      } Boundary;
-   char IP[Par_MAX_BYTES_IP + 1];
+   char IP[Cns_MAX_BYTES_IP + 1];
   } Par_Params =
   {
    .ContentReceivedByCGI = Act_CONT_NORM,

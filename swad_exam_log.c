@@ -235,7 +235,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    int QstInd;
    bool UsrCouldAnswer;
    time_t ClickTimeUTC;
-   char IP[Par_MAX_BYTES_IP + 1];
+   char IP[Cns_MAX_BYTES_IP + 1];
    char *Id;
    size_t Length;
    char Anonymized[14 + 1];	// ***&hellip;***

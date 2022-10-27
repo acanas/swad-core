@@ -58,10 +58,20 @@ TODO: Check if web service is called from an authorized IP.
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private variables *****************************/
+/******************************* Private types *******************************/
 /*****************************************************************************/
 
-static struct Plg_Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plugin being edited
+struct Plg_Plugins
+  {
+   unsigned Num;			// Number of plugins
+   struct Plg_Plugin *Lst;		// List of plugins
+  };
+
+/*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -69,9 +79,10 @@ static struct Plg_Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the 
 
 static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
-static void Plg_ListPluginsForEdition (void);
+static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins);
+static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins);
 static void Plg_PutParamPlgCod (void *PlgCod);
-static void Plg_GetListPlugins (void);
+static void Plg_GetListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
 
@@ -91,6 +102,7 @@ void Plg_ListPlugins (void)
    struct Plg_Plugin *Plg;
    char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
    char *Icon;
+   struct Plg_Plugins Plugins;
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {
@@ -99,7 +111,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** Get list of plugins *****/
-   Plg_GetListPlugins ();
+   Plg_GetListPlugins (&Plugins);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Plugins,
@@ -116,10 +128,10 @@ void Plg_ListPlugins (void)
 
       /***** Write all plugins *****/
       for (NumPlg = 0;
-	   NumPlg < Gbl.Plugins.Num;
+	   NumPlg < Plugins.Num;
 	   NumPlg++)
 	{
-	 Plg = &(Gbl.Plugins.Lst[NumPlg]);
+	 Plg = &Plugins.Lst[NumPlg];
 
 	 snprintf (URL,sizeof (URL),"%s%s",Plg->URL,Gbl.Session.Id);
 
@@ -132,7 +144,7 @@ void Plg_ListPlugins (void)
 	       HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 			    " class=\"DAT_%s\"",
 			    URL,Plg->Name,The_GetSuffix ());
-		  if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+		  if (asprintf (&Icon,"%s24x24.gif",Plugins.Lst[NumPlg].Logo) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
 			   "class=\"ICO40x40\"");
@@ -155,7 +167,7 @@ void Plg_ListPlugins (void)
    Box_BoxTableEnd ();
 
    /***** Free list of plugins *****/
-   Plg_FreeListPlugins ();
+   Plg_FreeListPlugins (&Plugins);
   }
 
 /*****************************************************************************/
@@ -187,9 +199,10 @@ void Plg_EditPlugins (void)
 static void Plg_EditPluginsInternal (void)
   {
    extern const char *Txt_Plugins;
+   struct Plg_Plugins Plugins;
 
    /***** Get list of plugins *****/
-   Plg_GetListPlugins ();
+   Plg_GetListPlugins (&Plugins);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Plugins,
@@ -200,21 +213,21 @@ static void Plg_EditPluginsInternal (void)
       Plg_PutFormToCreatePlugin ();
 
       /***** List current plugins *****/
-      if (Gbl.Plugins.Num)
-	 Plg_ListPluginsForEdition ();
+      if (Plugins.Num)
+	 Plg_ListPluginsForEdition (&Plugins);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of plugins *****/
-   Plg_FreeListPlugins ();
+   Plg_FreeListPlugins (&Plugins);
   }
 
 /*****************************************************************************/
 /************************* Get list of current plugins ***********************/
 /*****************************************************************************/
 
-static void Plg_GetListPlugins (void)
+static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -222,19 +235,19 @@ static void Plg_GetListPlugins (void)
    struct Plg_Plugin *Plg;
 
    /***** Get plugins from database *****/
-   if ((Gbl.Plugins.Num = Plg_DB_GetListPlugins (&mysql_res))) // Plugins found...
+   if ((Plugins->Num = Plg_DB_GetListPlugins (&mysql_res))) // Plugins found...
      {
       /***** Create list with plugins *****/
-      if ((Gbl.Plugins.Lst = calloc ((size_t) Gbl.Plugins.Num,
-                                     sizeof (*Gbl.Plugins.Lst))) == NULL)
+      if ((Plugins->Lst = calloc ((size_t) Plugins->Num,
+                                  sizeof (*Plugins->Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the plugins *****/
       for (NumPlg = 0;
-	   NumPlg < Gbl.Plugins.Num;
+	   NumPlg < Plugins->Num;
 	   NumPlg++)
         {
-         Plg = &(Gbl.Plugins.Lst[NumPlg]);
+         Plg = &Plugins->Lst[NumPlg];
 
          /* Get next plugin */
          row = mysql_fetch_row (mysql_res);
@@ -253,6 +266,8 @@ static void Plg_GetListPlugins (void)
          Str_Copy (Plg->IP         ,row[6],sizeof (Plg->IP         ) - 1);
         }
      }
+   else
+      Plugins->Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -310,22 +325,23 @@ bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg)
 /*************************** Free list of plugins ****************************/
 /*****************************************************************************/
 
-void Plg_FreeListPlugins (void)
+static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins)
   {
-   if (Gbl.Plugins.Lst)
-     {
-      /***** Free memory used by the list of plugins *****/
-      free (Gbl.Plugins.Lst);
-      Gbl.Plugins.Lst = NULL;
-      Gbl.Plugins.Num = 0;
-     }
+   if (Plugins->Num)
+      if (Plugins->Lst)
+	{
+	 /***** Free memory used by the list of plugins *****/
+	 free (Plugins->Lst);
+	 Plugins->Lst = NULL;
+	 Plugins->Num = 0;
+	}
   }
 
 /*****************************************************************************/
 /****************************** List all plugins *****************************/
 /*****************************************************************************/
 
-static void Plg_ListPluginsForEdition (void)
+static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
   {
    unsigned NumPlg;
    struct Plg_Plugin *Plg;
@@ -339,10 +355,10 @@ static void Plg_ListPluginsForEdition (void)
 
       /***** Write all plugins *****/
       for (NumPlg = 0;
-	   NumPlg < Gbl.Plugins.Num;
+	   NumPlg < Plugins->Num;
 	   NumPlg++)
 	{
-	 Plg = &Gbl.Plugins.Lst[NumPlg];
+	 Plg = &Plugins->Lst[NumPlg];
 
 	 /* Row begin */
 	 HTM_TR_Begin (NULL);
@@ -361,9 +377,9 @@ static void Plg_ListPluginsForEdition (void)
 	    /* Plugin logo */
 	    // TODO: Change plugin icons to 32x32
 	    HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
-	       if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+	       if (asprintf (&Icon,"%s24x24.gif",Plugins->Lst[NumPlg].Logo) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Gbl.Plugins.Lst[NumPlg].Name,
+	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plugins->Lst[NumPlg].Name,
 			"class=\"ICO40x40\"");
 	       free (Icon);
 	    HTM_TD_End ();
@@ -426,7 +442,7 @@ static void Plg_ListPluginsForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgIP);
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
-		  HTM_INPUT_TEXT ("IP",Par_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -626,7 +642,8 @@ void Plg_ChangePlgLogo (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update logo *****/
-   Str_Copy (Plg_EditingPlg->Logo,NewLogo,sizeof (Plg_EditingPlg->Logo) - 1);
+   Str_Copy (Plg_EditingPlg->Logo,NewLogo,
+             sizeof (Plg_EditingPlg->Logo) - 1);
   }
 
 /*****************************************************************************/
@@ -667,7 +684,8 @@ void Plg_ChangePlgAppKey (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update app key *****/
-   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,sizeof (Plg_EditingPlg->AppKey) - 1);
+   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
+             sizeof (Plg_EditingPlg->AppKey) - 1);
   }
 
 /*****************************************************************************/
@@ -708,7 +726,8 @@ void Plg_ChangePlgURL (void)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update URL *****/
-   Str_Copy (Plg_EditingPlg->URL,NewURL,sizeof (Plg_EditingPlg->URL) - 1);
+   Str_Copy (Plg_EditingPlg->URL,NewURL,
+             sizeof (Plg_EditingPlg->URL) - 1);
   }
 
 /*****************************************************************************/
@@ -718,7 +737,7 @@ void Plg_ChangePlgURL (void)
 void Plg_ChangePlgIP (void)
   {
    extern const char *Txt_The_new_IP_address_is_X;
-   char NewIP[Par_MAX_BYTES_IP + 1];
+   char NewIP[Cns_MAX_BYTES_IP + 1];
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -729,7 +748,7 @@ void Plg_ChangePlgIP (void)
       Err_WrongPluginExit ();
 
    /* Get the new IP for the plugin */
-   Par_GetParToText ("IP",NewIP,Par_MAX_BYTES_IP);
+   Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -851,7 +870,7 @@ static void Plg_PutFormToCreatePlugin (void)
 
 	    /***** Plugin IP address *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("IP",Par_MAX_CHARS_IP,Plg_EditingPlg->IP,
+	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"10\" class=\"INPUT_%s\""
 			       " required=\"required\"",
@@ -910,23 +929,13 @@ void Plg_ReceiveFormNewPlg (void)
    Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get plugin name */
-   Par_GetParToText ("Name",Plg_EditingPlg->Name,Plg_MAX_BYTES_PLUGIN_NAME);
-
-   /* Get plugin description */
+   /* Get plugin name, description, logo, application key, URL, IP address */
+   Par_GetParToText ("Name"       ,Plg_EditingPlg->Name       ,Plg_MAX_BYTES_PLUGIN_NAME);
    Par_GetParToText ("Description",Plg_EditingPlg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
-
-   /* Get plugin logo */
-   Par_GetParToText ("Logo",Plg_EditingPlg->Logo,Plg_MAX_BYTES_PLUGIN_LOGO);
-
-   /* Get plugin application key */
-   Par_GetParToText ("AppKey",Plg_EditingPlg->AppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
-
-   /* Get plugin URL */
-   Par_GetParToText ("URL",Plg_EditingPlg->URL,Cns_MAX_BYTES_WWW);
-
-   /* Get plugin IP address */
-   Par_GetParToText ("IP",Plg_EditingPlg->IP,Par_MAX_BYTES_IP);
+   Par_GetParToText ("Logo"       ,Plg_EditingPlg->Logo       ,Plg_MAX_BYTES_PLUGIN_LOGO);
+   Par_GetParToText ("AppKey"     ,Plg_EditingPlg->AppKey     ,Plg_MAX_BYTES_PLUGIN_APP_KEY);
+   Par_GetParToText ("URL"        ,Plg_EditingPlg->URL        ,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("IP"         ,Plg_EditingPlg->IP         ,Cns_MAX_BYTES_IP);
 
    if (Plg_EditingPlg->Name[0])	// If there's a plugin name
      {
@@ -963,12 +972,8 @@ void Plg_ReceiveFormNewPlg (void)
 
 static void Plg_EditingPluginConstructor (void)
   {
-   /***** Pointer must be NULL *****/
-   if (Plg_EditingPlg != NULL)
-      Err_WrongPluginExit ();
-
    /***** Allocate memory for plugin *****/
-   if ((Plg_EditingPlg = malloc (sizeof (*Plg_EditingPlg))) == NULL)
+   if ((Plg_EditingPlg = malloc (sizeof (struct Plg_Plugin))) == NULL)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset plugin *****/

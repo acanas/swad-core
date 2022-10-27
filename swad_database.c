@@ -1199,7 +1199,7 @@ mysql> DESCRIBE exa_log;
 		        "QstInd INT NOT NULL DEFAULT -1,"
 			"CanAnswer ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"ClickTime DATETIME NOT NULL,"
-			"IP CHAR(15) NOT NULL,"		// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(LogCod),"
 		   "UNIQUE INDEX(PrnCod,LogCod),"
 		   "INDEX(ClickTime))");
@@ -1445,7 +1445,7 @@ mysql> DESCRIBE fir_banned;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_banned ("
-			"IP CHAR(15) NOT NULL,"		// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"BanTime DATETIME NOT NULL,"
 			"UnbanTime DATETIME NOT NULL,"
 		   "INDEX(IP,UnbanTime),"
@@ -1465,7 +1465,7 @@ mysql> DESCRIBE fir_log;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_log ("
 			"ClickTime DATETIME NOT NULL,"
-			"IP CHAR(15) NOT NULL,"	// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "INDEX(ClickTime),"
 		   "INDEX(IP))");
 
@@ -2072,7 +2072,7 @@ mysql> DESCRIBE log_recent;
 			"ClickTime DATETIME NOT NULL,"
 			"TimeToGenerate INT NOT NULL,"
 			"TimeToSend INT NOT NULL,"
-			"IP CHAR(15) NOT NULL,"	// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(LogCod),"
 		   "INDEX(ActCod),"
 		   "INDEX(CtyCod),"
@@ -2463,7 +2463,7 @@ mysql> DESCRIBE plg_plugins;
 			"Logo VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_LOGO
 			"AppKey VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_APP_KEY
 			"URL VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
-			"IP CHAR(15) NOT NULL,"			// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
    /***** Table prg_clipboards *****/
@@ -2880,7 +2880,7 @@ mysql> DESCRIBE set_ip_settings;
 10 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS set_ip_settings ("
-			"IP CHAR(15) NOT NULL,"		// Par_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"UsrCod INT NOT NULL DEFAULT -1,"
 			"LastChange DATETIME NOT NULL,"
 			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"

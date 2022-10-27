@@ -326,7 +326,6 @@ void Gbl_Cleanup (void)
    Ctr_FreeListCenters ();
    Cty_FreeListCountries ();
    Lnk_FreeListLinks ();
-   Plg_FreeListPlugins ();
 
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

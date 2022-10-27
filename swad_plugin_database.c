@@ -127,7 +127,7 @@ void Plg_DB_ChangeURL (long PlgCod,
 /*****************************************************************************/
 
 void Plg_DB_ChangeIP (long PlgCod,
-                      const char NewIP[Par_MAX_BYTES_IP + 1])
+                      const char NewIP[Cns_MAX_BYTES_IP + 1])
   {
    DB_QueryUPDATE ("can not update the IP address of a plugin",
 		   "UPDATE plg_plugins"
