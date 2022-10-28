@@ -240,7 +240,7 @@ static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
      {
       /***** Create list with plugins *****/
       if ((Plugins->Lst = calloc ((size_t) Plugins->Num,
-                                  sizeof (*Plugins->Lst))) == NULL)
+                                  sizeof (struct Plg_Plugin))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the plugins *****/
@@ -328,14 +328,12 @@ bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg)
 
 static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins)
   {
-   if (Plugins->Num)
-      if (Plugins->Lst)
-	{
-	 /***** Free memory used by the list of plugins *****/
-	 free (Plugins->Lst);
-	 Plugins->Lst = NULL;
-	 Plugins->Num = 0;
-	}
+   if (Plugins->Num && Plugins->Lst)
+     {
+      free (Plugins->Lst);
+      Plugins->Lst = NULL;
+      Plugins->Num = 0;
+     }
   }
 
 /*****************************************************************************/

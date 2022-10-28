@@ -50,6 +50,16 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+struct Lnk_Links
+  {
+   unsigned Num;		// Number of institutional links
+   struct Lnk_Link *Lst;	// List of institutional links
+  };
+
+/*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
@@ -61,14 +71,17 @@ static struct Lnk_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the li
 
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args);
 static void Lnk_PutIconToEditLinks (void);
-static void Lnk_WriteListOfLinks (const char *Class);
+static void Lnk_WriteListOfLinks (const struct Lnk_Links *Links,const char *Class);
 
 static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
+static void Lnk_GetListLinks (struct Lnk_Links *Links);
 static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
 
-static void Lnk_ListLinksForEdition (void);
+static void Lnk_FreeListLinks (struct Lnk_Links *Links);
+
+static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links);
 static void Lnk_PutParamLnkCod (void *LnkCod);
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -89,9 +102,10 @@ void Lnk_SeeLinks (void)
    extern const char *Txt_Links;
    extern const char *Txt_No_links;
    extern const char *Txt_New_link;
+   struct Lnk_Links Links;
 
    /***** Get list of links *****/
-   Lnk_GetListLinks ();
+   Lnk_GetListLinks (&Links);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Links,
@@ -99,8 +113,8 @@ void Lnk_SeeLinks (void)
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
       /***** Write all links *****/
-      if (Gbl.Links.Num)	// There are links
-	 Lnk_WriteListOfLinks ("class=\"LIST_LEFT\"");
+      if (Links.Num)	// There are links
+	 Lnk_WriteListOfLinks (&Links,"class=\"LIST_LEFT\"");
       else			// No links created
 	 Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
@@ -116,7 +130,7 @@ void Lnk_SeeLinks (void)
    Box_BoxEnd ();
 
    /***** Free list of links *****/
-   Lnk_FreeListLinks ();
+   Lnk_FreeListLinks (&Links);
   }
 
 /*****************************************************************************/
@@ -150,12 +164,13 @@ static void Lnk_PutIconToEditLinks (void)
 void Lnk_WriteMenuWithInstitutionalLinks (void)
   {
    extern const char *Txt_Links;
+   struct Lnk_Links Links;
 
    /***** Get list of links *****/
-   Lnk_GetListLinks ();
+   Lnk_GetListLinks (&Links);
 
    /***** Write all links *****/
-   if (Gbl.Links.Num)
+   if (Links.Num)
      {
       HTM_DIV_Begin ("id=\"institutional_links\" class=\"INS_LNK_%s\"",
                      The_GetSuffix ());
@@ -166,20 +181,20 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
-	 Lnk_WriteListOfLinks (NULL);
+	 Lnk_WriteListOfLinks (&Links,NULL);
 
       HTM_DIV_End ();
      }
 
    /***** Free list of links *****/
-   Lnk_FreeListLinks ();
+   Lnk_FreeListLinks (&Links);
   }
 
 /*****************************************************************************/
 /*************************** Write list of links *****************************/
 /*****************************************************************************/
 
-static void Lnk_WriteListOfLinks (const char *Class)
+static void Lnk_WriteListOfLinks (const struct Lnk_Links *Links,const char *Class)
   {
    unsigned NumLnk;
 
@@ -188,17 +203,17 @@ static void Lnk_WriteListOfLinks (const char *Class)
 
       /***** Write all links *****/
       for (NumLnk = 0;
-	   NumLnk < Gbl.Links.Num;
+	   NumLnk < Links->Num;
 	   NumLnk++)
 	{
 	 /* Write data of this link */
 	 HTM_LI_Begin ("class=\"ICO_HIGHLIGHT INS_LNK\"");
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\""
 		         " class=\"INS_LNK_%s\" target=\"_blank\"",
-			 Gbl.Links.Lst[NumLnk].WWW,
-			 Gbl.Links.Lst[NumLnk].FullName,
+			 Links->Lst[NumLnk].WWW,
+			 Links->Lst[NumLnk].FullName,
 			 The_GetSuffix ());
-	       HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
+	       HTM_Txt (Links->Lst[NumLnk].ShrtName);
 	    HTM_A_End ();
 	 HTM_LI_End ();
 	}
@@ -227,9 +242,10 @@ static void Lnk_EditLinksInternal (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Links;
+   struct Lnk_Links Links;
 
    /***** Get list of links *****/
-   Lnk_GetListLinks ();
+   Lnk_GetListLinks (&Links);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Links,
@@ -240,14 +256,14 @@ static void Lnk_EditLinksInternal (void)
       Lnk_PutFormToCreateLink ();
 
       /***** Forms to edit current links *****/
-      if (Gbl.Links.Num)
-	 Lnk_ListLinksForEdition ();
+      if (Links.Num)
+	 Lnk_ListLinksForEdition (&Links);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of links *****/
-   Lnk_FreeListLinks ();
+   Lnk_FreeListLinks (&Links);
   }
 
 /*****************************************************************************/
@@ -278,27 +294,31 @@ void Lnk_PutIconToViewLinks (void)
 /****************************** List all links *******************************/
 /*****************************************************************************/
 
-void Lnk_GetListLinks (void)
+static void Lnk_GetListLinks (struct Lnk_Links *Links)
   {
    MYSQL_RES *mysql_res;
    unsigned NumLnk;
 
+   /***** Reset links *****/
+   Links->Num = 0;
+   Links->Lst = NULL;
+
    if (DB_CheckIfDatabaseIsOpen ())
      {
       /***** Get institutional links from database *****/
-      if ((Gbl.Links.Num = Lnk_DB_GetLinks (&mysql_res))) // Links found...
+      if ((Links->Num = Lnk_DB_GetLinks (&mysql_res))) // Links found...
 	{
 	 /***** Create list with places *****/
-	 if ((Gbl.Links.Lst = calloc ((size_t) Gbl.Links.Num,
-	                              sizeof (*Gbl.Links.Lst))) == NULL)
+	 if ((Links->Lst = calloc ((size_t) Links->Num,
+	                           sizeof (struct Lnk_Link))) == NULL)
 	     Err_NotEnoughMemoryExit ();
 
 	 /***** Get the links *****/
 	 for (NumLnk = 0;
-	      NumLnk < Gbl.Links.Num;
+	      NumLnk < Links->Num;
 	      NumLnk++)
 	    /* Get next link */
-	    Lnk_GetDataOfLink (mysql_res,&(Gbl.Links.Lst[NumLnk]));
+	    Lnk_GetDataOfLink (mysql_res,&Links->Lst[NumLnk]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -347,6 +367,11 @@ static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
    row[2]	FullName
    row[3]	WWW
    */
+
+   /***** Get plugin code (row[0]) *****/
+   if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongLinkExit ();
+
    /***** Get the short name (row[1]),
 	      the full name (row[2])
           and the URL (row[3]) of the link *****/
@@ -359,14 +384,13 @@ static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
 /**************************** Free list of links *****************************/
 /*****************************************************************************/
 
-void Lnk_FreeListLinks (void)
+static void Lnk_FreeListLinks (struct Lnk_Links *Links)
   {
-   if (Gbl.Links.Lst)
+   if (Links->Num && Links->Lst)
      {
-      /***** Free memory used by the list of links *****/
-      free (Gbl.Links.Lst);
-      Gbl.Links.Lst = NULL;
-      Gbl.Links.Num = 0;
+      free (Links->Lst);
+      Links->Lst = NULL;
+      Links->Num = 0;
      }
   }
 
@@ -374,7 +398,7 @@ void Lnk_FreeListLinks (void)
 /****************************** List all links *******************************/
 /*****************************************************************************/
 
-static void Lnk_ListLinksForEdition (void)
+static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
@@ -387,10 +411,10 @@ static void Lnk_ListLinksForEdition (void)
 
       /***** Write all links *****/
       for (NumLnk = 0;
-	   NumLnk < Gbl.Links.Num;
+	   NumLnk < Links->Num;
 	   NumLnk++)
 	{
-	 Lnk = &Gbl.Links.Lst[NumLnk];
+	 Lnk = &Links->Lst[NumLnk];
 
 	 HTM_TR_Begin (NULL);
 

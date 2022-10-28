@@ -107,11 +107,6 @@ struct Globals
      } DegTypes;
    struct
      {
-      unsigned Num;		// Number of institutional links
-      struct Lnk_Link *Lst;		// List of institutional links
-     } Links;
-   struct
-     {
       Sch_WhatToSearch_t WhatToSearch;
       char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
       bool LogSearch;

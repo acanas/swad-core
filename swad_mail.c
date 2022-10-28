@@ -412,9 +412,8 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
 
 static void Mai_FreeListMailDomains (struct Mai_Mails *Mails)
   {
-   if (Mails->Lst)
+   if (Mails->Num && Mails->Lst)
      {
-      /***** Free memory used by the list of mail domains *****/
       free (Mails->Lst);
       Mails->Lst = NULL;
       Mails->Num = 0;

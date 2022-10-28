@@ -228,9 +228,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Search.Str[0] = '\0';
    Gbl.Search.LogSearch = false;
 
-   Gbl.Links.Num = 0;
-   Gbl.Links.Lst = NULL;
-
    Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;
    Gbl.Usrs.Listing.RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
@@ -321,7 +318,6 @@ void Gbl_Cleanup (void)
    Ins_FreeListInstitutions ();
    Ctr_FreeListCenters ();
    Cty_FreeListCountries ();
-   Lnk_FreeListLinks ();
 
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

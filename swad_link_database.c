@@ -97,9 +97,10 @@ unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an institutional link",
-		   "SELECT ShortName,"	// row[0]
-			  "FullName,"	// row[1]
-			  "WWW"		// row[2]
+		   "SELECT LnkCod,"	// row[0]
+		          "ShortName,"	// row[1]
+			  "FullName,"	// row[2]
+			  "WWW"		// row[3]
 		    " FROM lnk_links"
 		   " WHERE LnkCod=%ld",
 		   LnkCod);
