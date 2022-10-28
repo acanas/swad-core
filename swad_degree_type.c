@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable to keep the degree type being edited
+static struct DegTyp_DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable to keep the degree type being edited
 
 /*****************************************************************************/
 /*************************** Private prototypes ******************************/
@@ -67,17 +67,18 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
                                    DegTyp_Order_t DefaultOrder);
 static DegTyp_Order_t DegTyp_GetParamDegTypOrder (DegTyp_Order_t DefaultOrder);
 
-static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
+static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
+                                    Act_Action_t NextAction,
                                     HieLvl_Level_t Scope,
                                     DegTyp_Order_t SelectedOrder);
 
-static void DegTyp_EditDegreeTypesInternal (void);
+static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes);
 static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args);
 
-static void DegTyp_ListDegreeTypesForSeeing (void);
+static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTypes);
 static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args);
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args);
-static void DegTyp_ListDegreeTypesForEdition (void);
+static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegTypes);
 
 static void DegTyp_PutFormToCreateDegreeType (void);
 
@@ -100,11 +101,12 @@ static void DegTyp_EditingDegreeTypeDestructor (void);
 void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
   {
    extern const char *Txt_Any_type_of_degree;
+   struct DegTyp_DegTypes DegTypes;
    unsigned NumDegTyp;
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DegTyp_GetListDegreeTypes (HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -115,15 +117,15 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 		  SelectedDegTypCod == -1L,false,
 		  "%s",Txt_Any_type_of_degree);
       for (NumDegTyp = 0;
-	   NumDegTyp < Gbl.DegTypes.Num;
+	   NumDegTyp < DegTypes.Num;
 	   NumDegTyp++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod,
-		     Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == SelectedDegTypCod,false,
-		     "%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+	 HTM_OPTION (HTM_Type_LONG,&DegTypes.Lst[NumDegTyp].DegTypCod,
+		     DegTypes.Lst[NumDegTyp].DegTypCod == SelectedDegTypCod,false,
+		     "%s",DegTypes.Lst[NumDegTyp].DegTypName);
    HTM_SELECT_End ();
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes ();
+   DegTyp_FreeListDegreeTypes (&DegTypes);
   }
 
 /*****************************************************************************/
@@ -146,18 +148,19 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
                                    DegTyp_Order_t DefaultOrder)
   {
    DegTyp_Order_t SelectedOrder;
+   struct DegTyp_DegTypes DegTypes;
 
    /***** Get parameter with the type of order in the list of degree types *****/
    SelectedOrder = DegTyp_GetParamDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (Scope,SelectedOrder);
+   DegTyp_GetListDegreeTypes (&DegTypes,Scope,SelectedOrder);
 
    /***** List degree types *****/
-   DegTyp_ListDegreeTypes (NextAction,Scope,SelectedOrder);
+   DegTyp_ListDegreeTypes (&DegTypes,NextAction,Scope,SelectedOrder);
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes ();
+   DegTyp_FreeListDegreeTypes (&DegTypes);
   }
 
 /*****************************************************************************/
@@ -179,7 +182,8 @@ static DegTyp_Order_t DegTyp_GetParamDegTypOrder (DegTyp_Order_t DefaultOrder)
 // - center tab		=> NextAction = ActSeeDegTyp
 // - statistic tab	=> NextAction = ActSeeUseGbl
 
-static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
+static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
+                                    Act_Action_t NextAction,
                                     HieLvl_Level_t Scope,
                                     DegTyp_Order_t SelectedOrder)
   {
@@ -207,7 +211,7 @@ static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
 	 return;
      }
 
-   if (Gbl.DegTypes.Num)
+   if (DegTypes->Num)
      {
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (2);
@@ -216,7 +220,7 @@ static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
 	 DegTyp_PutHeadDegreeTypesForSeeing (NextAction,Scope,SelectedOrder);
 
 	 /***** List current degree types for seeing *****/
-	 DegTyp_ListDegreeTypesForSeeing ();
+	 DegTyp_ListDegreeTypesForSeeing (DegTypes);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -228,8 +232,8 @@ static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
    if (DegTyp_CheckIfICanCreateDegreeTypes ())
      {
       Frm_BeginForm (ActEdiDegTyp);
-	 Btn_PutConfirmButton (Gbl.DegTypes.Num ? Txt_Create_another_type_of_degree :
-						  Txt_Create_type_of_degree);
+	 Btn_PutConfirmButton (DegTypes->Num ? Txt_Create_another_type_of_degree :
+					       Txt_Create_type_of_degree);
       Frm_EndForm ();
      }
 
@@ -241,25 +245,26 @@ static void DegTyp_ListDegreeTypes (Act_Action_t NextAction,
 /************************ Put forms to edit degree types *********************/
 /*****************************************************************************/
 
-void DegTyp_EditDegreeTypes (void)
+void DegTyp_GetAndEditDegreeTypes (void)
   {
-   /***** Degree type constructor *****/
+   struct DegTyp_DegTypes DegTypes;
+
+   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_EditDegreeTypes (&DegTypes);
+   DegTyp_FreeListDegreeTypes (&DegTypes);
+  }
+
+void DegTyp_EditDegreeTypes (const struct DegTyp_DegTypes *DegTypes)
+  {
    DegTyp_EditingDegreeTypeConstructor ();
-
-   /***** Edit degree types *****/
-   DegTyp_EditDegreeTypesInternal ();
-
-   /***** Degree type destructor *****/
+   DegTyp_EditDegreeTypesInternal (DegTypes);
    DegTyp_EditingDegreeTypeDestructor ();
   }
 
-static void DegTyp_EditDegreeTypesInternal (void)
+static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Hlp_CENTER_DegreeTypes_edit;
    extern const char *Txt_Types_of_degree;
-
-   /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,
@@ -270,14 +275,11 @@ static void DegTyp_EditDegreeTypesInternal (void)
       DegTyp_PutFormToCreateDegreeType ();
 
       /***** Forms to edit current degree types *****/
-      if (Gbl.DegTypes.Num)
-	 DegTyp_ListDegreeTypesForEdition ();
+      if (DegTypes->Num)
+	 DegTyp_ListDegreeTypesForEdition (DegTypes);
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes ();
   }
 
 /*****************************************************************************/
@@ -311,17 +313,17 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 /******************* List current degree types for seeing ********************/
 /*****************************************************************************/
 
-static void DegTyp_ListDegreeTypesForSeeing (void)
+static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTypes)
   {
    unsigned NumDegTyp;
    const char *BgColor;
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0, The_ResetRowColor ();
-	NumDegTyp < Gbl.DegTypes.Num;
+	NumDegTyp < DegTypes->Num;
 	NumDegTyp++, The_ChangeRowColor ())
      {
-      BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
+      BgColor = (DegTypes->Lst[NumDegTyp].DegTypCod ==
 	         Gbl.Hierarchy.Deg.DegTypCod) ? "BG_HIGHLIGHT" :
                                                 The_GetColorRows ();
 
@@ -337,13 +339,13 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
 	 /* Name of degree type */
 	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
 	               The_GetSuffix (),BgColor);
-	    HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+	    HTM_Txt (DegTypes->Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
 	               The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+	    HTM_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 
       /* End table row */
@@ -383,7 +385,7 @@ static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
 /******************* List current degree types for edition *******************/
 /*****************************************************************************/
 
-static void DegTyp_ListDegreeTypesForEdition (void)
+static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    unsigned NumDegTyp;
 
@@ -395,7 +397,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 
       /***** List degree types with forms for edition *****/
       for (NumDegTyp = 0;
-	   NumDegTyp < Gbl.DegTypes.Num;
+	   NumDegTyp < DegTypes->Num;
 	   NumDegTyp++)
 	{
 	 /* Begin table row */
@@ -403,24 +405,25 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 
 	    /* Put icon to remove degree type */
 	    HTM_TD_Begin ("class=\"BM\"");
-	       if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
+	       if (DegTypes->Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDegTyp,NULL,
-						 DegTyp_PutParamOtherDegTypCod,&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+						 DegTyp_PutParamOtherDegTypCod,
+						 &DegTypes->Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
 	    /* Degree type code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_Long (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+	       HTM_Long (DegTypes->Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
 	    /* Name of degree type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDegTyp);
-		  DegTyp_PutParamOtherDegTypCod (&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+		  DegTyp_PutParamOtherDegTypCod (&DegTypes->Lst[NumDegTyp].DegTypCod);
 		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,
-				  Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
+				  DegTypes->Lst[NumDegTyp].DegTypName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"25\" class=\"INPUT_%s\""
 				  " required=\"required\"",
@@ -430,7 +433,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 
 	    /* Number of degrees of this type */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+	       HTM_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
 	    HTM_TD_End ();
 
 	 /* End table row */
@@ -586,41 +589,43 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 /****************** Create a list with all degree types **********************/
 /*****************************************************************************/
 
-void DegTyp_GetListDegreeTypes (HieLvl_Level_t Scope,DegTyp_Order_t Order)
+void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
+                                HieLvl_Level_t Scope,DegTyp_Order_t Order)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTyp;
 
    /***** Get types of degree from database *****/
-   Gbl.DegTypes.Num = Deg_DB_GetDegreeTypes (&mysql_res,Scope,Order);
+   DegTypes->Num = Deg_DB_GetDegreeTypes (&mysql_res,Scope,Order);
+   DegTypes->Lst = NULL;
 
    /***** Get degree types *****/
-   if (Gbl.DegTypes.Num)
+   if (DegTypes->Num)
      {
       /***** Create a list of degree types *****/
-      if ((Gbl.DegTypes.Lst = calloc (Gbl.DegTypes.Num,
-			              sizeof (*Gbl.DegTypes.Lst))) == NULL)
+      if ((DegTypes->Lst = calloc ((size_t) DegTypes->Num,
+			           sizeof (struct DegTyp_DegreeType))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
       for (NumTyp = 0;
-	   NumTyp < Gbl.DegTypes.Num;
+	   NumTyp < DegTypes->Num;
 	   NumTyp++)
         {
          /* Get next degree type */
          row = mysql_fetch_row (mysql_res);
 
          /* Get degree type code (row[0]) */
-         if ((Gbl.DegTypes.Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         if ((DegTypes->Lst[NumTyp].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongDegTypExit ();
 
          /* Get degree type name (row[1]) */
-         Str_Copy (Gbl.DegTypes.Lst[NumTyp].DegTypName,row[1],
-                   sizeof (Gbl.DegTypes.Lst[NumTyp].DegTypName) - 1);
+         Str_Copy (DegTypes->Lst[NumTyp].DegTypName,row[1],
+                   sizeof (DegTypes->Lst[NumTyp].DegTypName) - 1);
 
          /* Number of degrees of this type (row[2]) */
-         if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumTyp].NumDegs) != 1)
+         if (sscanf (row[2],"%u",&DegTypes->Lst[NumTyp].NumDegs) != 1)
             Err_ShowErrorAndExit ("Error when getting number of degrees of a type");
         }
      }
@@ -633,14 +638,14 @@ void DegTyp_GetListDegreeTypes (HieLvl_Level_t Scope,DegTyp_Order_t Order)
 /********* Free list of degree types and list of degrees of each type ********/
 /*****************************************************************************/
 
-void DegTyp_FreeListDegreeTypes (void)
+void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes)
   {
    /***** Free memory used by the list of degree types *****/
-   if (Gbl.DegTypes.Lst)
+   if (DegTypes->Num && DegTypes->Lst)
      {
-      free (Gbl.DegTypes.Lst);
-      Gbl.DegTypes.Lst = NULL;
-      Gbl.DegTypes.Num = 0;
+      free (DegTypes->Lst);
+      DegTypes->Lst = NULL;
+      DegTypes->Num = 0;
      }
   }
 
@@ -745,7 +750,7 @@ long DegTyp_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
 /****************** Get data of a degree type from its code ******************/
 /*****************************************************************************/
 
-bool DegTyp_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
+bool DegTyp_GetDataOfDegreeTypeByCod (struct DegTyp_DegreeType *DegTyp)
   {
    /***** Trivial check: code of degree type should be >= 0 *****/
    if (DegTyp->DegTypCod <= 0)
@@ -871,11 +876,15 @@ void DegTyp_RenameDegreeType (void)
 
 void DegTyp_ContEditAfterChgDegTyp (void)
   {
+   struct DegTyp_DegTypes DegTypes;
+
    /***** Show possible delayed alerts *****/
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   DegTyp_EditDegreeTypesInternal ();
+   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_EditDegreeTypesInternal (&DegTypes);
+   DegTyp_FreeListDegreeTypes (&DegTypes);
 
    /***** Degree type destructor *****/
    DegTyp_EditingDegreeTypeDestructor ();

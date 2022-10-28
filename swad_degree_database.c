@@ -74,6 +74,78 @@ void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status)
   }
 
 /*****************************************************************************/
+/************************* Get number of degree types ************************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope)
+  {
+   /***** Get number of types of degree from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get types of degree",
+	                "SELECT COUNT(*)"
+		         " FROM deg_types");
+      case HieLvl_CTY:
+	 /* Get only degree types with degrees in the current country */
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get types of degree",
+	                "SELECT COUNT(deg_types.*)"
+		         " FROM ins_instits,"
+		               "ctr_centers,"
+		               "deg_degrees,"
+		               "deg_types"
+		        " WHERE ins_instits.CtyCod=%ld"
+			  " AND ins_instits.InsCod=ctr_centers.InsCod"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+		     " GROUP BY deg_degrees.DegTypCod",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+	 /* Get only degree types with degrees in the current institution */
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get types of degree",
+	                "SELECT COUNT(deg_types.*)"
+		         " FROM ctr_centers,"
+		               "deg_degrees,"
+		               "deg_types"
+		        " WHERE ctr_centers.InsCod=%ld"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+		     " GROUP BY deg_degrees.DegTypCod",
+			 Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+	 /* Get only degree types with degrees in the current center */
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get types of degree",
+	                "SELECT COUNT(deg_types.*)"
+		         " FROM deg_degrees,"
+		               "deg_types"
+		        " WHERE deg_degrees.CtrCod=%ld"
+			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
+		     " GROUP BY deg_degrees.DegTypCod",
+			 Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 /* Get only degree types with degrees in the current degree */
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get types of degree",
+	                "SELECT COUNT(deg_types.*)"
+		         " FROM deg_degrees,"
+		               "deg_types"
+			 " FROM deg_degrees,"
+			       "deg_types"
+			" WHERE deg_degrees.DegCod=%ld"
+			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod",
+			 Gbl.Hierarchy.Deg.DegCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
 /****************** Create a list with all degree types **********************/
 /*****************************************************************************/
 
@@ -194,7 +266,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 /************** Get the name of a type of degree from database ***************/
 /*****************************************************************************/
 
-void Deg_DB_GetDegTypeNameByCod (struct DegreeType *DegTyp)
+void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp)
   {
    DB_QuerySELECTString (DegTyp->DegTypName,sizeof (DegTyp->DegTypName) - 1,
 		         "can not get the name of a type of degree",

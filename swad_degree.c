@@ -81,9 +81,9 @@ static struct Deg_Degree *Deg_EditingDeg = NULL;	// Static variable to keep the 
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Deg_ListDegreesForEdition (void);
+static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes);
 static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg);
-static void Deg_PutFormToCreateDegree (void);
+static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
 
@@ -304,11 +304,11 @@ void Deg_ShowDegsOfCurrentCtr (void)
 /********************* List current degrees for edition **********************/
 /*****************************************************************************/
 
-static void Deg_ListDegreesForEdition (void)
+static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
-   struct DegreeType *DegTyp;
+   struct DegTyp_DegreeType *DegTyp;
    struct Deg_Degree *Deg;
    unsigned NumDegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -406,10 +406,10 @@ static void Deg_ListDegreesForEdition (void)
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				       The_GetSuffix ());
 			for (NumDegTyp = 0;
-			     NumDegTyp < Gbl.DegTypes.Num;
+			     NumDegTyp < DegTypes->Num;
 			     NumDegTyp++)
 			  {
-			   DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
+			   DegTyp = &DegTypes->Lst[NumDegTyp];
 			   HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
 				       // Gbl.Hierarchy.Deg.DegCod > 0 &&
 				       DegTyp->DegTypCod == Deg->DegTypCod,false,
@@ -420,10 +420,10 @@ static void Deg_ListDegreesForEdition (void)
 		 }
 	       else
 		  for (NumDegTyp = 0;
-		       NumDegTyp < Gbl.DegTypes.Num;
+		       NumDegTyp < DegTypes->Num;
 		       NumDegTyp++)
-		     if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
-			HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+		     if (DegTypes->Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
+			HTM_Txt (DegTypes->Lst[NumDegTyp].DegTypName);
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
@@ -503,11 +503,11 @@ static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
 /*********************** Put a form to create a new degree *******************/
 /*****************************************************************************/
 
-static void Deg_PutFormToCreateDegree (void)
+static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
-   struct DegreeType *DegTyp;
+   struct DegTyp_DegreeType *DegTyp;
    unsigned NumDegTyp;
 
    /***** Begin form *****/
@@ -566,10 +566,10 @@ static void Deg_PutFormToCreateDegree (void)
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (NumDegTyp = 0;
-		    NumDegTyp < Gbl.DegTypes.Num;
+		    NumDegTyp < DegTypes->Num;
 		    NumDegTyp++)
 		 {
-		  DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
+		  DegTyp = &DegTypes->Lst[NumDegTyp];
 		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
 			      DegTyp->DegTypCod == Deg_EditingDeg->DegTypCod,false,
 			      "%s",DegTyp->DegTypName);
@@ -794,7 +794,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
-   struct DegreeType DegTyp;
+   struct DegTyp_DegreeType DegTyp;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
@@ -891,13 +891,14 @@ static void Deg_EditDegreesInternal (void)
    extern const char *Hlp_CENTER_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
    extern const char *Txt_No_types_of_degree;
+   struct DegTyp_DegTypes DegTypes;
    char *Title;
+
+   /***** Get list of degree types *****/
+   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /***** Get list of degrees in the current center *****/
    Deg_GetListDegsInCurrentCtr ();
-
-   /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /***** Write menu to select country, institution and center *****/
    Hie_WriteMenuHierarchy ();
@@ -909,14 +910,14 @@ static void Deg_EditDegreesInternal (void)
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.DegTypes.Num)
+      if (Deg_DB_GetNumDegreeTypes (HieLvl_SYS))
 	{
 	 /***** Put a form to create a new degree *****/
-	 Deg_PutFormToCreateDegree ();
+	 Deg_PutFormToCreateDegree (&DegTypes);
 
 	 /***** Forms to edit current degrees *****/
 	 if (Gbl.Hierarchy.Degs.Num)
-	    Deg_ListDegreesForEdition ();
+	    Deg_ListDegreesForEdition (&DegTypes);
 	}
       else	// No degree types
 	{
@@ -925,17 +926,14 @@ static void Deg_EditDegreesInternal (void)
 
 	 /***** Form to create the first degree type *****/
 	 if (DegTyp_CheckIfICanCreateDegreeTypes ())
-	    DegTyp_EditDegreeTypes ();
+	    DegTyp_EditDegreeTypes (&DegTypes);
 	}
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes ();
-
-   /***** Free list of degrees in the current center *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
+   DegTyp_FreeListDegreeTypes (&DegTypes);
   }
 
 /*****************************************************************************/

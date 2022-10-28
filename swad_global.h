@@ -102,11 +102,6 @@ struct Globals
      } Hierarchy;
    struct
      {
-      unsigned Num;		// Number of degree types
-      struct DegreeType *Lst;	// List of degree types
-     } DegTypes;
-   struct
-     {
       Sch_WhatToSearch_t WhatToSearch;
       char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
       bool LogSearch;

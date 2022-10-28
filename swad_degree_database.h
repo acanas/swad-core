@@ -40,9 +40,10 @@
 void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
 void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status);
 
+unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope);
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
                                 HieLvl_Level_t Scope,DegTyp_Order_t Order);
-void Deg_DB_GetDegTypeNameByCod (struct DegreeType *DegTyp);
+void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp);
 unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);

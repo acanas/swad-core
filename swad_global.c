@@ -191,9 +191,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Crs.ShrtName[0] =
    Gbl.Hierarchy.Crs.FullName[0] = '\0';
 
-   Gbl.DegTypes.Num = 0;
-   Gbl.DegTypes.Lst = NULL;
-
    Gbl.Crs.Info.ShowMsgMustBeRead = 0;
 
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
@@ -314,7 +311,6 @@ void Gbl_Cleanup (void)
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInCurrentDegree ();
    Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
-   DegTyp_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCenters ();
    Cty_FreeListCountries ();

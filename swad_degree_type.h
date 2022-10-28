@@ -40,11 +40,17 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct DegreeType
+struct DegTyp_DegreeType
   {
    long DegTypCod;						// Degree type code
    char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];	// Degree type name
    unsigned NumDegs;						// Number of degrees of this type
+  };
+
+struct DegTyp_DegTypes
+  {
+   unsigned Num;			// Number of degree types
+   struct DegTyp_DegreeType *Lst;	// List of degree types
   };
 
 #define DegTyp_NUM_ORDERS 2
@@ -62,14 +68,16 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod);
 
 void DegTyp_SeeDegreeTypesInDegTab (void);
 void DegTyp_SeeDegreeTypesInStaTab (void);
-void DegTyp_EditDegreeTypes (void);
+void DegTyp_GetAndEditDegreeTypes (void);
+void DegTyp_EditDegreeTypes (const struct DegTyp_DegTypes *DegTypes);
 
 void DegTyp_PutIconToViewDegreeTypes (void);
 
 bool DegTyp_CheckIfICanCreateDegreeTypes (void);
 
-void DegTyp_GetListDegreeTypes (HieLvl_Level_t Scope,DegTyp_Order_t Order);
-void DegTyp_FreeListDegreeTypes (void);
+void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
+                                HieLvl_Level_t Scope,DegTyp_Order_t Order);
+void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes);
 
 void DegTyp_ReceiveFormNewDegreeType (void);
 
@@ -77,7 +85,7 @@ void DegTyp_RemoveDegreeType (void);
 
 long DegTyp_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
 
-bool DegTyp_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
+bool DegTyp_GetDataOfDegreeTypeByCod (struct DegTyp_DegreeType *DegTyp);
 void DegTyp_RenameDegreeType (void);
 
 void DegTyp_ContEditAfterChgDegTyp (void);

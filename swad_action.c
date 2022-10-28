@@ -362,7 +362,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttr	,NULL},
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_SeeDegreeTypesInDegTab	,NULL},
-   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_EditDegreeTypes		,NULL},
+   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_GetAndEditDegreeTypes		,NULL},
    [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_ReceiveFormNewDegreeType,DegTyp_ContEditAfterChgDegTyp	,NULL},
    [ActRemDegTyp	] = { 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RemoveDegreeType	,DegTyp_ContEditAfterChgDegTyp	,NULL},
    [ActRenDegTyp	] = { 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RenameDegreeType	,DegTyp_ContEditAfterChgDegTyp	,NULL},
