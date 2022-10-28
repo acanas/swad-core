@@ -352,7 +352,7 @@ void Mai_DB_UpdateMailDomainName (long MaiCod,
 /****************************** Get mail domains *****************************/
 /*****************************************************************************/
 
-unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res)
+unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Mai_NUM_ORDERS] =
      {
@@ -386,7 +386,7 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res)
 			  " (SELECT Domain COLLATE 'latin1_bin'"
 			     " FROM T2))"
 		    " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-		   OrderBySubQuery[Gbl.Mails.SelectedOrder]);
+		   OrderBySubQuery[SelectedOrder]);
   }
 
 

@@ -61,7 +61,6 @@ struct Mail
 
 void Mai_SeeMailDomains (void);
 void Mai_EditMailDomains (void);
-void Mai_FreeListMailDomains (void);
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat);
 void Mai_WriteWarningEmailNotifications (void);

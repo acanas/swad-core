@@ -228,10 +228,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Search.Str[0] = '\0';
    Gbl.Search.LogSearch = false;
 
-   Gbl.Mails.Num = 0;
-   Gbl.Mails.Lst = NULL;
-   Gbl.Mails.SelectedOrder = Mai_ORDER_DEFAULT;
-
    Gbl.Links.Num = 0;
    Gbl.Links.Lst = NULL;
 

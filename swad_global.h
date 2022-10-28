@@ -107,12 +107,6 @@ struct Globals
      } DegTypes;
    struct
      {
-      unsigned Num;		// Number of mail domains
-      struct Mail *Lst;		// List of mail domains
-      Mai_DomainsOrder_t SelectedOrder;
-     } Mails;
-   struct
-     {
       unsigned Num;		// Number of institutional links
       struct Lnk_Link *Lst;		// List of institutional links
      } Links;

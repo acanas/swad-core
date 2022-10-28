@@ -55,6 +55,17 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+struct Mai_Mails
+  {
+   unsigned Num;		// Number of mail domains
+   struct Mail *Lst;		// List of mail domains
+   Mai_DomainsOrder_t SelectedOrder;
+  };
+
+/*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
@@ -65,14 +76,15 @@ static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail d
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mai_GetParamMaiOrder (void);
+static Mai_DomainsOrder_t Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args);
 static void Mai_EditMailDomainsInternal (void);
-static void Mai_GetListMailDomainsAllowedForNotif (void);
+static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails);
 static void Mai_GetMailDomain (const char *Email,
                                char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 
-static void Mai_ListMailDomainsForEdition (void);
+static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
 static void Mai_PutParamMaiCod (void *MaiCod);
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -94,6 +106,8 @@ static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
+static void Mai_InitializeMailDomainList (struct Mai_Mails *Mails);
+
 static void Mai_EditingMailDomainConstructor (void);
 static void Mai_EditingMailDomainDestructor (void);
 
@@ -109,12 +123,16 @@ void Mai_SeeMailDomains (void)
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    Mai_DomainsOrder_t Order;
    unsigned NumMai;
+   struct Mai_Mails Mails;
+
+   /***** Initialize mail domain list *****/
+   Mai_InitializeMailDomainList (&Mails);
 
    /***** Get parameter with the type of order in the list of mail domains *****/
-   Mai_GetParamMaiOrder ();
+   Mails.SelectedOrder = Mai_GetParamMaiOrder ();
 
    /***** Get list of mail domains *****/
-   Mai_GetListMailDomainsAllowedForNotif ();
+   Mai_GetListMailDomainsAllowedForNotif (&Mails);
 
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -138,10 +156,10 @@ void Mai_SeeMailDomains (void)
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	       HTM_BUTTON_Submit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],
 	                                "class=\"BT_LINK\"");
-		  if (Order == Gbl.Mails.SelectedOrder)
+		  if (Order == Mails.SelectedOrder)
 		     HTM_U_Begin ();
 		  HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
-		  if (Order == Gbl.Mails.SelectedOrder)
+		  if (Order == Mails.SelectedOrder)
 		     HTM_U_End ();
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -152,22 +170,22 @@ void Mai_SeeMailDomains (void)
 
    /***** Write all mail domains *****/
    for (NumMai = 0;
-	NumMai < Gbl.Mails.Num;
+	NumMai < Mails.Num;
 	NumMai++)
      {
       /* Write data of this mail domain */
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Gbl.Mails.Lst[NumMai].Domain);
+	    HTM_Txt (Mails.Lst[NumMai].Domain);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Gbl.Mails.Lst[NumMai].Info);
+	    HTM_Txt (Mails.Lst[NumMai].Info);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Gbl.Mails.Lst[NumMai].NumUsrs);
+	    HTM_Unsigned (Mails.Lst[NumMai].NumUsrs);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -177,20 +195,20 @@ void Mai_SeeMailDomains (void)
    Box_BoxTableEnd ();
 
    /***** Free list of mail domains *****/
-   Mai_FreeListMailDomains ();
+   Mai_FreeListMailDomains (&Mails);
   }
 
 /*****************************************************************************/
 /******* Get parameter with the type or order in list of mail domains ********/
 /*****************************************************************************/
 
-static void Mai_GetParamMaiOrder (void)
+static Mai_DomainsOrder_t Mai_GetParamMaiOrder (void)
   {
-   Gbl.Mails.SelectedOrder = (Mai_DomainsOrder_t)
-	                     Par_GetParToUnsignedLong ("Order",
-	                                               0,
-	                                               Mai_NUM_ORDERS - 1,
-	                                               (unsigned long) Mai_ORDER_DEFAULT);
+   return (Mai_DomainsOrder_t)
+	  Par_GetParToUnsignedLong ("Order",
+				    0,
+				    Mai_NUM_ORDERS - 1,
+				    (unsigned long) Mai_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -221,25 +239,30 @@ void Mai_EditMailDomains (void)
 
 static void Mai_EditMailDomainsInternal (void)
   {
+   struct Mai_Mails Mails;
+
+   /***** Initialize mail domain list *****/
+   Mai_InitializeMailDomainList (&Mails);
+
    /***** Get list of mail domains *****/
-   Mai_GetListMailDomainsAllowedForNotif ();
+   Mai_GetListMailDomainsAllowedForNotif (&Mails);
 
    /***** Put a form to create a new mail *****/
    Mai_PutFormToCreateMailDomain ();
 
    /***** Forms to edit current mail domains *****/
-   if (Gbl.Mails.Num)
-      Mai_ListMailDomainsForEdition ();
+   if (Mails.Num)
+      Mai_ListMailDomainsForEdition (&Mails);
 
    /***** Free list of mail domains *****/
-   Mai_FreeListMailDomains ();
+   Mai_FreeListMailDomains (&Mails);
   }
 
 /*****************************************************************************/
 /*************************** List all mail domains ***************************/
 /*****************************************************************************/
 
-static void Mai_GetListMailDomainsAllowedForNotif (void)
+static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -256,19 +279,19 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    Mai_DB_CreateTmpTables ();
 
    /***** Get mail domains from database *****/
-   if ((Gbl.Mails.Num = Mai_DB_GetMailDomains (&mysql_res))) // Mail domains found...
+   if ((Mails->Num = Mai_DB_GetMailDomains (&mysql_res,Mails->SelectedOrder))) // Mail domains found...
      {
       /***** Create list with places *****/
-      if ((Gbl.Mails.Lst = calloc ((size_t) Gbl.Mails.Num,
-                                   sizeof (*Gbl.Mails.Lst))) == NULL)
+      if ((Mails->Lst = calloc ((size_t) Mails->Num,
+                                sizeof (struct Mail))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the mail domains *****/
       for (NumMai = 0;
-	   NumMai < Gbl.Mails.Num;
+	   NumMai < Mails->Num;
 	   NumMai++)
         {
-         Mai = &(Gbl.Mails.Lst[NumMai]);
+         Mai = &(Mails->Lst[NumMai]);
 
          /* Get next mail */
          row = mysql_fetch_row (mysql_res);
@@ -387,14 +410,14 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
 /************************** Free list of mail domains ************************/
 /*****************************************************************************/
 
-void Mai_FreeListMailDomains (void)
+static void Mai_FreeListMailDomains (struct Mai_Mails *Mails)
   {
-   if (Gbl.Mails.Lst)
+   if (Mails->Lst)
      {
       /***** Free memory used by the list of mail domains *****/
-      free (Gbl.Mails.Lst);
-      Gbl.Mails.Lst = NULL;
-      Gbl.Mails.Num = 0;
+      free (Mails->Lst);
+      Mails->Lst = NULL;
+      Mails->Num = 0;
      }
   }
 
@@ -402,7 +425,7 @@ void Mai_FreeListMailDomains (void)
 /************************** List all mail domains ****************************/
 /*****************************************************************************/
 
-static void Mai_ListMailDomainsForEdition (void)
+static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
   {
    extern const char *Hlp_START_Domains_edit;
    extern const char *Txt_Email_domains_allowed_for_notifications;
@@ -419,10 +442,10 @@ static void Mai_ListMailDomainsForEdition (void)
 
       /***** Write all mail domains *****/
       for (NumMai = 0;
-	   NumMai < Gbl.Mails.Num;
+	   NumMai < Mails->Num;
 	   NumMai++)
 	{
-	 Mai = &Gbl.Mails.Lst[NumMai];
+	 Mai = &Mails->Lst[NumMai];
 
 	 HTM_TR_Begin (NULL);
 
@@ -1658,6 +1681,17 @@ bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
       default:
 	 return false;
      }
+  }
+
+/*****************************************************************************/
+/************************* Initialize mail domain list ***********************/
+/*****************************************************************************/
+
+static void Mai_InitializeMailDomainList (struct Mai_Mails *Mails)
+  {
+   Mails->Num = 0;
+   Mails->Lst = NULL;
+   Mails->SelectedOrder = Mai_ORDER_DEFAULT;
   }
 
 /*****************************************************************************/

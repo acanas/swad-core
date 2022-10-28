@@ -63,15 +63,16 @@ extern struct Globals Gbl;
 
 struct Plg_Plugins
   {
-   unsigned Num;			// Number of plugins
-   struct Plg_Plugin *Lst;		// List of plugins
+   unsigned Num;		// Number of plugins
+   struct Plg_Plugin *Lst;	// List of plugins
   };
 
 /*****************************************************************************/
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited
+// Global because it's maintained from a-priori to a-posteriori functions
+static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited.
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
