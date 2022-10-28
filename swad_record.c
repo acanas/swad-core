@@ -86,6 +86,16 @@ extern struct Globals Gbl;
 #define Rec_MY_INS_CTR_DPT_ID	"my_ins_ctr_dpt_section"
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+struct
+  {
+   struct Usr_Data *UsrDat;
+   Rec_SharedRecordViewType_t TypeOfView;
+  } Rec_Record;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -2109,8 +2119,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Gbl.Record.UsrDat = UsrDat;
-   Gbl.Record.TypeOfView = TypeOfView;
+   Rec_Record.UsrDat = UsrDat;
+   Rec_Record.TypeOfView = TypeOfView;
    if (TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM)
       Box_BoxTableBegin (StrRecordWidth,NULL,
 			 NULL,NULL,	// New user ==> don't put icons
@@ -2307,7 +2317,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
   {
-   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
+   bool ItsMe = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -2328,8 +2338,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
        Gbl.Usrs.Me.Logged)					// Only if I am logged
      {
-      ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->BaPrfVisibility,
-						 Gbl.Record.UsrDat);
+      ICanViewUsrProfile = Pri_ShowingIsAllowed (Rec_Record.UsrDat->BaPrfVisibility,
+						 Rec_Record.UsrDat);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
@@ -2346,12 +2356,12 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   "user.svg",Ico_BLACK);
 
 	 /***** Button to view user's record card *****/
-	 if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
+	 if (Usr_CheckIfICanViewRecordStd (Rec_Record.UsrDat))
 	    /* View student's records: common record card and course record card */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
-	 else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
+	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
@@ -2361,7 +2371,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
 					   NULL,NULL,
 					   "calendar.svg",Ico_BLACK);
-	 else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
+	 else if (Usr_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "calendar.svg",Ico_BLACK);
@@ -2373,16 +2383,16 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	    Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
+	    Lay_PutContextualLinkOnlyIcon (NextAction[Rec_Record.UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "user-cog.svg",Ico_BLACK);
 
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	   {
-	    if (Gbl.Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
+	    if (Rec_Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
 	      {
 	       /***** Buttons to view student's test, exam and match results *****/
-	       if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat))
 		 {
 		  if (ItsMe)
 		    {
@@ -2417,7 +2427,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		 }
 
 	       /***** Button to view student's assignments and works *****/
-	       if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
+	       if (Usr_CheckIfICanViewAsgWrk (Rec_Record.UsrDat))
 		 {
 		  if (ItsMe)
 		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
@@ -2430,7 +2440,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		 }
 
 	       /***** Button to view student's attendance *****/
-	       if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
+	       if (Usr_CheckIfICanViewAtt (Rec_Record.UsrDat))
 		 {
 		  if (ItsMe)
 		     Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
@@ -2450,7 +2460,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 	 /***** Button to send a message *****/
 	 RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,	// From:
-							   Gbl.Record.UsrDat->UsrCod);	// To:
+							   Rec_Record.UsrDat->UsrCod);	// To:
 	 if (!RecipientHasBannedMe)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Rec_PutParamsMsgUsr,NULL,
@@ -2460,7 +2470,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	 if (!ItsMe)	// Not me
 	   {
 	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Gbl.Record.UsrDat->UsrCod))
+					     Rec_Record.UsrDat->UsrCod))
 	       // I follow user
 	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
 					      Rec_PutParamUsrCodEncrypted,NULL,
@@ -2472,10 +2482,10 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	   }
 
 	 /***** Button to change user's photo *****/
-	 Pho_PutIconToChangeUsrPhoto ();
+	 Pho_PutIconToChangeUsrPhoto (Rec_Record.UsrDat);
 
 	 /***** Button to change user's account *****/
-	 Acc_PutIconToChangeUsrAccount ();
+	 Acc_PutIconToChangeUsrAccount (Rec_Record.UsrDat);
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -2484,7 +2494,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Record.UsrDat->EnUsrCod);
+   Usr_PutParamUsrCodEncrypted (Rec_Record.UsrDat->EnUsrCod);
   }
 
 static void Rec_PutParamsMyTsts (__attribute__((unused)) void *Args)
@@ -2510,7 +2520,7 @@ static void Rec_PutParamsWorks (__attribute__((unused)) void *Args)
 
 static void Rec_PutParamsStudent (__attribute__((unused)) void *Args)
   {
-   Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EnUsrCod);
+   Par_PutHiddenParamString (NULL,"UsrCodStd",Rec_Record.UsrDat->EnUsrCod);
    Grp_PutParamAllGroups ();
   }
 

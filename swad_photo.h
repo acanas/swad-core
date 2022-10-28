@@ -96,7 +96,7 @@ struct Pho_DegPhotos
 /*****************************************************************************/
 
 bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat);
-void Pho_PutIconToChangeUsrPhoto (void);
+void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat);
 void Pho_ReqMyPhoto (void);
 void Pho_SendPhotoUsr (void);
 void Pho_RecMyPhotoDetFaces (void);

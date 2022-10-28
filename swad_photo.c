@@ -169,7 +169,7 @@ bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 /********** Put a link to the action used to request user's photo ************/
 /*****************************************************************************/
 
-void Pho_PutIconToChangeUsrPhoto (void)
+void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -186,15 +186,13 @@ void Pho_PutIconToChangeUsrPhoto (void)
      };
 
    /***** Link for changing / uploading the photo *****/
-   if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
-     {
+   if (Usr_ItsMe (UsrDat->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
                                      NULL,NULL,
 				     "camera.svg",Ico_BLACK);
-     }
    else	// Not me
-      if (Pho_ICanChangeOtherUsrPhoto (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
+      if (Pho_ICanChangeOtherUsrPhoto (UsrDat))
+	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 				        Rec_PutParamUsrCodEncrypted,NULL,
 	                                "camera.svg",Ico_BLACK);
   }

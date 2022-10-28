@@ -605,7 +605,7 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.55 (2022-10-28)"
+#define Log_PLATFORM_VERSION	"SWAD 22.56 (2022-10-29)"
 #define CSS_FILE		"swad22.49.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
@@ -616,6 +616,7 @@ Que al subir un fichero por defecto esté oculto, aunque sea opcional.
 Al subir cosas para los grupos, en documentos, resltar más los grupos porque no son conscientes...
 Exportar listas en CSV.
 
+	Version 22.56:    Oct 29, 2022  Code refactoring in user record. (333696 lines)
 	Version 22.55:    Oct 28, 2022  Code refactoring in degree types. (333694 lines)
 	Version 22.54:    Oct 28, 2022  Code refactoring and bug fixing in institutional links. (333614 lines)
 	Version 22.53:    Oct 28, 2022  Code refactoring in mail domains. (333607 lines)

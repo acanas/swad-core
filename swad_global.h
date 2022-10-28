@@ -235,11 +235,6 @@ struct Globals
      } Usrs;
    struct
      {
-      struct Usr_Data *UsrDat;
-      Rec_SharedRecordViewType_t TypeOfView;
-     } Record;
-   struct
-     {
       HieLvl_Level_t Current;
       HieLvl_Level_t Default;
       unsigned Allowed;

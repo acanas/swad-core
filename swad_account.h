@@ -68,6 +68,6 @@ void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
                                      Cns_QuietOrVerbose_t QuietOrVerbose);
 
-void Acc_PutIconToChangeUsrAccount (void);
+void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat);
 
 #endif

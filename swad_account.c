@@ -1110,7 +1110,7 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat)
 /********* Put an icon to the action used to manage user's account ***********/
 /*****************************************************************************/
 
-void Acc_PutIconToChangeUsrAccount (void)
+void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -1127,13 +1127,13 @@ void Acc_PutIconToChangeUsrAccount (void)
      };
 
    /***** Link for changing the account *****/
-   if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
                                      NULL,NULL,
 			             "at.svg",Ico_BLACK);
    else	// Not me
-      if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
+      if (Usr_ICanEditOtherUsr (UsrDat))
+	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 	                                Rec_PutParamUsrCodEncrypted,NULL,
 	                                "at.svg",Ico_BLACK);
   }
