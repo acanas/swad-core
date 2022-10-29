@@ -1634,6 +1634,7 @@ int swad__findUsers (struct soap *soap,
                      struct swad__getUsersOutput *getUsersOut)			// output
   {
    int ReturnCode;
+   struct Sch_Search Search;
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    Rol_Role_t Role;
    bool FilterTooShort = false;
@@ -1689,13 +1690,14 @@ int swad__findUsers (struct soap *soap,
    Role = API_SvcRole_to_RolRole[userRole];
 
    /***** Query users beloging to course or group from database *****/
-   Str_Copy (Gbl.Search.Str,filter,sizeof (Gbl.Search.Str) - 1);
+   Search.WhatToSearch = Sch_SEARCH_USERS;
+   Str_Copy (Search.Str,filter,sizeof (Search.Str) - 1);
 
-   if (Gbl.Search.Str[0])	// Search some users
+   if (Search.Str[0])	// Search some users
      {
       Gbl.Scope.Current = (Gbl.Hierarchy.Level == HieLvl_CRS) ? HieLvl_CRS :
-							     HieLvl_SYS;
-      if (Sch_BuildSearchQuery (SearchQuery,
+							        HieLvl_SYS;
+      if (Sch_BuildSearchQuery (SearchQuery,&Search,
 				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				NULL,NULL))
 	{

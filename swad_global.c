@@ -221,10 +221,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Records.LstFields.Num = 0;
    Gbl.Crs.Records.LstFields.NestedCalls = 0;
 
-   Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
-   Gbl.Search.Str[0] = '\0';
-   Gbl.Search.LogSearch = false;
-
    Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;
    Gbl.Usrs.Listing.RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;

@@ -33,9 +33,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 //---------------------------------- Sessions ---------------------------------
-void Ses_DB_InsertSession (void);
+void Ses_DB_InsertSession (Sch_WhatToSearch_t WhatToSearch);
 void Ses_DB_UpdateSession (void);
-void Ses_DB_SaveLastSearchIntoSession (void);
+void Ses_DB_SaveLastSearchIntoSession (const struct Sch_Search *Search);
 void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 void Ses_DB_UpdateSessionLastRefresh (void);
 

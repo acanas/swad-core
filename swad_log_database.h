@@ -30,7 +30,7 @@
 long Log_DB_LogAccessInHistoricalLog (long ActCod,Rol_Role_t RoleToStore);
 void Log_DB_LogAccessInRecentLog (long LogCod,long ActCod,Rol_Role_t RoleToStore);
 void Log_DB_LogComments (long LogCod,const char *CommentsDB);
-void Log_DB_LogSearchString (long LogCod);
+void Log_DB_LogSearchString (long LogCod,const struct Sch_Search *Search);
 void Log_DB_LogAPI (long LogCod);
 void Log_DB_LogBanner (long LogCod,long BanCodClicked);
 

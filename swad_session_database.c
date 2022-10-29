@@ -40,11 +40,8 @@ extern struct Globals Gbl;
 /******************** Insert new session in the database *********************/
 /*****************************************************************************/
 
-void Ses_DB_InsertSession (void)
+void Ses_DB_InsertSession (Sch_WhatToSearch_t WhatToSearch)
   {
-   if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
-      Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
-
    DB_QueryINSERT ("can not create session",
 		   "INSERT INTO ses_sessions"
 	           " (SessionId,UsrCod,Password,Role,"
@@ -61,7 +58,7 @@ void Ses_DB_InsertSession (void)
 		   Gbl.Hierarchy.Ctr.CtrCod,
 		   Gbl.Hierarchy.Deg.DegCod,
 		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Search.WhatToSearch);
+		   WhatToSearch);
   }
 
 /*****************************************************************************/
@@ -98,15 +95,15 @@ void Ses_DB_UpdateSession (void)
 /********************** Save last search into session ************************/
 /*****************************************************************************/
 
-void Ses_DB_SaveLastSearchIntoSession (void)
+void Ses_DB_SaveLastSearchIntoSession (const struct Sch_Search *Search)
   {
    DB_QueryUPDATE ("can not update last search in session",
 		   "UPDATE ses_sessions"
 		     " SET WhatToSearch=%u,"
 			  "SearchStr='%s'"
 		   " WHERE SessionId='%s'",
-		   (unsigned) Gbl.Search.WhatToSearch,
-		   Gbl.Search.Str,
+		   (unsigned) Search->WhatToSearch,
+		   Search->Str,
 		   Gbl.Session.Id);
   }
 

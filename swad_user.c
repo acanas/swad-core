@@ -1947,6 +1947,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
 static void Usr_SetMyPrefsAndRoles (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
+   struct Sch_Search *Search;
    bool GetRoleAndActionFromLastData;
    Act_Action_t LastSuperAction;
    bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
@@ -1981,7 +1982,8 @@ static void Usr_SetMyPrefsAndRoles (void)
      {
       /***** WhatToSearch is stored in session,
              but in login it is got from user's last data *****/
-      Gbl.Search.WhatToSearch = Gbl.Usrs.Me.UsrLast.WhatToSearch;
+      Search = Sch_GetSearch ();
+      Search->WhatToSearch = Gbl.Usrs.Me.UsrLast.WhatToSearch;
 
       /***** Location in hierarchy and role are stored in session,
              but in login the are got from user's last data *****/

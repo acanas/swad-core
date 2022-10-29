@@ -89,7 +89,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-struct
+static struct
   {
    struct Usr_Data *UsrDat;
    Rec_SharedRecordViewType_t TypeOfView;

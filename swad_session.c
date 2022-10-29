@@ -74,6 +74,8 @@ void Ses_GetNumSessions (void)
 
 void Ses_CreateSession (void)
   {
+   struct Sch_Search *Search = Sch_GetSearch ();
+
    /***** Create a unique name for the session *****/
    Str_Copy (Gbl.Session.Id,Cry_GetUniqueNameEncrypted (),sizeof (Gbl.Session.Id) - 1);
 
@@ -82,7 +84,9 @@ void Ses_CreateSession (void)
       Err_ShowErrorAndExit ("Can not create session.");
 
    /***** Add session to database *****/
-   Ses_DB_InsertSession ();
+   if (Search->WhatToSearch == Sch_SEARCH_UNKNOWN)
+      Search->WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+   Ses_DB_InsertSession (Search->WhatToSearch);
 
    /***** Update time and course in connected list *****/
    Con_DB_UpdateMeInConnectedList ();
@@ -155,6 +159,7 @@ bool Ses_GetSessionData (void)
    MYSQL_ROW row;
    unsigned UnsignedNum;
    bool Result = false;
+   struct Sch_Search *Search;
 
    /***** Check if the session existed in the database *****/
    if (Ses_DB_GetSessionData (&mysql_res))
@@ -186,16 +191,18 @@ bool Ses_GetSessionData (void)
       /***** Get last search *****/
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed
 	{
+         Search = Sch_GetSearch ();
+
 	 /* Get what to search (row[8]) */
-	 Gbl.Search.WhatToSearch = Sch_SEARCH_UNKNOWN;
+	 Search->WhatToSearch = Sch_SEARCH_UNKNOWN;
 	 if (sscanf (row[8],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
-	       Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
-	 if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
-	    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+	       Search->WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
+	 if (Search->WhatToSearch == Sch_SEARCH_UNKNOWN)
+	    Search->WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
 	 /* Get search string (row[9]) */
-	 Str_Copy (Gbl.Search.Str,row[9],sizeof (Gbl.Search.Str) - 1);
+	 Str_Copy (Search->Str,row[9],sizeof (Search->Str) - 1);
 	}
 
       Result = true;

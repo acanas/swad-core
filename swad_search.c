@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_institution_database.h"
 #include "swad_layout.h"
+#include "swad_log.h"
 #include "swad_parameter.h"
 #include "swad_session_database.h"
 #include "swad_user.h"
@@ -59,12 +60,21 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct Sch_Search Sch_Search =
+  {
+   .WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT,
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultScope);
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
-static void Sch_GetParamSearch (void);
+static void Sch_GetParamSearchStr (void);
 static void Sch_SearchInDB (void);
 
 static unsigned Sch_SearchCountrsInDB (const char *RangeQuery);
@@ -80,6 +90,16 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery);
 static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery);
 
 static void Sch_SaveLastSearchIntoSession (void);
+
+
+/*****************************************************************************/
+/*********************** Get pointer to global search ************************/
+/*****************************************************************************/
+
+struct Sch_Search *Sch_GetSearch (void)
+  {
+   return &Sch_Search;
+  }
 
 /*****************************************************************************/
 /*********************** Request search in system tab ************************/
@@ -132,6 +152,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultS
      };
    Sch_WhatToSearch_t WhatToSearch;
    unsigned WTS;
+   const struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CM\"");
@@ -178,7 +199,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultS
 		       {
 			WTS = (unsigned) WhatToSearch;
 			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
-				    Gbl.Search.WhatToSearch == WhatToSearch,false,
+				    Search->WhatToSearch == WhatToSearch,false,
 				    "%s",*Titles[WhatToSearch]);
 		       }
 	       HTM_SELECT_End ();
@@ -252,10 +273,11 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 void Sch_PutInputStringToSearch (const char *IdInputText)
   {
    extern const char *Txt_Search;
+   const struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** String to find *****/
    // Input field not required, because it can be hidden (display:none)
-   HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Gbl.Search.Str,
+   HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Search->Str,
 	             "id=\"%s\" size=\"18\" class=\"INPUT_%s\""
 	             " placeholder=\"%s&hellip;\"",
 		     IdInputText,
@@ -279,6 +301,7 @@ void Sch_PutMagnifyingGlassButton (Ico_Color_t Color)
 void Sch_GetParamWhatToSearch (void)
   {
    Sch_WhatToSearch_t WhatToSearch;
+   struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** Get what to search from form *****/
    WhatToSearch = (Sch_WhatToSearch_t)
@@ -290,17 +313,19 @@ void Sch_GetParamWhatToSearch (void)
    /***** If parameter WhatToSearch is not present,
           use parameter from session *****/
    if (WhatToSearch != Sch_SEARCH_UNKNOWN)
-      Gbl.Search.WhatToSearch = WhatToSearch;
+      Search->WhatToSearch = WhatToSearch;
   }
 
 /*****************************************************************************/
 /*********************** Get string from search form *************************/
 /*****************************************************************************/
 
-static void Sch_GetParamSearch (void)
+static void Sch_GetParamSearchStr (void)
   {
+   struct Sch_Search *Search = Sch_GetSearch ();
+
    /***** Get string to search *****/
-   Par_GetParToText ("Search",Gbl.Search.Str,Sch_MAX_BYTES_STRING_TO_FIND);
+   Par_GetParToText ("Search",Search->Str,Sch_MAX_BYTES_STRING_TO_FIND);
   }
 
 /*****************************************************************************/
@@ -313,7 +338,7 @@ void Sch_GetParamsSearch (void)
    Sch_GetParamWhatToSearch ();
 
    /***** Get search string *****/
-   Sch_GetParamSearch ();
+   Sch_GetParamSearchStr ();
 
    /***** Save my search in order to show it in current session *****/
    if (Gbl.Usrs.Me.Logged)
@@ -326,8 +351,13 @@ void Sch_GetParamsSearch (void)
 
 void Sch_SysSearch (void)
   {
-   if (Gbl.Search.Str[0])
+   const struct Sch_Search *Search = Sch_GetSearch ();
+
+   if (Search->Str[0])
      {
+      /***** Activate logging search in database *****/
+      Log_SetLogSearch (true);
+
       /***** Show search form again *****/
       Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_SYS);
 
@@ -348,8 +378,7 @@ static void Sch_SearchInDB (void)
    extern const char *Txt_No_results;
    char RangeQuery[256];
    unsigned NumResults = 0;	// Initialized to avoid warning
-
-   Gbl.Search.LogSearch = true;
+   struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** Select courses in all degrees or in current degree *****/
    switch (Gbl.Scope.Current)
@@ -381,9 +410,9 @@ static void Sch_SearchInDB (void)
          break;
      }
 
-   if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
-      Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
-   switch (Gbl.Search.WhatToSearch)
+   if (Search->WhatToSearch == Sch_SEARCH_UNKNOWN)
+      Search->WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+   switch (Search->WhatToSearch)
      {
       case Sch_SEARCH_ALL:
 	 NumResults  = Sch_SearchCountrsInDB (RangeQuery);
@@ -467,7 +496,8 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
 	 /***** Split countries string into words *****/
 	 snprintf (FieldName,sizeof (FieldName),"Name_%s",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
+	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+	                           FieldName,NULL,NULL))
 	   {
 	    /***** Query database and list countries found *****/
 	    NumCtys = Cty_DB_SearchCtys (&mysql_res,SearchQuery,RangeQuery);
@@ -498,7 +528,8 @@ static unsigned Sch_SearchInstitsInDB (const char *RangeQuery)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITS))
 	 /***** Split institutions string into words *****/
-	 if (Sch_BuildSearchQuery (SearchQuery,"ins_instits.FullName",NULL,NULL))
+	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+	                           "ins_instits.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list institutions found *****/
 	    NumInss = Ins_DB_SearchInss (&mysql_res,SearchQuery,RangeQuery);
@@ -526,7 +557,8 @@ static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTERS))
 	 /***** Split center string into words *****/
-	 if (Sch_BuildSearchQuery (SearchQuery,"ctr_centers.FullName",NULL,NULL))
+	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+	                           "ctr_centers.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list centers found *****/
 	    NumCtrs = Ctr_DB_SearchCtrs (&mysql_res,SearchQuery,RangeQuery);
@@ -553,7 +585,8 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DEGREES))
 	 /***** Split degree string into words *****/
-	 if (Sch_BuildSearchQuery (SearchQuery,"deg_degrees.FullName",NULL,NULL))
+	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+	                           "deg_degrees.FullName",NULL,NULL))
 	   {
 	    /***** Query database and list degrees found *****/
 	    NumDegs = Deg_DB_SearchDegs (&mysql_res,SearchQuery,RangeQuery);
@@ -578,7 +611,8 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COURSES))
       /***** Split course string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,"crs_courses.FullName",NULL,NULL))
+      if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+                                "crs_courses.FullName",NULL,NULL))
 	{
 	 /***** Query database and list courses found *****/
 	 NumCrss = Crs_DB_SearchCrss (&mysql_res,SearchQuery,RangeQuery);
@@ -601,7 +635,7 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
 
    /***** Split user string into words *****/
-   if (Sch_BuildSearchQuery (SearchQuery,
+   if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
 			     "CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 			     NULL,NULL))
       /***** Query database and list users found *****/
@@ -633,7 +667,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
       /***** Split document string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(brw_files.Path,'/',-1)",
+      if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+                                "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Query database *****/
@@ -665,7 +700,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DOCUM_IN_MY_COURSES))
       /***** Split document string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(brw_files.Path,'/',-1)",
+      if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+                                "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Query database *****/
@@ -697,7 +733,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
       /***** Split document string into words *****/
-      if (Sch_BuildSearchQuery (SearchQuery,"SUBSTRING_INDEX(brw_files.Path,'/',-1)",
+      if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
+                                "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
 				"_latin1 "," COLLATE latin1_general_ci"))
 	{
 	 /***** Query database *****/
@@ -721,6 +758,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 // Returns false when no valid search query
 
 bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                           const struct Sch_Search *Search,
                            const char *FieldName,
                            const char *CharSet,const char *Collate)
   {
@@ -733,10 +771,10 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
    char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_BYTES_SEARCH_WORD + 1];
    bool SearchWordIsValid = true;
 
-   if (Gbl.Search.Str[0])
+   if (Search->Str[0])
      {
       SearchQuery[0] = '\0';
-      Ptr = Gbl.Search.Str;
+      Ptr = Search->Str;
       for (NumWords = 0;
 	   NumWords < Sch_MAX_WORDS_IN_SEARCH && *Ptr;
 	   NumWords++)
@@ -745,7 +783,7 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 	 Str_GetNextStringUntilSpace (&Ptr,SearchWords[NumWords],Sch_MAX_BYTES_SEARCH_WORD);
 
 	 /* Is this word valid? */
-	 switch (Gbl.Search.WhatToSearch)
+	 switch (Search->WhatToSearch)
 	   {
 	    case Sch_SEARCH_OPEN_DOCUMENTS:
 	    case Sch_SEARCH_DOCUM_IN_MY_COURSES:
@@ -807,18 +845,21 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 
 static void Sch_SaveLastSearchIntoSession (void)
   {
+   struct Sch_Search *Search;
+
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
-	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+      Search = Sch_GetSearch ();
+      if (Search->WhatToSearch == Sch_SEARCH_UNKNOWN)
+	 Search->WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /***** Save last search in session *****/
-      Ses_DB_SaveLastSearchIntoSession ();
+      Ses_DB_SaveLastSearchIntoSession (Search);
 
       /***** Update my last type of search *****/
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-      Usr_DB_UpdateMyLastWhatToSearch ();
+      Usr_DB_UpdateMyLastWhatToSearch (Search->WhatToSearch);
      }
   }
 

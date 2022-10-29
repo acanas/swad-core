@@ -67,9 +67,17 @@ typedef enum
   } Sch_WhatToSearch_t;
 #define Sch_WHAT_TO_SEARCH_DEFAULT Sch_SEARCH_ALL
 
+struct Sch_Search
+  {
+   Sch_WhatToSearch_t WhatToSearch;
+   char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
+
+struct Sch_Search *Sch_GetSearch (void);
 
 void Sch_ReqSysSearch (void);
 
@@ -82,6 +90,7 @@ void Sch_GetParamsSearch (void);
 void Sch_SysSearch (void);
 
 bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                           const struct Sch_Search *Search,
                            const char *FieldName,
                            const char *CharSet,const char *Collate);
 

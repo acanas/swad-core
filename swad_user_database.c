@@ -1492,7 +1492,7 @@ void Usr_DB_UpdateMyLastData (void)
 /********************** Update my last type of search ************************/
 /*****************************************************************************/
 
-void Usr_DB_UpdateMyLastWhatToSearch (void)
+void Usr_DB_UpdateMyLastWhatToSearch (Sch_WhatToSearch_t WhatToSearch)
   {
    // WhatToSearch is stored in usr_last for next time I log in
    // In other existing sessions distinct to this, WhatToSearch will remain unchanged
@@ -1500,7 +1500,7 @@ void Usr_DB_UpdateMyLastWhatToSearch (void)
 		   "UPDATE usr_last"
 		     " SET WhatToSearch=%u"
 		   " WHERE UsrCod=%ld",
-		   (unsigned) Gbl.Search.WhatToSearch,
+		   (unsigned) WhatToSearch,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

@@ -54,6 +54,32 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static bool Log_Search = false;	// Log search in database?
+
+/*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static bool Log_GetLogSearch (void);
+
+/*****************************************************************************/
+/******************** Set/get logging search in database *********************/
+/*****************************************************************************/
+
+void Log_SetLogSearch (bool Search)
+  {
+   Log_Search = Search;
+  }
+
+static bool Log_GetLogSearch (void)
+  {
+   return Log_Search;
+  }
+
+/*****************************************************************************/
 /**************************** Log access in database *************************/
 /*****************************************************************************/
 
@@ -92,8 +118,8 @@ void Log_LogAccess (const char *Comments)
      }
 
    /* Log search string */
-   if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
-      Log_DB_LogSearchString (LogCod);
+   if (Log_GetLogSearch ())
+      Log_DB_LogSearchString (LogCod,Sch_GetSearch ());
 
    if (Gbl.WebService.IsWebService)
       /* Log web service plugin and API function */

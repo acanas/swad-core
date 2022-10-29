@@ -114,15 +114,14 @@ void Log_DB_LogComments (long LogCod,const char *CommentsDB)
 /****************************** Log search string ****************************/
 /*****************************************************************************/
 
-void Log_DB_LogSearchString (long LogCod)
+void Log_DB_LogSearchString (long LogCod,const struct Sch_Search *Search)
   {
    DB_QueryINSERT ("can not log access (search)",
 		   "INSERT INTO log_search"
 		   " (LogCod,SearchStr)"
 		   " VALUES"
 		   " (%ld,'%s')",
-		   LogCod,
-		   Gbl.Search.Str);
+		   LogCod,Search->Str);
   }
 
 /*****************************************************************************/

@@ -33,6 +33,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Log_SetLogSearch (bool Search);
+
 void Log_LogAccess (const char *Comments);
 
 void Log_PutLinkToLastClicks (void);
