@@ -100,14 +100,6 @@ struct Globals
       struct Crs_ListCourses Crss;	// List of courses in current degree
       struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
-   /*
-   struct
-     {
-      Sch_WhatToSearch_t WhatToSearch;
-      char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
-      bool LogSearch;
-     } Search;
-   */
    struct
      {
       bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?

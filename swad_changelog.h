@@ -532,7 +532,6 @@ dentro siempre de lo que haya guardado en la tabla de ubicaciones limitada a 12/
 // TODO: Integrar pull requests con traducciones del alemán del usuario eruedin en GitHub
 // TODO: Cambiar icono notificaciones nuevas con "bell-on.svg"
 // TODO: Ahmed El Moukhtari Koubaa: Cuando le damos a la opción de mostrar solo los mensajes no leídos, se muestran estos mensajes, pero cuando los intentamos leer, es decir, hacemos clic sobre ellos se recarga toda la página por así decirlo y vuelve a dar una lista con los mensajes, pero descartando aquel que clicamos porque, entiendo yo al menos, que ya lo ha marcado como leído.
-// TODO: Cambiar "centre" a "center"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -605,8 +604,8 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.57 (2022-10-29)"
-#define CSS_FILE		"swad22.49.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 22.57.1 (2022-10-29)"
+#define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
 Sugerencia de J.L Bernier. Al eliminar los estudiantes, que se eliminen los trabajos opcionalmente marcando una casilla.
@@ -616,6 +615,7 @@ Que al subir un fichero por defecto esté oculto, aunque sea opcional.
 Al subir cosas para los grupos, en documentos, resltar más los grupos porque no son conscientes...
 Exportar listas en CSV.
 
+	Version 22.57.1:  Oct 29, 2022  Change in layout of heading title. (333789 lines)
 	Version 22.57:    Oct 29, 2022  Code refactoring in search. (333762 lines)
 	Version 22.56:    Oct 29, 2022  Code refactoring in user record. (333696 lines)
 	Version 22.55:    Oct 28, 2022  Code refactoring in degree types. (333694 lines)
