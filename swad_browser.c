@@ -43,6 +43,7 @@
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
+#include "swad_browser_size.h"
 #include "swad_config.h"
 #include "swad_course_database.h"
 #include "swad_database.h"
@@ -219,39 +220,6 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
    [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
    [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
-
-static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = false,
-   [Brw_SHOW_DOC_CRS] = false,
-   [Brw_SHOW_MRK_CRS] = false,
-   [Brw_ADMI_DOC_CRS] = true,
-   [Brw_ADMI_SHR_CRS] = true,
-   [Brw_ADMI_SHR_GRP] = true,
-   [Brw_ADMI_WRK_USR] = true,
-   [Brw_ADMI_WRK_CRS] = true,
-   [Brw_ADMI_MRK_CRS] = true,
-   [Brw_ADMI_BRF_USR] = true,
-   [Brw_SHOW_DOC_GRP] = false,
-   [Brw_ADMI_DOC_GRP] = true,
-   [Brw_SHOW_MRK_GRP] = false,
-   [Brw_ADMI_MRK_GRP] = true,
-   [Brw_ADMI_ASG_USR] = true,
-   [Brw_ADMI_ASG_CRS] = true,
-   [Brw_SHOW_DOC_DEG] = false,
-   [Brw_ADMI_DOC_DEG] = true,
-   [Brw_SHOW_DOC_CTR] = false,
-   [Brw_ADMI_DOC_CTR] = true,
-   [Brw_SHOW_DOC_INS] = false,
-   [Brw_ADMI_DOC_INS] = true,
-   [Brw_ADMI_SHR_DEG] = true,
-   [Brw_ADMI_SHR_CTR] = true,
-   [Brw_ADMI_SHR_INS] = true,
-   [Brw_ADMI_TCH_CRS] = true,
-   [Brw_ADMI_TCH_GRP] = true,
-   [Brw_ADMI_DOC_PRJ] = true,
-   [Brw_ADMI_ASS_PRJ] = true,
   };
 
 static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -1079,91 +1047,6 @@ static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActZIPAssPrj,
   };
 
-/* All quotas must be multiple of 1 GiB (Gibibyte)*/
-#define Brw_GiB (1024ULL * 1024ULL * 1024ULL)
-
-/* Maximum quotas for each type of file browser */
-#define Brw_MAX_QUOTA_DOCUM_INS		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOCUM_INS		5000
-#define Brw_MAX_FOLDS_DOCUM_INS		1000
-
-#define Brw_MAX_QUOTA_DOCUM_CTR		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOCUM_CTR		5000
-#define Brw_MAX_FOLDS_DOCUM_CTR		1000
-
-#define Brw_MAX_QUOTA_DOCUM_DEG		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOCUM_DEG		5000
-#define Brw_MAX_FOLDS_DOCUM_DEG		1000
-
-#define Brw_MAX_QUOTA_DOCUM_CRS		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOCUM_CRS		5000
-#define Brw_MAX_FOLDS_DOCUM_CRS		1000
-
-#define Brw_MAX_QUOTA_DOCUM_GRP		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOCUM_GRP		1000
-#define Brw_MAX_FOLDS_DOCUM_GRP		500
-
-#define Brw_MAX_QUOTA_TEACH_CRS		Brw_MAX_QUOTA_DOCUM_CRS
-#define Brw_MAX_FILES_TEACH_CRS		Brw_MAX_FILES_DOCUM_CRS
-#define Brw_MAX_FOLDS_TEACH_CRS		Brw_MAX_FOLDS_DOCUM_CRS
-
-#define Brw_MAX_QUOTA_TEACH_GRP		Brw_MAX_QUOTA_DOCUM_GRP
-#define Brw_MAX_FILES_TEACH_GRP		Brw_MAX_FILES_DOCUM_GRP
-#define Brw_MAX_FOLDS_TEACH_GRP		Brw_MAX_FOLDS_DOCUM_GRP
-
-#define Brw_MAX_QUOTA_SHARE_INS		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_SHARE_INS		5000
-#define Brw_MAX_FOLDS_SHARE_INS		1000	// Many, because every student can create his own directories
-
-#define Brw_MAX_QUOTA_SHARE_CTR		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_SHARE_CTR		5000
-#define Brw_MAX_FOLDS_SHARE_CTR		1000	// Many, because every student can create his own directories
-
-#define Brw_MAX_QUOTA_SHARE_DEG		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_SHARE_DEG		5000
-#define Brw_MAX_FOLDS_SHARE_DEG		1000	// Many, because every student can create his own directories
-
-#define Brw_MAX_QUOTA_SHARE_CRS		(64ULL*Brw_GiB)
-#define Brw_MAX_FILES_SHARE_CRS		5000
-#define Brw_MAX_FOLDS_SHARE_CRS		1000	// Many, because every student can create his own directories
-
-#define Brw_MAX_QUOTA_SHARE_GRP		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_SHARE_GRP		1000
-#define Brw_MAX_FOLDS_SHARE_GRP		500	// Many, because every student can create his own directories
-
-#define Brw_MAX_QUOTA_ASSIG_PER_STD	( 2ULL*Brw_GiB)
-#define Brw_MAX_FILES_ASSIG_PER_STD	500
-#define Brw_MAX_FOLDS_ASSIG_PER_STD	50
-
-#define Brw_MAX_QUOTA_WORKS_PER_STD	( 2ULL*Brw_GiB)
-#define Brw_MAX_FILES_WORKS_PER_STD	500
-#define Brw_MAX_FOLDS_WORKS_PER_STD	50
-
-#define Brw_MAX_QUOTA_DOC_PRJ		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_DOC_PRJ		500
-#define Brw_MAX_FOLDS_DOC_PRJ		50
-
-#define Brw_MAX_QUOTA_ASS_PRJ		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_ASS_PRJ		200
-#define Brw_MAX_FOLDS_ASS_PRJ		20
-
-#define Brw_MAX_QUOTA_MARKS_CRS		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_MARKS_CRS		500
-#define Brw_MAX_FOLDS_MARKS_CRS		50
-
-#define Brw_MAX_QUOTA_MARKS_GRP		( 1ULL*Brw_GiB)
-#define Brw_MAX_FILES_MARKS_GRP		200
-#define Brw_MAX_FOLDS_MARKS_GRP		20
-
-static const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
-  {
-   [Rol_STD] =	32ULL*Brw_GiB,
-   [Rol_NET] =	32ULL*Brw_GiB,
-   [Rol_TCH] =	64ULL*Brw_GiB,
-  };
-#define Brw_MAX_FILES_BRIEF	5000
-#define Brw_MAX_FOLDS_BRIEF	1000
-
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -1180,9 +1063,6 @@ static void Brw_GetDataCurrentGrp (void);
 static void Brw_GetParamsPathInTreeAndFileName (void);
 static void Brw_SetPathFileBrowser (void);
 static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
-static void Brw_SetAndCheckQuota (void);
-static void Brw_SetMaxQuota (void);
-static bool Brw_CheckIfQuotaExceded (void);
 
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowserNormal (void);
@@ -1201,7 +1081,6 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
 static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
-static void Brw_ShowAndStoreSizeOfFileTree (void);
 
 static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
@@ -1215,8 +1094,7 @@ static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
-static void Brw_ResetFileBrowserSize (void);
-static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path);
+
 static void Brw_ListDir (unsigned Level,const char *RowId,
                          bool TreeContracted,
                          const char Path[PATH_MAX + 1],
@@ -1238,8 +1116,6 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
                                          bool Hidden);
 
 static void Brw_PutIconHideUnhide (const char *Anchor,bool RowSetAsHidden);
-// static void Brw_PutIconShow (const char *Anchor);
-// static void Brw_PutIconHide (const char *Anchor);
 static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Brw_PutIconFolder (unsigned Level,
@@ -1277,9 +1153,10 @@ static bool Brw_CheckIfClipboardIsInThisTree (void);
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char Path[PATH_MAX + 1]);
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char Path[PATH_MAX + 1]);
 
-static void Brw_PasteClipboard (void);
+static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size);
 static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
-static bool Brw_PasteTreeIntoFolder (unsigned Level,
+static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
+                                     unsigned LevelOrg,
                                      const char PathOrg[PATH_MAX + 1],
                                      const char PathDstInTree[PATH_MAX + 1],
                                      struct Brw_NumObjects *Pasted,
@@ -1289,7 +1166,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow);
 static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow);
 static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow);
 static void Brw_PutFormToCreateALink (const char *FileNameToShow);
-static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType);
+static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+                                  Brw_UploadType_t UploadType);
 static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
@@ -1318,8 +1196,6 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
-static bool Prj_CheckIfICanViewProjectDocuments (long PrjCod);
-static bool Prj_CheckIfICanViewProjectAssessment (long PrjCod);
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 
@@ -1338,20 +1214,18 @@ static void Brw_RemoveFileFromDiskAndDB (const char Path[PATH_MAX + 1],
 static int Brw_RemoveFolderFromDiskAndDB (const char Path[PATH_MAX + 1],
                                           const char FullPathInTree[PATH_MAX + 1]);
 
-static void Brw_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
-                                   struct Brw_SizeOfFileZones *SizeOfFileZones);
 static void Brw_WriteStatsFileZonesTableHead1 (void);
 static void Brw_WriteStatsFileZonesTableHead2 (void);
 static void Brw_WriteStatsFileZonesTableHead3 (void);
 static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
 static void Brw_GetNumberOfOERs (Brw_License_t License,
                                  unsigned long NumFiles[2]);
@@ -2350,11 +2224,13 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
 
 void Brw_InitializeFileBrowser (void)
   {
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
+
    /***** Construct the relative path to the folder of file browser *****/
    Brw_SetPathFileBrowser ();
 
    /***** Other initializations *****/
-   Brw_ResetFileBrowserSize ();
+   BrwSiz_ResetFileBrowserSize (Size);
   }
 
 /*****************************************************************************/
@@ -2805,150 +2681,6 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/*** Initialize maximum quota of current file browser and check if exceded ***/
-/*****************************************************************************/
-
-static void Brw_SetAndCheckQuota (void)
-  {
-   extern const char *Txt_Quota_exceeded;
-
-   /***** Check the quota *****/
-   Brw_SetMaxQuota ();
-   Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
-   if (Brw_CheckIfQuotaExceded ())
-      Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
-  }
-
-/*****************************************************************************/
-/************ Initialize maximum quota of current file browser ***************/
-/*****************************************************************************/
-
-static void Brw_SetMaxQuota (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_INS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_INS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_INS;
-         break;
-      case Brw_ADMI_SHR_INS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_INS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_INS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_INS;
-	 break;
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_CTR;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_CTR;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_CTR;
-         break;
-      case Brw_ADMI_SHR_CTR:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_CTR;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_CTR;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_CTR;
-	 break;
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_DEG;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_DEG;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_DEG;
-         break;
-      case Brw_ADMI_SHR_DEG:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_DEG;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_DEG;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_DEG;
-	 break;
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_CRS;
-	 break;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOCUM_GRP;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOCUM_GRP;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOCUM_GRP;
-	 break;
-      case Brw_ADMI_TCH_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_TEACH_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_TEACH_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_TEACH_CRS;
-	 break;
-      case Brw_ADMI_TCH_GRP:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_TEACH_GRP;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_TEACH_GRP;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_TEACH_GRP;
-	 break;
-      case Brw_ADMI_SHR_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_CRS;
-	 break;
-      case Brw_ADMI_SHR_GRP:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_SHARE_GRP;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_SHARE_GRP;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_SHARE_GRP;
-	 break;
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_ASG_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_ASSIG_PER_STD;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_ASSIG_PER_STD;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_ASSIG_PER_STD;
-	 break;
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_WRK_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_WORKS_PER_STD;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_WORKS_PER_STD;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_WORKS_PER_STD;
-	 break;
-      case Brw_ADMI_DOC_PRJ:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_DOC_PRJ;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_DOC_PRJ;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_DOC_PRJ;
-	 break;
-      case Brw_ADMI_ASS_PRJ:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_ASS_PRJ;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_ASS_PRJ;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_ASS_PRJ;
-	 break;
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_CRS;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_CRS;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_CRS;
-	 break;
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_MARKS_GRP;
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_MARKS_GRP;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_MARKS_GRP;
-	 break;
-      case Brw_ADMI_BRF_USR:
-	 Gbl.FileBrowser.Size.MaxQuota = Brw_MAX_QUOTA_BRIEF[Gbl.Usrs.Me.Role.Max];
-         Gbl.FileBrowser.Size.MaxFiles = Brw_MAX_FILES_BRIEF;
-         Gbl.FileBrowser.Size.MaxFolds = Brw_MAX_FOLDS_BRIEF;
-	 break;
-      default:
-	 break;
-     }
-  }
-
-/*****************************************************************************/
-/********************** Check if quota has been exceeded *********************/
-/*****************************************************************************/
-
-static bool Brw_CheckIfQuotaExceded (void)
-  {
-   return (Gbl.FileBrowser.Size.NumLevls > Brw_MAX_DIR_LEVELS ||
-           Gbl.FileBrowser.Size.NumFolds > Gbl.FileBrowser.Size.MaxFolds ||
-           Gbl.FileBrowser.Size.NumFiles > Gbl.FileBrowser.Size.MaxFiles ||
-           Gbl.FileBrowser.Size.TotalSiz > Gbl.FileBrowser.Size.MaxQuota);
   }
 
 /*****************************************************************************/
@@ -3448,6 +3180,7 @@ static void Brw_ShowFileBrowser (void)
    char FileBrowserSectionId[32];
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Set contextual icon in box *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
@@ -3507,8 +3240,8 @@ static void Brw_ShowFileBrowser (void)
                                    &Removed);	// Not used here
 
    /***** Check if the maximum quota has been exceeded *****/
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-      Brw_SetAndCheckQuota ();
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
+      BrwSiz_SetAndCheckQuota (Size);
 
    /***** Check if the clipboard is in this tree *****/
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
@@ -3545,7 +3278,7 @@ static void Brw_ShowFileBrowser (void)
 	 HTM_TABLE_End ();
 
 	 /***** Show and store number of documents found *****/
-	 Brw_ShowAndStoreSizeOfFileTree ();
+	 BrwSiz_ShowAndStoreSizeOfFileBrowser (Size);
 
 	 /***** Put button to show / edit *****/
 	 Brw_PutButtonToShowEdit ();
@@ -3683,7 +3416,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
      }
 
    /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
       if (Brw_GetMyClipboard ())
 	 Brw_WriteCurrentClipboard ();
   }
@@ -3919,59 +3652,9 @@ static void Brw_InitHiddenLevels (void)
    unsigned Level;
 
    for (Level  = 0;
-	Level <= Brw_MAX_DIR_LEVELS;
+	Level <= BrwSiz_MAX_DIR_LEVELS;
 	Level++)
       Gbl.FileBrowser.HiddenLevels[Level] = false;
-  }
-
-/*****************************************************************************/
-/************************* Show size of a file browser ***********************/
-/*****************************************************************************/
-
-static void Brw_ShowAndStoreSizeOfFileTree (void)
-  {
-   extern const char *Txt_level;
-   extern const char *Txt_levels;
-   extern const char *Txt_folder;
-   extern const char *Txt_folders;
-   extern const char *Txt_file;
-   extern const char *Txt_files;
-   extern const char *Txt_of_PART_OF_A_TOTAL;
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-
-   HTM_DIV_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-
-      if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-	{
-	 Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
-	 HTM_TxtF ("%u %s; %lu %s; %lu %s; %s",
-		   Gbl.FileBrowser.Size.NumLevls,
-		   Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
-							Txt_levels ,
-		   Gbl.FileBrowser.Size.NumFolds,
-		   Gbl.FileBrowser.Size.NumFolds == 1 ? Txt_folder :
-							Txt_folders,
-		   Gbl.FileBrowser.Size.NumFiles,
-		   Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
-							Txt_files,
-		   FileSizeStr);
-
-	 if (Gbl.FileBrowser.Size.MaxQuota)
-	   {
-	    Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
-	    HTM_TxtF (" (%.1f%% %s %s)",
-		      100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
-			       (double) Gbl.FileBrowser.Size.MaxQuota),
-		      Txt_of_PART_OF_A_TOTAL,
-		      FileSizeStr);
-	   }
-
-	 Brw_DB_StoreSizeOfFileZone ();
-	}
-      else
-	 HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
-
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -4223,80 +3906,6 @@ long Brw_GetGrpLastAccZone (const char *FieldNameDB)
   }
 
 /*****************************************************************************/
-/********************* Reset the size of a file browser **********************/
-/*****************************************************************************/
-
-static void Brw_ResetFileBrowserSize (void)
-  {
-   Gbl.FileBrowser.Size.NumLevls = 0;
-   Gbl.FileBrowser.Size.NumFolds =
-   Gbl.FileBrowser.Size.NumFiles = 0L;
-   Gbl.FileBrowser.Size.TotalSiz = 0ULL;
-  }
-
-/*****************************************************************************/
-/********************** Compute the size of a directory **********************/
-/*****************************************************************************/
-
-void Brw_CalcSizeOfDir (char *Path)
-  {
-   Brw_ResetFileBrowserSize ();
-   Brw_CalcSizeOfDirRecursive (1,Path);
-  }
-
-/*****************************************************************************/
-/**************** Compute the size of a directory recursively ****************/
-/*****************************************************************************/
-
-static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
-  {
-   struct dirent **FileList;
-   int NumFile;
-   int NumFiles;
-   char PathFileRel[PATH_MAX + 1];
-   struct stat FileStatus;
-
-   /***** Scan the directory *****/
-   if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
-     {
-      /***** Compute recursively the total number and size of the files and folders *****/
-      for (NumFile = 0;
-	   NumFile < NumFiles;
-	   NumFile++)
-	{
-	 if (strcmp (FileList[NumFile]->d_name,".") &&
-	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
-	   {
-	    /* There are files in this directory ==> update level */
-	    if (Level > Gbl.FileBrowser.Size.NumLevls)
-	       Gbl.FileBrowser.Size.NumLevls++;
-
-	    /* Update counters depending on whether it's a directory or a regular file */
-	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
-		      Path,FileList[NumFile]->d_name);
-	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
-	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	      {
-	       Gbl.FileBrowser.Size.NumFolds++;
-	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	       Brw_CalcSizeOfDirRecursive (Level + 1,PathFileRel);
-	      }
-	    else if (S_ISREG (FileStatus.st_mode))		// It's a regular file
-	      {
-	       Gbl.FileBrowser.Size.NumFiles++;
-	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	      }
-	   }
-	 free (FileList[NumFile]);
-	}
-      free (FileList);
-     }
-   else
-      Err_ShowErrorAndExit ("Error while scanning directory.");
-  }
-
-/*****************************************************************************/
 /************************ List a directory recursively ***********************/
 /*****************************************************************************/
 
@@ -4379,7 +3988,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 	       if (Brw_WriteRowFileBrowser (Level,RowId,
 	                                    TreeContracted,
 	                                    IconSubtree))
-		  if (Level < Brw_MAX_DIR_LEVELS)
+		  if (Level < BrwSiz_MAX_DIR_LEVELS)
 		     /* List subtree starting at this this directory */
 		     Brw_ListDir (Level + 1,RowId,
 		                  TreeContracted || IconSubtree == Brw_ICON_TREE_EXPAND,
@@ -4554,7 +4163,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /****** If current action allows file administration... ******/
    Brw_SetIfICanEditFileOrFolder (false);
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type] &&
+   if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
       if (Gbl.FileBrowser.Clipboard.IsThisTree &&
@@ -6266,6 +5875,7 @@ void Brw_PasteIntoFileBrowser (void)
   {
    extern const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_;
    struct GroupData GrpDat;
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -6286,7 +5896,7 @@ void Brw_PasteIntoFileBrowser (void)
         }
 
       /***** Copy files recursively *****/
-      Brw_PasteClipboard ();
+      Brw_PasteClipboard (Size);
 
       /***** Remove the affected clipboards *****/
       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -6322,7 +5932,7 @@ void Brw_PasteIntoFileBrowser (void)
 //	Path (should be a folder):	Gbl.FileBrowser.FilFolLnk.Full
 // Returns the number of files pasted
 
-static void Brw_PasteClipboard (void)
+static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
   {
    extern const char *Txt_The_copy_has_been_successful;
    extern const char *Txt_Files_copied;
@@ -6469,9 +6079,10 @@ static void Brw_PasteClipboard (void)
         }
 
       /***** Paste tree (path in clipboard) into folder *****/
-      Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
-      Brw_SetMaxQuota ();
-      if (Brw_PasteTreeIntoFolder (Gbl.FileBrowser.Clipboard.Level,
+      BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+      BrwSiz_SetMaxQuota (Size);
+      if (Brw_PasteTreeIntoFolder (Size,
+	                           Gbl.FileBrowser.Clipboard.Level,
 	                           PathOrg,
                                    Gbl.FileBrowser.FilFolLnk.Full,
 	                           &Pasted,
@@ -6547,7 +6158,8 @@ static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1])
 /*****************************************************************************/
 // Return true if the copy has been made successfully, and false if not
 
-static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
+static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
+                                     unsigned LevelOrg,
                                      const char PathOrg[PATH_MAX + 1],
                                      const char PathDstInTree[PATH_MAX + 1],
                                      struct Brw_NumObjects *Pasted,
@@ -6619,9 +6231,10 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    /***** Update and check number of levels *****/
    // The number of levels is counted starting on the root folder raíz, not included.
    // Example:	If PathDstInTreeWithFile is "root-folder/1/2/3/4/FileNameOrg", then NumLevls=5
-   if ((NumLevls = Brw_NumLevelsInPath (PathDstInTreeWithFile)) > Gbl.FileBrowser.Size.NumLevls)
-      Gbl.FileBrowser.Size.NumLevls = NumLevls;
-   if (Brw_CheckIfQuotaExceded ())
+   if ((NumLevls = Brw_NumLevelsInPath (PathDstInTreeWithFile)) > Size->NumLevls)
+      Size->NumLevls = NumLevls;
+
+   if (BrwSiz_CheckIfQuotaExceded (Size))
      {
       switch (FileType)
         {
@@ -6677,9 +6290,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
             if (CopyIsGoingSuccessful)
               {
 	       /***** Update and check the quota before copying the file *****/
-	       Gbl.FileBrowser.Size.NumFiles++;
-	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	       if (Brw_CheckIfQuotaExceded ())
+	       Size->NumFiles++;
+	       Size->TotalSiz += (unsigned long long) FileStatus.st_size;
+	       if (BrwSiz_CheckIfQuotaExceded (Size))
 		 {
 		  Ale_ShowAlert (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
 						                       Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota,
@@ -6719,9 +6332,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	      {
 	       /* The directory does not exist ==> create it.
 		  First, update and check the quota */
-	       Gbl.FileBrowser.Size.NumFolds++;
-	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
-	       if (Brw_CheckIfQuotaExceded ())
+	       Size->NumFolds++;
+	       Size->TotalSiz += (unsigned long long) FileStatus.st_size;
+	       if (BrwSiz_CheckIfQuotaExceded (Size))
 		 {
 		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
 			         FileNameToShow);
@@ -6751,7 +6364,8 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 		  snprintf (PathInFolderOrg,sizeof (PathInFolderOrg),"%s/%s",
 			    PathOrg,FileList[NumFile]->d_name);
 		  /* Recursive call to this function */
-		  if (!Brw_PasteTreeIntoFolder (LevelOrg + 1,
+		  if (!Brw_PasteTreeIntoFolder (Size,
+		                                LevelOrg + 1,
 			                        PathInFolderOrg,
 		                                PathDstInTreeWithFile,
 						Pasted,
@@ -7086,6 +6700,7 @@ void Brw_RecFolderFileBrowser (void)
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
    char PathCompleteInTreeIncludingFolder[PATH_MAX + 1 + NAME_MAX + 1];
    char FileNameToShow[NAME_MAX + 1];
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -7109,9 +6724,9 @@ void Brw_RecFolderFileBrowser (void)
          if (mkdir (Path,(mode_t) 0xFFF) == 0)
 	   {
 	    /* Check if quota has been exceeded */
-	    Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
-	    Brw_SetMaxQuota ();
-            if (Brw_CheckIfQuotaExceded ())
+	    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+	    BrwSiz_SetMaxQuota (Size);
+            if (BrwSiz_CheckIfQuotaExceded (Size))
 	      {
 	       Fil_RemoveTree (Path);
                Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
@@ -7289,9 +6904,10 @@ void Brw_RenFolderFileBrowser (void)
 void Brw_RcvFileInFileBrwDropzone (void)
   {
    bool UploadSucessful;
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Receive file *****/
-   UploadSucessful = Brw_RcvFileInFileBrw (Brw_DROPZONE_UPLOAD);
+   UploadSucessful = Brw_RcvFileInFileBrw (Size,Brw_DROPZONE_UPLOAD);
 
    /***** When a file is uploaded, the HTTP response
 	  is a code status and a message for Dropzone.js *****/
@@ -7318,8 +6934,10 @@ void Brw_RcvFileInFileBrwDropzone (void)
 
 void Brw_RcvFileInFileBrwClassic (void)
   {
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
+
    /***** Receive file and show feedback message *****/
-   Brw_RcvFileInFileBrw (Brw_CLASSIC_UPLOAD);
+   Brw_RcvFileInFileBrw (Size,Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
    Ale_ShowAlerts (NULL);
@@ -7332,7 +6950,8 @@ void Brw_RcvFileInFileBrwClassic (void)
 /****************** Receive a new file in a file browser *********************/
 /*****************************************************************************/
 
-static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
+static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
+                                  Brw_UploadType_t UploadType)
   {
    extern const char *Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_could_not_create_file_NO_HTML;
@@ -7420,9 +7039,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                      else			// Success
 	               {
 	                /* Check if quota has been exceeded */
-	                Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
-	                Brw_SetMaxQuota ();
-                        if (Brw_CheckIfQuotaExceded ())
+	                BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+	                BrwSiz_SetMaxQuota (Size);
+                        if (BrwSiz_CheckIfQuotaExceded (Size))
 	                  {
 	                   Fil_RemoveTree (Path);
         	           Ale_CreateAlert (Ale_WARNING,NULL,
@@ -7535,6 +7154,7 @@ void Brw_RecLinkFileBrowser (void)
    long FilCod = -1L;	// Code of new file in database
    char FileNameToShow[NAME_MAX + 1];
    struct Brw_FileMetadata FileMetadata;
+   struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -7604,9 +7224,9 @@ void Brw_RecLinkFileBrowser (void)
 		  fclose (FileURL);
 
 		  /* Check if quota has been exceeded */
-		  Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
-		  Brw_SetMaxQuota ();
-		  if (Brw_CheckIfQuotaExceded ())
+		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+		  BrwSiz_SetMaxQuota (Size);
+		  if (BrwSiz_CheckIfQuotaExceded (Size))
 		    {
 		     Fil_RemoveTree (Path);
 		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
@@ -9444,7 +9064,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_ASS_PRJ:
          return Brw_CheckIfICanModifyPrjAssFileOrFolder ();
       default:
-         return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
      }
    return false;
   }
@@ -9464,7 +9084,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       return false;
 
    /***** If maximum level is reached, I can not create/paste *****/
-   if (Level >= Brw_MAX_DIR_LEVELS)
+   if (Level >= BrwSiz_MAX_DIR_LEVELS)
       return false;
 
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
@@ -9523,9 +9143,51 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	   }
 	 return false;
       default:
-         return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
      }
    return false;
+  }
+
+/*****************************************************************************/
+/********************* Check if file browser is editable *********************/
+/*****************************************************************************/
+
+bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
+  {
+   static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_UNKNOWN     ] = false,
+      [Brw_SHOW_DOC_CRS] = false,
+      [Brw_SHOW_MRK_CRS] = false,
+      [Brw_ADMI_DOC_CRS] = true,
+      [Brw_ADMI_SHR_CRS] = true,
+      [Brw_ADMI_SHR_GRP] = true,
+      [Brw_ADMI_WRK_USR] = true,
+      [Brw_ADMI_WRK_CRS] = true,
+      [Brw_ADMI_MRK_CRS] = true,
+      [Brw_ADMI_BRF_USR] = true,
+      [Brw_SHOW_DOC_GRP] = false,
+      [Brw_ADMI_DOC_GRP] = true,
+      [Brw_SHOW_MRK_GRP] = false,
+      [Brw_ADMI_MRK_GRP] = true,
+      [Brw_ADMI_ASG_USR] = true,
+      [Brw_ADMI_ASG_CRS] = true,
+      [Brw_SHOW_DOC_DEG] = false,
+      [Brw_ADMI_DOC_DEG] = true,
+      [Brw_SHOW_DOC_CTR] = false,
+      [Brw_ADMI_DOC_CTR] = true,
+      [Brw_SHOW_DOC_INS] = false,
+      [Brw_ADMI_DOC_INS] = true,
+      [Brw_ADMI_SHR_DEG] = true,
+      [Brw_ADMI_SHR_CTR] = true,
+      [Brw_ADMI_SHR_INS] = true,
+      [Brw_ADMI_TCH_CRS] = true,
+      [Brw_ADMI_TCH_GRP] = true,
+      [Brw_ADMI_DOC_PRJ] = true,
+      [Brw_ADMI_ASS_PRJ] = true,
+     };
+
+   return Brw_FileBrowserIsEditable[FileBrowser];
   }
 
 /*****************************************************************************/
@@ -9566,66 +9228,6 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
-  }
-
-/*****************************************************************************/
-/******************** Can I view files of a given project? *******************/
-/*****************************************************************************/
-
-bool Prj_CheckIfICanViewProjectFiles (long PrjCod)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
-      case Rol_TCH:	// Editing teachers in a course can access to all files
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/******** Check if I have permission to view project documents zone **********/
-/*****************************************************************************/
-
-static bool Prj_CheckIfICanViewProjectDocuments (long PrjCod)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
-      case Rol_TCH:	// Editing teachers in a course can access to all files
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
-  }
-
-/*****************************************************************************/
-/******** Check if I have permission to view project assessment zone *********/
-/*****************************************************************************/
-
-static bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-      case Rol_NET:
-	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
-	                                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
-      case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
       default:
@@ -10513,7 +10115,7 @@ void Brw_GetAndShowFileBrowsersStats (void)
    extern const char *Hlp_ANALYTICS_Figures_folders_and_files;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES];
-   static const Brw_FileBrowser_t StatCrsFileZones[Fig_NUM_STAT_CRS_FILE_ZONES] =
+   static const Brw_FileBrowser_t StatCrsFileZone[Fig_NUM_STAT_CRS_FILE_ZONES] =
      {
       Brw_ADMI_DOC_CRS,
       Brw_ADMI_DOC_GRP,
@@ -10528,15 +10130,15 @@ void Brw_GetAndShowFileBrowsersStats (void)
       Brw_UNKNOWN,
       Brw_ADMI_BRF_USR,
      };
-   struct Brw_SizeOfFileZones SizeOfFileZones[Fig_NUM_STAT_CRS_FILE_ZONES];
+   struct BrwSiz_SizeOfFileZone SizeOfFileZone[Fig_NUM_STAT_CRS_FILE_ZONES];
    unsigned NumStat;
 
    /***** Get sizes of all file zones *****/
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
 	NumStat++)
-      Brw_GetSizeOfFileZone (StatCrsFileZones[NumStat],
-				   &SizeOfFileZones[NumStat]);
+      BrwSiz_GetSizeOfFileZone (StatCrsFileZone[NumStat],
+				&SizeOfFileZone[NumStat]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],
@@ -10550,8 +10152,8 @@ void Brw_GetAndShowFileBrowsersStats (void)
 	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
 	      NumStat++)
 	    Brw_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-					    StatCrsFileZones[NumStat],
-					    &SizeOfFileZones[NumStat]);
+					    StatCrsFileZone[NumStat],
+					    &SizeOfFileZone[NumStat]);
       HTM_TABLE_End ();
 
       /***** Write sizes of all file zones per course *****/
@@ -10561,8 +10163,8 @@ void Brw_GetAndShowFileBrowsersStats (void)
 	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
 	      NumStat++)
 	    Brw_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-					    StatCrsFileZones[NumStat],
-					    &SizeOfFileZones[NumStat]);
+					    StatCrsFileZone[NumStat],
+					    &SizeOfFileZone[NumStat]);
       HTM_TABLE_End ();
 
       /***** Write sizes of all file zones per user *****/
@@ -10572,76 +10174,12 @@ void Brw_GetAndShowFileBrowsersStats (void)
 	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
 	      NumStat++)
 	    Brw_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-					    StatCrsFileZones[NumStat],
-					    &SizeOfFileZones[NumStat]);
+					    StatCrsFileZone[NumStat],
+					    &SizeOfFileZone[NumStat]);
       HTM_TABLE_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/**************** Get the size of a file zone from database ******************/
-/*****************************************************************************/
-
-static void Brw_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
-                                   struct Brw_SizeOfFileZones *SizeOfFileZones)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get the size of a file browser *****/
-   /* Query database */
-   Brw_DB_GetSizeOfFileBrowser (&mysql_res,FileBrowser);
-
-   /* Get row */
-   row = mysql_fetch_row (mysql_res);
-
-   /* Reset default values to zero */
-   SizeOfFileZones->NumCrss    =
-   SizeOfFileZones->NumUsrs    = 0;
-   SizeOfFileZones->MaxLevels  = 0;
-   SizeOfFileZones->NumFolders =
-   SizeOfFileZones->NumFiles   = 0;
-   SizeOfFileZones->Size       = 0;
-
-   /* Get number of courses (row[0]) */
-   if (row[0])
-      if (sscanf (row[0],"%d",&(SizeOfFileZones->NumCrss)) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of courses.");
-
-   /* Get number of groups (row[1]) */
-   if (row[1])
-      if (sscanf (row[1],"%d",&(SizeOfFileZones->NumGrps)) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of groups.");
-
-   /* Get number of users (row[2]) */
-   if (row[2])
-      if (sscanf (row[2],"%d",&(SizeOfFileZones->NumUsrs)) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of users.");
-
-   /* Get maximum number of levels (row[3]) */
-   if (row[3])
-      if (sscanf (row[3],"%u",&(SizeOfFileZones->MaxLevels)) != 1)
-         Err_ShowErrorAndExit ("Error when getting maximum number of levels.");
-
-   /* Get number of folders (row[4]) */
-   if (row[4])
-      if (sscanf (row[4],"%lu",&(SizeOfFileZones->NumFolders)) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of folders.");
-
-   /* Get number of files (row[5]) */
-   if (row[5])
-      if (sscanf (row[5],"%lu",&(SizeOfFileZones->NumFiles)) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of files.");
-
-   /* Get total size (row[6]) */
-   if (row[6])
-      if (sscanf (row[6],"%llu",&(SizeOfFileZones->Size)) != 1)
-         Err_ShowErrorAndExit ("Error when getting toal size.");
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -10743,7 +10281,7 @@ static void Brw_WriteStatsFileZonesTableHead3 (void)
 
 static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
    char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -10752,25 +10290,25 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 	                                           "DAT";
 
-   Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
+   Fil_WriteFileSizeFull ((double) SizeOfFileZone->Size,FileSizeStr);
 
-   if (SizeOfFileZones->NumCrss == -1)	// Not applicable
+   if (SizeOfFileZone->NumCrss == -1)	// Not applicable
       Str_Copy (StrNumCrss,"-",sizeof (StrNumCrss) - 1);
    else
       snprintf (StrNumCrss,sizeof (StrNumCrss),"%d",
-		SizeOfFileZones->NumCrss);
+		SizeOfFileZone->NumCrss);
 
-   if (SizeOfFileZones->NumGrps == -1)	// Not applicable
+   if (SizeOfFileZone->NumGrps == -1)	// Not applicable
       Str_Copy (StrNumGrps,"-",sizeof (StrNumGrps) - 1);
    else
       snprintf (StrNumGrps,sizeof (StrNumGrps),"%d",
-		SizeOfFileZones->NumGrps);
+		SizeOfFileZone->NumGrps);
 
-   if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
+   if (SizeOfFileZone->NumUsrs == -1)	// Not applicable
       Str_Copy (StrNumUsrs,"-",sizeof (StrNumUsrs) - 1);
    else
       snprintf (StrNumUsrs,sizeof (StrNumUsrs),"%d",
-		SizeOfFileZones->NumUsrs);
+		SizeOfFileZone->NumUsrs);
 
    HTM_TR_Begin (NULL);
 
@@ -10791,15 +10329,15 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_GetSuffix ());
-	 HTM_Unsigned (SizeOfFileZones->MaxLevels);
+	 HTM_Unsigned (SizeOfFileZone->MaxLevels);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_GetSuffix ());
-	 HTM_UnsignedLong (SizeOfFileZones->NumFolders);
+	 HTM_UnsignedLong (SizeOfFileZone->NumFolders);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_GetSuffix ());
-	 HTM_UnsignedLong (SizeOfFileZones->NumFiles);
+	 HTM_UnsignedLong (SizeOfFileZone->NumFiles);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RM %s_%s\"",Class,The_GetSuffix ());
@@ -10811,7 +10349,7 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
 static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -10819,7 +10357,7 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 						   "DAT";
 
-   if (SizeOfFileZones->NumCrss == -1)	// Not applicable
+   if (SizeOfFileZone->NumCrss == -1)	// Not applicable
      {
       Str_Copy (StrNumFoldersPerCrs,"-",sizeof (StrNumFoldersPerCrs) - 1);
       Str_Copy (StrNumFilesPerCrs  ,"-",sizeof (StrNumFilesPerCrs  ) - 1);
@@ -10828,16 +10366,16 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    else
      {
       snprintf (StrNumFoldersPerCrs,sizeof (StrNumFoldersPerCrs),"%.1f",
-                SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFolders /
-        	                           (double) SizeOfFileZones->NumCrss :
-        	                           0.0);
+                SizeOfFileZone->NumCrss ? (double) SizeOfFileZone->NumFolders /
+        	                          (double) SizeOfFileZone->NumCrss :
+        	                          0.0);
       snprintf (StrNumFilesPerCrs,sizeof (StrNumFilesPerCrs),"%.1f",
-                SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFiles /
-        	                           (double) SizeOfFileZones->NumCrss :
-        	                           0.0);
-      Fil_WriteFileSizeFull (SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->Size /
-	                                                (double) SizeOfFileZones->NumCrss :
-	                                                0.0,
+                SizeOfFileZone->NumCrss ? (double) SizeOfFileZone->NumFiles /
+        	                          (double) SizeOfFileZone->NumCrss :
+        	                          0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZone->NumCrss ? (double) SizeOfFileZone->Size /
+	                                               (double) SizeOfFileZone->NumCrss :
+	                                               0.0,
 	                     FileSizePerCrsStr);
      }
 
@@ -10864,7 +10402,7 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 
 static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
-                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+                                            struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -10872,7 +10410,7 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 						   "DAT";
 
-   if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
+   if (SizeOfFileZone->NumUsrs == -1)	// Not applicable
      {
       Str_Copy (StrNumFoldersPerUsr,"-",sizeof (StrNumFoldersPerUsr) - 1);
       Str_Copy (StrNumFilesPerUsr  ,"-",sizeof (StrNumFilesPerUsr  ) - 1);
@@ -10881,16 +10419,16 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    else
      {
       snprintf (StrNumFoldersPerUsr,sizeof (StrNumFoldersPerUsr),"%.1f",
-                SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFolders /
-        	                           (double) SizeOfFileZones->NumUsrs :
-        	                           0.0);
+                SizeOfFileZone->NumUsrs ? (double) SizeOfFileZone->NumFolders /
+        	                          (double) SizeOfFileZone->NumUsrs :
+        	                          0.0);
       snprintf (StrNumFilesPerUsr,sizeof (StrNumFilesPerUsr),"%.1f",
-                SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFiles /
-        	                           (double) SizeOfFileZones->NumUsrs :
-        	                           0.0);
-      Fil_WriteFileSizeFull (SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->Size /
-	                                                (double) SizeOfFileZones->NumUsrs :
-	                                                0.0,
+                SizeOfFileZone->NumUsrs ? (double) SizeOfFileZone->NumFiles /
+        	                          (double) SizeOfFileZone->NumUsrs :
+        	                          0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZone->NumUsrs ? (double) SizeOfFileZone->Size /
+	                                               (double) SizeOfFileZone->NumUsrs :
+	                                               0.0,
 	                     FileSizePerUsrStr);
      }
 

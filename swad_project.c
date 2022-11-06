@@ -177,6 +177,8 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
+static bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
+
 static void Prj_PutCurrentParams (void *Projects);
 static void Prj_PutHiddenParamAssign (unsigned Assign);
 static void Prj_PutHiddenParamHidden (unsigned Hidden);
@@ -839,6 +841,66 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
       /***** End form *****/
       Frm_EndForm ();
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/******************** Can I view files of a given project? *******************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanViewProjectFiles (long PrjCod)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
+      case Rol_TCH:	// Editing teachers in a course can access to all files
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/******** Check if I have permission to view project documents zone **********/
+/*****************************************************************************/
+
+bool Prj_CheckIfICanViewProjectDocuments (long PrjCod)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
+      case Rol_TCH:	// Editing teachers in a course can access to all files
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
+  }
+
+/*****************************************************************************/
+/******** Check if I have permission to view project assessment zone *********/
+/*****************************************************************************/
+
+bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
+	                                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
+      case Rol_TCH:	// Editing teachers in a course can access to all files
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
   }
 
 /*****************************************************************************/

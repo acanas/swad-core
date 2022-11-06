@@ -615,6 +615,7 @@ Que al subir un fichero por defecto esté oculto, aunque sea opcional.
 Al subir cosas para los grupos, en documentos, resltar más los grupos porque no son conscientes...
 Exportar listas en CSV.
 
+	Version 22.59:    Nov 06, 2022  New module swad_browser_size. (334067 lines)
 	Version 22.58:    Nov 06, 2022  New module swad_action_list for list of actions. (333958 lines)
 	Version 22.57.1:  Oct 29, 2022  Change in layout of heading title. (333789 lines)
 	Version 22.57:    Oct 29, 2022  Code refactoring in search. (333762 lines)

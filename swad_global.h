@@ -258,16 +258,6 @@ struct Globals
       bool ShowOnlyPublicFiles;	// Show only public files?
       bool UploadingWithDropzone;
       struct
-        {
-         unsigned long MaxFiles;
-         unsigned long MaxFolds;
-         unsigned long long int MaxQuota;
-         unsigned NumLevls;
-         unsigned long NumFolds;
-         unsigned long NumFiles;
-         unsigned long long int TotalSiz;
-        } Size;
-      struct
 	{
 	 char PathAboveRootFolder[PATH_MAX + 1];
 	 char PathRootFolder[PATH_MAX + 1];
@@ -291,7 +281,7 @@ struct Globals
          char L[2 + 1];		// Left directory: 2 first chars
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
-      bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
+      bool HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
       char TxtStyle[64];
       const char *InputStyle;
       struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone.

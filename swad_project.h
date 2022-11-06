@@ -213,6 +213,9 @@ void Prj_SeeProjects (void);
 void Prj_ShowProjects (struct Prj_Projects *Projects);
 void Prj_ShowTableSelectedPrjs (void);
 
+bool Prj_CheckIfICanViewProjectDocuments (long PrjCod);
+bool Prj_CheckIfICanViewProjectAssessment (long PrjCod);
+
 void Prj_PutParams (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,

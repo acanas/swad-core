@@ -147,23 +147,13 @@ struct Brw_FileMetadata
    unsigned NumLoggedUsrs;
   };
 
-struct Brw_SizeOfFileZones
-  {
-   int NumCrss;	// -1 stands for not aplicable
-   int NumGrps;	// -1 stands for not aplicable
-   int NumUsrs;	// -1 stands for not aplicable
-   unsigned MaxLevels;
-   unsigned long NumFolders;
-   unsigned long NumFiles;
-   unsigned long long int Size;	// Total size in bytes
-  };
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Brw_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
-#define Brw_MAX_ROW_ID	((1 + Brw_MAX_DIR_LEVELS) * (10 + 1))
+#define BrwSiz_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
+
+#define Brw_MAX_ROW_ID	((1 + BrwSiz_MAX_DIR_LEVELS) * (10 + 1))
 
 #define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
 
@@ -248,14 +238,12 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod);
 
-bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
+bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser);
 
 long Brw_GetCodForFileBrowser (void);
 long Brw_GetZoneUsrCodForFileBrowser (void);
 
 void Brw_DB_RemoveExpiredExpandedFolders (void);
-
-void Brw_CalcSizeOfDir (char *Path);
 
 void Brw_SetFullPathInTree (void);
 

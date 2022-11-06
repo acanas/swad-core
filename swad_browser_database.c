@@ -2845,12 +2845,11 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 /*********************** Store size of a file zone ***************************/
 /*****************************************************************************/
 
-void Brw_DB_StoreSizeOfFileZone (void)
+void Brw_DB_StoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size)
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
-   /***** Update size of the file browser in database *****/
    DB_QueryREPLACE ("can not store the size of a file zone",
 		    "REPLACE INTO brw_sizes"
 		    " (FileBrowser,Cod,ZoneUsrCod,"
@@ -2860,10 +2859,10 @@ void Brw_DB_StoreSizeOfFileZone (void)
 		      "%u,'%lu','%lu','%llu')",
 	            (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		    Cod,ZoneUsrCod,
-	            Gbl.FileBrowser.Size.NumLevls,
-	            Gbl.FileBrowser.Size.NumFolds,
-	            Gbl.FileBrowser.Size.NumFiles,
-	            Gbl.FileBrowser.Size.TotalSiz);
+	            Size->NumLevls,
+	            Size->NumFolds,
+	            Size->NumFiles,
+	            Size->TotalSiz);
   }
 
 /*****************************************************************************/

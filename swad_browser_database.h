@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_browser.h"
+#include "swad_browser_size.h"
 #include "swad_search.h"
 
 /*****************************************************************************/
@@ -121,7 +122,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
                                       long MyUsrCod,long WorksUsrCod);
 
 //-------------------------- Size of file zones -------------------------------
-void Brw_DB_StoreSizeOfFileZone (void);
+void Brw_DB_StoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size);
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			          Brw_FileBrowser_t FileBrowser);
 
