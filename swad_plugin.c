@@ -35,6 +35,7 @@ TODO: Check if web service is called from an authorized IP.
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
+#include "swad_action_list.h"
 #include "swad_API.h"
 #include "swad_box.h"
 #include "swad_config.h"

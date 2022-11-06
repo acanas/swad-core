@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_autolink.h"
 #include "swad_box.h"

@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_global.h"

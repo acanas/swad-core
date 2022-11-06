@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_call_for_exam.h"
 #include "swad_call_for_exam_resource.h"
@@ -71,7 +72,7 @@ void Cfe_GetLinkToCallForExam (void)
 void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
    char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
    char *Anchor = NULL;

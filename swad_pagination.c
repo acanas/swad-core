@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_agenda.h"
 #include "swad_attendance.h"
 #include "swad_database.h"

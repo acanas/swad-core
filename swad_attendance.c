@@ -33,6 +33,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
 #include "swad_autolink.h"

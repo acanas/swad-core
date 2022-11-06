@@ -34,6 +34,7 @@
 #include <time.h>		// For time
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_config.h"

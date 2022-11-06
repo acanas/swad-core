@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_match_print.h"

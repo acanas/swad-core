@@ -32,6 +32,7 @@
 
 #include "swad_account.h"
 #include "swad_account_database.h"
+#include "swad_action_list.h"
 #include "swad_admin_database.h"
 #include "swad_agenda_database.h"
 #include "swad_announcement_database.h"

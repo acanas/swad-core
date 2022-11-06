@@ -25,7 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
+#include "swad_action_list.h"
 
 /*****************************************************************************/
 /************************* Private global variables **************************/
@@ -35,7 +35,7 @@
 #define L 3	// English
 #endif
 
-const char *Txt_Actions[Act_NUM_ACTIONS] =
+const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	{
 	[ActAll] =
 #if   L==1	// ca

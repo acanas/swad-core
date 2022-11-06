@@ -36,6 +36,7 @@
 #include <sys/types.h>		// For mkdir...
 #include <unistd.h>		// For chdir...
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_browser.h"

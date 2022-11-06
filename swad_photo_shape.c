@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_error.h"

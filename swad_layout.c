@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_API.h"
 #include "swad_banner.h"
 #include "swad_box.h"

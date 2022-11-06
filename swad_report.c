@@ -31,6 +31,7 @@
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_browser_database.h"
 #include "swad_database.h"
@@ -711,7 +712,6 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
 
 static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_Other_actions;
@@ -760,7 +760,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Rep_File,"&nbsp;");
       if (ActCod >= 0)
 	{
-	 if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
+	 if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
 	   {
 	    Tab = Act_GetTab (Act_GetSuperAction (Action));
 	    if (Txt_TABS_TXT[Tab])

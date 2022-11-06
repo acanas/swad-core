@@ -32,6 +32,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"

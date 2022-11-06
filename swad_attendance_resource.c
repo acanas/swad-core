@@ -24,6 +24,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
@@ -66,7 +67,7 @@ void AttRsc_GetLinkToEvent (void)
 void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
                                        const char *Icon,const char *IconTitle)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 

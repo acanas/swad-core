@@ -30,6 +30,7 @@
 #include <stdio.h>		// For sprintf
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_error.h"

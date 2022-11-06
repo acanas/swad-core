@@ -29,6 +29,7 @@
 #include <stddef.h>		// For NULL
 #include <string.h>
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"

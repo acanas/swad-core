@@ -30,6 +30,7 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_browser_database.h"

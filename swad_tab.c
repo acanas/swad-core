@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"

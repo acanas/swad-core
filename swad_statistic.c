@@ -31,6 +31,7 @@
 #include <stdlib.h>		// For getenv, malloc
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_banner.h"
 #include "swad_box.h"
@@ -689,7 +690,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	    HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
-		 Action <= (Act_Action_t) (Act_NUM_ACTIONS - 1);
+		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
 		 Action++)
 	      {
 	       Tab = Act_GetTab (Act_GetSuperAction (Action));
@@ -791,7 +792,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Stats.NumAction = (Act_Action_t)
 		     Par_GetParToUnsignedLong ("StatAct",
 					       0,
-					       Act_NUM_ACTIONS - 1,
+					       ActLst_NUM_ACTIONS - 1,
 					       (unsigned long) Sta_NUM_ACTION_DEFAULT);
 
    switch (Stats.GlobalOrCourse)
@@ -1039,7 +1040,6 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           unsigned NumHits,
                                           MYSQL_RES *mysql_res)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
    extern const char *Txt_Clicks;
@@ -1252,7 +1252,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 HTM_TD_Begin ("class=\"LT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
 	    if (ActCod >= 0)
-	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
+	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_GetActionFromActCod (ActCod)));
 	    else
 	       HTM_TxtF ("?&nbsp;");
 	 HTM_TD_End ();
@@ -2657,7 +2657,6 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Action;
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
@@ -2689,7 +2688,7 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
 	    if (ActCod >= 0)
-	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
+	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_GetActionFromActCod (ActCod)));
 	    else
 	       HTM_Txt ("?&nbsp;");
 	 HTM_TD_End ();

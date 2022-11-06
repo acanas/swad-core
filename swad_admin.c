@@ -27,6 +27,7 @@
 
 #include <stdlib.h>		// For free
 
+#include "swad_action_list.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
 #include "swad_alert.h"

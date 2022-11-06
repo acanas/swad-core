@@ -25,6 +25,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -70,7 +71,7 @@ void SvyRsc_GetLinkToSurvey (void)
 void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
                                      const char *Icon,const char *IconTitle)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 

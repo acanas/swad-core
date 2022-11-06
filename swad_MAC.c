@@ -28,6 +28,7 @@
 #include <stddef.h>		// For NULL
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"

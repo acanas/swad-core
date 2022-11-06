@@ -25,6 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include "swad_action_list.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_timetable_database.h"

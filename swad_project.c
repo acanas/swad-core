@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_browser_database.h"
@@ -1456,7 +1457,7 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
                                      unsigned UniqueId,
                                      const char *Anchor)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Id;
    Act_Action_t NextAction;
    const char *ClassDate = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :

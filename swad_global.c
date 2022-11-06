@@ -34,6 +34,7 @@
 #include <unistd.h>		// For getpid
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_API.h"
 #include "swad_calendar.h"
 #include "swad_call_for_exam.h"

@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_autolink.h"
 #include "swad_config.h"
 #include "swad_error.h"

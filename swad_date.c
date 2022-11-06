@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"

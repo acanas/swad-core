@@ -35,6 +35,7 @@
 #include <time.h>		// For time ()
 #include <unistd.h>		// For SEEK_SET
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_changelog.h"
 #include "swad_config.h"

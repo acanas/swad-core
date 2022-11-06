@@ -25,6 +25,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_browser.h"
 #include "swad_browser_resource.h"
@@ -96,7 +97,7 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Documents;
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction = ActUnk;	// Initialized to avoid warning
    struct Brw_FileMetadata FileMetadata;
    char Title[NAME_MAX + 1];	// File or link name
@@ -177,7 +178,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
                                           const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Marks_area;
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
    struct Brw_FileMetadata FileMetadata;
    char Title[NAME_MAX + 1];	// File or link name

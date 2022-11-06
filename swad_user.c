@@ -37,6 +37,7 @@
 #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
 
 #include "swad_account.h"
+#include "swad_action_list.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
 #include "swad_agenda.h"

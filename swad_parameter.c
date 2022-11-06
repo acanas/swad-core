@@ -31,8 +31,8 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_config.h"
-#include "swad_database.h"	// TODO: REMOVE!!!
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -713,7 +713,6 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
 
 void Par_GetMainParams (void)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    long ActCod;
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -776,8 +775,8 @@ void Par_GetMainParams (void)
 
    /***** Get action to perform *****/
    ActCod = Par_GetParToLong ("act");
-   if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
-      Gbl.Action.Act = Gbl.Action.Original = Act_FromActCodToAction[ActCod];
+   if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
+      Gbl.Action.Act = Gbl.Action.Original = Act_GetActionFromActCod (ActCod);
 
    /***** Some preliminary adjusts depending on action *****/
    switch (Act_GetBrowserTab (Gbl.Action.Act))

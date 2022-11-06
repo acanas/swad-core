@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_country_config.h"
 #include "swad_country_database.h"

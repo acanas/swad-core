@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -93,7 +94,6 @@ void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
    unsigned NumActions;
    unsigned NumAction;
@@ -110,8 +110,8 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
      {
       /* Get action code */
       ActCod = DB_GetNextCode (mysql_res);
-      if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
-         if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
+      if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
+         if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
             if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
                if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                   ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
@@ -127,7 +127,6 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 
 Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
   {
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    MYSQL_RES *mysql_res;
    unsigned NumActions;
    unsigned NumAct;
@@ -147,8 +146,8 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
         {
          /* Get action code */
          ActCod = DB_GetNextCode (mysql_res);
-         if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
-            if ((Action = Act_FromActCodToAction[ActCod]) >= 0)
+         if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
+            if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
                if (Act_GetTab (Act_GetSuperAction (Action)) == Gbl.Action.Tab)
                   if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                     {

@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_assignment.h"
 #include "swad_assignment_database.h"
 #include "swad_autolink.h"
@@ -484,7 +485,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    bool OnlyOneAssignment,
                                    bool PrintView)
   {
-   extern const char *Txt_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;

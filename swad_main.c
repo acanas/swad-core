@@ -31,6 +31,7 @@
 #include <unistd.h>		// For sleep
 
 #include "swad_action.h"
+#include "swad_action_list.h"
 #include "swad_announcement.h"
 #include "swad_config.h"
 #include "swad_connected_database.h"
