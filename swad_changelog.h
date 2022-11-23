@@ -604,7 +604,7 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.58 (2022-11-06)"
+#define Log_PLATFORM_VERSION	"SWAD 22.59.1 (2022-11-23)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
@@ -615,6 +615,7 @@ Que al subir un fichero por defecto esté oculto, aunque sea opcional.
 Al subir cosas para los grupos, en documentos, resltar más los grupos porque no son conscientes...
 Exportar listas en CSV.
 
+	Version 22.59.1:  Nov 23, 2022  Fixed bug in file browser. Reported by Javier Fernández Baldomero. (334070 lines)
 	Version 22.59:    Nov 06, 2022  New module swad_browser_size. (334067 lines)
 	Version 22.58:    Nov 06, 2022  New module swad_action_list for list of actions. (333958 lines)
 	Version 22.57.1:  Oct 29, 2022  Change in layout of heading title. (333789 lines)

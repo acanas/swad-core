@@ -6306,7 +6306,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
 		  /***** Add entry to the table of files/folders *****/
 		  FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-					    PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+					   PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
 		  if (*FirstFilCod <= 0)
 		     *FirstFilCod = FilCod;
 
@@ -6348,7 +6348,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
 		  /* Add entry to the table of files/folders */
 		  Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,FileType,
-				   PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
+				  PathDstInTreeWithFile,false,Brw_LICENSE_DEFAULT);
 		 }
 	      }
 

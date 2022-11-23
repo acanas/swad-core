@@ -252,7 +252,9 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 			        " AND Cod=%ld"
 			        " AND ZoneUsrCod=%ld"
 			        " AND Path='%s'"
-			        "%s",
+			        "%s"
+			      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+			      " LIMIT 1",		// Select the most recent entry.
 			      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			      Cod,
 			      ZoneUsrCod,
