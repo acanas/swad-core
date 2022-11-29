@@ -290,7 +290,9 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
-		     " AND Path='%s'",
+		     " AND Path='%s'"
+		   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+		   " LIMIT 1",			// Select the most recent entry.
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,
@@ -2311,7 +2313,9 @@ unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
-		     " AND Path='%s'",
+		     " AND Path='%s'"
+		   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
+		   " LIMIT 1",			// Select the most recent entry.
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,

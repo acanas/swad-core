@@ -326,12 +326,20 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat)
   {
    char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
-   /***** Check #1: is my email address confirmed? *****/
+   /***** Check #1: is email empty or filled? *****/
+   if (!UsrDat->Email[0])
+      return false;
+
+   /***** Check #2: is email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
       return false;
 
-   /***** Check #2: if my mail domain allowed? *****/
+   /***** Check #3: check if there is mail domain *****/
    Mai_GetMailDomain (UsrDat->Email,MailDomain);
+   if (!MailDomain[0])
+      return false;
+
+   /***** Check #4: is mail domain allowed? *****/
    return Mai_DB_CheckIfMailDomainIsAllowedForNotif (MailDomain);
   }
 
@@ -1454,15 +1462,21 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
+   Lan_Language_t ToUsrLanguage;
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
    Mai_CreateFileNameMail (FileNameMail,&FileMail);
 
+   /***** If I have no language, set language to current language *****/
+   ToUsrLanguage = Gbl.Usrs.Me.UsrDat.Prefs.Language;
+   if (ToUsrLanguage == Lan_LANGUAGE_UNKNOWN)
+      ToUsrLanguage = Gbl.Prefs.Language;
+
    /***** Write mail content into file and close file *****/
    /* Welcome note */
-   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat);
+   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat,ToUsrLanguage);
 
    /* Store encrypted key in database */
    Mai_InsertMailKey (Gbl.Usrs.Me.UsrDat.Email,UniqueNameEncrypted);
@@ -1475,13 +1489,14 @@ bool Mai_SendMailMsgToConfirmEmail (void)
             Cfg_URL_SWAD_CGI);
 
    /* Footer note */
-   Mai_WriteFootNoteEMail (FileMail,Gbl.Prefs.Language);
+   Mai_WriteFootNoteEMail (FileMail,ToUsrLanguage);
 
    fclose (FileMail);
 
    /***** Call the script to send an email *****/
    ReturnCode = Mai_SendMailMsg (FileNameMail,
-                                 Txt_Confirmation_of_your_email_NO_HTML);
+                                 Txt_Confirmation_of_your_email_NO_HTML,
+                                 Gbl.Usrs.Me.UsrDat.Email);
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);
@@ -1609,15 +1624,16 @@ void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail)
 /************ Write a welcome note heading the automatic email ***************/
 /*****************************************************************************/
 
-void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct Usr_Data *UsrDat)
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,const struct Usr_Data *UsrDat,
+                                Lan_Language_t ToUsrLanguage)
   {
    extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Lan_NUM_LANGUAGES];
 
    fprintf (FileMail,"%s %s:\n",
-            Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
+            Txt_Dear_NO_HTML[UsrDat->Sex][ToUsrLanguage],
             UsrDat->FrstName[0] ? UsrDat->FrstName :
-                                   Txt_user_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language]);
+                                  Txt_user_NO_HTML[UsrDat->Sex][ToUsrLanguage]);
   }
 
 /*****************************************************************************/
@@ -1731,7 +1747,9 @@ static void Mai_EditingMailDomainDestructor (void)
 // Return 0 on success
 // Return != 0 on error
 
-int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject)
+int Mai_SendMailMsg (const char FileNameMail[PATH_MAX + 1],
+                     const char *Subject,
+                     const char ToEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    char Command[2048 +
 		Cfg_MAX_BYTES_SMTP_PASSWORD +
@@ -1747,7 +1765,7 @@ int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject)
 	     Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
              Cfg_AUTOMATIC_EMAIL_FROM,
              Cfg_GetSMTPPassword (),
-             Gbl.Usrs.Me.UsrDat.Email,
+             ToEmail,
              Cfg_PLATFORM_SHORT_NAME,Subject,
              FileNameMail);
    ReturnCode = system (Command);

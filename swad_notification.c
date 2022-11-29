@@ -296,7 +296,9 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                              const struct For_Forums *Forums);
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
-static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
+static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat,
+                                                 unsigned *NumNotif,
+                                                 unsigned *NumMails);
 static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
                                  Ntf_NotifyEvent_t NotifyEvent,
                                  unsigned *NumEvents,unsigned *NumMails);
@@ -1204,7 +1206,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
    unsigned NumUsr;
-   struct Usr_Data UsrDat;
+   struct Usr_Data ToUsrDat;
    unsigned NumNotif;
    unsigned NumTotalNotif = 0;
    unsigned NumMails;
@@ -1214,7 +1216,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    if ((NumUsrs = Ntf_DB_GetUsrsWhoMustBeNotified (&mysql_res)))
      {
       /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+      Usr_UsrDataConstructor (&ToUsrDat);
 
       /***** Notify the users one by one *****/
       for (NumUsr = 0;
@@ -1222,22 +1224,22 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 	   NumUsr++)
 	{
          /* Get next user */
-         UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+         ToUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
          /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
-	                                              Usr_DONT_GET_PREFS,
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&ToUsrDat,	// Get user's data from database
+	                                              Usr_GET_PREFS,	// User's language necessary to write email
 	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
             /* Send one email to this user */
-            Ntf_SendPendingNotifByEMailToOneUsr (&UsrDat,&NumNotif,&NumMails);
+            Ntf_SendPendingNotifByEMailToOneUsr (&ToUsrDat,&NumNotif,&NumMails);
             NumTotalNotif += NumNotif;
             NumTotalMails += NumMails;
            }
         }
 
       /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      Usr_UsrDataDestructor (&ToUsrDat);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1251,7 +1253,9 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 /************ Send pending notifications of one user by email ****************/
 /*****************************************************************************/
 
-static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
+static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat,
+                                                 unsigned *NumNotif,
+                                                 unsigned *NumMails)
   {
    extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES];
@@ -1290,13 +1294,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 	 /***** If user has no language, set it to current language *****/
 	 ToUsrLanguage = ToUsrDat->Prefs.Language;
 	 if (ToUsrLanguage == Lan_LANGUAGE_UNKNOWN)
-	    ToUsrLanguage = Gbl.Prefs.Language;
+	    ToUsrLanguage = Cfg_DEFAULT_LANGUAGE;
 
 	 /***** Create temporary file for mail content *****/
 	 Mai_CreateFileNameMail (FileNameMail,&FileMail);
 
 	 /***** Welcome note *****/
-	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat);
+	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat,ToUsrLanguage);
 	 if (NumNtfs == 1)
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
@@ -1315,6 +1319,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 	   {
 	    /* Get next event */
 	    row = mysql_fetch_row (mysql_res);
+	    /* row[0]: NotifyEvent
+	       row[1]: FromUsrCod
+	       row[2]: InsCod
+	       row[3]: CtrCod
+	       row[4]: DegCod
+	       row[5]: CrsCod
+	       row[6]: Cod */
 
 	    /* Get event type (row[0]) */
 	    NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
@@ -1325,7 +1336,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 	                                             Usr_DONT_GET_PREFS,
 	                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-	    /* Get institution code (row[2]),
+	    /* Get insti. code (row[2]),
 	           center code (row[3]),
 	           degree code (row[4]),
 	           course code (row[5]) */
@@ -1417,7 +1428,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 
 	 /***** Call the command to send an email *****/
          ReturnCode = Mai_SendMailMsg (FileNameMail,
-                                       Txt_Notifications_NO_HTML[ToUsrLanguage]);
+                                       Txt_Notifications_NO_HTML[ToUsrLanguage],
+                                       ToUsrDat->Email);
 
 	 /***** Remove temporary file *****/
 	 unlink (FileNameMail);
@@ -1429,7 +1441,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct Usr_Data *ToUsrDat,unsig
 	    *NumMails = 1;
 
 	    /* Update statistics about notifications */
-	    Ntf_UpdateNumNotifSent (Hie.Deg.DegCod,Hie.Crs.CrsCod,NotifyEvent,*NumNotif,*NumMails);
+	    Ntf_UpdateNumNotifSent (Hie.Deg.DegCod,Hie.Crs.CrsCod,NotifyEvent,
+	                            *NumNotif,*NumMails);
 	   }
 
 	 /***** Mark all pending notifications of this user as 'sent' *****/

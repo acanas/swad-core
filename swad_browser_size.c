@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <dirent.h>		// For scandir, etc.
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For lstat
 

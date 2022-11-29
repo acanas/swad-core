@@ -405,6 +405,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    extern const char *Txt_New_password_NO_HTML[1 + Lan_NUM_LANGUAGES];
    char FileNameMail[PATH_MAX + 1];
    FILE *FileMail;
+   Lan_Language_t ToUsrLanguage;
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -413,9 +414,14 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
    /***** Create a new random password *****/
    Pwd_CreateANewPassword (NewRandomPlainPassword);
 
+   /***** If I have no language, set language to current language *****/
+   ToUsrLanguage = Gbl.Usrs.Me.UsrDat.Prefs.Language;
+   if (ToUsrLanguage == Lan_LANGUAGE_UNKNOWN)
+      ToUsrLanguage = Gbl.Prefs.Language;
+
    /***** Write mail content into file and close file *****/
    /* Welcome note */
-   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat);
+   Mai_WriteWelcomeNoteEMail (FileMail,&Gbl.Usrs.Me.UsrDat,ToUsrLanguage);
 
    /* Message body */
    fprintf (FileMail,Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML,
@@ -424,13 +430,14 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_
 	    Gbl.Usrs.Me.UsrDat.Email);
 
    /* Footer note */
-   Mai_WriteFootNoteEMail (FileMail,Gbl.Prefs.Language);
+   Mai_WriteFootNoteEMail (FileMail,ToUsrLanguage);
 
    fclose (FileMail);
 
    /***** Call the script to send an email *****/
    ReturnCode = Mai_SendMailMsg (FileNameMail,
-                                 Txt_New_password_NO_HTML[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+                                 Txt_New_password_NO_HTML[ToUsrLanguage],
+                                 Gbl.Usrs.Me.UsrDat.Email);
 
    /***** Remove temporary file *****/
    unlink (FileNameMail);

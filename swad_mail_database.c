@@ -90,7 +90,7 @@ unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get email address",
-		   "SELECT E_mail,"		// row[0]
+		   "SELECT E_mail,"	// row[0]
 			  "Confirmed"	// row[1]
 		    " FROM usr_emails"
 		   " WHERE UsrCod=%ld"

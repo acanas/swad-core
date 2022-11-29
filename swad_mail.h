@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_constant.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -94,11 +95,14 @@ bool Mai_SendMailMsgToConfirmEmail (void);
 void Mai_ConfirmEmail (void);
 
 void Mai_CreateFileNameMail (char FileNameMail[PATH_MAX + 1],FILE **FileMail);
-void Mai_WriteWelcomeNoteEMail (FILE *FileMail,struct Usr_Data *UsrDat);
+void Mai_WriteWelcomeNoteEMail (FILE *FileMail,const struct Usr_Data *UsrDat,
+                                Lan_Language_t ToUsrLanguage);
 void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language);
 
 bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat);
 
-int Mai_SendMailMsg (char FileNameMail[PATH_MAX + 1],const char *Subject);
+int Mai_SendMailMsg (const char FileNameMail[PATH_MAX + 1],
+                     const char *Subject,
+                     const char ToEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 #endif
