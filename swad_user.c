@@ -46,6 +46,7 @@
 #include "swad_calendar.h"
 #include "swad_center_database.h"
 #include "swad_config.h"
+#include "swad_constant.h"
 #include "swad_connected_database.h"
 #include "swad_country_database.h"
 #include "swad_course.h"
@@ -1308,16 +1309,23 @@ void Usr_WelcomeUsr (void)
 void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1])
   {
+   char BirthdayStrTmp[1 + Cns_MAX_DECIMAL_DIGITS_UINT +
+                       1 + Cns_MAX_DECIMAL_DIGITS_UINT +
+                       1 + Cns_MAX_DECIMAL_DIGITS_UINT +
+                       1 + 1];
+
    if (UsrDat->Birthday.Year  == 0 ||
        UsrDat->Birthday.Month == 0 ||
        UsrDat->Birthday.Day   == 0)
       Str_Copy (BirthdayStrDB,"NULL",Usr_BIRTHDAY_STR_DB_LENGTH);	// Without apostrophes
    else
-      snprintf (BirthdayStrDB,Usr_BIRTHDAY_STR_DB_LENGTH + 1,
-                "'%04u-%02u-%02u'",	// With apostrophes
-	        UsrDat->Birthday.Year,
-	        UsrDat->Birthday.Month,
-	        UsrDat->Birthday.Day);
+     {
+      sprintf (BirthdayStrTmp,"'%04u-%02u-%02u'",	// With apostrophes
+	       UsrDat->Birthday.Year,
+	       UsrDat->Birthday.Month,
+	       UsrDat->Birthday.Day);
+      Str_Copy (BirthdayStrDB,BirthdayStrTmp,Usr_BIRTHDAY_STR_DB_LENGTH);
+     }
   }
 
 /*****************************************************************************/
@@ -4710,7 +4718,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 // Returns number of users found
 
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,
-                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY])
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1])
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
@@ -6234,9 +6242,10 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 /********** Build the relative path of a user from his user's code ***********/
 /*****************************************************************************/
 
-void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1])
+void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
   {
    char PathAboveUsr[PATH_MAX + 1];
+   char PathUsrTmp[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Path for users *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
@@ -6247,8 +6256,11 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIM
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
-   snprintf (PathUsr,PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1,"%s/%ld",
-	     PathAboveUsr,UsrCod);
+   snprintf (PathUsrTmp,sizeof (PathUsrTmp),"%s/%ld",PathAboveUsr,UsrCod);
+   if (strlen (PathUsrTmp) <= PATH_MAX)
+      Str_Copy (PathUsr,PathUsrTmp,PATH_MAX);
+   else
+      Err_PathTooLongExit ();
   }
 
 /*****************************************************************************/
@@ -6333,7 +6345,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
+   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
 
    /***** Initialize structure with user's data *****/

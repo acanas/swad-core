@@ -5115,7 +5115,7 @@ void Brw_AskRemFileFromTree (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
       /***** Show question and button to remove file/link *****/
-      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FilFolLnk.Type,
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
                                              Gbl.FileBrowser.Level,
                                              Gbl.FileBrowser.FilFolLnk.Type,
                                              Gbl.FileBrowser.FilFolLnk.Name,

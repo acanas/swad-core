@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 void Err_NotEnoughMemoryExit (void);
+void Err_PathTooLongExit (void);
 void Err_QuerySizeExceededExit (void);
 void Err_WrongActionExit (void);
 void Err_WrongScopeExit (void);

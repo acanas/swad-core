@@ -246,7 +246,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
 		  Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
-		  Dat_PutHiddenParamOrder (Order);
+		  Par_PutHiddenParamOrder ((unsigned) Order);
 
 	          /* Begin link to select order */
 		  HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
@@ -358,7 +358,7 @@ static void Asg_ParamsWhichGroupsToShow (void *Assignments)
   {
    if (Assignments)
      {
-      Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,
                                 ((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
@@ -776,7 +776,7 @@ static void Asg_PutParams (void *Assignments)
      {
       if (((struct Asg_Assignments *) Assignments)->Asg.AsgCod > 0)
 	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
-      Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);

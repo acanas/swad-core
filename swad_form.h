@@ -55,7 +55,7 @@ void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,con
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id);
 void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor);
 void Frm_BeginFormNoAction (void);
-void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR],Act_Action_t NextAction,
+void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSession);
 void Frm_EndForm (void);
 

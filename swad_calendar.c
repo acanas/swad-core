@@ -204,7 +204,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
 void Cal_DrawCurrentMonth (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
@@ -252,7 +252,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
   {
    extern const char *Hlp_START_Calendar;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,

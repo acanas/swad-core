@@ -40,7 +40,7 @@
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-long Nck_GetUsrCodFromNickname (const char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1]);
+long Nck_GetUsrCodFromNickname (const char *NickWithArr);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
 void Nck_ShowFormChangeOtherUsrNickname (void);

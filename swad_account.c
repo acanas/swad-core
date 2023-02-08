@@ -89,11 +89,11 @@ extern struct Globals Gbl;
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat);
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNickWithoutArr,
                                                      const char *NewEmail);
 static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
                                      char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
-                                     char *NewEncryptedPassword);
+                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
 static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod);
@@ -360,7 +360,7 @@ void Acc_ShowFormCreateMyAccount (void)
 /************ Show form to create a new account using parameters *************/
 /*****************************************************************************/
 
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNickWithoutArr,
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;

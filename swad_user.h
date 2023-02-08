@@ -411,7 +411,7 @@ void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListAllDataTchs (void);
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,
-                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 void Usr_ListDataAdms (void);
 
 void Usr_SeeGuests (void);
@@ -426,7 +426,7 @@ void Usr_SeeStdClassPhotoPrn (void);
 void Usr_SeeTchClassPhotoPrn (void);
 void Usr_PutSelectorNumColsClassPhoto (void);
 
-void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1]);
+void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1]);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 

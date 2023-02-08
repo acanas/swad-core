@@ -1147,6 +1147,15 @@ void Par_PutHiddenParamString (const char *Id,const char *ParamName,
   }
 
 /*****************************************************************************/
+/********* Put a hidden parameter with the type of order in listing **********/
+/*****************************************************************************/
+
+void Par_PutHiddenParamOrder (unsigned SelectedOrder)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"Order",SelectedOrder);
+  }
+
+/*****************************************************************************/
 /****************************** Set/Get current IP ***************************/
 /*****************************************************************************/
 /*

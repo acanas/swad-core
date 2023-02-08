@@ -958,7 +958,7 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
       Agd_PutHiddenParamHiddenVisiblEvents (HiddenVisiblEvents);
 
    if (Order != Agd_ORDER_DEFAULT)
-      Dat_PutHiddenParamOrder (Order);
+      Par_PutHiddenParamOrder ((unsigned) Order);
 
    if (NumPage > 1)
       Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,NumPage);
@@ -999,7 +999,7 @@ static void Agd_GetParams (struct Agd_Agenda *Agenda,
 void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder)
   {
    if (SelectedOrder != Agd_ORDER_DEFAULT)
-      Dat_PutHiddenParamOrder (SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/

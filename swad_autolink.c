@@ -476,10 +476,10 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
      };
    char Ch;
    size_t Length;
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
    struct Usr_Data UsrDat;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
+   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    char *CaptionStr;
    char *ImgStr;
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];

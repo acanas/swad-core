@@ -252,7 +252,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 			WhichGroups = Grp_GetParamWhichGroups ();
 			Grp_PutParamWhichGroups (&WhichGroups);
 			Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Dat_PutHiddenParamOrder (Order);
+			Par_PutHiddenParamOrder ((unsigned) Order);
 			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
 			                         "class=\"BT_LINK\"");
 			   if (Order == Surveys->SelectedOrder)
@@ -884,7 +884,7 @@ static Dat_StartEndTime_t Svy_GetParamSvyOrder (void)
 
 void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder)
   {
-   Dat_PutHiddenParamOrder (SelectedOrder);
+   Par_PutHiddenParamOrder ((unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -939,7 +939,7 @@ static void Svy_PutParams (void *Surveys)
      {
       if (((struct Svy_Surveys *) Surveys)->Svy.SvyCod > 0)
 	 Svy_PutParamSvyCod (((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Surveys)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Surveys)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_SURVEYS,((struct Svy_Surveys *) Surveys)->CurrentPage);

@@ -264,7 +264,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 			WhichGroups = Grp_GetParamWhichGroups ();
 			Grp_PutParamWhichGroups (&WhichGroups);
 			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
-			Dat_PutHiddenParamOrder (Order);
+			Par_PutHiddenParamOrder ((unsigned) Order);
 
 			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
 			                         "class=\"BT_LINK\"");
@@ -330,7 +330,7 @@ static void Att_ParamsWhichGroupsToShow (void *Events)
   {
    if (Events)
      {
-      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
@@ -419,7 +419,7 @@ static void Att_PutParamsToCreateNewAttEvent (void *Events)
 
    if (Events)
      {
-      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
@@ -436,7 +436,7 @@ static void Att_PutParamsToListUsrsAttendance (void *Events)
 
    if (Events)
      {
-      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
@@ -652,7 +652,7 @@ static void Att_PutParams (void *Events)
    if (Events)
      {
       Att_PutParamAttCod (((struct Att_Events *) Events)->Event.AttCod);
-      Dat_PutHiddenParamOrder (((struct Att_Events *) Events)->SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
@@ -1032,7 +1032,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Frm_BeginForm (ActChgAtt);
 	 Att_PutParamAttCod (Events.Event.AttCod);
      }
-      Dat_PutHiddenParamOrder (Events.SelectedOrder);
+      Par_PutHiddenParamOrder ((unsigned) Events.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);

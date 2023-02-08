@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action_list.h"
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_degree_database.h"
@@ -1099,7 +1100,6 @@ static void Hie_GetAndShowHierarchyWithDegs (void)
 	 NumCtysWithDegs = Cty_GetCachedNumCtysWithDegs ();
 	 /* falls through */
 	 /* no break */
-         break;
       case HieLvl_CTY:
 	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs ();
 	 /* falls through */

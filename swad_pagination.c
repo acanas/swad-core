@@ -177,7 +177,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       case Pag_ASSIGNMENTS:
 		  Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
@@ -191,28 +191,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       case Pag_EXAMS:
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_GAMES:
 		  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_SURVEYS:
 		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_ATT_EVENTS:
 		  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
@@ -300,7 +300,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -314,28 +314,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -416,7 +416,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -430,28 +430,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -545,7 +545,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_ASSIGNMENTS:
                   Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
@@ -559,28 +559,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_EXAMS:
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_GAMES:
                   Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_SURVEYS:
                   Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_ATT_EVENTS:
                   Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
@@ -660,7 +660,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -674,28 +674,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -776,7 +776,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
@@ -790,28 +790,28 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;

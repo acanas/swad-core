@@ -1141,7 +1141,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
    Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,NumPageThreads);
    Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,NumPagePosts);
    For_PutParamForumSet (ForumSet);
-   Dat_PutHiddenParamOrder (Order);
+   Par_PutHiddenParamOrder ((unsigned) Order);
    For_PutParamForumLocation (Location);
    For_PutHiddenParamThrCod (ThrCod);
    For_PutHiddenParamPstCod (PstCod);
@@ -1412,7 +1412,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
           - all my forums
           - only the forums of current institution/degree/course *****/
    Frm_BeginForm (ActSeeFor);
-      Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
+      Par_PutHiddenParamOrder ((unsigned) Forums->ThreadsOrder);
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 

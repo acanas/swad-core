@@ -133,7 +133,7 @@ struct Globals
          bool IBelongToCurrentCrs;
          bool MyPhotoExists;
          unsigned NumAccWithoutPhoto;
-         char PhotoURL[PATH_MAX + 1];
+         char PhotoURL[Cns_MAX_BYTES_WWW + 1];
          time_t TimeLastAccToThisFileBrowser;
          bool ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
          struct

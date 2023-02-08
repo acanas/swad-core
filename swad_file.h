@@ -72,7 +72,7 @@ void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
 			  FILE *NewFile);
 
 bool Fil_CheckIfPathExists (const char *Path);
-void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1]);
+void Fil_CreateDirIfNotExists (const char *Path);
 void Fil_RemoveTree (const char *Path);
 
 void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,

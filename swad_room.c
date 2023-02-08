@@ -439,7 +439,7 @@ static void Roo_EditRoomsInternal (void)
    Roo_ResetRooms (&Rooms);
 
    /***** Get lists of buildings and rooms *****/
-   Bld_GetListBuildings (&Buildings,Roo_ALL_DATA);
+   Bld_GetListBuildings (&Buildings,Bld_ALL_DATA);
    Roo_GetListRooms (&Rooms,Roo_ALL_DATA);
 
    /***** Begin box *****/

@@ -603,6 +603,8 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate key... Reportado por Salvador Romero Cortés.
 
 TODO: Attach pdf files in multimedia.
+
+TODO: BUG al intentar crear un fichero ZIP con los trabajos de una asignatura si un estudiante con nombre cirílico está entre los alumnos que seleccionas para ver los trabajos. Reported by Víctor Vázquez Rodríguez el 22 de enero de 2023.
 */
 #define Log_PLATFORM_VERSION	"SWAD 22.60 (2022-11-29)"
 #define CSS_FILE		"swad22.57.1.css"
@@ -615,6 +617,16 @@ Que al subir un fichero por defecto esté oculto, aunque sea opcional.
 Al subir cosas para los grupos, en documentos, resltar más los grupos porque no son conscientes...
 Exportar listas en CSV.
 
+Sugerencia de Raymon Moreno:
+Saludos cordiales estimado, tengo un planteamiento que hacerle con respecto a la actualización de las asignaturas que están aperturadas en las distintas titulaciones que administramos en la Universidad, el escenario es el siguiente, tenemos asignaturas que en este momento no tendrán alumnos inscritos porque no hay secciones abiertas pero que en próximos lapsos si tendrán participantes inscritos, por lo que quiero consultar si hay manera de que se puedan como INHABILITAR TEMPORALMENTE, y cuando se requiera nuevamente la inscripción de los estudiantes se puedan ACTIVAR o HABILITAR, creo que esa función de ACTIVAR la hacemos los administradores de Titulaciones cuando algún profesor crea una asignatura....... entonces algo como eso........ todo esto con el fin, de que no se pierda lo estructurado que posee cada asignatura........
+
+El otro escenario esta orientado en lo siguiente, Si no es Factible lo de la INACTIVACIÓN de asignaturas quisiera intentar borrarlas y guardar el Contenido en MALETÍN, pero no me permite guardar los elementos que se disponen en los apartados iniciales de cada asignatura y que tienen la opción de ser de LECTURA OBLIGATORIA por el estudiante, entonces mi consulta es, como podría almacenar estos elementos en Maletin, de manera que cuando se vaya a aperturar la asignatura nuevamente se pueda cargar tanto el contenido, como los aspectos de Guía, Información, Programa o Temario, Bibliografía.......
+
+son planteamientos que facilitarían la organización del entorno para cada titulación y no tener secciones inactivas que signifiquen una data no ajustada a la realidad el uso de la misma..............
+
+siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
+
+	Version 22.61:	  Feb 08, 2023  Fixed bug in figures about hierarchy. (334142 lines)
 	Version 22.60:    Nov 29, 2022  Fixed bug sending notification emails. Reported by Manuel Rodríguez Álvarez and Eva Martínez Ortigosa. (334114 lines)
 	Version 22.59.1:  Nov 23, 2022  Fixed bug in file browser. Reported by Javier Fernández Baldomero. (334070 lines)
 	Version 22.59:    Nov 06, 2022  New module swad_browser_size. (334067 lines)

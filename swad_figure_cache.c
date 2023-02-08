@@ -27,6 +27,7 @@
 
 #include <stdio.h>		// For sscanf
 
+#include "swad_alert.h"
 #include "swad_database.h"
 #include "swad_figure_cache.h"
 #include "swad_figure_database.h"

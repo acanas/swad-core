@@ -415,7 +415,7 @@ bool Fil_CheckIfPathExists (const char *Path)
 /********** Check if a directory exists. If not exists, create it! ***********/
 /*****************************************************************************/
 
-void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1])
+void Fil_CreateDirIfNotExists (const char *Path)
   {
    char ErrorMsg[128 + PATH_MAX];
 
@@ -433,7 +433,7 @@ void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1])
 /*****************************************************************************/
 // If the tree of directories and files exists, remove it
 
-void Fil_RemoveTree (const char Path[PATH_MAX + 1])
+void Fil_RemoveTree (const char *Path)
   {
    struct stat FileStatus;
    struct dirent **FileList;

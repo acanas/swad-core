@@ -104,7 +104,7 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 // Nickname may have leading '@'
 // Returns true if nickname found in database
 
-long Nck_GetUsrCodFromNickname (const char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1])
+long Nck_GetUsrCodFromNickname (const char *NickWithArr)
   {
    char CopyOfNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
