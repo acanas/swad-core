@@ -107,11 +107,10 @@ int main (void)
       Par_CreateListOfParams ();
       Par_GetMainParams ();
 
-      /***** Mitigate DoS attacks *****/
+      /***** Kick out banned IPs *****/
       Fir_CheckFirewallAndExitIfBanned ();
-      Fir_DB_LogAccess ();
-      Fir_CheckFirewallAndExitIfTooManyRequests ();
 
+      /**** Initialize current country, institution, center, degree and course *****/
       Hie_InitHierarchy ();
 
       if (!Gbl.WebService.IsWebService)
@@ -139,6 +138,13 @@ int main (void)
 	 /***** Check user and get user's data *****/
 	 Usr_ChkUsrAndGetUsrData ();
 	}
+
+      /***** Mitigate automatized attacks from the same IP-user *****/
+      // If this execution is web service, no user is logged at this moment...
+      // ...so only IP is checked and it could be banned...
+      // ...if many users use the web service from the same IP
+      Fir_DB_LogAccess ();
+      Fir_CheckFirewallAndExitIfTooManyRequests ();
 
       /***** Check if the user have permission to execute the action *****/
       if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.Action.Act))

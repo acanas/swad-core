@@ -1460,14 +1460,17 @@ mysql> DESCRIBE fir_log;
 +-----------+----------+------+-----+---------+-------+
 | ClickTime | datetime | NO   | MUL | NULL    |       |
 | IP        | char(15) | NO   | MUL | NULL    |       |
+| UsrCod    | int      | NO   | MUL | -1      |       |
 +-----------+----------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fir_log ("
 			"ClickTime DATETIME NOT NULL,"
 			"IP CHAR(15) NOT NULL,"	// Cns_MAX_BYTES_IP
+			"UsrCod INT NOT NULL DEFAULT -1,"
 		   "INDEX(ClickTime),"
-		   "INDEX(IP))");
+		   "INDEX(IP),"
+		   "INDEX(UsrCod))");
 
    /***** Table for_clipboards *****/
 /*

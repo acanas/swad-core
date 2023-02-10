@@ -46,10 +46,11 @@ void Fir_DB_LogAccess (void)
   {
    DB_QueryINSERT ("can not log access into firewall_log",
 		   "INSERT INTO fir_log"
-		   " (ClickTime,IP)"
+		   " (ClickTime,IP,UsrCod)"
 		   " VALUES"
-		   " (NOW(),'%s')",
-		   Par_GetIP ());
+		   " (NOW(),'%s',%ld)",
+		   Par_GetIP (),
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -63,8 +64,10 @@ unsigned Fir_DB_GetNumClicksFromLog (void)
 		  "SELECT COUNT(*)"
 		   " FROM fir_log"
 		  " WHERE IP='%s'"
+		    " AND UsrCod=%ld"
 		    " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		  Par_GetIP (),
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  Fw_CHECK_INTERVAL);
   }
 

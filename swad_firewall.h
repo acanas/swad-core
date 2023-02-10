@@ -27,7 +27,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-/* The maximum number of clicks in the interval
+/* The maximum number of clicks from the same IP-user in the interval
    should be large enough to prevent an IP from being banned
    due to automatic refresh when the user is viewing the last clicks. */
 #define Fw_CHECK_INTERVAL		((time_t)(30UL))	// Check clicks in the last 30 seconds

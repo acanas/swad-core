@@ -25117,11 +25117,11 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==3	// en
 	"List the full data of students"
 #elif L==4	// es
-	"Listar los datos completos de estudiantes"
+	"Listar los datos completos de los estudiantes"
 #elif L==5	// fr
 	"List the full data of students"		// Besoin de traduction
 #elif L==6	// gn
-	"Listar los datos completos de estudiantes"	// Okoteve traducción
+	"Listar los datos completos de los estudiantes"	// Okoteve traducción
 #elif L==7	// it
 	"List the full data of students"		// Bisogno di traduzione
 #elif L==8	// pl

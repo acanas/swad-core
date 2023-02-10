@@ -606,7 +606,7 @@ TODO: Attach pdf files in multimedia.
 
 TODO: BUG al intentar crear un fichero ZIP con los trabajos de una asignatura si un estudiante con nombre cirílico está entre los alumnos que seleccionas para ver los trabajos. Reported by Víctor Vázquez Rodríguez el 22 de enero de 2023.
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.60 (2022-11-29)"
+#define Log_PLATFORM_VERSION	"SWAD 22.62 (2023-02-10)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
@@ -625,6 +625,11 @@ El otro escenario esta orientado en lo siguiente, Si no es Factible lo de la INA
 son planteamientos que facilitarían la organización del entorno para cada titulación y no tener secciones inactivas que signifiquen una data no ajustada a la realidad el uso de la misma..............
 
 siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
+
+	Version 22.62:	  Feb 10, 2023  User's code stored in fir_log table in order to avoid banning users who share the same IP. (334157 lines)
+					2 changes necessary in database:
+ALTER TABLE fir_log ADD COLUMN UsrCod INT NOT NULL DEFAULT -1 AFTER IP,ADD INDEX (UsrCod);
+DELETE FROM fir_log;
 
 	Version 22.61:	  Feb 08, 2023  Fixed bug in figures about hierarchy. (334142 lines)
 	Version 22.60:    Nov 29, 2022  Fixed bug sending notification emails. Reported by Manuel Rodríguez Álvarez and Eva Martínez Ortigosa. (334114 lines)
