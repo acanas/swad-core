@@ -626,6 +626,7 @@ son planteamientos que facilitarían la organización del entorno para cada titula
 
 siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
 
+	Version 22.62.1:  Feb 13, 2023  Fixed alignment in layout of messages. (334160 lines)
 	Version 22.62:	  Feb 10, 2023  User's code stored in fir_log table in order to avoid banning users who share the same IP. (334157 lines)
 					2 changes necessary in database:
 ALTER TABLE fir_log ADD COLUMN UsrCod INT NOT NULL DEFAULT -1 AFTER IP,ADD INDEX (UsrCod);

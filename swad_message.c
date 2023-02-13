@@ -2065,28 +2065,32 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    HTM_TR_Begin (NULL);
 
+      /***** Icons *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
 		    Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? "MSG_BG" :
 								       "MSG_BG_NEW") :
 							       "MSG_BG",
 		    The_GetSuffix ());
+
+         /* Type of message icon (envelope, reply...) */
 	 Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open ? (Replied ? "reply.svg" :
 										    "envelope-open-text.svg") :
 									 "envelope.svg") :
 								 "share.svg",
 		      Ico_BLACK,Title,"ICO16x16");
 
-	 /***** Form to delete message *****/
 	 HTM_BR ();
+
+	 /* Form to delete message */
 	 Messages->MsgCod = MsgCod;	// Message to be deleted
 	 Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],NULL,
 					Msg_PutHiddenParamsOneMsg,Messages);
       HTM_TD_End ();
 
-      /***** Write message number *****/
+      /***** Number *****/
       Msg_WriteMsgNumber (MsgNum,!Open);
 
-      /***** Write message author *****/
+      /***** Author *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
                     Open ? "MSG_AUT" :
 			   "MSG_AUT_NEW",The_GetSuffix (),
@@ -2098,10 +2102,10 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 Msg_WriteMsgAuthor (&UsrDat,true);
       HTM_TD_End ();
 
-      /***** Write subject *****/
+      /***** Subject *****/
       Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
 
-      /***** Write date-time *****/
+      /***** Date-time *****/
       Msg_WriteMsgDate (CreatTimeUTC,
                         Open ? "MSG_TIT" :
 			       "MSG_TIT_NEW",
@@ -2280,7 +2284,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
 	 HTM_BUTTON_Submit_Begin (Expanded ? Txt_Hide_message :
 					     Txt_See_message,
-				  "class=\"BT_LINK\"");
+				  "class=\"LT BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])
