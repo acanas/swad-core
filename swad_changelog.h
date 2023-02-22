@@ -626,6 +626,13 @@ son planteamientos que facilitarían la organización del entorno para cada titula
 
 siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
 
+TODO: Emilce Barrera Mesa: Calificación integrada de las actividades.
+
+	Version 22.62.2:  Feb 22, 2023  Changed icon for question bank. (? lines)
+Copy the following icons to icon public directory:
+sudo cp icon/iconset/awesome/clipboard-question.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/nuvola/clipboard-question.png /var/www/html/swad/icon/iconset/nuvola/
+
 	Version 22.62.1:  Feb 13, 2023  Fixed alignment in layout of messages. (334160 lines)
 	Version 22.62:	  Feb 10, 2023  User's code stored in fir_log table in order to avoid banning users who share the same IP. (334157 lines)
 					2 changes necessary in database:

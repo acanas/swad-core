@@ -2500,14 +2500,14 @@ void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args)
 
 static void Rec_PutParamsMyTsts (__attribute__((unused)) void *Args)
   {
-   Dat_SetIniEndDatesToDistantPastToNow ();
+   Dat_SetIniEndDatesToPastAndNow ();
    Dat_WriteParamsIniEndDates ();
   }
 
 static void Rec_PutParamsStdTsts (__attribute__((unused)) void *Args)
   {
    Rec_PutParamsStudent (NULL);
-   Dat_SetIniEndDatesToDistantPastToNow ();
+   Dat_SetIniEndDatesToPastAndNow ();
    Dat_WriteParamsIniEndDates ();
   }
 

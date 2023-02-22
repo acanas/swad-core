@@ -1170,7 +1170,7 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 /******* Set initial date to distant past and end date to current date *******/
 /*****************************************************************************/
 
-void Dat_SetIniEndDatesToDistantPastToNow (void)
+void Dat_SetIniEndDatesToPastAndNow (void)
   {
    Dat_Time.Range.TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();

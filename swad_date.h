@@ -189,7 +189,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 
-void Dat_SetIniEndDatesToDistantPastToNow (void);
+void Dat_SetIniEndDatesToPastAndNow (void);
 void Dat_SetIniEndDatesToRecentWeeks (void);
 void Dat_WriteParamsIniEndDates (void);
 void Dat_GetIniEndDatesFromForm (void);
