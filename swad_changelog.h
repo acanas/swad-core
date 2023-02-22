@@ -627,8 +627,10 @@ son planteamientos que facilitarían la organización del entorno para cada titula
 siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
 
 TODO: Emilce Barrera Mesa: Calificación integrada de las actividades.
+TODO: Emilce Barrera Mesa: Para futuras mejoras podrías incluir por favor la opción de duplicar una pregunta al momento de crearlas. Esto en razón a que si tengo dos preguntas con las mismas opciones de respuesta, pero diferente enunciado me ahorrarías tiempo si me permites duplicar la pregunta y solo cambiar el enunciado.
 
-	Version 22.62.2:  Feb 22, 2023  Changed icon for question bank. (? lines)
+	Version 22.63:    Feb 22, 2023  Assessment information moved to course tab. (334216 lines)
+	Version 22.62.2:  Feb 22, 2023  Changed icon for question bank. (334165 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/iconset/awesome/clipboard-question.svg /var/www/html/swad/icon/iconset/awesome/
 sudo cp icon/iconset/nuvola/clipboard-question.png /var/www/html/swad/icon/iconset/nuvola/

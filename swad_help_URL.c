@@ -1285,53 +1285,53 @@ const char *Hlp_COURSE_Links_edit =
 	"COURSE.Links.en#edit";
 #endif
 
+const char *Hlp_COURSE_Assessment =
+#if   L==1
+	"ASSESSMENT.System.es";
+#elif L==2
+	"ASSESSMENT.System.en";
+#elif L==3
+	"ASSESSMENT.System.en";
+#elif L==4
+	"ASSESSMENT.System.es";
+#elif L==5
+	"ASSESSMENT.System.en";
+#elif L==6
+	"ASSESSMENT.System.es";
+#elif L==7
+	"ASSESSMENT.System.en";
+#elif L==8
+	"ASSESSMENT.System.en";
+#elif L==9
+	"ASSESSMENT.System.en";
+#elif L==10	// tr
+	"ASSESSMENT.System.en";
+#endif
+
+const char *Hlp_COURSE_Assessment_edit =
+#if   L==1
+	"ASSESSMENT.System.es#editar";
+#elif L==2
+	"ASSESSMENT.System.en#edit";
+#elif L==3
+	"ASSESSMENT.System.en#edit";
+#elif L==4
+	"ASSESSMENT.System.es#editar";
+#elif L==5
+	"ASSESSMENT.System.en#edit";
+#elif L==6
+	"ASSESSMENT.System.es#editar";
+#elif L==7
+	"ASSESSMENT.System.en#edit";
+#elif L==8
+	"ASSESSMENT.System.en#edit";
+#elif L==9
+	"ASSESSMENT.System.en#edit";
+#elif L==10	// tr
+	"ASSESSMENT.System.en#edit";
+#endif
+
 /***** ASSESSMENT tab *****/
-
-const char *Hlp_ASSESSMENT_System =
-#if   L==1
-	"ASSESSMENT.System.es";
-#elif L==2
-	"ASSESSMENT.System.en";
-#elif L==3
-	"ASSESSMENT.System.en";
-#elif L==4
-	"ASSESSMENT.System.es";
-#elif L==5
-	"ASSESSMENT.System.en";
-#elif L==6
-	"ASSESSMENT.System.es";
-#elif L==7
-	"ASSESSMENT.System.en";
-#elif L==8
-	"ASSESSMENT.System.en";
-#elif L==9
-	"ASSESSMENT.System.en";
-#elif L==10	// tr
-	"ASSESSMENT.System.en";
-#endif
-
-const char *Hlp_ASSESSMENT_System_edit =
-#if   L==1
-	"ASSESSMENT.System.es#editar";
-#elif L==2
-	"ASSESSMENT.System.en#edit";
-#elif L==3
-	"ASSESSMENT.System.en#edit";
-#elif L==4
-	"ASSESSMENT.System.es#editar";
-#elif L==5
-	"ASSESSMENT.System.en#edit";
-#elif L==6
-	"ASSESSMENT.System.es#editar";
-#elif L==7
-	"ASSESSMENT.System.en#edit";
-#elif L==8
-	"ASSESSMENT.System.en#edit";
-#elif L==9
-	"ASSESSMENT.System.en#edit";
-#elif L==10	// tr
-	"ASSESSMENT.System.en#edit";
-#endif
 
 const char *Hlp_ASSESSMENT_Assignments =
 #if   L==1
@@ -1495,27 +1495,27 @@ const char *Hlp_ASSESSMENT_Projects_add_user =
 	"ASSESSMENT.Projects.en#add-user";
 #endif
 
-const char *Hlp_ASSESSMENT_Questions_editing_questions =
+const char *Hlp_ASSESSMENT_Questions =
 #if   L==1
-	"ASSESSMENT.Questions.es#editar-preguntas";
+	"ASSESSMENT.Questions.es";
 #elif L==2
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==3
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==4
-	"ASSESSMENT.Questions.es#editar-preguntas";
+	"ASSESSMENT.Questions.es";
 #elif L==5
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==6
-	"ASSESSMENT.Questions.es#editar-preguntas";
+	"ASSESSMENT.Questions.es";
 #elif L==7
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==8
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==9
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #elif L==10	// tr
-	"ASSESSMENT.Questions.en#editing-questions";
+	"ASSESSMENT.Questions.en";
 #endif
 
 const char *Hlp_ASSESSMENT_Questions_writing_a_question =

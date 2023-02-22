@@ -5536,6 +5536,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the links related to the course"			// Çeviri lazim!
 #endif
 	,
+	[ActSeeAss] =
+#if   L==1	// ca
+	"See assessment system"			// Necessita traducció
+#elif L==2	// de
+	"See assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"See assessment system"
+#elif L==4	// es
+	"Ver sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"See assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"See assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"See assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeCrsTT] =
 #if   L==1	// ca
 	"See the course timetable"		// Necessita traducció
@@ -6916,6 +6939,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Edit course links"			// Çeviri lazim!
 #endif
 	,
+	[ActEdiAss] =
+#if   L==1	// ca
+	"Edit assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Edit assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Edit assessment system"
+#elif L==4	// es
+	"Editar sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Edit assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Edit assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit assessment system"		// Çeviri lazim!
+#endif
+	,
 	[ActChgFrcReaCrsInf] =
 #if   L==1	// ca
 	"Change whether students are forced to read the course information"			// Necessita traducció
@@ -7075,6 +7121,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change whether students are forced to read the links"		// Precisa de tradução
 #elif L==10	// tr
 	"Change whether students are forced to read the links"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaAss] =
+#if   L==1	// ca
+	"Change whether students are forced to read the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the assessment system"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change whether students are forced to read the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the assessment system"		// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaCrsInf] =
@@ -7238,6 +7307,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change if I have read the course links"			// Çeviri lazim!
 #endif
 	,
+	[ActChgHavReaAss] =
+#if   L==1	// ca
+	"Change if I have read the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the assessment system"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change if I have read the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActSelInfSrcCrsInf] =
 #if   L==1	// ca
 	"Select the type of information shown in the course information"				// Necessita traducció
@@ -7397,6 +7489,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the course links"				// Precisa de tradução
 #elif L==10	// tr
 	"Select the type of information shown in the course links"				// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcAss] =
+#if   L==1	// ca
+	"Select the type of information shown in the assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the assessment system"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Select the type of information shown in the assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the assessment system"				// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLCrsInf] =
@@ -7560,6 +7675,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create URL in the course links"		// Çeviri lazim!
 #endif
 	,
+	[ActRcvURLAss] =
+#if   L==1	// ca
+	"Create URL in the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Create URL in the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the assessment system"
+#elif L==4	// es
+	"Crear una URL en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create URL in the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActRcvPagCrsInf] =
 #if   L==1	// ca
 	"Create web page in the course information"				// Necessita traducció
@@ -7719,6 +7857,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create web page in the course links"				// Precisa de tradução
 #elif L==10	// tr
 	"Create web page in the course links"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagAss] =
+#if   L==1	// ca
+	"Create web page in the assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the assessment system"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create web page in the assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the assessment system"				// Çeviri lazim!
 #endif
 	,
 	[ActEditorCrsInf] =
@@ -7882,6 +8043,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of course links"			// Çeviri lazim!
 #endif
 	,
+	[ActEditorAss] =
+#if   L==1	// ca
+	"Integrated editor of the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of the assessment system"
+#elif L==4	// es
+	"Editor integrado del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Integrated editor of the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of the assessment system"		// Çeviri lazim!
+#endif
+	,
 	[ActPlaTxtEdiCrsInf] =
 #if   L==1	// ca
 	"Plain text editor of course information"				// Necessita traducció
@@ -8041,6 +8225,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of course links"			// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of course links"			// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiAss] =
+#if   L==1	// ca
+	"Plain text editor of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of the assessment system"
+#elif L==4	// es
+	"Editor de texto plano del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Plain text editor of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of the assessment system"			// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiCrsInf] =
@@ -8204,6 +8411,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Rich text editor of course links"				// Çeviri lazim!
 #endif
 	,
+	[ActRchTxtEdiAss] =
+#if   L==1	// ca
+	"Rich text editor of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the assessment system"
+#elif L==4	// es
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Rich text editor of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActRcvPlaTxtCrsInf] =
 #if   L==1	// ca
 	"Change plain text of course information"			// Necessita traducció
@@ -8363,6 +8593,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of course links"			// Precisa de tradução
 #elif L==10	// tr
 	"Change plain text of course links"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtAss] =
+#if   L==1	// ca
+	"Change plain text of the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Change plain text of the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of the assessment system"
+#elif L==4	// es
+	"Cambiar texto plano del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change plain text of the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of the assessment system"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtCrsInf] =
@@ -8526,6 +8779,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course links"				// Çeviri lazim!
 #endif
 	,
+	[ActRcvRchTxtAss] =
+#if   L==1	// ca
+	"Change rich text of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Change rich text of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Change rich text of the assessment system"
+#elif L==4	// es
+	"Cambiar texto enriquecido del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change rich text of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change rich text of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change rich text of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change rich text of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Change rich text of the assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActPrnCrsTT] =
 #if   L==1	// ca
 	"Show print view of course timetable"					// Necessita traducció
@@ -8616,29 +8892,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change first day of week of course timetable"				// Precisa de tradução
 #elif L==10	// tr
 	"Change first day of week of course timetable"				// Çeviri lazim!
-#endif
-	,
-	[ActSeeAss] =
-#if   L==1	// ca
-	"See assessment system"			// Necessita traducció
-#elif L==2	// de
-	"See assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"See assessment system"
-#elif L==4	// es
-	"Ver sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"See assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"See assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"See assessment system"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeAsg] =
@@ -8802,6 +9055,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See all games"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeAllRub] =
+#if   L==1	// ca
+	"See rubrics"		// Necessita traducció
+#elif L==2	// de
+	"See rubrics"		// Need Übersetzung
+#elif L==3	// en
+	"See rubrics"
+#elif L==4	// es
+	"Ver r&uacute;bricas"
+#elif L==5	// fr
+	"See rubrics"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver r&uacute;bricas"	// Okoteve traducción
+#elif L==7	// it
+	"See rubrics"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See rubrics"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See rubrics"		// Precisa de tradução
+#elif L==10	// tr
+	"See rubrics"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeAllSvy] =
 #if   L==1	// ca
 	"See surveys"	// Necessita traducció
@@ -8823,259 +9099,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See surveys"	// Precisa de tradução
 #elif L==10	// tr
 	"See surveys"	// Çeviri lazim!
-#endif
-	,
-	[ActEdiAss] =
-#if   L==1	// ca
-	"Edit assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Edit assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Edit assessment system"
-#elif L==4	// es
-	"Editar sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Edit assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Edit assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaAss] =
-#if   L==1	// ca
-	"Change whether students are forced to read the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the assessment system"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change whether students are forced to read the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaAss] =
-#if   L==1	// ca
-	"Change if I have read the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the assessment system"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change if I have read the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcAss] =
-#if   L==1	// ca
-	"Select the type of information shown in the assessment system"				// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the assessment system"				// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the assessment system"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Select the type of information shown in the assessment system"				// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the assessment system"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the assessment system"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the assessment system"				// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the assessment system"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLAss] =
-#if   L==1	// ca
-	"Create URL in the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Create URL in the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the assessment system"
-#elif L==4	// es
-	"Crear una URL en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create URL in the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagAss] =
-#if   L==1	// ca
-	"Create web page in the assessment system"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the assessment system"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the assessment system"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create web page in the assessment system"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the assessment system"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the assessment system"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the assessment system"				// Çeviri lazim!
-#endif
-	,
-	[ActEditorAss] =
-#if   L==1	// ca
-	"Integrated editor of the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the assessment system"
-#elif L==4	// es
-	"Editor integrado del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Integrated editor of the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiAss] =
-#if   L==1	// ca
-	"Plain text editor of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the assessment system"
-#elif L==4	// es
-	"Editor de texto plano del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Plain text editor of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiAss] =
-#if   L==1	// ca
-	"Rich text editor of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the assessment system"
-#elif L==4	// es
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Rich text editor of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtAss] =
-#if   L==1	// ca
-	"Change plain text of the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the assessment system"
-#elif L==4	// es
-	"Cambiar texto plano del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change plain text of the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvRchTxtAss] =
-#if   L==1	// ca
-	"Change rich text of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Change rich text of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Change rich text of the assessment system"
-#elif L==4	// es
-	"Cambiar texto enriquecido del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change rich text of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change rich text of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change rich text of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change rich text of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Change rich text of the assessment system"			// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewAsg] =

@@ -136,7 +136,7 @@ void Qst_RequestEditQsts (void)
 
 void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
   {
-   extern const char *Hlp_ASSESSMENT_Questions_editing_questions;
+   extern const char *Hlp_ASSESSMENT_Questions;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Question_bank;
    extern const char *Txt_Show_questions;
@@ -150,7 +150,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Question_bank,
                  Qst_PutIconsRequestBankQsts,NULL,
-                 Hlp_ASSESSMENT_Questions_editing_questions,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -845,7 +845,7 @@ void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
 void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
                                       MYSQL_RES *mysql_res)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Questions;
    extern const char *Txt_Questions;
    unsigned QstInd;
    MYSQL_ROW row;
@@ -853,7 +853,7 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
                  Qst_PutIconsEditBankQsts,Questions,
-		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+		 Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (5);

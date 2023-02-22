@@ -21624,7 +21624,30 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ba&gbreve;lant&inodot;lar"
 #endif
 	,
-	//  7: ActSeeCrsTT
+	//  7: ActSeeAss
+#if   L==1	// ca
+	"Avaluaci&oacute;"
+#elif L==2	// de
+	"Bewertung"
+#elif L==3	// en
+	"Assessment"
+#elif L==4	// es
+	"Evaluaci&oacute;n"
+#elif L==5	// fr
+	"&Eacute;valuation"
+#elif L==6	// gn
+	"Mbohepy"
+#elif L==7	// it
+	"Valutazione"
+#elif L==8	// pl
+	"Ocena"
+#elif L==9	// pt
+	"Avalia&ccedil;&atilde;o"
+#elif L==10	// tr
+	"De&gbreve; erlendirme"
+#endif
+	,
+	//  8: ActSeeCrsTT
 #if   L==1	// ca
 	"Horari"
 #elif L==2	// de
@@ -21647,7 +21670,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Program&inodot;"
 #endif
 	,
-	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -21655,30 +21677,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 [TabAss] =
 	{
-	//  0: ActSeeAss
-#if   L==1	// ca
-	"Sistema"
-#elif L==2	// de
-	"System"
-#elif L==3	// en
-	"System"
-#elif L==4	// es
-	"Sistema"
-#elif L==5	// fr
-	"Syst&egrave;me"
-#elif L==6	// gn
-	"Sistema"	// Okoteve traducción
-#elif L==7	// it
-	"Sistema"
-#elif L==8	// pl
-	"System"
-#elif L==9	// pt
-	"Sistema"
-#elif L==10	// tr
-	"Sistemi"
-#endif
-	,
-	//  1: ActSeeAsg
+	//  0: ActSeeAsg
 #if   L==1	// ca
 	"Activitats"
 #elif L==2	// de
@@ -21701,7 +21700,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"&Ouml;devler"
 #endif
 	,
-	//  2: ActSeePrj
+	//  1: ActSeePrj
 #if   L==1	// ca
 	"Projectes"
 #elif L==2	// de
@@ -21724,7 +21723,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Projeler"
 #endif
 	,
-	//  3: ActSeeAllExaAnn
+	//  2: ActSeeAllExaAnn
 #if   L==1	// ca
 	"Convocat&ograve;ries"
 #elif L==2	// de
@@ -21747,7 +21746,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Aramalar"	// Çeviri lazim!
 #endif
 	,
-	//  4: ActEdiTstQst
+	//  3: ActEdiTstQst
 #if   L==1	// ca
 	"Preguntes"
 #elif L==2	// de
@@ -21770,7 +21769,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sorular"
 #endif
 	,
-	//  5: ActReqTst
+	//  4: ActReqTst
 #if   L==1	// ca
 	"Tests"
 #elif L==2	// de
@@ -21793,7 +21792,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testler"
 #endif
 	,
-	//  6: ActSeeAllExa
+	//  5: ActSeeAllExa
 #if   L==1	// ca
 	"Ex&agrave;mens"
 #elif L==2	// de
@@ -21816,7 +21815,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"S&inodot;navlar"
 #endif
 	,
-	//  7: ActSeeAllGam
+	//  6: ActSeeAllGam
 #if   L==1	// ca
 	"Jocs"
 #elif L==2	// de
@@ -21837,6 +21836,29 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Jogos"
 #elif L==10	// tr
 	"Oyunlar"
+#endif
+	,
+	//  7: ActSeeAllRub
+#if   L==1	// ca
+	"R&uacute;briques"
+#elif L==2	// de
+	"Rubriken"
+#elif L==3	// en
+	"Rubrics"
+#elif L==4	// es
+	"R&uacute;bricas"
+#elif L==5	// fr
+	"Rubriques"
+#elif L==6	// gn
+	"R&uacute;bricas"	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche"
+#elif L==8	// pl
+	"Rubryki"
+#elif L==9	// pt
+	"Rubricas"
+#elif L==10	// tr
+	"De&gbreve;erlendirme"
 #endif
 	,
 	//  8: ActSeeAllSvy

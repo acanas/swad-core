@@ -233,7 +233,7 @@ extern const char *Hlp_COURSE_Syllabus;
 extern const char *Hlp_COURSE_Bibliography;
 extern const char *Hlp_COURSE_FAQ;
 extern const char *Hlp_COURSE_Links;
-extern const char *Hlp_ASSESSMENT_System;
+extern const char *Hlp_COURSE_Assessment;
 
 extern const char *Hlp_COURSE_Information_edit;
 extern const char *Hlp_COURSE_Guide_edit;
@@ -241,7 +241,7 @@ extern const char *Hlp_COURSE_Syllabus_edit;
 extern const char *Hlp_COURSE_Bibliography_edit;
 extern const char *Hlp_COURSE_FAQ_edit;
 extern const char *Hlp_COURSE_Links_edit;
-extern const char *Hlp_ASSESSMENT_System_edit;
+extern const char *Hlp_COURSE_Assessment_edit;
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -298,7 +298,7 @@ void Inf_ShowInfo (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ,
       [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
      };
 
    /***** Reset syllabus context *****/
@@ -823,7 +823,7 @@ static void Inf_ShowPage (const char *URL)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ,
       [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
      };
 
    /***** Begin box *****/
@@ -891,7 +891,7 @@ void Inf_FormsToSelSendInfo (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
       [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1457,7 +1457,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ,
       [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
      };
 
    /***** Get info text from database *****/
@@ -1546,7 +1546,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ,
       [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
      };
 
    /***** Get info text from database *****/
@@ -1672,7 +1672,7 @@ void Inf_EditPlainTxtInfo (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
       [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1729,7 +1729,7 @@ void Inf_EditRichTxtInfo (void)
       [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
       [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
       [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_ASSESSMENT_System_edit,
+      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
