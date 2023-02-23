@@ -49,13 +49,13 @@ typedef enum
    Fig_TESTS,			// Number of test questions
    Fig_EXAMS,			// Number of exams
    Fig_GAMES,			// Number of games
-   Fig_SURVEYS,			// Number of surveys
    Fig_TIMELINE,		// Number of timeline notes
    Fig_FOLLOW,			// Number of following and followers
    Fig_FORUMS,			// Number of forums, threads and posts
    Fig_NOTIFY_EVENTS,		// Number of users per notify event
    Fig_NOTICES,			// Number of notices
    Fig_MESSAGES,		// Number of users' (sent and received) messages
+   Fig_SURVEYS,			// Number of surveys
    Fig_AGENDAS,			// Number of agendas
    Fig_SOCIAL_NETWORKS,		// Number of users in social networks
    Fig_LANGUAGES,		// Number of users per language

@@ -639,11 +639,11 @@ static void Lay_WriteScripts (void)
 	 HTM_SCRIPT_End ();
 	 Lay_WriteScriptCustomDropzone ();
          break;
+      case ActSeeAllStaCrs:
       case ActReqAccGbl:
       case ActSeeAccGbl:
       case ActReqAccCrs:
       case ActSeeAccCrs:
-      case ActSeeAllStaCrs:
 	 HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/jstz/jstz.js",NULL);
 	 HTM_SCRIPT_End ();
 	 break;

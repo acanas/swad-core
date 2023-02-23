@@ -202,13 +202,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
-	       case Pag_SURVEYS:
-		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParamWhichGroups ();
-		     Grp_PutParamWhichGroups (&WhichGroups);
-		  break;
 	       case Pag_ATT_EVENTS:
 		  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -247,6 +240,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
 		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  break;
+	       case Pag_SURVEYS:
+		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_MY_AGENDA:
 		  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -325,13 +325,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_SURVEYS:
-               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
-               break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -370,6 +363,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
 		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+               break;
+            case Pag_SURVEYS:
+               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -441,13 +441,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_SURVEYS:
-               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
-               break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
@@ -486,6 +479,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
 		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+               break;
+            case Pag_SURVEYS:
+               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -570,13 +570,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     WhichGroups = Grp_GetParamWhichGroups ();
 		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
-               case Pag_SURVEYS:
-                  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParamWhichGroups ();
-		     Grp_PutParamWhichGroups (&WhichGroups);
-                  break;
                case Pag_ATT_EVENTS:
                   Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
@@ -615,6 +608,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
 		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+                  break;
+               case Pag_SURVEYS:
+                  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_MY_AGENDA:
                   Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -685,13 +685,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_SURVEYS:
-               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
-               break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
@@ -730,6 +723,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
 		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+               break;
+            case Pag_SURVEYS:
+               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -801,13 +801,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
-            case Pag_SURVEYS:
-               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
-               break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
@@ -846,6 +839,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
 		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
 		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+               break;
+            case Pag_SURVEYS:
+               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);

@@ -21861,29 +21861,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"De&gbreve;erlendirme"
 #endif
 	,
-	//  8: ActSeeAllSvy
-#if   L==1	// ca
-	"Enquestes"
-#elif L==2	// de
-	"Umfragen"
-#elif L==3	// en
-	"Surveys"
-#elif L==4	// es
-	"Encuestas"
-#elif L==5	// fr
-	"Sondages"
-#elif L==6	// gn
-	"Encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"Sondaggi"
-#elif L==8	// pl
-	"Ankiety"
-#elif L==9	// pt
-	"Inqu&eacute;ritos"
-#elif L==10	// tr
-	"Anketler"
-#endif
-	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -22601,7 +22579,30 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"G&ouml;stergeler"
 #endif
 	,
-	//  3: ActReqAccGbl
+	//  3: ActSeeAllSvy
+#if   L==1	// ca
+	"Enquestes"
+#elif L==2	// de
+	"Umfragen"
+#elif L==3	// en
+	"Surveys"
+#elif L==4	// es
+	"Encuestas"
+#elif L==5	// fr
+	"Sondages"
+#elif L==6	// gn
+	"Encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggi"
+#elif L==8	// pl
+	"Ankiety"
+#elif L==9	// pt
+	"Inqu&eacute;ritos"
+#elif L==10	// tr
+	"Anketler"
+#endif
+	,
+	//  4: ActReqAccGbl
 #if   L==1	// ca
 	"Accessos"
 #elif L==2	// de
@@ -22624,7 +22625,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ziyaretler"
 #endif
 	,
-	//  4: ActReqMyUsgRep
+	//  5: ActReqMyUsgRep
 #if   L==1	// ca
 	"Informe"
 #elif L==2	// de
@@ -22647,7 +22648,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bildiri"
 #endif
 	,
-	//  5: ActMFUAct
+	//  6: ActMFUAct
 #if   L==1	// ca
 	"Freq&uuml;ents"
 #elif L==2	// de
@@ -22670,7 +22671,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"S&inodot;k"
 #endif
 	,
-	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -46001,29 +46001,6 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Oyunlar"
 #endif
 	,
-	[Fig_SURVEYS] =
-#if   L==1	// ca
-	"Enquestes"
-#elif L==2	// de
-	"Umfragen"
-#elif L==3	// en
-	"Surveys"
-#elif L==4	// es
-	"Encuestas"
-#elif L==5	// fr
-	"Sondages"
-#elif L==6	// gn
-	"Encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"Sondaggi"
-#elif L==8	// pl
-	"Ankieta"
-#elif L==9	// pt
-	"Inqu&eacute;ritos"
-#elif L==10	// tr
-	"Anketler"
-#endif
-	,
 	[Fig_TIMELINE] =
 #if   L==1	// ca
 	"Timeline"
@@ -46160,6 +46137,29 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Mensagens"
 #elif L==10	// tr
 	"Mesajlar"
+#endif
+	,
+	[Fig_SURVEYS] =
+#if   L==1	// ca
+	"Enquestes"
+#elif L==2	// de
+	"Umfragen"
+#elif L==3	// en
+	"Surveys"
+#elif L==4	// es
+	"Encuestas"
+#elif L==5	// fr
+	"Sondages"
+#elif L==6	// gn
+	"Encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggi"
+#elif L==8	// pl
+	"Ankieta"
+#elif L==9	// pt
+	"Inqu&eacute;ritos"
+#elif L==10	// tr
+	"Anketler"
 #endif
 	,
 	[Fig_AGENDAS] =

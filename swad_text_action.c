@@ -9078,29 +9078,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See rubrics"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeAllSvy] =
-#if   L==1	// ca
-	"See surveys"	// Necessita traducció
-#elif L==2	// de
-	"See surveys"	// Need Übersetzung
-#elif L==3	// en
-	"See surveys"
-#elif L==4	// es
-	"Ver encuestas"
-#elif L==5	// fr
-	"See surveys"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"See surveys"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See surveys"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See surveys"	// Precisa de tradução
-#elif L==10	// tr
-	"See surveys"	// Çeviri lazim!
-#endif
-	,
 	[ActFrmNewAsg] =
 #if   L==1	// ca
 	"Edit new assignment"		// Necessita traducció
@@ -13860,374 +13837,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to game"	// Precisa de tradução
 #elif L==10	// tr
 	"Copy link to game"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeSvy] =
-#if   L==1	// ca
-	"Show survey"		// Necessita traducció
-#elif L==2	// de
-	"Show survey"		// Need Übersetzung
-#elif L==3	// en
-	"Show survey"
-#elif L==4	// es
-	"Mostrar encuesta"
-#elif L==5	// fr
-	"Show survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Show survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Show survey"		// Çeviri lazim!
-#endif
-	,
-	[ActAnsSvy] =
-#if   L==1	// ca
-	"Answer survey"		// Necessita traducció
-#elif L==2	// de
-	"Answer survey"		// Need Übersetzung
-#elif L==3	// en
-	"Answer survey"
-#elif L==4	// es
-	"Responder encuesta"
-#elif L==5	// fr
-	"Answer survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Responder encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Answer survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Answer survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Answer survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Answer survey"		// Çeviri lazim!
-#endif
-	,
-	[ActFrmNewSvy] =
-#if   L==1	// ca
-	"Edit new survey"	// Necessita traducció
-#elif L==2	// de
-	"Edit new survey"	// Need Übersetzung
-#elif L==3	// en
-	"Edit new survey"
-#elif L==4	// es
-	"Editar nueva encuesta"
-#elif L==5	// fr
-	"Edit new survey"	// Besoin de traduction
-#elif L==6	// gn
-	"Editar nueva encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Edit new survey"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit new survey"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit new survey"	// Precisa de tradução
-#elif L==10	// tr
-	"Edit new survey"	// Çeviri lazim!
-#endif
-	,
-	[ActEdiOneSvy] =
-#if   L==1	// ca
-	"Edit survey"		// Necessita traducció
-#elif L==2	// de
-	"Edit survey"		// Need Übersetzung
-#elif L==3	// en
-	"Edit survey"
-#elif L==4	// es
-	"Editar encuesta"
-#elif L==5	// fr
-	"Edit survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Edit survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit survey"		// Çeviri lazim!
-#endif
-	,
-	[ActNewSvy] =
-#if   L==1	// ca
-	"Create new survey"	// Necessita traducció
-#elif L==2	// de
-	"Create new survey"	// Need Übersetzung
-#elif L==3	// en
-	"Create new survey"
-#elif L==4	// es
-	"Crear nueva encuesta"
-#elif L==5	// fr
-	"Create new survey"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nueva encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Create new survey"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new survey"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new survey"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new survey"	// Çeviri lazim!
-#endif
-	,
-	[ActChgSvy] =
-#if   L==1	// ca
-	"Change survey"		// Necessita traducció
-#elif L==2	// de
-	"Change survey"		// Need Übersetzung
-#elif L==3	// en
-	"Change survey"
-#elif L==4	// es
-	"Cambiar encuesta"
-#elif L==5	// fr
-	"Change survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Change survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Change survey"		// Çeviri lazim!
-#endif
-	,
-	[ActReqRemSvy] =
-#if   L==1	// ca
-	"Request removal of survey"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of survey"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of survey"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de encuesta"
-#elif L==5	// fr
-	"Request removal of survey"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of survey"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of survey"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of survey"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of survey"			// Çeviri lazim!
-#endif
-	,
-	[ActRemSvy] =
-#if   L==1	// ca
-	"Remove survey"		// Necessita traducció
-#elif L==2	// de
-	"Remove survey"		// Need Übersetzung
-#elif L==3	// en
-	"Remove survey"
-#elif L==4	// es
-	"Eliminar encuesta"
-#elif L==5	// fr
-	"Remove survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Remove survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove survey"		// Çeviri lazim!
-#endif
-	,
-	[ActReqRstSvy] =
-#if   L==1	// ca
-	"Request reset of answers of survey"			// Necessita traducció
-#elif L==2	// de
-	"Request reset of answers of survey"			// Need Übersetzung
-#elif L==3	// en
-	"Request reset of answers of survey"
-#elif L==4	// es
-	"Solicitar puesta a cero de preguntas de encuesta"
-#elif L==5	// fr
-	"Request reset of answers of survey"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar puesta a cero de preguntas de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Request reset of answers of survey"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request reset of answers of survey"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request reset of answers of survey"			// Precisa de tradução
-#elif L==10	// tr
-	"Request reset of answers of survey"			// Çeviri lazim!
-#endif
-	,
-	[ActRstSvy] =
-#if   L==1	// ca
-	"Reset answers of survey"		// Necessita traducció
-#elif L==2	// de
-	"Reset answers of survey"		// Need Übersetzung
-#elif L==3	// en
-	"Reset answers of survey"
-#elif L==4	// es
-	"Poner a cero respuestas de encuesta"
-#elif L==5	// fr
-	"Reset answers of survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Poner a cero respuestas de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Reset answers of survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Reset answers of survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Reset answers of survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Reset answers of survey"		// Çeviri lazim!
-#endif
-	,
-	[ActHidSvy] =
-#if   L==1	// ca
-	"Hide survey"		// Necessita traducció
-#elif L==2	// de
-	"Hide survey"		// Need Übersetzung
-#elif L==3	// en
-	"Hide survey"
-#elif L==4	// es
-	"Ocultar encuesta"
-#elif L==5	// fr
-	"Hide survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Ocultar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Hide survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Hide survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Hide survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Hide survey"		// Çeviri lazim!
-#endif
-	,
-	[ActUnhSvy] =
-#if   L==1	// ca
-	"Unhide survey"		// Necessita traducció
-#elif L==2	// de
-	"Unhide survey"		// Need Übersetzung
-#elif L==3	// en
-	"Unhide survey"
-#elif L==4	// es
-	"Mostrar encuesta"
-#elif L==5	// fr
-	"Unhide survey"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Unhide survey"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Unhide survey"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Unhide survey"		// Precisa de tradução
-#elif L==10	// tr
-	"Unhide survey"		// Çeviri lazim!
-#endif
-	,
-	[ActEdiOneSvyQst] =
-#if   L==1	// ca
-	"Edit new survey question"		// Necessita traducció
-#elif L==2	// de
-	"Edit new survey question"		// Need Übersetzung
-#elif L==3	// en
-	"Edit new survey question"
-#elif L==4	// es
-	"Editar nueva pregunta de encuesta"
-#elif L==5	// fr
-	"Edit new survey question"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar nueva pregunta de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Edit new survey question"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit new survey question"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit new survey question"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit new survey question"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvSvyQst] =
-#if   L==1	// ca
-	"Create survey question"	// Necessita traducció
-#elif L==2	// de
-	"Create survey question"	// Need Übersetzung
-#elif L==3	// en
-	"Create survey question"
-#elif L==4	// es
-	"Crear pregunta de encuesta"
-#elif L==5	// fr
-	"Create survey question"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear pregunta de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Create survey question"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create survey question"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create survey question"	// Precisa de tradução
-#elif L==10	// tr
-	"Create survey question"	// Çeviri lazim!
-#endif
-	,
-	[ActReqRemSvyQst] =
-#if   L==1	// ca
-	"Request removal of survey question"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of survey question"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of survey question"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de pregunta de encuesta"
-#elif L==5	// fr
-	"Request removal of survey question"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de pregunta de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of survey question"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of survey question"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of survey question"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of survey question"			// Çeviri lazim!
-#endif
-	,
-	[ActRemSvyQst] =
-#if   L==1	// ca
-	"Confirm removal of survey question"			// Necessita traducció
-#elif L==2	// de
-	"Confirm removal of survey question"			// Need Übersetzung
-#elif L==3	// en
-	"Confirm removal of survey question"
-#elif L==4	// es
-	"Confirmar eliminaci&oacute;n de pregunta de encuesta"
-#elif L==5	// fr
-	"Confirm removal of survey question"			// Besoin de traduction
-#elif L==6	// gn
-	"Confirmar eliminaci&oacute;n de pregunta de encuesta"	// Okoteve traducción
-#elif L==7	// it
-	"Confirm removal of survey question"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Confirm removal of survey question"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Confirm removal of survey question"			// Precisa de tradução
-#elif L==10	// tr
-	"Confirm removal of survey question"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocIns] =
@@ -32423,6 +32032,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Request statistics of courses"			// Çeviri lazim!
 #endif
 	,
+	[ActSeeAllSvy] =
+#if   L==1	// ca
+	"See surveys"	// Necessita traducció
+#elif L==2	// de
+	"See surveys"	// Need Übersetzung
+#elif L==3	// en
+	"See surveys"
+#elif L==4	// es
+	"Ver encuestas"
+#elif L==5	// fr
+	"See surveys"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"See surveys"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See surveys"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See surveys"	// Precisa de tradução
+#elif L==10	// tr
+	"See surveys"	// Çeviri lazim!
+#endif
+	,
 	[ActReqAccGbl] =
 #if   L==1	// ca
 	"Request query of clicks to the complete platform"	// Necessita traducció
@@ -32561,6 +32193,397 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compute average photos of students of degree"			// Çeviri lazim!
 #endif
 	,
+	[ActSeeAllStaCrs] =
+#if   L==1	// ca
+	"See statistics of courses"			// Necessita traducció
+#elif L==2	// de
+	"See statistics of courses"			// Need Übersetzung
+#elif L==3	// en
+	"See statistics of courses"
+#elif L==4	// es
+	"Ver estad&iacute;sticas de asignaturas"
+#elif L==5	// fr
+	"See statistics of courses"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver estad&iacute;sticas de asignaturas"	// Okoteve traducción
+#elif L==7	// it
+	"See statistics of courses"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See statistics of courses"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See statistics of courses"			// Precisa de tradução
+#elif L==10	// tr
+	"See statistics of courses"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeSvy] =
+#if   L==1	// ca
+	"Show survey"		// Necessita traducció
+#elif L==2	// de
+	"Show survey"		// Need Übersetzung
+#elif L==3	// en
+	"Show survey"
+#elif L==4	// es
+	"Mostrar encuesta"
+#elif L==5	// fr
+	"Show survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Show survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Show survey"		// Çeviri lazim!
+#endif
+	,
+	[ActAnsSvy] =
+#if   L==1	// ca
+	"Answer survey"		// Necessita traducció
+#elif L==2	// de
+	"Answer survey"		// Need Übersetzung
+#elif L==3	// en
+	"Answer survey"
+#elif L==4	// es
+	"Responder encuesta"
+#elif L==5	// fr
+	"Answer survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Responder encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Answer survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Answer survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Answer survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Answer survey"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewSvy] =
+#if   L==1	// ca
+	"Edit new survey"	// Necessita traducció
+#elif L==2	// de
+	"Edit new survey"	// Need Übersetzung
+#elif L==3	// en
+	"Edit new survey"
+#elif L==4	// es
+	"Editar nueva encuesta"
+#elif L==5	// fr
+	"Edit new survey"	// Besoin de traduction
+#elif L==6	// gn
+	"Editar nueva encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Edit new survey"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit new survey"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit new survey"	// Precisa de tradução
+#elif L==10	// tr
+	"Edit new survey"	// Çeviri lazim!
+#endif
+	,
+	[ActEdiOneSvy] =
+#if   L==1	// ca
+	"Edit survey"		// Necessita traducció
+#elif L==2	// de
+	"Edit survey"		// Need Übersetzung
+#elif L==3	// en
+	"Edit survey"
+#elif L==4	// es
+	"Editar encuesta"
+#elif L==5	// fr
+	"Edit survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Edit survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit survey"		// Çeviri lazim!
+#endif
+	,
+	[ActNewSvy] =
+#if   L==1	// ca
+	"Create new survey"	// Necessita traducció
+#elif L==2	// de
+	"Create new survey"	// Need Übersetzung
+#elif L==3	// en
+	"Create new survey"
+#elif L==4	// es
+	"Crear nueva encuesta"
+#elif L==5	// fr
+	"Create new survey"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nueva encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Create new survey"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new survey"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new survey"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new survey"	// Çeviri lazim!
+#endif
+	,
+	[ActChgSvy] =
+#if   L==1	// ca
+	"Change survey"		// Necessita traducció
+#elif L==2	// de
+	"Change survey"		// Need Übersetzung
+#elif L==3	// en
+	"Change survey"
+#elif L==4	// es
+	"Cambiar encuesta"
+#elif L==5	// fr
+	"Change survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Change survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Change survey"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemSvy] =
+#if   L==1	// ca
+	"Request removal of survey"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of survey"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of survey"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de encuesta"
+#elif L==5	// fr
+	"Request removal of survey"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of survey"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of survey"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of survey"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of survey"			// Çeviri lazim!
+#endif
+	,
+	[ActRemSvy] =
+#if   L==1	// ca
+	"Remove survey"		// Necessita traducció
+#elif L==2	// de
+	"Remove survey"		// Need Übersetzung
+#elif L==3	// en
+	"Remove survey"
+#elif L==4	// es
+	"Eliminar encuesta"
+#elif L==5	// fr
+	"Remove survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Remove survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove survey"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRstSvy] =
+#if   L==1	// ca
+	"Request reset of answers of survey"			// Necessita traducció
+#elif L==2	// de
+	"Request reset of answers of survey"			// Need Übersetzung
+#elif L==3	// en
+	"Request reset of answers of survey"
+#elif L==4	// es
+	"Solicitar puesta a cero de preguntas de encuesta"
+#elif L==5	// fr
+	"Request reset of answers of survey"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar puesta a cero de preguntas de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Request reset of answers of survey"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request reset of answers of survey"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request reset of answers of survey"			// Precisa de tradução
+#elif L==10	// tr
+	"Request reset of answers of survey"			// Çeviri lazim!
+#endif
+	,
+	[ActRstSvy] =
+#if   L==1	// ca
+	"Reset answers of survey"		// Necessita traducció
+#elif L==2	// de
+	"Reset answers of survey"		// Need Übersetzung
+#elif L==3	// en
+	"Reset answers of survey"
+#elif L==4	// es
+	"Poner a cero respuestas de encuesta"
+#elif L==5	// fr
+	"Reset answers of survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Poner a cero respuestas de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Reset answers of survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Reset answers of survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Reset answers of survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Reset answers of survey"		// Çeviri lazim!
+#endif
+	,
+	[ActHidSvy] =
+#if   L==1	// ca
+	"Hide survey"		// Necessita traducció
+#elif L==2	// de
+	"Hide survey"		// Need Übersetzung
+#elif L==3	// en
+	"Hide survey"
+#elif L==4	// es
+	"Ocultar encuesta"
+#elif L==5	// fr
+	"Hide survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Hide survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Hide survey"		// Çeviri lazim!
+#endif
+	,
+	[ActUnhSvy] =
+#if   L==1	// ca
+	"Unhide survey"		// Necessita traducció
+#elif L==2	// de
+	"Unhide survey"		// Need Übersetzung
+#elif L==3	// en
+	"Unhide survey"
+#elif L==4	// es
+	"Mostrar encuesta"
+#elif L==5	// fr
+	"Unhide survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Unhide survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unhide survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unhide survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Unhide survey"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiOneSvyQst] =
+#if   L==1	// ca
+	"Edit new survey question"		// Necessita traducció
+#elif L==2	// de
+	"Edit new survey question"		// Need Übersetzung
+#elif L==3	// en
+	"Edit new survey question"
+#elif L==4	// es
+	"Editar nueva pregunta de encuesta"
+#elif L==5	// fr
+	"Edit new survey question"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar nueva pregunta de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Edit new survey question"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit new survey question"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit new survey question"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit new survey question"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvSvyQst] =
+#if   L==1	// ca
+	"Create survey question"	// Necessita traducció
+#elif L==2	// de
+	"Create survey question"	// Need Übersetzung
+#elif L==3	// en
+	"Create survey question"
+#elif L==4	// es
+	"Crear pregunta de encuesta"
+#elif L==5	// fr
+	"Create survey question"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear pregunta de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Create survey question"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create survey question"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create survey question"	// Precisa de tradução
+#elif L==10	// tr
+	"Create survey question"	// Çeviri lazim!
+#endif
+	,
+	[ActReqRemSvyQst] =
+#if   L==1	// ca
+	"Request removal of survey question"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of survey question"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of survey question"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de pregunta de encuesta"
+#elif L==5	// fr
+	"Request removal of survey question"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de pregunta de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of survey question"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of survey question"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of survey question"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of survey question"			// Çeviri lazim!
+#endif
+	,
+	[ActRemSvyQst] =
+#if   L==1	// ca
+	"Confirm removal of survey question"			// Necessita traducció
+#elif L==2	// de
+	"Confirm removal of survey question"			// Need Übersetzung
+#elif L==3	// en
+	"Confirm removal of survey question"
+#elif L==4	// es
+	"Confirmar eliminaci&oacute;n de pregunta de encuesta"
+#elif L==5	// fr
+	"Confirm removal of survey question"			// Besoin de traduction
+#elif L==6	// gn
+	"Confirmar eliminaci&oacute;n de pregunta de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Confirm removal of survey question"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Confirm removal of survey question"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Confirm removal of survey question"			// Precisa de tradução
+#elif L==10	// tr
+	"Confirm removal of survey question"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeAccGbl] =
 #if   L==1	// ca
 	"Query clicks to the complete platform"		// Necessita traducció
@@ -32628,29 +32651,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Query clicks in the current course"		// Precisa de tradução
 #elif L==10	// tr
 	"Query clicks in the current course"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllStaCrs] =
-#if   L==1	// ca
-	"See statistics of courses"			// Necessita traducció
-#elif L==2	// de
-	"See statistics of courses"			// Need Übersetzung
-#elif L==3	// en
-	"See statistics of courses"
-#elif L==4	// es
-	"Ver estad&iacute;sticas de asignaturas"
-#elif L==5	// fr
-	"See statistics of courses"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver estad&iacute;sticas de asignaturas"	// Okoteve traducción
-#elif L==7	// it
-	"See statistics of courses"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See statistics of courses"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See statistics of courses"			// Precisa de tradução
-#elif L==10	// tr
-	"See statistics of courses"			// Çeviri lazim!
 #endif
 	,
 	[ActLstClk] =

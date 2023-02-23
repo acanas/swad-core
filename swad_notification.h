@@ -68,7 +68,6 @@ typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
    /* Course tab */
    /* Assessment tab */
    Ntf_EVENT_ASSIGNMENT		=  4,
-   Ntf_EVENT_SURVEY		= 19,
    Ntf_EVENT_CALL_FOR_EXAM	=  5,
    /* Files tab */
    Ntf_EVENT_DOCUMENT_FILE	=  1,
@@ -86,6 +85,7 @@ typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
    Ntf_EVENT_FORUM_REPLY	= 16,	// New reply to one of my posts in any forum
    Ntf_EVENT_MESSAGE		= 18,
    /* Analytics tab */
+   Ntf_EVENT_SURVEY		= 19,
    /* Profile tab */
   } Ntf_NotifyEvent_t;
 

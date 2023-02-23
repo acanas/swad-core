@@ -140,7 +140,6 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* Course tab */
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAsg,
-   [Ntf_EVENT_SURVEY           ] = ActSeeAllSvy,
    [Ntf_EVENT_CALL_FOR_EXAM    ] = ActSeeAllCfe,
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = ActSeeAdmDocCrsGrp,
@@ -158,6 +157,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_FORUM_REPLY      ] = ActSeeFor,
    [Ntf_EVENT_MESSAGE          ] = ActExpRcvMsg,
    /* Analytics tab */
+   [Ntf_EVENT_SURVEY           ] = ActSeeAllSvy,
    /* Profile tab */
   };
 

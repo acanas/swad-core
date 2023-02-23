@@ -4402,8 +4402,8 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 	 case ActSeeAsg:	// List assignments
 	 case ActSeeAllExa:	// List exams
 	 case ActSeeAllGam:	// List games
-	 case ActSeeAllSvy:	// List surveys
 	 case ActSeeAtt:	// List attendance
+	 case ActSeeAllSvy:	// List surveys
 	    /*
 	    If I belong       to this course ==> see only my groups
 	    If I don't belong to this course ==> see all groups

@@ -129,7 +129,6 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 5] = ActSeeAllExa,
 		[ 6] = ActSeeAllGam,
 		[ 7] = ActSeeAllRub,
-		[ 8] = ActSeeAllSvy,
 	       },
    [TabFil] =  {
 		[ 0] = ActSeeAdmDocIns,
@@ -168,9 +167,10 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 0] = ActReqUseGbl,
 		[ 1] = ActSeePhoDeg,
 		[ 2] = ActReqStaCrs,
-		[ 3] = ActReqAccGbl,
-		[ 4] = ActReqMyUsgRep,
-		[ 5] = ActMFUAct,
+		[ 3] = ActSeeAllSvy,
+		[ 4] = ActReqAccGbl,
+		[ 5] = ActReqMyUsgRep,
+		[ 6] = ActMFUAct,
 	       },
    [TabPrf] =  {
 		[ 0] = ActFrmRolSes,
