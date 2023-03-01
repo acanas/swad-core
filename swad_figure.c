@@ -47,6 +47,7 @@
 #include "swad_privacy.h"
 #include "swad_program.h"
 #include "swad_project.h"
+#include "swad_rubric.h"
 #include "swad_survey.h"
 #include "swad_test.h"
 #include "swad_theme.h"
@@ -208,6 +209,7 @@ void Fig_ShowFigures (void)
       [Fig_TESTS            ] = Tst_GetAndShowTestsStats,
       [Fig_EXAMS            ] = Exa_GetAndShowExamsStats,
       [Fig_GAMES            ] = Gam_GetAndShowGamesStats,
+      [Fig_RUBRICS          ] = Rub_GetAndShowRubricsStats,
       [Fig_TIMELINE         ] = Tml_GetAndShowTimelineActivityStats,
       [Fig_FOLLOW           ] = Fol_GetAndShowFollowStats,
       [Fig_FORUMS           ] = For_GetAndShowForumStats,

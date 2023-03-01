@@ -188,7 +188,7 @@ void Svy_SeeAllSurveys (void)
 
 void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
   {
-   extern const char *Hlp_ASSESSMENT_Surveys;
+   extern const char *Hlp_ANALYTICS_Surveys;
    extern const char *Txt_Surveys;
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -216,7 +216,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Surveys,
                  Svy_PutIconsListSurveys,Surveys,
-                 Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
+                 Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
       if (Gbl.Crs.Grps.NumGrps)
@@ -423,7 +423,7 @@ void Svy_SeeOneSurvey (void)
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
                                bool ShowOnlyThisSvyComplete)
   {
-   extern const char *Hlp_ASSESSMENT_Surveys;
+   extern const char *Hlp_ANALYTICS_Surveys;
    extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
    extern const char *Txt_Number_of_questions;
@@ -450,7 +450,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    if (ShowOnlyThisSvyComplete)
       Box_BoxBegin (NULL,Txt_Survey,
                     Svy_PutIconsOneSvy,Surveys,
-                    Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
+                    Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Surveys->Svy.SvyCod,&Anchor);
@@ -1666,8 +1666,8 @@ void Svy_UnhideSurvey (void)
 
 void Svy_RequestCreatOrEditSvy (void)
   {
-   extern const char *Hlp_ASSESSMENT_Surveys_new_survey;
-   extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
+   extern const char *Hlp_ANALYTICS_Surveys_new_survey;
+   extern const char *Hlp_ANALYTICS_Surveys_edit_survey;
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1741,13 +1741,13 @@ void Svy_RequestCreatOrEditSvy (void)
       if (ItsANewSurvey)
 	 Box_BoxTableBegin (NULL,Txt_New_survey,
 			    NULL,NULL,
-			    Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
+			    Hlp_ANALYTICS_Surveys_new_survey,Box_NOT_CLOSABLE,2);
       else
 	 Box_BoxTableBegin (NULL,
 			    Surveys.Svy.Title[0] ? Surveys.Svy.Title :
 						   Txt_Edit_survey,
 			    NULL,NULL,
-			    Hlp_ASSESSMENT_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
+			    Hlp_ANALYTICS_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
 
       /***** Scope of the survey *****/
       HTM_TR_Begin (NULL);
@@ -2318,7 +2318,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                                     struct Svy_Question *SvyQst,
                                     char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
-   extern const char *Hlp_ASSESSMENT_Surveys_questions;
+   extern const char *Hlp_ANALYTICS_Surveys_questions;
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
    extern const char *Txt_Wording;
@@ -2386,7 +2386,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    else
       Box_BoxBegin (NULL,Txt_New_question,
                     NULL,NULL,
-                    Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
+                    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvSvyQst);
@@ -2755,7 +2755,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
   {
-   extern const char *Hlp_ASSESSMENT_Surveys_questions;
+   extern const char *Hlp_ANALYTICS_Surveys_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -2778,11 +2778,11 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
    if (Surveys->Svy.Status.ICanEdit)
       Box_BoxBegin (NULL,Txt_Questions,
 		    Svy_PutIconToAddNewQuestion,Surveys,
-		    Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
+		    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
    else
       Box_BoxBegin (NULL,Txt_Questions,
 		    NULL,NULL,
-		    Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
+		    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Get data of questions from database *****/
    if ((NumQsts = Svy_DB_GetSurveyQsts (&mysql_res,Surveys->Svy.SvyCod)))

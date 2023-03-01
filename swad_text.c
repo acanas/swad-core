@@ -1060,6 +1060,29 @@ const char *Txt_Action =
 	"Eylem";
 #endif
 
+const char *Txt_Add_criteria =
+#if   L==1	// ca
+	"Afegir criteris";
+#elif L==2	// de
+	"F&uuml;gen Kriterien";
+#elif L==3	// en
+	"Add criteria";
+#elif L==4	// es
+	"A&ntilde;adir criterios";
+#elif L==5	// fr
+	"Ajouter crit&egrave;res";
+#elif L==6	// gn
+	"A&ntilde;adir criterios";	// Okoteve traducción
+#elif L==7	// it
+	"Aggiungere criteri";
+#elif L==8	// pl
+	"Dodaj kryteria";
+#elif L==9	// pt
+	"Adicionar crit&eacute;rios";
+#elif L==10	// tr
+	"Kriter ekle";
+#endif
+
 const char *Txt_Add_questions =
 #if   L==1	// ca
 	"Afegir preguntes";
@@ -2802,7 +2825,7 @@ const char *Txt_average =
 
 const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d'activitats<br />per assignatura";
+	"Nombre mitj&agrave;<br />d'activitats<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Aufgaben<br />pro Kurs";
 #elif L==3	// en
@@ -2823,9 +2846,55 @@ const char *Txt_Average_number_BR_of_ASSIG_BR_per_course =
 	"Average number<br />of assignments<br />per course";		// Çeviri lazim!
 #endif
 
+const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
+#if   L==1	// ca
+	"Nombre mitj&agrave; d'assignatures a las quals pertany cada usuari";
+#elif L==2	// de
+	"Durchschnittliche Anzahl von Kursen, an denen der Benutzer teilnimmt";
+#elif L==3	// en
+	"Average number of courses to which a user belongs";
+#elif L==4	// es
+	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";
+#elif L==5	// fr
+	"Nombre moyen de mati&egrave;res &agrave; qui appartient un utilisateur";
+#elif L==6	// gn
+	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio di corsi a cui appartiene un utente";
+#elif L==8	// pl
+	"&Sacute;rednia liczba kurs&oacute;w do kt&oacute;rej nalezy uzytkownik";
+#elif L==9	// pt
+	"N.&ordm; medio de disciplinas em que cada utilizador pertence";
+#elif L==10	// tr
+	"Average number of courses to which a user belongs";			// Çeviri lazim!
+#endif
+
+const char *Txt_Average_number_BR_of_criteria_BR_per_rubric =
+#if   L==1	// ca
+	"Nombre mitj&agrave;<br />de criteris<br />per r&uacute;brica";
+#elif L==2	// de
+	"Durchschnittliche Anzahl<br />von Kriterien<br />pro Rubrik";
+#elif L==3	// en
+	"Average number<br />of criteria<br />per rubric";
+#elif L==4	// es
+	"N.&ordm; medio<br />de criterios<br />por r&uacute;brica";
+#elif L==5	// fr
+	"Nombre moyen<br />de crit&egrave;res<br />par rubrique";
+#elif L==6	// gn
+	"N.&ordm; medio<br />de criterios<br />por r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio<br />di criteri<br />per rubrica";
+#elif L==8	// pl
+	"&Sacute;rednia liczba<br />kryteri&oacute;w<br />na rubryk&eogon;";
+#elif L==9	// pt
+	"N.&ordm; medio<br />de crit&eacute;rios<br />por rubrica";
+#elif L==10	// tr
+	"Dereceli puanlama<br />anahtar&inodot; ba&scedil;&inodot;na<br />ortalama &ouml;l&ccedil;&uuml;t say&inodot;s&inodot;";
+#endif
+
 const char *Txt_Average_number_BR_of_exams_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d'ex&agrave;mens<br />per assignatura";
+	"Nombre mitj&agrave;<br />d'ex&agrave;mens<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Pr&uuml;fung<br />pro Kurs";
 #elif L==3	// en
@@ -2848,7 +2917,7 @@ const char *Txt_Average_number_BR_of_exams_BR_per_course =
 
 const char *Txt_Average_number_BR_of_games_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />de jocs<br />per assignatura";
+	"Nombre mitj&agrave;<br />de jocs<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Spiele<br />pro Kurs";
 #elif L==3	// en
@@ -2871,7 +2940,7 @@ const char *Txt_Average_number_BR_of_games_BR_per_course =
 
 const char *Txt_Average_number_BR_of_items_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />d'items<br />per assignatura";
+	"Nombre mitj&agrave;<br />d'items<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Programmelemente<br />pro Kurs";
 #elif L==3	// en
@@ -2894,7 +2963,7 @@ const char *Txt_Average_number_BR_of_items_BR_per_course =
 
 const char *Txt_Average_number_BR_of_projects_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />de projectes<br />per assignatura";
+	"Nombre mitj&agrave;<br />de projectes<br />per assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Projekte<br />pro Kurs";
 #elif L==3	// en
@@ -2917,7 +2986,7 @@ const char *Txt_Average_number_BR_of_projects_BR_per_course =
 
 const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />de preguntes<br />per enquesta";
+	"Nombre mitj&agrave;<br />de preguntes<br />per enquesta";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Fragen<br />pro Umfrage";
 #elif L==3	// en
@@ -2938,9 +3007,55 @@ const char *Txt_Average_number_BR_of_questions_BR_per_survey =
 	"Average number<br />of questions<br />per survey";	// Çeviri lazim!
 #endif
 
+const char *Txt_Average_number_BR_of_rubrics_BR_per_course =
+#if   L==1	// ca
+	"Nombre mitj&agrave;<br />de r&uacute;briques<br />per assignatura";
+#elif L==2	// de
+	"Durchschnittliche Anzahl<br />von Rubriken<br />pro Kurs";
+#elif L==3	// en
+	"Average number<br />of rubrics<br />per course";
+#elif L==4	// es
+	"N.&ordm; medio<br />de r&uacute;bricas<br />por asignatura";
+#elif L==5	// fr
+	"Nombre moyen<br />de rubriques<br />par mati&egrave;re";
+#elif L==6	// gn
+	"N.&ordm; medio<br />de r&uacute;bricas<br />por asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio<br />di rubriche<br />per corso";
+#elif L==8	// pl
+	"&Sacute;rednia liczba<br />badania<br />na kurs";
+#elif L==9	// pt
+	"N.&ordm; medio<br />de rubricas<br />por disciplina";
+#elif L==10	// tr
+	"Kurs ba&scedil;&inodot;na<br />ortalama de&gbreve;erlendirme listesi<br />say&inodot;s&inodot;";
+#endif
+
+const char *Txt_Average_number_BR_of_surveys_BR_per_course =
+#if   L==1	// ca
+	"Nombre mitj&agrave;<br />d'enquestes<br />per assignatura";
+#elif L==2	// de
+	"Durchschnittliche Anzahl<br />von Umfragen<br />pro Kurs";
+#elif L==3	// en
+	"Average number<br />of surveys<br />per course";
+#elif L==4	// es
+	"N.&ordm; medio<br />de encuestas<br />por asignatura";
+#elif L==5	// fr
+	"Nombre moyen<br />de sondages<br />par mati&egrave;re";
+#elif L==6	// gn
+	"N.&ordm; medio<br />de encuestas<br />por asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Numero medio<br />di sondaggi<br />per corso";
+#elif L==8	// pl
+	"&Sacute;rednia liczba<br />badania<br />na kurs";
+#elif L==9	// pt
+	"N.&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
+#elif L==10	// tr
+	"Kurs ba&scedil;&inodot;na<br />ortalama anket<br />say&inodot;s&inodot;";
+#endif
+
 const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 #if   L==1	// ca
-	"Nombre mitj&acute;<br />de preguntes<br />de test per<br />assignatura";
+	"Nombre mitj&agrave;<br />de preguntes<br />de test per<br />assignatura";
 #elif L==2	// de
 	"Durchschnittliche Anzahl<br />von Testfragen<br />pro Kurs";
 #elif L==3	// en
@@ -2959,52 +3074,6 @@ const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course =
 	"N.&ordm; medio<br />de perguntas<br />de test por<br />disciplina";
 #elif L==10	// tr
 	"Average<br />number<br />of test<br />questions<br />per course";	// Çeviri lazim!
-#endif
-
-const char *Txt_Average_number_BR_of_surveys_BR_per_course =
-#if   L==1	// ca
-	"Nombre mitj&acute;<br />d'enquestes<br />per assignatura";
-#elif L==2	// de
-	"Durchschnittliche Anzahl<br />von Umfragen<br />pro Kurs";
-#elif L==3	// en
-	"Average number<br />of surveys<br />per course";
-#elif L==4	// es
-	"N.&ordm; medio<br />de encuestas<br />por asignatura";
-#elif L==5	// fr
-	"Nombre moyen<br />de sondages<br />par mati&egrave;re";
-#elif L==6	// gn
-	"N.&ordm; medio<br />de encuestas<br />por asignatura";	// Okoteve traducción
-#elif L==7	// it
-	"Numero medio<br />di sondaggi<br />per corso";
-#elif L==8	// pl
-	"&Sacute;rednia liczba<br />badania<br />na kurs";
-#elif L==9	// pt
-	"N.&ordm; medio<br />de inqu&eacute;ritos<br />por disciplina";
-#elif L==10	// tr
-	"Average number<br />of surveys<br />per course";	// Çeviri lazim!
-#endif
-
-const char *Txt_Average_number_of_courses_to_which_a_user_belongs =
-#if   L==1	// ca
-	"Nombre mitj&aacute; d'assignatures a las quals pertany cada usuari";
-#elif L==2	// de
-	"Durchschnittliche Anzahl von Kursen, an denen der Benutzer teilnimmt";
-#elif L==3	// en
-	"Average number of courses to which a user belongs";
-#elif L==4	// es
-	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";
-#elif L==5	// fr
-	"Nombre moyen de mati&egrave;res &agrave; qui appartient un utilisateur";
-#elif L==6	// gn
-	"N.&ordm; medio de asignaturas a las que pertenece cada usuario";	// Okoteve traducción
-#elif L==7	// it
-	"Numero medio di corsi a cui appartiene un utente";
-#elif L==8	// pl
-	"&Sacute;rednia liczba kurs&oacute;w do kt&oacute;rej nalezy uzytkownik";
-#elif L==9	// pt
-	"N.&ordm; medio de disciplinas em que cada utilizador pertence";
-#elif L==10	// tr
-	"Average number of courses to which a user belongs";			// Çeviri lazim!
 #endif
 
 const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded =
@@ -7190,6 +7259,29 @@ const char *Txt_Create_room =
 	"Create room";	// Çeviri lazim!
 #endif
 
+const char *Txt_Create_rubric =
+#if   L==1	// ca
+	"Crear r&uacute;brica";
+#elif L==2	// de
+	"Rubrik erstellen";
+#elif L==3	// en
+	"Create rubric";
+#elif L==4	// es
+	"Crear r&uacute;brica";
+#elif L==5	// fr
+	"Cr&eacute;er rubrique";
+#elif L==6	// gn
+	"Crear r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Crea rubrica";
+#elif L==8	// pl
+	"Utw&oacute;rz rubryk&eogon;";
+#elif L==9	// pt
+	"Criar rubrica";
+#elif L==10	// tr
+	"De&gbreve;erlendirme listesi olu&scedil;turun";
+#endif
+
 const char *Txt_Create_set_of_questions =
 #if   L==1	// ca
 	"Crear conjunt de preguntes";
@@ -7970,6 +8062,75 @@ const char *Txt_Creating_database_tables_if_they_do_not_exist =
 	"Criando tabelas da base de dados, se elas n&atilde;o existirem&hellip;";
 #elif L==10	// tr
 	"Creating database tables if they do not exist&hellip;";	// Çeviri lazim!
+#endif
+
+const char *Txt_Criteria =
+#if   L==1	// ca
+	"Criteris";
+#elif L==2	// de
+	"Kriterien";
+#elif L==3	// en
+	"Criteria";
+#elif L==4	// es
+	"Criterios";
+#elif L==5	// fr
+	"Crit&egrave;res";
+#elif L==6	// gn
+	"Criterios";	// Okoteve traducción
+#elif L==7	// it
+	"Criteri";
+#elif L==8	// pl
+	"Kryteria";
+#elif L==9	// pt
+	"Crit&eacute;rios";
+#elif L==10	// tr
+	"Kriterler";
+#endif
+
+const char *Txt_Criterion =
+#if   L==1	// ca
+	"Criteri";
+#elif L==2	// de
+	"Kriterium";
+#elif L==3	// en
+	"Criterion";
+#elif L==4	// es
+	"Criterio";
+#elif L==5	// fr
+	"Crit&egrave;re";
+#elif L==6	// gn
+	"Criterio";	// Okoteve traducción
+#elif L==7	// it
+	"Criterio";
+#elif L==8	// pl
+	"Kryterium";
+#elif L==9	// pt
+	"Crit&eacute;rio";
+#elif L==10	// tr
+	"Kriter";
+#endif
+
+const char *Txt_Criterion_removed =
+#if   L==1	// ca
+	"Criteri eliminat.";
+#elif L==2	// de
+	"Kriterium entfernt.";
+#elif L==3	// en
+	"Criterion removed.";
+#elif L==4	// es
+	"Criterio eliminado.";
+#elif L==5	// fr
+	"Crit&egrave;re supprim&eacute;.";
+#elif L==6	// gn
+	"Criterio eliminado.";	// Okoteve traducción
+#elif L==7	// it
+	"Criterio rimosso.";
+#elif L==8	// pl
+	"Usuni&eogon;to kryterium.";
+#elif L==9	// pt
+	"Crit&eacute;rio removido.";
+#elif L==10	// tr
+	"Kriter kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_Current_email =
@@ -11544,7 +11705,7 @@ const char *Txt_Edit_game =
 #elif L==9	// pt
 	"Editar jogo";
 #elif L==10	// tr
-	"Edit game";	// Çeviri lazim!
+	"Oyunu d&uuml;zenle";
 #endif
 
 const char *Txt_Edit_item =
@@ -11637,6 +11798,29 @@ const char *Txt_Edit_record_fields =
 	"Editar campos cart&otilde;es";
 #elif L==10	// tr
 	"Edit record fields";		// Çeviri lazim!
+#endif
+
+const char *Txt_Edit_rubric =
+#if   L==1	// ca
+	"Editar r&uacute;brica";
+#elif L==2	// de
+	"Rubrik bearbeiten";
+#elif L==3	// en
+	"Edit rubric";
+#elif L==4	// es
+	"Editar r&uacute;brica";
+#elif L==5	// fr
+	"&Eacute;diter rubrique";
+#elif L==6	// gn
+	"Editar r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Editare rubrica";
+#elif L==8	// pl
+	"Edycja rubryka";
+#elif L==9	// pt
+	"Editar rubrica";
+#elif L==10	// tr
+	"Puan anahtar&inodot;n&inodot; d&uuml;zenle";
 #endif
 
 const char *Txt_Edit_set_of_questions =
@@ -24485,7 +24669,7 @@ const char *Txt_My_agenda =
 #elif L==9	// pt
 	"Minha agenda";
 #elif L==10	// tr
-	"My agenda";	// Çeviri lazim!
+	"G&uuml;ndemim";
 #endif
 
 const char *Txt_My_courses =
@@ -24508,7 +24692,7 @@ const char *Txt_My_courses =
 #elif L==9	// pt
 	"As minha disciplinas";
 #elif L==10	// tr
-	"My courses";	// Çeviri lazim!
+	"Kurslar&inodot;m";
 #endif
 
 const char *Txt_my_documents =
@@ -24531,7 +24715,7 @@ const char *Txt_my_documents =
 #elif L==9	// pt
 	"meus documentos";
 #elif L==10	// tr
-	"my documents";		// Çeviri lazim!
+	"benim d&ouml;k&uuml;manlar&inodot;m";
 #endif
 
 const char *Txt_My_frequent_actions =
@@ -24554,7 +24738,7 @@ const char *Txt_My_frequent_actions =
 #elif L==9	// pt
 	"Minhas a&ccedil;&otilde;es freq&uuml;entes";
 #elif L==10	// tr
-	"My frequent actions";		// Çeviri lazim!
+	"S&inodot;k yapt&inodot;&gbreve;&inodot;m eylemler";
 #endif
 
 const char *Txt_My_groups =
@@ -24577,7 +24761,7 @@ const char *Txt_My_groups =
 #elif L==9	// pt
 	"Meus grupos";
 #elif L==10	// tr
-	"My groups";	// Çeviri lazim!
+	"Gruplar&inodot;m";
 #endif
 
 const char *Txt_My_public_profile =
@@ -24600,7 +24784,7 @@ const char *Txt_My_public_profile =
 #elif L==9	// pt
 	"Meu perfil p&uacute;blico";
 #elif L==10	// tr
-	"My public profile";		// Çeviri lazim!
+	"Herkese a&ccedil;&inodot;k profilim";
 #endif
 
 const char *Txt_My_views =
@@ -24623,7 +24807,7 @@ const char *Txt_My_views =
 #elif L==9	// pt
 	"Meus acessos";
 #elif L==10	// tr
-	"My views";	// Çeviri lazim!
+	"G&ouml;r&uuml;&scedil;lerim";
 #endif
 
 const char *Txt_Name =
@@ -24646,7 +24830,7 @@ const char *Txt_Name =
 #elif L==9	// pt
 	"Nome";
 #elif L==10	// tr
-	"Name";	// Çeviri lazim!
+	"&Idot;sim";
 #endif
 
 const char *Txt_New_assignment =
@@ -24669,7 +24853,7 @@ const char *Txt_New_assignment =
 #elif L==9	// pt
 	"Nova atividade";
 #elif L==10	// tr
-	"New assignment";	// Çeviri lazim!
+	"Yeni g&ouml;rev";
 #endif
 
 const char *Txt_New_announcement =
@@ -24692,7 +24876,7 @@ const char *Txt_New_announcement =
 #elif L==9	// pt
 	"Novo an&uacute;ncio";
 #elif L==10	// tr
-	"New announcement";	// Çeviri lazim!
+	"Yeni duyuru";
 #endif
 
 const char *Txt_New_call_FOR_EXAM =
@@ -24715,7 +24899,7 @@ const char *Txt_New_call_FOR_EXAM =
 #elif L==9	// pt
 	"Nova chamada";
 #elif L==10	// tr
-	"New call";		// Çeviri lazim!
+	"Yeni &ccedil;a&gbreve;r&inodot;";
 #endif
 
 const char *Txt_New_banner =
@@ -24738,7 +24922,7 @@ const char *Txt_New_banner =
 #elif L==9	// pt
 	"Novo banner";
 #elif L==10	// tr
-	"New banner";	// Çeviri lazim!
+	"Yeni afi&scedil;";
 #endif
 
 const char *Txt_New_building =
@@ -24761,30 +24945,40 @@ const char *Txt_New_building =
 #elif L==9	// pt
 	"Novo edif&iacute;cio";
 #elif L==10	// tr
-	"New building";		// Çeviri lazim!
+	"Yeni bina";
 #endif
 
 const char *Txt_New_center =
 #if   L==1	// ca
-	"Nou center (facultat, escola, institut, divisi&oacute;, edifici...)";
+	"Nou center"
+	" (facultat, escola, institut, divisi&oacute;, edifici...)";
 #elif L==2	// de
-	"Neues Lehrinstitut (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...)";
+	"Neues Lehrinstitut"
+	" (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...)";
 #elif L==3	// en
-	"New center (faculty, school, college, division, building...)";
+	"New center"
+	" (faculty, school, college, division, building...)";
 #elif L==4	// es
-	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";
+	"Nuevo centro"
+	" (facultad, escuela, instituto, divisi&oacute;n, edificio...)";
 #elif L==5	// fr
-	"Nouveau center (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...)";
+	"Nouveau center"
+	" (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...)";
 #elif L==6	// gn
-	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";	// Okoteve traducción
+	"Nuevo centro"
+	" (facultad, escuela, instituto, divisi&oacute;n, edificio...)";	// Okoteve traducción
 #elif L==7	// it
-	"Nuovo centro (facolt&agrave;, scuola, istituto, divisione, costruzione...)";
+	"Nuovo centro"
+	" (facolt&agrave;, scuola, istituto, divisione, costruzione...)";
 #elif L==8	// pl
-	"Nowe centrum (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...)";
+	"Nowe centrum"
+	" (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...)";
 #elif L==9	// pt
-	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
+	"Novo centro"
+	" (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
 #elif L==10	// tr
-	"New center (faculty, school, college, division, building...)";			// Çeviri lazim!
+	"Yeni merkez"
+	" (fak&uuml;lte, okul, kolej, b&ouml;l&uuml;m, bina...)";
 #endif
 
 const char *Txt_New_country =
@@ -24807,53 +25001,73 @@ const char *Txt_New_country =
 #elif L==9	// pt
 	"Novo pa&iacute;s";
 #elif L==10	// tr
-	"New country";		// Çeviri lazim!
+	"Yeni &uuml;lke";
 #endif
 
 const char *Txt_New_course =
 #if   L==1	// ca
-	"Nova assignatura (assignatura, curs, mat&egrave;ria, disciplina...)";
+	"Nova assignatura"
+	" (assignatura, curs, mat&egrave;ria, disciplina...)";
 #elif L==2	// de
-	"Neue Kurs (Kurs, Thema, Disziplin...)";
+	"Neue Kurs"
+	" (Kurs, Thema, Disziplin...)";
 #elif L==3	// en
-	"New course (course, subject, discipline...)";
+	"New course"
+	" (course, subject, discipline...)";
 #elif L==4	// es
-	"Nueva asignatura (asignatura, curso, materia, disciplina...)";
+	"Nueva asignatura"
+	" (asignatura, curso, materia, disciplina...)";
 #elif L==5	// fr
-	"Nouvelle mati&egrave;re (mati&egrave;re, cours, discipline...)";
+	"Nouvelle mati&egrave;re"
+	" (mati&egrave;re, cours, discipline...)";
 #elif L==6	// gn
-	"Nueva asignatura (asignatura, curso, materia, disciplina...)";	// Okoteve traducción
+	"Nueva asignatura"
+	" (asignatura, curso, materia, disciplina...)";	// Okoteve traducción
 #elif L==7	// it
-	"Nuovo corso (corso, materia...)";
+	"Nuovo corso"
+	" (corso, materia...)";
 #elif L==8	// pl
-	"Nowy kurs";
+	"Nowy kurs"
+	" (kurs, przedmiot, dyscyplina...)";
 #elif L==9	// pt
-	"Nova disciplina (disciplina, curso...)";
+	"Nova disciplina"
+	" (disciplina, curso...)";
 #elif L==10	// tr
-	"New course (course, subject, discipline...)";			// Çeviri lazim!
+	"Yeni kurs"
+	" (ders, konu, disiplin...)";
 #endif
 
 const char *Txt_New_degree =
 #if   L==1	// ca
-	"Nova titulaci&oacute; (carrera, llicenciatura, diplomatura, grau, postgrau, m&agrave;ster, cicle, nivell...)";
+	"Nova titulaci&oacute;"
+	" (carrera, llicenciatura, diplomatura, grau, postgrau, m&agrave;ster, cicle, nivell...)";
 #elif L==2	// de
-	"Neuer Studiengang (Karriere, Diplom, Grad, Graduierten, Master, Zyklus, Niveau...)";
+	"Neuer Studiengang"
+	" (Karriere, Diplom, Grad, Graduierten, Master, Zyklus, Niveau...)";
 #elif L==3	// en
-	"New degree (career, diploma, degree, postgraduate, master, cycle, level...)";
+	"New degree"
+	" (career, diploma, degree, postgraduate, master, cycle, level...)";
 #elif L==4	// es
-	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";
+	"Nueva titulaci&oacute;n"
+	" (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";
 #elif L==5	// fr
-	"Nouvel &eacute;tude (carri&egrave;re, grade, dipl&ocirc;me, degr&eacute;, troisi&agrave;me cycle, master, cycle, niveau...)";
+	"Nouvel &eacute;tude"
+	" (carri&egrave;re, grade, dipl&ocirc;me, degr&eacute;, troisi&agrave;me cycle, master, cycle, niveau...)";
 #elif L==6	// gn
-	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";	// Okoteve traducción
+	"Nueva titulaci&oacute;n"
+	" (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";	// Okoteve traducción
 #elif L==7	// it
-	"Nuova laurea (carriera, diploma, laurea, post-laurea, master, ciclo, livello...)";
+	"Nuova laurea"
+	" (carriera, diploma, laurea, post-laurea, master, ciclo, livello...)";
 #elif L==8	// pl
-	"Nowy stopie&nacute; (zawodowe, stopie&nacute;, dyplom, magisterskie, podyplomowe, magisterskie, cykl, poziom...)";
+	"Nowy stopie&nacute;"
+	" (zawodowe, stopie&nacute;, dyplom, magisterskie, podyplomowe, magisterskie, cykl, poziom...)";
 #elif L==9	// pt
-	"Novo grau (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...)";
+	"Novo grau"
+	" (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...)";
 #elif L==10	// tr
-	"New degree (career, diploma, degree, postgraduate, master, cycle, level...)";						// Çeviri lazim!
+	"Yeni derece"
+	" (kariyer, diploma, derece, lisans&uuml;st&uuml;, y&uuml;ksek lisans, d&ouml;ng&uuml;, seviye...)";
 #endif
 
 const char *Txt_New_department =
@@ -24876,7 +25090,7 @@ const char *Txt_New_department =
 #elif L==9	// pt
 	"Novo departamento";
 #elif L==10	// tr
-	"New department";	// Çeviri lazim!
+	"Yeni departman";
 #endif
 
 const char *Txt_New_email =
@@ -24899,7 +25113,7 @@ const char *Txt_New_email =
 #elif L==9	// pt
 	"Novo email";
 #elif L==10	// tr
-	"New email";	// Çeviri lazim!
+	"Yeni e-posta";
 #endif
 
 const char *Txt_New_email_domain =
@@ -24922,7 +25136,7 @@ const char *Txt_New_email_domain =
 #elif L==9	// pt
 	"Novo dom&iacute;nio de email";
 #elif L==10	// tr
-	"New email domain";		// Çeviri lazim!
+	"Yeni e-posta alan&inodot;";
 #endif
 
 const char *Txt_New_event =
@@ -24945,7 +25159,7 @@ const char *Txt_New_event =
 #elif L==9	// pt
 	"Novo evento";
 #elif L==10	// tr
-	"New event";	// Çeviri lazim!
+	"Yeni etkinlik";
 #endif
 
 const char *Txt_New_exam =
@@ -24968,7 +25182,7 @@ const char *Txt_New_exam =
 #elif L==9	// pt
 	"Novo exame";
 #elif L==10	// tr
-	"New exam";	// Çeviri lazim!
+	"Yeni s&inodot;nav";
 #endif
 
 const char *Txt_New_FILE_OR_FOLDER =
@@ -24991,7 +25205,7 @@ const char *Txt_New_FILE_OR_FOLDER =
 #elif L==9	// pt
 	"Novo";
 #elif L==10	// tr
-	"New";	// Çeviri lazim!
+	"Yeni";
 #endif
 
 const char *Txt_New_game =
@@ -25014,7 +25228,7 @@ const char *Txt_New_game =
 #elif L==9	// pt
 	"Novo jogo";
 #elif L==10	// tr
-	"New game";	// Çeviri lazim!
+	"Yeni oyun";
 #endif
 
 const char *Txt_New_group =
@@ -25037,7 +25251,7 @@ const char *Txt_New_group =
 #elif L==9	// pt
 	"Novo grupo";
 #elif L==10	// tr
-	"New group";	// Çeviri lazim!
+	"Yeni grup";
 #endif
 
 const char *Txt_New_holiday =
@@ -25060,30 +25274,40 @@ const char *Txt_New_holiday =
 #elif L==9	// pt
 	"Nova f&eacute;ria";
 #elif L==10	// tr
-	"New holiday";		// Çeviri lazim!
+	"Yeni tatil";
 #endif
 
 const char *Txt_New_institution =
 #if   L==1	// ca
-	"Nova instituci&oacute;n (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...)";
+	"Nova instituci&oacute;n"
+	" (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...)";
 #elif L==2	// de
-	"Neue Hochschule (Universit&auml;t, Hochschule, Schule, Hochschule, Organisation, Unternehmen...)";
+	"Neue Hochschule"
+	" (Universit&auml;t, Hochschule, Schule, Hochschule, Organisation, Unternehmen...)";
 #elif L==3	// en
-	"New institution (university, college, school, academy, organization, company...)";
+	"New institution"
+	" (university, college, school, academy, organization, company...)";
 #elif L==4	// es
-	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...)";
+	"Nueva instituci&oacute;n"
+	" (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...)";
 #elif L==5	// fr
-	"Nouvel &eacute;tablissement (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...)";
+	"Nouvel &eacute;tablissement"
+	" (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...)";
 #elif L==6	// gn
-	"Nueva instituci&oacute;n (universidad, instituto, mbo'ehao, academia, organizaci&oacute;n, empresa...)";	// Okoteve traducción
+	"Nueva instituci&oacute;n"
+	" (universidad, instituto, mbo'ehao, academia, organizaci&oacute;n, empresa...)";	// Okoteve traducción
 #elif L==7	// it
-	"Nuova istituzione (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...)";
+	"Nuova istituzione"
+	" (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...)";
 #elif L==8	// pl
-	"Nowa instytucja (uniwersytet, uczelnia, szko&lstrok;a, akademia, organizacja, firma...)";
+	"Nowa instytucja"
+	" (uniwersytet, uczelnia, szko&lstrok;a, akademia, organizacja, firma...)";
 #elif L==9	// pt
-	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...)";
+	"Nova institu&ccedil;&atilde;o"
+	" (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...)";
 #elif L==10	// tr
-	"New institution (university, college, school, academy, organization, company...)";				// Çeviri lazim!
+	"Yeni kurum"
+	" (&uuml;niversite, kolej, okul, akademi, organizasyon, &scedil;irket...)";
 #endif
 
 const char *Txt_New_item =
@@ -25106,7 +25330,7 @@ const char *Txt_New_item =
 #elif L==9	// pt
 	"Novo item";
 #elif L==10	// tr
-	"New item";		// Çeviri lazim!
+	"Yeni &ouml;&gbreve;e";
 #endif
 
 const char *Txt_New_link =
@@ -25129,7 +25353,7 @@ const char *Txt_New_link =
 #elif L==9	// pt
 	"Nova liga&ccedil;&atilde;o";
 #elif L==10	// tr
-	"New link";		// Çeviri lazim!
+	"Yeni ba&gbreve;lant&inodot;";
 #endif
 
 const char *Txt_New_match =	// of a game
@@ -25152,7 +25376,7 @@ const char *Txt_New_match =	// of a game
 #elif L==9	// pt
 	"Novo jogo";
 #elif L==10	// tr
-	"New match";		// Çeviri lazim!
+	"Yeni ma&ccedil;";
 #endif
 
 const char *Txt_New_message =
@@ -25175,7 +25399,7 @@ const char *Txt_New_message =
 #elif L==9	// pt
 	"Nova mensagem";
 #elif L==10	// tr
-	"New message";		// Çeviri lazim!
+	"Yeni mesaj";
 #endif
 
 const char *Txt_New_nickname =
@@ -25198,7 +25422,7 @@ const char *Txt_New_nickname =
 #elif L==9	// pt
 	"Nova alcunha";
 #elif L==10	// tr
-	"New nickname";	// Çeviri lazim!
+	"Yeni takma ad";
 #endif
 
 const char *Txt_New_notice =
@@ -25221,7 +25445,7 @@ const char *Txt_New_notice =
 #elif L==9	// pt
 	"Novo aviso";
 #elif L==10	// tr
-	"New notice";	// Çeviri lazim!
+	"Yeni bildirim";
 #endif
 
 const char *Txt_New_on_PLATFORM_Sign_up =	// Warning: it is very important to include %s in the following sentences
@@ -25290,7 +25514,7 @@ const char *Txt_New_place =
 #elif L==9	// pt
 	"Nova localiza&ccedil;&atilde;o";
 #elif L==10	// tr
-	"New place";	// Çeviri lazim!
+	"Yeni yer";
 #endif
 
 const char *Txt_New_plugin =
@@ -25313,7 +25537,7 @@ const char *Txt_New_plugin =
 #elif L==9	// pt
 	"Novo plugin";
 #elif L==10	// tr
-	"New plugin";		// Çeviri lazim!
+	"Yeni eklenti";
 #endif
 
 const char *Txt_New_post =
@@ -25336,7 +25560,7 @@ const char *Txt_New_post =
 #elif L==9	// pt
 	"Novo post";
 #elif L==10	// tr
-	"New post";		// Çeviri lazim!
+	"Yeni posta";
 #endif
 
 const char *Txt_New_project =
@@ -25359,7 +25583,7 @@ const char *Txt_New_project =
 #elif L==9	// pt
 	"Novo projeto";
 #elif L==10	// tr
-	"New project";		// Çeviri lazim!
+	"Yeni proje";
 #endif
 
 const char *Txt_New_question =
@@ -25382,7 +25606,7 @@ const char *Txt_New_question =
 #elif L==9	// pt
 	"Nova pergunta";
 #elif L==10	// tr
-	"New question";		// Çeviri lazim!
+	"Yeni soru";
 #endif
 
 const char *Txt_New_record_field =
@@ -25405,7 +25629,7 @@ const char *Txt_New_record_field =
 #elif L==9	// pt
 	"Novo campo de cart&atilde;o";
 #elif L==10	// tr
-	"New record field";		// Çeviri lazim!
+	"Yeni kay&inodot;t alan&inodot;";
 #endif
 
 const char *Txt_New_resource =
@@ -25451,7 +25675,30 @@ const char *Txt_New_room =
 #elif L==9	// pt
 	"Nova sala";
 #elif L==10	// tr
-	"New room";	// Çeviri lazim!
+	"Yeni oda";
+#endif
+
+const char *Txt_New_rubric =
+#if   L==1	// ca
+	"Nova r&uacute;brica";
+#elif L==2	// de
+	"Neue Rubrik";
+#elif L==3	// en
+	"New rubric";
+#elif L==4	// es
+	"Nueva r&uacute;brica";
+#elif L==5	// fr
+	"Nouvelle rubrique";
+#elif L==6	// gn
+	"Nueva r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova rubrica";
+#elif L==8	// pl
+	"Nowa rubryka";
+#elif L==9	// pt
+	"Nova rubrica";
+#elif L==10	// tr
+	"Yeni de&gbreve;erlendirme listesi";
 #endif
 
 const char *Txt_New_session =
@@ -25474,7 +25721,7 @@ const char *Txt_New_session =
 #elif L==9	// pt
 	"Nova sess&atilde;o";
 #elif L==10	// tr
-	"New session";		// Çeviri lazim!
+	"Yeni sezon";
 #endif
 
 const char *Txt_New_set_of_questions =
@@ -25497,7 +25744,7 @@ const char *Txt_New_set_of_questions =
 #elif L==9	// pt
 	"Novo conjunto de perguntas";
 #elif L==10	// tr
-	"New set of questions";		// Çeviri lazim!
+	"Yeni soru grubu";
 #endif
 
 const char *Txt_New_TIMELINE_comment =
@@ -25520,7 +25767,7 @@ const char *Txt_New_TIMELINE_comment =
 #elif L==9	// pt
 	"Novo coment&aacute;rio";
 #elif L==10	// tr
-	"New comment";		// Çeviri lazim!
+	"Yeni yorum";
 #endif
 
 const char *Txt_New_TIMELINE_post =
@@ -25543,7 +25790,7 @@ const char *Txt_New_TIMELINE_post =
 #elif L==9	// pt
 	"Novo post";
 #elif L==10	// tr
-	"New post";			// Çeviri lazim!
+	"Yeni posta";
 #endif
 
 const char *Txt_New_survey =
@@ -25566,7 +25813,7 @@ const char *Txt_New_survey =
 #elif L==9	// pt
 	"Novo inqu&eacute;rito";
 #elif L==10	// tr
-	"New survey";		// Çeviri lazim!
+	"Yeni anket";
 #endif
 
 const char *Txt_new_tag =		// Tag used in test
@@ -25589,7 +25836,7 @@ const char *Txt_new_tag =		// Tag used in test
 #elif L==9	// pt
 	"novo descritor";
 #elif L==10	// tr
-	"new tag";		// Çeviri lazim!
+	"yeni etiket";
 #endif
 
 const char *Txt_New_thread =
@@ -25612,7 +25859,7 @@ const char *Txt_New_thread =
 #elif L==9	// pt
 	"Nova discuss&atilde;o";
 #elif L==10	// tr
-	"New thread";			// Çeviri lazim!
+	"Yeni konu";
 #endif
 
 const char *Txt_New_type_of_degree =
@@ -25635,7 +25882,7 @@ const char *Txt_New_type_of_degree =
 #elif L==9	// pt
 	"Novo tipo de grau";
 #elif L==10	// tr
-	"New type of degree";			// Çeviri lazim!
+	"Yeni derece t&uuml;r&uuml;";
 #endif
 
 const char *Txt_New_type_of_group =
@@ -25658,7 +25905,7 @@ const char *Txt_New_type_of_group =
 #elif L==9	// pt
 	"Novo tipo de grupo";
 #elif L==10	// tr
-	"New type of group";		// Çeviri lazim!
+	"Yeni grup t&uuml;r&uuml;";
 #endif
 
 const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include %u in the following sentences
@@ -26540,6 +26787,29 @@ const char *Txt_No_results =
 	"Nenhum resultado.";
 #elif L==10	// tr
 	"No results.";			// Çeviri lazim!
+#endif
+
+const char *Txt_No_rubrics =
+#if   L==1	// ca
+	"No hi ha r&uacute;briques.";
+#elif L==2	// de
+	"Keine Rubriken.";
+#elif L==3	// en
+	"No rubrics.";
+#elif L==4	// es
+	"No hay r&uacute;bricas.";
+#elif L==5	// fr
+	"Pas de rubriques.";
+#elif L==6	// gn
+	"No hay r&uacute;bricas.";		// Okoteve traducción
+#elif L==7	// it
+	"Non ci sono rubriche.";
+#elif L==8	// pl
+	"Brak rubryk.";
+#elif L==9	// pt
+	"N&atilde;o h&aacute; rubricas.";
+#elif L==10	// tr
+	"Puan anahtar&inodot; yok.";
 #endif
 
 const char *Txt_no_subject =
@@ -27973,29 +28243,6 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"New messages"		// Çeviri lazim!
 #endif
 	,
-	[Ntf_EVENT_SURVEY] =
-#if   L==1	// ca
-	"Noves enquestes"
-#elif L==2	// de
-	"Neue Umfragen"
-#elif L==3	// en
-	"New surveys"
-#elif L==4	// es
-	"Nuevas encuestas"
-#elif L==5	// fr
-	"Nouveaux sondages"
-#elif L==6	// gn
-	"Nuevas encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"Nuove sondaggi"
-#elif L==8	// pl
-	"Nowe badania"
-#elif L==9	// pt
-	"Novos inqu&eacute;ritos"
-#elif L==10	// tr
-	"New surveys"		// Çeviri lazim!
-#endif
-	,
 	[Ntf_EVENT_ENROLMENT_NET] =	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
 #if   L==1	// ca
 	"Novas inscripci&oacute;s com a professor/a no editor/a"
@@ -28017,6 +28264,29 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
 #elif L==10	// tr
 	"New enrolments as a non-editing teacher"		// Çeviri lazim!
+#endif
+	,
+	[Ntf_EVENT_SURVEY] =
+#if   L==1	// ca
+	"Noves enquestes"
+#elif L==2	// de
+	"Neue Umfragen"
+#elif L==3	// en
+	"New surveys"
+#elif L==4	// es
+	"Nuevas encuestas"
+#elif L==5	// fr
+	"Nouveaux sondages"
+#elif L==6	// gn
+	"Nuevas encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"Nuove sondaggi"
+#elif L==8	// pl
+	"Nowe badania"
+#elif L==9	// pt
+	"Novos inqu&eacute;ritos"
+#elif L==10	// tr
+	"New surveys"		// Çeviri lazim!
 #endif
 	};
 
@@ -28575,6 +28845,29 @@ const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X =	// Warni
 	"Now each student can only belong to a group of type <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
+const char *Txt_Number_of_criteria =
+#if   L==1	// ca
+	"Nombre de criteris";
+#elif L==2	// de
+	"Anzahl der Kriterien";
+#elif L==3	// en
+	"Number of criteria";
+#elif L==4	// es
+	"N.&ordm; de criterios";
+#elif L==5	// fr
+	"Nombre de crit&egrave;res";
+#elif L==6	// gn
+	"N.&ordm; de criterios";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di criteri";
+#elif L==8	// pl
+	"Liczba kryteri&oacute;w";
+#elif L==9	// pt
+	"N.&ordm; de crit&eacute;rios";
+#elif L==10	// tr
+	"Kriter say&inodot;s&inodot;";
+#endif
+
 const char *Txt_Number_of_files =
 #if   L==1	// ca
 	"Nombre d'arxius";
@@ -29055,7 +29348,7 @@ const char *Txt_Number_of_BR_assignments =
 #elif L==9	// pt
 	"N.&ordm; de<br />atividades";
 #elif L==10	// tr
-	"Number of<br />assignments";	// Çeviri lazim!
+	"&Ouml;dev<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_assignments =
@@ -29078,7 +29371,7 @@ const char *Txt_Number_of_BR_courses_with_BR_assignments =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com atividades";
 #elif L==10	// tr
-	"Number of<br />courses with<br />assignments";		// Çeviri lazim!
+	"&Ouml;dev verilen<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exams =
@@ -29101,7 +29394,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exams =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com exames";
 #elif L==10	// tr
-	"Number of<br />courses with<br />exams";			// Çeviri lazim!
+	"S&inodot;navl&inodot;<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
@@ -29124,7 +29417,7 @@ const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test<br />export&aacute;veis";
 #elif L==10	// tr
-	"Number of<br />courses with<br />exportable<br />test<br />questions";			// Çeviri lazim!
+	"D&inodot;&scedil;a<br />aktar&inodot;labilir<br />test<br />sorular&inodot;na<br />sahip<br />kurs";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_games =
@@ -29147,7 +29440,7 @@ const char *Txt_Number_of_BR_courses_with_BR_games =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com jogos";
 #elif L==10	// tr
-	"Number of<br />courses with<br />games";	// Çeviri lazim!
+	"Oyunlu<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_program_items =
@@ -29170,7 +29463,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas com<br />itens de programas";
 #elif L==10	// tr
-	"Number of<br />courses with<br />program items";		// Çeviri lazim!
+	"Program &ouml;&gbreve;elerini i&ccedil;eren<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_projects =
@@ -29193,7 +29486,7 @@ const char *Txt_Number_of_BR_courses_with_BR_projects =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com projetos";
 #elif L==10	// tr
-	"Number of<br />courses with<br />projects";		// Çeviri lazim!
+	"Projeli<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
@@ -29216,7 +29509,30 @@ const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com<br />perguntas<br />de test";
 #elif L==10	// tr
-	"Number of<br />courses<br />with test<br />questions";		// Çeviri lazim!
+	"Sorulu<br />ders<br />say&inodot;s&inodot;";
+#endif
+
+const char *Txt_Number_of_BR_courses_with_BR_rubrics =
+#if   L==1	// ca
+	"Nombre<br />d'assignatures<br />amb r&uacute;briques";
+#elif L==2	// de
+	"Anzahl der<br />Kursen<br />mit Rubriken";
+#elif L==3	// en
+	"Number of<br />courses with<br />rubrics";
+#elif L==4	// es
+	"N.&ordm; de<br />asignaturas<br />con r&uacute;bricas";
+#elif L==5	// fr
+	"Nombre de<br />mati&egrave;res<br />avec rubriques";
+#elif L==6	// gn
+	"N.&ordm; de<br />asignaturas<br />con r&uacute;bricas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />corsi con<br />rubriche";
+#elif L==8	// pl
+	"Liczba<br />kurs&oacute;w z<br />rubryk";
+#elif L==9	// pt
+	"N.&ordm; de<br />disciplinas<br />com rubricas";
+#elif L==10	// tr
+	"Rubrikli<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_courses_with_BR_surveys =
@@ -29239,7 +29555,7 @@ const char *Txt_Number_of_BR_courses_with_BR_surveys =
 #elif L==9	// pt
 	"N.&ordm; de<br />disciplinas<br />com inqu&eacute;ritos";
 #elif L==10	// tr
-	"Number of<br />courses with<br />surveys";		// Çeviri lazim!
+	"Anketli<br />ders<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_events =
@@ -29403,6 +29719,29 @@ const char *Txt_Number_of_BR_projects =
 	"Number of<br />projects";	// Çeviri lazim!
 #endif
 
+const char *Txt_Number_of_BR_rubrics =
+#if   L==1	// ca
+	"Nombre de<br />r&uacute;briques";
+#elif L==2	// de
+	"Anzahl der<br />Rubriken";
+#elif L==3	// en
+	"Number of<br />rubrics";
+#elif L==4	// es
+	"N.&ordm; de<br />r&uacute;bricas";
+#elif L==5	// fr
+	"Nombre de<br />rubriques";
+#elif L==6	// gn
+	"N.&ordm; de<br />r&uacute;bricas";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di<br />rubriche";
+#elif L==8	// pl
+	"Liczba<br />rubryk";
+#elif L==9	// pt
+	"N.&ordm; de<br />rubricas";
+#elif L==10	// tr
+	"De&gbreve;erlendirme listesi<br />say&inodot;s&inodot;";
+#endif
+
 const char *Txt_Number_of_students =
 #if   L==1	// ca
 	"Nombre d'estudiants";
@@ -29423,7 +29762,7 @@ const char *Txt_Number_of_students =
 #elif L==9	// pt
 	"N.&ordm; de estudantes";
 #elif L==10	// tr
-	"Number of students";		// Çeviri lazim!
+	"&Ouml;&gbreve;renci say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_of_BR_surveys =
@@ -29446,7 +29785,7 @@ const char *Txt_Number_of_BR_surveys =
 #elif L==9	// pt
 	"N.&ordm; de<br />inqu&eacute;ritos";
 #elif L==10	// tr
-	"Number of<br />surveys";	// Çeviri lazim!
+	"Anket<br />say&inodot;s&inodot;";
 #endif
 
 const char *Txt_Number_BR_of_test_BR_questions =
@@ -42197,6 +42536,75 @@ const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER] =
 #endif
 	};
 
+const char *Txt_Rubric =
+#if   L==1	// ca
+	"R&uacute;brica";
+#elif L==2	// de
+	"Rubrik";
+#elif L==3	// en
+	"Rubric";
+#elif L==4	// es
+	"R&uacute;brica";
+#elif L==5	// fr
+	"Rubrique";
+#elif L==6	// gn
+	"R&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche";
+#elif L==8	// pl
+	"Rubryki";
+#elif L==9	// pt
+	"Rubrica";
+#elif L==10	// tr
+	"De&gbreve;erlendirme";
+#endif
+
+const char *Txt_Rubric_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"R&uacute;brica <strong>%s</strong> eliminada.";
+#elif L==2	// de
+	"Rubrik <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Rubric <strong>%s</strong> removed.";
+#elif L==4	// es
+	"R&uacute;brica <strong>%s</strong> eliminada.";
+#elif L==5	// fr
+	"Rubrique <strong>%s</strong> supprim&eacute;e.";
+#elif L==6	// gn
+	"R&uacute;brica <strong>%s</strong> eliminada.";	// Okoteve traducción
+#elif L==7	// it
+	"Rubrica <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Rubryki <strong>%s</strong> usuni&eogon;te.";
+#elif L==9	// pt
+	"Rubrica <strong>%s</strong> removida.";
+#elif L==10	// tr
+	"De&gbreve;erlendirme listesi <strong>%s</strong> kald&inodot;r&inodot;ld&inodot;.";
+#endif
+
+const char *Txt_Rubrics =
+#if   L==1	// ca
+	"R&uacute;briques";
+#elif L==2	// de
+	"Rubriken";
+#elif L==3	// en
+	"Rubrics";
+#elif L==4	// es
+	"R&uacute;bricas";
+#elif L==5	// fr
+	"Rubriques";
+#elif L==6	// gn
+	"R&uacute;bricas";	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche";
+#elif L==8	// pl
+	"Rubryki";
+#elif L==9	// pt
+	"Rubricas";
+#elif L==10	// tr
+	"De&gbreve;erlendirme listesi";
+#endif
+
 const char *Txt_Save_as =
 #if   L==1	// ca
 	"Guardar com";
@@ -46001,6 +46409,29 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Oyunlar"
 #endif
 	,
+	[Fig_RUBRICS] =
+#if   L==1	// ca
+	"R&uacute;briques"
+#elif L==2	// de
+	"Rubriken"
+#elif L==3	// en
+	"Rubrics"
+#elif L==4	// es
+	"R&uacute;bricas"
+#elif L==5	// fr
+	"Rubriques"
+#elif L==6	// gn
+	"R&uacute;bricas"	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche"
+#elif L==8	// pl
+	"Rubryki"
+#elif L==9	// pt
+	"Rubricas"
+#elif L==10	// tr
+	"De&gbreve;erlendirme"
+#endif
+	,
 	[Fig_TIMELINE] =
 #if   L==1	// ca
 	"Timeline"
@@ -48295,7 +48726,7 @@ const char *Txt_The_assignment_has_been_modified =
 #elif L==9	// pt
 	"A atividade foi modificada.";
 #elif L==10	// tr
-	"The assignment has been modified.";	// Çeviri lazim!
+	"&Ouml;dev de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_banner_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -49655,7 +50086,7 @@ const char *Txt_The_event_has_been_modified =
 #elif L==9	// pt
 	"O evento foi modificado.";
 #elif L==10	// tr
-	"The event has been modified.";		// Çeviri lazim!
+	"Etkinlik de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_exam_has_been_modified =
@@ -49678,7 +50109,7 @@ const char *Txt_The_exam_has_been_modified =
 #elif L==9	// pt
 	"O exame foi modificado.";
 #elif L==10	// tr
-	"The exam has been modified.";		// Çeviri lazim!
+	"S&inodot;nav de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_file_could_not_be_processed_successfully =
@@ -49997,7 +50428,7 @@ const char *Txt_The_game_has_been_modified =
 #elif L==9	// pt
 	"O jogo foi modificado.";
 #elif L==10	// tr
-	"The game has been modified.";	// Çeviri lazim!
+	"Oyun de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_group_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -51873,7 +52304,7 @@ const char *Txt_The_project_has_been_modified =
 #elif L==9	// pt
 	"O projeto foi modificado.";
 #elif L==10	// tr
-	"The project has been modified.";	// Çeviri lazim!
+	"Proje de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_properties_of_file_X_have_been_saved =	// Warning: it is very important to include %s in the following sentences
@@ -52103,6 +52534,29 @@ const char *Txt_The_room_assigned_to_the_group_X_has_changed =
 	"The room assigned to the group <strong>%s</strong> has changed.";	// Çeviri lazim!
 #endif
 
+const char *Txt_The_rubric_has_been_modified =
+#if   L==1	// ca
+	"La r&uacute;brica ha estat modificada.";
+#elif L==2	// de
+	"Die Rubrik wurde ge&auml;ndert.";
+#elif L==3	// en
+	"The rubric has been modified.";
+#elif L==4	// es
+	"La r&uacute;brica ha sido modificada.";
+#elif L==5	// fr
+	"La rubrique a &eacute;t&eacute; modifi&eacute;e.";
+#elif L==6	// gn
+	"La r&uacute;brica ha sido modificada.";	// Okoteve traducción
+#elif L==7	// it
+	"La rubrica &egrave; stata modificata.";
+#elif L==8	// pl
+	"Rubryka zosta&lstrok;a zmieniona.";
+#elif L==9	// pt
+	"A rubrica foi modificada.";
+#elif L==10	// tr
+	"Puan anahtar&inodot;n&inodot; de&gbreve;i&scedil;tirildi.";
+#endif
+
 const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it =	// Warning: it is very important to include %u and %s in the following sentences
 #if   L==1	// ca
 	"Els %u estudiants que pertanyien a l'assignatura <strong>%s</strong>"
@@ -52202,7 +52656,7 @@ const char *Txt_The_set_of_questions_has_been_modified =
 #elif L==9	// pt
 	"O conjunto de perguntas foi modificado.";
 #elif L==10	// tr
-	"The set of questions has been modified.";	// Çeviri lazim!
+	"Soru seti de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
@@ -52350,7 +52804,7 @@ const char *Txt_The_survey_has_been_modified =
 #elif L==9	// pt
 	"O inqu&eacute;rito foi modificado.";
 #elif L==10	// tr
-	"The survey has been modified.";	// Çeviri lazim!
+	"Anket de&gbreve;i&scedil;tirildi.";
 #endif
 
 const char *Txt_The_tag_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -58779,6 +59233,29 @@ const char *Txt_View_results =
 	"View results";		// Çeviri lazim!
 #endif
 
+const char *Txt_View_rubric =
+#if   L==1	// ca
+	"Veure r&uacute;brica";
+#elif L==2	// de
+	"Anzeigen Rubrik";
+#elif L==3	// en
+	"View rubric";
+#elif L==4	// es
+	"Ver r&uacute;brica";
+#elif L==5	// fr
+	"Voir rubrique";
+#elif L==6	// gn
+	"Ver r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi rubrica";
+#elif L==8	// pl
+	"Zobacz rubryk&eogon;";
+#elif L==9	// pt
+	"Ver rubrica";
+#elif L==10	// tr
+	"Puan anahtar&inodot;n&inodot; g&ouml;r&uuml;nt&uuml;le";
+#endif
+
 const char *Txt_View_survey =
 #if   L==1	// ca
 	"Veure enquesta";
@@ -61489,7 +61966,7 @@ const char *Txt_You_must_select_one_ore_more_users =
 #elif L==8	// pl
 	"Musisz wybra&cacute; jednego lub wi&eogon;cej u&zdot;ytkownik&oacute;w.";
 #elif L==9	// pt
-	"Voc&ecirc; deve selecionar um ou mais usu&acute;rios.";
+	"Voc&ecirc; deve selecionar um ou mais usu&aacute;rios.";
 #elif L==10	// tr
 	"You must select one or more users.";		// Çeviri lazim!
 #endif

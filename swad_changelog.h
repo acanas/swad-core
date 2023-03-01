@@ -629,6 +629,14 @@ siempre atento a sus comentarios y agradecido de antemano por la ayuda que siemp
 TODO: Emilce Barrera Mesa: Calificación integrada de las actividades.
 TODO: Emilce Barrera Mesa: Para futuras mejoras podrías incluir por favor la opción de duplicar una pregunta al momento de crearlas. Esto en razón a que si tengo dos preguntas con las mismas opciones de respuesta, pero diferente enunciado me ahorrarías tiempo si me permites duplicar la pregunta y solo cambiar el enunciado.
 
+	Version 22.65:    Mar 01, 2023  New module swad_rubric for rubrics. Not finished. (336989 lines)
+					2 changes necessary in database:
+CREATE TABLE IF NOT EXISTS rub_rubrics (RubCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(RubCod),INDEX(CrsCod));
+CREATE TABLE IF NOT EXISTS rub_criteria (RubCod INT NOT NULL,CriInd INT NOT NULL,CriCod INT NOT NULL,UNIQUE INDEX(RubCod,CriInd),UNIQUE INDEX(RubCod,CriCod));
+					If you want to use MyISAM:
+ALTER TABLE rub_rubrics ENGINE=MyISAM;
+ALTER TABLE rub_criteria ENGINE=MyISAM;
+
 	Version 22.64:    Feb 23, 2023  Surveys moved to analytics tab. (334217 lines)
 	Version 22.63:    Feb 22, 2023  Assessment information moved to course tab. (334216 lines)
 	Version 22.62.2:  Feb 22, 2023  Changed icon for question bank. (334165 lines)

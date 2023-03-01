@@ -99,6 +99,7 @@
 #include "swad_QR.h"
 #include "swad_report.h"
 #include "swad_role.h"
+#include "swad_rubric.h"
 #include "swad_search.h"
 #include "swad_session.h"
 #include "swad_setting.h"
@@ -593,7 +594,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqTst		] = { 103, 4,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_RequestTest		,"check"		},
    [ActSeeAllExa	] = {1848, 5,TabAss,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeAllExams		,"file-signature"	},
    [ActSeeAllGam	] = {1649, 6,TabAss,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"gamepad"		},
-   [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"tasks"		},
+   [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeAllRubrics		,"tasks"		},
 
    // Actions not in menu:
    [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
@@ -833,6 +834,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUp_GamQst	] = {1668,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveUpQst			,NULL},
    [ActDwnGamQst	] = {1669,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveDownQst		,NULL},
    [ActReqLnkGam	] = {1935,-1,TabUnk,ActSeeAllGam	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,GamRsc_GetLinkToGame		,NULL},
+
+   [ActSeeRub		] = {1952,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeOneRubric		,NULL},
+   [ActFrmNewRub	] = {1953,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RequestCreatOrEditRubric	,NULL},
+   [ActEdiOneRub	] = {1954,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RequestCreatOrEditRubric	,NULL},
+   [ActNewRub		] = {1955,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReceiveFormRubric		,NULL},
+   [ActChgRub		] = {1956,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReceiveFormRubric		,NULL},
+   [ActReqRemRub	] = {1957,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_AskRemRubric		,NULL},
+   [ActRemRub		] = {1958,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RemoveRubric		,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -3816,4 +3825,11 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeOnePrj,		// #1949
 	ActChgPrjRev,		// #1950
 	ActSeeAllRub,		// #1951
+	ActSeeRub,		// #1952
+	ActFrmNewRub,		// #1953
+	ActEdiOneRub,		// #1954
+	ActNewRub,		// #1955
+	ActChgRub,		// #1956
+	ActReqRemRub,		// #1957
+	ActRemRub,		// #1958
   };

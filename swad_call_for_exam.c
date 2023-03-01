@@ -875,8 +875,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				 Cfe_TypeViewCallForExam_t TypeViewCallForExam,
 				 bool HighLight)
   {
-   extern const char *Hlp_ASSESSMENT_Calls_for_exam_new_call;
-   extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
+   extern const char *Hlp_ASSESSMENT_Calls_for_exams_new_call;
+   extern const char *Hlp_ASSESSMENT_Calls_for_exams_edit_call;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Call_for_exam;
    extern const char *Txt_CALL_FOR_EXAM_Course;
@@ -940,8 +940,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    CallsForExams->ExaCod = ExaCod;	// Used to put contextual icons
    FunctionToDrawContextualIcons = TypeViewCallForExam == Cfe_NORMAL_VIEW ? Cfe_PutIconsCallForExam :
 									    NULL;
-   HelpLink = TypeViewCallForExam == Cfe_FORM_VIEW ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
-								     Hlp_ASSESSMENT_Calls_for_exam_new_call) :
+   HelpLink = TypeViewCallForExam == Cfe_FORM_VIEW ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Calls_for_exams_edit_call :
+								     Hlp_ASSESSMENT_Calls_for_exams_new_call) :
 						     NULL;
    if (HighLight)
      {

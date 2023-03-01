@@ -102,7 +102,6 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Course tab */
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "assignment",
-   [Ntf_EVENT_SURVEY           ] = "survey",
    [Ntf_EVENT_CALL_FOR_EXAM    ] = "examAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "documentFile",
@@ -120,6 +119,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_FORUM_REPLY      ] = "forumReply",
    [Ntf_EVENT_MESSAGE          ] = "message",
    /* Analytics tab */
+   [Ntf_EVENT_SURVEY           ] = "survey",
    /* Profile tab */
   };
 
@@ -183,7 +183,6 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Course tab */
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "NotifyNtfEventAssignment",
-   [Ntf_EVENT_SURVEY           ] = "NotifyNtfEventSurvey",
    [Ntf_EVENT_CALL_FOR_EXAM    ] = "NotifyNtfEventExamAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "NotifyNtfEventDocumentFile",
@@ -201,6 +200,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_ENROLMENT_TCH    ] = "NotifyNtfEventEnrolmentTeacher",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "NotifyNtfEventEnrolmentRequest",
    /* Analytics tab */
+   [Ntf_EVENT_SURVEY           ] = "NotifyNtfEventSurvey",
    /* Profile tab */
   };
 
@@ -222,7 +222,6 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Course tab */
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "EmailNtfEventAssignment",
-   [Ntf_EVENT_SURVEY           ] = "EmailNtfEventSurvey",
    [Ntf_EVENT_CALL_FOR_EXAM    ] = "EmailNtfEventExamAnnouncement",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "EmailNtfEventDocumentFile",
@@ -240,6 +239,7 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_ENROLMENT_TCH    ] = "EmailNtfEventEnrolmentTeacher",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "EmailNtfEventEnrolmentRequest",
    /* Analytics tab */
+   [Ntf_EVENT_SURVEY           ] = "EmailNtfEventSurvey",
    /* Profile tab */
   };
 
@@ -261,7 +261,6 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    /* Course tab */
    /* Assessment tab */
    [Ntf_EVENT_ASSIGNMENT       ] = "edit.svg",
-   [Ntf_EVENT_SURVEY           ] = "poll.svg",
    [Ntf_EVENT_CALL_FOR_EXAM    ] = "bullhorn.svg",
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = "file.svg",
@@ -279,6 +278,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_ENROLMENT_TCH    ] = "user-tie.svg",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "hand-point-up.svg",
    /* Analytics tab */
+   [Ntf_EVENT_SURVEY           ] = "poll.svg",
    /* Profile tab */
   };
 

@@ -13839,6 +13839,167 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to game"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeRub] =
+#if   L==1	// ca
+	"See rubric"		// Necessita traducció
+#elif L==2	// de
+	"See rubric"		// Need Übersetzung
+#elif L==3	// en
+	"See rubric"
+#elif L==4	// es
+	"Ver r&uacute;brica"
+#elif L==5	// fr
+	"See rubric"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"See rubric"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See rubric"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See rubric"		// Precisa de tradução
+#elif L==10	// tr
+	"See rubric"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewRub] =
+#if   L==1	// ca
+	"Edit new rubric"		// Necessita traducció
+#elif L==2	// de
+	"Edit new rubric"		// Need Übersetzung
+#elif L==3	// en
+	"Edit new rubric"
+#elif L==4	// es
+	"Editar nueva r&uacute;brica"
+#elif L==5	// fr
+	"Edit new rubric"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar nueva r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Edit new rubric"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit new rubric"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit new rubric"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit new rubric"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiOneRub] =
+#if   L==1	// ca
+	"Edit rubric"		// Necessita traducció
+#elif L==2	// de
+	"Edit rubric"		// Need Übersetzung
+#elif L==3	// en
+	"Edit rubric"
+#elif L==4	// es
+	"Editar r&uacute;brica"
+#elif L==5	// fr
+	"Edit rubric"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Edit rubric"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit rubric"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit rubric"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit rubric"		// Çeviri lazim!
+#endif
+	,
+	[ActNewRub] =
+#if   L==1	// ca
+	"Create new rubric"		// Necessita traducció
+#elif L==2	// de
+	"Create new rubric"		// Need Übersetzung
+#elif L==3	// en
+	"Create new rubric"
+#elif L==4	// es
+	"Crear nueva r&uacute;brica"
+#elif L==5	// fr
+	"Create new rubric"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear nueva r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Create new rubric"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new rubric"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new rubric"		// Precisa de tradução
+#elif L==10	// tr
+	"Create new rubric"		// Çeviri lazim!
+#endif
+	,
+	[ActChgRub] =
+#if   L==1	// ca
+	"Change rubric"			// Necessita traducció
+#elif L==2	// de
+	"Change rubric"			// Need Übersetzung
+#elif L==3	// en
+	"Change rubric"
+#elif L==4	// es
+	"Cambiar r&uacute;brica"
+#elif L==5	// fr
+	"Change rubric"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change rubric"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change rubric"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change rubric"			// Precisa de tradução
+#elif L==10	// tr
+	"Change rubric"			// Çeviri lazim!
+#endif
+	,
+	[ActReqRemRub] =
+#if   L==1	// ca
+	"Request removal of rubric"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of rubric"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of rubric"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de r&uacute;brica"
+#elif L==5	// fr
+	"Request removal of rubric"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of rubric"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of rubric"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of rubric"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of rubric"				// Çeviri lazim!
+#endif
+	,
+	[ActRemRub] =
+#if   L==1	// ca
+	"Remove rubric"			// Necessita traducció
+#elif L==2	// de
+	"Remove rubric"			// Need Übersetzung
+#elif L==3	// en
+	"Remove rubric"
+#elif L==4	// es
+	"Eliminar r&uacute;brica"
+#elif L==5	// fr
+	"Remove rubric"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Remove rubric"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove rubric"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove rubric"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove rubric"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeAdmDocIns] =
 #if   L==1	// ca
 	"Documents zone of institution (see or manage)"			// Necessita traducció

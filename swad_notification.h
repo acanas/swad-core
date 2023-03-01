@@ -51,7 +51,9 @@
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones
 // in database tables ntf_notifications, sta_notifications and usr_data
-typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+
+// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+typedef enum
   {
    Ntf_EVENT_UNKNOWN		=  0,
    /* Start tab */

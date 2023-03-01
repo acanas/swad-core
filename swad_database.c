@@ -2796,6 +2796,48 @@ mysql> DESCRIBE roo_check_in;
 		   "INDEX(UsrCod,CheckInTime),"
 		   "INDEX(CheckInTime))");
 
+   /***** Table rub_criteria *****/
+/*
+mysql> DESCRIBE rub_criteria;
++--------+------+------+-----+---------+-------+
+| Field  | Type | Null | Key | Default | Extra |
++--------+------+------+-----+---------+-------+
+| RubCod | int  | NO   | PRI | NULL    |       |
+| CriInd | int  | NO   | PRI | NULL    |       |
+| CriCod | int  | NO   |     | NULL    |       |
++--------+------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_criteria ("
+			"RubCod INT NOT NULL,"
+			"CriInd INT NOT NULL,"
+			"CriCod INT NOT NULL,"
+		   "UNIQUE INDEX(RubCod,CriInd),"
+		   "UNIQUE INDEX(RubCod,CriCod))");
+
+   /***** Table rub_rubrics *****/
+/*
+mysql> DESCRIBE rub_rubrics;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| RubCod | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod | int           | NO   | MUL | -1      |                |
+| UsrCod | int           | NO   |     | NULL    |                |
+| Title  | varchar(2047) | NO   |     | NULL    |                |
+| Txt    | text          | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_rubrics ("
+			"RubCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Rub_MAX_BYTES_TITLE
+			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(RubCod),"
+		   "INDEX(CrsCod))");
+
    /***** Table ses_params *****/
 /*
 mysql> DESCRIBE ses_params;

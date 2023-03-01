@@ -1495,6 +1495,75 @@ const char *Hlp_ASSESSMENT_Projects_add_user =
 	"ASSESSMENT.Projects.en#add-user";
 #endif
 
+const char *Hlp_ASSESSMENT_Calls_for_exams =
+#if   L==1
+	"ASSESSMENT.Calls_for_exams.es";
+#elif L==2
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==3
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==4
+	"ASSESSMENT.Calls_for_exams.es";
+#elif L==5
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==6
+	"ASSESSMENT.Calls_for_exams.es";
+#elif L==7
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==8
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==9
+	"ASSESSMENT.Calls_for_exams.en";
+#elif L==10	// tr
+	"ASSESSMENT.Calls_for_exams.en";
+#endif
+
+const char *Hlp_ASSESSMENT_Calls_for_exams_new_call =
+#if   L==1
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
+#elif L==2
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==3
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==4
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
+#elif L==5
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==6
+	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
+#elif L==7
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==8
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==9
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#elif L==10	// tr
+	"ASSESSMENT.Calls_for_exams.en#new-call";
+#endif
+
+const char *Hlp_ASSESSMENT_Calls_for_exams_edit_call =
+#if   L==1
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
+#elif L==2
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==3
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==4
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
+#elif L==5
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==6
+	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
+#elif L==7
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==8
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==9
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#elif L==10	// tr
+	"ASSESSMENT.Calls_for_exams.en#edit-call";
+#endif
+
 const char *Hlp_ASSESSMENT_Questions =
 #if   L==1
 	"ASSESSMENT.Questions.es";
@@ -1955,165 +2024,96 @@ const char *Hlp_ASSESSMENT_Games_results =
 	"ASSESSMENT.Games.en#results";
 #endif
 
-const char *Hlp_ASSESSMENT_Surveys =
+const char *Hlp_ASSESSMENT_Rubrics =
 #if   L==1
-	"ASSESSMENT.Surveys.es";
+	"ASSESSMENT.Rubrics.es";
 #elif L==2
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==3
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==4
-	"ASSESSMENT.Surveys.es";
+	"ASSESSMENT.Rubrics.es";
 #elif L==5
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==6
-	"ASSESSMENT.Surveys.es";
+	"ASSESSMENT.Rubrics.es";
 #elif L==7
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==8
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==9
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #elif L==10	// tr
-	"ASSESSMENT.Surveys.en";
+	"ASSESSMENT.Rubrics.en";
 #endif
 
-const char *Hlp_ASSESSMENT_Surveys_new_survey =
+const char *Hlp_ASSESSMENT_Rubrics_edit_rubric =
 #if   L==1
-	"ASSESSMENT.Surveys.es#nueva-encuesta";
+	"ASSESSMENT.Rubrics.es#editar-juego";
 #elif L==2
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==3
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==4
-	"ASSESSMENT.Surveys.es#nueva-encuesta";
+	"ASSESSMENT.Rubrics.es#editar-rubrica";
 #elif L==5
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==6
-	"ASSESSMENT.Surveys.es#nueva-encuesta";
+	"ASSESSMENT.Rubrics.es#editar-rubrica";
 #elif L==7
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==8
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==9
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #elif L==10	// tr
-	"ASSESSMENT.Surveys.en#new-survey";
+	"ASSESSMENT.Rubrics.en#edit-rubric";
 #endif
 
-const char *Hlp_ASSESSMENT_Surveys_edit_survey =
+const char *Hlp_ASSESSMENT_Rubrics_new_rubric =
 #if   L==1
-	"ASSESSMENT.Surveys.es#editar-encuesta";
+	"ASSESSMENT.Rubrics.es#nuevo-juego";
 #elif L==2
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==3
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==4
-	"ASSESSMENT.Surveys.es#editar-encuesta";
+	"ASSESSMENT.Rubrics.es#nueva-rubrica";
 #elif L==5
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==6
-	"ASSESSMENT.Surveys.es#editar-encuesta";
+	"ASSESSMENT.Rubrics.es#nueva-rubrica";
 #elif L==7
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==8
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==9
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #elif L==10	// tr
-	"ASSESSMENT.Surveys.en#edit-survey";
+	"ASSESSMENT.Rubrics.en#new-rubric";
 #endif
 
-const char *Hlp_ASSESSMENT_Surveys_questions =
+const char *Hlp_ASSESSMENT_Rubrics_criteria =
 #if   L==1
-	"ASSESSMENT.Surveys.es#preguntas";
+	"ASSESSMENT.Rubrics.es#criteria";
 #elif L==2
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==3
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==4
-	"ASSESSMENT.Surveys.es#preguntas";
+	"ASSESSMENT.Rubrics.es#criterios";
 #elif L==5
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==6
-	"ASSESSMENT.Surveys.es#preguntas";
+	"ASSESSMENT.Rubrics.es#criterios";
 #elif L==7
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==8
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==9
-	"ASSESSMENT.Surveys.en#questions";
+	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==10	// tr
-	"ASSESSMENT.Surveys.en#questions";
-#endif
-
-const char *Hlp_ASSESSMENT_Calls_for_exams =
-#if   L==1
-	"ASSESSMENT.Calls_for_exams.es";
-#elif L==2
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==3
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==4
-	"ASSESSMENT.Calls_for_exams.es";
-#elif L==5
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==6
-	"ASSESSMENT.Calls_for_exams.es";
-#elif L==7
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==8
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==9
-	"ASSESSMENT.Calls_for_exams.en";
-#elif L==10	// tr
-	"ASSESSMENT.Calls_for_exams.en";
-#endif
-
-const char *Hlp_ASSESSMENT_Calls_for_exam_new_call =
-#if   L==1
-	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
-#elif L==2
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==3
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==4
-	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
-#elif L==5
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==6
-	"ASSESSMENT.Calls_for_exams.es#nueva-convocatoria";
-#elif L==7
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==8
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==9
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#elif L==10	// tr
-	"ASSESSMENT.Calls_for_exams.en#new-call";
-#endif
-
-const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
-#if   L==1
-	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
-#elif L==2
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==3
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==4
-	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
-#elif L==5
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==6
-	"ASSESSMENT.Calls_for_exams.es#editar-convocatoria";
-#elif L==7
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==8
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==9
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
-#elif L==10	// tr
-	"ASSESSMENT.Calls_for_exams.en#edit-call";
+	"ASSESSMENT.Rubrics.en#criteria";
 #endif
 
 /***** FILES tab *****/
@@ -3435,6 +3435,29 @@ const char *Hlp_ANALYTICS_Figures_games =
 	"ANALYTICS.Figures.en#games";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_rubrics =
+#if   L==1
+	"ANALYTICS.Figures.es#rubricas";
+#elif L==2
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==3
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==4
+	"ANALYTICS.Figures.es#rubricas";
+#elif L==5
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==6
+	"ANALYTICS.Figures.es#rubricas";
+#elif L==7
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==8
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==9
+	"ANALYTICS.Figures.en#rubrics";
+#elif L==10	// tr
+	"ANALYTICS.Figures.en#rubrics";
+#endif
+
 const char *Hlp_ANALYTICS_Figures_surveys =
 #if   L==1
 	"ANALYTICS.Figures.es#encuestas";
@@ -3962,6 +3985,98 @@ const char *Hlp_ANALYTICS_Visits_visits_to_course =
 	"ANALYTICS.Visits.en#visits-to-course";
 #elif L==10	// tr
 	"ANALYTICS.Visits.en#visits-to-course";
+#endif
+
+const char *Hlp_ANALYTICS_Surveys =
+#if   L==1
+	"ANALYTICS.Surveys.es";
+#elif L==2
+	"ANALYTICS.Surveys.en";
+#elif L==3
+	"ANALYTICS.Surveys.en";
+#elif L==4
+	"ANALYTICS.Surveys.es";
+#elif L==5
+	"ANALYTICS.Surveys.en";
+#elif L==6
+	"ANALYTICS.Surveys.es";
+#elif L==7
+	"ANALYTICS.Surveys.en";
+#elif L==8
+	"ANALYTICS.Surveys.en";
+#elif L==9
+	"ANALYTICS.Surveys.en";
+#elif L==10	// tr
+	"ANALYTICS.Surveys.en";
+#endif
+
+const char *Hlp_ANALYTICS_Surveys_new_survey =
+#if   L==1
+	"ANALYTICS.Surveys.es#nueva-encuesta";
+#elif L==2
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==3
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==4
+	"ANALYTICS.Surveys.es#nueva-encuesta";
+#elif L==5
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==6
+	"ANALYTICS.Surveys.es#nueva-encuesta";
+#elif L==7
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==8
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==9
+	"ANALYTICS.Surveys.en#new-survey";
+#elif L==10	// tr
+	"ANALYTICS.Surveys.en#new-survey";
+#endif
+
+const char *Hlp_ANALYTICS_Surveys_edit_survey =
+#if   L==1
+	"ANALYTICS.Surveys.es#editar-encuesta";
+#elif L==2
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==3
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==4
+	"ANALYTICS.Surveys.es#editar-encuesta";
+#elif L==5
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==6
+	"ANALYTICS.Surveys.es#editar-encuesta";
+#elif L==7
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==8
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==9
+	"ANALYTICS.Surveys.en#edit-survey";
+#elif L==10	// tr
+	"ANALYTICS.Surveys.en#edit-survey";
+#endif
+
+const char *Hlp_ANALYTICS_Surveys_questions =
+#if   L==1
+	"ANALYTICS.Surveys.es#preguntas";
+#elif L==2
+	"ANALYTICS.Surveys.en#questions";
+#elif L==3
+	"ANALYTICS.Surveys.en#questions";
+#elif L==4
+	"ANALYTICS.Surveys.es#preguntas";
+#elif L==5
+	"ANALYTICS.Surveys.en#questions";
+#elif L==6
+	"ANALYTICS.Surveys.es#preguntas";
+#elif L==7
+	"ANALYTICS.Surveys.en#questions";
+#elif L==8
+	"ANALYTICS.Surveys.en#questions";
+#elif L==9
+	"ANALYTICS.Surveys.en#questions";
+#elif L==10	// tr
+	"ANALYTICS.Surveys.en#questions";
 #endif
 
 const char *Hlp_ANALYTICS_Report =

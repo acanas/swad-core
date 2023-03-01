@@ -433,6 +433,29 @@ void Err_WrongMatchExit (void)
   }
 
 /*****************************************************************************/
+/************** Write error message and exit when wrong ribric ***************/
+/*****************************************************************************/
+
+void Err_WrongRubricExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong rubric.");
+  }
+
+/*****************************************************************************/
+/************ Write error message and exit when wrong criterion **************/
+/*****************************************************************************/
+
+void Err_WrongCriterionExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong criterion.");
+  }
+
+void Err_WrongCriterionIndexExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong criterion index.");
+  }
+
+/*****************************************************************************/
 /************** Write error message and exit when wrong survey ***************/
 /*****************************************************************************/
 
