@@ -311,7 +311,7 @@ void Mai_DB_CreateTmpTables (void)
 		      " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,"
 			      "COUNT(*) as N"
 		        " FROM usr_emails"
-		       " GROUP BY Domain");
+		    " GROUP BY Domain");
 
    DB_CreateTmpTable ("CREATE TEMPORARY TABLE T2 ENGINE=MEMORY"
 		      " SELECT *"

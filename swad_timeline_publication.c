@@ -141,8 +141,8 @@ void TmlPub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       of every set of publications corresponding to the same note:
       SELECT MAX(PubCod) AS NewestPubCod
         FROM tml_pubs ...
-       GROUP BY NotCod
-       ORDER BY NewestPubCod DESC
+    GROUP BY NotCod
+    ORDER BY NewestPubCod DESC
        LIMIT 10
       but this query is slow (several seconds) with a big table.
    */

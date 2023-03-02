@@ -1240,8 +1240,8 @@ unsigned Mch_DB_GetMaxUsrsPerScore (long MchCod)
 				   " FROM (SELECT COUNT(*) AS NumUsrs"
 					   " FROM mch_results"
 					  " WHERE MchCod=%ld"
-					  " GROUP BY Score"
-					  " ORDER BY Score) AS Scores",
+				       " GROUP BY Score"
+				       " ORDER BY Score) AS Scores",
 				  MchCod);
   }
 
@@ -1257,7 +1257,7 @@ unsigned Mch_DB_GetNumUsrsPerScore (MYSQL_RES **mysql_res,long MchCod)
 			  "COUNT(*) AS NumUsrs"	// row[1]
 		    " FROM mch_results"
 		   " WHERE MchCod=%ld"
-		   " GROUP BY Score"
-		   " ORDER BY Score DESC",
+		" GROUP BY Score"
+		" ORDER BY Score DESC",
 		   MchCod);
   }

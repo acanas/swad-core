@@ -222,8 +222,8 @@ unsigned Ins_DB_GetAllInsWithPendingCtr (MYSQL_RES **mysql_res)
 			  "ins_instits"
 		   " WHERE (ctr_centers.Status & %u)<>0"
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY ins_instits.ShortName",
+		" GROUP BY ctr_centers.InsCod"
+		" ORDER BY ins_instits.ShortName",
 		   (unsigned) Hie_STATUS_BIT_PENDING);
   }
 
@@ -244,8 +244,8 @@ unsigned Ins_DB_GetInsWithPendingCtrsAdminByMe (MYSQL_RES **mysql_res)
 		     " AND ctr_centers.InsCod=ins_admin.InsCod"
 		     " AND ins_admin.UsrCod=%ld"
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY ins_instits.ShortName",
+		" GROUP BY ctr_centers.InsCod"
+		" ORDER BY ins_instits.ShortName",
 		   (unsigned) Hie_STATUS_BIT_PENDING,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -317,7 +317,7 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
 			  "usr_data"
 		   " WHERE ins_instits.CtyCod=%ld"
 		     " AND ins_instits.InsCod=usr_data.InsCod"
-		   " GROUP BY ins_instits.InsCod)"
+	        " GROUP BY ins_instits.InsCod)"
 		   " UNION "
 		   "(SELECT InsCod,"				// row[0]
 			   "CtyCod,"				// row[1]
@@ -353,8 +353,8 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			 "SELECT InsCod,"		// row[0]
 				"COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC");
       case HieLvl_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -364,8 +364,8 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 				"ctr_centers"
 			 " WHERE ins_instits.CtyCod=%ld"
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
       case HieLvl_CTR:
@@ -377,7 +377,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 				"COUNT(*) AS N"		// row[1]
 			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
-			 " GROUP BY InsCod",
+		      " GROUP BY InsCod",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -401,8 +401,8 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			  " FROM ctr_centers,"
 				"deg_degrees"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC");
       case HieLvl_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -414,8 +414,8 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			 " WHERE ins_instits.CtyCod=%ld"
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
       case HieLvl_CTR:
@@ -429,8 +429,8 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 				"deg_degrees"
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -456,8 +456,8 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 				"crs_courses"
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC");
       case HieLvl_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -471,8 +471,8 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
       case HieLvl_CTR:
@@ -488,8 +488,8 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -518,8 +518,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC");
       case HieLvl_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -535,8 +535,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
       case HieLvl_CTR:
@@ -554,8 +554,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY ctr_centers.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -578,8 +578,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 				"COUNT(*) AS N"		// row[1]
 			  " FROM usr_data"
 			 " WHERE InsCod>0"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC");
       case HieLvl_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -588,8 +588,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			  " FROM ins_instits,usr_data"
 			 " WHERE ins_instits.CtyCod=%ld"
 			   " AND ins_instits.InsCod=usr_data.InsCod"
-			 " GROUP BY usr_data.InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY usr_data.InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
       case HieLvl_CTR:
@@ -601,8 +601,8 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 				"COUNT(*) AS N"		// row[1]
 			  " FROM usr_data"
 			 " WHERE InsCod=%ld"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC",
+		      " GROUP BY InsCod"
+		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -767,8 +767,8 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
 		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		        " AND ctr_centers.InsCod=ins_instits.InsCod"
 		        " AND ins_instits.CtyCod=%ld"
-		      " GROUP BY ins_instits.InsCod"
-		      " ORDER BY ins_instits.ShortName",
+		   " GROUP BY ins_instits.InsCod"
+		   " ORDER BY ins_instits.ShortName",
 		      UsrCod,
 		      CtyCod);
    else
@@ -786,8 +786,8 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
 		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		        " AND ctr_centers.InsCod=ins_instits.InsCod"
-		      " GROUP BY ins_instits.InsCod"
-		      " ORDER BY ins_instits.ShortName",
+		   " GROUP BY ins_instits.InsCod"
+		   " ORDER BY ins_instits.ShortName",
 		      UsrCod);
   }
 

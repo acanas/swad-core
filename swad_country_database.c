@@ -136,8 +136,8 @@ unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res)
 			  "cty_countrs"
 		   " WHERE (ins_instits.Status & %u)<>0"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		   " GROUP BY ins_instits.CtyCod"
-		   " ORDER BY cty_countrs.Name_%s",
+		" GROUP BY ins_instits.CtyCod"
+		" ORDER BY cty_countrs.Name_%s",
 		   (unsigned) Hie_STATUS_BIT_PENDING,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
@@ -201,7 +201,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 		    " FROM cty_countrs,"
 			  "usr_data"
 		   " WHERE cty_countrs.CtyCod=usr_data.CtyCod"
-		   " GROUP BY cty_countrs.CtyCod)"
+		" GROUP BY cty_countrs.CtyCod)"
 		   " UNION "
 		   "(SELECT CtyCod,"			// row[0]
 			   "Alpha2,"			// row[1]
@@ -213,7 +213,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 		         " (SELECT DISTINCT "
 		                  "CtyCod"
 			    " FROM usr_data))"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   SubQueryNam1,SubQueryWWW1,
 		   SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
 
@@ -565,8 +565,8 @@ unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod)
 		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		   " GROUP BY cty_countrs.CtyCod"
-		   " ORDER BY cty_countrs.Name_%s",
+		" GROUP BY cty_countrs.CtyCod"
+		" ORDER BY cty_countrs.Name_%s",
 		   UsrCod,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }

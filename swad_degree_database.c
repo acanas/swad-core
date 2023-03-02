@@ -175,7 +175,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " FROM deg_degrees,"
 			         "deg_types"
 			 " WHERE deg_degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY deg_degrees.DegTypCod)"
+		      " GROUP BY deg_degrees.DegTypCod)"
 			 " UNION "
 			 "(SELECT DegTypCod,"				// row[0]
 				 "DegTypName,"				// row[1]
@@ -187,7 +187,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			 " WHERE DegTypCod NOT IN"
 			       " (SELECT DegTypCod"
 			          " FROM deg_degrees))"
-			 " ORDER BY %s",
+		      " ORDER BY %s",
 			 OrderBySubQuery[Order]);
       case HieLvl_CTY:
 	 /* Get only degree types with degrees in the current country */
@@ -204,8 +204,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY deg_degrees.DegTypCod"
-			 " ORDER BY %s",
+		      " GROUP BY deg_degrees.DegTypCod"
+		      " ORDER BY %s",
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_INS:
@@ -221,8 +221,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY deg_degrees.DegTypCod"
-			 " ORDER BY %s",
+		      " GROUP BY deg_degrees.DegTypCod"
+		      " ORDER BY %s",
 			 Gbl.Hierarchy.Ins.InsCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_CTR:
@@ -236,8 +236,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			        "deg_types"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY deg_degrees.DegTypCod"
-			 " ORDER BY %s",
+		      " GROUP BY deg_degrees.DegTypCod"
+		      " ORDER BY %s",
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_DEG:
@@ -252,8 +252,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			        "deg_types"
 			 " WHERE deg_degrees.DegCod=%ld"
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
-			 " GROUP BY deg_degrees.DegTypCod"
-			 " ORDER BY %s",
+		      " GROUP BY deg_degrees.DegTypCod"
+		      " ORDER BY %s",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 OrderBySubQuery[Order]);
       default:
@@ -462,8 +462,8 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
 			   " AND usr_admins.Cod=crs_courses.DegCod"
 			   " AND (crs_courses.Status & %u)<>0"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			 " GROUP BY crs_courses.DegCod"
-			 " ORDER BY deg_degrees.ShortName",
+		      " GROUP BY crs_courses.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Sco_GetDBStrFromScope (HieLvl_DEG),
 			 (unsigned) Hie_STATUS_BIT_PENDING);
@@ -476,8 +476,8 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
 			        "deg_degrees"
 			 " WHERE (crs_courses.Status & %u)<>0"
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
-			 " GROUP BY crs_courses.DegCod"
-			 " ORDER BY deg_degrees.ShortName",
+		      " GROUP BY crs_courses.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
 			 (unsigned) Hie_STATUS_BIT_PENDING);
       default:	// Forbidden for other users
 	 Err_WrongRoleExit ();
@@ -766,8 +766,8 @@ unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
 		        " AND crs_users.CrsCod=crs_courses.CrsCod"
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
 		        " AND deg_degrees.CtrCod=%ld"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
+		   " GROUP BY deg_degrees.DegCod"
+		   " ORDER BY deg_degrees.ShortName",
 		      UsrCod,
 		      CtrCod);
    else
@@ -781,8 +781,8 @@ unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
 		      " WHERE crs_users.UsrCod=%ld"
 		        " AND crs_users.CrsCod=crs_courses.CrsCod"
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
+		   " GROUP BY deg_degrees.DegCod"
+		   " ORDER BY deg_degrees.ShortName",
 		      UsrCod);
   }
 
@@ -806,8 +806,8 @@ unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 			        "crs_courses"
 			 " WHERE crs_users.UsrCod=%ld"
 			   " AND crs_users.CrsCod=crs_courses.CrsCod"
-			 " GROUP BY crs_courses.DegCod"
-			 " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
+		      " GROUP BY crs_courses.DegCod"
+		      " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
 			 " LIMIT 1)"		// We need only the main degree
 			" AS main_degree"
 

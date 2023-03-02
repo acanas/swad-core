@@ -158,8 +158,8 @@ unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)
 		      " ON gam_games.GamCod=mch_matches.GamCod"
 		   " WHERE gam_games.CrsCod=%ld"
 		      "%s"
-		   " GROUP BY gam_games.GamCod"
-		   " ORDER BY %s",
+		" GROUP BY gam_games.GamCod"
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   HiddenSubQuery,
 		   OrderBySubQuery[SelectedOrder]);
@@ -191,10 +191,10 @@ unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
 		      " ON gam_games.GamCod=mch_matches.GamCod"
 		   " WHERE gam_games.CrsCod=%ld"
 		     " AND Hidden='N'"
-		   " GROUP BY gam_games.GamCod"
-		   " ORDER BY StartTime DESC,"
-			     "EndTime DESC,"
-			     "gam_games.Title DESC",
+		" GROUP BY gam_games.GamCod"
+		" ORDER BY StartTime DESC,"
+			  "EndTime DESC,"
+			  "gam_games.Title DESC",
 		   Gbl.Hierarchy.Crs.CrsCod);
    }
 
@@ -298,7 +298,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
+                         Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
@@ -665,7 +665,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				        " FROM gam_games,"
 					      "gam_questions"
 				       " WHERE gam_games.GamCod=gam_questions.GamCod"
-				       " GROUP BY gam_questions.GamCod) AS NumQstsTable");
+				    " GROUP BY gam_questions.GamCod) AS NumQstsTable");
       case HieLvl_CTY:
          return
          DB_QuerySELECTDouble ("can not get number of questions per game",
@@ -683,7 +683,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				        " AND deg_degrees.DegCod=crs_courses.DegCod"
 				        " AND crs_courses.CrsCod=gam_games.CrsCod"
 				        " AND gam_games.GamCod=gam_questions.GamCod"
-				      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+				   " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return
@@ -700,7 +700,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				        " AND deg_degrees.DegCod=crs_courses.DegCod"
 				        " AND crs_courses.CrsCod=gam_games.CrsCod"
 				        " AND gam_games.GamCod=gam_questions.GamCod"
-				     " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+				   " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
          return
@@ -715,7 +715,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				         " AND deg_degrees.DegCod=crs_courses.DegCod"
 				         " AND crs_courses.CrsCod=gam_games.CrsCod"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
-				       " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
          return
@@ -728,7 +728,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				       " WHERE crs_courses.DegCod=%ld"
 				         " AND crs_courses.CrsCod=gam_games.CrsCod"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
-				       " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
          return
@@ -739,7 +739,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 					      "gam_questions"
 				       " WHERE gam_games.Cod=%ld"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
-				       " GROUP BY gam_questions.GamCod) AS NumQstsTable",
+				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();
@@ -780,7 +780,7 @@ unsigned Gam_DB_GetNumAnswersOfQstsInGame (MYSQL_RES **mysql_res,long GamCod)
 		          "gam_questions"
 		   " WHERE gam_questions.GamCod=%ld"
 		     " AND gam_questions.QstCod=tst_answers.QstCod"
-		   " GROUP BY tst_answers.QstCod",
+		" GROUP BY tst_answers.QstCod",
 		   GamCod);
   }
 

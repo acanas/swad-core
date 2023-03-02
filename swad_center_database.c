@@ -142,7 +142,7 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
 		    " FROM ctr_centers,usr_data"
 		   " WHERE ctr_centers.InsCod=%ld"
 		     " AND ctr_centers.CtrCod=usr_data.CtrCod"
-		   " GROUP BY ctr_centers.CtrCod)"
+		" GROUP BY ctr_centers.CtrCod)"
 		   " UNION "
 		   "(SELECT CtrCod,"				// row[ 0]
 			   "InsCod,"				// row[ 1]
@@ -162,7 +162,7 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
 		         " (SELECT DISTINCT "
 		                  "CtrCod"
 			    " FROM usr_data))"
-		   " ORDER BY %s",
+		" ORDER BY %s",
 		   InsCod,
 		   InsCod,
 		   OrderBySubQuery[SelectedOrder]);
@@ -188,8 +188,8 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.CtrCod=ctr_admin.CtrCod"
 			   " AND ctr_admin.UsrCod=%ld"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			 " GROUP BY deg_degrees.CtrCod"
-			 " ORDER BY ctr_centers.ShortName",
+		      " GROUP BY deg_degrees.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
 			 (unsigned) Hie_STATUS_BIT_PENDING,
 			 Gbl.Usrs.Me.UsrDat.UsrCod);
       case Rol_SYS_ADM:
@@ -201,8 +201,8 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 			        "ctr_centers"
 			 " WHERE (deg_degrees.Status & %u)<>0"
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			 " GROUP BY deg_degrees.CtrCod"
-			 " ORDER BY ctr_centers.ShortName",
+		      " GROUP BY deg_degrees.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
 			 (unsigned) Hie_STATUS_BIT_PENDING);
       default:		// Forbidden for other users
 	 Err_WrongRoleExit ();
@@ -728,8 +728,8 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
 		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		        " AND ctr_centers.InsCod=%ld"
-		      " GROUP BY ctr_centers.CtrCod"
-		      " ORDER BY ctr_centers.ShortName",
+		   " GROUP BY ctr_centers.CtrCod"
+		   " ORDER BY ctr_centers.ShortName",
 		      UsrCod,
 		      InsCod);
    else
@@ -745,8 +745,8 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
 		        " AND crs_users.CrsCod=crs_courses.CrsCod"
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
 		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		      " GROUP BY ctr_centers.CtrCod"
-		      " ORDER BY ctr_centers.ShortName",
+		   " GROUP BY ctr_centers.CtrCod"
+		   " ORDER BY ctr_centers.ShortName",
 		      UsrCod);
   }
 

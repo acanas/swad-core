@@ -220,8 +220,8 @@ unsigned Log_DB_GetMyClicksGroupedByAction (MYSQL_RES **mysql_res,
 		    " FROM log"
 		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 		     " AND UsrCod=%ld"
-		   " GROUP BY ActCod"
-		   " ORDER BY N DESC"
+		" GROUP BY ActCod"
+		" ORDER BY N DESC"
 		   " LIMIT %u",
 		   (long) FirstClickTimeUTC,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -247,7 +247,7 @@ unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
 	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 	             " AND UsrCod=%ld"
 	             " AND CrsCod<=0"
-	           " GROUP BY Year"
+	        " GROUP BY Year"
 		   // ---------------------------------------------------------
 	           " UNION "
 		   // Clicks as student, non-editing teacher or teacher in courses
@@ -261,9 +261,9 @@ unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
 	             " AND Role>=%u"	// Student
 	             " AND Role<=%u"	// Teacher
 	             " AND CrsCod>0"
-	           " GROUP BY CrsCod,"
-	                     "Year,"
-	                     "Role"
+	        " GROUP BY CrsCod,"
+	                  "Year,"
+	                  "Role"
 		   // ---------------------------------------------------------
 	           ") AS hits_per_crs_year",
 		   (unsigned) Rol_UNK,
@@ -293,12 +293,13 @@ unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role)
 		      " ON my_courses.CrsCod=log.CrsCod"
 		   " WHERE log.UsrCod=%ld"
 		     " AND log.Role=%u"
-		   " GROUP BY my_courses.CrsCod"
-		   " ORDER BY N DESC,"
-			     "my_courses.CrsCod DESC",
+		" GROUP BY my_courses.CrsCod"
+		" ORDER BY N DESC,"
+			  "my_courses.CrsCod DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
   }
+
 /*****************************************************************************/
 /************************** Get my historic courses **************************/
 /*****************************************************************************/
@@ -314,7 +315,7 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
 		   " WHERE UsrCod=%ld"
 		     " AND Role=%u"
 		     " AND CrsCod>0"
-		   " GROUP BY CrsCod"
+	        " GROUP BY CrsCod"
 		  " HAVING N>%u"
 		   " ORDER BY N DESC",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -350,10 +351,10 @@ unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
 		    " FROM log"
 		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
 		     " AND UsrCod=%ld"
-		     "%s"
-		     "%s"
-		   " GROUP BY Year"
-		   " ORDER BY Year DESC",
+		       "%s"
+		       "%s"
+	        " GROUP BY Year"
+		" ORDER BY Year DESC",
 		   (long) FirstClickTimeUTC,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   SubQueryCrs,

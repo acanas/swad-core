@@ -350,7 +350,7 @@ unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstC
 		         " (SELECT ThrCod"
 			    " FROM for_posts"
 			   " WHERE PstCod=%ld)"
-		   " GROUP BY ThrCod;",
+	        " GROUP BY ThrCod;",
 		   PstCod);
   }
 
@@ -368,7 +368,7 @@ unsigned For_DB_GetPublishersInThreadExceptMe (MYSQL_RES **mysql_res,long PstCod
 		   " WHERE ThrCod=(SELECT ThrCod"
 				   " FROM for_posts"
 				  " WHERE PstCod=%ld)"
-		   " AND UsrCod<>%ld",
+		     " AND UsrCod<>%ld",
 		   PstCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }

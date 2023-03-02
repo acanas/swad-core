@@ -187,7 +187,7 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Scope)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
+                         Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
@@ -525,7 +525,7 @@ unsigned Rub_DB_GetCriterionData (MYSQL_RES **mysql_res,long CriCod)
    DB_QuerySELECT (mysql_res,"can not get a criterion",
 		   "SELECT Title"	// row[0]
 		    " FROM rub_criteria"
-		   " WHERE QstCod=%ld"
+		   " WHERE CriCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   CriCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
@@ -544,16 +544,16 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			        " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			        " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				        " FROM rub_rubrics,"
 					      "rub_criteria"
 				       " WHERE rub_rubrics.RubCod=rub_criteria.RubCod"
-				       " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable");
+				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable");
       case HieLvl_CTY:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			       " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			       " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				       " FROM ins_instits,"
 					     "ctr_centers,"
 					     "deg_degrees,"
@@ -566,13 +566,13 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 				        " AND deg_degrees.DegCod=crs_courses.DegCod"
 				        " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				        " AND rub_rubrics.RubCod=rub_criteria.RubCod"
-				      " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
+				   " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			       " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			       " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				       " FROM ctr_centers,"
 					     "deg_degrees,"
 					     "crs_courses,"
@@ -583,13 +583,13 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 				        " AND deg_degrees.DegCod=crs_courses.DegCod"
 				        " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				        " AND rub_rubrics.RubCod=rub_criteria.RubCod"
-				     " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
+				   " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			        " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			        " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				        " FROM deg_degrees,"
 					      "crs_courses,"
 					      "rub_rubrics,"
@@ -598,31 +598,31 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 				         " AND deg_degrees.DegCod=crs_courses.DegCod"
 				         " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
-				       " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
+				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			        " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			        " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				        " FROM crs_courses,"
 					      "rub_rubrics,"
 					      "rub_criteria"
 				       " WHERE crs_courses.DegCod=%ld"
 				         " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
-				       " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
+				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
-			        " FROM (SELECT COUNT(rub_criteria.QstCod) AS NumCriteria"
+			        " FROM (SELECT COUNT(rub_criteria.CriCod) AS NumCriteria"
 				        " FROM rub_rubrics,"
 					      "rub_criteria"
-				       " WHERE rub_rubrics.Cod=%ld"
+				       " WHERE rub_rubrics.CrsCod=%ld"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
-				       " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
+				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();

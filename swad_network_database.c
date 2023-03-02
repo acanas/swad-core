@@ -129,9 +129,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			 "SELECT Web,"					// row[0]
 			        "COUNT(*) AS N"				// row[1]
 			  " FROM usr_webs"
-			 " GROUP BY Web"
-			 " ORDER BY N DESC,"
-			           "Web");
+		      " GROUP BY Web"
+		      " ORDER BY N DESC,"
+			        "Web");
       case HieLvl_CTY:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
@@ -150,9 +150,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
+		      " GROUP BY usr_webs.Web"
+		      " ORDER BY N DESC,"
+			        "usr_webs.Web",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return (unsigned)
@@ -170,9 +170,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
+		      " GROUP BY usr_webs.Web"
+		      " ORDER BY N DESC,"
+			        "usr_webs.Web",
 			 Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
          return (unsigned)
@@ -188,9 +188,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
+		      " GROUP BY usr_webs.Web"
+		      " ORDER BY N DESC,"
+			        "usr_webs.Web",
 			 Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
          return (unsigned)
@@ -204,9 +204,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
+		      " GROUP BY usr_webs.Web"
+		      " ORDER BY N DESC,"
+			        "usr_webs.Web",
 			 Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
          return (unsigned)
@@ -218,9 +218,9 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			        "usr_webs"
 			 " WHERE crs_users.CrsCod=%ld"
 			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
+		      " GROUP BY usr_webs.Web"
+		      " ORDER BY N DESC,"
+			        "usr_webs.Web",
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:

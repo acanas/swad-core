@@ -90,7 +90,7 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 		    " WHERE plc_places.InsCod=%ld"
 		      " AND plc_places.PlcCod=ctr_centers.PlcCod"
 		      " AND ctr_centers.InsCod=%ld"
-		    " GROUP BY plc_places.PlcCod)"
+		 " GROUP BY plc_places.PlcCod)"
 		    " UNION "
 		   "(SELECT PlcCod,"
 			   "ShortName,"
@@ -103,7 +103,7 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 			           "PlcCod"
 			     " FROM ctr_centers"
 			    " WHERE InsCod=%ld))"
-		   " ORDER BY %s",
+		 " ORDER BY %s",
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ins.InsCod,
@@ -127,7 +127,7 @@ unsigned Plc_DB_GetDataOfPlaceByCod (MYSQL_RES **mysql_res,long PlcCod)
 		    " WHERE plc_places.PlcCod=%ld"
 		      " AND plc_places.PlcCod=ctr_centers.PlcCod"
 		      " AND ctr_centers.PlcCod=%ld"
-		    " GROUP BY plc_places.PlcCod)"
+		 " GROUP BY plc_places.PlcCod)"
 		    " UNION "
 		   "(SELECT ShortName,"			// row[0]
 			   "FullName,"			// row[1]

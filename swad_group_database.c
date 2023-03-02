@@ -424,8 +424,8 @@ unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
 			  "grp_groups"
 		   " WHERE grp_types.CrsCod=%ld"
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		   " GROUP BY grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName",
+		" GROUP BY grp_types.GrpTypCod"
+		" ORDER BY grp_types.GrpTypName",
 		   CrsCod);
   }
 
@@ -449,7 +449,7 @@ unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod)
 			   "grp_groups"
 		    " WHERE grp_types.CrsCod=%ld"
 		      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		    " GROUP BY grp_types.GrpTypCod)"
+		 " GROUP BY grp_types.GrpTypCod)"
 		   " UNION "
 		   "(SELECT GrpTypCod,"					// row[0]
 			   "GrpTypName,"				// row[1]
@@ -463,7 +463,7 @@ unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod)
 		      " AND GrpTypCod NOT IN"
 			  " (SELECT GrpTypCod"
 			     " FROM grp_groups))"
-		   " ORDER BY GrpTypName",
+		 " ORDER BY GrpTypName",
 		   CrsCod,
 		   CrsCod);
   }
@@ -954,8 +954,8 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
 				     " AND grp_groups.GrpCod=grp_users.GrpCod"
 				     " AND grp_users.UsrCod=crs_users.UsrCod"
 				     " AND crs_users.Role=%u"			// Student
-				   " GROUP BY grp_groups.GrpCod"
-				   " HAVING NumStudents<MaxStudents"		// Not full
+				" GROUP BY grp_groups.GrpCod"
+				  " HAVING NumStudents<MaxStudents"		// Not full
 				  ") AS available_grp_types_with_stds"
 
 			   " UNION "

@@ -1486,7 +1486,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			        "COUNT(*)"		// row[1]
 			  " FROM brw_files"
 			 " WHERE License=%u"
-			 " GROUP BY Public",
+		      " GROUP BY Public",
 			 (unsigned) License);
       case HieLvl_CTY:
          return (unsigned)
@@ -1505,7 +1505,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND crs_courses.CrsCod=brw_files.Cod"
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
+		      " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -1525,7 +1525,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND crs_courses.CrsCod=brw_files.Cod"
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
+		      " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Ins.InsCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -1543,7 +1543,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND crs_courses.CrsCod=brw_files.Cod"
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
+		      " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -1559,7 +1559,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND crs_courses.CrsCod=brw_files.Cod"
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
+		      " GROUP BY brw_files.Public",
 			 Gbl.Hierarchy.Deg.DegCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
@@ -1573,7 +1573,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			 " WHERE Cod=%ld"
 			   " AND FileBrowser IN (%u,%u)"
 			   " AND License=%u"
-			 " GROUP BY Public",
+		      " GROUP BY Public",
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,

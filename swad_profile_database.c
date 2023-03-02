@@ -273,8 +273,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY %s DESC,"
-			           "UsrCod"
+		      " ORDER BY %s DESC,"
+			        "UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 FieldName,
@@ -301,8 +301,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
+		      " ORDER BY usr_figures.%s DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Cty.CtyCod,
@@ -328,8 +328,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
+		      " ORDER BY usr_figures.%s DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Ins.InsCod,
@@ -353,8 +353,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
+		      " ORDER BY usr_figures.%s DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Ctr.CtrCod,
@@ -376,8 +376,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
+		      " ORDER BY usr_figures.%s DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Deg.DegCod,
@@ -397,8 +397,8 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
+		      " ORDER BY usr_figures.%s DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FieldName,
 			 Gbl.Hierarchy.Crs.CrsCod,
@@ -430,8 +430,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-			           "UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "UsrCod"
 			 " LIMIT 100");
       case HieLvl_CTY:
 	 return (unsigned)
@@ -457,8 +457,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
@@ -483,8 +483,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
@@ -507,8 +507,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
@@ -529,8 +529,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
@@ -549,8 +549,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND usr_figures.UsrCod NOT IN"
 			       " (SELECT UsrCod"
 			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
+		      " ORDER BY NumClicksPerDay DESC,"
+			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Crs.CrsCod);
       default:

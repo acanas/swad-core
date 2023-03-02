@@ -83,7 +83,7 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 		      " AND dpt_departments.DptCod=usr_data.DptCod"
 		      " AND usr_data.UsrCod=crs_users.UsrCod"
 		      " AND crs_users.Role IN (%u,%u)"
-		    " GROUP BY dpt_departments.DptCod)"
+		 " GROUP BY dpt_departments.DptCod)"
 		   " UNION "
 		   "(SELECT DptCod,"					// row[0]
 			   "InsCod,"					// row[1]
@@ -99,7 +99,7 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 			     " FROM usr_data,crs_users"
 		  	    " WHERE crs_users.Role IN (%u,%u)"
 			      " AND crs_users.UsrCod=usr_data.UsrCod))"
-	            " ORDER BY %s",
+	         " ORDER BY %s",
 		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		   OrderBySubQuery[SelectedOrder]);
@@ -125,7 +125,7 @@ unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
 		      " AND dpt_departments.DptCod=usr_data.DptCod"
 		      " AND usr_data.UsrCod=crs_users.UsrCod"
 		      " AND crs_users.Role=%u"
-		    " GROUP BY dpt_departments.DptCod)"
+		 " GROUP BY dpt_departments.DptCod)"
 		   " UNION "
 		   "(SELECT InsCod,"					// row[0]
 			   "ShortName,"					// row[1]

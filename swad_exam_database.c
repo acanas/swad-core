@@ -168,8 +168,8 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
 		      " ON exa_exams.ExaCod=exa_sessions.ExaCod"
 		   " WHERE exa_exams.CrsCod=%ld"
 		       "%s"
-		   " GROUP BY exa_exams.ExaCod"
-		   " ORDER BY %s",
+		" GROUP BY exa_exams.ExaCod"
+		" ORDER BY %s",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   HiddenSubQuery,
 		   OrderBySubQuery[SelectedOrder]);
@@ -290,7 +290,7 @@ unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Ins.InsCod);
+			       Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
@@ -419,7 +419,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 					       " FROM exa_exams,"
 						     "exa_set_questions"
 					      " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
-					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
+					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
       case HieLvl_CTY:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
@@ -436,7 +436,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 						 " AND deg_degrees.DegCod=crs_courses.DegCod"
 						 " AND crs_courses.CrsCod=exa_exams.CrsCod"
 						 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-					       " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+					    " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
@@ -452,7 +452,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 					        " AND deg_degrees.DegCod=crs_courses.DegCod"
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
@@ -466,7 +466,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 					        " AND deg_degrees.DegCod=crs_courses.DegCod"
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
@@ -478,7 +478,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 					      " WHERE crs_courses.DegCod=%ld"
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
@@ -488,7 +488,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 						     "exa_set_questions"
 					      " WHERE exa_exams.Cod=%ld"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
-					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();

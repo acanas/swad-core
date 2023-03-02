@@ -381,7 +381,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
                           " AND deg_degrees.DegCod=crs_courses.DegCod"
                           " AND crs_courses.CrsCod=svy_surveys.Cod"
                           " AND svy_surveys.Scope='%s'",
-			Gbl.Hierarchy.Ins.InsCod,
+			Gbl.Hierarchy.Cty.CtyCod,
 			Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_INS:
          return (unsigned)
@@ -549,7 +549,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 						     "svy_questions"
 					      " WHERE svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_CTY:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
@@ -568,7 +568,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND crs_courses.CrsCod=svy_surveys.Cod"
 					        " AND svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Cty.CtyCod,
 				      Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_INS:
@@ -586,7 +586,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND crs_courses.CrsCod=svy_surveys.Cod"
 					        " AND svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ins.InsCod,
 				      Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_CTR:
@@ -602,7 +602,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND crs_courses.CrsCod=svy_surveys.Cod"
 					        " AND svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ctr.CtrCod,
 				      Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_DEG:
@@ -616,7 +616,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND crs_courses.CrsCod=svy_surveys.Cod"
 					        " AND svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Deg.DegCod,
 				      Sco_GetDBStrFromScope (HieLvl_CRS));
       case HieLvl_CRS:
@@ -628,7 +628,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					      " WHERE svy_surveys.Scope='%s'"
 					        " AND svy_surveys.Cod=%ld"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
-					       " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Sco_GetDBStrFromScope (HieLvl_CRS),Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();

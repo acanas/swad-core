@@ -419,7 +419,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(%s) AS N"
 					       " FROM usr_follow"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
       case HieLvl_CTY:
@@ -438,7 +438,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND deg_degrees.DegCod=crs_courses.DegCod"
 						" AND crs_courses.CrsCod=crs_users.CrsCod"
 						" AND crs_users.UsrCod=usr_follow.%s"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      Gbl.Hierarchy.Cty.CtyCod,
 				      FieldDB[Fol],
@@ -457,7 +457,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND deg_degrees.DegCod=crs_courses.DegCod"
 						" AND crs_courses.CrsCod=crs_users.CrsCod"
 						" AND crs_users.UsrCod=usr_follow.%s"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      Gbl.Hierarchy.Ins.InsCod,
 				      FieldDB[Fol],
@@ -474,7 +474,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND deg_degrees.DegCod=crs_courses.DegCod"
 						" AND crs_courses.CrsCod=crs_users.CrsCod"
 						" AND crs_users.UsrCod=usr_follow.%s"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      Gbl.Hierarchy.Ctr.CtrCod,
 				      FieldDB[Fol],
@@ -489,7 +489,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 					      " WHERE crs_courses.DegCod=%ld"
 						" AND crs_courses.CrsCod=crs_users.CrsCod"
 						" AND crs_users.UsrCod=usr_follow.%s"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      Gbl.Hierarchy.Deg.DegCod,
 				      FieldDB[Fol],
@@ -502,7 +502,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						     "usr_follow"
 					      " WHERE crs_users.CrsCod=%ld"
 						" AND crs_users.UsrCod=usr_follow.%s"
-					      " GROUP BY %s) AS F",
+					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      Gbl.Hierarchy.Crs.CrsCod,
 				      FieldDB[Fol],
@@ -567,9 +567,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			 "SELECT FollowedCod,"					// row[0]
 			        "COUNT(FollowerCod) AS N"			// row[1]
 			  " FROM usr_follow"
-			 " GROUP BY FollowedCod"
-			 " ORDER BY N DESC,"
-			           "FollowedCod"
+		      " GROUP BY FollowedCod"
+		      " ORDER BY N DESC,"
+			        "FollowedCod"
 			 " LIMIT 100");
       case HieLvl_CTY:
          return (unsigned)
@@ -588,9 +588,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
-			 " GROUP BY usr_follow.FollowedCod"
-			 " ORDER BY N DESC,"
-			           "usr_follow.FollowedCod"
+		      " GROUP BY usr_follow.FollowedCod"
+		      " ORDER BY N DESC,"
+			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
@@ -608,9 +608,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
-			 " GROUP BY usr_follow.FollowedCod"
-			 " ORDER BY N DESC,"
-			           "usr_follow.FollowedCod"
+		      " GROUP BY usr_follow.FollowedCod"
+		      " ORDER BY N DESC,"
+			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
@@ -626,9 +626,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
-			 " GROUP BY usr_follow.FollowedCod"
-			 " ORDER BY N DESC,"
-			           "usr_follow.FollowedCod"
+		      " GROUP BY usr_follow.FollowedCod"
+		      " ORDER BY N DESC,"
+		                "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
@@ -642,9 +642,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
-			 " GROUP BY usr_follow.FollowedCod"
-			 " ORDER BY N DESC,"
-			           "usr_follow.FollowedCod"
+		      " GROUP BY usr_follow.FollowedCod"
+		      " ORDER BY N DESC,"
+			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
@@ -656,9 +656,9 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			        "usr_follow"
 			 " WHERE crs_users.CrsCod=%ld"
 			   " AND crs_users.UsrCod=usr_follow.FollowedCod"
-			 " GROUP BY usr_follow.FollowedCod"
-			 " ORDER BY N DESC,"
-			           "usr_follow.FollowedCod"
+		      " GROUP BY usr_follow.FollowedCod"
+		      " ORDER BY N DESC,"
+			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;

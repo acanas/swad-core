@@ -46,9 +46,9 @@ unsigned Dup_DB_GetListDuplicateUsrs (MYSQL_RES **mysql_res)
 			  "COUNT(*) AS N,"				// row[1]
 			  "UNIX_TIMESTAMP(MIN(InformTime)) AS T"	// row[2]
 		    " FROM usr_duplicated"
-		   " GROUP BY UsrCod"
-		   " ORDER BY N DESC,"
-			     "T DESC");
+		" GROUP BY UsrCod"
+		" ORDER BY N DESC,"
+			  "T DESC");
   }
 
 /*****************************************************************************/

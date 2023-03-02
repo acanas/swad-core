@@ -680,13 +680,14 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 						  " FROM crs_users"
-						 " GROUP BY CrsCod) AS NumUsrsTable");
+					      " GROUP BY CrsCod) AS NumUsrsTable");
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
 					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
 						  " FROM crs_users"
-						 " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
+						 " WHERE Role=%u"
+					      " GROUP BY CrsCod) AS NumUsrsTable",
 					 (unsigned) Role);
       case HieLvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
@@ -703,7 +704,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
@@ -720,7 +721,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_INS:
@@ -736,7 +737,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
@@ -751,7 +752,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_CTR:
@@ -765,7 +766,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						 " WHERE deg_degrees.CtrCod=%ld"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
@@ -778,7 +779,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_DEG:
@@ -790,7 +791,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						        "crs_users"
 						 " WHERE crs_courses.DegCod=%ld"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
@@ -801,7 +802,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						 " WHERE crs_courses.DegCod=%ld"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_CRS:
@@ -831,14 +832,14 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
 						  " FROM crs_users"
-						 " GROUP BY UsrCod) AS NumCrssTable");
+					      " GROUP BY UsrCod) AS NumCrssTable");
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
 					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
 						  " FROM crs_users"
 						 " WHERE Role=%u"
-						 " GROUP BY UsrCod) AS NumCrssTable",
+					      " GROUP BY UsrCod) AS NumCrssTable",
 					 (unsigned) Role);
       case HieLvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
@@ -855,7 +856,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
@@ -872,7 +873,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_INS:
@@ -888,7 +889,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
@@ -903,7 +904,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						    " AND deg_degrees.DegCod=crs_courses.DegCod"
 						    " AND crs_courses.CrsCod=crs_users.CrsCod"
 						    " AND crs_users.Role=%u"
-						  " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					       " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_CTR:
@@ -917,7 +918,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						 " WHERE deg_degrees.CtrCod=%ld"
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
@@ -930,7 +931,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						   " AND deg_degrees.DegCod=crs_courses.DegCod"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_DEG:
@@ -942,7 +943,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						        "crs_users"
 						 " WHERE crs_courses.DegCod=%ld"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod);
 	 else
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
@@ -953,7 +954,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 						 " WHERE crs_courses.DegCod=%ld"
 						   " AND crs_courses.CrsCod=crs_users.CrsCod"
 						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_CRS:

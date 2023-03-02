@@ -392,8 +392,8 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
-			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-			       " ORDER BY %s",
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			    " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
@@ -417,8 +417,8 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
-			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-			       " ORDER BY %s",
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			    " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
@@ -450,8 +450,8 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
-				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				  " ORDER BY %s",
+			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			       " ORDER BY %s",
 				  Gbl.Hierarchy.Crs.CrsCod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
@@ -469,14 +469,14 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	                                             " LEFT JOIN prj_users"
 				     " ON prj_projects.PrjCod=prj_users.PrjCod"
 				  " WHERE prj_projects.CrsCod=%ld"
-				    "%s"
-				    "%s"
-				    "%s"
-				    "%s"
+				      "%s"
+				      "%s"
+				      "%s"
+				      "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
-				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				  " ORDER BY %s",
+			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			       " ORDER BY %s",
 				  Gbl.Hierarchy.Crs.CrsCod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
@@ -500,11 +500,11 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       "SELECT prj_projects.PrjCod"
 				" FROM prj_projects"
 			       " WHERE prj_projects.CrsCod=%ld"
-				 "%s"
-				 "%s"
-				 "%s"
-				 "%s"
-			       " ORDER BY %s",
+				   "%s"
+				   "%s"
+				   "%s"
+				   "%s"
+			    " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
@@ -519,11 +519,11 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				" FROM prj_projects LEFT JOIN dpt_departments"
 				  " ON prj_projects.DptCod=dpt_departments.DptCod"
 			       " WHERE prj_projects.CrsCod=%ld"
-				 "%s"
-				 "%s"
-				 "%s"
-				 "%s"
-			       " ORDER BY %s",
+				   "%s"
+				   "%s"
+				   "%s"
+				   "%s"
+			    " ORDER BY %s",
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,

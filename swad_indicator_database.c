@@ -178,8 +178,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod"
 			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
@@ -198,8 +198,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND ins_instits.InsCod=ctr_centers.InsCod"
 			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Cty.CtyCod);
       case HieLvl_INS:
          if (Indicators->DptCod >= 0)	// 0 means another department
@@ -222,8 +222,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod"
 			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Ins.InsCod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
@@ -240,8 +240,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			    " WHERE ctr_centers.InsCod=%ld"
 			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Ins.InsCod);
       case HieLvl_CTR:
          if (Indicators->DptCod >= 0)	// 0 means another department
@@ -262,8 +262,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod"
 			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
@@ -278,8 +278,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			           "crs_courses"
 			    " WHERE deg_degrees.CtrCod=%ld"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Ctr.CtrCod);
       case HieLvl_DEG:
          if (Indicators->DptCod >= 0)	// 0 means another department
@@ -300,8 +300,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod"
 			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Deg.DegCod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
@@ -316,8 +316,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			           "crs_courses"
 			    " WHERE deg_degrees.DegCod=%ld"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Deg.DegCod);
       case HieLvl_CRS:
          if (Indicators->DptCod >= 0)	// 0 means another department
@@ -339,8 +339,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND crs_users.Role=%u"
 			      " AND crs_users.UsrCod=usr_data.UsrCod"
 			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    (unsigned) Rol_TCH,
@@ -356,8 +356,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			           "crs_courses"
 			    " WHERE crs_courses.CrsCod=%ld"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
+			 " ORDER BY deg_degrees.FullName,"
+				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();
