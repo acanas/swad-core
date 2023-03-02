@@ -27,8 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
-#include "swad_scope.h"
+#include "swad_string.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -58,13 +57,6 @@ struct Rub_Rubrics
    struct Rub_Rubric Rubric;	// Selected/current rubric
   };
 
-struct Rub_Criterion
-  {
-   long RubCod;			// Rubric code
-   long CriCod;			// Course code
-   char Title[Rub_MAX_BYTES_TITLE + 1];
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -74,6 +66,7 @@ void Rub_ResetRubric (struct Rub_Rubric *Rubric);
 
 void Rub_SeeAllRubrics (void);
 void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics);
+bool Rub_CheckIfICanEditRubrics (void);
 void Rub_SeeOneRubric (void);
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics,
 			    bool ListRubricDims);
@@ -101,17 +94,6 @@ void Rub_ListRubric (void);
 void Rub_RequestCreatOrEditRubric (void);
 
 void Rub_ReceiveFormRubric (void);
-
-//------------------------------- Criteria ------------------------------------
-void Rub_CriterionConstructor (struct Rub_Criterion *Criterion);
-void Rub_CriterionDestructor (struct Rub_Criterion *Criterion);
-void Rub_PutParamCriCod (void *CriCod);
-bool Rub_GetCriterionDataFromDB (struct Rub_Criterion *Criterion);
-void Rub_ListCriterionForEdition (struct Rub_Criterion *Criterion,
-                                  unsigned CriInd,bool CriterionExists,
-                                  const char *Anchor);
-void Rub_WriteNumCriterion (unsigned NumDim,const char *Class);
-void Rub_WriteCriterionTitle (const char *Title,const char *ClassTitle,bool Visible);
 
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (void);

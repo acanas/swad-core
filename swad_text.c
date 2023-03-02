@@ -10650,7 +10650,7 @@ const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the game <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> oyununu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -10673,7 +10673,7 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the group <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning: it is very important to include %s in the following sentences
@@ -10762,7 +10762,7 @@ const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o item <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the item <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> &ouml;&gbreve;esini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
@@ -10785,7 +10785,7 @@ const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is ver
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the match <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> e&scedil;le&scedil;mesini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -10831,7 +10831,7 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o projeto <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the project <strong>%s</strong>?";	// Çeviri lazim!
+	"<strong>%s</strong> projesini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
@@ -10854,7 +10854,7 @@ const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is 
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a pergunta <strong>%ld</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the question <strong>%ld</strong>?";	// Çeviri lazim!
+	"<strong>%ld</strong> sorusunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_resource_X =	// Warning: it is very important to include %s in the following sentences
@@ -10878,6 +10878,29 @@ const char *Txt_Do_you_really_want_to_remove_the_resource_X =	// Warning: it is 
 	"Voc&ecirc; realmente deseja remover o recurso <strong>%s</strong>?";
 #elif L==10	// tr
 	"<strong>%s</strong> kayna&gbreve;&inodot;n&inodot; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_rubric_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Realment voleu eliminar la r&uacute;brica <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Rubrik <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the rubric <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar la r&uacute;brica <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer la rubrique <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar la r&uacute;brica <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere la rubrica <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usun&aogon;&cacute; rubryk&eogon; <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover a rubrica <strong>%s</strong>?";
+#elif L==10	// tr
+	"<strong>%s</strong> de&gbreve;erlendirme tablosunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_selected_questions =
@@ -10923,7 +10946,7 @@ const char *Txt_Do_you_really_want_to_remove_the_session_X =	// Warning: it is v
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover a sess&atilde;o <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the session <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> oturumunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
@@ -10946,7 +10969,7 @@ const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X =	// Warning
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o conjunto de perguntas <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the set of questions <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> soru grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -10969,7 +10992,7 @@ const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is ve
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o inqu&eacute;rito <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the survey <strong>%s</strong>?";		// Çeviri lazim!
+	"<strong>%s</strong> anketini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_ =	// Warning: it is very important to include %s in the following sentences
@@ -35009,14 +35032,14 @@ const char *Txt_Remove_assignment =
 #elif L==9	// pt
 	"Remover atividade";
 #elif L==10	// tr
-	"Remove assignment";	// Çeviri lazim!
+	"Atamay&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_event =
 #if   L==1	// ca
 	"Eliminar esdeveniment";
 #elif L==2	// de
-	"Ereignis Entfernen";
+	"Ereignis entfernen";
 #elif L==3	// en
 	"Remove event";
 #elif L==4	// es
@@ -35032,14 +35055,14 @@ const char *Txt_Remove_event =
 #elif L==9	// pt
 	"Remover evento";
 #elif L==10	// tr
-	"Remove event";		// Çeviri lazim!
+	"Etkinli&gbreve;i kald&inodot;r";
 #endif
 
 const char *Txt_Remove_exam =
 #if   L==1	// ca
 	"Eliminar examen";
 #elif L==2	// de
-	"Ereignis Pr&uuml;fung";
+	"Pr&uuml;fung entfernen";
 #elif L==3	// en
 	"Remove exam";
 #elif L==4	// es
@@ -35055,14 +35078,14 @@ const char *Txt_Remove_exam =
 #elif L==9	// pt
 	"Remover exame";
 #elif L==10	// tr
-	"Remove exam";		// Çeviri lazim!
+	"S&inodot;nav&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_file =
 #if   L==1	// ca
 	"Eliminar fitxer";
 #elif L==2	// de
-	"Datei Entfernen";
+	"Datei entfernen";
 #elif L==3	// en
 	"Remove file";
 #elif L==4	// es
@@ -35078,7 +35101,7 @@ const char *Txt_Remove_file =
 #elif L==9	// pt
 	"Remover arquivo";
 #elif L==10	// tr
-	"Remove file";		// Çeviri lazim!
+	"Dosyay&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_files_older_than_PART_1_OF_2 =
@@ -35147,14 +35170,14 @@ const char *Txt_Remove_folder =
 #elif L==9	// pt
 	"Remover diret&oacute;rio";
 #elif L==10	// tr
-	"Remove folder";	// Çeviri lazim!
+	"Klas&ouml;r&uuml; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_game =
 #if   L==1	// ca
 	"Eliminar joc";
 #elif L==2	// de
-	"Entfernen Spiel";
+	"Spiel entfernen";
 #elif L==3	// en
 	"Remove game";
 #elif L==4	// es
@@ -35170,14 +35193,14 @@ const char *Txt_Remove_game =
 #elif L==9	// pt
 	"Remover jogo";
 #elif L==10	// tr
-	"Remove folder";	// Çeviri lazim!
+	"Oyunu kald&inodot;r";
 #endif
 
 const char *Txt_Remove_group =
 #if   L==1	// ca
 	"Eliminar grup";
 #elif L==2	// de
-	"Entfernen Gruppe";
+	"Gruppe entfernen";
 #elif L==3	// en
 	"Remove group";
 #elif L==4	// es
@@ -35193,14 +35216,14 @@ const char *Txt_Remove_group =
 #elif L==9	// pt
 	"Remover grupo";
 #elif L==10	// tr
-	"Remove group";	// Çeviri lazim!
+	"Grubu kald&inodot;r";
 #endif
 
 const char *Txt_Remove_item =
 #if   L==1	// ca
 	"Eliminar &iacute;tem";
 #elif L==2	// de
-	"Entfernen Artikel";
+	"Artikel entfernen";
 #elif L==3	// en
 	"Remove item";
 #elif L==4	// es
@@ -35216,14 +35239,14 @@ const char *Txt_Remove_item =
 #elif L==9	// pt
 	"Remover item";
 #elif L==10	// tr
-	"Remove item";		// Çeviri lazim!
+	"&Ouml;&gbreve;eyi kald&inodot;r";
 #endif
 
 const char *Txt_Remove_link =
 #if   L==1	// ca
 	"Eliminar enlla&ccedil;";
 #elif L==2	// de
-	"Entfernen Link";
+	"Link entfernen";
 #elif L==3	// en
 	"Remove link";
 #elif L==4	// es
@@ -35239,14 +35262,14 @@ const char *Txt_Remove_link =
 #elif L==9	// pt
 	"Remover liga&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Remove link";		// Çeviri lazim!
+	"Ba&gbreve;lant&inodot;y&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_match =	// of a game
 #if   L==1	// ca
 	"Eliminar partida";
 #elif L==2	// de
-	"Entfernen Spiel";
+	"Spiel entfernen";
 #elif L==3	// en
 	"Remove match";
 #elif L==4	// es
@@ -35262,7 +35285,7 @@ const char *Txt_Remove_match =	// of a game
 #elif L==9	// pt
 	"Remover jogo";
 #elif L==10	// tr
-	"Remove match";		// Çeviri lazim!
+	"E&scedil;le&scedil;meyi kald&inodot;r";
 #endif
 
 const char *Txt_Remove_me =
@@ -35460,7 +35483,7 @@ const char *Txt_Remove_old_files =
 #if   L==1	// ca
 	"Eliminar arxius antics";
 #elif L==2	// de
-	"Entfernen Sie alte Dateien";
+	"Sie alte Dateien entfernen";
 #elif L==3	// en
 	"Remove old files";
 #elif L==4	// es
@@ -35483,7 +35506,7 @@ const char *Txt_Remove_photo =
 #if   L==1	// ca
 	"Eliminar foto";
 #elif L==2	// de
-	"Entfernen Foto";
+	"Foto entfernen";
 #elif L==3	// en
 	"Remove photo";
 #elif L==4	// es
@@ -35499,14 +35522,14 @@ const char *Txt_Remove_photo =
 #elif L==9	// pt
 	"Remover foto";
 #elif L==10	// tr
-	"Remove photo";		// Çeviri lazim!
+	"Foto&gbreve;raf&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_project =
 #if   L==1	// ca
 	"Eliminar projecte";
 #elif L==2	// de
-	"Entfernen Projekt";
+	"Projekt entfernen";
 #elif L==3	// en
 	"Remove project";
 #elif L==4	// es
@@ -35522,7 +35545,7 @@ const char *Txt_Remove_project =
 #elif L==9	// pt
 	"Remover projeto";
 #elif L==10	// tr
-	"Remove project";	// Çeviri lazim!
+	"Projeyi kald&inodot;r";
 #endif
 
 const char *Txt_Remove_question =
@@ -35545,7 +35568,7 @@ const char *Txt_Remove_question =
 #elif L==9	// pt
 	"Remover pergunta";
 #elif L==10	// tr
-	"Remove question";	// Çeviri lazim!
+	"Soruyu kald&inodot;r";
 #endif
 
 const char *Txt_Remove_questions =
@@ -35568,14 +35591,14 @@ const char *Txt_Remove_questions =
 #elif L==9	// pt
 	"Remover perguntas";
 #elif L==10	// tr
-	"Remove questions";	// Çeviri lazim!
+	"Sorular&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_record_field =
 #if   L==1	// ca
 	"Eliminar camp de fitxa";
 #elif L==2	// de
-	"Entfernen Datenfeld";
+	"Datenfeld entfernen";
 #elif L==3	// en
 	"Remove record field";
 #elif L==4	// es
@@ -35591,14 +35614,14 @@ const char *Txt_Remove_record_field =
 #elif L==9	// pt
 	"Remover campo de cart&atilde;o";
 #elif L==10	// tr
-	"Remove record field";		// Çeviri lazim!
+	"Kay&inodot;t alan&inodot;n&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_resource =
 #if   L==1	// ca
 	"Eliminar recurs";
 #elif L==2	// de
-	"Entfernen Ressource";
+	"Ressource entfernen";
 #elif L==3	// en
 	"Remove resource";
 #elif L==4	// es
@@ -35614,14 +35637,37 @@ const char *Txt_Remove_resource =
 #elif L==9	// pt
 	"Remover recurso";
 #elif L==10	// tr
-	"Kayna&gbreve;&inodot; kaynak";
+	"Kayna&gbreve;&inodot; kald&inodot;r";
+#endif
+
+const char *Txt_Remove_rubric =
+#if   L==1	// ca
+	"Eliminar r&uacute;brica";
+#elif L==2	// de
+	"Rubrik entfernen";
+#elif L==3	// en
+	"Remove rubric";
+#elif L==4	// es
+	"Eliminar r&uacute;brica";
+#elif L==5	// fr
+	"Supprimer rubrique";
+#elif L==6	// gn
+	"Eliminar r&uacute;brica";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere rubrica";
+#elif L==8	// pl
+	"Usu&nacute; rubryk&eogon;";
+#elif L==9	// pt
+	"Remover rubrica";
+#elif L==10	// tr
+	"Puan anahtar&inodot;n&inodot; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_session =
 #if   L==1	// ca
 	"Eliminar sessi&oacute;";
 #elif L==2	// de
-	"Entfernen Sitzung";
+	"Sitzung entfernen";
 #elif L==3	// en
 	"Remove session";
 #elif L==4	// es
@@ -35637,14 +35683,14 @@ const char *Txt_Remove_session =
 #elif L==9	// pt
 	"Remover sess&atilde;o";
 #elif L==10	// tr
-	"Remove session";		// Çeviri lazim!
+	"Oturumu kald&inodot;r";
 #endif
 
 const char *Txt_Remove_set_of_questions =
 #if   L==1	// ca
 	"Eliminar conjunt de preguntes";
 #elif L==2	// de
-	"Entfernen Satz von Fragen";
+	"Satz von Fragen entfernen";
 #elif L==3	// en
 	"Remove set of questions";
 #elif L==4	// es
@@ -35660,14 +35706,14 @@ const char *Txt_Remove_set_of_questions =
 #elif L==9	// pt
 	"Remover conjunto de perguntas";
 #elif L==10	// tr
-	"Remove set of questions";		// Çeviri lazim!
+	"Soru grubunu kald&inodot;r";
 #endif
 
 const char *Txt_Remove_survey =
 #if   L==1	// ca
 	"Eliminar enquesta";
 #elif L==2	// de
-	"Entfernen Umfrage";
+	"Umfrage entfernen";
 #elif L==3	// en
 	"Remove survey";
 #elif L==4	// es
@@ -35683,14 +35729,14 @@ const char *Txt_Remove_survey =
 #elif L==9	// pt
 	"Remover inqu&eacute;rito";
 #elif L==10	// tr
-	"Remove survey";	// Çeviri lazim!
+	"Anketi kald&inodot;r";
 #endif
 
 const char *Txt_Remove_thread =
 #if   L==1	// ca
 	"Eliminar discussi&oacute;";
 #elif L==2	// de
-	"Entfernen Thread";
+	"Thread entfernen";
 #elif L==3	// en
 	"Remove thread";
 #elif L==4	// es
@@ -35706,7 +35752,7 @@ const char *Txt_Remove_thread =
 #elif L==9	// pt
 	"Remover discuss&atilde;o";
 #elif L==10	// tr
-	"Remove thread";		// Çeviri lazim!
+	"&Idot;pli&gbreve;i kald&inodot;r";
 #endif
 
 const char *Txt_Remove_the_users_not_indicated_in_step_1 =
@@ -35775,7 +35821,7 @@ const char *Txt_Remove_type_of_group =
 #elif L==9	// pt
 	"Remover tipo de grupo";
 #elif L==10	// tr
-	"Remove type of group";		// Çeviri lazim!
+	"Grup t&uuml;r&uuml;n&uuml; kald&inodot;r";
 #endif
 
 const char *Txt_Remove_user_from_this_course =
@@ -35989,7 +36035,7 @@ const char *Txt_Reply_message =	// "Reply" as a noun, not as a verb
 #elif L==9	// pt
 	"Mensagem de resposta";
 #elif L==10	// tr
-	"Reply message";	// Çeviri lazim!
+	"Mesaj&inodot; yan&inodot;tla";
 #endif
 
 const char *Txt_Report =

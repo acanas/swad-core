@@ -232,7 +232,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
    extern const char *Txt_Matches;
    extern const char *Txt_No_games;
    Gam_Order_t Order;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumGame;
 
    /***** Reset game *****/

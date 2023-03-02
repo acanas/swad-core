@@ -58,7 +58,7 @@ typedef enum
    Pag_ANOTHER_AGENDA		= 13,
   } Pag_WhatPaginate_t;
 
-struct Pagination	// Used for threads and messages pagination
+struct Pag_Pagination	// Used for threads and messages pagination
   {
    unsigned NumItems;
    unsigned StartPage;
@@ -77,12 +77,12 @@ struct Pagination	// Used for threads and messages pagination
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Pag_CalculatePagination (struct Pagination *Pagination);
+void Pag_CalculatePagination (struct Pag_Pagination *Pagination);
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
-                                    struct Pagination *Pagination,
+                                    struct Pag_Pagination *Pagination,
                                     const void *Context,long Cod);
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
-                            struct Pagination *Pagination,
+                            struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,

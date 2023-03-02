@@ -605,11 +605,7 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 TODO: Attach pdf files in multimedia.
 
 TODO: BUG al intentar crear un fichero ZIP con los trabajos de una asignatura si un estudiante con nombre cirílico está entre los alumnos que seleccionas para ver los trabajos. Reported by Víctor Vázquez Rodríguez el 22 de enero de 2023.
-*/
-#define Log_PLATFORM_VERSION	"SWAD 22.62 (2023-02-10)"
-#define CSS_FILE		"swad22.57.1.css"
-#define JS_FILE			"swad22.49.js"
-/*
+
 Sugerencia de J.L Bernier. Al eliminar los estudiantes, que se eliminen los trabajos opcionalmente marcando una casilla.
 En Actividades, no permitir acceso a documentos mientras dura la actividad, también opcionalmente.
 Que no haya dos sesiones del mismo usuario abiertas al entregar actividades, o hacer algo como en los exámenes, log.
@@ -626,10 +622,19 @@ son planteamientos que facilitarían la organización del entorno para cada titula
 
 siempre atento a sus comentarios y agradecido de antemano por la ayuda que siempre nos ha brindado.........Saludos Caribeños desde Venezuela
 
-TODO: Emilce Barrera Mesa: Calificación integrada de las actividades.
+TODO: Emilce Barrera Mesa: Calificación integrada de las actividades. No olvides por favor la opción de calificar y asignar nota en cada actividad o trabajo. Eso agregaría un toque de supereficiencia a tu plataforma.
 TODO: Emilce Barrera Mesa: Para futuras mejoras podrías incluir por favor la opción de duplicar una pregunta al momento de crearlas. Esto en razón a que si tengo dos preguntas con las mismas opciones de respuesta, pero diferente enunciado me ahorrarías tiempo si me permites duplicar la pregunta y solo cambiar el enunciado.
+TODO: Emilce Barrera Mesa: Quiero preguntarte si es posible que me habilites la opción de que en el examen solo tenga en cuenta las respuestas correctas para asignar la nota. Es decir que no reste puntaje por las preguntas incorrectas, que tanto incorrectas como sin contestar tengan el valor de cero.
+TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita exportar en excel, cvs o pdf el listado de estudiantes y la nota optenida en el examen. Eso me ayudaría mucho a la hora de pegarlas en mi planilla de excel.
+TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
-	Version 22.65.1:  Mar 01, 2023  Changes in rubrics. Not finished. (? lines)
+*/
+#define Log_PLATFORM_VERSION	"SWAD 22.66 (2023-03-02)"
+#define CSS_FILE		"swad22.57.1.css"
+#define JS_FILE			"swad22.49.js"
+/*
+	Version 22.66:    Mar 02, 2023  New module swad_rubric_criteria for rubric criteria. (337125 lines)
+	Version 22.65.1:  Mar 02, 2023  Changes in rubrics. Not finished. (337012 lines)
 	Version 22.65:    Mar 01, 2023  New module swad_rubric for rubrics. Not finished. (336989 lines)
 					2 changes necessary in database:
 CREATE TABLE IF NOT EXISTS rub_rubrics (RubCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(RubCod),INDEX(CrsCod));

@@ -140,7 +140,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
    extern const char *Txt_No_assignments;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumAsg;
 
    /***** Get list of assignments *****/

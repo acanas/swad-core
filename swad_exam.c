@@ -217,7 +217,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    extern const char *Txt_Sessions;
    extern const char *Txt_No_exams;
    Exa_Order_t Order;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumExam;
 
    /***** Get number of groups in current course *****/

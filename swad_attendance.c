@@ -214,7 +214,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_No_events;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    Dat_StartEndTime_t Order;
    Grp_WhichGroups_t WhichGroups;
    unsigned NumAttEvent;

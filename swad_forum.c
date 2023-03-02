@@ -369,7 +369,7 @@ static void For_PutAllHiddenParamsNewThread (void *Forums);
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
-                               struct Pagination *PaginationThrs);
+                               struct Pag_Pagination *PaginationThrs);
 static void For_GetThreadData (struct For_Thread *Thr);
 
 static void For_SetForumType (struct For_Forums *Forums);
@@ -669,7 +669,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
    unsigned NumPsts;
    time_t ReadTimeUTC;		// Read time of thread for the current user
    time_t CreatTimeUTC;		// Creation time of post
-   struct Pagination PaginationPsts;
+   struct Pag_Pagination PaginationPsts;
    bool NewPst = false;
    bool ICanModerateForum = false;
 
@@ -2005,7 +2005,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    Dat_StartEndTime_t Order;
    long ThrCods[Pag_ITEMS_PER_PAGE];
-   struct Pagination PaginationThrs;
+   struct Pag_Pagination PaginationThrs;
 
    /***** Set forum name *****/
    For_SetForumName (&Forums->Forum,
@@ -2158,7 +2158,7 @@ static void For_PutAllHiddenParamsNewThread (void *Forums)
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
-                               struct Pagination *PaginationThrs)
+                               struct Pag_Pagination *PaginationThrs)
   {
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
@@ -2178,7 +2178,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    struct Usr_Data UsrDat;
    Dat_StartEndTime_t Order;
    time_t TimeUTC;
-   struct Pagination PaginationPsts;
+   struct Pag_Pagination PaginationPsts;
    const char *Class;
    long ThreadInMyClipboard = -1L;
    unsigned Column;

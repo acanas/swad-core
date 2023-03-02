@@ -88,7 +88,7 @@ static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
 #define NUM_PAGES_BEFORE_CURRENT 1
 #define NUM_PAGES_AFTER_CURRENT 1
 
-void Pag_CalculatePagination (struct Pagination *Pagination)
+void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
   {
    Pagination->StartPage =
    Pagination->LeftPage  =
@@ -138,7 +138,7 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 /*****************************************************************************/
 
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
-                                    struct Pagination *Pagination,
+                                    struct Pag_Pagination *Pagination,
                                     const void *Context,long Cod)
   {
    if (Pagination->MoreThanOnePage)
@@ -155,7 +155,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 /*****************************************************************************/
 
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
-                            struct Pagination *Pagination,
+                            struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
                             bool FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,

@@ -1439,7 +1439,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    unsigned NumMsg;
    char *NumMsgsStr;
    unsigned NumUnreadMsgs;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    long MsgCod;
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {

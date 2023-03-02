@@ -489,7 +489,7 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_My_agenda;
    extern const char *Txt_No_events;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumEvent;
    static const Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {

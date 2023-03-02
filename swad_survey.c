@@ -197,7 +197,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    extern const char *Txt_No_surveys;
    Dat_StartEndTime_t Order;
    Grp_WhichGroups_t WhichGroups;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumSvy;
 
    /***** Get number of groups in current course *****/

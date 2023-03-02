@@ -490,7 +490,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
    extern const char *Txt_No_projects;
-   struct Pagination Pagination;
+   struct Pag_Pagination Pagination;
    unsigned NumPrj;
 
    if (Projects)
