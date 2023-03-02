@@ -467,6 +467,7 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
       /***** Icon to remove rubric *****/
       Ico_PutContextualIconToRemove (ActReqRemRub,NULL,
 				     Rub_PutParams,Rubrics);
+
       /***** Icon to edit rubric *****/
       Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,
 				   Rub_PutParams,Rubrics);
@@ -640,7 +641,7 @@ void Rub_AskRemRubric (void)
       Err_NoPermissionExit ();
 
    /***** Show criterion and button to remove rubric *****/
-   Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,
+   Ale_ShowAlertAndButton (ActRemRub,NULL,NULL,
                            Rub_PutParams,&Rubrics,
 			   Btn_REMOVE_BUTTON,Txt_Remove_rubric,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_rubric_X,
