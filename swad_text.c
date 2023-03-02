@@ -7926,6 +7926,29 @@ const char *Txt_Created_new_room_X =	// Warning: it is very important to include
 	"Created new room <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
+const char *Txt_Created_new_rubric_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creada nova r&uacute;brica <strong>%s</strong>.";
+#elif L==2	// de
+	"Neuer Rubrik <strong>%s</strong> erstellt.";
+#elif L==3	// en
+	"Created new rubric <strong>%s</strong>.";
+#elif L==4	// es
+	"Creado nueva r&uacute;brica <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouvelle rubrique <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creado nueva r&uacute;brica <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creata nuova rubrica <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono now&aogon; rubryk&eogon; <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criada nova rubrica <strong>%s</strong>.";
+#elif L==10	// tr
+	"Yeni de&gbreve;erlendirme listesi <strong>%s</strong> olu&scedil;turuldu.";
+#endif
+
 const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Creat nou conjunt de preguntes <strong>%s</strong>.";

@@ -629,6 +629,7 @@ siempre atento a sus comentarios y agradecido de antemano por la ayuda que siemp
 TODO: Emilce Barrera Mesa: Calificación integrada de las actividades.
 TODO: Emilce Barrera Mesa: Para futuras mejoras podrías incluir por favor la opción de duplicar una pregunta al momento de crearlas. Esto en razón a que si tengo dos preguntas con las mismas opciones de respuesta, pero diferente enunciado me ahorrarías tiempo si me permites duplicar la pregunta y solo cambiar el enunciado.
 
+	Version 22.65.1:  Mar 01, 2023  Changes in rubrics. Not finished. (? lines)
 	Version 22.65:    Mar 01, 2023  New module swad_rubric for rubrics. Not finished. (336989 lines)
 					2 changes necessary in database:
 CREATE TABLE IF NOT EXISTS rub_rubrics (RubCod INT NOT NULL AUTO_INCREMENT,CrsCod INT NOT NULL DEFAULT -1,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,Txt TEXT NOT NULL,UNIQUE INDEX(RubCod),INDEX(CrsCod));

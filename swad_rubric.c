@@ -150,7 +150,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
    extern const char *Hlp_ASSESSMENT_Rubrics;
    extern const char *Txt_Rubrics;
    extern const char *Txt_Rubric;
-   extern const char *Txt_Criteria;
+   // extern const char *Txt_Criteria;
    extern const char *Txt_No_rubrics;
    struct Pagination Pagination;
    unsigned NumRubric;
@@ -189,12 +189,14 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 	    HTM_TR_Begin (NULL);
 
                HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
-
+               /*
 	       HTM_TH_Begin (HTM_HEAD_LEFT);
 	          HTM_Txt (Txt_Rubric);
 	       HTM_TH_End ();
+	       */
+	       HTM_TH_Span (Txt_Rubric,HTM_HEAD_LEFT,1,2,NULL);
 
-	       HTM_TH (Txt_Criteria,HTM_HEAD_RIGHT);
+	       // HTM_TH (Txt_Criteria,HTM_HEAD_RIGHT);
 
 	    HTM_TR_End ();
 
@@ -209,7 +211,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 
 	       /* Show a pair of rows with the main data of this rubric */
 	       Rub_ShowRubricMainData (Rubrics,
-				     false);	// Do not show only this rubric
+				       false);	// Do not show only this rubric
 	      }
 
 	 /***** End table *****/
@@ -266,7 +268,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
   }
 
 /*****************************************************************************/
-/*********************** Put icon to create a new rubric ***********************/
+/********************** Put icon to create a new rubric **********************/
 /*****************************************************************************/
 
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
@@ -276,7 +278,7 @@ static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/********************* Put button to create a new rubric ***********************/
+/******************** Put button to create a new rubric **********************/
 /*****************************************************************************/
 
 static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics)
@@ -292,7 +294,7 @@ static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/******************** Put parameters to create a new rubric ********************/
+/******************* Put parameters to create a new rubric *******************/
 /*****************************************************************************/
 
 static void Rub_PutParamsToCreateNewRubric (void *Rubrics)
@@ -302,7 +304,7 @@ static void Rub_PutParamsToCreateNewRubric (void *Rubrics)
   }
 
 /*****************************************************************************/
-/******************************* Show one rubric *******************************/
+/****************************** Show one rubric ******************************/
 /*****************************************************************************/
 
 void Rub_SeeOneRubric (void)
@@ -364,7 +366,7 @@ void Rub_ShowOnlyOneRubricEnd (void)
   }
 
 /*****************************************************************************/
-/********** Show a pair of rows with the main data of a given rubric ***********/
+/********* Show a pair of rows with the main data of a given rubric **********/
 /*****************************************************************************/
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
@@ -392,9 +394,9 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 
       /***** Rubric title and main data *****/
       if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 
       /* Rubric title */
       Frm_BeginForm (ActSeeRub);
@@ -419,19 +421,17 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 
       /***** Author of the rubric *****/
       if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Rub_WriteAuthor (&Rubrics->Rubric);
       HTM_TD_End ();
 
       /***** Text of the rubric *****/
       if (ShowOnlyThisRubric)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Rub_DB_GetRubricTxt (Rubrics->Rubric.RubCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
@@ -452,7 +452,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/******************** Put icons to remove/edit one rubric **********************/
+/******************* Put icons to remove/edit one rubric *********************/
 /*****************************************************************************/
 
 static void Rub_PutIconsOneRubric (void *Rubrics)
@@ -472,7 +472,7 @@ static void Rub_WriteAuthor (struct Rub_Rubric *Rubric)
   }
 
 /*****************************************************************************/
-/******************** Put icons to remove/edit one rubric **********************/
+/******************* Put icons to remove/edit one rubric *********************/
 /*****************************************************************************/
 
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
@@ -489,7 +489,7 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/**************** Put parameter to move/remove one criterion ******************/
+/**************** Put parameter to move/remove one criterion *****************/
 /*****************************************************************************/
 
 static void Rub_PutParamsOneQst (void *Rubrics)
@@ -499,7 +499,7 @@ static void Rub_PutParamsOneQst (void *Rubrics)
   }
 
 /*****************************************************************************/
-/*********************** Params used to edit a rubric **************************/
+/*********************** Params used to edit a rubric ************************/
 /*****************************************************************************/
 
 void Rub_PutParams (void *Rubrics)
@@ -513,7 +513,7 @@ void Rub_PutParams (void *Rubrics)
   }
 
 /*****************************************************************************/
-/******************** Write parameter with code of rubric **********************/
+/******************* Write parameter with code of rubric *********************/
 /*****************************************************************************/
 
 void Rub_PutParamRubCod (long RubCod)
@@ -523,7 +523,7 @@ void Rub_PutParamRubCod (long RubCod)
   }
 
 /*****************************************************************************/
-/********************* Get parameter with code of rubric ***********************/
+/******************** Get parameter with code of rubric **********************/
 /*****************************************************************************/
 
 long Rub_GetParamRubCod (void)
@@ -546,7 +546,7 @@ long Rub_GetParams (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/************************** Get list of all rubrics ****************************/
+/************************* Get list of all rubrics ***************************/
 /*****************************************************************************/
 
 void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics)
@@ -586,7 +586,7 @@ void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/********************** Get rubric data using its code *************************/
+/********************* Get rubric data using its code ************************/
 /*****************************************************************************/
 
 void Rub_GetDataOfRubricByCod (struct Rub_Rubric *Rubric)
@@ -624,7 +624,7 @@ void Rub_GetDataOfRubricByCod (struct Rub_Rubric *Rubric)
   }
 
 /*****************************************************************************/
-/***************************** Free list of rubrics ****************************/
+/*************************** Free list of rubrics ****************************/
 /*****************************************************************************/
 
 void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
@@ -640,7 +640,7 @@ void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/*************** Ask for confirmation of removing of a rubric ******************/
+/************** Ask for confirmation of removing of a rubric *****************/
 /*****************************************************************************/
 
 void Rub_AskRemRubric (void)
@@ -676,7 +676,7 @@ void Rub_AskRemRubric (void)
   }
 
 /*****************************************************************************/
-/******************************* Remove a rubric *******************************/
+/****************************** Remove a rubric ******************************/
 /*****************************************************************************/
 
 void Rub_RemoveRubric (void)
@@ -711,7 +711,7 @@ void Rub_RemoveRubric (void)
   }
 
 /*****************************************************************************/
-/*********************** Remove rubric from all tables *************************/
+/********************** Remove rubric from all tables ************************/
 /*****************************************************************************/
 
 static void Rub_RemoveRubricFromAllTables (long RubCod)
@@ -724,7 +724,7 @@ static void Rub_RemoveRubricFromAllTables (long RubCod)
   }
 
 /*****************************************************************************/
-/*********************** Remove all rubrics of a course ************************/
+/********************** Remove all rubrics of a course ***********************/
 /*****************************************************************************/
 
 void Rub_RemoveCrsRubrics (long CrsCod)
@@ -737,7 +737,7 @@ void Rub_RemoveCrsRubrics (long CrsCod)
   }
 
 /*****************************************************************************/
-/************************ List the criteria in a rubric ********************/
+/************************ List the criteria in a rubric **********************/
 /*****************************************************************************/
 
 void Rub_ListRubric (void)
@@ -765,7 +765,7 @@ void Rub_ListRubric (void)
   }
 
 /*****************************************************************************/
-/**************** Request the creation or edition of a rubric ******************/
+/*************** Request the creation or edition of a rubric *****************/
 /*****************************************************************************/
 
 void Rub_RequestCreatOrEditRubric (void)
@@ -893,7 +893,7 @@ static void Rub_PutFormsEditionRubric (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/********************** Receive form to create a new rubric ********************/
+/********************* Receive form to create a new rubric *******************/
 /*****************************************************************************/
 
 void Rub_ReceiveFormRubric (void)
@@ -989,19 +989,18 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
   }
 
 /*****************************************************************************/
-/**************************** Create a new rubric ******************************/
+/**************************** Create a new rubric ****************************/
 /*****************************************************************************/
 
 static void Rub_CreateRubric (struct Rub_Rubric *Rubric,const char *Txt)
   {
-   extern const char *Txt_Created_new_game_X;
+   extern const char *Txt_Created_new_rubric_X;
 
    /***** Create a new rubric *****/
    Rubric->RubCod = Rub_DB_CreateRubric (Rubric,Txt);
 
    /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,
-                  Rubric->Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_rubric_X,Rubric->Title);
   }
 
 /*****************************************************************************/
@@ -1043,7 +1042,7 @@ unsigned Rub_GetParamCriInd (void)
   }
 
 /*****************************************************************************/
-/********************** List the criteria of a rubric **********************/
+/*********************** List the criteria of a rubric ***********************/
 /*****************************************************************************/
 
 static void Rub_ListRubricCriteria (struct Rub_Rubrics *Rubrics)
@@ -1084,7 +1083,7 @@ static void Rub_ListRubricCriteria (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
-/********************* List rubric criteria for edition ***********************/
+/********************* List rubric criteria for edition **********************/
 /*****************************************************************************/
 
 static void Rub_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
