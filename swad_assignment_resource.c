@@ -33,6 +33,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_pagination.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -54,7 +55,7 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Asg_GetParamAsgCod ();
+   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
 
    /***** Get assignment title *****/
    AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);

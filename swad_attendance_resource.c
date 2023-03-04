@@ -31,6 +31,7 @@
 #include "swad_attendance_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -44,7 +45,7 @@ void AttRsc_GetLinkToEvent (void)
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /***** Get attendance event code *****/
-   AttCod = Att_GetParamAttCod ();
+   AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Get attendance event title *****/
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);

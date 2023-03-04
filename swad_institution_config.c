@@ -539,7 +539,7 @@ void InsCfg_ChangeInsCty (void)
    struct Cty_Countr NewCty;
 
    /***** Get the new country code for the institution *****/
-   NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   NewCty.CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Check if country has changed *****/
    if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)

@@ -91,7 +91,6 @@ void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 
 void Att_PutParamAttCod (long AttCod);
-long Att_GetParamAttCod (void);
 
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);

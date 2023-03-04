@@ -32,6 +32,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
@@ -57,7 +58,7 @@ void BrwRsc_GetLinkToFile (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file code *****/
-   FilCod = Brw_GetParamFilCod ();
+   FilCod = Par_GetAndCheckParCode (Par_FilCod);
 
    /***** Get file title *****/
    switch (Gbl.Action.Act)

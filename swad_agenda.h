@@ -121,8 +121,6 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
                             long AgdCodToEdit);
 void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder);
 
-long Agd_GetParamAgdCod (void);
-
 void Agd_AskRemEvent (void);
 void Agd_RemoveEvent (void);
 

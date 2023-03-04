@@ -830,15 +830,6 @@ void Att_PutParamAttCod (long AttCod)
   }
 
 /*****************************************************************************/
-/*************** Get parameter with code of attendance event *****************/
-/*****************************************************************************/
-
-long Att_GetParamAttCod (void)
-  {
-   return Par_GetParToLong ("AttCod");
-  }
-
-/*****************************************************************************/
 /********* Ask for confirmation of removing of an attendance event ***********/
 /*****************************************************************************/
 
@@ -857,8 +848,7 @@ void Att_AskRemAttEvent (void)
    Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   if ((Events.Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);
@@ -884,8 +874,7 @@ void Att_GetAndRemAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
@@ -927,8 +916,7 @@ void Att_HideAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -949,8 +937,7 @@ void Att_UnhideAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   if ((Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -998,8 +985,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   Events.Event.AttCod = Att_GetParamAttCod ();
-   ItsANewAttEvent = (Events.Event.AttCod <= 0);
+   ItsANewAttEvent = ((Events.Event.AttCod = Par_GetParCode (Par_AttCod)) <= 0);
 
    /***** Get from the database the data of the attendance event *****/
    if (ItsANewAttEvent)
@@ -1206,7 +1192,7 @@ void Att_ReceiveFormAttEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) <= 0);
+   ItsANewAttEvent = ((ReceivedAtt.AttCod = Par_GetParCode (Par_AttCod)) <= 0);
 
    if (!ItsANewAttEvent)
      {
@@ -1466,8 +1452,7 @@ void Att_SeeOneAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Events.Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
 
    /***** Show event *****/
    Att_ShowEvent (&Events);
@@ -1957,8 +1942,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Events.Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);	// This checks that event belong to current course
 
    if (Events.Event.Open)
@@ -2021,8 +2005,7 @@ void Att_RegisterStudentsInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   if ((Events.Event.AttCod = Att_GetParamAttCod ()) < 0)
-      Err_WrongEventExit ();
+   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);	// This checks that event belong to current course
 
    /***** Get groups selected *****/

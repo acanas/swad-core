@@ -1410,11 +1410,8 @@ void Pho_CalcPhotoDegree (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
 
    /***** Get the degree which photo will be computed *****/
-   DegCod = Deg_GetAndCheckParamOtherDegCod (-1L);	// Parameter may be omitted
-							// (when selecting classphoto/list)
-
-   if (DegCod > 0)
-     {
+   if ((DegCod = Par_GetParCode (Par_OthDegCod)) > 0)	// Parameter may be omitted
+     {							// (when selecting classphoto/list)
       /***** Prevent the computing of an average photo too recently updated *****/
       if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
 	  Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)

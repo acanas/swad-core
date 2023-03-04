@@ -3987,7 +3987,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    unsigned NumInss;
 
    /***** Get country code of my institution *****/
-   Gbl.Usrs.Me.UsrDat.InsCtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Gbl.Usrs.Me.UsrDat.InsCtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** When country changes, the institution, center and department must be reset *****/
    NumInss = Ins_GetNumInssInCty (Gbl.Usrs.Me.UsrDat.InsCtyCod);
@@ -4023,7 +4023,7 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   Ins.InsCod = Ins_GetAndCheckParamOtherInsCod (0);	// 0 (another institution) is allowed here
+   Ins.InsCod = Par_GetAndCheckParCodeMin (Par_OthInsCod,0);	// 0 (another institution) is allowed here
 
    /* Get country of institution */
    if (Ins.InsCod > 0)
@@ -4059,7 +4059,7 @@ void Rec_UpdateMyCenter (void)
 
    /***** Get my center *****/
    /* Get center code */
-   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (0);	// 0 (another center) is allowed here
+   Ctr.CtrCod = Par_GetAndCheckParCodeMin (Par_OthCtrCod,0);	// 0 (another center) is allowed here
 
    /* Get institution of center */
    if (Ctr.CtrCod > 0)

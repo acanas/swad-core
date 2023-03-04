@@ -962,21 +962,6 @@ void Ctr_PutParamCtrCod (long CtrCod)
   }
 
 /*****************************************************************************/
-/****************** Get parameter with code of other center ******************/
-/*****************************************************************************/
-
-long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed)
-  {
-   long CtrCod;
-
-   /***** Get and check parameter with code of center *****/
-   if ((CtrCod = Par_GetParToLong ("OthCtrCod")) < MinCodAllowed)
-      Err_WrongCenterExit ();
-
-   return CtrCod;
-  }
-
-/*****************************************************************************/
 /******************************* Remove a center *****************************/
 /*****************************************************************************/
 

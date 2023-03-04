@@ -57,7 +57,6 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit);
 static void Ann_PutParams (void *AnnCod);
-static long Ann_GetParamAnnCod (void);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
 
@@ -309,21 +308,6 @@ static void Ann_PutParams (void *AnnCod)
   }
 
 /*****************************************************************************/
-/************** Get parameter with the code of an announcement ***************/
-/*****************************************************************************/
-
-static long Ann_GetParamAnnCod (void)
-  {
-   long AnnCod;
-
-   /***** Get announcement code *****/
-   if ((AnnCod = Par_GetParToLong ("AnnCod")) <= 0)
-      Err_WrongAnnouncementExit ();
-
-   return AnnCod;
-  }
-
-/*****************************************************************************/
 /***************** Show form to create a new announcement ********************/
 /*****************************************************************************/
 
@@ -444,7 +428,7 @@ void Ann_HideActiveAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement to hide *****/
-   AnnCod = Ann_GetParamAnnCod ();
+   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
 
    /***** Set global announcement as hidden *****/
    Ann_DB_HideAnnouncement (AnnCod);
@@ -459,7 +443,7 @@ void Ann_RevealHiddenAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement to show *****/
-   AnnCod = Ann_GetParamAnnCod ();
+   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
 
    /***** Set global announcement as not hidden *****/
    Ann_DB_UnhideAnnouncement (AnnCod);
@@ -475,7 +459,7 @@ void Ann_RemoveAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
-   AnnCod = Ann_GetParamAnnCod ();
+   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
 
    /***** Remove users who have seen the announcement *****/
    Ann_DB_RemoveUsrsWhoSawAnnouncement (AnnCod);
@@ -499,7 +483,7 @@ void Ann_MarkAnnouncementAsSeen (void)
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
-   AnnCod = Ann_GetParamAnnCod ();
+   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
 
    /***** Mark announcement as seen *****/
    Ann_DB_MarkAnnouncementAsSeenByMe (AnnCod);

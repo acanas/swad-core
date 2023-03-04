@@ -662,7 +662,7 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    bool ICanEditQuestions = Exa_CheckIfEditable (&Exams->Exam);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
+   Box_BoxBegin ("100%",Txt_Questions,
 		 ICanEditQuestions ? ExaSet_PutIconToAddNewQuestions :
 				     NULL,
 		 ICanEditQuestions ? Exams :
@@ -970,7 +970,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	       else
 		  Ico_PutIconRemovalNotAllowed ();
 
-	       /* Put icon to cancel the question */
+	       /* Put icon to validate/invalidate the question */
 	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
 					      ExaSet_PutParamsOneQst,Exams,
 					      ValInv[Question.Validity].Icon,

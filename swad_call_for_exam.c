@@ -169,7 +169,7 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    long ExaCod;
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Cfe_GetParamExaCod ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
    Par_GetParToText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
@@ -379,8 +379,7 @@ void Cfe_PrintCallForExam (void)
    Cfe_AllocMemCallForExam (&CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Read call for exam from the database *****/
    Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
@@ -407,8 +406,7 @@ void Cfe_ReqRemoveCallForExam (void)
    Cfe_ResetCallsForExams (&CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Show question and button to remove call for exam *****/
    /* Begin alert */
@@ -442,8 +440,7 @@ void Cfe_RemoveCallForExam1 (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Mark the call for exam as deleted in the database *****/
    Cfe_DB_MarkACallForExamAsDeleted (ExaCod);
@@ -484,8 +481,7 @@ void Cfe_HideCallForExam (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Mark the call for exam as hidden in the database *****/
    Cfe_DB_HideCallForExam (ExaCod);
@@ -509,8 +505,7 @@ void Cfe_UnhideCallForExam (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   if ((ExaCod = Cfe_GetParamExaCod ()) <= 0)
-      Err_WrongCallForExamExit ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Mark the call for exam as visible in the database *****/
    Cfe_DB_UnhideCallForExam (ExaCod);
@@ -592,7 +587,7 @@ static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams)
   {
    /***** Get the call for exam code
           of the call for exam to highlight *****/
-   CallsForExams->HighlightExaCod = Cfe_GetParamExaCod ();
+   CallsForExams->HighlightExaCod = Par_GetParCode (Par_ExaCod);
   }
 
 /*****************************************************************************/
@@ -1560,16 +1555,6 @@ void Cfe_PutHiddenParamExaCod (long ExaCod)
   {
    if (ExaCod > 0)
       Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
-  }
-
-/*****************************************************************************/
-/************ Get parameter with the code of a call for exam *****************/
-/*****************************************************************************/
-
-long Cfe_GetParamExaCod (void)
-  {
-   /* Get notice code */
-   return Par_GetParToLong ("ExaCod");
   }
 
 /*****************************************************************************/

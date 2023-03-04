@@ -63,6 +63,24 @@ typedef enum
    Par_PARAM_MULTIPLE,
   } Par_ParamType_t; // Parameter is present only one time / multiple times
 
+typedef enum
+  {
+   Par_AgdCod,
+   Par_AnnCod,
+   Par_AsgCod,
+   Par_AttCod,
+   Par_BanCod,
+   Par_BldCod,
+   Par_ExaCod,
+   Par_FilCod,
+   Par_GrpCod,
+   Par_GrpTypCod,
+   Par_OthCtrCod,
+   Par_OthCtyCod,
+   Par_OthDegCod,
+   Par_OthInsCod,
+  } Par_Code_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -85,6 +103,9 @@ unsigned long Par_GetParToUnsignedLong (const char *ParamName,
                                         unsigned long Max,
                                         unsigned long Default);
 long Par_GetParToLong (const char *ParamName);
+long Par_GetAndCheckParCode (Par_Code_t ParamCode);
+long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed);
+long Par_GetParCode (Par_Code_t ParamCode);
 bool Par_GetParToBool (const char *ParamName);
 unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxBytes);
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes);

@@ -80,7 +80,6 @@ static void Cty_PutIconToViewCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
 static void Cty_PutParamOtherCtyCod (void *CtyCod);
-static long Cty_GetParamOtherCtyCod (void);
 
 static void Cty_UpdateCtyName (long CtyCod,const char *FieldName,const char *NewCtyName);
 
@@ -1185,27 +1184,6 @@ static void Cty_PutParamOtherCtyCod (void *CtyCod)
   }
 
 /*****************************************************************************/
-/******************* Get parameter with code of country **********************/
-/*****************************************************************************/
-
-long Cty_GetAndCheckParamOtherCtyCod (long MinCodAllowed)
-  {
-   long CtyCod;
-
-   /***** Get and check parameter with code of country *****/
-   if ((CtyCod = Cty_GetParamOtherCtyCod ()) < MinCodAllowed)
-      Err_WrongCountrExit ();
-
-   return CtyCod;
-  }
-
-static long Cty_GetParamOtherCtyCod (void)
-  {
-   /***** Get code of country *****/
-   return Par_GetParToLong ("OthCtyCod");
-  }
-
-/*****************************************************************************/
 /****************************** Remove a country *****************************/
 /*****************************************************************************/
 
@@ -1218,7 +1196,7 @@ void Cty_RemoveCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get country code *****/
-   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Get data of the country from database *****/
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
@@ -1279,7 +1257,7 @@ void Cty_RenameCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
@@ -1358,7 +1336,7 @@ void Cty_ChangeCtyWWW (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
@@ -1587,7 +1565,7 @@ void Cty_ReceiveFormNewCountry (void)
 
    /***** Get parameters from form *****/
    /* Get numeric country code */
-   if ((Cty_EditingCty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
+   if ((Cty_EditingCty->CtyCod = Par_GetParCode (Par_OthCtyCod)) < 0)
      {
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_numerical_code_of_the_new_country);

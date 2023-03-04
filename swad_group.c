@@ -143,8 +143,6 @@ static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
 static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
-static long Grp_GetParamGrpTypCod (void);
-static long Grp_GetParamGrpCod (void);
 static void Grp_PutParamGrpTypCod (void *GrpTypCod);
 
 /*****************************************************************************/
@@ -3297,7 +3295,7 @@ void Grp_ReceiveFormNewGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get parameters from form *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetParCode (Par_GrpTypCod)) > 0) // Group type valid
      {
       /* Get group name */
       Par_GetParToText ("GrpName",Gbl.Crs.Grps.GrpName,
@@ -3362,8 +3360,7 @@ void Grp_ReqRemGroupType (void)
    unsigned NumGrps;
 
    /***** Get the code of the group type *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /***** Check if this group type has groups *****/
    if ((NumGrps = Grp_DB_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
@@ -3379,8 +3376,7 @@ void Grp_ReqRemGroupType (void)
 void Grp_ReqRemGroup (void)
   {
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Confirm removing *****/
    Grp_AskConfirmRemGrp ();
@@ -3476,8 +3472,7 @@ static void Grp_AskConfirmRemGrp (void)
 void Grp_RemoveGroupType (void)
   {
    /***** Get param with code of group type *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /***** Remove group type and its groups *****/
    Grp_RemoveGroupTypeCompletely ();
@@ -3490,8 +3485,7 @@ void Grp_RemoveGroupType (void)
 void Grp_RemoveGroup (void)
   {
    /***** Get param with group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Remove group *****/
    Grp_RemoveGroupCompletely ();
@@ -3609,8 +3603,7 @@ void Grp_OpenGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3640,8 +3633,7 @@ void Grp_CloseGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3671,8 +3663,7 @@ void Grp_EnableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3703,8 +3694,7 @@ void Grp_DisableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3739,11 +3729,10 @@ void Grp_ChangeGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new group type */
-   NewGrpTypCod = Grp_GetParamGrpTypCod ();
+   NewGrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get from the database the type and the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3789,8 +3778,7 @@ void Grp_ChangeGroupRoom (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new room */
    NewRooCod = Roo_GetParamRooCod ();
@@ -3829,8 +3817,7 @@ void Grp_ChangeMandatGrpTyp (void)
 
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
    NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
@@ -3883,8 +3870,7 @@ void Grp_ChangeMultiGrpTyp (void)
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
@@ -3930,8 +3916,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
 
    /***** Get the code of type of group *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /***** Get from the database the data of this type of group *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3970,8 +3955,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /***** Get parameters of the form *****/
    /* Get group code */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
@@ -4059,8 +4043,7 @@ void Grp_RenameGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) <= 0)
-      Err_WrongGrpTypExit ();
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new name for the group type */
    Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
@@ -4132,8 +4115,7 @@ void Grp_RenameGroup (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
-   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) <= 0)
-      Err_WrongGroupExit ();
+   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new name for the group */
    Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
@@ -4186,26 +4168,6 @@ void Grp_RenameGroup (void)
    Str_Copy (Gbl.Crs.Grps.GrpName,NewNameGrp,sizeof (Gbl.Crs.Grps.GrpName) - 1);
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
-  }
-
-/*****************************************************************************/
-/******************* Get parameter with code of group type *******************/
-/*****************************************************************************/
-
-static long Grp_GetParamGrpTypCod (void)
-  {
-   /***** Get code of group type *****/
-   return Par_GetParToLong ("GrpTypCod");
-  }
-
-/*****************************************************************************/
-/*********************** Get parameter with group code ***********************/
-/*****************************************************************************/
-
-static long Grp_GetParamGrpCod (void)
-  {
-   /***** Get group code *****/
-   return Par_GetParToLong ("GrpCod");
   }
 
 /*****************************************************************************/

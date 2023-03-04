@@ -493,16 +493,6 @@ static void Bld_PutParamBldCod (void *BldCod)
   }
 
 /*****************************************************************************/
-/******************** Get parameter with code of building ********************/
-/*****************************************************************************/
-
-long Bld_GetParamBldCod (void)
-  {
-   /***** Get code of building *****/
-   return Par_GetParToLong ("BldCod");
-  }
-
-/*****************************************************************************/
 /****************************** Remove a building ****************************/
 /*****************************************************************************/
 
@@ -514,8 +504,7 @@ void Bld_RemoveBuilding (void)
    Bld_EditingBuildingConstructor ();
 
    /***** Get building code *****/
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Err_WrongBuildingExit ();
+   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /***** Get data of the building from database *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -591,8 +580,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Err_WrongBuildingExit ();
+   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /* Get the new name for the building */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
@@ -649,8 +637,7 @@ void Bld_ChangeBuildingLocation (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   if ((Bld_EditingBuilding->BldCod = Bld_GetParamBldCod ()) <= 0)
-      Err_WrongBuildingExit ();
+   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /* Get the new location for the building */
    Par_GetParToText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);

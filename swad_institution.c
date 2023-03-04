@@ -1117,21 +1117,6 @@ void Ins_PutParamInsCod (long InsCod)
   }
 
 /*****************************************************************************/
-/******************* Get parameter with code of institution ******************/
-/*****************************************************************************/
-
-long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed)
-  {
-   long InsCod;
-
-   /***** Get and check parameter with code of institution *****/
-   if ((InsCod = Par_GetParToLong ("OthInsCod")) < MinCodAllowed)
-      Err_WrongInstitExit ();
-
-   return InsCod;
-  }
-
-/*****************************************************************************/
 /**************************** Remove a institution ***************************/
 /*****************************************************************************/
 

@@ -947,6 +947,49 @@ long Par_GetParToLong (const char *ParamName)
   }
 
 /*****************************************************************************/
+/******************** Get the value of a code parameter **********************/
+/*****************************************************************************/
+
+long Par_GetAndCheckParCode (Par_Code_t ParamCode)
+  {
+   return Par_GetAndCheckParCodeMin (ParamCode,1);
+  }
+
+long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed)
+  {
+   long Cod;
+
+   /***** Get code and check that is a valid code (>= minimum) *****/
+   if ((Cod = Par_GetParCode (ParamCode)) < MinCodAllowed)
+      Err_WrongCodeExit ();
+
+   return Cod;
+  }
+
+long Par_GetParCode (Par_Code_t ParamCode)
+  {
+   static const char *Par_CodeStr[] =
+     {
+      [Par_AgdCod] = "AgdCod",
+      [Par_AnnCod] = "AnnCod",
+      [Par_AsgCod] = "AsgCod",
+      [Par_AttCod] = "AttCod",
+      [Par_BanCod] = "BanCod",
+      [Par_BldCod] = "BldCod",
+      [Par_ExaCod] = "ExaCod",
+      [Par_FilCod] = "FilCod",
+      [Par_GrpCod] = "GrpCod",
+      [Par_GrpTypCod] = "GrpTypCod",
+      [Par_OthCtrCod] = "OthCtrCod",
+      [Par_OthCtyCod] = "OthCtyCod",
+      [Par_OthDegCod] = "OthDegCod",
+      [Par_OthInsCod] = "OthInsCod",
+     };
+
+   return Par_GetParToLong (Par_CodeStr[ParamCode]);
+  }
+
+/*****************************************************************************/
 /************************** Get a boolean parameter **************************/
 /*****************************************************************************/
 

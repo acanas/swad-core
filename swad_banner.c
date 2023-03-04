@@ -518,16 +518,6 @@ static void Ban_PutParamBanCod (long BanCod)
   }
 
 /*****************************************************************************/
-/******************** Get parameter with code of banner **********************/
-/*****************************************************************************/
-
-long Ban_GetParamBanCod (void)
-  {
-   /***** Get code of banner *****/
-   return Par_GetParToLong ("BanCod");
-  }
-
-/*****************************************************************************/
 /******************************* Remove a banner *****************************/
 /*****************************************************************************/
 
@@ -540,8 +530,7 @@ void Ban_RemoveBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Get banner code *****/
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -592,8 +581,7 @@ void Ban_HideBanner (void)
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
   {
    /***** Get banner code *****/
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -667,8 +655,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new name for the banner */
    Par_GetParToText (ParamName,NewBanName,MaxBytes);
@@ -726,8 +713,7 @@ void Ban_ChangeBannerImg (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
@@ -769,8 +755,7 @@ void Ban_ChangeBannerWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1030,8 +1015,7 @@ void Ban_ClickOnBanner (void)
    struct Ban_Banner Ban;
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) <= 0)
-      Err_WrongBannerExit ();
+   Ban.BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);

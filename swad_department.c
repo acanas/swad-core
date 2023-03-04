@@ -626,7 +626,7 @@ void Dpt_ChangeDepartIns (void)
    Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get parameter with institution code */
-   NewInsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   NewInsCod = Par_GetAndCheckParCode (Par_OthInsCod);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -919,7 +919,7 @@ void Dpt_ReceiveFormNewDpt (void)
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt_EditingDpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Dpt_EditingDpt->InsCod = Par_GetAndCheckParCode (Par_OthInsCod);
 
    /* Get department short name */
    Par_GetParToText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);

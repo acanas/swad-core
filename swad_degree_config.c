@@ -360,7 +360,7 @@ void DegCfg_ChangeDegCtr (void)
    struct Ctr_Center NewCtr;
 
    /***** Get parameter with center code *****/
-   NewCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   NewCtr.CtrCod = Par_GetAndCheckParCode (Par_OthCtrCod);
 
    /***** Check if center has changed *****/
    if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)

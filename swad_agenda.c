@@ -1157,16 +1157,6 @@ static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
   }
 
 /*****************************************************************************/
-/******************** Get parameter with code of event ***********************/
-/*****************************************************************************/
-
-long Agd_GetParamAgdCod (void)
-  {
-   /***** Get code of event *****/
-   return Par_GetParToLong ("AgdCod");
-  }
-
-/*****************************************************************************/
 /************** Ask for confirmation of removing of an event *****************/
 /*****************************************************************************/
 
@@ -1184,8 +1174,7 @@ void Agd_AskRemEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1220,8 +1209,7 @@ void Agd_RemoveEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1254,8 +1242,7 @@ void Agd_HideEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1284,8 +1271,7 @@ void Agd_UnhideEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1315,8 +1301,7 @@ void Agd_MakeEventPrivate (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1350,8 +1335,7 @@ void Agd_MakeEventPublic (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) < 0)
-      Err_WrongEventExit ();
+   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1400,7 +1384,7 @@ void Agd_RequestCreatOrEditEvent (void)
    Agd_GetParams (&Agenda,Agd_MY_AGENDA);
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) <= 0);
+   ItsANewEvent = ((AgdEvent.AgdCod = Par_GetParCode (Par_AgdCod)) <= 0);
 
    /***** Get from the database the data of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1546,7 +1530,7 @@ void Agd_ReceiveFormEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) <= 0);
+   ItsANewEvent = ((AgdEvent.AgdCod = Par_GetParCode (Par_AgdCod)) <= 0);
 
    /***** Get start/end date-times *****/
    AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");

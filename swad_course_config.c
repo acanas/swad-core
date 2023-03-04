@@ -472,7 +472,7 @@ void CrsCfg_ChangeCrsDeg (void)
    struct Deg_Degree NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   NewDeg.DegCod = Par_GetAndCheckParCode (Par_OthDegCod);
 
    /***** Check if degree has changed *****/
    if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)

@@ -99,7 +99,6 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              long AsgCod,bool GetContent);
 
 void Asg_PutParamAsgCod (long AsgCod);
-long Asg_GetParamAsgCod (void);
 void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);

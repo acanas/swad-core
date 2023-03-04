@@ -12298,6 +12298,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove exam question"		// Çeviri lazim!
 #endif
 	,
+	[ActValSetQst] =
+#if   L==1	// ca
+	"Validar pregunta d'examen"
+#elif L==2	// de
+	"Pr&uuml;fungsfrage validieren"
+#elif L==3	// en
+	"Validate exam question"
+#elif L==4	// es
+	"Validar pregunta de examen"
+#elif L==5	// fr
+	"Valider question d'examen"
+#elif L==6	// gn
+	"Validar pregunta de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Validare domanda d'esame"
+#elif L==8	// pl
+	"Potwierd&zacute; pytanie egzaminacyjne"
+#elif L==9	// pt
+	"Validar pergunta do exame"
+#elif L==10	// tr
+	"S&inodot;nav sorusunu do&gbreve;rula"
+#endif
+	,
+	[ActInvSetQst] =
+#if   L==1	// ca
+	"Invalidar pregunta d'examen"
+#elif L==2	// de
+	"Pr&uuml;fungsfrage ung&uuml;ltig machen"
+#elif L==3	// en
+	"Invalidate exam question"
+#elif L==4	// es
+	"Invalidar pregunta de examen"
+#elif L==5	// fr
+	"Invalider question d'examen"
+#elif L==6	// gn
+	"Invalidar pregunta de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Invalidare domanda d'esame"
+#elif L==8	// pl
+	"Uniewa&zdot;nij pytanie egzaminacyjne"
+#elif L==9	// pt
+	"Invalidar pergunta do exame"
+#elif L==10	// tr
+	"Ge&ccedil;ersiz s&inodot;nav sorusu"
+#endif
+	,
 	[ActReqNewExaSes] =
 #if   L==1	// ca
 	"Request new exam session"			// Necessita traducció

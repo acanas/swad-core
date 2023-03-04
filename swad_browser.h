@@ -182,7 +182,6 @@ struct Brw_FileMetadata
 
 void Brw_GetParAndInitFileBrowser (void);
 void Brw_PutHiddenParamFilCod (long FilCod);
-long Brw_GetParamFilCod (void);
 void Brw_InitializeFileBrowser (void);
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,

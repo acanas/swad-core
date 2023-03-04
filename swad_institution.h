@@ -93,7 +93,6 @@ void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
 void Ins_PutParamCurrentInsCod (void *InsCod);
 void Ins_PutParamInsCod (long InsCod);
-long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);

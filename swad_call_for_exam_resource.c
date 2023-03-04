@@ -31,6 +31,7 @@
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -45,7 +46,7 @@ void Cfe_GetLinkToCallForExam (void)
    char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Cfe_GetParamExaCod ();
+   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Get session and date of the exam *****/
    CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);

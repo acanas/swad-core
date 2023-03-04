@@ -90,7 +90,6 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings);
 void Bld_GetListBuildingsInThisCtr (void);
 
 void Bld_GetDataOfBuildingByCod (struct Bld_Building *Roo);
-long Bld_GetParamBldCod (void);
 
 void Bld_RemoveBuilding (void);
 void Bld_RenameBuildingShort (void);

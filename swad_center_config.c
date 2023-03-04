@@ -1006,7 +1006,7 @@ void CtrCfg_ChangeCtrIns (void)
    struct Ins_Instit NewIns;
 
    /***** Get parameter with institution code *****/
-   NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   NewIns.InsCod = Par_GetAndCheckParCode (Par_OthInsCod);
 
    /***** Check if institution has changed *****/
    if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)

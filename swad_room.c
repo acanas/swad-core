@@ -937,7 +937,7 @@ void Roo_ChangeBuilding (void)
       Err_WrongRoomExit ();
 
    /* Get room building */
-   NewBldCod = Bld_GetParamBldCod ();
+   NewBldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1386,7 +1386,7 @@ void Roo_ReceiveFormNewRoom (void)
 
    /***** Get parameters from form *****/
    /* Get room building, floor and type */
-   Roo_EditingRoom->BldCod = Bld_GetParamBldCod ();
+   Roo_EditingRoom->BldCod = Par_GetAndCheckParCode (Par_BldCod);
    Roo_EditingRoom->Floor  = Roo_GetParamFloor ();
    Roo_EditingRoom->Type   = Roo_GetParamType ();
 

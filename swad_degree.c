@@ -1177,21 +1177,6 @@ void Deg_PutParamDegCod (long DegCod)
   }
 
 /*****************************************************************************/
-/********************* Get parameter with code of degree *********************/
-/*****************************************************************************/
-
-long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed)
-  {
-   long DegCod;
-
-   /***** Get and check parameter with code of degree *****/
-   if ((DegCod = Par_GetParToLong ("OthDegCod")) < MinCodAllowed)
-      Err_WrongDegreeExit ();
-
-   return DegCod;
-  }
-
-/*****************************************************************************/
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
 // Returns true if degree found

@@ -1978,7 +1978,7 @@ static long Brw_GetGrpSettings (void)
   {
    long GrpCod;
 
-   if ((GrpCod = Par_GetParToLong ("GrpCod")) > 0)
+   if ((GrpCod = Par_GetParCode (Par_GrpCod)) > 0)
       return GrpCod;
    else
       /***** Try to get group code from database *****/
@@ -2083,16 +2083,6 @@ void Brw_PutHiddenParamFilCod (long FilCod)
   {
    if (FilCod > 0)
       Par_PutHiddenParamLong (NULL,"FilCod",FilCod);
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of file ***********************/
-/*****************************************************************************/
-
-long Brw_GetParamFilCod (void)
-  {
-   /***** Get code of file *****/
-   return Par_GetParToLong ("FilCod");
   }
 
 /*****************************************************************************/
@@ -7489,7 +7479,7 @@ void Brw_ShowFileMetadata (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   FileMetadata.FilCod = Par_GetAndCheckParCode (Par_FilCod);
    Brw_GetFileMetadataByCod (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
@@ -8299,7 +8289,7 @@ void Brw_ChgFileMetadata (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = Brw_GetParamFilCod ();
+   FileMetadata.FilCod = Par_GetAndCheckParCode (Par_FilCod);
    Brw_GetFileMetadataByCod (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
