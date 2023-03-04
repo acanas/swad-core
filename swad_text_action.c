@@ -14000,6 +14000,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove rubric"			// Çeviri lazim!
 #endif
 	,
+	[ActFrmNewRubCri] =
+#if   L==1	// ca
+	"Edit new rubric criterion"			// Necessita traducció
+#elif L==2	// de
+	"Edit new rubric criterion"			// Need Übersetzung
+#elif L==3	// en
+	"Edit new rubric criterion"
+#elif L==4	// es
+	"Editar nuevo criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Edit new rubric criterion"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar nuevo criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Edit new rubric criterion"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit new rubric criterion"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit new rubric criterion"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit new rubric criterion"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeAdmDocIns] =
 #if   L==1	// ca
 	"Documents zone of institution (see or manage)"			// Necessita traducció

@@ -336,7 +336,7 @@ void Rub_ShowOnlyOneRubricBegin (struct Rub_Rubrics *Rubrics,
 
       /***** Show main data of this rubric *****/
       Rub_ShowRubricMainData (Rubrics,
-		            true);	// Show only this rubric
+		              true);	// Show only this rubric
 
       /***** Write criteria of this rubric *****/
       if (ListRubricCriteria)
@@ -355,7 +355,7 @@ void Rub_ShowOnlyOneRubricEnd (void)
 /*****************************************************************************/
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
-                                  bool ShowOnlyThisRubric)
+                                    bool ShowOnlyThisRubric)
   {
    extern const char *Txt_View_rubric;
    extern const char *Txt_Number_of_criteria;

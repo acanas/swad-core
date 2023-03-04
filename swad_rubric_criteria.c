@@ -209,7 +209,7 @@ void RubCri_WriteCriterionTitle (const char *Title,const char *ClassTitle,bool V
 
 void RubCri_PutIconToAddNewCriterion (void *Rubrics)
   {
-   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Rub_PutParams,Rubrics);
+   Ico_PutContextualIconToAdd (ActFrmNewRubCri,NULL,Rub_PutParams,Rubrics);
   }
 
 /*****************************************************************************/
@@ -218,12 +218,12 @@ void RubCri_PutIconToAddNewCriterion (void *Rubrics)
 
 void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics)
   {
-   extern const char *Txt_Add_criteria;
+   extern const char *Txt_New_criterion;
 
-   Frm_BeginForm (ActAddOneGamQst);
+   Frm_BeginForm (ActFrmNewRubCri);
       Rub_PutParams (Rubrics);
 
-      Btn_PutConfirmButton (Txt_Add_criteria);
+      Btn_PutConfirmButton (Txt_New_criterion);
 
    Frm_EndForm ();
   }
@@ -422,4 +422,55 @@ static void RubCri_PutParamsOneCriterion (void *Rubrics)
   {
    if (Rubrics)
       Rub_PutParams (Rubrics);
+  }
+
+/*****************************************************************************/
+/************ Request the creation or edition of a rubric criterion **********/
+/*****************************************************************************/
+
+void RubCri_RequestCreatOrEditCri (void)
+  {
+   struct Rub_Rubrics Rubrics;
+   bool ItsANewCriterion;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   Err_ShowErrorAndExit ("Not implemented.");
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+
+   /***** Reset rubric *****/
+   Rub_ResetRubric (&Rubrics.Rubric);
+
+   /***** Check if I can edit rubrics *****/
+   if (!Rub_CheckIfICanEditRubrics ())
+      Err_NoPermissionExit ();
+
+   /***** Get parameters *****/
+   ItsANewCriterion = ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0);
+
+   /***** Get rubric data *****/
+   if (ItsANewCriterion)
+     {
+      /* Initialize to empty rubric */
+      Rub_ResetRubric (&Rubrics.Rubric);
+      Txt[0] = '\0';
+     }
+   else
+     {
+      /* Get rubric data from database */
+      Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+      Rub_DB_GetRubricTxt (Rubrics.Rubric.RubCod,Txt);
+     }
+
+   /***** Put forms to create/edit a rubric *****/
+   // Rub_PutFormsEditionRubric (&Rubrics,Txt,ItsANewCriterion);
+
+   /***** Show rubrics or criteria *****/
+   if (ItsANewCriterion)
+      /* Show rubrics again */
+      Rub_ListAllRubrics (&Rubrics);
+   else
+      /* Show criteria of the rubric ready to be edited */
+      RubCri_ListRubricCriteria (&Rubrics);
   }

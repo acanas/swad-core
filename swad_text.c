@@ -1060,29 +1060,6 @@ const char *Txt_Action =
 	"Eylem";
 #endif
 
-const char *Txt_Add_criteria =
-#if   L==1	// ca
-	"Afegir criteris";
-#elif L==2	// de
-	"F&uuml;gen Kriterien";
-#elif L==3	// en
-	"Add criteria";
-#elif L==4	// es
-	"A&ntilde;adir criterios";
-#elif L==5	// fr
-	"Ajouter crit&egrave;res";
-#elif L==6	// gn
-	"A&ntilde;adir criterios";	// Okoteve traducción
-#elif L==7	// it
-	"Aggiungere criteri";
-#elif L==8	// pl
-	"Dodaj kryteria";
-#elif L==9	// pt
-	"Adicionar crit&eacute;rios";
-#elif L==10	// tr
-	"Kriter ekle";
-#endif
-
 const char *Txt_Add_questions =
 #if   L==1	// ca
 	"Afegir preguntes";
@@ -24925,29 +24902,6 @@ const char *Txt_New_announcement =
 	"Yeni duyuru";
 #endif
 
-const char *Txt_New_call_FOR_EXAM =
-#if   L==1	// ca
-	"Nova convocat&ograve;ria";
-#elif L==2	// de
-	"Neuer Aufruf";
-#elif L==3	// en
-	"New call";
-#elif L==4	// es
-	"Nueva convocatoria";
-#elif L==5	// fr
-	"Nouvelle convocation";
-#elif L==6	// gn
-	"Nueva convocatoria";	// Okoteve traducción
-#elif L==7	// it
-	"Nuova sessione";
-#elif L==8	// pl
-	"Nowe ogloszenie";
-#elif L==9	// pt
-	"Nova chamada";
-#elif L==10	// tr
-	"Yeni &ccedil;a&gbreve;r&inodot;";
-#endif
-
 const char *Txt_New_banner =
 #if   L==1	// ca
 	"Nou banner";
@@ -24992,6 +24946,29 @@ const char *Txt_New_building =
 	"Novo edif&iacute;cio";
 #elif L==10	// tr
 	"Yeni bina";
+#endif
+
+const char *Txt_New_call_FOR_EXAM =
+#if   L==1	// ca
+	"Nova convocat&ograve;ria";
+#elif L==2	// de
+	"Neuer Aufruf";
+#elif L==3	// en
+	"New call";
+#elif L==4	// es
+	"Nueva convocatoria";
+#elif L==5	// fr
+	"Nouvelle convocation";
+#elif L==6	// gn
+	"Nueva convocatoria";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova sessione";
+#elif L==8	// pl
+	"Nowe ogloszenie";
+#elif L==9	// pt
+	"Nova chamada";
+#elif L==10	// tr
+	"Yeni &ccedil;a&gbreve;r&inodot;";
 #endif
 
 const char *Txt_New_center =
@@ -25081,6 +25058,29 @@ const char *Txt_New_course =
 #elif L==10	// tr
 	"Yeni kurs"
 	" (ders, konu, disiplin...)";
+#endif
+
+const char *Txt_New_criterion =
+#if   L==1	// ca
+	"Nou criteri";
+#elif L==2	// de
+	"Neues Kriterium";
+#elif L==3	// en
+	"New criterion";
+#elif L==4	// es
+	"Nuevo criterio";
+#elif L==5	// fr
+	"Nouveau crit&egrave;re";
+#elif L==6	// gn
+	"Nuevo criterio";	// Okoteve traducción
+#elif L==7	// it
+	"Nuovo criterio";
+#elif L==8	// pl
+	"Nowe kryterium";
+#elif L==9	// pt
+	"Novo crit&eacute;rio";
+#elif L==10	// tr
+	"Yeni kriter";
 #endif
 
 const char *Txt_New_degree =

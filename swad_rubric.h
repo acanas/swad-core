@@ -44,7 +44,7 @@ struct Rub_Rubric
    long CrsCod;			// Course code
    long UsrCod;			// Author code
    char Title[Rub_MAX_BYTES_TITLE + 1];
-   unsigned NumCriteria;		// Number of criteria in the rubric
+   unsigned NumCriteria;	// Number of criteria in the rubric
   };
 
 struct Rub_Rubrics

@@ -100,6 +100,7 @@
 #include "swad_report.h"
 #include "swad_role.h"
 #include "swad_rubric.h"
+#include "swad_rubric_criteria.h"
 #include "swad_search.h"
 #include "swad_session.h"
 #include "swad_setting.h"
@@ -842,6 +843,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgRub		] = {1956,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReceiveFormRubric		,NULL},
    [ActReqRemRub	] = {1957,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_AskRemRubric		,NULL},
    [ActRemRub		] = {1958,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RemoveRubric		,NULL},
+   [ActFrmNewRubCri	] = {1959,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_RequestCreatOrEditCri	,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -3832,4 +3834,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgRub,		// #1956
 	ActReqRemRub,		// #1957
 	ActRemRub,		// #1958
+	ActFrmNewRubCri,	// #1959
   };

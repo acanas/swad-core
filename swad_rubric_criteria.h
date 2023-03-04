@@ -64,4 +64,6 @@ unsigned RubCri_GetParamCriInd (void);
 
 void RubCri_ListRubricCriteria (struct Rub_Rubrics *Rubrics);
 
+void RubCri_RequestCreatOrEditCri (void);
+
 #endif
