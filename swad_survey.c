@@ -2071,8 +2071,8 @@ void Svy_ReceiveFormSurvey (void)
      }
 
    /***** Get start/end date-times *****/
-   NewSvy.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewSvy.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewSvy.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   NewSvy.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get survey title *****/
    Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_BYTES_SURVEY_TITLE);

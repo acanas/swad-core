@@ -1533,8 +1533,8 @@ void Agd_ReceiveFormEvent (void)
    ItsANewEvent = ((AgdEvent.AgdCod = Par_GetParCode (Par_AgdCod)) <= 0);
 
    /***** Get start/end date-times *****/
-   AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   AgdEvent.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   AgdEvent.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get event location *****/
    Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);

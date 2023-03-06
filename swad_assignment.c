@@ -1424,8 +1424,8 @@ void Asg_ReceiveFormAssignment (void)
      }
 
    /***** Get start/end date-times *****/
-   Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   Assignments.Asg.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   Assignments.Asg.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get assignment title *****/
    Par_GetParToText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);

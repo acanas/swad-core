@@ -1221,8 +1221,8 @@ void ExaSes_ReceiveFormSession (void)
    Par_GetParToText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
 
    /* Get start/end date-times */
-   Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   Session.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   Session.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /* Get groups associated to the session */
    Grp_GetParCodsSeveralGrps ();

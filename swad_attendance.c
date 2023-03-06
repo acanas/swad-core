@@ -1203,8 +1203,8 @@ void Att_ReceiveFormAttEvent (void)
      }
 
    /***** Get start/end date-times *****/
-   ReceivedAtt.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   ReceivedAtt.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   ReceivedAtt.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   ReceivedAtt.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
    ReceivedAtt.CommentTchVisible = Par_GetParToBool ("ComTchVisible");

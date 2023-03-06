@@ -1319,7 +1319,7 @@ static void Grp_ListGroupTypesForEdition (void)
 			HTM_TD_Begin ("class=\"LM\"");
 			   snprintf (Id,sizeof (Id),"open_time_%u",UniqueId);
 			   Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id,
-									"Open",
+									Dat_STR_TIME,
 									Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
 									CurrentYear,
 									CurrentYear + 1,
@@ -2483,7 +2483,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 			HTM_TD_Begin ("class=\"LM\"");
 			   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
-									"Open",
+									Dat_STR_TIME,
 									Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
 									CurrentYear,
 									CurrentYear + 1,
@@ -3233,7 +3233,7 @@ void Grp_ReceiveFormNewGrpTyp (void)
    Gbl.Crs.Grps.GrpTyp.MultipleEnrolment  = Par_GetParToBool ("MultipleEnrolment");
 
    /* Get open time */
-   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
    Gbl.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
    if (Gbl.Crs.Grps.GrpTyp.GrpTypName[0])	// If there's a group type name
@@ -3922,7 +3922,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Get open time *****/
-   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
    Gbl.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Update the table of types of group

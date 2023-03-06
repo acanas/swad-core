@@ -170,14 +170,14 @@ void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START
 					      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME]);
 
 void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
-                                                  const char *ParamName,
+                                                  Dat_StartEndTime_t StartEndTime,
                                                   time_t TimeUTC,
                                                   unsigned FirstYear,
                                                   unsigned LastYear,
                                                   Dat_FormSeconds FormSeconds,
                                                   Dat_SetHMS SetHMS,
                                                   bool SubmitFormOnChange);
-time_t Dat_GetTimeUTCFromForm (const char *ParamName);
+time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime);
 
 void Dat_PutHiddenParBrowserTZDiff (void);
 void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);

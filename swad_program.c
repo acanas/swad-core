@@ -2112,8 +2112,8 @@ void Prg_ReceiveFormChgItem (void)
       Err_WrongItemExit ();
 
    /***** Get start/end date-times *****/
-   Item.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   Item.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   Item.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   Item.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get program item title *****/
    Par_GetParToText ("Title",Item.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
@@ -2159,8 +2159,8 @@ void Prg_ReceiveFormNewItem (void)
    NewItem.Hierarchy.Level = Item.Hierarchy.Level + 1;	// Create as child
 
    /***** Get start/end date-times *****/
-   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get program item title *****/
    Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
