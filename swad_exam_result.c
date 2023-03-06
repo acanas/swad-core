@@ -194,9 +194,7 @@ void ExaRes_ShowMyResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -244,11 +242,8 @@ void ExaRes_ShowMyResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
-   if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Err_WrongExamSessionExit ();
+   Exa_GetParams (&Exams,true);
+   Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
    Exa_GetDataOfExamByCod (&Exams.Exam);
    ExaSes_GetDataOfSessionByCod (&Session);
 
@@ -393,9 +388,7 @@ void ExaRes_ShowAllResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
    Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Exam begin *****/
@@ -463,11 +456,8 @@ void ExaRes_ShowAllResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
-   if ((Session.SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Err_WrongExamSessionExit ();
+   Exa_GetParams (&Exams,true);
+   Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get exam data and session *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -570,6 +560,7 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
    extern const char *Txt_Update_results;
@@ -614,7 +605,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
-		     HTM_INPUT_CHECKBOX ("ExaCod",HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_INPUT_CHECKBOX (Par_CodeStr[Par_ExaCod],HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumExam,Exams->Lst[NumExam].ExaCod,
 					 Exams->Lst[NumExam].Selected ? " checked=\"checked\"" :

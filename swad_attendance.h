@@ -90,8 +90,6 @@ bool Att_CheckIfICanEditAttEvents (void);
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 
-void Att_PutParamAttCod (long AttCod);
-
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);
 void Att_RemoveAttEventFromDB (long AttCod);

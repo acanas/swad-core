@@ -261,7 +261,6 @@ void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 void Qst_ChangeShuffleQst (void);
 
-long Qst_GetParamQstCod (void);
 void Qst_PutParamQstCod (void *QstCod);
 
 void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);

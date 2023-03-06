@@ -700,7 +700,7 @@ void DegTyp_RemoveDegreeType (void)
    DegTyp_EditingDegreeTypeConstructor ();
 
    /***** Get the code of the degree type *****/
-   DegTyp_EditingDegTyp->DegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
+   DegTyp_EditingDegTyp->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /***** Get data of the degree type from database *****/
    if (!DegTyp_GetDataOfDegreeTypeByCod (DegTyp_EditingDegTyp))
@@ -729,22 +729,7 @@ void DegTyp_RemoveDegreeType (void)
 static void DegTyp_PutParamOtherDegTypCod (void *DegTypCod)
   {
    if (DegTypCod)
-      Par_PutHiddenParamLong (NULL,"OthDegTypCod",*((long *) DegTypCod));
-  }
-
-/*****************************************************************************/
-/******************* Get parameter with code of degree type ******************/
-/*****************************************************************************/
-
-long DegTyp_GetAndCheckParamOtherDegTypCod (long MinCodAllowed)
-  {
-   long DegTypCod;
-
-   /***** Get and check parameter with code of degree type *****/
-   if ((DegTypCod = Par_GetParToLong ("OthDegTypCod")) < MinCodAllowed)
-      Err_WrongDegTypExit ();
-
-   return DegTypCod;
+      Par_PutParCod (Par_OthDegTypCod,*((long *) DegTypCod));
   }
 
 /*****************************************************************************/
@@ -825,7 +810,7 @@ void DegTyp_RenameDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
-   DegTyp_EditingDegTyp->DegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
+   DegTyp_EditingDegTyp->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /* Get the new name for the degree type */
    Par_GetParToText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);

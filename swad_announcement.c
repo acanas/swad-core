@@ -304,7 +304,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 
 static void Ann_PutParams (void *AnnCod)
   {
-   Par_PutHiddenParamLong (NULL,"AnnCod",*((long *) AnnCod));
+   Par_PutParCod (Par_AnnCod,*((long *) AnnCod));
   }
 
 /*****************************************************************************/

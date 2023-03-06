@@ -119,8 +119,7 @@ void Gam_ShowOnlyOneGameEnd (void);
 
 void Gam_SetCurrentGamCod (long GamCod);
 void Gam_PutParams (void *Games);
-void Gam_PutParamGameCod (long GamCod);
-long Gam_GetParamGameCod (void);
+void Gam_PutParamGamCod (long GamCod);
 long Gam_GetParams (struct Gam_Games *Games);
 
 void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder);

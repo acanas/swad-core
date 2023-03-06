@@ -958,8 +958,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      {
       /***** Begin form *****/
       Frm_BeginFormAnchor (ActRcvCfe,Anchor);
-	 if (ExaCod > 0)	// Existing call for exam
-	    Cfe_PutHiddenParamExaCod (ExaCod);
+         Par_PutParCod (Par_ExaCod,ExaCod);
      }
 
       /***** Begin table *****/
@@ -1548,13 +1547,7 @@ bool Cfe_CheckIfICanEditCallsForExams (void)
 static void Cfe_PutParamExaCodToEdit (void *ExaCod)
   {
    if (ExaCod)
-      Cfe_PutHiddenParamExaCod (*((long *) ExaCod));
-  }
-
-void Cfe_PutHiddenParamExaCod (long ExaCod)
-  {
-   if (ExaCod > 0)
-      Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
+      Par_PutParCod (Par_ExaCod,*((long *) ExaCod));
   }
 
 /*****************************************************************************/

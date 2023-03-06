@@ -2699,7 +2699,9 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   AttEventIsAsociatedToGrps = Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod);
+   AttEventIsAsociatedToGrps = Grp_DB_CheckIfAssociatedToGrps ("att_groups",
+                                                               Par_AttCod,
+                                                               Event.AttCod);
 
    NumUsrs = Att_DB_GetListUsrsInAttEvent (&mysql_res,Event.AttCod,AttEventIsAsociatedToGrps);
 

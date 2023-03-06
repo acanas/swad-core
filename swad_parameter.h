@@ -71,14 +71,25 @@ typedef enum
    Par_AttCod,
    Par_BanCod,
    Par_BldCod,
+   Par_DptCod,
    Par_ExaCod,
    Par_FilCod,
+   Par_GamCod,
    Par_GrpCod,
    Par_GrpTypCod,
+   Par_MchCod,
+   Par_NotCod,
    Par_OthCtrCod,
    Par_OthCtyCod,
    Par_OthDegCod,
+   Par_OthDegTypCod,
    Par_OthInsCod,
+   Par_PstCod,
+   Par_PubCod,
+   Par_QstCod,
+   Par_SesCod,
+   Par_SvyCod,
+   Par_ThrCod,
   } Par_Code_t;
 
 /*****************************************************************************/
@@ -118,6 +129,7 @@ void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
 void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value);
 void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutParCod (Par_Code_t ParamCode,long Cod);
 void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value);
 void Par_PutHiddenParamChar (const char *ParamName,char Value);
 void Par_PutHiddenParamString (const char *Id,const char *ParamName,

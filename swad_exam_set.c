@@ -116,9 +116,6 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Valid);
 static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
                                           struct ExaSet_Set *Set);
 
-static long ExaSet_GetParamQstCod (void);
-static void ExaSet_PutParamQstCod (void *QstCod);	// Should be a pointer to long
-
 static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
 
@@ -145,17 +142,7 @@ void ExaSet_PutParamsOneSet (void *Exams)
 static void ExaSet_PutParamsOneQst (void *Exams)
   {
    ExaSet_PutParamsOneSet (Exams);
-   ExaSet_PutParamQstCod (&(((struct Exa_Exams *) Exams)->QstCod));
-  }
-
-/*****************************************************************************/
-/********************** Get parameter with code of set ***********************/
-/*****************************************************************************/
-
-long ExaSet_GetParamSetCod (void)
-  {
-   /***** Get code of set *****/
-   return Par_GetParToLong ("SetCod");
+   Qst_PutParamQstCod (&(((struct Exa_Exams *) Exams)->QstCod));
   }
 
 /*****************************************************************************/
@@ -295,11 +282,9 @@ void ExaSet_ReceiveFormSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
    Set.ExaCod = Exams.Exam.ExaCod;
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -516,10 +501,8 @@ void ExaSet_RequestCreatOrEditSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
-   Exams.SetCod = Set.SetCod = ExaSet_GetParamSetCod ();
+   Exa_GetParams (&Exams,true);
+   Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -1548,8 +1531,8 @@ void ExaSet_RequestRemoveQstFromSet (void)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Set);
 
-   /***** Get question index *****/
-   Exams.QstCod = ExaSet_GetParamQstCod ();
+   /***** Get question code *****/
+   Exams.QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (Set.SetCod,&Anchor);
@@ -1588,8 +1571,8 @@ void ExaSet_RemoveQstFromSet (void)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Set);
 
-   /***** Get question index *****/
-   QstCod = ExaSet_GetParamQstCod ();
+   /***** Get question code *****/
+   QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Remove media associated to question *****/
    ExaSet_RemoveMediaFromStemOfQst (QstCod,Set.SetCod);
@@ -1669,8 +1652,8 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
    /***** Get and check parameters *****/
    ExaSet_GetAndCheckParameters (&Exams,&Set);
 
-   /***** Get question index *****/
-   QstCod = ExaSet_GetParamQstCod ();
+   /***** Get question code *****/
+   QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Validate/unvalidate question *****/
    Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Crs.CrsCod,
@@ -1689,12 +1672,9 @@ static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
                                           struct ExaSet_Set *Set)
   {
    /***** Get parameters *****/
-   Exa_GetParams (Exams);
-   if (Exams->Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (Exams,true);
    Grp_GetParamWhichGroups ();
-   if ((Set->SetCod = ExaSet_GetParamSetCod ()) <= 0)
-      Err_WrongSetExit ();
+   Set->SetCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams->Exam);
@@ -1706,27 +1686,6 @@ static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
    if (Set->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SetCod = Set->SetCod;
-  }
-
-/*****************************************************************************/
-/************ Get the parameter with the code of a test question *************/
-/*****************************************************************************/
-
-static long ExaSet_GetParamQstCod (void)
-  {
-   /***** Get code of test question *****/
-   return Par_GetParToLong ("QstCod");
-  }
-
-/*****************************************************************************/
-/************ Put parameter with question code to edit, remove... ************/
-/*****************************************************************************/
-
-static void ExaSet_PutParamQstCod (void *QstCod)	// Should be a pointer to long
-  {
-   if (QstCod)
-      if (*((long *) QstCod) > 0)	// If question exists
-	 Par_PutHiddenParamLong (NULL,"QstCod",*((long *) QstCod));
   }
 
 /*****************************************************************************/

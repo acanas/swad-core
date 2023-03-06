@@ -3153,6 +3153,7 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm)
 
 static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    char *Label;
@@ -3169,7 +3170,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 	{
 	 if (asprintf (&Label,"%s*",Txt_Country) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",Label);
+	 Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthCtyCod],Label);
 	 free (Label);
 	}
       else
@@ -3206,6 +3207,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 
 static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Date_of_birth;
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
@@ -3644,7 +3646,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
                                            (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
-   UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");
+   UsrDat->CtyCod = Par_GetAndCheckParCodeMin (Par_OthCtyCod,0);	// 0 (another country) is allowed here
 
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
                         &(UsrDat->Birthday.Day  ),
@@ -3754,6 +3756,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3824,7 +3827,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    /* Label */
 	    if (asprintf (&Label,"%s*",Txt_Institution) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",Label);
+	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthInsCod],Label);
 	    free (Label);
 
 	    /* Data */
@@ -3867,7 +3870,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       if (asprintf (&Label,"%s*",Txt_Center) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthCtrCod],Label);
 	       free (Label);
 
 	       /* Data */
@@ -3908,7 +3911,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       if (asprintf (&Label,"%s*",Txt_Department) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_DptCod],Label);
 	       free (Label);
 
 	       /* Data */
@@ -3919,7 +3922,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						  Dpt_PARAM_DPT_COD_NAME,		// Parameter name
+						  Par_CodeStr[Par_DptCod],		// Parameter name
 						  SelectClass,				// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected
@@ -4092,7 +4095,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Get my department *****/
    /* Get department code */
-   Dpt.DptCod = Dpt_GetAndCheckParamDptCod (0);	// 0 (another department) is allowed here
+   Dpt.DptCod = Par_GetAndCheckParCodeMin (Par_DptCod,0);	// 0 (another department) is allowed here
 
    /* Get institution of department */
    if (Dpt.DptCod > 0)

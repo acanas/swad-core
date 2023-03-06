@@ -93,7 +93,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Not_Status_t Status);
 
 static void Not_PutParams (void *NotCod);
-static long Not_GetParamNotCod (void);
 
 /*****************************************************************************/
 /***************************** Write a new notice ****************************/
@@ -203,8 +202,7 @@ void Not_ListFullNotices (void)
 
 void Not_GetHighLightedNotCod (void)
   {
-   /***** Get notice to be highlighted *****/
-   Gbl.Crs.Notices.HighlightNotCod = Not_GetParamNotCod ();
+   Gbl.Crs.Notices.HighlightNotCod = Par_GetParCode (Par_NotCod);
   }
 
 /*****************************************************************************/
@@ -216,7 +214,7 @@ void Not_HideActiveNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to hide *****/
-   NotCod = Not_GetParamNotCod ();
+   NotCod = Par_GetAndCheckParCode (Par_NotCod);
 
    /***** Set notice as hidden *****/
    Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
@@ -237,7 +235,7 @@ void Not_RevealHiddenNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to reveal *****/
-   NotCod = Not_GetParamNotCod ();
+   NotCod = Par_GetAndCheckParCode (Par_NotCod);
 
    /***** Set notice as active *****/
    Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
@@ -259,7 +257,7 @@ void Not_RequestRemNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   NotCod = Not_GetParamNotCod ();
+   NotCod = Par_GetAndCheckParCode (Par_NotCod);
 
    /***** Show question and button to remove this notice *****/
    /* Begin alert */
@@ -287,7 +285,7 @@ void Not_RemoveNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   NotCod = Not_GetParamNotCod ();
+   NotCod = Par_GetAndCheckParCode (Par_NotCod);
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
@@ -602,7 +600,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
-	       Not_PutHiddenParamNotCod (NotCod);
+	       Par_PutParCod (Par_NotCod,NotCod);
 	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
 	                                "class=\"RT BT_LINK\"");
 	   }
@@ -806,26 +804,7 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
 static void Not_PutParams (void *NotCod)
   {
    if (NotCod)
-      Not_PutHiddenParamNotCod (*((long *) NotCod));
-  }
-
-/*****************************************************************************/
-/*************** Put parameter with the code of a notice *********************/
-/*****************************************************************************/
-
-void Not_PutHiddenParamNotCod (long NotCod)
-  {
-   Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
-  }
-
-/*****************************************************************************/
-/*************** Get parameter with the code of a notice *********************/
-/*****************************************************************************/
-
-static long Not_GetParamNotCod (void)
-  {
-   /***** Get notice code *****/
-   return Par_GetParToLong ("NotCod");
+      Par_PutParCod (Par_NotCod,*((long *) NotCod));
   }
 
 /*****************************************************************************/

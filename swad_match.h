@@ -116,7 +116,6 @@ void Mch_EditMatch (void);
 void Mch_PutParamsEdit (void *Games);
 void Mch_GetAndCheckParameters (struct Gam_Games *Games,
                                 struct Mch_Match *Match);
-long Mch_GetParamMchCod (void);
 
 void Mch_CreateNewMatch (void);
 void Mch_ChangeMatch (void);

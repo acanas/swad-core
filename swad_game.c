@@ -786,7 +786,7 @@ void Gam_PutParams (void *Games)
    if (Games)
      {
       if (((struct Gam_Games *) Games)->Game.GamCod > 0)
-	 Gam_PutParamGameCod (((struct Gam_Games *) Games)->Game.GamCod);
+	 Gam_PutParamGamCod (((struct Gam_Games *) Games)->Game.GamCod);
       Gam_PutHiddenParamOrder (((struct Gam_Games *) Games)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -798,20 +798,12 @@ void Gam_PutParams (void *Games)
 /******************** Write parameter with code of game **********************/
 /*****************************************************************************/
 
-void Gam_PutParamGameCod (long GamCod)
+void Gam_PutParamGamCod (long GamCod)
   {
+   extern const char *Par_CodeStr[];
+
    if (GamCod > 0)
-      Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of game ***********************/
-/*****************************************************************************/
-
-long Gam_GetParamGameCod (void)
-  {
-   /***** Get code of game *****/
-   return Par_GetParToLong ("GamCod");
+      Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_GamCod],GamCod);
   }
 
 /*****************************************************************************/
@@ -825,7 +817,7 @@ long Gam_GetParams (struct Gam_Games *Games)
    Games->CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
-   return Gam_GetParamGameCod ();
+   return Par_GetParCode (Par_GamCod);
   }
 
 /*****************************************************************************/
@@ -896,6 +888,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
 
 void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
   {
+   extern const char *Par_CodeStr[];
    unsigned MaxSizeListGamCodsSelected;
    unsigned NumGame;
    const char *Ptr;
@@ -915,7 +908,8 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
-   Par_GetParMultiToText ("GamCod",Games->GamCodsSelected,MaxSizeListGamCodsSelected);
+   Par_GetParMultiToText (Par_CodeStr[Par_GamCod],Games->GamCodsSelected,
+                          MaxSizeListGamCodsSelected);
 
    /***** Set which games will be shown as selected (checkboxes on) *****/
    if (Games->GamCodsSelected[0])	// Some games selected
@@ -1104,8 +1098,7 @@ void Gam_RemoveGame (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Get game code *****/
-   if ((Games.Game.GamCod = Gam_GetParamGameCod ()) <= 0)
-      Err_WrongGameExit ();
+   Games.Game.GamCod = Par_GetAndCheckParCode (Par_GamCod);
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Games.Game);

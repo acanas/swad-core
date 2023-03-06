@@ -32,7 +32,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
-#include "swad_group.h"
+#include "swad_group_database.h"
 
 /*****************************************************************************/
 /************* External global variables from others modules *****************/
@@ -679,9 +679,11 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 /*********** exam session or match is associated to a given group ************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParamCode,
                                     long Cod,long GrpCod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    return
    DB_QueryEXISTS ("can not check if associated to a group",
 		   "SELECT EXISTS"
@@ -690,7 +692,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 		    " WHERE %s=%ld"
 		      " AND GrpCod=%ld)",
 		   Table,
-		   Field,Cod,
+		   Par_CodeStr[ParamCode],Cod,
 		   GrpCod);
   }
 
@@ -699,8 +701,10 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
 /************ exam session or match is associated to any group  **************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParamCode,long Cod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    /***** Trivial check *****/
    if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
       return false;
@@ -714,7 +718,7 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 		     " FROM %s"
 		    " WHERE %s=%ld)",
 		   Table,
-		   Field,Cod);
+		   Par_CodeStr[ParamCode],Cod);
   }
 
 /*****************************************************************************/

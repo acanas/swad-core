@@ -134,6 +134,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #include "swad_global.h"
 #include "swad_message.h"
 #include "swad_notification.h"
+#include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
@@ -225,7 +226,7 @@ void Tml_ShowNoteAndTimelineGbl (struct Tml_Timeline *Timeline)
    // This parameter is optional. It can be provided by a notification.
    // If > 0 ==> the associated note will be shown highlighted
    //            get its code from database and show it above the timeline
-   if ((PubCod = TmlPub_GetParamPubCod ()) > 0)
+   if ((PubCod = Par_GetParCode (Par_PubCod)) > 0)
      {
       if ((Not.NotCod = Tml_DB_GetNotCodFromPubCod (PubCod)) > 0)
           TmlNot_ShowHighlightedNote (Timeline,&Not);

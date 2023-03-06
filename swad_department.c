@@ -556,23 +556,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 static void Dpt_PutParamDptCod (void *DptCod)
   {
+   extern const char *Par_CodeStr[];
+
    if (DptCod)
-      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,*((long *) DptCod));
-  }
-
-/*****************************************************************************/
-/******************* Get parameter with code of department *******************/
-/*****************************************************************************/
-
-long Dpt_GetAndCheckParamDptCod (long MinCodAllowed)
-  {
-   long DptCod;
-
-   /***** Get and check parameter with code of department *****/
-   if ((DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME)) < MinCodAllowed)
-      Err_WrongDepartmentExit ();
-
-   return DptCod;
+      Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_DptCod],*((long *) DptCod));
   }
 
 /*****************************************************************************/
@@ -588,7 +575,7 @@ void Dpt_RemoveDepartment (void)
    Dpt_EditingDepartmentConstructor ();
 
    /***** Get department code *****/
-   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -623,7 +610,7 @@ void Dpt_ChangeDepartIns (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get parameter with institution code */
    NewInsCod = Par_GetAndCheckParCode (Par_OthInsCod);
@@ -698,7 +685,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get the new name for the department */
    Par_GetParToText (ParamName,NewDptName,MaxBytes);
@@ -754,7 +741,7 @@ void Dpt_ChangeDptWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get the new WWW for the department */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);

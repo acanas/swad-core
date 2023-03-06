@@ -2076,16 +2076,6 @@ static void Brw_GetDataCurrentGrp (void)
   }
 
 /*****************************************************************************/
-/**************** Write hidden parameter with code of file *******************/
-/*****************************************************************************/
-
-void Brw_PutHiddenParamFilCod (long FilCod)
-  {
-   if (FilCod > 0)
-      Par_PutHiddenParamLong (NULL,"FilCod",FilCod);
-  }
-
-/*****************************************************************************/
 /**************** Write parameters related with file browser *****************/
 /*****************************************************************************/
 
@@ -2122,7 +2112,7 @@ void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
       Par_PutHiddenParamString (NULL,"Path",PathInTree);
    if (FilFolLnkName)
       Par_PutHiddenParamString (NULL,Brw_FileTypeParamName[FileType],FilFolLnkName);
-   Brw_PutHiddenParamFilCod (FilCod);
+   Par_PutParCod (Par_FilCod,FilCod);
   }
 
 /*****************************************************************************/
@@ -2826,6 +2816,7 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void)
 
 static void Brw_FormToChangeCrsGrpZone (void)
   {
+   extern const char *Par_CodeStr[];
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
@@ -2858,7 +2849,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
 						     "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("GrpCod",true,
+	       HTM_INPUT_RADIO (Par_CodeStr[Par_GrpCod],true,
 				"value=\"-1\"%s",
 				IsCourseZone ? " checked=\"checked\"" : "");
 	       HTM_Txt (Gbl.Hierarchy.Crs.FullName);
@@ -2887,7 +2878,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   NULL,
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO ("GrpCod",true,
+		     HTM_INPUT_RADIO (Par_CodeStr[Par_GrpCod],true,
 				      "value=\"%ld\"%s",
 				      GrpDat.GrpCod,
 				      (IsGroupZone &&

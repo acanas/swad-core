@@ -714,7 +714,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 /* Begin form */
 	 Action = ActSeeOneCfe;
          Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
-            Cfe_PutHiddenParamExaCod (Cod);
+            Par_PutParCod (Par_ExaCod,Cod);
 
 	 /* Free anchor string */
 	 Frm_FreeAnchorStr (Anchor);
@@ -758,9 +758,8 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 	    Frm_BeginForm (Action);
-	       if (GrpCod > 0)
-		  Grp_PutParamGrpCod (&GrpCod);
-	       Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
+	       Par_PutParCod (Par_GrpCod,GrpCod);
+	       Par_PutParCod (Par_FilCod,FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_TML_COMMENT:
@@ -770,7 +769,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 // Cod is the code of the social publishing
 	 Action = ActSeeGblTL;
          Frm_BeginForm (Action);
-	    TmlPub_PutHiddenParamPubCod (Cod);
+	    Par_PutParCod (Par_PubCod,Cod);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
@@ -804,7 +803,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_NOTICE:
 	 Action = ActSeeOneNot;
          Frm_BeginForm (Action);
-	    Not_PutHiddenParamNotCod (Cod);
+	    Par_PutParCod (Par_NotCod,Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
 	 Action = ActExpRcvMsg;

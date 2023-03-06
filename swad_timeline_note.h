@@ -106,9 +106,6 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path);
 void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void TmlNot_PutHiddenParamNotCod (long NotCod);
-long TmlNot_GetParamNotCod (void);
-
 void TmlNot_RequestRemNoteUsr (void);
 void TmlNot_RequestRemNoteGbl (void);
 void TmlNot_RemoveNoteUsr (void);

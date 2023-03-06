@@ -131,8 +131,6 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
 
 bool Cfe_CheckIfICanEditCallsForExams (void);
 
-void Cfe_PutHiddenParamExaCod (long ExaCod);
-
 void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                           char **ContentStr,
                                           long ExaCod,bool GetContent);

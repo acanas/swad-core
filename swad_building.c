@@ -489,7 +489,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 static void Bld_PutParamBldCod (void *BldCod)
   {
    if (BldCod)
-      Par_PutHiddenParamLong (NULL,"BldCod",*((long *) BldCod));
+      Par_PutParCod (Par_BldCod,*((long *) BldCod));
   }
 
 /*****************************************************************************/

@@ -91,7 +91,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
       NextAction = (ExaCod > 0)	? ActSeeOneCfe :	// Call for exam specified
 				  ActSeeAllCfe;		// All calls for exams
       Frm_BeginFormAnchor (NextAction,Anchor);
-         Cfe_PutHiddenParamExaCod (ExaCod);
+         Par_PutParCod (Par_ExaCod,ExaCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

@@ -54,6 +54,36 @@ extern struct Globals Gbl;
 
 const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 31
 
+// Parameter name for codes, some of them also used as database fields (so change carefully)
+const char *Par_CodeStr[] =
+  {
+   [Par_AgdCod      ] = "AgdCod",
+   [Par_AnnCod      ] = "AnnCod",
+   [Par_AsgCod      ] = "AsgCod",
+   [Par_AttCod      ] = "AttCod",
+   [Par_BanCod      ] = "BanCod",
+   [Par_BldCod      ] = "BldCod",
+   [Par_DptCod      ] = "DptCod",
+   [Par_ExaCod      ] = "ExaCod",
+   [Par_FilCod      ] = "FilCod",
+   [Par_GamCod      ] = "GamCod",
+   [Par_GrpCod      ] = "GrpCod",
+   [Par_GrpTypCod   ] = "GrpTypCod",
+   [Par_MchCod      ] = "MchCod",
+   [Par_NotCod      ] = "NotCod",
+   [Par_OthCtrCod   ] = "OthCtrCod",
+   [Par_OthCtyCod   ] = "OthCtyCod",
+   [Par_OthDegCod   ] = "OthDegCod",
+   [Par_OthDegTypCod] = "OthDegTypCod",
+   [Par_OthInsCod   ] = "OthInsCod",
+   [Par_PstCod      ] = "PstCod",
+   [Par_PubCod      ] = "PubCod",
+   [Par_QstCod      ] = "QstCod",
+   [Par_SesCod      ] = "SesCod",
+   [Par_SvyCod      ] = "SvyCod",
+   [Par_ThrCod      ] = "ThrCod",
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -968,24 +998,6 @@ long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed)
 
 long Par_GetParCode (Par_Code_t ParamCode)
   {
-   static const char *Par_CodeStr[] =
-     {
-      [Par_AgdCod] = "AgdCod",
-      [Par_AnnCod] = "AnnCod",
-      [Par_AsgCod] = "AsgCod",
-      [Par_AttCod] = "AttCod",
-      [Par_BanCod] = "BanCod",
-      [Par_BldCod] = "BldCod",
-      [Par_ExaCod] = "ExaCod",
-      [Par_FilCod] = "FilCod",
-      [Par_GrpCod] = "GrpCod",
-      [Par_GrpTypCod] = "GrpTypCod",
-      [Par_OthCtrCod] = "OthCtrCod",
-      [Par_OthCtyCod] = "OthCtyCod",
-      [Par_OthDegCod] = "OthDegCod",
-      [Par_OthInsCod] = "OthInsCod",
-     };
-
    return Par_GetParToLong (Par_CodeStr[ParamCode]);
   }
 
@@ -1148,6 +1160,20 @@ void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,un
          HTM_TxtF (" id=\"%s\"",Id);
    HTM_TxtF (" name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
 	     ParamName,Value);
+  }
+
+/*****************************************************************************/
+/******************** Put the value of a code parameter **********************/
+/*****************************************************************************/
+
+void Par_PutParCod (Par_Code_t ParamCode,long Cod)
+  {
+   extern const char *Par_CodeStr[];
+
+   			// <0 => not specified => don't write parameter
+   if (Cod >= 0)	//  0 => another country, institution, centre...
+			// >0 => a given country, institution, centre...
+      Par_PutHiddenParamLong (NULL,Par_CodeStr[ParamCode],Cod);
   }
 
 /*****************************************************************************/

@@ -64,10 +64,8 @@ void ExaSes_HideSession (void);
 void ExaSes_UnhideSession (void);
 
 void ExaSes_PutParamsEdit (void *Exams);
-void ExaSes_PutParamSesCod (long SesCod);
 void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct ExaSes_Session *Session);
-long ExaSes_GetParamSesCod (void);
 
 void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams);
 void ExaSes_RequestCreatOrEditSes (void);

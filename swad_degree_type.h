@@ -83,8 +83,6 @@ void DegTyp_ReceiveFormNewDegreeType (void);
 
 void DegTyp_RemoveDegreeType (void);
 
-long DegTyp_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
-
 bool DegTyp_GetDataOfDegreeTypeByCod (struct DegTyp_DegreeType *DegTyp);
 void DegTyp_RenameDegreeType (void);
 

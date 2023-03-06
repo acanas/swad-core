@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
@@ -68,7 +69,7 @@ void TmlFav_ShowAllFaversNoteGbl (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = TmlNot_GetParamNotCod ();
+   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
@@ -130,7 +131,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TmlNot_GetParamNotCod ();
+   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -160,7 +161,7 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TmlNot_GetParamNotCod ();
+   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -203,7 +204,7 @@ void TmlFav_ShowAllFaversComGbl (void)
 
    /***** Get data of comment *****/
    Med_MediaConstructor (&Com.Content.Media);
-   Com.PubCod = TmlPub_GetParamPubCod ();
+   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
    TmlCom_GetDataOfCommByCod (&Com);
    Med_MediaDestructor (&Com.Content.Media);
 
@@ -267,7 +268,7 @@ static void TmlFav_FavComm (struct TmlCom_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = TmlPub_GetParamPubCod ();
+   Com->PubCod = Par_GetAndCheckParCode (Par_PubCod);
    TmlCom_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/
@@ -306,7 +307,7 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = TmlPub_GetParamPubCod ();
+   Com->PubCod = Par_GetAndCheckParCode (Par_PubCod);
    TmlCom_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/

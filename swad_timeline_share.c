@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_notification_database.h"
+#include "swad_parameter.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_notification.h"
@@ -65,7 +66,7 @@ void TmlSha_ShowAllSharersNoteGbl (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = TmlNot_GetParamNotCod ();
+   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
@@ -106,7 +107,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TmlNot_GetParamNotCod ();
+   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -164,7 +165,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = TmlNot_GetParamNotCod ();
+   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/

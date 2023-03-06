@@ -1817,11 +1817,11 @@ void Qst_ShowFormEditOneQst (void)
    Qst_QstConstructor (&Question);
 
    /***** Get question data *****/
-   Question.QstCod = Qst_GetParamQstCod ();
-   if (Question.QstCod > 0)	// Question already exists in the database
-      PutFormToEditQuestion = Qst_GetQstDataFromDB (&Question);
-   else				// New question
+   Question.QstCod = Par_GetParCode (Par_QstCod);
+   if (Question.QstCod <= 0)	// New question
       PutFormToEditQuestion = true;
+   else
+      PutFormToEditQuestion = Qst_GetQstDataFromDB (&Question);
 
    /***** Put form to edit question *****/
    if (PutFormToEditQuestion)
@@ -2724,7 +2724,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   Question->QstCod = Qst_GetParamQstCod ();
+   Question->QstCod = Par_GetParCode (Par_QstCod);
 
    /***** Get answer type *****/
    Question->Answer.Type = (Qst_AnswerType_t)
@@ -3330,9 +3330,7 @@ void Qst_RequestRemoveOneQst (void)
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   Questions.Question.QstCod = Qst_GetParamQstCod ();
-   if (Questions.Question.QstCod <= 0)
-      Err_WrongQuestionExit ();
+   Questions.Question.QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
@@ -3391,9 +3389,7 @@ void Qst_RemoveOneQst (void)
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
-   QstCod = Qst_GetParamQstCod ();
-   if (QstCod <= 0)
-      Err_WrongQuestionExit ();
+   QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
@@ -3446,9 +3442,7 @@ void Qst_ChangeShuffleQst (void)
    Qst_Constructor (&Questions);
 
    /***** Get the question code *****/
-   Questions.Question.QstCod = Qst_GetParamQstCod ();
-   if (Questions.Question.QstCod <= 0)
-      Err_WrongQuestionExit ();
+   Questions.Question.QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
@@ -3475,24 +3469,16 @@ void Qst_ChangeShuffleQst (void)
   }
 
 /*****************************************************************************/
-/************ Get the parameter with the code of a test question *************/
-/*****************************************************************************/
-
-long Qst_GetParamQstCod (void)
-  {
-   /***** Get code of test question *****/
-   return Par_GetParToLong ("QstCod");
-  }
-
-/*****************************************************************************/
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
 void Qst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
   {
+   extern const char *Par_CodeStr[];
+
    if (QstCod)
       if (*((long *) QstCod) > 0)	// If question exists
-	 Par_PutHiddenParamLong (NULL,"QstCod",*((long *) QstCod));
+	 Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_QstCod],*((long *) QstCod));
   }
 
 /*****************************************************************************/

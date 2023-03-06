@@ -521,7 +521,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutParams (Exams);
-	       ExaSes_PutParamSesCod (Session->SesCod);
+	       Par_PutParCod (Par_SesCod,Session->SesCod);
 	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
 					"class=\"LT BT_LINK %s_%s\"",
@@ -926,17 +926,8 @@ void ExaSes_PutParamsEdit (void *Exams)
    if (Exams)
      {
       Exa_PutParams (Exams);
-      ExaSes_PutParamSesCod (((struct Exa_Exams *) Exams)->SesCod);
+      Par_PutParCod (Par_SesCod,((struct Exa_Exams *) Exams)->SesCod);
      }
-  }
-
-/*****************************************************************************/
-/**************** Write parameter with code of exam session ******************/
-/*****************************************************************************/
-
-void ExaSes_PutParamSesCod (long SesCod)
-  {
-   Par_PutHiddenParamLong (NULL,"SesCod",SesCod);
   }
 
 /*****************************************************************************/
@@ -947,12 +938,9 @@ void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
                                    struct ExaSes_Session *Session)
   {
    /***** Get parameters *****/
-   Exa_GetParams (Exams);
-   if (Exams->Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (Exams,true);
    Grp_GetParamWhichGroups ();
-   if ((Session->SesCod = ExaSes_GetParamSesCod ()) <= 0)
-      Err_WrongExamSessionExit ();
+   Session->SesCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams->Exam);
@@ -964,16 +952,6 @@ void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
    if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SesCod = Session->SesCod;
-  }
-
-/*****************************************************************************/
-/**************** Get parameter with code of exam session ********************/
-/*****************************************************************************/
-
-long ExaSes_GetParamSesCod (void)
-  {
-   /***** Get code of exam session *****/
-   return Par_GetParToLong ("SesCod");
   }
 
 /*****************************************************************************/
@@ -1000,9 +978,9 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       /***** Begin form *****/
       Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
 				      ActChgExaSes);	// Existing session
-	 Exa_PutParamExamCod (Session->ExaCod);
+	 Par_PutParCod (Par_ExaCod,Session->ExaCod);
 	 if (!ItsANewSession)	// Existing session
-	    ExaSes_PutParamSesCod (Session->SesCod);
+	    Par_PutParCod (Par_SesCod,Session->SesCod);
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
@@ -1084,8 +1062,10 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_DB_CheckIfAssociatedToGrps ("exa_groups","SesCod",SesCod) ? "" :
-													 " checked=\"checked\"");
+					    Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
+					                                    Par_SesCod,
+					                                    SesCod) ? "" :
+										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -1140,11 +1120,9 @@ void ExaSes_RequestCreatOrEditSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
    Grp_GetParamWhichGroups ();
-   Session.SesCod = ExaSes_GetParamSesCod ();
+   Session.SesCod = Par_GetParCode (Par_SesCod);
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
@@ -1188,11 +1166,9 @@ void ExaSes_ReceiveFormSession (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get main parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
    Grp_GetParamWhichGroups ();
-   Session.SesCod = ExaSes_GetParamSesCod ();
+   Session.SesCod = Par_GetParCode (Par_SesCod);
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/

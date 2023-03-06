@@ -1095,7 +1095,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Par_GetParToText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
-   Deg_EditingDeg->DegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
+   Deg_EditingDeg->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /* Get degree WWW */
    Par_GetParToText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
@@ -1415,7 +1415,7 @@ void Deg_ChangeDegreeType (void)
    Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
 
    /* Get the new degree type */
-   NewDegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
+   NewDegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);

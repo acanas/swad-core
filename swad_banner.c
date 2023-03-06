@@ -89,7 +89,6 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
 static void Ban_PutParamBanCodToEdit (void *BanCod);
-static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
@@ -509,12 +508,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 static void Ban_PutParamBanCodToEdit (void *BanCod)
   {
    if (BanCod)
-      Ban_PutParamBanCod (*((long *) BanCod));
-  }
-
-static void Ban_PutParamBanCod (long BanCod)
-  {
-   Par_PutHiddenParamLong (NULL,"BanCod",BanCod);
+      Par_PutParCod (Par_BanCod,*((long *) BanCod));
   }
 
 /*****************************************************************************/
@@ -987,7 +981,7 @@ void Ban_WriteMenuWithBanners (void)
 
          /* Begin form */
 	 Frm_BeginForm (ActClkBan);
-	    Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
+	    Par_PutParCod (Par_BanCod,Banners.Lst[NumBan].BanCod);
 	    Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
 
 	    /* Banner image */

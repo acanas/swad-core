@@ -198,7 +198,7 @@ void Exa_SeeAllExams (void)
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
+   Exa_GetParams (&Exams,false); // Don't check exam code
 
    /***** Show all exams *****/
    Exa_ListAllExams (&Exams);
@@ -413,9 +413,7 @@ void Exa_SeeOneExam (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
 
    /***** Get exam data *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -718,8 +716,7 @@ void Exa_PutParams (void *Exams)
 
    if (Exams)
      {
-      if (((struct Exa_Exams *) Exams)->Exam.ExaCod > 0)
-	 Exa_PutParamExamCod (((struct Exa_Exams *) Exams)->Exam.ExaCod);
+      Par_PutParCod (Par_ExaCod,((struct Exa_Exams *) Exams)->Exam.ExaCod);
       Exa_PutHiddenParamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -728,37 +725,23 @@ void Exa_PutParams (void *Exams)
   }
 
 /*****************************************************************************/
-/******************** Write parameter with code of exam **********************/
-/*****************************************************************************/
-
-void Exa_PutParamExamCod (long ExaCod)
-  {
-   if (ExaCod > 0)
-      Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of exam ***********************/
-/*****************************************************************************/
-
-long Exa_GetParamExamCod (void)
-  {
-   /***** Get code of exam *****/
-   return Par_GetParToLong ("ExaCod");
-  }
-
-/*****************************************************************************/
 /******************* Get parameters used to edit an exam **********************/
 /*****************************************************************************/
 
-void Exa_GetParams (struct Exa_Exams *Exams)
+void Exa_GetParams (struct Exa_Exams *Exams,bool CheckExaCod)
   {
+   long (*GetExaCo[2]) (Par_Code_t ParamCode) =
+     {
+      [false] = Par_GetParCode,
+      [true ] = Par_GetAndCheckParCode,
+     };
+
    /***** Get other parameters *****/
    Exams->SelectedOrder = Exa_GetParamOrder ();
    Exams->CurrentPage = Pag_GetParamPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
-   Exams->Exam.ExaCod = Exa_GetParamExamCod ();
+   Exams->Exam.ExaCod = GetExaCo[CheckExaCod] (Par_ExaCod);
   }
 
 /*****************************************************************************/
@@ -829,6 +812,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
 
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
   {
+   extern const char *Par_CodeStr[];
    unsigned MaxSizeListExaCodsSelected;
    unsigned NumExam;
    const char *Ptr;
@@ -841,7 +825,8 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
       Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of exams selected *****/
-   Par_GetParMultiToText ("ExaCod",Exams->ExaCodsSelected,MaxSizeListExaCodsSelected);
+   Par_GetParMultiToText (Par_CodeStr[Par_ExaCod],Exams->ExaCodsSelected,
+                          MaxSizeListExaCodsSelected);
 
    /***** Set which exams will be shown as selected (checkboxes on) *****/
    if (Exams->ExaCodsSelected[0])	// Some exams selected
@@ -1005,9 +990,7 @@ void Exa_AskRemExam (void)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -1041,8 +1024,7 @@ void Exa_RemoveExam (void)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get exam code *****/
-   if ((Exams.Exam.ExaCod = Exa_GetParamExamCod ()) <= 0)
-      Err_WrongExamExit ();
+   Exams.Exam.ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -1230,9 +1212,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
-   if (Exams.Exam.ExaCod <= 0)
-      Err_WrongExamExit ();
+   Exa_GetParams (&Exams,true);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -1264,7 +1244,7 @@ void Exa_RequestCreatOrEditExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
+   Exa_GetParams (&Exams,false);	// Don't check exam code
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get exam data *****/
@@ -1437,7 +1417,7 @@ void Exa_ReceiveFormExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
+   Exa_GetParams (&Exams,false);	// Don't check exam code
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get all current exam data from database *****/

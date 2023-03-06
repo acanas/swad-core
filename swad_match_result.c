@@ -213,8 +213,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Err_WrongMatchExit ();
+   Match.MchCod = Par_GetAndCheckParCode (Par_MchCod);
    Gam_GetDataOfGameByCod (&Games.Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -440,8 +439,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
       Err_WrongGameExit ();
-   if ((Match.MchCod = Mch_GetParamMchCod ()) <= 0)
-      Err_WrongMatchExit ();
+   Match.MchCod = Par_GetAndCheckParCode (Par_MchCod);
    Gam_GetDataOfGameByCod (&Games.Game);
    Mch_GetDataOfMatchByCod (&Match);
 
@@ -535,6 +533,7 @@ static void MchRes_ShowResultsEnd (void)
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
    extern const char *Txt_Update_results;
@@ -579,7 +578,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
-		     HTM_INPUT_CHECKBOX ("GamCod",HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_INPUT_CHECKBOX (Par_CodeStr[Par_GamCod],HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumGame,Games->Lst[NumGame].GamCod,
 					 Games->Lst[NumGame].Selected ? " checked=\"checked\"" :

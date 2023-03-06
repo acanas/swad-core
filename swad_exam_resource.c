@@ -32,6 +32,7 @@
 #include "swad_exam_database.h"
 #include "swad_exam_resource.h"
 #include "swad_form.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -48,7 +49,7 @@ void ExaRsc_GetLinkToExam (void)
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams);
+   Exa_GetParams (&Exams,true);
 
    /***** Get exam title *****/
    ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);
@@ -84,7 +85,7 @@ void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
       NextAction = (ExaCod > 0)	? ActSeeExa :	// Exam specified
 				  ActSeeAllExa;	// All exams
       Frm_BeginForm (NextAction);
-         Exa_PutParamExamCod (ExaCod);
+         Par_PutParCod (Par_ExaCod,ExaCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

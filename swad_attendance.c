@@ -651,7 +651,7 @@ static void Att_PutParams (void *Events)
 
    if (Events)
      {
-      Att_PutParamAttCod (((struct Att_Events *) Events)->Event.AttCod);
+      Par_PutParCod (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
       Par_PutHiddenParamOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -820,13 +820,7 @@ static void Att_FreeListAttEvents (struct Att_Events *Events)
 static void Att_PutParamSelectedAttCod (void *Events)
   {
    if (Events)
-      Att_PutParamAttCod (((struct Att_Events *) Events)->Event.AttCod);
-  }
-
-void Att_PutParamAttCod (long AttCod)
-  {
-   if (AttCod > 0)
-      Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
+      Par_PutParCod (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
   }
 
 /*****************************************************************************/
@@ -1016,7 +1010,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    else
      {
       Frm_BeginForm (ActChgAtt);
-	 Att_PutParamAttCod (Events.Event.AttCod);
+	 Par_PutParCod (Par_AttCod,Events.Event.AttCod);
      }
       Par_PutHiddenParamOrder ((unsigned) Events.SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
@@ -1149,8 +1143,10 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
-													 " checked=\"checked\"");
+					    Grp_DB_CheckIfAssociatedToGrps ("att_groups",
+					                                    Par_AttCod,
+					                                    AttCod) ? "" :
+										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -1541,7 +1537,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
       if (Event->Open)
 	{
 	 Frm_BeginForm (ActRecAttMe);
-	    Att_PutParamAttCod (Event->AttCod);
+	    Par_PutParCod (Par_AttCod,Event->AttCod);
 	}
 
 	 /***** List students (only me) *****/
@@ -1621,7 +1617,7 @@ static void Att_ListAttStudents (struct Att_Events *Events)
 
 	    /* Begin form */
 	    Frm_BeginForm (ActRecAttStd);
-	       Att_PutParamAttCod (Events->Event.AttCod);
+	       Par_PutParCod (Par_AttCod,Events->Event.AttCod);
 	       Grp_PutParamsCodGrps ();
 
 	       /* Begin table */
@@ -1855,7 +1851,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
   {
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
-      Att_PutParamAttCod (Event->AttCod);
+      Par_PutParCod (Par_AttCod,Event->AttCod);
       Att_PutParamsCodGrps (Event->AttCod);
 
       /***** Link to view attendance event *****/

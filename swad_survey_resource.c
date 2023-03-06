@@ -29,6 +29,7 @@
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"
@@ -48,7 +49,7 @@ void SvyRsc_GetLinkToSurvey (void)
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Svy_GetParamSvyCod ();
+   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
 
    /***** Get survey title *****/
    SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);
@@ -84,7 +85,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
       NextAction = (SvyCod > 0)	? ActSeeSvy :	// Survey specified
 				  ActSeeAllSvy;	// All surveys
       Frm_BeginForm (NextAction);
-         Svy_PutParamSvyCod (SvyCod);
+         Par_PutParCod (Par_SvyCod,SvyCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

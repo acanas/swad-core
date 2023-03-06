@@ -30,6 +30,7 @@
 #include "swad_follow.h"
 #include "swad_follow_database.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_publication.h"
@@ -44,11 +45,11 @@ static const char *Tml_DB_TableFav[TmlUsr_NUM_FAV_SHA] =
    [TmlUsr_FAV_UNF_COMM] = "tml_comments_fav",
    [TmlUsr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static const char *Tml_DB_FieldFav[TmlUsr_NUM_FAV_SHA] =
+static Par_Code_t Tml_DB_FieldFav[TmlUsr_NUM_FAV_SHA] =
   {
-   [TmlUsr_FAV_UNF_NOTE] = "NotCod",
-   [TmlUsr_FAV_UNF_COMM] = "PubCod",
-   [TmlUsr_SHA_UNS_NOTE] = NULL,		// Not used
+   [TmlUsr_FAV_UNF_NOTE] = Par_NotCod,
+   [TmlUsr_FAV_UNF_COMM] = Par_PubCod,
+   [TmlUsr_SHA_UNS_NOTE] = Par_NotCod,		// Not used
   };
 static TmlPub_Type_t Tml_DB_PubTypeFav[TmlUsr_NUM_FAV_SHA] =
   {
@@ -67,7 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod);
+static long Tml_DB_GetMedCod (const char *Table,Par_Code_t ParCod,long Cod);
 
 /*****************************************************************************/
 /********************* Get which users to show in timeline *******************/
@@ -572,7 +573,7 @@ unsigned Tml_DB_GetPostByCod (long PstCod,MYSQL_RES **mysql_res)
 
 long Tml_DB_GetMedCodFromPost (long PstCod)
   {
-   return Tml_DB_GetMedCod ("tml_posts","PstCod",PstCod);
+   return Tml_DB_GetMedCod ("tml_posts",Par_PstCod,PstCod);
   }
 
 /*****************************************************************************/
@@ -756,7 +757,7 @@ void Tml_DB_InsertCommContent (long PubCod,
 
 long Tml_DB_GetMedCodFromComm (long PubCod)
   {
-   return Tml_DB_GetMedCod ("tml_comments","PubCod",PubCod);
+   return Tml_DB_GetMedCod ("tml_comments",Par_PubCod,PubCod);
   }
 
 /*****************************************************************************/
@@ -838,14 +839,16 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
 /*************** Get code of media associated to post/comment ****************/
 /*****************************************************************************/
 
-static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
+static long Tml_DB_GetMedCod (const char *Table,Par_Code_t ParCod,long Cod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    return DB_QuerySELECTCode ("can not get media code",
 			      "SELECT MedCod"	// row[0]
 			       " FROM %s"
 			      " WHERE %s=%ld",
 			      Table,
-			      Field,Cod);
+			      Par_CodeStr[ParCod],Cod);
   }
 
 /*****************************************************************************/
@@ -1131,6 +1134,8 @@ void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
 
 bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    return
    DB_QueryEXISTS ("can not check if a user has favourited",
 		   "SELECT EXISTS"
@@ -1139,7 +1144,7 @@ bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
 		    " WHERE %s=%ld"
 		      " AND UsrCod=%ld)",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,UsrCod);
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]],Cod,UsrCod);
   }
 
 /*****************************************************************************/
@@ -1148,6 +1153,8 @@ bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
 
 unsigned Tml_DB_GetNumFavers (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times has been favourited",
 		  "SELECT COUNT(*)"
@@ -1155,7 +1162,7 @@ unsigned Tml_DB_GetNumFavers (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
 		  " WHERE %s=%ld"
 		    " AND UsrCod<>%ld",	// Extra check
 		  Tml_DB_TableFav[FavSha],
-		  Tml_DB_FieldFav[FavSha],Cod,
+		  Par_CodeStr[Tml_DB_FieldFav[FavSha]],Cod,
 		  UsrCod);		// The author
   }
 
@@ -1167,6 +1174,8 @@ unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned MaxUsrs,
                            MYSQL_RES **mysql_res)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get favers",
 		   "SELECT UsrCod"	// row[0]
@@ -1176,7 +1185,7 @@ unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
 		   " ORDER BY FavCod"
 		   " LIMIT %u",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]],Cod,
 		   UsrCod,
 		   MaxUsrs);
   }
@@ -1187,13 +1196,15 @@ unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
 
 void Tml_DB_MarkAsFav (TmlUsr_FavSha_t FavSha,long Cod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    DB_QueryINSERT ("can not favourite comment",
 		   "INSERT IGNORE INTO %s"
 		   " (%s,UsrCod,TimeFav)"
 		   " VALUES"
 		   " (%ld,%ld,NOW())",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]],
 		   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1203,12 +1214,14 @@ void Tml_DB_MarkAsFav (TmlUsr_FavSha_t FavSha,long Cod)
 
 void Tml_DB_UnmarkAsFav (TmlUsr_FavSha_t FavSha,long Cod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
 		   " WHERE %s=%ld"
 		     " AND UsrCod=%ld",
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],Cod,
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]],Cod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1231,6 +1244,8 @@ void Tml_DB_RemoveAllFavsMadeByUsr (TmlUsr_FavSha_t FavSha,long UsrCod)
 
 void Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FavSha_t FavSha,long UsrCod)
   {
+   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
+
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
 	           " USING tml_pubs,"
@@ -1242,9 +1257,9 @@ void Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FavSha_t FavSha,long UsrCod)
 	           Tml_DB_TableFav[FavSha],
 		   UsrCod,
 		   (unsigned) Tml_DB_PubTypeFav[FavSha],
-		   Tml_DB_FieldFav[FavSha],
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]],
 		   Tml_DB_TableFav[FavSha],
-		   Tml_DB_FieldFav[FavSha]);
+		   Par_CodeStr[Tml_DB_FieldFav[FavSha]]);
   }
 
 /*****************************************************************************/

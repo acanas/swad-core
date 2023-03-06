@@ -36,7 +36,6 @@
 /*****************************************************************************/
 
 void ExaSet_PutParamsOneSet (void *Exams);
-long ExaSet_GetParamSetCod (void);
 
 void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set);
 

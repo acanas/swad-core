@@ -330,8 +330,6 @@ static void For_PutParamsForum (void *Forums);
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet);
 static void For_PutParamForumLocation (long Location);
-static void For_PutHiddenParamThrCod (long ThrCod);
-static void For_PutHiddenParamPstCod (long PstCod);
 
 static void For_PutIconsForums (__attribute__((unused)) void *Args);
 static void For_PutFormWhichForums (const struct For_Forums *Forums);
@@ -1143,8 +1141,8 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
    For_PutParamForumSet (ForumSet);
    Par_PutHiddenParamOrder ((unsigned) Order);
    For_PutParamForumLocation (Location);
-   For_PutHiddenParamThrCod (ThrCod);
-   For_PutHiddenParamPstCod (PstCod);
+   Par_PutParCod (Par_ThrCod,ThrCod);
+   Par_PutParCod (Par_PstCod,PstCod);
   }
 
 /*****************************************************************************/
@@ -1167,26 +1165,6 @@ static void For_PutParamForumLocation (long Location)
       /***** Put a hidden parameter with the
              institution, center, degree or course of the forum *****/
       Par_PutHiddenParamLong (NULL,"Location",Location);
-  }
-
-/*****************************************************************************/
-/************ Write a form parameter to specify a thread code ****************/
-/*****************************************************************************/
-
-static void For_PutHiddenParamThrCod (long ThrCod)
-  {
-   if (ThrCod > 0)
-      Par_PutHiddenParamLong (NULL,"ThrCod",ThrCod);
-  }
-
-/*****************************************************************************/
-/************* Write a form parameter to specify a post code *****************/
-/*****************************************************************************/
-
-static void For_PutHiddenParamPstCod (long PstCod)
-  {
-   if (PstCod > 0)
-      Par_PutHiddenParamLong (NULL,"PstCod",PstCod);
   }
 
 /*****************************************************************************/
@@ -2462,10 +2440,10 @@ void For_GetParamsForums (struct For_Forums *Forums)
 
    /***** Get optional parameter with code of a selected thread *****/
    Forums->Thread.Current  =
-   Forums->Thread.Selected = Par_GetParToLong ("ThrCod");
+   Forums->Thread.Selected = Par_GetParCode (Par_ThrCod);
 
    /***** Get optional parameter with code of a selected post *****/
-   Forums->PstCod = Par_GetParToLong ("PstCod");
+   Forums->PstCod = Par_GetParCode (Par_PstCod);
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)

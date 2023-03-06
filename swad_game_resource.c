@@ -85,7 +85,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
       NextAction = (GamCod > 0)	? ActSeeGam :	// Game specified
 				  ActSeeAllGam;	// All games
       Frm_BeginForm (NextAction);
-         Gam_PutParamGameCod (GamCod);
+         Gam_PutParamGamCod (GamCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

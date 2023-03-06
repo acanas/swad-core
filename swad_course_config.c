@@ -211,6 +211,7 @@ static void CrsCfg_Title (bool PutLink)
 
 static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
@@ -218,7 +219,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "OthDegCod" :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthDegCod] :
 				      NULL,
 		       Txt_Degree);
 

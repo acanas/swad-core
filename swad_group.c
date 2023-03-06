@@ -1620,14 +1620,14 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    static const struct
      {
       const char *Table;
-      const char *Field;
+      Par_Code_t ParamCode;
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
-      [Grp_ASSIGNMENT] = {"asg_groups","AsgCod"},
-      [Grp_ATT_EVENT ] = {"att_groups","AttCod"},
-      [Grp_SURVEY    ] = {"svy_groups","SvyCod"},
-      [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
-      [Grp_MATCH     ] = {"mch_groups","MchCod"},
+      [Grp_ASSIGNMENT] = {"asg_groups",Par_AsgCod},
+      [Grp_ATT_EVENT ] = {"att_groups",Par_AttCod},
+      [Grp_SURVEY    ] = {"svy_groups",Par_SvyCod},
+      [Grp_EXA_EVENT ] = {"exa_groups",Par_SesCod},
+      [Grp_MATCH     ] = {"mch_groups",Par_MchCod},
      };
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1652,7 +1652,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
 	 AssociatedToGrp = Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].Field,
+	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].ParamCode,
 	                                                  Cod,Grp->GrpCod);
       else
          AssociatedToGrp = false;
@@ -4177,7 +4177,7 @@ void Grp_RenameGroup (void)
 static void Grp_PutParamGrpTypCod (void *GrpTypCod)
   {
    if (GrpTypCod)
-      Par_PutHiddenParamLong (NULL,"GrpTypCod",*((long *) GrpTypCod));
+      Par_PutParCod (Par_GrpTypCod,*((long *) GrpTypCod));
   }
 
 /*****************************************************************************/
@@ -4187,7 +4187,7 @@ static void Grp_PutParamGrpTypCod (void *GrpTypCod)
 void Grp_PutParamGrpCod (void *GrpCod)
   {
    if (GrpCod)
-      Par_PutHiddenParamLong (NULL,"GrpCod",*((long *) GrpCod));
+      Par_PutParCod (Par_GrpCod,*((long *) GrpCod));
   }
 
 /*****************************************************************************/

@@ -306,6 +306,7 @@ static void InsCfg_Map (void)
 
 static void InsCfg_Country (bool PrintView,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    unsigned NumCty;
 
@@ -316,7 +317,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "OthCtyCod" :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthCtyCod] :
 				      NULL,
 		       Txt_Country);
 

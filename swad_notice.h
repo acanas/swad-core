@@ -71,8 +71,6 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 unsigned Not_GetNumNotices (HieLvl_Level_t Scope,Not_Status_t Status,unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif);
 
-void Not_PutHiddenParamNotCod (long NotCod);
-
 //-------------------------------- Figures ------------------------------------
 void Not_GetAndShowNoticesStats (void);
 

@@ -51,8 +51,6 @@ typedef enum
   } Dpt_Order_t;
 #define Dpt_ORDER_DEFAULT Dpt_ORDER_BY_DEPARTMENT
 
-#define Dpt_PARAM_DPT_COD_NAME	"DptCod"
-
 struct Dpt_Departments
   {
    unsigned Num;		// Number of departments
@@ -68,7 +66,6 @@ void Dpt_SeeDepts (void);
 void Dpt_EditDepartments (void);
 void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
 void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt);
-long Dpt_GetAndCheckParamDptCod (long MinCodAllowed);
 void Dpt_RemoveDepartment (void);
 void Dpt_ChangeDepartIns (void);
 void Dpt_RenameDepartShort (void);

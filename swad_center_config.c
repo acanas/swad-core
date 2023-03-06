@@ -540,6 +540,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
    unsigned NumIns;
 
@@ -547,7 +548,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "OthInsCod" :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthInsCod] :
 				      NULL,
 		       Txt_Institution);
 

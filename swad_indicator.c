@@ -97,6 +97,7 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -143,7 +144,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
+	       Frm_LabelColumn ("RT",Par_CodeStr[Par_OthDegTypCod],Txt_Types_of_degree);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
@@ -159,7 +160,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+	       Frm_LabelColumn ("RT",Par_CodeStr[Par_DptCod],Txt_Department);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -168,7 +169,7 @@ void Ind_ReqIndicatorsCourses (void)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
-					       Dpt_PARAM_DPT_COD_NAME,		// Parameter name
+					       Par_CodeStr[Par_DptCod],		// Parameter name
 					       SelectClass,			// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected
@@ -220,8 +221,8 @@ void Ind_ReqIndicatorsCourses (void)
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
 	    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-	    Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
-	    Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);
+	    Par_PutParCod (Par_OthDegTypCod,Indicators.DegTypCod);
+	    Par_PutParCod (Par_DptCod      ,Indicators.DptCod   );
 	    if (Indicators.StrIndicatorsSelected[0])
 	       Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
 	    Btn_PutConfirmButton (Txt_Show_more_details);
@@ -253,11 +254,11 @@ static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
 
    /***** Get degree type code *****/
    Indicators->DegTypCod = (Gbl.Scope.Current == HieLvl_SYS) ?
-	                   DegTyp_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
+	                   Par_GetParCode (Par_OthDegTypCod) :	// -1L (any degree type) is allowed here
                            -1L;
 
    /***** Get department code *****/
-   Indicators->DptCod = Dpt_GetAndCheckParamDptCod (-1L);	// -1L (any department) is allowed here
+   Indicators->DptCod = Par_GetParCode (Par_DptCod);		// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
    Ind_GetParamNumIndicators (Indicators);
@@ -381,11 +382,13 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
 
 static void Ind_PutParamsConfirmIWantToSeeBigList (void *Indicators)
   {
+   extern const char *Par_CodeStr[];
+
    if (Indicators)
      {
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutHiddenParamLong (NULL,"OthDegTypCod",((struct Ind_Indicators *) Indicators)->DegTypCod);
-      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,((struct Ind_Indicators *) Indicators)->DptCod);
+      Par_PutParCod (Par_OthDegTypCod,((struct Ind_Indicators *) Indicators)->DegTypCod);
+      Par_PutParCod (Par_DptCod      ,((struct Ind_Indicators *) Indicators)->DptCod   );
       if (((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected[0])
 	 Par_PutHiddenParamString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected);
       Par_PutHiddenParamChar ("ShowBigList",'Y');

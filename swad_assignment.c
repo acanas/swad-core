@@ -774,8 +774,7 @@ static void Asg_PutParams (void *Assignments)
 
    if (Assignments)
      {
-      if (((struct Asg_Assignments *) Assignments)->Asg.AsgCod > 0)
-	 Asg_PutParamAsgCod (((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
+      Par_PutParCod (Par_AsgCod,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
       Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -1002,16 +1001,6 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/***************** Write parameter with code of assignment *******************/
-/*****************************************************************************/
-
-void Asg_PutParamAsgCod (long AsgCod)
-  {
-   if (AsgCod > 0)
-      Par_PutHiddenParamLong (NULL,"AsgCod",AsgCod);
   }
 
 /*****************************************************************************/
@@ -1354,8 +1343,10 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
-													 " checked=\"checked\"");
+					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
+					                                    Par_AsgCod,
+					                                    AsgCod) ? "" :
+										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

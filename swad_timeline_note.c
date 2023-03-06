@@ -625,28 +625,28 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_INS_DOC_PUB_FILE:
 	    case TmlNot_INS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Brw_PutHiddenParamFilCod (Not->Cod);
+		  Par_PutParCod (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 		     Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Brw_PutHiddenParamFilCod (Not->Cod);
+		  Par_PutParCod (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
 		     Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Brw_PutHiddenParamFilCod (Not->Cod);
+		  Par_PutParCod (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 		     Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Brw_PutHiddenParamFilCod (Not->Cod);
+		  Par_PutParCod (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
@@ -655,7 +655,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],
 				    Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
-		  Cfe_PutHiddenParamExaCod (Not->Cod);
+		  Par_PutParCod (Par_ExaCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
@@ -677,7 +677,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
 	       Frm_FreeAnchorStr (Anchor);
-		  Not_PutHiddenParamNotCod (Not->Cod);
+		  Par_PutParCod (Par_NotCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
@@ -867,7 +867,7 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_NOTE);
-      TmlNot_PutHiddenParamNotCod (NotCod);
+      Par_PutParCod (Par_NotCod,NotCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
@@ -960,25 +960,6 @@ void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   }
 
 /*****************************************************************************/
-/****************** Put parameter with the code of a note ********************/
-/*****************************************************************************/
-
-void TmlNot_PutHiddenParamNotCod (long NotCod)
-  {
-   Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
-  }
-
-/*****************************************************************************/
-/****************** Get parameter with the code of a note ********************/
-/*****************************************************************************/
-
-long TmlNot_GetParamNotCod (void)
-  {
-   /***** Get note code *****/
-   return Par_GetParToLong ("NotCod");
-  }
-
-/*****************************************************************************/
 /*********************** Request the removal of a note ***********************/
 /*****************************************************************************/
 
@@ -1028,7 +1009,7 @@ static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = TmlNot_GetParamNotCod ();
+   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Do some checks *****/
@@ -1068,7 +1049,7 @@ static void TmlNot_PutParamsRemoveNote (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
-      TmlNot_PutHiddenParamNotCod (((struct Tml_Timeline *) Timeline)->NotCod);
+      Par_PutParCod (Par_NotCod,((struct Tml_Timeline *) Timeline)->NotCod);
      }
   }
 
@@ -1123,7 +1104,7 @@ static void TmlNot_RemoveNote (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = TmlNot_GetParamNotCod ();
+   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check 1: note code should be > 0 *****/

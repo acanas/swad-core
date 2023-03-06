@@ -971,7 +971,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get session code *****/
-   Print.SesCod = ExaSes_GetParamSesCod ();
+   Print.SesCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get print data *****/
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;

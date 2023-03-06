@@ -223,7 +223,7 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
       /***** Begin form to write the post *****/
       TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_COMM);
-	 TmlNot_PutHiddenParamNotCod (NotCod);
+	 Par_PutParCod (Par_NotCod,NotCod);
 
 	 /***** Textarea and button *****/
 	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH INPUT_%s",
@@ -372,7 +372,7 @@ void TmlCom_ShowHiddenCommsGbl (void)
 
    /***** Get parameters *****/
    /* Get note code, identifier and number of comments to get */
-   NotCod = TmlNot_GetParamNotCod ();
+   NotCod = Par_GetParCode (Par_NotCod);
    Par_GetParToText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
    NumInitialCommsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
 
@@ -700,7 +700,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_COMM);
-      TmlPub_PutHiddenParamPubCod (PubCod);
+      Par_PutParCod (Par_PubCod,PubCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
@@ -764,7 +764,7 @@ static long TmlCom_ReceiveComm (void)
    struct TmlPub_Publication Pub;
 
    /***** Get data of note *****/
-   Not.NotCod = TmlNot_GetParamNotCod ();
+   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check: note code *****/
@@ -870,7 +870,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = TmlPub_GetParamPubCod ();
+   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
    TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Do some checks *****/
@@ -922,7 +922,7 @@ static void TmlCom_PutParamsRemoveComm (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
-      TmlPub_PutHiddenParamPubCod (((struct Tml_Timeline *) Timeline)->PubCod);
+      Par_PutParCod (Par_PubCod,((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }
 
@@ -980,7 +980,7 @@ static void TmlCom_RemoveComm (void)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = TmlPub_GetParamPubCod ();
+   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
    TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Trivial check 1: publication code *****/

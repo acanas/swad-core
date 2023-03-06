@@ -3740,6 +3740,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
   {
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
+   extern const char *Par_CodeStr[];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -3825,7 +3826,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+	    Frm_LabelColumn ("RT",Par_CodeStr[Par_DptCod],Txt_Department);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -3834,7 +3835,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Projects->Prj.DptCod,	// Selected department
-					    Dpt_PARAM_DPT_COD_NAME,	// Parameter name
+					    Par_CodeStr[Par_DptCod],	// Parameter name
 					    SelectClass,		// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
@@ -4031,6 +4032,7 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 
 void Prj_ReceiveFormProject (void)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
@@ -4069,7 +4071,7 @@ void Prj_ReceiveFormProject (void)
       Par_GetParToText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
 
       /* Get department */
-      Projects.Prj.DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);
+      Projects.Prj.DptCod = Par_GetParToLong (Par_CodeStr[Par_DptCod]);
 
       /* Get whether the project is assigned */
       Projects.Prj.Assigned = (Par_GetParToBool ("Assigned")) ? Prj_ASSIGNED :

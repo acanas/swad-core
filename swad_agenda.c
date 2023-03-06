@@ -963,8 +963,7 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
    if (NumPage > 1)
       Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,NumPage);
 
-   if (AgdCodToEdit > 0)
-      Par_PutHiddenParamLong (NULL,"AgdCod",AgdCodToEdit);
+   Par_PutParCod (Par_AgdCod,AgdCodToEdit);
   }
 
 /*****************************************************************************/

@@ -100,8 +100,6 @@ void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent);
-void Svy_PutParamSvyCod (long SvyCod);
-long Svy_GetParamSvyCod (void);
 void Svy_AskRemSurvey (void);
 void Svy_RemoveSurvey (void);
 void Svy_AskResetSurvey (void);

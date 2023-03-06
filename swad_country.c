@@ -1180,7 +1180,7 @@ void Cty_PutParamCtyCod (long CtyCod)
 static void Cty_PutParamOtherCtyCod (void *CtyCod)
   {
    if (CtyCod)
-      Par_PutHiddenParamLong (NULL,"OthCtyCod",*((long *) CtyCod));
+      Par_PutParCod (Par_OthCtyCod,*((long *) CtyCod));
   }
 
 /*****************************************************************************/
@@ -1413,6 +1413,7 @@ static void Cty_PutParamGoToCty (void *CtyCod)
 static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Par_CodeStr[];
    extern const char *Txt_New_country;
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
@@ -1443,7 +1444,7 @@ static void Cty_PutFormToCreateCountry (void)
 		  snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
 	       else
 		  StrCtyCod[0] = '\0';
-	       HTM_INPUT_TEXT ("OthCtyCod",3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_INPUT_TEXT (Par_CodeStr[Par_OthCtyCod],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"3\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());

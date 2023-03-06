@@ -206,6 +206,7 @@ static void DegCfg_Title (bool PutLink)
 
 static void DegCfg_Center (bool PrintView,bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
    unsigned NumCtr;
 
@@ -213,7 +214,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthCtrCod] :
 				      NULL,
 		       Txt_Center);
 

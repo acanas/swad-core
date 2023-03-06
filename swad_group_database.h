@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_group.h"
+#include "swad_parameter.h"
 
 /*****************************************************************************/
 /**************************** Public prototypes ******************************/
@@ -77,9 +78,9 @@ unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
 
 long Grp_DB_GetGrpTypeFromGrp (long GrpCod);
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParamCode,
                                     long Cod,long GrpCod);
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParamCode,long Cod);
 
 void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
                                                bool NewMandatoryEnrolment);
