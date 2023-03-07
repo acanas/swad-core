@@ -1002,7 +1002,7 @@ static void Lay_WritePageTopHeading (void)
 
 	    /* Begin form to go to home page */
 	    Frm_BeginFormGoTo (ActMnu);
-	       Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	       Par_PutParUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
 	       HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,

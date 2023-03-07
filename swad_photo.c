@@ -689,7 +689,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
 		  Frm_BeginFormId (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],FormId);
 		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
-		  Par_PutHiddenParamString (NULL,"FileName",StrFileName);
+		  Par_PutParString (NULL,"FileName",StrFileName);
 		  Frm_EndForm ();
               }
             else
@@ -834,7 +834,7 @@ static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat)
    char PathRelPhoto[PATH_MAX + 1];
 
    /***** Get the name of the file with the selected face *****/
-   Par_GetParToText ("FileName",Gbl.Usrs.FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
+   Par_GetParText ("FileName",Gbl.Usrs.FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
 
    /***** Convert the temporary photo resulting of the processing to the current photo of the user *****/
    snprintf (PathPhotoTmp,sizeof (PathPhotoTmp),"%s/%s_paso3.jpg",
@@ -1794,7 +1794,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 
 void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
   {
-   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) TypeOfAverage);
+   Par_PutParUnsigned (NULL,"AvgType",(unsigned) TypeOfAverage);
   }
 
 /*****************************************************************************/
@@ -1804,7 +1804,7 @@ void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
    return (Pho_AvgPhotoTypeOfAverage_t)
-	  Par_GetParToUnsignedLong ("AvgType",
+	  Par_GetParUnsignedLong ("AvgType",
                                     0,
                                     Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
                                     (unsigned long) Pho_PHOTO_AVG_DEFAULT);
@@ -1859,7 +1859,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 
 void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
   {
-   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) HowComputePhotoSize);
+   Par_PutParUnsigned (NULL,"PhotoSize",(unsigned) HowComputePhotoSize);
   }
 
 /*****************************************************************************/
@@ -1869,7 +1869,7 @@ void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
    return (Pho_HowComputePhotoSize_t)
-	  Par_GetParToUnsignedLong ("PhotoSize",
+	  Par_GetParUnsignedLong ("PhotoSize",
                                     0,
                                     Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
                                     (unsigned long) Pho_PHOTO_SIZE_DEFAULT);
@@ -1923,7 +1923,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 
 void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) HowOrderDegrees);
+   Par_PutParUnsigned (NULL,"Order",(unsigned) HowOrderDegrees);
   }
 
 /*****************************************************************************/
@@ -1933,7 +1933,7 @@ void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
    return (Pho_HowOrderDegrees_t)
-	  Par_GetParToUnsignedLong ("Order",
+	  Par_GetParUnsignedLong ("Order",
                                     0,
                                     Pho_NUM_HOW_ORDER_DEGREES - 1,
                                     (unsigned long) Pho_ORDER_DEFAULT);

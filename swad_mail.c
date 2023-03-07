@@ -154,7 +154,7 @@ void Mai_SeeMailDomains (void)
          HTM_TH_Begin (HTM_HEAD_LEFT);
 
 	    Frm_BeginForm (ActSeeMai);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 	       HTM_BUTTON_Submit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],
 	                                "class=\"BT_LINK\"");
 		  if (Order == Mails.SelectedOrder)
@@ -206,7 +206,7 @@ void Mai_SeeMailDomains (void)
 static Mai_DomainsOrder_t Mai_GetParamMaiOrder (void)
   {
    return (Mai_DomainsOrder_t)
-	  Par_GetParToUnsignedLong ("Order",
+	  Par_GetParUnsignedLong ("Order",
 				    0,
 				    Mai_NUM_ORDERS - 1,
 				    (unsigned long) Mai_ORDER_DEFAULT);
@@ -509,7 +509,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 static void Mai_PutParamMaiCod (void *MaiCod)
   {
    if (MaiCod)
-      Par_PutHiddenParamLong (NULL,"MaiCod",*((long *) MaiCod));
+      Par_PutParLong (NULL,"MaiCod",*((long *) MaiCod));
   }
 
 /*****************************************************************************/
@@ -519,7 +519,7 @@ static void Mai_PutParamMaiCod (void *MaiCod)
 long Mai_GetParamMaiCod (void)
   {
    /***** Get code of mail *****/
-   return Par_GetParToLong ("MaiCod");
+   return Par_GetParLong ("MaiCod");
   }
 
 /*****************************************************************************/
@@ -612,7 +612,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       Err_WrongMailDomainExit ();
 
    /* Get the new name for the mail */
-   Par_GetParToText (ParamName,NewMaiName,MaxBytes);
+   Par_GetParText (ParamName,NewMaiName,MaxBytes);
 
    /***** Get from the database the old names of the mail *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -757,10 +757,10 @@ void Mai_ReceiveFormNewMailDomain (void)
 
    /***** Get parameters from form *****/
    /* Get mail short name */
-   Par_GetParToText ("Domain",Mai_EditingMai->Domain,Cns_MAX_BYTES_EMAIL_ADDRESS);
+   Par_GetParText ("Domain",Mai_EditingMai->Domain,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
    /* Get mail full name */
-   Par_GetParToText ("Info",Mai_EditingMai->Info,Mai_MAX_BYTES_MAIL_INFO);
+   Par_GetParText ("Info",Mai_EditingMai->Info,Mai_MAX_BYTES_MAIL_INFO);
 
    if (Mai_EditingMai->Domain[0] &&
        Mai_EditingMai->Info[0])	// If there's a mail name
@@ -1200,7 +1200,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	       Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
 		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	      }
-	       Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
+	       Par_PutParString (NULL,"NewEmail",row[0]);
 	       Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 								      Txt_Use_this_email);
 	    Frm_EndForm ();
@@ -1252,7 +1252,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 static void Mai_PutParamsRemoveMyEmail (void *Email)
   {
    if (Email)
-      Par_PutHiddenParamString (NULL,"Email",Email);
+      Par_PutParString (NULL,"Email",Email);
   }
 
 static void Mai_PutParamsRemoveOtherEmail (void *Email)
@@ -1260,7 +1260,7 @@ static void Mai_PutParamsRemoveOtherEmail (void *Email)
    if (Email)
      {
       Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      Par_PutHiddenParamString (NULL,"Email",Email);
+      Par_PutParString (NULL,"Email",Email);
      }
   }
 
@@ -1313,7 +1313,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
-      Par_GetParToText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
+      Par_GetParText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
       /***** Remove one of user's old email addresses *****/
       Mai_DB_RemoveEmail (UsrDat->UsrCod,Email);
@@ -1384,7 +1384,7 @@ static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe)
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
-      Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
+      Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
       if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
 	{
@@ -1554,7 +1554,7 @@ void Mai_ConfirmEmail (void)
    bool KeyIsCorrect;
 
    /***** Get parameter Key *****/
-   Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
+   Par_GetParText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and email from key *****/
    if (Mai_DB_GetPendingEmail (&mysql_res,MailKey))

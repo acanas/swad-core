@@ -246,7 +246,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
 		  Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
-		  Par_PutHiddenParamOrder ((unsigned) Order);
+		  Par_PutParOrder ((unsigned) Order);
 
 	          /* Begin link to select order */
 		  HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
@@ -358,7 +358,7 @@ static void Asg_ParamsWhichGroupsToShow (void *Assignments)
   {
    if (Assignments)
      {
-      Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,
                                 ((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
@@ -711,7 +711,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
   {
    return (Dat_StartEndTime_t)
-   Par_GetParToUnsignedLong ("Order",
+   Par_GetParUnsignedLong ("Order",
 			     0,
 			     Dat_NUM_START_END_TIME - 1,
 			     (unsigned long) Asg_ORDER_DEFAULT);
@@ -774,8 +774,8 @@ static void Asg_PutParams (void *Assignments)
 
    if (Assignments)
      {
-      Par_PutParCod (Par_AsgCod,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
-      Par_PutHiddenParamOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      Par_PutParCode (Par_AsgCod,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
+      Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
@@ -1419,15 +1419,15 @@ void Asg_ReceiveFormAssignment (void)
    Assignments.Asg.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get assignment title *****/
-   Par_GetParToText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
+   Par_GetParText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /***** Get folder name where to send works of the assignment *****/
-   Par_GetParToText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
+   Par_GetParText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
    Assignments.Asg.SendWork = (Assignments.Asg.Folder[0]) ? Asg_SEND_WORK :
 							    Asg_DO_NOT_SEND_WORK;
 
    /***** Get assignment text *****/
-   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (Assignments.Asg.TimeUTC[Dat_STR_TIME] == 0)

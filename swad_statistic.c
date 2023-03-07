@@ -293,8 +293,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	       Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
 		  Grp_PutParamsCodGrps ();
-		  Par_PutHiddenParamLong (NULL,"FirstRow",0);
-		  Par_PutHiddenParamLong (NULL,"LastRow",0);
+		  Par_PutParLong (NULL,"FirstRow",0);
+		  Par_PutParLong (NULL,"LastRow",0);
 
 		  /***** Put list of users to select some of them *****/
 		  HTM_TABLE_BeginCenterPadding (2);
@@ -766,7 +766,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Get the type of stat of clicks ******/
    DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
-	               Par_GetParToUnsignedLong ("GroupedOrDetailed",
+	               Par_GetParUnsignedLong ("GroupedOrDetailed",
 	                                         0,
 	                                         Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
 	                                         (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
@@ -775,7 +775,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       Stats.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
    else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
       Stats.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
-			      Par_GetParToUnsignedLong ("GroupedBy",
+			      Par_GetParUnsignedLong ("GroupedBy",
 							0,
 							Sta_NUM_CLICKS_GROUPED_BY - 1,
 							(unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
@@ -783,14 +783,14 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Get the type of count of clicks *****/
    if (Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
       Stats.CountType = (Sta_CountType_t)
-			Par_GetParToUnsignedLong ("CountType",
+			Par_GetParUnsignedLong ("CountType",
 						  0,
 						  Sta_NUM_COUNT_TYPES - 1,
 						  (unsigned long) Sta_COUNT_TYPE_DEFAULT);
 
    /***** Get action *****/
    Stats.NumAction = (Act_Action_t)
-		     Par_GetParToUnsignedLong ("StatAct",
+		     Par_GetParUnsignedLong ("StatAct",
 					       0,
 					       ActLst_NUM_ACTIONS - 1,
 					       (unsigned long) Sta_NUM_ACTION_DEFAULT);
@@ -800,7 +800,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       case Sta_SHOW_GLOBAL_ACCESSES:
 	 /***** Get the type of user of clicks *****/
 	 Stats.Role = (Sta_Role_t)
-		      Par_GetParToUnsignedLong ("Role",
+		      Par_GetParUnsignedLong ("Role",
 						0,
 						Sta_NUM_ROLES_STAT - 1,
 						(unsigned long) Sta_ROLE_DEFAULT);
@@ -836,20 +836,20 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	   {
 	    /****** Get the number of the first row to show ******/
-	    Stats.FirstRow = Par_GetParToUnsignedLong ("FirstRow",
+	    Stats.FirstRow = Par_GetParUnsignedLong ("FirstRow",
 						       1,
 						       ULONG_MAX,
 						       0);
 
 	    /****** Get the number of the last row to show ******/
-	    Stats.LastRow = Par_GetParToUnsignedLong ("LastRow",
+	    Stats.LastRow = Par_GetParUnsignedLong ("LastRow",
 						      1,
 						      ULONG_MAX,
 						      0);
 
 	    /****** Get the number of rows per page ******/
 	    Stats.RowsPerPage =
-	    (unsigned) Par_GetParToUnsignedLong ("RowsPage",
+	    (unsigned) Par_GetParUnsignedLong ("RowsPage",
 	                                         Sta_MIN_ROWS_PER_PAGE,
 	                                         Sta_MAX_ROWS_PER_PAGE,
 	                                         Sta_DEF_ROWS_PER_PAGE);
@@ -1115,11 +1115,11 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		 {
 		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 		     Dat_WriteParamsIniEndDates ();
-		     Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-		     Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-		     Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
-		     Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
-		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
+		     Par_PutParUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		     Par_PutParUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		     Par_PutParLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
+		     Par_PutParLong (NULL,"LastRow" ,FirstRow - 1);
+		     Par_PutParUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
                HTM_TH_Begin (HTM_HEAD_LEFT);
@@ -1149,11 +1149,11 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		 {
 		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 		     Dat_WriteParamsIniEndDates ();
-		     Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-		     Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-		     Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
-		     Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
-		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
+		     Par_PutParUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		     Par_PutParUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		     Par_PutParUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
+		     Par_PutParUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
+		     Par_PutParUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
                HTM_TH_Begin (HTM_HEAD_RIGHT);
@@ -1591,14 +1591,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
 	 Frm_BeginFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
 	    Dat_WriteParamsIniEndDates ();
-	    Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
-	    Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
-	    Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+	    Par_PutParUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
+	    Par_PutParUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
+	    Par_PutParUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
 	    if (Gbl.Action.Act == ActSeeAccCrs)
 	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    else // Gbl.Action.Act == ActSeeAccGbl
 	      {
-	       Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
+	       Par_PutParUnsigned (NULL,"Role",(unsigned) Stats->Role);
 	       Sta_PutHiddenParamScopeSta ();
 	      }
 
@@ -1840,7 +1840,7 @@ static void Sta_PutHiddenParamScopeSta (void)
 static Sta_ColorType_t Sta_GetStatColorType (void)
   {
    return (Sta_ColorType_t)
-	  Par_GetParToUnsignedLong ("ColorType",
+	  Par_GetParUnsignedLong ("ColorType",
 	                            0,
 	                            Sta_NUM_COLOR_TYPES - 1,
 	                            (unsigned long) Sta_COLOR_TYPE_DEF);

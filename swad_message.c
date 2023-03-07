@@ -203,7 +203,7 @@ void Msg_FormMsgUsrs (void)
    Msg_ResetMessages (&Messages);
 
    /***** Get possible hidden subject and content of the message *****/
-   Par_GetParToHTML ("HiddenSubject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParHTML ("HiddenSubject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
    Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_TEXT,false);
 
@@ -233,7 +233,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
-   if ((Messages->Reply.IsReply = Par_GetParToBool ("IsReply")))
+   if ((Messages->Reply.IsReply = Par_GetParBool ("IsReply")))
       /* Get original message code */
       if ((Messages->Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
          Err_WrongMessageExit ();
@@ -243,7 +243,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
       /* Get who to show as potential recipients:
          - only the selected recipient
          - any user (default) */
-      Messages->ShowOnlyOneRecipient = Par_GetParToBool ("ShowOnlyOneRecipient");
+      Messages->ShowOnlyOneRecipient = Par_GetParBool ("ShowOnlyOneRecipient");
    else
       Messages->ShowOnlyOneRecipient = false;
 
@@ -320,14 +320,14 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
       Frm_BeginForm (ActRcvMsgUsr);
 	 if (Messages->Reply.IsReply)
 	   {
-	    Par_PutHiddenParamChar ("IsReply",'Y');
+	    Par_PutParChar ("IsReply",'Y');
 	    Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
 	   }
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	   {
 	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	    if (Messages->ShowOnlyOneRecipient)
-	       Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+	       Par_PutParChar ("ShowOnlyOneRecipient",'Y');
 	   }
 
 	 /***** Begin table *****/
@@ -430,7 +430,7 @@ static void Msg_PutParamsShowMorePotentialRecipients (void *Messages)
   {
    if (((struct Msg_Messages *) Messages)->Reply.IsReply)
      {
-      Par_PutHiddenParamChar ("IsReply",'Y');
+      Par_PutParChar ("IsReply",'Y');
       Msg_PutHiddenParamMsgCod (((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
      }
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -453,14 +453,14 @@ static void Msg_PutParamsWriteMsg (void *Messages)
       Msg_PutHiddenParamsSubjectAndContent ();
       if (((struct Msg_Messages *) Messages)->Reply.IsReply)
 	{
-	 Par_PutHiddenParamChar ("IsReply",'Y');
+	 Par_PutParChar ("IsReply",'Y');
 	 Msg_PutHiddenParamMsgCod (((struct Msg_Messages *) Messages)->Reply.OriginalMsgCod);
 	}
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	{
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 if (((struct Msg_Messages *) Messages)->ShowOnlyOneRecipient)
-	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+	    Par_PutParChar ("ShowOnlyOneRecipient",'Y');
 	}
      }
   }
@@ -474,8 +474,8 @@ static void Msg_PutHiddenParamsSubjectAndContent (void)
    /***** Hidden params to send subject and content.
           When the user edit the subject or the content,
           they are copied here. *****/
-   Par_PutHiddenParamString (NULL,"HiddenSubject","");
-   Par_PutHiddenParamString (NULL,"HiddenContent","");
+   Par_PutParString (NULL,"HiddenSubject","");
+   Par_PutParString (NULL,"HiddenContent","");
   }
 
 /*****************************************************************************/
@@ -696,7 +696,7 @@ static void Msg_PutHiddenParamAnotherRecipient (const struct Usr_Data *UsrDat)
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",UsrDat->Nickname);
-   Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArr);
+   Par_PutParString (NULL,"OtherRecipients",NickWithArr);
   }
 
 /*****************************************************************************/
@@ -707,7 +707,7 @@ static void Msg_PutHiddenParamOtherRecipients (void)
   {
    if (Gbl.Usrs.ListOtherRecipients)
       if (Gbl.Usrs.ListOtherRecipients[0])
-         Par_PutHiddenParamString (NULL,"OtherRecipients",Gbl.Usrs.ListOtherRecipients);
+         Par_PutParString (NULL,"OtherRecipients",Gbl.Usrs.ListOtherRecipients);
   }
 
 /*****************************************************************************/
@@ -749,14 +749,14 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Get data from form *****/
    /* Get subject */
-   Par_GetParToHTML ("Subject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParHTML ("Subject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
 
    /* Get body */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_DONT_CHANGE,false);
 
    /* Get parameter that indicates if the message is a reply to a previous message */
-   if ((IsReply = Par_GetParToBool ("IsReply")))
+   if ((IsReply = Par_GetParBool ("IsReply")))
       /* Get original message code */
       if ((OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
          Err_WrongMessageExit ();
@@ -1107,7 +1107,7 @@ static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
    extern const char *Txt_any_course;
    struct Crs_Course Crs;
 
-   if ((Messages->FilterCrsCod = Par_GetParToLong ("FilterCrsCod")) > 0)	// If origin course specified
+   if ((Messages->FilterCrsCod = Par_GetParLong ("FilterCrsCod")) > 0)	// If origin course specified
      {
       /* Get data of course */
       Crs.CrsCod = Messages->FilterCrsCod;
@@ -1128,7 +1128,7 @@ static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages)
 static void Msg_GetParamFilterFromTo (struct Msg_Messages *Messages)
   {
    /***** Get "from"/"to" filter *****/
-   Par_GetParToText ("FilterFromTo",Messages->FilterFromTo,
+   Par_GetParText ("FilterFromTo",Messages->FilterFromTo,
                      Usr_MAX_BYTES_FULL_NAME);
   }
 
@@ -1139,7 +1139,7 @@ static void Msg_GetParamFilterFromTo (struct Msg_Messages *Messages)
 static void Msg_GetParamFilterContent (struct Msg_Messages *Messages)
   {
    /***** Get content filter *****/
-   Par_GetParToText ("FilterContent",Messages->FilterContent,
+   Par_GetParText ("FilterContent",Messages->FilterContent,
                      Msg_MAX_BYTES_FILTER_CONTENT);
   }
 
@@ -1782,13 +1782,13 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
    if (Messages)
      {
       if (((struct Msg_Messages *) Messages)->FilterCrsCod >= 0)
-	 Par_PutHiddenParamLong (NULL,"FilterCrsCod",((struct Msg_Messages *) Messages)->FilterCrsCod);
+	 Par_PutParLong (NULL,"FilterCrsCod",((struct Msg_Messages *) Messages)->FilterCrsCod);
       if (((struct Msg_Messages *) Messages)->FilterFromTo[0])
-	 Par_PutHiddenParamString (NULL,"FilterFromTo",((struct Msg_Messages *) Messages)->FilterFromTo);
+	 Par_PutParString (NULL,"FilterFromTo",((struct Msg_Messages *) Messages)->FilterFromTo);
       if (((struct Msg_Messages *) Messages)->FilterContent[0])
-	 Par_PutHiddenParamString (NULL,"FilterContent",((struct Msg_Messages *) Messages)->FilterContent);
+	 Par_PutParString (NULL,"FilterContent",((struct Msg_Messages *) Messages)->FilterContent);
       if (((struct Msg_Messages *) Messages)->ShowOnlyUnreadMsgs)
-	 Par_PutHiddenParamChar ("OnlyUnreadMsgs",'Y');
+	 Par_PutParChar ("OnlyUnreadMsgs",'Y');
      }
   }
 
@@ -1930,7 +1930,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 static bool Msg_GetParamOnlyUnreadMsgs (void)
   {
    /***** Get parameter to show only unread (received) messages *****/
-   return Par_GetParToBool ("OnlyUnreadMsgs");
+   return Par_GetParBool ("OnlyUnreadMsgs");
   }
 
 /*****************************************************************************/
@@ -2430,10 +2430,10 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,bool FromThisCrs,
 	 Crs_PutParamCrsCod (CrsCod);
      }
       Grp_PutParamAllGroups ();
-      Par_PutHiddenParamChar ("IsReply",'Y');
+      Par_PutParChar ("IsReply",'Y');
       Msg_PutHiddenParamMsgCod (MsgCod);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+      Par_PutParChar ("ShowOnlyOneRecipient",'Y');
 
       /****** Link *****/
       Ico_PutIconLink ("reply.svg",Ico_BLACK,ActReqMsgUsr);
@@ -2568,7 +2568,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    NumRecipients.ToShow = NumRecipients.Known;
 	 else	// A lot of recipients
 	    /***** Get parameter that indicates if I want to see all recipients *****/
-	    NumRecipients.ToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipients.Known :
+	    NumRecipients.ToShow = Par_GetParBool ("SeeAllRcpts") ? NumRecipients.Known :
 								      Msg_DEF_RECIPIENTS_TO_SHOW;
 
 	 /***** Initialize structure with user's data *****/
@@ -2662,7 +2662,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		  Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
 		     Msg_PutHiddenParamsOneMsg (Messages);
-		     Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
+		     Par_PutParChar ("SeeAllRcpts",'Y');
 			HTM_BUTTON_Submit_Begin (Txt_View_all_recipients,
 			                         "class=\"LM BT_LINK\"");
 			   HTM_TxtF (Txt_and_X_other_recipients,
@@ -2740,7 +2740,7 @@ void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
 
 void Msg_PutHiddenParamMsgCod (long MsgCod)
   {
-   Par_PutHiddenParamLong (NULL,"MsgCod",MsgCod);
+   Par_PutParLong (NULL,"MsgCod",MsgCod);
   }
 
 /*****************************************************************************/
@@ -2750,7 +2750,7 @@ void Msg_PutHiddenParamMsgCod (long MsgCod)
 static long Msg_GetParamMsgCod (void)
   {
    /***** Get code of message *****/
-   return Par_GetParToLong ("MsgCod");
+   return Par_GetParLong ("MsgCod");
   }
 
 /*****************************************************************************/

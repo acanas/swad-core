@@ -208,7 +208,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    Mnu_ContextMenuEnd ();
 
    /***** Get new user's ID from form *****/
-   Par_GetParToText ("ID",ID,ID_MAX_BYTES_USR_ID);
+   Par_GetParText ("ID",ID,ID_MAX_BYTES_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (ID);
    Str_ConvertToUpperText (ID);
@@ -581,7 +581,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
 static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
   {
    Usr_PutParamMyUsrCodEncrypted (EncryptedUsrCod);
-   Par_PutHiddenParamUnsigned (NULL,"RegRemAction",
+   Par_PutParUnsigned (NULL,"RegRemAction",
                                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
 
@@ -654,7 +654,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_W
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNick,sizeof (NewNick) - 1);
+   Par_GetParText ("NewNick",NewNick,sizeof (NewNick) - 1);
 
    /* Remove arrobas at the beginning */
    Str_RemoveLeadingArrobas (NewNick);
@@ -683,7 +683,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_W
      }
 
    /***** Step 2/3: Get new email from form *****/
-   Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
+   Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
@@ -704,7 +704,7 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_W
      }
 
    /***** Step 3/3: Get new password from form *****/
-   Par_GetParToText ("Paswd",NewPlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParText ("Paswd",NewPlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {

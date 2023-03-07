@@ -176,7 +176,7 @@ void Fig_PutHiddenParamFigures (void *Figures)
 
 static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType)
   {
-   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) FigureType);
+   Par_PutParUnsigned (NULL,"FigureType",(unsigned) FigureType);
   }
 
 /*****************************************************************************/
@@ -234,7 +234,7 @@ void Fig_ShowFigures (void)
 
    /***** Get the type of figure ******/
    SelectedFigureType = (Fig_FigureType_t)
-		        Par_GetParToUnsignedLong ("FigureType",
+		        Par_GetParUnsignedLong ("FigureType",
 						  0,
 						  Fig_NUM_FIGURES - 1,
 						  (unsigned long) Fig_FIGURE_TYPE_DEF);

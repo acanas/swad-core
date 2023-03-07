@@ -152,7 +152,7 @@ void Ico_PutIconsToSelectIconSet (void)
 	      {
 	       Set_BeginPref (IconSet == Gbl.Prefs.IconSet);
 		  Frm_BeginForm (ActChgIco);
-		     Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
+		     Par_PutParString (NULL,"IconSet",Ico_IconSetId[IconSet]);
 		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
 			       Cfg_ICON_FOLDER_SETS,
 			       Ico_IconSetId[IconSet]);
@@ -201,7 +201,7 @@ Ico_IconSet_t Ico_GetParamIconSet (void)
    char IconSetId[Ico_MAX_BYTES_ICON_SET_ID + 1];
    Ico_IconSet_t IconSet;
 
-   Par_GetParToText ("IconSet",IconSetId,Ico_MAX_BYTES_ICON_SET_ID);
+   Par_GetParText ("IconSet",IconSetId,Ico_MAX_BYTES_ICON_SET_ID);
    for (IconSet  = (Ico_IconSet_t) 0;
 	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
 	IconSet++)

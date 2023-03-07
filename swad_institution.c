@@ -481,7 +481,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
 		                           "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
@@ -518,7 +518,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 static void Ins_GetParamInsOrder (void)
   {
    Gbl.Hierarchy.Inss.SelectedOrder = (Ins_Order_t)
-				      Par_GetParToUnsignedLong ("Order",
+				      Par_GetParUnsignedLong ("Order",
 								0,
 								Ins_NUM_ORDERS - 1,
 								(unsigned long) Ins_ORDER_DEFAULT);
@@ -1113,7 +1113,7 @@ void Ins_PutParamCurrentInsCod (void *InsCod)
 
 void Ins_PutParamInsCod (long InsCod)
   {
-   Par_PutHiddenParamLong (NULL,"ins",InsCod);
+   Par_PutParLong (NULL,"ins",InsCod);
   }
 
 /*****************************************************************************/
@@ -1130,7 +1130,7 @@ void Ins_RemoveInstitution (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Get institution code *****/
-   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get data of the institution from database *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
@@ -1204,7 +1204,7 @@ void Ins_RenameInsShort (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Ins_RenameInstitution (Ins_EditingIns,Cns_SHRT_NAME);
   }
 
@@ -1214,7 +1214,7 @@ void Ins_RenameInsFull (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Ins_RenameInstitution (Ins_EditingIns,Cns_FULL_NAME);
   }
 
@@ -1250,7 +1250,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
      }
 
    /***** Get the new name for the institution from form *****/
-   Par_GetParToText (ParamName,NewInsName,MaxBytes);
+   Par_GetParText (ParamName,NewInsName,MaxBytes);
 
    /***** Get from the database the old names of the institution *****/
    Ins_GetDataOfInstitByCod (Ins);
@@ -1317,10 +1317,10 @@ void Ins_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get the new WWW for the institution */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
@@ -1356,7 +1356,7 @@ void Ins_ChangeInsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get institution code */
-   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
    Status = Hie_GetParamStatus ();	// New status
@@ -1597,13 +1597,13 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
    Ins_EditingIns->CtyCod = Gbl.Hierarchy.Cty.CtyCod;
 
    /* Get institution short name */
-   Par_GetParToText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get institution full name */
-   Par_GetParToText ("FullName",Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get institution WWW */
-   Par_GetParToText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ins_EditingIns->ShrtName[0] &&
        Ins_EditingIns->FullName[0])	// If there's a institution name

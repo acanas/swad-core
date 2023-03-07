@@ -167,7 +167,7 @@ void Sco_PutParamCurrentScope (void *Scope)
 
 void Sco_PutParamScope (const char *ParamName,HieLvl_Level_t Scope)
   {
-   Par_PutHiddenParamUnsigned (NULL,ParamName,(unsigned) Scope);
+   Par_PutParUnsigned (NULL,ParamName,(unsigned) Scope);
   }
 
 /*****************************************************************************/
@@ -178,7 +178,7 @@ void Sco_GetScope (const char *ParamName)
   {
    /***** Get parameter with scope *****/
    Gbl.Scope.Current = (HieLvl_Level_t)
-	               Par_GetParToUnsignedLong (ParamName,
+	               Par_GetParUnsignedLong (ParamName,
                                                  0,
                                                  HieLvl_NUM_LEVELS - 1,
                                                  (unsigned long) HieLvl_UNK);

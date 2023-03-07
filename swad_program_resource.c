@@ -615,7 +615,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 
 void PrgRsc_PutParamRscCod (long RscCod)
   {
-   Par_PutHiddenParamLong (NULL,"RscCod",RscCod);
+   Par_PutParLong (NULL,"RscCod",RscCod);
   }
 
 /*****************************************************************************/
@@ -634,7 +634,7 @@ void PrgRsc_CreateResource (void)
    Prg_GetParams (&Item);
 
    /* Get the new title for the new resource */
-   Par_GetParToText ("Title",Item.Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+   Par_GetParText ("Title",Item.Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
 
    /***** Create resource *****/
    Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
@@ -665,7 +665,7 @@ void PrgRsc_RenameResource (void)
 
    /***** Rename resource *****/
    /* Get the new title for the resource */
-   Par_GetParToText ("Title",NewTitle,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+   Par_GetParText ("Title",NewTitle,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
 
    /* Update database changing old title by new title */
    Prg_DB_UpdateResourceTitle (Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod,NewTitle);
@@ -1079,7 +1079,7 @@ void PrgRsc_ChangeLink (void)
       Err_WrongResourceExit ();
 
    /* Get link type and code */
-   Par_GetParToText ("Link",TypeCod,sizeof (TypeCod) - 1);
+   Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
    if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
      {
       Item.Resource.Link.Type = PrgRsc_GetTypeFromString (TypeStr);

@@ -593,7 +593,7 @@ void CtyCfg_ChangeCtyMapAttr (void)
 
    /***** Get parameters from form *****/
    /* Get the new map attribution for the country */
-   Par_GetParToText ("Attribution",NewMapAttribution,Med_MAX_BYTES_ATTRIBUTION);
+   Par_GetParText ("Attribution",NewMapAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Change old attribution by new attribution in database *****/
    Cty_DB_UpdateCtyMapAttr (NewMapAttribution);

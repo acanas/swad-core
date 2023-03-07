@@ -96,7 +96,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (__attribute__((unused)) void *Ar
   {
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-   Par_PutHiddenParamChar ("CreateZIP",'Y');
+   Par_PutParChar ("CreateZIP",'Y');
   }
 
 /*****************************************************************************/
@@ -105,7 +105,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (__attribute__((unused)) void *Ar
 
 bool ZIP_GetCreateZIPFromForm (void)
   {
-   return Par_GetParToBool ("CreateZIP");
+   return Par_GetParBool ("CreateZIP");
   }
 
 /*****************************************************************************/

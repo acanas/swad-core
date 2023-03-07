@@ -607,7 +607,7 @@ void Inf_ChangeIHaveReadInfo (void)
 
 static bool Inf_GetMustBeReadFromForm (void)
   {
-   return Par_GetParToBool ("MustBeRead");
+   return Par_GetParBool ("MustBeRead");
   }
 
 /*****************************************************************************/
@@ -616,7 +616,7 @@ static bool Inf_GetMustBeReadFromForm (void)
 
 static bool Inf_GetIfIHaveReadFromForm (void)
   {
-   return Par_GetParToBool ("IHaveRead");
+   return Par_GetParBool ("IHaveRead");
   }
 
 /*****************************************************************************/
@@ -1270,7 +1270,7 @@ Inf_Src_t Inf_GetInfoSrcFromForm (void)
    /***** Get info source for a specific type of course information
           (introduction, teaching guide, bibliography, FAQ, links or evaluation) *****/
    return (Inf_Src_t)
-	  Par_GetParToUnsignedLong ("InfoSrc",
+	  Par_GetParUnsignedLong ("InfoSrc",
                                     0,
                                     Inf_NUM_SOURCES - 1,
                                     (unsigned long) Inf_NONE);
@@ -1864,7 +1864,7 @@ void Inf_ReceiveURLInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Get parameter with URL *****/
-   Par_GetParToText ("InfoSrcURL",Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("InfoSrcURL",Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
    Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);

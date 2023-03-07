@@ -388,7 +388,7 @@ void Dat_ChangeDateFormat (void)
 
 static Dat_Format_t Dat_GetParamDateFormat (void)
   {
-   return (Dat_Format_t) Par_GetParToUnsignedLong ("DateFormat",
+   return (Dat_Format_t) Par_GetParUnsignedLong ("DateFormat",
                                                    0L,
                                                    (unsigned long) (Dat_NUM_OPTIONS_FORMAT - 1),
                                                    (unsigned long) Dat_FORMAT_DEFAULT);
@@ -925,7 +925,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    if (asprintf (&IdTimeUTC,"%sTimeUTC",Id) < 0)
       Err_NotEnoughMemoryExit ();
-   Par_PutHiddenParamLong (IdTimeUTC,Dat_ParamTimeUTCName[StartEndTime],(long) TimeUTC);
+   Par_PutParLong (IdTimeUTC,Dat_ParamTimeUTCName[StartEndTime],(long) TimeUTC);
    free (IdTimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
@@ -947,7 +947,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime)
   {
-   return Par_GetParToLong (Dat_ParamTimeUTCName[StartEndTime]);
+   return Par_GetParLong (Dat_ParamTimeUTCName[StartEndTime]);
   }
 
 /*****************************************************************************/
@@ -958,8 +958,8 @@ time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime)
 
 void Dat_PutHiddenParBrowserTZDiff (void)
   {
-   Par_PutHiddenParamString ("BrowserTZName","BrowserTZName","");
-   Par_PutHiddenParamLong ("BrowserTZDiff","BrowserTZDiff",0);
+   Par_PutParString ("BrowserTZName","BrowserTZName","");
+   Par_PutParLong ("BrowserTZDiff","BrowserTZDiff",0);
    HTM_SCRIPT_Begin (NULL,NULL);
       HTM_TxtF ("setTZname('BrowserTZName');"
 		"setTZ('BrowserTZDiff');");
@@ -988,7 +988,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
    // The return value is an IANA zone info key (aka the Olson time zone database).
    // https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
    // For example, if browser is in Madrid(Spain) timezone, "Europe/Berlin" will be returned.
-   Par_GetParToText ("BrowserTZName",BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE);
+   Par_GetParText ("BrowserTZName",BrowserTimeZone,Dat_MAX_BYTES_TIME_ZONE);
 
    /* Check if client time zone is usable with CONVERT_TZ */
    if (BrowserTimeZone[0])
@@ -1014,7 +1014,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
       // We get client TZ difference using JavaScript getTimezoneOffset() method
       // getTimezoneOffset() returns UTC-time - browser-local-time, in minutes.
       // For example, if browser time zone is GMT+2, -120 will be returned.
-      Par_GetParToText ("BrowserTZDiff",IntStr,Cns_MAX_DECIMAL_DIGITS_INT);
+      Par_GetParText ("BrowserTZDiff",IntStr,Cns_MAX_DECIMAL_DIGITS_INT);
       if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
 	 ClientUTCMinusLocal = 0;
 
@@ -1164,13 +1164,13 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
    /**** Get day ****/
-   *Day   = (unsigned) Par_GetParToUnsignedLong (ParamNameDay  ,1,31,0);
+   *Day   = (unsigned) Par_GetParUnsignedLong (ParamNameDay  ,1,31,0);
 
    /**** Get month ****/
-   *Month = (unsigned) Par_GetParToUnsignedLong (ParamNameMonth,1,12,0);
+   *Month = (unsigned) Par_GetParUnsignedLong (ParamNameMonth,1,12,0);
 
    /**** Get year ****/
-   *Year  = (unsigned) Par_GetParToUnsignedLong (ParamNameYear ,0,UINT_MAX,0);
+   *Year  = (unsigned) Par_GetParUnsignedLong (ParamNameYear ,0,UINT_MAX,0);
   }
 
 /*****************************************************************************/
@@ -1201,8 +1201,8 @@ void Dat_SetIniEndDatesToRecentWeeks (void)
 
 void Dat_WriteParamsIniEndDates (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,Dat_ParamTimeUTCName[Dat_STR_TIME],Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
-   Par_PutHiddenParamUnsigned (NULL,Dat_ParamTimeUTCName[Dat_END_TIME],Dat_Time.Range.TimeUTC[Dat_END_TIME]);
+   Par_PutParUnsigned (NULL,Dat_ParamTimeUTCName[Dat_STR_TIME],Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
+   Par_PutParUnsigned (NULL,Dat_ParamTimeUTCName[Dat_END_TIME],Dat_Time.Range.TimeUTC[Dat_END_TIME]);
   }
 
 /*****************************************************************************/

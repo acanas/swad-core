@@ -495,7 +495,7 @@ void Rub_PutParams (void *Rubrics)
 void Rub_PutParamRubCod (long RubCod)
   {
    if (RubCod > 0)
-      Par_PutHiddenParamLong (NULL,"RubCod",RubCod);
+      Par_PutParLong (NULL,"RubCod",RubCod);
   }
 
 /*****************************************************************************/
@@ -505,7 +505,7 @@ void Rub_PutParamRubCod (long RubCod)
 long Rub_GetParamRubCod (void)
   {
    /***** Get code of rubric *****/
-   return Par_GetParToLong ("RubCod");
+   return Par_GetParLong ("RubCod");
   }
 
 /*****************************************************************************/
@@ -932,10 +932,10 @@ static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric,
 				             char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    /***** Get rubric title *****/
-   Par_GetParToText ("Title",Rubric->Title,Rub_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Rubric->Title,Rub_MAX_BYTES_TITLE);
 
    /***** Get rubric text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
 static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric)

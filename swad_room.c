@@ -186,7 +186,7 @@ void Roo_SeeRooms (void)
 	   {
             HTM_TH_Begin (HTM_HEAD_LEFT);
 	       Frm_BeginForm (ActSeeRoo);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_ROOMS_HELP_ORDER[Order],
 		                           "class=\"BT_LINK\"");
 		     if (Order == Rooms.SelectedOrder)
@@ -347,7 +347,7 @@ void Roo_ChangeMAC (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   if ((Roo_EditingRoom->RooCod = Par_GetParToLong ("Cod")) <= 0)
+   if ((Roo_EditingRoom->RooCod = Par_GetParLong ("Cod")) <= 0)
       Err_WrongRoomExit ();
 
    /* Get the old MAC address of the room */
@@ -375,7 +375,7 @@ void Roo_ChangeMAC (void)
 
 static Roo_Order_t Roo_GetParamRoomOrder (void)
   {
-   return (Roo_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Roo_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Roo_NUM_ORDERS - 1,
 						  (unsigned long) Roo_ORDER_DEFAULT);
@@ -848,7 +848,7 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 static void Roo_PutParamRooCod (void *RooCod)
   {
    if (RooCod)
-      Par_PutHiddenParamLong (NULL,"RooCod",*((long *) RooCod));
+      Par_PutParLong (NULL,"RooCod",*((long *) RooCod));
   }
 
 /*****************************************************************************/
@@ -858,7 +858,7 @@ static void Roo_PutParamRooCod (void *RooCod)
 long Roo_GetParamRooCod (void)
   {
    /***** Get code of room *****/
-   return Par_GetParToLong ("RooCod");
+   return Par_GetParLong ("RooCod");
   }
 
 /*****************************************************************************/
@@ -868,7 +868,7 @@ long Roo_GetParamRooCod (void)
 static int Roo_GetParamFloor (void)
   {
    /***** Get floor *****/
-   return (int) Par_GetParToLong ("Floor");
+   return (int) Par_GetParLong ("Floor");
   }
 
 /*****************************************************************************/
@@ -880,7 +880,7 @@ static Roo_RoomType_t Roo_GetParamType (void)
    long TypeLong;
 
    /***** Get type string *****/
-   TypeLong = Par_GetParToLong ("Type");
+   TypeLong = Par_GetParLong ("Type");
    if (TypeLong >= 0 && TypeLong < Roo_NUM_TYPES)
       return (Roo_RoomType_t) TypeLong;	// Correc type
 
@@ -1124,7 +1124,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
       Err_WrongRoomExit ();
 
    /* Get the new name for the room */
-   Par_GetParToText (ParamName,NewClaName,MaxBytes);
+   Par_GetParText (ParamName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the room *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1186,7 +1186,7 @@ void Roo_ChangeCapacity (void)
 
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
-	          Par_GetParToUnsignedLong ("Capacity",
+	          Par_GetParUnsignedLong ("Capacity",
                                             0,
                                             Roo_MAX_CAPACITY,
                                             Roo_UNLIMITED_CAPACITY);
@@ -1391,12 +1391,12 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoom->Type   = Roo_GetParamType ();
 
    /* Get room short name and full name */
-   Par_GetParToText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);
-   Par_GetParToText ("FullName" ,Roo_EditingRoom->FullName,Roo_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Roo_EditingRoom->FullName,Roo_MAX_BYTES_FULL_NAME);
 
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
-	                       Par_GetParToUnsignedLong ("Capacity",
+	                       Par_GetParUnsignedLong ("Capacity",
                                                          0,
                                                          Roo_MAX_CAPACITY,
                                                          Roo_UNLIMITED_CAPACITY);

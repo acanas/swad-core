@@ -306,7 +306,7 @@ void Sch_GetParamWhatToSearch (void)
 
    /***** Get what to search from form *****/
    WhatToSearch = (Sch_WhatToSearch_t)
-	          Par_GetParToUnsignedLong ("WhatToSearch",
+	          Par_GetParUnsignedLong ("WhatToSearch",
 	                                    0,
 	                                    Sch_NUM_WHAT_TO_SEARCH - 1,
 	                                    (unsigned long) Sch_SEARCH_UNKNOWN);
@@ -326,7 +326,7 @@ static void Sch_GetParamSearchStr (void)
    struct Sch_Search *Search = Sch_GetSearch ();
 
    /***** Get string to search *****/
-   Par_GetParToText ("Search",Search->Str,Sch_MAX_BYTES_STRING_TO_FIND);
+   Par_GetParText ("Search",Search->Str,Sch_MAX_BYTES_STRING_TO_FIND);
   }
 
 /*****************************************************************************/
@@ -871,5 +871,5 @@ static void Sch_SaveLastSearchIntoSession (void)
 void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args)
   {
    Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
-   Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+   Par_PutParUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }

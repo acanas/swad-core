@@ -202,7 +202,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
-   Par_GetParToText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+   Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/

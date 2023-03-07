@@ -69,12 +69,14 @@ const char *Par_CodeStr[] =
    [Par_GamCod      ] = "GamCod",
    [Par_GrpCod      ] = "GrpCod",
    [Par_GrpTypCod   ] = "GrpTypCod",
+   [Par_HldCod      ] = "HldCod",
    [Par_MchCod      ] = "MchCod",
    [Par_NotCod      ] = "NotCod",
    [Par_OthCtrCod   ] = "OthCtrCod",
    [Par_OthCtyCod   ] = "OthCtyCod",
    [Par_OthDegCod   ] = "OthDegCod",
    [Par_OthDegTypCod] = "OthDegTypCod",
+   [Par_OthHieCod   ] = "OthHieCod",
    [Par_OthInsCod   ] = "OthInsCod",
    [Par_PstCod      ] = "PstCod",
    [Par_PubCod      ] = "PubCod",
@@ -771,7 +773,7 @@ void Par_GetMainParams (void)
    /***** Get another user's nickname, if exists
           (this nickname is used to go to another user's profile,
            not to get the logged user) *****/
-   if (Par_GetParToText ("usr",Nick,sizeof (Nick) - 1))
+   if (Par_GetParText ("usr",Nick,sizeof (Nick) - 1))
      {
       if (Nick[0])
 	{
@@ -787,7 +789,7 @@ void Par_GetMainParams (void)
          Gbl.Action.Act = Gbl.Action.Original = ActSeeOthPubPrf;	// Set default action if no other is specified
 	}
      }
-   else if (Par_GetParToText ("agd",Nick,sizeof (Nick) - 1))
+   else if (Par_GetParText ("agd",Nick,sizeof (Nick) - 1))
      {
       if (Nick[0])
 	{
@@ -804,7 +806,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get action to perform *****/
-   ActCod = Par_GetParToLong ("act");
+   ActCod = Par_GetParLong ("act");
    if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
       Gbl.Action.Act = Gbl.Action.Original = Act_GetActionFromActCod (ActCod);
 
@@ -826,7 +828,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get session identifier, if exists *****/
-   Par_GetParToText ("ses",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
+   Par_GetParText ("ses",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
    if (Gbl.Session.Id[0])
      {
       /***** Get user's code, password, current degree and current course from stored session *****/
@@ -841,7 +843,7 @@ void Par_GetMainParams (void)
    else
      {
       // Try old parameter "IdSes" (allowed for compatibility, to be removed soon)
-      Par_GetParToText ("IdSes",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
+      Par_GetParText ("IdSes",Gbl.Session.Id,Cns_BYTES_SESSION_ID);
       if (Gbl.Session.Id[0])
 	{
 	 /***** Get user's code, password, current degree and current course from stored session *****/
@@ -874,7 +876,7 @@ void Par_GetMainParams (void)
    Set_GetSettingsFromIP ();
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParToText ("cty",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText ("cty",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "cty" available
      {
       Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -885,7 +887,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParToText ("ins",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText ("ins",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "ins" available
      {
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -895,7 +897,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get center if exists (from menu) *****/
-   Par_GetParToText ("ctr",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText ("ctr",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "ctr" available
      {
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -904,7 +906,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParToText ("deg",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText ("deg",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -912,7 +914,7 @@ void Par_GetMainParams (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParToText ("crs",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText ("crs",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter "crs" available
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
@@ -921,7 +923,7 @@ void Par_GetMainParams (void)
    if (Gbl.Action.Act == ActMnu)
      {
       Gbl.Action.Tab = (Tab_Tab_t)
-	               Par_GetParToUnsignedLong ("NxtTab",
+	               Par_GetParUnsignedLong ("NxtTab",
                                                  (unsigned long) TabUnk,
                                                  Tab_NUM_TABS - 1,
                                                  (unsigned long) TabUnk);
@@ -936,7 +938,7 @@ void Par_GetMainParams (void)
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParText (const char *ParamName,char *ParamValue,size_t MaxBytes)
   {
    return Par_GetParAndChangeFormat (ParamName,ParamValue,MaxBytes,
                                      Str_TO_TEXT,true);
@@ -946,16 +948,16 @@ unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxByte
 /****************** Get the unsigned value of a parameter ********************/
 /*****************************************************************************/
 
-unsigned long Par_GetParToUnsignedLong (const char *ParamName,
-                                        unsigned long Min,
-                                        unsigned long Max,
-                                        unsigned long Default)
+unsigned long Par_GetParUnsignedLong (const char *ParamName,
+                                      unsigned long Min,
+                                      unsigned long Max,
+                                      unsigned long Default)
   {
    char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
    unsigned long UnsignedLongNum;
 
    /***** Get parameter with unsigned number *****/
-   Par_GetParToText (ParamName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
+   Par_GetParText (ParamName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
    if (sscanf (UnsignedLongStr,"%lu",&UnsignedLongNum) == 1)
       if (UnsignedLongNum >= Min && UnsignedLongNum <= Max)
          return UnsignedLongNum;
@@ -967,12 +969,12 @@ unsigned long Par_GetParToUnsignedLong (const char *ParamName,
 /******************** Get the long value of a parameter **********************/
 /*****************************************************************************/
 
-long Par_GetParToLong (const char *ParamName)
+long Par_GetParLong (const char *ParamName)
   {
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Get parameter with long number *****/
-   Par_GetParToText (ParamName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (ParamName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -998,19 +1000,19 @@ long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed)
 
 long Par_GetParCode (Par_Code_t ParamCode)
   {
-   return Par_GetParToLong (Par_CodeStr[ParamCode]);
+   return Par_GetParLong (Par_CodeStr[ParamCode]);
   }
 
 /*****************************************************************************/
-/************************** Get a boolean parameter **************************/
+/************************ Get a boolean Y/N parameter ************************/
 /*****************************************************************************/
 
-bool Par_GetParToBool (const char *ParamName)
+bool Par_GetParBool (const char *ParamName)
   {
    char YN[1 + 1];
 
    /***** Get parameter "Y"/"N" and convert to boolean *****/
-   Par_GetParToText (ParamName,YN,1);
+   Par_GetParText (ParamName,YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
   }
 
@@ -1019,7 +1021,7 @@ bool Par_GetParToBool (const char *ParamName)
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes)
   {
    return Par_GetParAndChangeFormat (ParamName,ParamValue,MaxBytes,
                                      Str_TO_HTML,true);
@@ -1143,7 +1145,7 @@ void Par_ReplaceSeparatorMultipleByComma (char *Str)
 /********************** Put an unsigned hidden parameter *********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value)
+void Par_PutParUnsigned (const char *Id,const char *ParamName,unsigned Value)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
@@ -1152,7 +1154,7 @@ void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned V
    HTM_TxtF (" name=\"%s\" value=\"%u\" />",ParamName,Value);
   }
 
-void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value)
+void Par_PutParUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
@@ -1166,21 +1168,21 @@ void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,un
 /******************** Put the value of a code parameter **********************/
 /*****************************************************************************/
 
-void Par_PutParCod (Par_Code_t ParamCode,long Cod)
+void Par_PutParCode (Par_Code_t ParCod,long Cod)
   {
    extern const char *Par_CodeStr[];
 
    			// <0 => not specified => don't write parameter
    if (Cod >= 0)	//  0 => another country, institution, centre...
 			// >0 => a given country, institution, centre...
-      Par_PutHiddenParamLong (NULL,Par_CodeStr[ParamCode],Cod);
+      Par_PutParLong (NULL,Par_CodeStr[ParCod],Cod);
   }
 
 /*****************************************************************************/
 /************************* Put a long hidden parameter ***********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value)
+void Par_PutParLong (const char *Id,const char *ParamName,long Value)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
@@ -1193,7 +1195,7 @@ void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value)
 /************************* Put a char hidden parameter ***********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamChar (const char *ParamName,char Value)
+void Par_PutParChar (const char *ParamName,char Value)
   {
    HTM_TxtF ("<input type=\"hidden\" name=\"%s\" value=\"%c\" />",
              ParamName,Value);
@@ -1203,8 +1205,7 @@ void Par_PutHiddenParamChar (const char *ParamName,char Value)
 /************************ Put a string hidden parameter **********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamString (const char *Id,const char *ParamName,
-                               const char *Value)
+void Par_PutParString (const char *Id,const char *ParamName,const char *Value)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
@@ -1212,16 +1213,16 @@ void Par_PutHiddenParamString (const char *Id,const char *ParamName,
          HTM_TxtF (" id=\"%s\"",Id);
    HTM_TxtF (" name=\"%s\" value=\"%s\" />",
              ParamName,Value ? Value :
-	                       "");
+	                     "");
   }
 
 /*****************************************************************************/
 /********* Put a hidden parameter with the type of order in listing **********/
 /*****************************************************************************/
 
-void Par_PutHiddenParamOrder (unsigned SelectedOrder)
+void Par_PutParOrder (unsigned SelectedOrder)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",SelectedOrder);
+   Par_PutParUnsigned (NULL,"Order",SelectedOrder);
   }
 
 /*****************************************************************************/

@@ -214,7 +214,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_NBSP ();
 
       Frm_BeginFormGoTo (ActMnu);
-	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	 Par_PutParUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 	 HTM_BUTTON_Submit_Begin (Txt_System,"class=\"BT_LINK\"");
 	    HTM_Txt (Txt_System);
 	 HTM_BUTTON_End ();
@@ -452,7 +452,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       HTM_DIV_Begin ("id=\"big_name_container\"");
 
 	 Frm_BeginForm (ActMnu);
-	    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.Level]);
+	    Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.Level]);
 	    HTM_BUTTON_Submit_Begin (ShrtText[Gbl.Hierarchy.Level],
 				     "class=\"BT_LINK ICO_HIGHLIGHT\"");
 
@@ -839,7 +839,7 @@ Hie_Status_t Hie_GetParamStatus (void)
 
    /***** Get parameter with status *****/
    Status = (Hie_Status_t)
-	    Par_GetParToUnsignedLong ("Status",
+	    Par_GetParUnsignedLong ("Status",
 	                              0,
 	                              (unsigned long) Hie_MAX_STATUS,
                                       (unsigned long) Hie_WRONG_STATUS);
@@ -900,22 +900,7 @@ static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
 void Hie_PutParamOtherHieCod (void *HieCod)
   {
    if (HieCod)
-      Par_PutHiddenParamLong (NULL,"OthHieCod",*((long *) HieCod));
-  }
-
-/*****************************************************************************/
-/***** Get parameter with code of other institution/center/degree/course *****/
-/*****************************************************************************/
-
-long Hie_GetAndCheckParamOtherHieCod (long MinCodAllowed)
-  {
-   long HieCod;
-
-   /***** Get and check parameter with code *****/
-   if ((HieCod = Par_GetParToLong ("OthHieCod")) < MinCodAllowed)
-      Err_WrongHierarchyExit ();
-
-   return HieCod;
+      Par_PutParCode (Par_OthHieCod,*((long *) HieCod));
   }
 
 /*****************************************************************************/

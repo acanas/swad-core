@@ -1424,7 +1424,7 @@ void Usr_PutFormLogOut (void)
 
 void Usr_GetParamUsrIdLogin (void)
   {
-   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,sizeof (Gbl.Usrs.Me.UsrIdLogin) - 1);
+   Par_GetParText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,sizeof (Gbl.Usrs.Me.UsrIdLogin) - 1);
    // Users' IDs are always stored internally without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
   }
@@ -1436,7 +1436,7 @@ void Usr_GetParamUsrIdLogin (void)
 static void Usr_GetParamOtherUsrIDNickOrEMail (void)
   {
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
-   Par_GetParToText ("OtherUsrIDNickOrEMail",
+   Par_GetParText ("OtherUsrIDNickOrEMail",
                      Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
                      sizeof (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) - 1);
 
@@ -1536,7 +1536,7 @@ void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod)
 
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   Par_PutHiddenParamString (NULL,"OtherUsrCod",EncryptedUsrCod);
+   Par_PutParString (NULL,"OtherUsrCod",EncryptedUsrCod);
   }
 
 /*****************************************************************************/
@@ -1545,7 +1545,7 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED
 
 void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
   {
-   Par_GetParToText ("OtherUsrCod",UsrDat->EnUsrCod,
+   Par_GetParText ("OtherUsrCod",UsrDat->EnUsrCod,
                      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    if (UsrDat->EnUsrCod[0])	// If parameter exists...
      {
@@ -2999,7 +2999,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
      {
       /***** Get parameter with user's confirmation
              to see a big list of users *****/
-      if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
+      if (!(ShowBigList = Par_GetParBool ("ShowBigList")))
 	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,
 	                                          FuncParams,Args,
 	                                          OnSubmit);
@@ -3036,7 +3036,7 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
    Set_PutParamsPrefsAboutUsrList ();
    if (Usr_FuncParamsBigList)
       Usr_FuncParamsBigList (Args);
-   Par_PutHiddenParamChar ("ShowBigList",'Y');
+   Par_PutParChar ("ShowBigList",'Y');
   }
 
 /*****************************************************************************/
@@ -3066,7 +3066,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
    char *ParamName;
 
    /***** Put a parameter indicating that a list of several users is present *****/
-   Par_PutHiddenParamChar ("MultiUsrs",'Y');
+   Par_PutParChar ("MultiUsrs",'Y');
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    /* Build name of the parameter.
@@ -3078,7 +3078,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
    if (Gbl.Session.IsOpen)
       Ses_InsertParamInDB (ParamName,SelectedUsrs->List[Rol_UNK]);
    else
-      Par_PutHiddenParamString (NULL,ParamName,SelectedUsrs->List[Rol_UNK]);
+      Par_PutParString (NULL,ParamName,SelectedUsrs->List[Rol_UNK]);
 
    /***** Free allocated memory for parameter name *****/
    free (ParamName);
@@ -3205,7 +3205,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    Usr_AllocateListOtherRecipients ();
 
    /***** Get recipients written explicetely *****/
-   Par_GetParToText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,
+   Par_GetParText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,
                      Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS);
 
    /***** Add encrypted users' IDs to the list with all selected users *****/
@@ -3963,7 +3963,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
   {
    extern const char *Txt_Display_photos;
 
-   Par_PutHiddenParamChar ("WithPhotosExists",'Y');
+   Par_PutParChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -5773,7 +5773,7 @@ void Usr_DoActionOnSeveralUsrs2 (void)
 
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction)
   {
-   return (Usr_ListUsrsOption_t) Par_GetParToUnsignedLong ("ListUsrsAction",
+   return (Usr_ListUsrsOption_t) Par_GetParUnsignedLong ("ListUsrsAction",
 							   0,
 							   Usr_LIST_USRS_NUM_OPTIONS - 1,
 							   (unsigned long) DefaultAction);
@@ -6503,7 +6503,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 
 void Usr_PutHiddenParamWho (Usr_Who_t Who)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+   Par_PutParUnsigned (NULL,"Who",(unsigned) Who);
   }
 
 /*****************************************************************************/
@@ -6512,7 +6512,7 @@ void Usr_PutHiddenParamWho (Usr_Who_t Who)
 
 Usr_Who_t Usr_GetHiddenParamWho (void)
   {
-   return (Usr_Who_t) Par_GetParToUnsignedLong ("Who",
+   return (Usr_Who_t) Par_GetParUnsignedLong ("Who",
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);

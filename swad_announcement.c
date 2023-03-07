@@ -304,7 +304,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 
 static void Ann_PutParams (void *AnnCod)
   {
-   Par_PutParCod (Par_AnnCod,*((long *) AnnCod));
+   Par_PutParCode (Par_AnnCod,*((long *) AnnCod));
   }
 
 /*****************************************************************************/
@@ -400,7 +400,7 @@ void Ann_ReceiveAnnouncement (void)
 
    /***** Get data from form *****/
    /* Get the subject of the announcement */
-   Par_GetParToHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
 
    /* Get the content of the announcement */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_TEXT,

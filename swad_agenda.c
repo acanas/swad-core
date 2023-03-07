@@ -154,7 +154,7 @@ void Agd_PutParamAgd (void)
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
-   Par_PutHiddenParamString (NULL,"agd",NickWithArr);
+   Par_PutParString (NULL,"agd",NickWithArr);
   }
 
 /*****************************************************************************/
@@ -321,17 +321,17 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_PutHiddenParamPast__FutureEvents (unsigned Past__FutureEvents)
   {
-   Par_PutHiddenParamUnsigned (NULL,ParamPast__FutureName,Past__FutureEvents);
+   Par_PutParUnsigned (NULL,ParamPast__FutureName,Past__FutureEvents);
   }
 
 static void Agd_PutHiddenParamPrivatPublicEvents (unsigned PrivatPublicEvents)
   {
-   Par_PutHiddenParamUnsigned (NULL,ParamPrivatPublicName,PrivatPublicEvents);
+   Par_PutParUnsigned (NULL,ParamPrivatPublicName,PrivatPublicEvents);
   }
 
 static void Agd_PutHiddenParamHiddenVisiblEvents (unsigned HiddenVisiblEvents)
   {
-   Par_PutHiddenParamUnsigned (NULL,ParamHiddenVisiblName,HiddenVisiblEvents);
+   Par_PutParUnsigned (NULL,ParamHiddenVisiblName,HiddenVisiblEvents);
   }
 
 /*****************************************************************************/
@@ -340,7 +340,7 @@ static void Agd_PutHiddenParamHiddenVisiblEvents (unsigned HiddenVisiblEvents)
 
 static unsigned Agd_GetParamsPast__FutureEvents (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong (ParamPast__FutureName,
+   return (unsigned) Par_GetParUnsignedLong (ParamPast__FutureName,
 					       0,
 					       (1 << Agd_PAST___EVENTS) |
 					       (1 << Agd_FUTURE_EVENTS),
@@ -350,7 +350,7 @@ static unsigned Agd_GetParamsPast__FutureEvents (void)
 
 static unsigned Agd_GetParamsPrivatPublicEvents (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong (ParamPrivatPublicName,
+   return (unsigned) Par_GetParUnsignedLong (ParamPrivatPublicName,
 					       0,
 					       (1 << Agd_PRIVAT_EVENTS) |
 					       (1 << Agd_PUBLIC_EVENTS),
@@ -360,7 +360,7 @@ static unsigned Agd_GetParamsPrivatPublicEvents (void)
 
 static unsigned Agd_GetParamsHiddenVisiblEvents (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong (ParamHiddenVisiblName,
+   return (unsigned) Par_GetParUnsignedLong (ParamHiddenVisiblName,
 					       0,
 					       (1 << Agd_HIDDEN_EVENTS) |
 					       (1 << Agd_VISIBL_EVENTS),
@@ -958,12 +958,12 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
       Agd_PutHiddenParamHiddenVisiblEvents (HiddenVisiblEvents);
 
    if (Order != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamOrder ((unsigned) Order);
+      Par_PutParOrder ((unsigned) Order);
 
    if (NumPage > 1)
       Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,NumPage);
 
-   Par_PutParCod (Par_AgdCod,AgdCodToEdit);
+   Par_PutParCode (Par_AgdCod,AgdCodToEdit);
   }
 
 /*****************************************************************************/
@@ -998,7 +998,7 @@ static void Agd_GetParams (struct Agd_Agenda *Agenda,
 void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder)
   {
    if (SelectedOrder != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamOrder ((unsigned) SelectedOrder);
+      Par_PutParOrder ((unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -1012,7 +1012,7 @@ static void Agd_GetParamEventOrder (struct Agd_Agenda *Agenda)
    if (!AlreadyGot)
      {
       Agenda->SelectedOrder = (Dat_StartEndTime_t)
-			      Par_GetParToUnsignedLong ("Order",
+			      Par_GetParUnsignedLong ("Order",
 							0,
 							Dat_NUM_START_END_TIME - 1,
 							(unsigned long) Agd_ORDER_DEFAULT);
@@ -1536,13 +1536,13 @@ void Agd_ReceiveFormEvent (void)
    AgdEvent.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get event location *****/
-   Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
+   Par_GetParText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
 
    /***** Get event title *****/
-   Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
+   Par_GetParText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
 
    /***** Get event description *****/
-   Par_GetParToHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (AgdEvent.TimeUTC[Dat_STR_TIME] == 0)

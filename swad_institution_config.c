@@ -602,7 +602,7 @@ void InsCfg_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the institution */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

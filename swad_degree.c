@@ -1091,14 +1091,14 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Deg_EditingDeg->CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
 
    /* Get degree short name and full name */
-   Par_GetParToText ("ShortName",Deg_EditingDeg->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-   Par_GetParToText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
    Deg_EditingDeg->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /* Get degree WWW */
-   Par_GetParToText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
 
    if (Deg_EditingDeg->ShrtName[0] &&
        Deg_EditingDeg->FullName[0])	// If there's a degree name
@@ -1144,7 +1144,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Get degree code *****/
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1173,7 +1173,7 @@ void Deg_RemoveDegree (void)
 
 void Deg_PutParamDegCod (long DegCod)
   {
-   Par_PutHiddenParamLong (NULL,"deg",DegCod);
+   Par_PutParLong (NULL,"deg",DegCod);
   }
 
 /*****************************************************************************/
@@ -1312,7 +1312,7 @@ void Deg_RenameDegreeShort (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
 
@@ -1322,7 +1322,7 @@ void Deg_RenameDegreeFull (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
 
@@ -1359,7 +1359,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Par_GetParToText (ParamName,NewDegName,MaxBytes);
+   Par_GetParText (ParamName,NewDegName,MaxBytes);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg);
@@ -1412,7 +1412,7 @@ void Deg_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get the new degree type */
    NewDegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
@@ -1445,10 +1445,10 @@ void Deg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get the new WWW for the degree */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1484,7 +1484,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
+   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
    Status = Hie_GetParamStatus ();	// New status

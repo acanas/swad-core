@@ -81,7 +81,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
       NextAction = (AttCod > 0)	? ActSeeOneAtt :	// Attendance events specified
 				  ActSeeAtt;		// All attendance events
       Frm_BeginForm (NextAction);
-         Par_PutParCod (Par_AttCod,AttCod);
+         Par_PutParCode (Par_AttCod,AttCod);
 	 Att_PutParamsCodGrps (AttCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",

@@ -479,7 +479,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 static void Lnk_PutParamLnkCod (void *LnkCod)
   {
    if (LnkCod)
-      Par_PutHiddenParamLong (NULL,"LnkCod",*((long *) LnkCod));
+      Par_PutParLong (NULL,"LnkCod",*((long *) LnkCod));
   }
 
 /*****************************************************************************/
@@ -489,7 +489,7 @@ static void Lnk_PutParamLnkCod (void *LnkCod)
 long Lnk_GetParamLnkCod (void)
   {
    /***** Get code of link *****/
-   return Par_GetParToLong ("LnkCod");
+   return Par_GetParLong ("LnkCod");
   }
 
 /*****************************************************************************/
@@ -582,7 +582,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       Err_WrongLinkExit ();
 
    /* Get the new name for the link */
-   Par_GetParToText (ParamName,NewLnkName,MaxBytes);
+   Par_GetParText (ParamName,NewLnkName,MaxBytes);
 
    /***** Get link data from the database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -639,7 +639,7 @@ void Lnk_ChangeLinkWWW (void)
       Err_WrongLinkExit ();
 
    /* Get the new WWW for the link */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get link data from the database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -777,13 +777,13 @@ void Lnk_ReceiveFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name */
-   Par_GetParToText ("ShortName",Lnk_EditingLnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
+   Par_GetParText ("ShortName",Lnk_EditingLnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
 
    /* Get link full name */
-   Par_GetParToText ("FullName",Lnk_EditingLnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
+   Par_GetParText ("FullName",Lnk_EditingLnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
 
    /* Get link URL */
-   Par_GetParToText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
 
    if (Lnk_EditingLnk->ShrtName[0] &&
        Lnk_EditingLnk->FullName[0])	// If there's a link name

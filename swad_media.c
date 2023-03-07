@@ -430,7 +430,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 		       Hlp_Multimedia,Box_NOT_CLOSABLE);
 
 	    /***** Action to perform on media *****/
-	    Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,
+	    Par_PutParUnsigned (NULL,ParamUploadMedia.Action,
 					(unsigned) Med_ACTION_NEW_MEDIA);
 
 	    /***** Icons *****/
@@ -546,7 +546,7 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
    /***** Hidden field with form type *****/
    if (asprintf (&Id,"%s_%s",UniqueId,MediaUploader->ParamSuffix) < 0)	// <id>_ParamSuffix
       Err_NotEnoughMemoryExit ();
-   Par_PutHiddenParamUnsignedDisabled (Id,ParamUploadMedia->FormType,
+   Par_PutParUnsignedDisabled (Id,ParamUploadMedia->FormType,
 			               (unsigned) MediaUploader->FormType);
    free (Id);
   }
@@ -674,7 +674,7 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
   {
    /***** Get parameter with the action to perform on media *****/
    return (Med_Action_t)
-   Par_GetParToUnsignedLong (ParamAction,
+   Par_GetParUnsignedLong (ParamAction,
 			     0,
 			     Med_NUM_ACTIONS - 1,
 			     (unsigned long) Med_ACTION_DEFAULT);
@@ -687,7 +687,7 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia)
   {
    return (Med_FormType_t)
-   Par_GetParToUnsignedLong (ParamUploadMedia->FormType,
+   Par_GetParUnsignedLong (ParamUploadMedia->FormType,
 			     0,
 			     Med_NUM_FORM_TYPES - 1,
 			     (unsigned long) Med_FORM_NONE);
@@ -703,7 +703,7 @@ static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
    size_t Length;
 
    /***** Get media URL from form *****/
-   Par_GetParToText (ParamName,URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText (ParamName,URL,Cns_MAX_BYTES_WWW);
    /* If the URL coming from the form is empty, keep current media URL unchanged
       If not empty, copy it to current media URL */
    if ((Length = strlen (URL)) > 0)
@@ -727,7 +727,7 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
    size_t Length;
 
    /***** Get image/video title from form *****/
-   Par_GetParToText (ParamName,Title,Med_MAX_BYTES_TITLE);
+   Par_GetParText (ParamName,Title,Med_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current media title unchanged
       If not empty, copy it to current media title */
    if ((Length = strlen (Title)) > 0)

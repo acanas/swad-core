@@ -543,7 +543,7 @@ void CrsCfg_ChangeCrsYear (void)
    unsigned NewYear;
 
    /***** Get parameter with year/semester *****/
-   Par_GetParToText ("OthCrsYear",YearStr,2);
+   Par_GetParText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
@@ -589,7 +589,7 @@ void CrsCfg_ChangeInsCrsCod (void)
    char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
 
    /***** Get institutional code from form *****/
-   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /***** Change the institutional course code *****/
    if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.InstitutionalCrsCod))

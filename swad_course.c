@@ -1555,17 +1555,17 @@ static void Crs_GetParamsNewCourse (struct Crs_Course *Crs)
 
    /***** Get parameters of the course from form *****/
    /* Get institutional code */
-   Par_GetParToText ("InsCrsCod",Crs->InstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",Crs->InstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get year */
-   Par_GetParToText ("OthCrsYear",YearStr,2);
+   Par_GetParText ("OthCrsYear",YearStr,2);
    Crs->Year = Deg_ConvStrToYear (YearStr);
 
    /* Get course short name */
-   Par_GetParToText ("ShortName",Crs->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Crs->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get course full name */
-   Par_GetParToText ("FullName",Crs->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Crs->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1581,7 +1581,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -1816,10 +1816,10 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get institutional code */
-   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -1862,10 +1862,10 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with year */
-   Par_GetParToText ("OthCrsYear",YearStr,2);
+   Par_GetParText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -1945,7 +1945,7 @@ void Crs_RenameCourseShort (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
   }
 
@@ -1955,7 +1955,7 @@ void Crs_RenameCourseFull (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
   }
 
@@ -1992,7 +1992,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParToText (ParamName,NewCrsName,MaxBytes);
+   Par_GetParText (ParamName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetDataOfCourseByCod (Crs);
@@ -2051,7 +2051,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
    Status = Hie_GetParamStatus ();	// New status
@@ -2237,7 +2237,7 @@ void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
 
 void Crs_PutParamCrsCod (long CrsCod)
   {
-   Par_PutHiddenParamLong (NULL,"crs",CrsCod);
+   Par_PutParLong (NULL,"crs",CrsCod);
   }
 
 /*****************************************************************************/
@@ -2598,7 +2598,7 @@ void Crs_RemoveOldCrss (void)
 
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
-	                 Par_GetParToUnsignedLong ("Months",
+	                 Par_GetParUnsignedLong ("Months",
                                                    Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
                                                    Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
                                                    UINT_MAX);

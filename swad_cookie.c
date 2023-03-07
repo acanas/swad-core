@@ -125,7 +125,7 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args)
 void Coo_ChangeMyPrefsCookies (void)
   {
    /***** Get param with preference about third party cookies *****/
-   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParToBool ("cookies");
+   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParBool ("cookies");
 
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)

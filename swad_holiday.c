@@ -137,7 +137,7 @@ void Hld_SeeHolidays (void)
 		    {
                      HTM_TH_Begin (HTM_HEAD_LEFT);
 			Frm_BeginForm (ActSeeHld);
-			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			   Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 			   HTM_BUTTON_Submit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
 			                            "class=\"BT_LINK\"");
 			      if (Order == Holidays.SelectedOrder)
@@ -225,7 +225,7 @@ void Hld_SeeHolidays (void)
 
 static Hld_Order_t Hld_GetParamHldOrder (void)
   {
-   return (Hld_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Hld_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Hld_NUM_ORDERS - 1,
 						  (unsigned long) Hld_DEFAULT_ORDER_TYPE);
@@ -458,7 +458,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 static Hld_HolidayType_t Hld_GetParamHldType (void)
   {
    return (Hld_HolidayType_t)
-	  Par_GetParToUnsignedLong ("HldTyp",
+	  Par_GetParUnsignedLong ("HldTyp",
 	                            0,
 	                            Hld_NUM_TYPES_HOLIDAY - 1,
 	                            (unsigned long) Hld_HOLIDAY_TYPE_DEFAULT);
@@ -631,17 +631,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 static void Hld_PutParamHldCod (void *HldCod)
   {
    if (HldCod)
-      Par_PutHiddenParamLong (NULL,"HldCod",*((long *) HldCod));
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of holiday ********************/
-/*****************************************************************************/
-
-long Hld_GetParamHldCod (void)
-  {
-   /***** Get code of holiday *****/
-   return Par_GetParToLong ("HldCod");
+      Par_PutParCode (Par_HldCod,*((long *) HldCod));
   }
 
 /*****************************************************************************/
@@ -656,8 +646,7 @@ void Hld_RemoveHoliday (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get holiday code *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
-      Err_WrongHolidayExit ();
+   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /***** Get data of the holiday from database *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -685,8 +674,7 @@ void Hld_ChangeHolidayPlace (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
-      Err_WrongHolidayExit ();
+   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /* Get the new place for the holiday */
    NewPlace.PlcCod = Plc_GetParamPlcCod ();
@@ -721,8 +709,7 @@ void Hld_ChangeHolidayType (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
-      Err_WrongHolidayExit ();
+   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -774,8 +761,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
-      Err_WrongHolidayExit ();
+   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -839,11 +825,10 @@ void Hld_RenameHoliday (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) <= 0)
-      Err_WrongHolidayExit ();
+   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /* Get the new name for the holiday */
-   Par_GetParToText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
+   Par_GetParText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Get from the database the old names of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -1073,7 +1058,7 @@ void Hld_ReceiveFormNewHoliday (void)
      }
 
    /***** Get holiday name *****/
-   Par_GetParToText ("Name",Hld_EditingHld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
+   Par_GetParText ("Name",Hld_EditingHld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Create the new holiday or set warning message *****/
    if (Hld_EditingHld->Name[0])	// If there's a holiday name

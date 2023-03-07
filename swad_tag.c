@@ -142,7 +142,7 @@ static long Tag_GetParamTagCode (void)
    long TagCod;
 
    /***** Get tag code *****/
-   if ((TagCod = Par_GetParToLong ("TagCod")) <= 0)
+   if ((TagCod = Par_GetParLong ("TagCod")) <= 0)
       Err_WrongTagExit ();
 
    return TagCod;
@@ -163,8 +163,8 @@ void Tag_RenameTag (void)
    bool ComplexRenaming;
 
    /***** Get old and new tags from the form *****/
-   Par_GetParToText ("OldTagTxt",OldTagTxt,Tag_MAX_BYTES_TAG);
-   Par_GetParToText ("NewTagTxt",NewTagTxt,Tag_MAX_BYTES_TAG);
+   Par_GetParText ("OldTagTxt",OldTagTxt,Tag_MAX_BYTES_TAG);
+   Par_GetParText ("NewTagTxt",NewTagTxt,Tag_MAX_BYTES_TAG);
 
    /***** Check that the new tag is not empty *****/
    if (NewTagTxt[0])	// New tag not empty
@@ -440,7 +440,7 @@ void Tag_ShowFormEditTags (void)
 	       /* Form to rename this tag */
 	       HTM_TD_Begin ("class=\"LM\"");
 		  Frm_BeginForm (ActRenTag);
-		     Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
+		     Par_PutParString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"36\" class=\"INPUT_%s\""
@@ -470,7 +470,7 @@ static void Tag_PutIconEnable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
-	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Par_PutParLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,ActEnaTag);
       Frm_EndForm ();
    HTM_TD_End ();
@@ -484,7 +484,7 @@ static void Tag_PutIconDisable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
-	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Par_PutParLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye.svg",Ico_GREEN,ActDisTag);
       Frm_EndForm ();
    HTM_TD_End ();

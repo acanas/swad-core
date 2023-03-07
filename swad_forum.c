@@ -1139,10 +1139,10 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
    Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,NumPageThreads);
    Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,NumPagePosts);
    For_PutParamForumSet (ForumSet);
-   Par_PutHiddenParamOrder ((unsigned) Order);
+   Par_PutParOrder ((unsigned) Order);
    For_PutParamForumLocation (Location);
-   Par_PutParCod (Par_ThrCod,ThrCod);
-   Par_PutParCod (Par_PstCod,PstCod);
+   Par_PutParCode (Par_ThrCod,ThrCod);
+   Par_PutParCode (Par_PstCod,PstCod);
   }
 
 /*****************************************************************************/
@@ -1151,7 +1151,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet)
   {
-   Par_PutHiddenParamUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
+   Par_PutParUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
   }
 
 /*****************************************************************************/
@@ -1164,7 +1164,7 @@ static void For_PutParamForumLocation (long Location)
    if (Location > 0)
       /***** Put a hidden parameter with the
              institution, center, degree or course of the forum *****/
-      Par_PutHiddenParamLong (NULL,"Location",Location);
+      Par_PutParLong (NULL,"Location",Location);
   }
 
 /*****************************************************************************/
@@ -1390,7 +1390,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
           - all my forums
           - only the forums of current institution/degree/course *****/
    Frm_BeginForm (ActSeeFor);
-      Par_PutHiddenParamOrder ((unsigned) Forums->ThreadsOrder);
+      Par_PutParOrder ((unsigned) Forums->ThreadsOrder);
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 
@@ -2431,7 +2431,7 @@ void For_GetParamsForums (struct For_Forums *Forums)
       case For_FORUM_DEGREE_TCHS:
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-	 Forums->Forum.Location = Par_GetParToLong ("Location");
+	 Forums->Forum.Location = Par_GetParLong ("Location");
          break;
       default:
 	 Forums->Forum.Location = -1L;
@@ -2447,14 +2447,14 @@ void For_GetParamsForums (struct For_Forums *Forums)
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)
-		      Par_GetParToUnsignedLong ("ForumSet",
+		      Par_GetParUnsignedLong ("ForumSet",
 					        0,
 					        For_NUM_FORUM_SETS - 1,
 					        (unsigned long) For_DEFAULT_FORUM_SET);
 
    /***** Get order type *****/
    Forums->ThreadsOrder = (Dat_StartEndTime_t)
-			  Par_GetParToUnsignedLong ("Order",
+			  Par_GetParUnsignedLong ("Order",
 						    0,
 						    Dat_NUM_START_END_TIME - 1,
 						    (unsigned long) For_DEFAULT_ORDER);
@@ -2792,7 +2792,7 @@ void For_ReceiveForumPost (void)
       IsReply = true;
 
    /***** Get message subject *****/
-   Par_GetParToHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParHTML ("Subject",Subject,Cns_MAX_BYTES_SUBJECT);
 
    /***** Get message body *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,

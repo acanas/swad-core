@@ -684,7 +684,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
 
 static bool Ntf_GetAllNotificationsFromForm (void)
   {
-   return Par_GetParToBool ("All");
+   return Par_GetParBool ("All");
   }
 
 /*****************************************************************************/
@@ -714,7 +714,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 /* Begin form */
 	 Action = ActSeeOneCfe;
          Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
-            Par_PutParCod (Par_ExaCod,Cod);
+            Par_PutParCode (Par_ExaCod,Cod);
 
 	 /* Free anchor string */
 	 Frm_FreeAnchorStr (Anchor);
@@ -758,8 +758,8 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 	    Frm_BeginForm (Action);
-	       Par_PutParCod (Par_GrpCod,GrpCod);
-	       Par_PutParCod (Par_FilCod,FileMetadata.FilCod);
+	       Par_PutParCode (Par_GrpCod,GrpCod);
+	       Par_PutParCode (Par_FilCod,FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_TML_COMMENT:
@@ -769,7 +769,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 // Cod is the code of the social publishing
 	 Action = ActSeeGblTL;
          Frm_BeginForm (Action);
-	    Par_PutParCod (Par_PubCod,Cod);
+	    Par_PutParCode (Par_PubCod,Cod);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
@@ -803,7 +803,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_NOTICE:
 	 Action = ActSeeOneNot;
          Frm_BeginForm (Action);
-	    Par_PutParCod (Par_NotCod,Cod);
+	    Par_PutParCode (Par_NotCod,Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
 	 Action = ActExpRcvMsg;
@@ -850,7 +850,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
   {
-   Par_PutHiddenParamUnsigned (NULL,"NotifyEvent",(unsigned) NotifyEvent);
+   Par_PutParUnsigned (NULL,"NotifyEvent",(unsigned) NotifyEvent);
   }
 
 /*****************************************************************************/
@@ -860,7 +860,7 @@ static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
   {
    return (Ntf_NotifyEvent_t)
-	  Par_GetParToUnsignedLong ("NotifyEvent",
+	  Par_GetParUnsignedLong ("NotifyEvent",
                                     0,
                                     Ntf_NUM_NOTIFY_EVENTS - 1,
                                     (unsigned long) Ntf_EVENT_UNKNOWN);
@@ -1628,13 +1628,13 @@ static void Ntf_GetParamsNotifyEvents (void)
 	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++)	// 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      if ((CreateNotifForThisEvent = Par_GetParToBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))
+      if ((CreateNotifForThisEvent = Par_GetParBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))
          Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif |= (1 << NotifyEvent);
 
       if (CreateNotifForThisEvent)
 	{
-         Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
-         if (Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]))
+         Par_GetParBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
+         if (Par_GetParBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]))
             Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail |= (1 << NotifyEvent);
 	}
      }

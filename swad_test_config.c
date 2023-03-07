@@ -399,21 +399,21 @@ void TstCfg_ReceiveConfigTst (void)
    /***** Get number of questions *****/
    /* Get minimum number of questions */
    TstCfg_SetConfigMin ((unsigned)
-	             Par_GetParToUnsignedLong ("NumQstMin",
+	             Par_GetParUnsignedLong ("NumQstMin",
 	                                       1,
 	                                       UINT_MAX,
 	                                       1));
 
    /* Get default number of questions */
    TstCfg_SetConfigDef ((unsigned)
-	             Par_GetParToUnsignedLong ("NumQstDef",
+	             Par_GetParUnsignedLong ("NumQstDef",
 	                                       1,
 	                                       UINT_MAX,
 	                                       1));
 
    /* Get maximum number of questions */
    TstCfg_SetConfigMax ((unsigned)
-	             Par_GetParToUnsignedLong ("NumQstMax",
+	             Par_GetParUnsignedLong ("NumQstMax",
 	                                       1,
 	                                       UINT_MAX,
 	                                       1));
@@ -422,7 +422,7 @@ void TstCfg_ReceiveConfigTst (void)
    TstCfg_CheckAndCorrectMinDefMax ();
 
    /***** Get minimum time between consecutive tests, per question *****/
-   TstCfg_SetConfigMinTimeNxtTstPerQst (Par_GetParToUnsignedLong ("MinTimeNxtTstPerQst",
+   TstCfg_SetConfigMinTimeNxtTstPerQst (Par_GetParUnsignedLong ("MinTimeNxtTstPerQst",
                                                                0,
                                                                ULONG_MAX,
                                                                0));
@@ -447,7 +447,7 @@ void TstCfg_ReceiveConfigTst (void)
 static TstCfg_Pluggable_t TstCfg_GetPluggableFromForm (void)
   {
    return (TstCfg_Pluggable_t)
-	  Par_GetParToUnsignedLong ("Pluggable",
+	  Par_GetParUnsignedLong ("Pluggable",
 	                            0,
                                     TstCfg_NUM_OPTIONS_PLUGGABLE - 1,
                                     (unsigned long) TstCfg_PLUGGABLE_UNKNOWN);

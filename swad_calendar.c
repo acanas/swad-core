@@ -131,7 +131,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	   {
 	    Set_BeginPref (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek);
 	       Frm_BeginForm (Action);
-		  Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
+		  Par_PutParUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
 		  if (FuncParams)	// Extra parameters depending on the action
 		     FuncParams (Args);
 		  snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
@@ -172,7 +172,7 @@ static unsigned Cal_GetParamFirstDayOfWeek (void)
    unsigned FirstDayOfWeek;
 
    FirstDayOfWeek = (unsigned)
-	            Par_GetParToUnsignedLong ("FirstDayOfWeek",
+	            Par_GetParUnsignedLong ("FirstDayOfWeek",
                                               0,
                                               6,
                                               Cal_FIRST_DAY_OF_WEEK_DEFAULT);

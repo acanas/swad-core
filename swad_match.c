@@ -631,7 +631,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 	 /***** Match title *****/
 	 Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 							     ActResMch);
-	    Par_PutParCod (Par_MchCod,Match->MchCod);
+	    Par_PutParCode (Par_MchCod,Match->MchCod);
 
 	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
@@ -1121,7 +1121,7 @@ void Mch_PutParamsEdit (void *Games)
    if (Games)
      {
       Gam_PutParams (Games);
-      Par_PutParCod (Par_MchCod,((struct Gam_Games *) Games)->MchCod.Current);
+      Par_PutParCode (Par_MchCod,((struct Gam_Games *) Games)->MchCod.Current);
      }
   }
 
@@ -1132,7 +1132,7 @@ void Mch_PutParamsEdit (void *Games)
 static void Mch_PutParamsPlay (void *MchCod)
   {
    if (MchCod)
-      Par_PutParCod (Par_MchCod,*((long *) MchCod));
+      Par_PutParCode (Par_MchCod,*((long *) MchCod));
   }
 
 /*****************************************************************************/
@@ -1361,7 +1361,7 @@ void Mch_CreateNewMatch (void)
    GamCod = Par_GetAndCheckParCode (Par_GamCod);
 
    /* Get match title */
-   Par_GetParToText ("Title",Title,Mch_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Title,Mch_MAX_BYTES_TITLE);
 
    /* Get groups for this match */
    Grp_GetParCodsSeveralGrps ();
@@ -1398,7 +1398,7 @@ void Mch_ChangeMatch (void)
 
    /***** Get match title and groups *****/
    /* Get match title */
-   Par_GetParToText ("Title",Match.Title,Mch_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Match.Title,Mch_MAX_BYTES_TITLE);
 
    /* Get groups for this match */
    Grp_GetParCodsSeveralGrps ();
@@ -1788,7 +1788,7 @@ void Mch_ChangeNumColsMch (void)
 
    /***** Get number of columns *****/
    Match.Status.NumCols = (unsigned)
-	                  Par_GetParToUnsignedLong ("NumCols",
+	                  Par_GetParUnsignedLong ("NumCols",
 						    1,
 						    Mch_MAX_COLS,
 						    Mch_NUM_COLS_DEFAULT);
@@ -2598,7 +2598,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 
 	 /* Begin form */
 	 Frm_BeginForm (ActChgNumColMch);
-	    Par_PutParCod (Par_MchCod,Match->MchCod);	// Current match being played
+	    Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
 	    Mch_PutParamNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
@@ -2626,7 +2626,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 
 static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
   {
-   Par_PutHiddenParamUnsigned (NULL,"NumCols",NumCols);
+   Par_PutParUnsigned (NULL,"NumCols",NumCols);
   }
 
 /*****************************************************************************/
@@ -2643,7 +2643,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActChgVisResMchQst);
-	 Par_PutParCod (Par_MchCod,Match->MchCod);	// Current match being played
+	 Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
 	 HTM_BUTTON_Submit_Begin (Txt_View_results,
@@ -2681,7 +2681,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	{
 	 /* Begin form */
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
-	    Par_PutParCod (Par_MchCod,Match->MchCod);	// Current match being played
+	    Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
 
 	    HTM_BUTTON_Submit_Begin (Txt_View_my_answer,
 	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
@@ -2726,7 +2726,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActRemMchAnsQstStd);
-	 Par_PutParCod (Par_MchCod,Match->MchCod);		// Current match being played
+	 Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
 	 Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 
 	 /***** Put icon with link *****/
@@ -2982,7 +2982,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  is necessary in order to be fast
 		  and not lose clicks due to refresh */
 	       Frm_BeginForm (ActAnsMchQstStd);
-		  Par_PutParCod (Par_MchCod,Match->MchCod);		// Current match being played
+		  Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
 		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 		  Mch_PutParamNumOpt (NumOpt);		// Number of button
 
@@ -3220,7 +3220,7 @@ static const char *Mch_GetClassBorder (unsigned NumRow)
 
 static void Mch_PutParamNumOpt (unsigned NumOpt)
   {
-   Par_PutHiddenParamUnsigned (NULL,"NumOpt",NumOpt);
+   Par_PutParUnsigned (NULL,"NumOpt",NumOpt);
   }
 
 /*****************************************************************************/
@@ -3231,7 +3231,7 @@ static unsigned Mch_GetParamNumOpt (void)
   {
    long NumOpt;
 
-   NumOpt = Par_GetParToLong ("NumOpt");
+   NumOpt = Par_GetParLong ("NumOpt");
    if (NumOpt < 0)
       Err_WrongAnswerExit ();
 
@@ -3247,7 +3247,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
   {
    /***** Begin form *****/
    Frm_BeginFormId (NextAction,Id);
-      Par_PutParCod (Par_MchCod,MchCod);
+      Par_PutParCode (Par_MchCod,MchCod);
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
@@ -3429,7 +3429,7 @@ void Mch_StartCountdown (void)
    Mch_ResetMatch (&Match);
 
    /***** Get countdown parameter ****/
-   NewCountdown = Par_GetParToLong ("Countdown");
+   NewCountdown = Par_GetParLong ("Countdown");
 
    /***** Remove old players.
           This function must be called by a teacher

@@ -223,7 +223,7 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
       /***** Begin form to write the post *****/
       TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_COMM);
-	 Par_PutParCod (Par_NotCod,NotCod);
+	 Par_PutParCode (Par_NotCod,NotCod);
 
 	 /***** Textarea and button *****/
 	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH INPUT_%s",
@@ -373,8 +373,8 @@ void TmlCom_ShowHiddenCommsGbl (void)
    /***** Get parameters *****/
    /* Get note code, identifier and number of comments to get */
    NotCod = Par_GetParCode (Par_NotCod);
-   Par_GetParToText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
-   NumInitialCommsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
+   Par_GetParText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
+   NumInitialCommsToGet = (unsigned) Par_GetParLong ("NumHidCom");
 
    /***** Write HTML inside DIV with hidden comments *****/
    NumInitialCommsGot =
@@ -700,7 +700,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_COMM);
-      Par_PutParCod (Par_PubCod,PubCod);
+      Par_PutParCode (Par_PubCod,PubCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
@@ -922,7 +922,7 @@ static void TmlCom_PutParamsRemoveComm (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
-      Par_PutParCod (Par_PubCod,((struct Tml_Timeline *) Timeline)->PubCod);
+      Par_PutParCode (Par_PubCod,((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }
 

@@ -218,7 +218,7 @@ static void Set_PutIconsToSelectSideCols (void)
 	   {
 	    Set_BeginPref (SideCols == Gbl.Prefs.SideCols);
 	       Frm_BeginForm (ActChgCol);
-		  Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
+		  Par_PutParUnsigned (NULL,"SideCols",SideCols);
 		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
 			    SideCols >> 1,SideCols & 1);
 		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
@@ -263,7 +263,7 @@ void Set_ChangeSideCols (void)
 
 unsigned Set_GetParamSideCols (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong ("SideCols",
+   return (unsigned) Par_GetParUnsignedLong ("SideCols",
                                                0,
                                                Lay_SHOW_BOTH_COLUMNS,
                                                Cfg_DEFAULT_COLUMNS);
@@ -339,7 +339,7 @@ static void Set_GetAndUpdateUsrListType (void)
 
 void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType)
   {
-   Par_PutHiddenParamUnsigned (NULL,"UsrListType",(unsigned) ListType);
+   Par_PutParUnsigned (NULL,"UsrListType",(unsigned) ListType);
   }
 
 /*****************************************************************************/
@@ -349,7 +349,7 @@ void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType)
 static void Set_GetUsrListTypeFromForm (void)
   {
    Gbl.Usrs.Me.ListType = (Set_ShowUsrsType_t)
-	                  Par_GetParToUnsignedLong ("UsrListType",
+	                  Par_GetParUnsignedLong ("UsrListType",
                                                     0,
                                                     Set_NUM_USR_LIST_TYPES - 1,
                                                     (unsigned long) Set_USR_LIST_UNKNOWN);
@@ -447,7 +447,7 @@ void Set_GetMyColsClassPhotoFromDB (void)
 
 void Set_PutParamColsClassPhoto (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
+   Par_PutParUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
   }
 
 /*****************************************************************************/
@@ -457,7 +457,7 @@ void Set_PutParamColsClassPhoto (void)
 static void Set_GetParamColsClassPhotoFromForm (void)
   {
    Gbl.Usrs.ClassPhoto.Cols = (unsigned)
-	                      Par_GetParToUnsignedLong ("ColsClassPhoto",
+	                      Par_GetParUnsignedLong ("ColsClassPhoto",
                                                         1,
                                                         Usr_CLASS_PHOTO_COLS_MAX,
                                                         0);
@@ -485,8 +485,8 @@ static void Set_GetAndUpdatePrefAboutListWithPhotos (void)
 
 void Set_PutParamListWithPhotos (void)
   {
-   Par_PutHiddenParamChar ("WithPhotosExists",'Y');
-   Par_PutHiddenParamChar ("WithPhotos",
+   Par_PutParChar ("WithPhotosExists",'Y');
+   Par_PutParChar ("WithPhotos",
                            Gbl.Usrs.Listing.WithPhotos ? 'Y' :
                         	                         'N');
   }
@@ -498,10 +498,10 @@ void Set_PutParamListWithPhotos (void)
 static bool Set_GetParamListWithPhotosFromForm (void)
   {
    /***** Get if exists parameter with preference about photos in users' list *****/
-   if (Par_GetParToBool ("WithPhotosExists"))
+   if (Par_GetParBool ("WithPhotosExists"))
      {
       /***** Parameter with preference about photos in users' list exists, so get it *****/
-      Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
+      Gbl.Usrs.Listing.WithPhotos = Par_GetParBool ("WithPhotos");
       return true;
      }
 

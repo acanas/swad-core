@@ -81,7 +81,7 @@ void RubCri_PutParamCriCod (void *CriCod)	// Should be a pointer to long
   {
    if (CriCod)
       if (*((long *) CriCod) > 0)	// If criterion exists
-	 Par_PutHiddenParamLong (NULL,"CriCod",*((long *) CriCod));
+	 Par_PutParLong (NULL,"CriCod",*((long *) CriCod));
   }
 
 /*****************************************************************************/
@@ -234,7 +234,7 @@ void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics)
 
 void RubCri_PutParamCriInd (unsigned CriInd)
   {
-   Par_PutHiddenParamUnsigned (NULL,"CriInd",CriInd);
+   Par_PutParUnsigned (NULL,"CriInd",CriInd);
   }
 
 /*****************************************************************************/
@@ -245,7 +245,7 @@ unsigned RubCri_GetParamCriInd (void)
   {
    long CriInd;
 
-   if ((CriInd = Par_GetParToLong ("CriInd")) <= 0)	// In rubrics, criterion index should be 1, 2, 3...
+   if ((CriInd = Par_GetParLong ("CriInd")) <= 0)	// In rubrics, criterion index should be 1, 2, 3...
       Err_WrongCriterionIndexExit ();
 
    return (unsigned) CriInd;

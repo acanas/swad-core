@@ -108,7 +108,7 @@ void The_PutIconsToSelectTheme (void)
 	      {
 	       Set_BeginPref (Theme == Gbl.Prefs.Theme);
 		  Frm_BeginForm (ActChgThe);
-		     Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
+		     Par_PutParString (NULL,"Theme",The_ThemeId[Theme]);
 		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
 			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
 		     Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,The_ThemeNames[Theme]);
@@ -156,7 +156,7 @@ The_Theme_t The_GetParamTheme (void)
    char ThemeId[The_MAX_BYTES_THEME_ID + 1];
    The_Theme_t Theme;
 
-   Par_GetParToText ("Theme",ThemeId,The_MAX_BYTES_THEME_ID);
+   Par_GetParText ("Theme",ThemeId,The_MAX_BYTES_THEME_ID);
    for (Theme  = (The_Theme_t) 0;
 	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 	Theme++)

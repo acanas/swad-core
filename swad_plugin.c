@@ -463,7 +463,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 static void Plg_PutParamPlgCod (void *PlgCod)
   {
    if (PlgCod)
-      Par_PutHiddenParamLong (NULL,"PlgCod",*((long *) PlgCod));
+      Par_PutParLong (NULL,"PlgCod",*((long *) PlgCod));
   }
 
 /*****************************************************************************/
@@ -473,7 +473,7 @@ static void Plg_PutParamPlgCod (void *PlgCod)
 long Plg_GetParamPlgCod (void)
   {
    /***** Get code of plugin *****/
-   return Par_GetParToLong ("PlgCod");
+   return Par_GetParLong ("PlgCod");
   }
 
 /*****************************************************************************/
@@ -523,7 +523,7 @@ void Plg_RenamePlugin (void)
       Err_WrongPluginExit ();
 
    /* Get the new name for the plugin */
-   Par_GetParToText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
+   Par_GetParText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -580,7 +580,7 @@ void Plg_ChangePlgDescription (void)
       Err_WrongPluginExit ();
 
    /* Get the new description for the plugin */
-   Par_GetParToText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
+   Par_GetParText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -622,7 +622,7 @@ void Plg_ChangePlgLogo (void)
       Err_WrongPluginExit ();
 
    /* Get the new logo for the plugin */
-   Par_GetParToText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
+   Par_GetParText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -664,7 +664,7 @@ void Plg_ChangePlgAppKey (void)
       Err_WrongPluginExit ();
 
    /* Get the new logo for the plugin */
-   Par_GetParToText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
+   Par_GetParText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -706,7 +706,7 @@ void Plg_ChangePlgURL (void)
       Err_WrongPluginExit ();
 
    /* Get the new URL for the plugin */
-   Par_GetParToText ("URL",NewURL,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("URL",NewURL,Cns_MAX_BYTES_WWW);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -748,7 +748,7 @@ void Plg_ChangePlgIP (void)
       Err_WrongPluginExit ();
 
    /* Get the new IP for the plugin */
-   Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
+   Par_GetParText ("IP",NewIP,Cns_MAX_BYTES_IP);
 
    /***** Get plugin data from the database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -930,12 +930,12 @@ void Plg_ReceiveFormNewPlg (void)
 
    /***** Get parameters from form *****/
    /* Get plugin name, description, logo, application key, URL, IP address */
-   Par_GetParToText ("Name"       ,Plg_EditingPlg->Name       ,Plg_MAX_BYTES_PLUGIN_NAME);
-   Par_GetParToText ("Description",Plg_EditingPlg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
-   Par_GetParToText ("Logo"       ,Plg_EditingPlg->Logo       ,Plg_MAX_BYTES_PLUGIN_LOGO);
-   Par_GetParToText ("AppKey"     ,Plg_EditingPlg->AppKey     ,Plg_MAX_BYTES_PLUGIN_APP_KEY);
-   Par_GetParToText ("URL"        ,Plg_EditingPlg->URL        ,Cns_MAX_BYTES_WWW);
-   Par_GetParToText ("IP"         ,Plg_EditingPlg->IP         ,Cns_MAX_BYTES_IP);
+   Par_GetParText ("Name"       ,Plg_EditingPlg->Name       ,Plg_MAX_BYTES_PLUGIN_NAME);
+   Par_GetParText ("Description",Plg_EditingPlg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
+   Par_GetParText ("Logo"       ,Plg_EditingPlg->Logo       ,Plg_MAX_BYTES_PLUGIN_LOGO);
+   Par_GetParText ("AppKey"     ,Plg_EditingPlg->AppKey     ,Plg_MAX_BYTES_PLUGIN_APP_KEY);
+   Par_GetParText ("URL"        ,Plg_EditingPlg->URL        ,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("IP"         ,Plg_EditingPlg->IP         ,Cns_MAX_BYTES_IP);
 
    if (Plg_EditingPlg->Name[0])	// If there's a plugin name
      {

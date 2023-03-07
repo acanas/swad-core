@@ -172,7 +172,7 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParToText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
       Str_Copy (CallsForExams->CallForExam.CrsFullName,Gbl.Hierarchy.Crs.FullName,
@@ -180,13 +180,13 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 
    /***** Get the year *****/
    CallsForExams->CallForExam.Year = (unsigned)
-   Par_GetParToUnsignedLong ("Year",
+   Par_GetParUnsignedLong ("Year",
 			     0,	// N.A.
 			     Deg_MAX_YEARS_PER_DEGREE,
 			     (unsigned long) Gbl.Hierarchy.Crs.Year);
 
    /***** Get the type of call for exam *****/
-   Par_GetParToText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
+   Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
 
    /***** Get the date of the exam *****/
    Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",
@@ -203,27 +203,27 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
      }
 
    /***** Get the hour of the exam *****/
-   CallsForExams->CallForExam.StartTime.Hour   = (unsigned) Par_GetParToUnsignedLong ("ExamHour",
+   CallsForExams->CallForExam.StartTime.Hour   = (unsigned) Par_GetParUnsignedLong ("ExamHour",
                                                                                       0,23,0);
-   CallsForExams->CallForExam.StartTime.Minute = (unsigned) Par_GetParToUnsignedLong ("ExamMinute",
+   CallsForExams->CallForExam.StartTime.Minute = (unsigned) Par_GetParUnsignedLong ("ExamMinute",
                                                                                       0,59,0);
 
    /***** Get the duration of the exam *****/
-   CallsForExams->CallForExam.Duration.Hour    = (unsigned) Par_GetParToUnsignedLong ("DurationHour",
+   CallsForExams->CallForExam.Duration.Hour    = (unsigned) Par_GetParUnsignedLong ("DurationHour",
                                                                                        0,23,0);
-   CallsForExams->CallForExam.Duration.Minute  = (unsigned) Par_GetParToUnsignedLong ("DurationMinute",
+   CallsForExams->CallForExam.Duration.Minute  = (unsigned) Par_GetParUnsignedLong ("DurationMinute",
                                                                                       0,59,0);
 
    /***** Get the place where the exam will happen, the modality of exam,
           the structure of exam, the mandatory documentation, the mandatory material,
           the allowed material and other information *****/
-   Par_GetParToHTML ("Place"      ,CallsForExams->CallForExam.Place      ,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("ExamMode"   ,CallsForExams->CallForExam.Mode       ,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("Structure"  ,CallsForExams->CallForExam.Structure  ,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("DocRequired",CallsForExams->CallForExam.DocRequired,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("MatRequired",CallsForExams->CallForExam.MatRequired,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("MatAllowed" ,CallsForExams->CallForExam.MatAllowed ,Cns_MAX_BYTES_TEXT);
-   Par_GetParToHTML ("OtherInfo"  ,CallsForExams->CallForExam.OtherInfo  ,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Place"      ,CallsForExams->CallForExam.Place      ,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("ExamMode"   ,CallsForExams->CallForExam.Mode       ,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Structure"  ,CallsForExams->CallForExam.Structure  ,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("DocRequired",CallsForExams->CallForExam.DocRequired,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("MatRequired",CallsForExams->CallForExam.MatRequired,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("MatAllowed" ,CallsForExams->CallForExam.MatAllowed ,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("OtherInfo"  ,CallsForExams->CallForExam.OtherInfo  ,Cns_MAX_BYTES_TEXT);
 
    return ExaCod;
   }
@@ -598,7 +598,7 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams)
   {
    /***** Get the date (in YYYYMMDD format)
           of the calls for exams to highlight *****/
-   Par_GetParToText ("Date",CallsForExams->HighlightDate,4 + 2 + 2);
+   Par_GetParText ("Date",CallsForExams->HighlightDate,4 + 2 + 2);
   }
 
 /*****************************************************************************/
@@ -958,7 +958,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      {
       /***** Begin form *****/
       Frm_BeginFormAnchor (ActRcvCfe,Anchor);
-         Par_PutParCod (Par_ExaCod,ExaCod);
+         Par_PutParCode (Par_ExaCod,ExaCod);
      }
 
       /***** Begin table *****/
@@ -1547,7 +1547,7 @@ bool Cfe_CheckIfICanEditCallsForExams (void)
 static void Cfe_PutParamExaCodToEdit (void *ExaCod)
   {
    if (ExaCod)
-      Par_PutParCod (Par_ExaCod,*((long *) ExaCod));
+      Par_PutParCode (Par_ExaCod,*((long *) ExaCod));
   }
 
 /*****************************************************************************/

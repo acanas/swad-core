@@ -304,7 +304,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
      {
       /***** Get URL from the form *****/
       snprintf (ParamName,sizeof (ParamName),"URL%u",(unsigned) NumURL);
-      Par_GetParToText (ParamName,URL,Cns_MAX_BYTES_WWW);
+      Par_GetParText (ParamName,URL,Cns_MAX_BYTES_WWW);
 
       if (URL[0])
 	 /***** Insert or replace web / social network *****/

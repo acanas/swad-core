@@ -422,7 +422,7 @@ void DegCfg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the degree */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

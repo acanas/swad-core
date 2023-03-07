@@ -521,7 +521,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutParams (Exams);
-	       Par_PutParCod (Par_SesCod,Session->SesCod);
+	       Par_PutParCode (Par_SesCod,Session->SesCod);
 	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
 					"class=\"LT BT_LINK %s_%s\"",
@@ -926,7 +926,7 @@ void ExaSes_PutParamsEdit (void *Exams)
    if (Exams)
      {
       Exa_PutParams (Exams);
-      Par_PutParCod (Par_SesCod,((struct Exa_Exams *) Exams)->SesCod);
+      Par_PutParCode (Par_SesCod,((struct Exa_Exams *) Exams)->SesCod);
      }
   }
 
@@ -978,9 +978,9 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       /***** Begin form *****/
       Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
 				      ActChgExaSes);	// Existing session
-	 Par_PutParCod (Par_ExaCod,Session->ExaCod);
+	 Par_PutParCode (Par_ExaCod,Session->ExaCod);
 	 if (!ItsANewSession)	// Existing session
-	    Par_PutParCod (Par_SesCod,Session->SesCod);
+	    Par_PutParCode (Par_SesCod,Session->SesCod);
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
@@ -1194,7 +1194,7 @@ void ExaSes_ReceiveFormSession (void)
 
    /***** Get parameters from form *****/
    /* Get session title */
-   Par_GetParToText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
 
    /* Get start/end date-times */
    Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);

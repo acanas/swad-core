@@ -97,7 +97,7 @@ void Tab_DrawTabs (void)
 		     HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\"");
 
 		  Frm_BeginForm (ActMnu);
-		     Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
+		     Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NumTab);
 		     HTM_BUTTON_Submit_Begin (Txt_TABS_TXT[NumTab],
 		                              "class=\"BT_LINK\"");
 			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",

@@ -257,27 +257,27 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
 
    /***** Get day (0: monday, 1: tuesday,..., 6: sunday *****/
    Timetable->WhichCell.Weekday = (unsigned)
-				  Par_GetParToUnsignedLong ("TTDay",
+				  Par_GetParUnsignedLong ("TTDay",
 							    0,
 							    Tmt_DAYS_PER_WEEK - 1,
 							    0);
 
    /***** Get hour *****/
    Timetable->WhichCell.Interval = (unsigned)
-				   Par_GetParToUnsignedLong ("TTInt",
+				   Par_GetParUnsignedLong ("TTInt",
 							     0,
 							     Timetable->Config.IntervalsPerDay - 1,
 							     0);
 
    /***** Get number of column *****/
    Timetable->WhichCell.Column = (unsigned)
-				 Par_GetParToUnsignedLong ("TTCol",
+				 Par_GetParUnsignedLong ("TTCol",
 							   0,
 							   Tmt_MAX_COLUMNS_PER_CELL - 1,
 							   0);
 
    /***** Get class type *****/
-   Par_GetParToText ("TTTyp",StrClassType,Tmt_MAX_BYTES_STR_CLASS_TYPE);
+   Par_GetParText ("TTTyp",StrClassType,Tmt_MAX_BYTES_STR_CLASS_TYPE);
    for (Timetable->ClassType  = (Tmt_ClassType_t) 0;
 	Timetable->ClassType <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	Timetable->ClassType++)
@@ -287,17 +287,17 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
       Err_ShowErrorAndExit ("Type of timetable cell is missing.");
 
    /***** Get class duration *****/
-   Par_GetParToText ("TTDur",StrDuration,Tmt_MAX_BYTES_STR_DURATION);
+   Par_GetParText ("TTDur",StrDuration,Tmt_MAX_BYTES_STR_DURATION);
    if (sscanf (StrDuration,"%u:%u",&Hours,&Minutes) != 2)
       Err_ShowErrorAndExit ("Duration is missing.");
    Timetable->DurationIntervals = Hours * Timetable->Config.IntervalsPerHour +
 	                          Minutes / Timetable->Config.Range.MinutesPerInterval;
 
    /***** Get group code *****/
-   Timetable->GrpCod = Par_GetParToLong ("TTGrp");
+   Timetable->GrpCod = Par_GetParLong ("TTGrp");
 
    /***** Get info *****/
-   Par_GetParToText ("TTInf",Timetable->Info,Tmt_MAX_BYTES_INFO);
+   Par_GetParText ("TTInf",Timetable->Info,Tmt_MAX_BYTES_INFO);
   }
 
 /*****************************************************************************/
@@ -1508,9 +1508,9 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    Frm_BeginForm (NextAction[Timetable->View]);
 
       /***** Put hidden parameters *****/
-      Par_PutHiddenParamUnsigned (NULL,"TTDay",WhichCell->Weekday );
-      Par_PutHiddenParamUnsigned (NULL,"TTInt",WhichCell->Interval);
-      Par_PutHiddenParamUnsigned (NULL,"TTCol",WhichCell->Column  );
+      Par_PutParUnsigned (NULL,"TTDay",WhichCell->Weekday );
+      Par_PutParUnsigned (NULL,"TTInt",WhichCell->Interval);
+      Par_PutParUnsigned (NULL,"TTCol",WhichCell->Column  );
 
       /***** Class type *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -1542,7 +1542,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 		       (Dur % Timetable->Config.IntervalsPerHour) *
 		       Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 	    Err_NotEnoughMemoryExit ();
-	 Par_PutHiddenParamString (NULL,"TTDur",TTDur);
+	 Par_PutParString (NULL,"TTDur",TTDur);
 	 free (TTDur);
 	}
       else

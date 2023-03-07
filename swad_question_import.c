@@ -92,8 +92,8 @@ static void QstImp_PutParamsExportQsts (void *Questions)
    if (Questions)
      {
       Qst_PutParamsEditQst (Questions);
-      Par_PutHiddenParamChar ("OnlyThisQst",'N');
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Questions)->SelectedOrder));
+      Par_PutParChar ("OnlyThisQst",'N');
+      Par_PutParUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Questions)->SelectedOrder));
       QstImp_PutCreateXMLParam ();
      }
   }
@@ -104,12 +104,12 @@ static void QstImp_PutParamsExportQsts (void *Questions)
 
 static void QstImp_PutCreateXMLParam (void)
   {
-   Par_PutHiddenParamChar ("CreateXML",'Y');
+   Par_PutParChar ("CreateXML",'Y');
   }
 
 bool QstImp_GetCreateXMLParamFromForm (void)
   {
-   return Par_GetParToBool ("CreateXML");
+   return Par_GetParBool ("CreateXML");
   }
 
 /*****************************************************************************/

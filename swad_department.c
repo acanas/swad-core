@@ -150,7 +150,7 @@ void Dpt_SeeDepts (void)
             HTM_TH_Begin (Align[Order]);
 
 	       Frm_BeginForm (ActSeeDpt);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],
 		                           "class=\"BT_LINK\"");
 		     if (Order == Departments.SelectedOrder)
@@ -239,7 +239,7 @@ void Dpt_SeeDepts (void)
 
 static Dpt_Order_t Dpt_GetParamDptOrder (void)
   {
-   return (Dpt_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Dpt_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Dpt_NUM_ORDERS - 1,
 						  (unsigned long) Dpt_ORDER_DEFAULT);
@@ -559,7 +559,7 @@ static void Dpt_PutParamDptCod (void *DptCod)
    extern const char *Par_CodeStr[];
 
    if (DptCod)
-      Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_DptCod],*((long *) DptCod));
+      Par_PutParLong (NULL,Par_CodeStr[Par_DptCod],*((long *) DptCod));
   }
 
 /*****************************************************************************/
@@ -688,7 +688,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get the new name for the department */
-   Par_GetParToText (ParamName,NewDptName,MaxBytes);
+   Par_GetParText (ParamName,NewDptName,MaxBytes);
 
    /***** Get from the database the old names of the department *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -744,7 +744,7 @@ void Dpt_ChangeDptWWW (void)
    Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get the new WWW for the department */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -909,13 +909,13 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = Par_GetAndCheckParCode (Par_OthInsCod);
 
    /* Get department short name */
-   Par_GetParToText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParToText ("FullName",Dpt_EditingDpt->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get department WWW */
-   Par_GetParToText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
 
    if (Dpt_EditingDpt->ShrtName[0] &&
        Dpt_EditingDpt->FullName[0])	// If there's a department name

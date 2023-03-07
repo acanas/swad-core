@@ -63,8 +63,8 @@ static void MAC_PutParams (void *Args)
   {
    if (Args)
      {
-      Par_PutHiddenParamLong   (NULL,"Cod",((struct MAC_Params *) Args)->Cod);
-      Par_PutHiddenParamString (NULL,"MAC",((struct MAC_Params *) Args)->MACstr);
+      Par_PutParLong   (NULL,"Cod",((struct MAC_Params *) Args)->Cod);
+      Par_PutParString (NULL,"MAC",((struct MAC_Params *) Args)->MACstr);
      }
   }
 
@@ -174,7 +174,7 @@ unsigned long long MAC_GetMACnumFromForm (const char *ParamName)
    unsigned long long MACnum;
 
    /***** Get parameter *****/
-   Par_GetParToText (ParamName,MACstr,MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR);
+   Par_GetParText (ParamName,MACstr,MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR);
 
    if (MACstr[0])	// Not empty
      {

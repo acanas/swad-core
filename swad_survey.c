@@ -250,7 +250,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 			WhichGroups = Grp_GetParamWhichGroups ();
 			Grp_PutParamWhichGroups (&WhichGroups);
 			Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-			Par_PutHiddenParamOrder ((unsigned) Order);
+			Par_PutParOrder ((unsigned) Order);
 			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
 			                         "class=\"BT_LINK\"");
 			   if (Order == Surveys->SelectedOrder)
@@ -531,7 +531,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
-	    Par_PutParCod (Par_SvyCod,Surveys->Svy.SvyCod);
+	    Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
 	    Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
 	    WhichGroups = Grp_GetParamWhichGroups ();
 	    Grp_PutParamWhichGroups (&WhichGroups);
@@ -575,7 +575,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-		  Par_PutParCod (Par_SvyCod,Surveys->Svy.SvyCod);
+		  Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
 		  Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
@@ -591,7 +591,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-		  Par_PutParCod (Par_SvyCod,Surveys->Svy.SvyCod);
+		  Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
 		  Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParamWhichGroups ();
 		  Grp_PutParamWhichGroups (&WhichGroups);
@@ -869,7 +869,7 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
 static Dat_StartEndTime_t Svy_GetParamSvyOrder (void)
   {
    return (Dat_StartEndTime_t)
-	  Par_GetParToUnsignedLong ("Order",
+	  Par_GetParUnsignedLong ("Order",
 				    0,
 				    Dat_NUM_START_END_TIME - 1,
 				    (unsigned long) Svy_ORDER_DEFAULT);
@@ -881,7 +881,7 @@ static Dat_StartEndTime_t Svy_GetParamSvyOrder (void)
 
 void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder)
   {
-   Par_PutHiddenParamOrder ((unsigned) SelectedOrder);
+   Par_PutParOrder ((unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -934,8 +934,8 @@ static void Svy_PutParams (void *Surveys)
 
    if (Surveys)
      {
-      Par_PutParCod (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Par_PutHiddenParamOrder ((unsigned) ((struct Svy_Surveys *) Surveys)->SelectedOrder);
+      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Surveys)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
       Pag_PutHiddenParamPagNum (Pag_SURVEYS,((struct Svy_Surveys *) Surveys)->CurrentPage);
@@ -2047,10 +2047,10 @@ void Svy_ReceiveFormSurvey (void)
    NewSvy.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get survey title *****/
-   Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_BYTES_SURVEY_TITLE);
+   Par_GetParText ("Title",NewSvy.Title,Svy_MAX_BYTES_SURVEY_TITLE);
 
    /***** Get survey text and insert links *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (NewSvy.TimeUTC[Dat_STR_TIME] == 0)
@@ -2361,8 +2361,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvSvyQst);
-      Par_PutParCod (Par_SvyCod,Surveys->Svy.SvyCod);
-      Par_PutParCod (Par_QstCod,SvyQst->QstCod);
+      Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
+      Par_PutParCode (Par_QstCod,SvyQst->QstCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -2563,13 +2563,13 @@ void Svy_ReceiveQst (void)
 
    /* Get answer type */
    SvyQst.AnswerType = (Svy_AnswerType_t)
-	               Par_GetParToUnsignedLong ("AnswerType",
+	               Par_GetParUnsignedLong ("AnswerType",
 	                                         0,
 	                                         Svy_NUM_ANS_TYPES - 1,
                                                  (unsigned long) Svy_ANSWER_TYPE_DEFAULT);
 
    /* Get question text */
-   Par_GetParToHTML ("Txt",Stem,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Txt",Stem,Cns_MAX_BYTES_TEXT);
 
    /* Get the texts of the answers */
    for (NumAns = 0;
@@ -2580,7 +2580,7 @@ void Svy_ReceiveQst (void)
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
       snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumAns);
-      Par_GetParToHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
+      Par_GetParHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
      }
 
    /***** Make sure that stem and answer are not empty *****/
@@ -2742,7 +2742,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	{
 	 /***** Begin form to send answers to survey *****/
 	 Frm_BeginForm (ActAnsSvy);
-	    Par_PutParCod (Par_SvyCod,Surveys->Svy.SvyCod);
+	    Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
 	}
 
       /***** Write the heading *****/
@@ -2870,8 +2870,8 @@ static void Svy_PutParamsToEditQuestion (void *Surveys)
   {
    if (Surveys)
      {
-      Par_PutParCod (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Par_PutParCod (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
+      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      Par_PutParCode (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
      }
   }
 
@@ -3095,8 +3095,8 @@ static void Svy_PutParamsRemoveOneQst (void *Surveys)
   {
    if (Surveys)
      {
-      Par_PutParCod (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Par_PutParCod (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
+      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      Par_PutParCode (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
      }
   }
 

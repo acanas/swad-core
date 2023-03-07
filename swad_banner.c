@@ -508,7 +508,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 static void Ban_PutParamBanCodToEdit (void *BanCod)
   {
    if (BanCod)
-      Par_PutParCod (Par_BanCod,*((long *) BanCod));
+      Par_PutParCode (Par_BanCod,*((long *) BanCod));
   }
 
 /*****************************************************************************/
@@ -652,7 +652,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new name for the banner */
-   Par_GetParToText (ParamName,NewBanName,MaxBytes);
+   Par_GetParText (ParamName,NewBanName,MaxBytes);
 
    /***** Get banner data from the database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -710,7 +710,7 @@ void Ban_ChangeBannerImg (void)
    Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new WWW for the banner */
-   Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
+   Par_GetParText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
 
    /***** Get banner data from the database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -752,7 +752,7 @@ void Ban_ChangeBannerWWW (void)
    Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new WWW for the banner */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get banner data from the database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -918,10 +918,10 @@ void Ban_ReceiveFormNewBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
-   Par_GetParToText ("FullName" ,Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
-   Par_GetParToText ("Img"      ,Ban->Img     ,Ban_MAX_BYTES_IMAGE);
-   Par_GetParToText ("WWW"      ,Ban->WWW     ,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("Img"      ,Ban->Img     ,Ban_MAX_BYTES_IMAGE);
+   Par_GetParText ("WWW"      ,Ban->WWW     ,Cns_MAX_BYTES_WWW);
 
    if (Ban->ShrtName[0] &&
        Ban->FullName[0])	// If there's a banner name
@@ -981,8 +981,8 @@ void Ban_WriteMenuWithBanners (void)
 
          /* Begin form */
 	 Frm_BeginForm (ActClkBan);
-	    Par_PutParCod (Par_BanCod,Banners.Lst[NumBan].BanCod);
-	    Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
+	    Par_PutParCode (Par_BanCod,Banners.Lst[NumBan].BanCod);
+	    Par_PutParString (NULL,"URL",Banners.Lst[NumBan].WWW);
 
 	    /* Banner image */
 	    HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,

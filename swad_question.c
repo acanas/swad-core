@@ -156,7 +156,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQst);
-	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
+	    Par_PutParUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -931,7 +931,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	      {
 	       Frm_BeginForm (ActLstTstQst);
 		  Qst_PutParamsEditQst (Questions);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_TST_STR_ORDER_FULL[Order],
 		                           "class=\"BT_LINK\"");
 		     if (Order == Questions->SelectedOrder)
@@ -1021,7 +1021,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	      {
 	       Frm_BeginForm (ActChgShfTstQst);
 		  Qst_PutParamsEditQst (Questions);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s",
 				      Questions->Question.Answer.Shuffle ? " checked=\"checked\"" :
@@ -1369,13 +1369,13 @@ void Qst_PutParamsEditQst (void *Questions)
   {
    if (Questions)
      {
-      Par_PutHiddenParamChar   ("AllTags",((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
+      Par_PutParChar   ("AllTags",((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
 					                                                   'N');
-      Par_PutHiddenParamString (NULL,"ChkTag",((struct Qst_Questions *) Questions)->Tags.List ? ((struct Qst_Questions *) Questions)->Tags.List :
+      Par_PutParString (NULL,"ChkTag",((struct Qst_Questions *) Questions)->Tags.List ? ((struct Qst_Questions *) Questions)->Tags.List :
 								                                "");
-      Par_PutHiddenParamChar   ("AllAnsTypes",((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
+      Par_PutParChar   ("AllAnsTypes",((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
 								                                      'N');
-      Par_PutHiddenParamString (NULL,"AnswerType",((struct Qst_Questions *) Questions)->AnswerTypes.List);
+      Par_PutParString (NULL,"AnswerType",((struct Qst_Questions *) Questions)->AnswerTypes.List);
 
       Qst_PutParamQstCod (&((struct Qst_Questions *) Questions)->Question.QstCod);
       // if (Test->NumQsts == 1)
@@ -1720,7 +1720,7 @@ void Qst_WriteParamQstCod (unsigned QstInd,long QstCod)
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    snprintf (StrAns,sizeof (StrAns),"Qst%010u",QstInd);
-   Par_PutHiddenParamLong (NULL,StrAns,QstCod);
+   Par_PutParLong (NULL,StrAns,QstCod);
   }
 
 /*****************************************************************************/
@@ -2728,7 +2728,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 
    /***** Get answer type *****/
    Question->Answer.Type = (Qst_AnswerType_t)
-			   Par_GetParToUnsignedLong ("AnswerType",
+			   Par_GetParUnsignedLong ("AnswerType",
 						     0,
 						     Qst_NUM_ANS_TYPES - 1,
 						     (unsigned long) Qst_ANS_UNKNOWN);
@@ -2741,7 +2741,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	NumTag++)
      {
       snprintf (TagStr,sizeof (TagStr),"TagTxt%u",NumTag);
-      Par_GetParToText (TagStr,Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG);
+      Par_GetParText (TagStr,Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG);
 
       if (Question->Tags.Txt[NumTag][0])
         {
@@ -2760,10 +2760,10 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
      }
 
    /***** Get question stem *****/
-   Par_GetParToHTML ("Stem",Question->Stem,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Stem",Question->Stem,Cns_MAX_BYTES_TEXT);
 
    /***** Get question feedback *****/
-   Par_GetParToHTML ("Feedback",Question->Feedback,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Feedback",Question->Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get media associated to the stem (action, file and title) *****/
    Question->Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
@@ -2785,7 +2785,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsInt",Question->Answer.Options[0].Text,
+	 Par_GetParText ("AnsInt",Question->Answer.Options[0].Text,
 			   Cns_MAX_DECIMAL_DIGITS_LONG);
 	 break;
       case Qst_ANS_FLOAT:
@@ -2793,24 +2793,24 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsFloatMin",Question->Answer.Options[0].Text,
+	 Par_GetParText ("AnsFloatMin",Question->Answer.Options[0].Text,
 	                   Qst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Qst_AllocateTextChoiceAnswer (Question,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
-	 Par_GetParToText ("AnsFloatMax",Question->Answer.Options[1].Text,
+	 Par_GetParText ("AnsFloatMax",Question->Answer.Options[1].Text,
 	                   Qst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Qst_ANS_TRUE_FALSE:
-	 Par_GetParToText ("AnsTF",TF,1);
+	 Par_GetParText ("AnsTF",TF,1);
 	 Question->Answer.TF = TF[0];
 	 break;
       case Qst_ANS_UNIQUE_CHOICE:
       case Qst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Question->Answer.Shuffle = Par_GetParToBool ("Shuffle");
+         Question->Answer.Shuffle = Par_GetParBool ("Shuffle");
 	 /* falls through */
 	 /* no break */
       case Qst_ANS_TEXT:
@@ -2825,7 +2825,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 
             /* Get answer */
             snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
-	    Par_GetParToHTML (AnsStr,Question->Answer.Options[NumOpt].Text,
+	    Par_GetParHTML (AnsStr,Question->Answer.Options[NumOpt].Text,
 	                      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Question->Answer.Type == Qst_ANS_TEXT)
 	       /* In order to compare student answer to stored answer,
@@ -2834,7 +2834,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 
             /* Get feedback */
             snprintf (FbStr,sizeof (FbStr),"FbStr%u",NumOpt);
-	    Par_GetParToHTML (FbStr,Question->Answer.Options[NumOpt].Feedback,
+	    Par_GetParHTML (FbStr,Question->Answer.Options[NumOpt].Feedback,
 	                      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get media associated to the answer (action, file and title) */
@@ -2856,7 +2856,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
          /* Get the numbers of correct answers */
          if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
            {
-	    NumCorrectAns = (unsigned) Par_GetParToUnsignedLong ("AnsUni",
+	    NumCorrectAns = (unsigned) Par_GetParUnsignedLong ("AnsUni",
 	                                                         0,
 	                                                         Qst_MAX_OPTIONS_PER_QUESTION - 1,
 	                                                         0);
@@ -3334,7 +3334,7 @@ void Qst_RequestRemoveOneQst (void)
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
-   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
+   EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
@@ -3374,7 +3374,7 @@ void Qst_PutParamsRemoveOnlyThisQst (void *QstCod)
    if (QstCod)
      {
       Qst_PutParamQstCod (QstCod);
-      Par_PutHiddenParamChar ("OnlyThisQst",'Y');
+      Par_PutParChar ("OnlyThisQst",'Y');
      }
   }
 
@@ -3393,7 +3393,7 @@ void Qst_RemoveOneQst (void)
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
-   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
+   EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Remove test question from database *****/
    Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
@@ -3445,10 +3445,10 @@ void Qst_ChangeShuffleQst (void)
    Questions.Question.QstCod = Par_GetAndCheckParCode (Par_QstCod);
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
-   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
+   EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
-   Shuffle = Par_GetParToBool ("Shuffle");
+   Shuffle = Par_GetParBool ("Shuffle");
 
    /***** Update the question changing the current shuffle *****/
    Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,Shuffle);
@@ -3478,7 +3478,7 @@ void Qst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
 
    if (QstCod)
       if (*((long *) QstCod) > 0)	// If question exists
-	 Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_QstCod],*((long *) QstCod));
+	 Par_PutParLong (NULL,Par_CodeStr[Par_QstCod],*((long *) QstCod));
   }
 
 /*****************************************************************************/

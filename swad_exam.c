@@ -258,7 +258,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
 			Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
-			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 			HTM_BUTTON_Submit_Begin (Txt_EXAMS_ORDER_HELP[Order],
 			                         "class=\"BT_LINK\"");
 			   if (Order == Exams->SelectedOrder)
@@ -656,7 +656,7 @@ static void Exa_WriteAuthor (struct Exa_Exam *Exam)
 
 static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+   Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -716,7 +716,7 @@ void Exa_PutParams (void *Exams)
 
    if (Exams)
      {
-      Par_PutParCod (Par_ExaCod,((struct Exa_Exams *) Exams)->Exam.ExaCod);
+      Par_PutParCode (Par_ExaCod,((struct Exa_Exams *) Exams)->Exam.ExaCod);
       Exa_PutHiddenParamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
       WhichGroups = Grp_GetParamWhichGroups ();
       Grp_PutParamWhichGroups (&WhichGroups);
@@ -751,7 +751,7 @@ void Exa_GetParams (struct Exa_Exams *Exams,bool CheckExaCod)
 static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder)
   {
    if (SelectedOrder != Exa_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+      Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -760,7 +760,7 @@ static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder)
 
 static Exa_Order_t Exa_GetParamOrder (void)
   {
-   return (Exa_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Exa_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Exa_NUM_ORDERS - 1,
 						  (unsigned long) Exa_ORDER_DEFAULT);
@@ -1452,10 +1452,10 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
    char MaxGradeStr[64];
 
    /***** Get exam title *****/
-   Par_GetParToText ("Title",Exam->Title,Exa_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Exam->Title,Exa_MAX_BYTES_TITLE);
 
    /***** Get maximum grade *****/
-   Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
+   Par_GetParText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
    Exam->MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
    if (Exam->MaxGrade < 0.0)	// Only positive values allowed
       Exam->MaxGrade = 0.0;
@@ -1464,7 +1464,7 @@ static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
    Exam->Visibility = TstVis_GetVisibilityFromForm ();
 
    /***** Get exam text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)

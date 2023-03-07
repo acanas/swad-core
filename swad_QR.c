@@ -71,7 +71,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,
 
 void QR_PutParamQRString (void *QRString)
   {
-   Par_PutHiddenParamString (NULL,"QRString",QRString);
+   Par_PutParString (NULL,"QRString",QRString);
   }
 
 /*****************************************************************************/
@@ -83,7 +83,7 @@ void QR_PrintQRCode (void)
    char QRString[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get QR string *****/
-   Par_GetParToText ("QRString",QRString,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("QRString",QRString,Cns_MAX_BYTES_WWW);
 
    /***** Show QR code *****/
    QR_ImageQRCode (QRString);

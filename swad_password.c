@@ -90,7 +90,7 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
 void Pwd_GetParamUsrPwdLogin (void)
   {
    /***** Get plain password from form *****/
-   Par_GetParToText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,
+   Par_GetParText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,
                      Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Encrypt password *****/
@@ -153,7 +153,7 @@ void Pwd_UpdateMyPwd (void)
    char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
 
    /***** Get plain password from form *****/
-   Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Encrypt password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);
@@ -197,8 +197,8 @@ static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat)
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
-   Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Check if I have written twice the same password *****/
    if (strcmp (NewPlainPassword[0],
@@ -242,7 +242,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
 static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin)
   {
    if (UsrIdLogin)
-      Par_PutHiddenParamString (NULL,"UsrId",(char *) Gbl.Usrs.Me.UsrIdLogin);
+      Par_PutParString (NULL,"UsrId",(char *) Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/
@@ -814,7 +814,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    /***** Get if consent has been done *****/
-   if (!Par_GetParToBool ("Consent"))
+   if (!Par_GetParBool ("Consent"))
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_confirmed_the_action);
       return false;
@@ -822,7 +822,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
 
    /***** Get my password *****/
    /* Get plain password from form */
-   Par_GetParToText ("OthUsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
+   Par_GetParText ("OthUsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /* Encrypt password */
    Cry_EncryptSHA512Base64 (PlainPassword,EncryptedPassword);

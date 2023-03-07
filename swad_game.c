@@ -279,7 +279,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllGam);
 			Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
-			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
 			HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],
 			                         "class=\"BT_LINK\"");
@@ -706,7 +706,7 @@ static void Gam_WriteAuthor (struct Gam_Game *Game)
 
 static void Gam_PutHiddenParamGameOrder (Gam_Order_t SelectedOrder)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+   Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -803,7 +803,7 @@ void Gam_PutParamGamCod (long GamCod)
    extern const char *Par_CodeStr[];
 
    if (GamCod > 0)
-      Par_PutHiddenParamLong (NULL,Par_CodeStr[Par_GamCod],GamCod);
+      Par_PutParLong (NULL,Par_CodeStr[Par_GamCod],GamCod);
   }
 
 /*****************************************************************************/
@@ -827,7 +827,7 @@ long Gam_GetParams (struct Gam_Games *Games)
 static void Gam_PutHiddenParamOrder (Gam_Order_t SelectedOrder)
   {
    if (SelectedOrder != Gam_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+      Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -836,7 +836,7 @@ static void Gam_PutHiddenParamOrder (Gam_Order_t SelectedOrder)
 
 static Gam_Order_t Gam_GetParamOrder (void)
   {
-   return (Gam_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Gam_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Gam_NUM_ORDERS - 1,
 						  (unsigned long) Gam_ORDER_DEFAULT);
@@ -1465,10 +1465,10 @@ static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
    char MaxGradeStr[64];
 
    /***** Get game title *****/
-   Par_GetParToText ("Title",Game->Title,Gam_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Game->Title,Gam_MAX_BYTES_TITLE);
 
    /***** Get maximum grade *****/
-   Par_GetParToText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
+   Par_GetParText ("MaxGrade",MaxGradeStr,sizeof (MaxGradeStr) - 1);
    Game->MaxGrade = Str_GetDoubleFromStr (MaxGradeStr);
    if (Game->MaxGrade < 0.0)	// Only positive values allowed
       Game->MaxGrade = 0.0;
@@ -1477,7 +1477,7 @@ static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
    Game->Visibility = TstVis_GetVisibilityFromForm ();
 
    /***** Get game text *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
 static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
@@ -1602,7 +1602,7 @@ void Gam_ListQstsToAddToGame (void)
 
 void Gam_PutParamQstInd (unsigned QstInd)
   {
-   Par_PutHiddenParamUnsigned (NULL,"QstInd",QstInd);
+   Par_PutParUnsigned (NULL,"QstInd",QstInd);
   }
 
 /*****************************************************************************/
@@ -1613,7 +1613,7 @@ unsigned Gam_GetParamQstInd (void)
   {
    long QstInd;
 
-   if ((QstInd = Par_GetParToLong ("QstInd")) <= 0)	// In games, question index should be 1, 2, 3...
+   if ((QstInd = Par_GetParLong ("QstInd")) <= 0)	// In games, question index should be 1, 2, 3...
       Err_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;

@@ -416,7 +416,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 static void Ctr_GetParamCtrOrder (void)
   {
    Gbl.Hierarchy.Ctrs.SelectedOrder = (Ctr_Order_t)
-				      Par_GetParToUnsignedLong ("Order",
+				      Par_GetParUnsignedLong ("Order",
 							        0,
 							        Ctr_NUM_ORDERS - 1,
 							        (unsigned long) Ctr_ORDER_DEFAULT);
@@ -958,7 +958,7 @@ static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr)
 
 void Ctr_PutParamCtrCod (long CtrCod)
   {
-   Par_PutHiddenParamLong (NULL,"ctr",CtrCod);
+   Par_PutParLong (NULL,"ctr",CtrCod);
   }
 
 /*****************************************************************************/
@@ -975,7 +975,7 @@ void Ctr_RemoveCenter (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get data of the center from database *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1047,7 +1047,7 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get parameter with place code *****/
    NewPlcCod = Plc_GetParamPlcCod ();
@@ -1075,7 +1075,7 @@ void Ctr_RenameCenterShort (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_SHRT_NAME);
   }
 
@@ -1085,7 +1085,7 @@ void Ctr_RenameCenterFull (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_FULL_NAME);
   }
 
@@ -1122,7 +1122,7 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the center */
-   Par_GetParToText (ParamName,NewCtrName,MaxBytes);
+   Par_GetParText (ParamName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the center *****/
    Ctr_GetDataOfCenterByCod (Ctr);
@@ -1174,10 +1174,10 @@ void Ctr_ChangeCtrWWW (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get the code of the center *****/
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get the new WWW for the center *****/
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of center *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1213,7 +1213,7 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Get parameters from form *****/
    /* Get center code */
-   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
+   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
    Status = Hie_GetParamStatus ();	// New status
@@ -1427,7 +1427,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],
 					   "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
@@ -1539,11 +1539,11 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
       Err_WrongPlaceExit ();
 
    /* Get center short name and full name */
-   Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-   Par_GetParToText ("FullName" ,Ctr_EditingCtr->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Ctr_EditingCtr->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get center WWW */
-   Par_GetParToText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ctr_EditingCtr->ShrtName[0] &&
        Ctr_EditingCtr->FullName[0])	// If there's a center name

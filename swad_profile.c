@@ -856,7 +856,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
    /***** Rank in form to go to ranking *****/
    Frm_BeginForm (ActSeeUseGbl);
       Sco_PutParamScope ("ScopeSta",HieLvl_SYS);
-      Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
+      Par_PutParUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
 	 Err_NotEnoughMemoryExit ();

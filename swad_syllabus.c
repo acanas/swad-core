@@ -148,7 +148,7 @@ Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
   {
    /***** Get which syllabus I want to see *****/
    return (Syl_WhichSyllabus_t)
-	  Par_GetParToUnsignedLong ("WhichSyllabus",
+	  Par_GetParUnsignedLong ("WhichSyllabus",
 				    0,
 				    Syl_NUM_WHICH_SYLLABUS - 1,
 				    (unsigned long) Syl_DEFAULT_WHICH_SYLLABUS);
@@ -194,7 +194,7 @@ static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 
 static unsigned Syl_GetParamItemNumber (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong ("NumI",
+   return (unsigned) Par_GetParUnsignedLong ("NumI",
 					       0,
 					       UINT_MAX,
 					       0);
@@ -875,7 +875,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 static void Syl_PutParamNumItem (void *ParamNumItem)
   {
    if (ParamNumItem)
-      Par_PutHiddenParamUnsigned (NULL,"NumI",*((unsigned *) ParamNumItem));
+      Par_PutParUnsigned (NULL,"NumI",*((unsigned *) ParamNumItem));
   }
 
 /*****************************************************************************/
@@ -1263,7 +1263,7 @@ void Syl_InsertItemSyllabus (void)
    Syllabus.NumItem = Syl_GetParamItemNumber ();
 
    /***** Get item body *****/
-   Par_GetParToHTML ("Txt",Txt,Syl_MAX_BYTES_TEXT_ITEM);
+   Par_GetParHTML ("Txt",Txt,Syl_MAX_BYTES_TEXT_ITEM);
 
    /***** Create a new file to do the update *****/
    Syl_BuildPathFileSyllabus (&Syllabus,PathFile);
@@ -1332,7 +1332,7 @@ void Syl_ModifyItemSyllabus (void)
    Syllabus.NumItem = Syl_GetParamItemNumber ();
 
    /***** Get item body *****/
-   Par_GetParToHTML ("Txt",Syl_LstItemsSyllabus.Lst[Syllabus.NumItem].Text,
+   Par_GetParHTML ("Txt",Syl_LstItemsSyllabus.Lst[Syllabus.NumItem].Text,
                      Syl_MAX_BYTES_TEXT_ITEM);
 
    /***** Create a new file where make the update *****/

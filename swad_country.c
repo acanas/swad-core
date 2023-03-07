@@ -369,7 +369,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCty);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],
 					   "class=\"BT_LINK\"");
 		     if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
@@ -657,7 +657,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 static void Cty_GetParamCtyOrder (void)
   {
    Gbl.Hierarchy.Ctys.SelectedOrder = (Cty_Order_t)
-				      Par_GetParToUnsignedLong ("Order",
+				      Par_GetParUnsignedLong ("Order",
 								0,
 								Cty_NUM_ORDERS - 1,
 								(unsigned long) Cty_ORDER_DEFAULT);
@@ -1136,7 +1136,7 @@ static void Cty_ListCountriesForEdition (void)
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActRenCty);
 		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"15\" class=\"INPUT_%s\"",
@@ -1148,7 +1148,7 @@ static void Cty_ListCountriesForEdition (void)
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActChgCtyWWW);
 		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -1170,7 +1170,7 @@ static void Cty_ListCountriesForEdition (void)
 
 void Cty_PutParamCtyCod (long CtyCod)
   {
-   Par_PutHiddenParamLong (NULL,"cty",CtyCod);
+   Par_PutParLong (NULL,"cty",CtyCod);
   }
 
 /*****************************************************************************/
@@ -1180,7 +1180,7 @@ void Cty_PutParamCtyCod (long CtyCod)
 static void Cty_PutParamOtherCtyCod (void *CtyCod)
   {
    if (CtyCod)
-      Par_PutParCod (Par_OthCtyCod,*((long *) CtyCod));
+      Par_PutParCode (Par_OthCtyCod,*((long *) CtyCod));
   }
 
 /*****************************************************************************/
@@ -1263,7 +1263,7 @@ void Cty_RenameCountry (void)
    Language = Lan_GetParamLanguage ();
 
    /***** Get the new name for the country *****/
-   Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
+   Par_GetParText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
@@ -1342,7 +1342,7 @@ void Cty_ChangeCtyWWW (void)
    Language = Lan_GetParamLanguage ();
 
    /***** Get the new WWW for the country *****/
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
@@ -1582,7 +1582,7 @@ void Cty_ReceiveFormNewCountry (void)
    else	// Numeric code correct
      {
       /* Get alphabetic-2 country code */
-      Par_GetParToText ("Alpha2",Cty_EditingCty->Alpha2,2);
+      Par_GetParText ("Alpha2",Cty_EditingCty->Alpha2,2);
       Str_ConvertToUpperText (Cty_EditingCty->Alpha2);
       for (i = 0;
 	   i < 2 && CreateCountry;
@@ -1612,7 +1612,7 @@ void Cty_ReceiveFormNewCountry (void)
         	 Lan++)
               {
                snprintf (ParamName,sizeof (ParamName),"Name_%s",Lan_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
+               Par_GetParText (ParamName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
 
                if (Cty_EditingCty->Name[Lan][0])	// If there's a country name
                  {
@@ -1635,7 +1635,7 @@ void Cty_ReceiveFormNewCountry (void)
                  }
 
                snprintf (ParamName,sizeof (ParamName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
+               Par_GetParText (ParamName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
         }

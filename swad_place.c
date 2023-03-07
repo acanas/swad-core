@@ -132,7 +132,7 @@ void Plc_SeePlaces (void)
                HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		  Frm_BeginForm (ActSeePlc);
-		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_Submit_Begin (Txt_PLACES_HELP_ORDER[Order],
 		                              "class=\"BT_LINK\"");
 			if (Order == Places.SelectedOrder)
@@ -233,7 +233,7 @@ void Plc_SeePlaces (void)
 
 static Plc_Order_t Plc_GetParamPlcOrder (void)
   {
-   return (Plc_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Plc_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Plc_NUM_ORDERS - 1,
 						  (unsigned long) Plc_ORDER_DEFAULT);
@@ -533,7 +533,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 static void Plc_PutParamPlcCod (void *PlcCod)
   {
    if (PlcCod)
-      Par_PutHiddenParamLong (NULL,"PlcCod",*((long *) PlcCod));
+      Par_PutParLong (NULL,"PlcCod",*((long *) PlcCod));
   }
 
 /*****************************************************************************/
@@ -543,7 +543,7 @@ static void Plc_PutParamPlcCod (void *PlcCod)
 long Plc_GetParamPlcCod (void)
   {
    /***** Get code of place *****/
-   return Par_GetParToLong ("PlcCod");
+   return Par_GetParLong ("PlcCod");
   }
 
 /*****************************************************************************/
@@ -644,7 +644,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       Err_WrongPlaceExit ();
 
    /* Get the new name for the place */
-   Par_GetParToText (ParamName,NewPlcName,MaxBytes);
+   Par_GetParText (ParamName,NewPlcName,MaxBytes);
 
    /***** Get from the database the old names of the place *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -795,10 +795,10 @@ void Plc_ReceiveFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name */
-   Par_GetParToText ("ShortName",Plc_EditingPlc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
+   Par_GetParText ("ShortName",Plc_EditingPlc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
 
    /* Get place full name */
-   Par_GetParToText ("FullName",Plc_EditingPlc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
+   Par_GetParText ("FullName",Plc_EditingPlc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name

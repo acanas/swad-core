@@ -1909,7 +1909,7 @@ void Brw_GetParAndInitFileBrowser (void)
 
       case ActCreFolBrf:	case ActRenFolBrf:
 	 /* Get the name of the new folder */
-	 Par_GetParToText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
+	 Par_GetParText ("NewFolderName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
       case ActCreLnkDocIns:
       case ActCreLnkShaIns:
@@ -1927,7 +1927,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActCreLnkDocPrj:
       case ActCreLnkBrf:
 	 /* Get the name of the new link */
-	 Par_GetParToText ("NewLinkName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
+	 Par_GetParText ("NewLinkName",Gbl.FileBrowser.NewFilFolLnkName,NAME_MAX);
 	 break;
       default:
 	 break;
@@ -2109,10 +2109,10 @@ void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
 
    /***** Path and file *****/
    if (PathInTree)
-      Par_PutHiddenParamString (NULL,"Path",PathInTree);
+      Par_PutParString (NULL,"Path",PathInTree);
    if (FilFolLnkName)
-      Par_PutHiddenParamString (NULL,Brw_FileTypeParamName[FileType],FilFolLnkName);
-   Par_PutParCod (Par_FilCod,FilCod);
+      Par_PutParString (NULL,Brw_FileTypeParamName[FileType],FilFolLnkName);
+   Par_PutParCode (Par_FilCod,FilCod);
   }
 
 /*****************************************************************************/
@@ -2129,7 +2129,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
    /***** Get the path inside the tree
           (this path does not include
            the name of the file or folder at the end) *****/
-   Par_GetParToText ("Path",Gbl.FileBrowser.FilFolLnk.Path,PATH_MAX);
+   Par_GetParText ("Path",Gbl.FileBrowser.FilFolLnk.Path,PATH_MAX);
 
    /* Check if path contains ".." */
    if (strstr (Gbl.FileBrowser.FilFolLnk.Path,".."))	// ".." is not allowed in path
@@ -3671,7 +3671,7 @@ void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree)
   {
    if (FullTree)
       if (*((bool *) FullTree))	// Put hidden parameter only if full tree selected
-	 Par_PutHiddenParamChar ("FullTree",'Y');
+	 Par_PutParChar ("FullTree",'Y');
   }
 
 /*****************************************************************************/
@@ -3680,7 +3680,7 @@ void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree)
 
 static bool Brw_GetFullTreeFromForm (void)
   {
-   return Par_GetParToBool ("FullTree");
+   return Par_GetParBool ("FullTree");
   }
 
 /*****************************************************************************/
@@ -6497,8 +6497,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 		   Cfg_URL_SWAD_CGI,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		   Cfg_URL_ICON_PUBLIC);
-	 Par_PutHiddenParamLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
-	 Par_PutHiddenParamString (NULL,"ses",Gbl.Session.Id);
+	 Par_PutParLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
+	 Par_PutParString (NULL,"ses",Gbl.Session.Id);
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 HTM_DIV_Begin ("class=\"dz-message\"");
@@ -7144,7 +7144,7 @@ void Brw_RecLinkFileBrowser (void)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** Create a new file to store URL ****/
-      Par_GetParToText ("NewLinkURL",URL,PATH_MAX);
+      Par_GetParText ("NewLinkURL",URL,PATH_MAX);
       if ((LengthURL = strlen (URL)))
 	{
 	 if (Gbl.FileBrowser.NewFilFolLnkName[0])
@@ -8387,7 +8387,7 @@ void Brw_ChgFileMetadata (void)
 
 static bool Brw_GetParamPublicFile (void)
   {
-   return Par_GetParToBool ("PublicFile");
+   return Par_GetParBool ("PublicFile");
   }
 
 /*****************************************************************************/
@@ -8397,7 +8397,7 @@ static bool Brw_GetParamPublicFile (void)
 static Brw_License_t Brw_GetParLicense (void)
   {
    return (Brw_License_t)
-	  Par_GetParToUnsignedLong ("License",
+	  Par_GetParUnsignedLong ("License",
                                     0,
                                     Brw_NUM_LICENSES - 1,
                                     (unsigned long) Brw_LICENSE_UNKNOWN);
@@ -9873,7 +9873,7 @@ void Brw_RemoveOldFilesBriefcase (void)
      {
       /***** Get parameter with number of months without access *****/
       Months = (unsigned)
-	       Par_GetParToUnsignedLong ("Months",
+	       Par_GetParUnsignedLong ("Months",
                                          Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES,
                                          Brw_MAX_MONTHS_IN_BRIEFCASE,
                                          Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);

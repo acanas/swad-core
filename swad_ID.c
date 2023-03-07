@@ -218,7 +218,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
 
 void ID_PutParamOtherUsrIDPlain (void)
   {
-   Par_PutHiddenParamString (NULL,"OtherUsrID",
+   Par_PutParString (NULL,"OtherUsrID",
 	                     (Gbl.Usrs.Other.UsrDat.IDs.Num &&
 	                      Gbl.Usrs.Other.UsrDat.IDs.List) ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
 	                                                        "");
@@ -234,7 +234,7 @@ void ID_GetParamOtherUsrIDPlain (void)
    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
 
    /***** Get parameter *****/
-   Par_GetParToText ("OtherUsrID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
+   Par_GetParText ("OtherUsrID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
                      ID_MAX_BYTES_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
@@ -411,7 +411,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
       if (Gbl.Action.Original != ActUnk)
 	{
-	 Par_PutHiddenParamLong (NULL,"OriginalActCod",
+	 Par_PutParLong (NULL,"OriginalActCod",
 				 Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
 	 switch (Gbl.Action.Original)
 	   {
@@ -425,7 +425,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
 	   }
 	}
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
+      Par_PutParString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
       /***** Put link *****/
       HTM_BUTTON_Submit_Begin (Txt_Confirm_ID,
@@ -652,7 +652,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 static void ID_PutParamsRemoveMyID (void *ID)
   {
    if (ID)
-      Par_PutHiddenParamString (NULL,"UsrID",(char *) ID);
+      Par_PutParString (NULL,"UsrID",(char *) ID);
   }
 
 static void ID_PutParamsRemoveOtherID (void *ID)
@@ -660,7 +660,7 @@ static void ID_PutParamsRemoveOtherID (void *ID)
    if (ID)
      {
       Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      Par_PutHiddenParamString (NULL,"UsrID",(char *) ID);
+      Par_PutParString (NULL,"UsrID",(char *) ID);
      }
   }
 
@@ -723,7 +723,7 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get user's ID from form *****/
-      Par_GetParToText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
+      Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrID);
       Str_ConvertToUpperText (UsrID);
@@ -818,7 +818,7 @@ static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new user's ID from form *****/
-      Par_GetParToText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
+      Par_GetParText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (NewID);
       Str_ConvertToUpperText (NewID);
@@ -892,7 +892,7 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Get where we came from *****/
-   OriginalActCod = Par_GetParToLong ("OriginalActCod");
+   OriginalActCod = Par_GetParLong ("OriginalActCod");
    Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
 
    /***** Get other user's code from form and get user's data *****/
@@ -913,7 +913,7 @@ void ID_ConfirmOtherUsrID (void)
    if (ICanConfirm)
      {
       /***** Get user's ID from form *****/
-      Par_GetParToText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
+      Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrID);
       Str_ConvertToUpperText (UsrID);

@@ -350,9 +350,9 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 
 void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName)
   {
-   Par_PutHiddenParamString (NULL,"RoomCode",RoomCode);
-   Par_PutHiddenParamString (NULL,"RoomShrtName",RoomShrtName);
-   Par_PutHiddenParamString (NULL,"RoomFullName",RoomFullName);
+   Par_PutParString (NULL,"RoomCode",RoomCode);
+   Par_PutParString (NULL,"RoomShrtName",RoomShrtName);
+   Par_PutParString (NULL,"RoomFullName",RoomFullName);
   }
 
 /*****************************************************************************/
@@ -390,11 +390,11 @@ void Cht_OpenChatWindow (void)
    FILE *FileOut = Fil_GetOutputFile ();
 
    /***** Get the code and the nombre of the room *****/
-   Par_GetParToText ("RoomCode",RoomCode,Cht_MAX_BYTES_ROOM_CODE);
+   Par_GetParText ("RoomCode",RoomCode,Cht_MAX_BYTES_ROOM_CODE);
 
-   Par_GetParToText ("RoomShrtName",RoomShrtName,Cht_MAX_BYTES_ROOM_SHRT_NAME);
+   Par_GetParText ("RoomShrtName",RoomShrtName,Cht_MAX_BYTES_ROOM_SHRT_NAME);
 
-   Par_GetParToText ("RoomFullName",RoomFullName,Cht_MAX_BYTES_ROOM_FULL_NAME);
+   Par_GetParText ("RoomFullName",RoomFullName,Cht_MAX_BYTES_ROOM_FULL_NAME);
 
    if (!RoomCode[0] || !RoomShrtName[0] || !RoomFullName[0])
       Err_ShowErrorAndExit ("Wrong code or name of chat room.");

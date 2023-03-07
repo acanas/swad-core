@@ -320,7 +320,7 @@ void Mnu_PutIconsToSelectMenu (void)
 	      {
 	       Set_BeginPref (Menu == Gbl.Prefs.Menu);
 		  Frm_BeginForm (ActChgMnu);
-		     Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
+		     Par_PutParUnsigned (NULL,"Menu",(unsigned) Menu);
 		     Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Ico_BLACK,
 					     Txt_MENU_NAMES[Menu]);
 		  Frm_EndForm ();
@@ -365,7 +365,7 @@ void Mnu_ChangeMenu (void)
 Mnu_Menu_t Mnu_GetParamMenu (void)
   {
    return (Mnu_Menu_t)
-	  Par_GetParToUnsignedLong ("Menu",
+	  Par_GetParUnsignedLong ("Menu",
 	                            0,
 	                            Mnu_NUM_MENUS - 1,
 	                            (unsigned long) Mnu_MENU_DEFAULT);

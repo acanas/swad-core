@@ -79,7 +79,7 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
 	      {
 	       Set_BeginPref (Who == Timeline->Who);
 		  Frm_BeginForm (ActSeeGblTL);
-		     Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+		     Par_PutParUnsigned (NULL,"Who",(unsigned) Who);
 		     Usr_PutWhoIcon (Who);
 		  Frm_EndForm ();
 	       Set_EndPref ();

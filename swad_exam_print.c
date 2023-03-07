@@ -1049,7 +1049,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd)
   {
    /***** Get answers selected by user for this question *****/
-   Par_GetParToText ("Ans",Print->PrintedQuestions[QstInd].StrAnswers,
+   Par_GetParText ("Ans",Print->PrintedQuestions[QstInd].StrAnswers,
 		     Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
   }
 
@@ -1061,7 +1061,7 @@ static unsigned ExaPrn_GetParamQstInd (void)
   {
    long QstInd;
 
-   if ((QstInd = Par_GetParToLong ("QstInd")) < 0)	// In exams, question index should be 0, 1, 2, 3...
+   if ((QstInd = Par_GetParLong ("QstInd")) < 0)	// In exams, question index should be 0, 1, 2, 3...
       Err_WrongQuestionIndexExit ();
 
    return (unsigned) QstInd;

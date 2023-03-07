@@ -1135,27 +1135,27 @@ void Prg_PutParamItmCod (void *ItmCod)
   {
    if (ItmCod)
       if (*((long *) ItmCod) > 0)
-	 Par_PutHiddenParamLong (NULL,"ItmCod",*((long *) ItmCod));
+	 Par_PutParLong (NULL,"ItmCod",*((long *) ItmCod));
   }
 
 void Prg_PutParamRscCod (void *RscCod)
   {
    if (RscCod)
       if (*((long *) RscCod) > 0)
-	 Par_PutHiddenParamLong (NULL,"RscCod",*((long *) RscCod));
+	 Par_PutParLong (NULL,"RscCod",*((long *) RscCod));
   }
 
 void Prg_GetParams (struct Prg_Item *Item)
   {
    /***** Try to get item resource *****/
-   Item->Resource.Hierarchy.RscCod = Par_GetParToLong ("RscCod");
+   Item->Resource.Hierarchy.RscCod = Par_GetParLong ("RscCod");
 
    /***** Get data of the program item from database *****/
    PrgRsc_GetDataOfResourceByCod (Item);
 
    if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
       /***** Try to get data of the program item from database *****/
-      Item->Hierarchy.ItmCod = Par_GetParToLong ("ItmCod");
+      Item->Hierarchy.ItmCod = Par_GetParLong ("ItmCod");
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (Item);
@@ -2116,10 +2116,10 @@ void Prg_ReceiveFormChgItem (void)
    Item.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get program item title *****/
-   Par_GetParToText ("Title",Item.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+   Par_GetParText ("Title",Item.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
    /***** Get program item text *****/
-   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (Item.TimeUTC[Dat_STR_TIME] == 0)
@@ -2163,10 +2163,10 @@ void Prg_ReceiveFormNewItem (void)
    NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
 
    /***** Get program item title *****/
-   Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
+   Par_GetParText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
 
    /***** Get program item text *****/
-   Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
    if (NewItem.TimeUTC[Dat_STR_TIME] == 0)

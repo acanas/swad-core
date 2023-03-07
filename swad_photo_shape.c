@@ -84,7 +84,7 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	   {
 	    Set_BeginPref (Shape == Gbl.Prefs.PhotoShape);
 	       Frm_BeginForm (ActChgUsrPho);
-		  Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
+		  Par_PutParUnsigned (NULL,"PhotoShape",Shape);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",
 				   Txt_PHOTO_SHAPES[Shape],
 				   "class=\"%s ICO_%s_%s\"",
@@ -131,7 +131,7 @@ void PhoSha_ChangePhotoShape (void)
 
 PhoSha_Shape_t PhoSha_GetParamPhotoShape (void)
   {
-   return (PhoSha_Shape_t) Par_GetParToUnsignedLong ("PhotoShape",
+   return (PhoSha_Shape_t) Par_GetParUnsignedLong ("PhotoShape",
 						  (PhoSha_Shape_t) 0,
 						  (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1),
 						  PhoSha_SHAPE_DEFAULT);

@@ -170,7 +170,7 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
 
 static DegTyp_Order_t DegTyp_GetParamDegTypOrder (DegTyp_Order_t DefaultOrder)
   {
-   return (DegTyp_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (DegTyp_Order_t) Par_GetParUnsignedLong ("Order",
 						     0,
 						     DegTyp_NUM_ORDERS - 1,
 						     (unsigned long) DefaultOrder);
@@ -545,7 +545,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 		  Figures.FigureType = Fig_DEGREE_TYPES;
 		  Fig_PutHiddenParamFigures (&Figures);
 		 }
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
 	       /* Link with the head of this column */
 	       HTM_BUTTON_Submit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],
@@ -665,7 +665,7 @@ void DegTyp_ReceiveFormNewDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the name of degree type */
-   Par_GetParToText ("DegTypName",DegTyp_EditingDegTyp->DegTypName,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
+   Par_GetParText ("DegTypName",DegTyp_EditingDegTyp->DegTypName,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    if (DegTyp_EditingDegTyp->DegTypName[0])	// If there's a degree type name
      {
@@ -729,7 +729,7 @@ void DegTyp_RemoveDegreeType (void)
 static void DegTyp_PutParamOtherDegTypCod (void *DegTypCod)
   {
    if (DegTypCod)
-      Par_PutParCod (Par_OthDegTypCod,*((long *) DegTypCod));
+      Par_PutParCode (Par_OthDegTypCod,*((long *) DegTypCod));
   }
 
 /*****************************************************************************/
@@ -813,7 +813,7 @@ void DegTyp_RenameDegreeType (void)
    DegTyp_EditingDegTyp->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
 
    /* Get the new name for the degree type */
-   Par_GetParToText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
+   Par_GetParText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
    if (!DegTyp_GetDataOfDegreeTypeByCod (DegTyp_EditingDegTyp))

@@ -442,19 +442,19 @@ void Rec_ReceiveFormField (void)
 
    /***** Get parameters from the form *****/
    /* Get the name of the field */
-   Par_GetParToText ("FieldName",Gbl.Crs.Records.Field.Name,
+   Par_GetParText ("FieldName",Gbl.Crs.Records.Field.Name,
                      Rec_MAX_BYTES_NAME_FIELD);
 
    /* Get the number of lines */
    Gbl.Crs.Records.Field.NumLines = (unsigned)
-	                                   Par_GetParToUnsignedLong ("NumLines",
+	                                   Par_GetParUnsignedLong ("NumLines",
                                                                      Rec_MIN_LINES_IN_EDITION_FIELD,
                                                                      Rec_MAX_LINES_IN_EDITION_FIELD,
                                                                      Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get the field visibility by students */
    Gbl.Crs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
-	                                     Par_GetParToUnsignedLong ("Visibility",
+	                                     Par_GetParUnsignedLong ("Visibility",
                                                                        0,
                                                                        Rec_NUM_TYPES_VISIBILITY - 1,
                                                                        (unsigned long) Rec_VISIBILITY_DEFAULT);
@@ -569,7 +569,7 @@ void Rec_ReqRemField (void)
 long Rec_GetFieldCod (void)
   {
    /***** Get the code of the field *****/
-   return Par_GetParToLong ("FieldCod");
+   return Par_GetParLong ("FieldCod");
   }
 
 /*****************************************************************************/
@@ -634,7 +634,7 @@ void Rec_RemoveFieldFromDB (void)
 static void Rec_PutParamFieldCod (void *FieldCod)
   {
    if (FieldCod)
-      Par_PutHiddenParamLong (NULL,"FieldCod",*((long *) FieldCod));
+      Par_PutParLong (NULL,"FieldCod",*((long *) FieldCod));
   }
 
 /*****************************************************************************/
@@ -702,7 +702,7 @@ void Rec_RenameField (void)
       Err_WrongRecordFieldExit ();
 
    /* Get the new group name */
-   Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
+   Par_GetParText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
 
    /***** Get from the database the old field name *****/
    Rec_GetFieldByCod (Gbl.Crs.Records.Field.FieldCod,
@@ -760,7 +760,7 @@ void Rec_ChangeLinesField (void)
 
    /* Get the new number of lines */
    NewNumLines = (unsigned)
-	         Par_GetParToUnsignedLong ("NumLines",
+	         Par_GetParUnsignedLong ("NumLines",
                                            Rec_MIN_LINES_IN_EDITION_FIELD,
                                            Rec_MAX_LINES_IN_EDITION_FIELD,
                                            Rec_DEF_LINES_IN_EDITION_FIELD);
@@ -805,7 +805,7 @@ void Rec_ChangeVisibilityField (void)
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
-	           Par_GetParToUnsignedLong ("Visibility",
+	           Par_GetParUnsignedLong ("Visibility",
                                              0,
                                              Rec_NUM_TYPES_VISIBILITY - 1,
                                              (unsigned long) Rec_VISIBILITY_DEFAULT);
@@ -1236,8 +1236,8 @@ static void Rec_ShowRecordOneTchCrs (void)
 	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
 	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-	 Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-	 Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
+	 Par_PutParChar ("ParamOfficeHours",'Y');
+	 Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
 								     'N');
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
@@ -1324,8 +1324,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevTch);
 	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-	    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-	    Par_PutHiddenParamChar ("ShowOfficeHours",
+	    Par_PutParChar ("ParamOfficeHours",'Y');
+	    Par_PutParChar ("ShowOfficeHours",
 				    ShowOfficeHours ? 'Y' :
 						      'N');
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
@@ -1440,7 +1440,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 static void Rec_GetParamRecordsPerPage (void)
   {
    Gbl.Usrs.Listing.RecsPerPag = (unsigned)
-	                         Par_GetParToUnsignedLong ("RecsPerPag",
+	                         Par_GetParUnsignedLong ("RecsPerPag",
                                                            Rec_MIN_RECORDS_PER_PAGE,
                                                            Rec_MAX_RECORDS_PER_PAGE,
                                                            Rec_DEF_RECORDS_PER_PAGE);
@@ -1477,13 +1477,13 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
 static void Rec_PutParamsShowOfficeHoursOneTch (void)
   {
    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+   Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
   {
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+   Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
 /*****************************************************************************/
@@ -1493,8 +1493,8 @@ static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
 
 static bool Rec_GetParamShowOfficeHours (void)
   {
-   if (Par_GetParToBool ("ParamOfficeHours"))
-      return Par_GetParToBool ("ShowOfficeHours");
+   if (Par_GetParBool ("ParamOfficeHours"))
+      return Par_GetParBool ("ShowOfficeHours");
 
    return Rec_SHOW_OFFICE_HOURS_DEFAULT;
   }
@@ -1534,7 +1534,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    long OriginalActCod;
 
    /***** Get where we came from *****/
-   OriginalActCod = Par_GetParToLong ("OriginalActCod");
+   OriginalActCod = Par_GetParLong ("OriginalActCod");
    Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
 
    /***** Get the user whose record we want to modify *****/
@@ -1650,7 +1650,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    ICanEdit = true;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
-	       Par_PutHiddenParamLong (NULL,"OriginalActCod",
+	       Par_PutParLong (NULL,"OriginalActCod",
 				       Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	       if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
@@ -1819,7 +1819,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
          /* Get text from the form */
          snprintf (FieldParamName,sizeof (FieldParamName),"Field%ld",
 		   Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-         Par_GetParToHTML (FieldParamName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
+         Par_GetParHTML (FieldParamName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
         }
   }
 
@@ -2514,14 +2514,14 @@ static void Rec_PutParamsStdTsts (__attribute__((unused)) void *Args)
 static void Rec_PutParamsWorks (__attribute__((unused)) void *Args)
   {
    Rec_PutParamsStudent (NULL);
-   Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+   Par_PutParChar ("FullTree",'Y');	// By default, show all files
    Gbl.FileBrowser.FullTree = true;
    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
   }
 
 static void Rec_PutParamsStudent (__attribute__((unused)) void *Args)
   {
-   Par_PutHiddenParamString (NULL,"UsrCodStd",Rec_Record.UsrDat->EnUsrCod);
+   Par_PutParString (NULL,"UsrCodStd",Rec_Record.UsrDat->EnUsrCod);
    Grp_PutParamAllGroups ();
   }
 
@@ -2529,7 +2529,7 @@ static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args)
   {
    Rec_PutParamUsrCodEncrypted (NULL);
    Grp_PutParamAllGroups ();
-   Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+   Par_PutParChar ("ShowOnlyOneRecipient",'Y');
   }
 
 /*****************************************************************************/
@@ -3564,7 +3564,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 
    /***** Get role as a parameter from form *****/
    Role = (Rol_Role_t)
-	  Par_GetParToUnsignedLong ("Role",
+	  Par_GetParUnsignedLong ("Role",
 				    0,
 				    Rol_NUM_ROLES - 1,
 				    (unsigned long) Rol_UNK);
@@ -3615,18 +3615,18 @@ void Rec_GetUsrNameFromRecordForm (struct Usr_Data *UsrDat)
    char FrstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];	// Temporary first name
 
    /***** Get surname 1 *****/
-   Par_GetParToText ("Surname1",Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+   Par_GetParText ("Surname1",Surname1,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (Surname1);
    // Surname 1 is mandatory, so avoid overwriting surname 1 with empty string
    if (Surname1[0])		// New surname 1 not empty
       Str_Copy (UsrDat->Surname1,Surname1,sizeof (UsrDat->Surname1) - 1);
 
    /***** Get surname 2 *****/
-   Par_GetParToText ("Surname2",UsrDat->Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+   Par_GetParText ("Surname2",UsrDat->Surname2,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (UsrDat->Surname2);
 
    /***** Get first name *****/
-   Par_GetParToText ("FirstName",FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+   Par_GetParText ("FirstName",FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (FrstName);
    // First name is mandatory, so avoid overwriting first name with empty string
    if (FrstName[0])		// New first name not empty
@@ -3640,7 +3640,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
   {
    /***** Get sex from form *****/
    UsrDat->Sex = (Usr_Sex_t)
-	         Par_GetParToUnsignedLong ("Sex",
+	         Par_GetParUnsignedLong ("Sex",
                                            (unsigned long) Usr_SEX_FEMALE,
                                            (unsigned long) Usr_SEX_MALE,
                                            (unsigned long) Usr_SEX_UNKNOWN);
@@ -3654,8 +3654,8 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
                         &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   Par_GetParToText ("Phone0",UsrDat->Phone[0],Usr_MAX_BYTES_PHONE);
-   Par_GetParToText ("Phone1",UsrDat->Phone[1],Usr_MAX_BYTES_PHONE);
+   Par_GetParText ("Phone0",UsrDat->Phone[0],Usr_MAX_BYTES_PHONE);
+   Par_GetParText ("Phone1",UsrDat->Phone[1],Usr_MAX_BYTES_PHONE);
 
    Rec_GetUsrCommentsFromForm (UsrDat);
   }
@@ -3671,7 +3671,7 @@ static void Rec_GetUsrCommentsFromForm (struct Usr_Data *UsrDat)
       Err_ShowErrorAndExit ("Can not read comments of a user.");
 
    /***** Get the parameter with the comments *****/
-   Par_GetParToHTML ("Comments",UsrDat->Comments,Cns_MAX_BYTES_TEXT);
+   Par_GetParHTML ("Comments",UsrDat->Comments,Cns_MAX_BYTES_TEXT);
   }
 
 /*****************************************************************************/
@@ -4123,7 +4123,7 @@ void Rec_UpdateMyDepartment (void)
 void Rec_UpdateMyOffice (void)
   {
    /***** Get my office *****/
-   Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
+   Par_GetParText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
    Usr_DB_UpdateMyOffice ();
@@ -4139,7 +4139,7 @@ void Rec_UpdateMyOffice (void)
 void Rec_UpdateMyOfficePhone (void)
   {
    /***** Get my office *****/
-   Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
+   Par_GetParText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
    Usr_DB_UpdateMyOfficePhone ();

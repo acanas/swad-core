@@ -95,7 +95,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
       NextAction = (AsgCod > 0)	? ActSeeOneAsg :	// Assignment specified
 				  ActSeeAsg;		// All assignments
       Frm_BeginForm (NextAction);
-         Par_PutParCod (Par_AsgCod,AsgCod);
+         Par_PutParCode (Par_AsgCod,AsgCod);
 	 // TODO: In the listing of assignments, the page is always the first.
 	 //       The page should be that corresponding to the selected assignment.
          HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],

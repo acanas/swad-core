@@ -221,10 +221,10 @@ void Ind_ReqIndicatorsCourses (void)
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
 	    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-	    Par_PutParCod (Par_OthDegTypCod,Indicators.DegTypCod);
-	    Par_PutParCod (Par_DptCod      ,Indicators.DptCod   );
+	    Par_PutParCode (Par_OthDegTypCod,Indicators.DegTypCod);
+	    Par_PutParCode (Par_DptCod      ,Indicators.DptCod   );
 	    if (Indicators.StrIndicatorsSelected[0])
-	       Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
+	       Par_PutParString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
 	    Btn_PutConfirmButton (Txt_Show_more_details);
 	 Frm_EndForm ();
 	}
@@ -356,7 +356,7 @@ static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
       return true;	// List is not too big ==> show it
 
    /***** Get parameter with user's confirmation to see a big list of courses *****/
-   if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
+   if (!(ShowBigList = Par_GetParBool ("ShowBigList")))
       Ind_PutButtonToConfirmIWantToSeeBigList (Indicators,NumCrss);
 
    return ShowBigList;
@@ -387,11 +387,11 @@ static void Ind_PutParamsConfirmIWantToSeeBigList (void *Indicators)
    if (Indicators)
      {
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutParCod (Par_OthDegTypCod,((struct Ind_Indicators *) Indicators)->DegTypCod);
-      Par_PutParCod (Par_DptCod      ,((struct Ind_Indicators *) Indicators)->DptCod   );
+      Par_PutParCode (Par_OthDegTypCod,((struct Ind_Indicators *) Indicators)->DegTypCod);
+      Par_PutParCode (Par_DptCod      ,((struct Ind_Indicators *) Indicators)->DptCod   );
       if (((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected[0])
-	 Par_PutHiddenParamString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected);
-      Par_PutHiddenParamChar ("ShowBigList",'Y');
+	 Par_PutParString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected);
+      Par_PutParChar ("ShowBigList",'Y');
      }
   }
 

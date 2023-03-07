@@ -472,7 +472,7 @@ void Grp_PutParamsCodGrps (void)
    char GrpCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Write the boolean parameter that indicates if all groups must be listed *****/
-   Par_PutHiddenParamChar ("AllGroups",
+   Par_PutParChar ("AllGroups",
                            Gbl.Usrs.ClassPhoto.AllGroups ? 'Y' :
                         	                           'N');
 
@@ -497,7 +497,7 @@ void Grp_PutParamsCodGrps (void)
          Str_Concat (GrpCods,GrpCod,MaxLengthGrpCods);
         }
 
-      Par_PutHiddenParamString (NULL,"GrpCods",GrpCods);
+      Par_PutParString (NULL,"GrpCods",GrpCods);
       free (GrpCods);
      }
   }
@@ -515,7 +515,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       return;
 
    /***** Get boolean parameter that indicates if all groups must be listed *****/
-   Gbl.Usrs.ClassPhoto.AllGroups = Par_GetParToBool ("AllGroups");
+   Gbl.Usrs.ClassPhoto.AllGroups = Par_GetParBool ("AllGroups");
 
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
@@ -3224,13 +3224,13 @@ void Grp_ReceiveFormNewGrpTyp (void)
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
-   Par_GetParToText ("GrpTypName",Gbl.Crs.Grps.GrpTyp.GrpTypName,
+   Par_GetParText ("GrpTypName",Gbl.Crs.Grps.GrpTyp.GrpTypName,
                      Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type
       and whether it is possible to register in multiple groups of this type */
-   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
-   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment  = Par_GetParToBool ("MultipleEnrolment");
+   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParBool ("MandatoryEnrolment");
+   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment  = Par_GetParBool ("MultipleEnrolment");
 
    /* Get open time */
    Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
@@ -3298,7 +3298,7 @@ void Grp_ReceiveFormNewGrp (void)
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetParCode (Par_GrpTypCod)) > 0) // Group type valid
      {
       /* Get group name */
-      Par_GetParToText ("GrpName",Gbl.Crs.Grps.GrpName,
+      Par_GetParText ("GrpName",Gbl.Crs.Grps.GrpName,
                         Grp_MAX_BYTES_GROUP_NAME);
 
       /* Get room */
@@ -3306,7 +3306,7 @@ void Grp_ReceiveFormNewGrp (void)
 
       /* Get maximum number of students */
       Gbl.Crs.Grps.MaxStudents = (unsigned)
-	                                Par_GetParToUnsignedLong ("MaxStudents",
+	                                Par_GetParUnsignedLong ("MaxStudents",
                                                                   0,
                                                                   Grp_MAX_STUDENTS_IN_A_GROUP,
                                                                   Grp_NUM_STUDENTS_NOT_LIMITED);
@@ -3820,7 +3820,7 @@ void Grp_ChangeMandatGrpTyp (void)
    Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
-   NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
+   NewMandatoryEnrolment = Par_GetParBool ("MandatoryEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3873,7 +3873,7 @@ void Grp_ChangeMultiGrpTyp (void)
    Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
-   NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
+   NewMultipleEnrolment = Par_GetParBool ("MultipleEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3959,7 +3959,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
-	        Par_GetParToUnsignedLong ("MaxStudents",
+	        Par_GetParUnsignedLong ("MaxStudents",
                                           0,
                                           Grp_MAX_STUDENTS_IN_A_GROUP,
                                           Grp_NUM_STUDENTS_NOT_LIMITED);
@@ -4046,7 +4046,7 @@ void Grp_RenameGroupType (void)
    Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
 
    /* Get the new name for the group type */
-   Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
+   Par_GetParText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -4118,7 +4118,7 @@ void Grp_RenameGroup (void)
    Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new name for the group */
-   Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
+   Par_GetParText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
 
    /***** Get from the database the type and the old name of the group *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4177,7 +4177,7 @@ void Grp_RenameGroup (void)
 static void Grp_PutParamGrpTypCod (void *GrpTypCod)
   {
    if (GrpTypCod)
-      Par_PutParCod (Par_GrpTypCod,*((long *) GrpTypCod));
+      Par_PutParCode (Par_GrpTypCod,*((long *) GrpTypCod));
   }
 
 /*****************************************************************************/
@@ -4187,7 +4187,7 @@ static void Grp_PutParamGrpTypCod (void *GrpTypCod)
 void Grp_PutParamGrpCod (void *GrpCod)
   {
    if (GrpCod)
-      Par_PutParCod (Par_GrpCod,*((long *) GrpCod));
+      Par_PutParCode (Par_GrpCod,*((long *) GrpCod));
   }
 
 /*****************************************************************************/
@@ -4285,7 +4285,7 @@ void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps)
 
 void Grp_PutParamAllGroups (void)
   {
-   Par_PutHiddenParamChar ("AllGroups",'Y');
+   Par_PutParChar ("AllGroups",'Y');
   }
 
 /*****************************************************************************/
@@ -4295,18 +4295,18 @@ void Grp_PutParamAllGroups (void)
 void Grp_PutParamWhichGroups (void *WhichGrps)
   {
    if (WhichGrps)
-      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",
+      Par_PutParUnsigned (NULL,"WhichGrps",
 				  (unsigned) *((Grp_WhichGroups_t *) WhichGrps));
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Grp_MY_GROUPS);
+   Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) Grp_MY_GROUPS);
   }
 
 void Grp_PutParamWhichGrpsAllGrps (void)
   {
-   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Grp_ALL_GROUPS);
+   Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) Grp_ALL_GROUPS);
   }
 
 /*****************************************************************************/
@@ -4329,7 +4329,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	{
 	 Set_BeginPref (WhichGrps == Gbl.Crs.Grps.WhichGrps);
 	    Frm_BeginForm (Action);
-	       Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	       Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
 	       if (FuncParams)	// Extra parameters depending on the action
 		  FuncParams (Args);
 	       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
@@ -4386,7 +4386,7 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 
       /* Get parameter */
       Gbl.Crs.Grps.WhichGrps = (Grp_WhichGroups_t)
-	                       Par_GetParToUnsignedLong ("WhichGrps",
+	                       Par_GetParUnsignedLong ("WhichGrps",
 	                                                 0,
 	                                                 Grp_NUM_WHICH_GROUPS - 1,
 	                                                 (unsigned long) WhichGroupsDefault);

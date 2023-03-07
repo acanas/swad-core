@@ -179,7 +179,7 @@ void Lan_AskChangeLanguage (void)
 static void Lan_PutParamLanguage (void *Language)
   {
    if (Language)
-      Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) *((Lan_Language_t *) Language));
+      Par_PutParUnsigned (NULL,"Lan",(unsigned) *((Lan_Language_t *) Language));
   }
 
 /*****************************************************************************/
@@ -222,7 +222,7 @@ Lan_Language_t Lan_GetParamLanguage (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
 
    return (Lan_Language_t)
-	  Par_GetParToUnsignedLong ("Lan",
+	  Par_GetParUnsignedLong ("Lan",
                                     1,
                                     Lan_NUM_LANGUAGES,
                                     (unsigned long) Txt_Current_CGI_SWAD_Language);

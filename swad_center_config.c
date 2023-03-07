@@ -987,7 +987,7 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
 
    /***** Get parameters from form *****/
    /* Get the new photo attribution for the center */
-   Par_GetParToText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
+   Par_GetParText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,NewPhotoAttribution);
@@ -1097,7 +1097,7 @@ void CtrCfg_ChangeCtrLatitude (void)
    double NewLatitude;
 
    /***** Get latitude *****/
-   Par_GetParToText ("Latitude",LatitudeStr,sizeof (LatitudeStr) - 1);
+   Par_GetParText ("Latitude",LatitudeStr,sizeof (LatitudeStr) - 1);
    NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
@@ -1118,7 +1118,7 @@ void CtrCfg_ChangeCtrLongitude (void)
    double NewLongitude;
 
    /***** Get longitude *****/
-   Par_GetParToText ("Longitude",LongitudeStr,sizeof (LongitudeStr) - 1);
+   Par_GetParText ("Longitude",LongitudeStr,sizeof (LongitudeStr) - 1);
    NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
@@ -1139,7 +1139,7 @@ void CtrCfg_ChangeCtrAltitude (void)
    double NewAltitude;
 
    /***** Get altitude *****/
-   Par_GetParToText ("Altitude",AltitudeStr,sizeof (AltitudeStr) - 1);
+   Par_GetParText ("Altitude",AltitudeStr,sizeof (AltitudeStr) - 1);
    NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
@@ -1161,7 +1161,7 @@ void CtrCfg_ChangeCtrWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the center */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

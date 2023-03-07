@@ -227,7 +227,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
 	 TstPrn_PutParamPrnCod (Print->PrnCod);
-	 Par_PutHiddenParamUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
+	 Par_PutParUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (10);
@@ -2073,7 +2073,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 void TstPrn_PutParamPrnCod (long ExaCod)
   {
-   Par_PutHiddenParamLong (NULL,"PrnCod",ExaCod);
+   Par_PutParLong (NULL,"PrnCod",ExaCod);
   }
 
 /*****************************************************************************/
@@ -2083,7 +2083,7 @@ void TstPrn_PutParamPrnCod (long ExaCod)
 long TstPrn_GetParamPrnCod (void)
   {
    /***** Get code of test print *****/
-   return Par_GetParToLong ("PrnCod");
+   return Par_GetParLong ("PrnCod");
   }
 
 /*****************************************************************************/

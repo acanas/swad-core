@@ -85,7 +85,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
       NextAction = (SvyCod > 0)	? ActSeeSvy :	// Survey specified
 				  ActSeeAllSvy;	// All surveys
       Frm_BeginForm (NextAction);
-         Par_PutParCod (Par_SvyCod,SvyCod);
+         Par_PutParCode (Par_SvyCod,SvyCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

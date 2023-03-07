@@ -313,10 +313,10 @@ void ExaSet_ReceiveFormSet (void)
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
   {
    /***** Get set title *****/
-   Par_GetParToText ("Title",Set->Title,ExaSet_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",Set->Title,ExaSet_MAX_BYTES_TITLE);
 
    /***** Get number of questions in set to appear in exam print *****/
-   Set->NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
+   Set->NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
                                                               0,
                                                               UINT_MAX,
                                                               0);
@@ -381,7 +381,7 @@ void ExaSet_ChangeSetTitle (void)
       Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
-   Par_GetParToText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
+   Par_GetParText ("Title",NewTitle,ExaSet_MAX_BYTES_TITLE);
 
    /***** Check if title should be changed *****/
    if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle))
@@ -425,7 +425,7 @@ void ExaSet_ChangeNumQstsToExam (void)
       Err_NoPermissionExit ();
 
    /***** Get number of questions in set to appear in exam print *****/
-   NumQstsToPrint = (unsigned) Par_GetParToUnsignedLong ("NumQstsToPrint",
+   NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
                                                          0,
                                                          UINT_MAX,
                                                          0);
@@ -585,7 +585,7 @@ void ExaSet_ListQstsToAddToSet (void)
 
 static void ExaSet_PutParamSetCod (long SetCod)
   {
-   Par_PutHiddenParamUnsigned (NULL,"SetCod",SetCod);
+   Par_PutParUnsigned (NULL,"SetCod",SetCod);
   }
 
 /*****************************************************************************/

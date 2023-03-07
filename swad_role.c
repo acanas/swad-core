@@ -511,7 +511,7 @@ void Rol_ChangeMyRole (void)
 
    /***** Get parameter with the new logged role ******/
    NewRole = (Rol_Role_t)
-	     Par_GetParToUnsignedLong ("MyRole",
+	     Par_GetParUnsignedLong ("MyRole",
                                        0,
                                        Rol_NUM_ROLES - 1,
                                        (unsigned long) Rol_UNK);
@@ -574,7 +574,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 
 void Rol_PutHiddenParamRoles (unsigned Roles)
   {
-   Par_PutHiddenParamUnsigned (NULL,"Roles",Roles);
+   Par_PutParUnsigned (NULL,"Roles",Roles);
   }
 
 /*****************************************************************************/
@@ -591,7 +591,7 @@ unsigned Rol_GetSelectedRoles (void)
 
    /***** Try to get param "Roles" with multiple roles *****/
    Roles = (unsigned)
-	   Par_GetParToUnsignedLong ("Roles",
+	   Par_GetParUnsignedLong ("Roles",
                                      0,				// 000...000
                                      (1 << Rol_NUM_ROLES) - 1,	// 111...111
                                      0);			// 000...000

@@ -712,7 +712,7 @@ void Enr_RemoveOldUsrs (void)
 
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
-	                 Par_GetParToUnsignedLong ("Months",
+	                 Par_GetParUnsignedLong ("Months",
                                                    Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
                                                    Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
                                                    (unsigned long) UINT_MAX);
@@ -943,7 +943,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    WhatToDo.RegisterUsrs = false;
 
    RegRemUsrsAction = (Enr_RegRemUsrsAction_t)
-	              Par_GetParToUnsignedLong ("RegRemAction",
+	              Par_GetParUnsignedLong ("RegRemAction",
                                                 0,
                                                 Enr_NUM_REG_REM_USRS_ACTIONS - 1,
                                                 (unsigned long) Enr_REG_REM_USRS_UNKNOWN_ACTION);
@@ -1020,7 +1020,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    /***** Get list of users' IDs *****/
    if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
-   Par_GetParToText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
+   Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1821,7 +1821,7 @@ void Enr_SignUpInCrs (void)
      {
       /***** Get new role from record form *****/
       RoleFromForm = (Rol_Role_t)
-	             Par_GetParToUnsignedLong ("Role",
+	             Par_GetParUnsignedLong ("Role",
                                                0,
                                                Rol_NUM_ROLES - 1,
                                                (unsigned long) Rol_UNK);
@@ -2863,7 +2863,7 @@ void Enr_ModifyUsr1 (void)
 
       /***** Get the action to do *****/
       Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
-	                      Par_GetParToUnsignedLong ("RegRemAction",
+	                      Par_GetParUnsignedLong ("RegRemAction",
                                                         0,
                                                         Enr_REG_REM_ONE_USR_NUM_ACTIONS - 1,
                                                         (unsigned long) Enr_REG_REM_ONE_USR_UNKNOWN_ACTION);

@@ -951,7 +951,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put order field *****/
    if (Order != Prj_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+      Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
    /***** Put number of page *****/
    if (NumPage > 1)
@@ -976,27 +976,27 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
 static void Prj_PutHiddenParamAssign (unsigned Assign)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_PRE_NON_NAME,Assign);
+   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_PRE_NON_NAME,Assign);
   }
 
 static void Prj_PutHiddenParamHidden (unsigned Hidden)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_HID_VIS_NAME,Hidden);
+   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_HID_VIS_NAME,Hidden);
   }
 
 static void Prj_PutHiddenParamFaulti (unsigned Faulti)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_FAULTIN_NAME,Faulti);
+   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_FAULTIN_NAME,Faulti);
   }
 
 static void Prj_PutHiddenParamReview (unsigned Review)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_REVIEW_NAME,Review);
+   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_REVIEW_NAME,Review);
   }
 
 static void Prj_PutHiddenParamFilterDptCod (long DptCod)
   {
-   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FILTER_DPT_COD_NAME,DptCod);
+   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/
@@ -1005,7 +1005,7 @@ static void Prj_PutHiddenParamFilterDptCod (long DptCod)
 
 static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects)
   {
-   Projects->Filter.Assign = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_FILTER_PRE_NON_NAME,
+   Projects->Filter.Assign = (unsigned) Par_GetParUnsignedLong (Prj_PARAM_FILTER_PRE_NON_NAME,
                                                                   0,
                                                                   (1 << Prj_ASSIGNED) |
                                                                   (1 << Prj_NONASSIG),
@@ -1023,7 +1023,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return (Prj_HiddenVisibl_t)
-         Par_GetParToUnsignedLong (Prj_PARAM_FILTER_HID_VIS_NAME,
+         Par_GetParUnsignedLong (Prj_PARAM_FILTER_HID_VIS_NAME,
 				   0,
 				   (1 << Prj_HIDDEN) |
 				   (1 << Prj_VISIBL),
@@ -1038,7 +1038,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
 static unsigned Prj_GetHiddenParamFaulti (void)
   {
    return (unsigned)
-	  Par_GetParToUnsignedLong (Prj_PARAM_FILTER_FAULTIN_NAME,
+	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_FAULTIN_NAME,
                                     0,
                                     (1 << Prj_FAULTY) |
                                     (1 << Prj_FAULTLESS),
@@ -1049,7 +1049,7 @@ static unsigned Prj_GetHiddenParamFaulti (void)
 static unsigned Prj_GetHiddenParamReview (void)
   {
    return (unsigned)
-	  Par_GetParToUnsignedLong (Prj_PARAM_FILTER_REVIEW_NAME,
+	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_REVIEW_NAME,
                                     0,
                                     (1 << Prj_UNREVIEWED) |
                                     (1 << Prj_UNAPPROVED) |
@@ -1061,7 +1061,7 @@ static unsigned Prj_GetHiddenParamReview (void)
 
 static long Prj_GetHiddenParamFilterDptCod (void)
   {
-   return Par_GetParToLong (Prj_PARAM_FILTER_DPT_COD_NAME);
+   return Par_GetParLong (Prj_PARAM_FILTER_DPT_COD_NAME);
   }
 
 /*****************************************************************************/
@@ -3158,7 +3158,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 static Prj_Order_t Prj_GetParamPrjOrder (void)
   {
    return (Prj_Order_t)
-	  Par_GetParToUnsignedLong ("Order",
+	  Par_GetParUnsignedLong ("Order",
 				    0,
 				    Prj_NUM_ORDERS - 1,
 				    (unsigned long) Prj_ORDER_DEFAULT);
@@ -3488,7 +3488,7 @@ void Prj_FreeListProjects (struct Prj_Projects *Projects)
 void Prj_PutParamPrjCod (long PrjCod)
   {
    if (PrjCod > 0)
-      Par_PutHiddenParamLong (NULL,"PrjCod",PrjCod);
+      Par_PutParLong (NULL,"PrjCod",PrjCod);
   }
 
 /*****************************************************************************/
@@ -3498,7 +3498,7 @@ void Prj_PutParamPrjCod (long PrjCod)
 long Prj_GetParamPrjCod (void)
   {
    /***** Get code of project *****/
-   return Par_GetParToLong ("PrjCod");
+   return Par_GetParLong ("PrjCod");
   }
 
 /*****************************************************************************/
@@ -4068,36 +4068,36 @@ void Prj_ReceiveFormProject (void)
    if (ICanEditProject)
      {
       /* Get project title */
-      Par_GetParToText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
+      Par_GetParText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
 
       /* Get department */
-      Projects.Prj.DptCod = Par_GetParToLong (Par_CodeStr[Par_DptCod]);
+      Projects.Prj.DptCod = Par_GetParLong (Par_CodeStr[Par_DptCod]);
 
       /* Get whether the project is assigned */
-      Projects.Prj.Assigned = (Par_GetParToBool ("Assigned")) ? Prj_ASSIGNED :
+      Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
 					 	                Prj_NONASSIG;
 
       /* Get number of students */
       Projects.Prj.NumStds = (unsigned)
-	                     Par_GetParToUnsignedLong ("NumStds",
+	                     Par_GetParUnsignedLong ("NumStds",
 	                                               0,
 	                                               UINT_MAX,
 	                                               1);
 
       /* Get status */
       Projects.Prj.Proposal = (Prj_Proposal_t)
-	                      Par_GetParToUnsignedLong ("Proposal",
+	                      Par_GetParUnsignedLong ("Proposal",
 							0,
 							Prj_NUM_PROPOSAL_TYPES - 1,
 							(unsigned long) Prj_PROPOSAL_DEFAULT);
 
       /* Get project description, required knowledge and required materials */
-      Par_GetParToHTML ("Description",Projects.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-      Par_GetParToHTML ("Knowledge"  ,Projects.Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-      Par_GetParToHTML ("Materials"  ,Projects.Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParHTML ("Description",Projects.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParHTML ("Knowledge"  ,Projects.Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParHTML ("Materials"  ,Projects.Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
       /* Get degree WWW */
-      Par_GetParToText ("URL",Projects.Prj.URL,Cns_MAX_BYTES_WWW);
+      Par_GetParText ("URL",Projects.Prj.URL,Cns_MAX_BYTES_WWW);
 
       /***** Check if title is correct *****/
       if (!Projects.Prj.Title[0])	// If there is not a project title
@@ -4307,7 +4307,7 @@ void Prj_ReceiveConfigPrj (void)
 
 static bool Prj_GetEditableFromForm (void)
   {
-   return Par_GetParToBool ("Editable");
+   return Par_GetParBool ("Editable");
   }
 
 /*****************************************************************************/
@@ -4641,7 +4641,7 @@ void Prj_ChangeReviewStatus (void)
    if (Prj_CheckIfICanReviewProjects ())
      {
       Projects.Prj.Review.Status = Prj_GetHiddenParamReviewStatus ();
-      Par_GetParToHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+      Par_GetParHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
       Prj_DB_UpdateReview (&Projects.Prj);
      }
    else
@@ -4661,7 +4661,7 @@ void Prj_ChangeReviewStatus (void)
 static Prj_ReviewStatus_t Prj_GetHiddenParamReviewStatus (void)
   {
    return (Prj_ReviewStatus_t)
-	  Par_GetParToUnsignedLong ("ReviewStatus",
+	  Par_GetParUnsignedLong ("ReviewStatus",
 				    0,
 				    Prj_NUM_REVIEW_STATUS - 1,
 				    (unsigned long) Prj_REVIEW_STATUS_DEFAULT);

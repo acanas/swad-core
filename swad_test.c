@@ -343,7 +343,7 @@ void Tst_AssessTest (void)
 
       /***** Get if test print will be visible by teachers *****/
       Print.Sent          = true;	// The exam has been finished and sent by student
-      Print.AllowTeachers = Par_GetParToBool ("AllowTchs");
+      Print.AllowTeachers = Par_GetParBool ("AllowTchs");
 
       /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
@@ -551,7 +551,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
      }
 
    /***** Get if test print will be visible by teachers *****/
-   Print->AllowTeachers = Par_GetParToBool ("AllowTchs");
+   Print->AllowTeachers = Par_GetParBool ("AllowTchs");
   }
 
 /*****************************************************************************/
@@ -634,7 +634,7 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
 
    /***** Tags *****/
    /* Get parameter that indicates whether all tags are selected */
-   Questions->Tags.All = Par_GetParToBool ("AllTags");
+   Questions->Tags.All = Par_GetParBool ("AllTags");
 
    /* Get the tags */
    if ((Questions->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
@@ -655,7 +655,7 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
       case Tst_EDIT_QUESTIONS:
       case Tst_SELECT_QUESTIONS_FOR_EXAM:
 	 /* Get parameter that indicates if all types of answer are selected */
-	 Questions->AnswerTypes.All = Par_GetParToBool ("AllAnsTypes");
+	 Questions->AnswerTypes.All = Par_GetParBool ("AllAnsTypes");
 
 	 /* Get types of answer */
 	 Par_GetParMultiToText ("AnswerType",Questions->AnswerTypes.List,Qst_MAX_BYTES_LIST_ANSWER_TYPES);
@@ -724,7 +724,7 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
 
 static unsigned Tst_GetParamNumTst (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong ("NumTst",
+   return (unsigned) Par_GetParUnsignedLong ("NumTst",
                                                1,
                                                UINT_MAX,
                                                1);
@@ -736,7 +736,7 @@ static unsigned Tst_GetParamNumTst (void)
 
 static unsigned Tst_GetParamNumQsts (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong ("NumQst",
+   return (unsigned) Par_GetParUnsignedLong ("NumQst",
 	                                       (unsigned long) TstCfg_GetConfigMin (),
 	                                       (unsigned long) TstCfg_GetConfigMax (),
 	                                       (unsigned long) TstCfg_GetConfigDef ());

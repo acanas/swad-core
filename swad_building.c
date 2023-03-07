@@ -129,7 +129,7 @@ void Bld_SeeBuildings (void)
 	      {
                HTM_TH_Begin (HTM_HEAD_LEFT);
 		  Frm_BeginForm (ActSeeBld);
-		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_Submit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],
 		                              "class=\"BT_LINK\"");
 			if (Order == Buildings.SelectedOrder)
@@ -195,7 +195,7 @@ void Bld_SeeBuildings (void)
 
 static Bld_Order_t Bld_GetParamBuildingOrder (void)
   {
-   return (Bld_Order_t) Par_GetParToUnsignedLong ("Order",
+   return (Bld_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
 						  Bld_NUM_ORDERS - 1,
 						  (unsigned long) Bld_ORDER_DEFAULT);
@@ -489,7 +489,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 static void Bld_PutParamBldCod (void *BldCod)
   {
    if (BldCod)
-      Par_PutParCod (Par_BldCod,*((long *) BldCod));
+      Par_PutParCode (Par_BldCod,*((long *) BldCod));
   }
 
 /*****************************************************************************/
@@ -583,7 +583,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /* Get the new name for the building */
-   Par_GetParToText (ParamName,NewClaName,MaxBytes);
+   Par_GetParText (ParamName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the building *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -640,7 +640,7 @@ void Bld_ChangeBuildingLocation (void)
    Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /* Get the new location for the building */
-   Par_GetParToText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);
+   Par_GetParText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);
 
    /***** Get from the database the old location of the building *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -782,13 +782,13 @@ void Bld_ReceiveFormNewBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get building short name */
-   Par_GetParToText ("ShortName",Bld_EditingBuilding->ShrtName,Bld_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Bld_EditingBuilding->ShrtName,Bld_MAX_BYTES_SHRT_NAME);
 
    /* Get building full name */
-   Par_GetParToText ("FullName",Bld_EditingBuilding->FullName,Bld_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Bld_EditingBuilding->FullName,Bld_MAX_BYTES_FULL_NAME);
 
    /* Get building location */
-   Par_GetParToText ("Location",Bld_EditingBuilding->Location,Bld_MAX_BYTES_LOCATION);
+   Par_GetParText ("Location",Bld_EditingBuilding->Location,Bld_MAX_BYTES_LOCATION);
 
    if (Bld_EditingBuilding->ShrtName[0] &&
        Bld_EditingBuilding->FullName[0])	// If there's a building name

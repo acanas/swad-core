@@ -271,7 +271,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		    }
 
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
-		     Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
+		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
 			Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 		  Frm_EndForm ();
 		 }
@@ -329,7 +329,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 static void Nck_PutParamsRemoveMyNick (void *Nick)
   {
    if (Nick)
-      Par_PutHiddenParamString (NULL,"Nick",Nick);
+      Par_PutParString (NULL,"Nick",Nick);
   }
 
 static void Nck_PutParamsRemoveOtherNick (void *Nick)
@@ -337,7 +337,7 @@ static void Nck_PutParamsRemoveOtherNick (void *Nick)
    if (Nick)
      {
       Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      Par_PutHiddenParamString (NULL,"Nick",Nick);
+      Par_PutParString (NULL,"Nick",Nick);
      }
   }
 
@@ -352,7 +352,7 @@ void Nck_RemoveMyNick (void)
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Get nickname from form *****/
-   Par_GetParToText ("Nick",NickWithoutArr,
+   Par_GetParText ("Nick",NickWithoutArr,
 	             Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
    if (strcasecmp (NickWithoutArr,Gbl.Usrs.Me.UsrDat.Nickname))	// Only if not my current nickname
@@ -388,7 +388,7 @@ void Nck_RemoveOtherUsrNick (void)
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Get nickname from form *****/
-	 Par_GetParToText ("Nick",NickWithoutArr,
+	 Par_GetParText ("Nick",NickWithoutArr,
 			   Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
 	 /***** Remove one of the old nicknames *****/
@@ -459,7 +459,7 @@ static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat)
    char NewNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    /***** Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNick,sizeof (NewNick) - 1);
+   Par_GetParText ("NewNick",NewNick,sizeof (NewNick) - 1);
 
    if (Nck_CheckIfNickWithArrIsValid (NewNick))        // If new nickname is valid
      {

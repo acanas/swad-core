@@ -600,7 +600,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
-	       Par_PutParCod (Par_NotCod,NotCod);
+	       Par_PutParCode (Par_NotCod,NotCod);
 	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
 	                                "class=\"RT BT_LINK\"");
 	   }
@@ -804,7 +804,7 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
 static void Not_PutParams (void *NotCod)
   {
    if (NotCod)
-      Par_PutParCod (Par_NotCod,*((long *) NotCod));
+      Par_PutParCode (Par_NotCod,*((long *) NotCod));
   }
 
 /*****************************************************************************/

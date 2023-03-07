@@ -77,12 +77,14 @@ typedef enum
    Par_GamCod,
    Par_GrpCod,
    Par_GrpTypCod,
+   Par_HldCod,
    Par_MchCod,
    Par_NotCod,
    Par_OthCtrCod,
    Par_OthCtyCod,
    Par_OthDegCod,
    Par_OthDegTypCod,
+   Par_OthHieCod,
    Par_OthInsCod,
    Par_PstCod,
    Par_PubCod,
@@ -108,17 +110,18 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 
 void Par_GetMainParams (void);
 
-unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
-unsigned long Par_GetParToUnsignedLong (const char *ParamName,
-                                        unsigned long Min,
-                                        unsigned long Max,
-                                        unsigned long Default);
-long Par_GetParToLong (const char *ParamName);
-long Par_GetAndCheckParCode (Par_Code_t ParamCode);
-long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed);
-long Par_GetParCode (Par_Code_t ParamCode);
-bool Par_GetParToBool (const char *ParamName);
-unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxBytes);
+//------------------------------ Get parameters -------------------------------
+unsigned Par_GetParText (const char *ParamName,char *ParamValue,size_t MaxBytes);
+unsigned long Par_GetParUnsignedLong (const char *ParamName,
+                                      unsigned long Min,
+                                      unsigned long Max,
+                                      unsigned long Default);
+long Par_GetParLong (const char *ParamName);
+long Par_GetAndCheckParCode (Par_Code_t ParCod);
+long Par_GetAndCheckParCodeMin (Par_Code_t ParCod,long MinCodAllowed);
+long Par_GetParCode (Par_Code_t ParCod);
+bool Par_GetParBool (const char *ParamName);
+unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes);
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
 unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces);
@@ -127,14 +130,14 @@ bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t 
 bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
-void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value);
-void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
-void Par_PutParCod (Par_Code_t ParamCode,long Cod);
-void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value);
-void Par_PutHiddenParamChar (const char *ParamName,char Value);
-void Par_PutHiddenParamString (const char *Id,const char *ParamName,
-                               const char *Value);
-void Par_PutHiddenParamOrder (unsigned SelectedOrder);
+//------------------------------ Put parameters -------------------------------
+void Par_PutParUnsigned (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutParUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutParCode (Par_Code_t ParCod,long Cod);
+void Par_PutParLong (const char *Id,const char *ParamName,long Value);
+void Par_PutParChar (const char *ParamName,char Value);
+void Par_PutParString (const char *Id,const char *ParamName,const char *Value);
+void Par_PutParOrder (unsigned SelectedOrder);
 
 //----------------------------- Client IP address -----------------------------
 void Par_SetIP (void);
