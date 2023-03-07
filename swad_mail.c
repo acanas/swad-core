@@ -471,7 +471,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 	    /* Mail domain */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiSho);
-		  Mai_PutParamMaiCod (&Mai->MaiCod);
+		  Par_PutParCode (Par_MaiCod,Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_%s\"",
@@ -482,7 +482,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 	    /* Mail domain info */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiFul);
-		  Mai_PutParamMaiCod (&Mai->MaiCod);
+		  Par_PutParCode (Par_MaiCod,Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"40\" class=\"INPUT_%s\"",
@@ -509,17 +509,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 static void Mai_PutParamMaiCod (void *MaiCod)
   {
    if (MaiCod)
-      Par_PutParLong (NULL,"MaiCod",*((long *) MaiCod));
-  }
-
-/*****************************************************************************/
-/*********************** Get parameter with code of mail *********************/
-/*****************************************************************************/
-
-long Mai_GetParamMaiCod (void)
-  {
-   /***** Get code of mail *****/
-   return Par_GetParLong ("MaiCod");
+      Par_PutParCode (Par_MaiCod,*((long *) MaiCod));
   }
 
 /*****************************************************************************/
@@ -534,8 +524,7 @@ void Mai_RemoveMailDomain (void)
    Mai_EditingMailDomainConstructor ();
 
    /***** Get mail domain code *****/
-   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
-      Err_WrongMailDomainExit ();
+   Mai_EditingMai->MaiCod = Par_GetAndCheckParCode (Par_MaiCod);
 
    /***** Get data of the mail domain rom database *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -608,8 +597,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the mail */
-   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
-      Err_WrongMailDomainExit ();
+   Mai_EditingMai->MaiCod = Par_GetAndCheckParCode (Par_MaiCod);
 
    /* Get the new name for the mail */
    Par_GetParText (ParamName,NewMaiName,MaxBytes);

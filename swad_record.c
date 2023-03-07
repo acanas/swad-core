@@ -1531,11 +1531,9 @@ void Rec_UpdateAndShowMyCrsRecord (void)
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
-   long OriginalActCod;
 
    /***** Get where we came from *****/
-   OriginalActCod = Par_GetParLong ("OriginalActCod");
-   Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
+   Gbl.Action.Original = Act_GetActionFromActCod (Par_GetParCode (Par_OrgActCod));
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1650,8 +1648,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    ICanEdit = true;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
-	       Par_PutParLong (NULL,"OriginalActCod",
-				       Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
+	       Par_PutParCode (Par_OrgActCod,Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	       if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);

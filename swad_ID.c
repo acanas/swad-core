@@ -411,8 +411,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
       if (Gbl.Action.Original != ActUnk)
 	{
-	 Par_PutParLong (NULL,"OriginalActCod",
-				 Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
+	 Par_PutParCode (Par_OrgActCod,Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
 	 switch (Gbl.Action.Original)
 	   {
 	    case ActSeeRecSevGst:
@@ -884,7 +883,6 @@ void ID_ConfirmOtherUsrID (void)
   {
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_The_ID_X_has_been_confirmed;
-   long OriginalActCod;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
    bool Found;
@@ -892,8 +890,7 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Get where we came from *****/
-   OriginalActCod = Par_GetParLong ("OriginalActCod");
-   Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
+   Gbl.Action.Original = Act_GetActionFromActCod (Par_GetParCode (Par_OrgActCod));
 
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;

@@ -808,7 +808,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_MESSAGE:
 	 Action = ActExpRcvMsg;
          Frm_BeginForm (Action);
-	    Msg_PutHiddenParamMsgCod (Cod);
+	    Par_PutParCode (Par_MsgCod,Cod);
 	 break;
       default:
 	 Action = Ntf_DefaultActions[NotifyEvent];
