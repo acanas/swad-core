@@ -319,7 +319,7 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
 
    /***** Trivial check: Have I faved this comment? *****/
    if (!TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_COMM,Com->PubCod,
-				         Gbl.Usrs.Me.UsrDat.UsrCod))
+				        Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;

@@ -3298,18 +3298,17 @@ void Grp_ReceiveFormNewGrp (void)
    if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetParCode (Par_GrpTypCod)) > 0) // Group type valid
      {
       /* Get group name */
-      Par_GetParText ("GrpName",Gbl.Crs.Grps.GrpName,
-                        Grp_MAX_BYTES_GROUP_NAME);
+      Par_GetParText ("GrpName",Gbl.Crs.Grps.GrpName,Grp_MAX_BYTES_GROUP_NAME);
 
       /* Get room */
-      Gbl.Crs.Grps.RooCod = Roo_GetParamRooCod ();
+      Gbl.Crs.Grps.RooCod = Par_GetParCode (Par_RooCod);
 
       /* Get maximum number of students */
       Gbl.Crs.Grps.MaxStudents = (unsigned)
-	                                Par_GetParUnsignedLong ("MaxStudents",
-                                                                  0,
-                                                                  Grp_MAX_STUDENTS_IN_A_GROUP,
-                                                                  Grp_NUM_STUDENTS_NOT_LIMITED);
+	                         Par_GetParUnsignedLong ("MaxStudents",
+                                                         0,
+                                                         Grp_MAX_STUDENTS_IN_A_GROUP,
+                                                         Grp_NUM_STUDENTS_NOT_LIMITED);
 
       if (Gbl.Crs.Grps.GrpName[0])	// If there's a group name
         {
@@ -3781,7 +3780,7 @@ void Grp_ChangeGroupRoom (void)
    Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
 
    /* Get the new room */
-   NewRooCod = Roo_GetParamRooCod ();
+   NewRooCod = Par_GetParCode (Par_RooCod);
 
    /* Get from the database the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;

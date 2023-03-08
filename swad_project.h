@@ -256,7 +256,6 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
 void Prj_FreeListProjects (struct Prj_Projects *Projects);
 
 void Prj_PutParamPrjCod (long PrjCod);
-long Prj_GetParamPrjCod (void);
 void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
 void Prj_HideProject (void);

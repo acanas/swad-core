@@ -1865,7 +1865,7 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get other parameters *****/
    if (Brw_GetIfProjectFileBrowser ())
       /* Get project code */
-      Prj_SetPrjCod (Prj_GetParamPrjCod ());
+      Prj_SetPrjCod (Par_GetParCode (Par_PrjCod));
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */

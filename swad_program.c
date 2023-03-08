@@ -456,10 +456,8 @@ static void Prg_PutIconToCreateNewItem (void)
 static void Prg_PutButtonToCreateNewItem (void)
   {
    extern const char *Txt_New_item;
-   long ItmCod = -1L;
 
    Frm_BeginFormAnchor (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID);
-      Prg_PutParamItmCod (&ItmCod);
       Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
   }
@@ -1134,28 +1132,26 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 void Prg_PutParamItmCod (void *ItmCod)
   {
    if (ItmCod)
-      if (*((long *) ItmCod) > 0)
-	 Par_PutParLong (NULL,"ItmCod",*((long *) ItmCod));
+      Par_PutParCode (Par_ItmCod,*((long *) ItmCod));
   }
 
 void Prg_PutParamRscCod (void *RscCod)
   {
    if (RscCod)
-      if (*((long *) RscCod) > 0)
-	 Par_PutParLong (NULL,"RscCod",*((long *) RscCod));
+      Par_PutParCode (Par_RscCod,*((long *) RscCod));
   }
 
 void Prg_GetParams (struct Prg_Item *Item)
   {
    /***** Try to get item resource *****/
-   Item->Resource.Hierarchy.RscCod = Par_GetParLong ("RscCod");
+   Item->Resource.Hierarchy.RscCod = Par_GetParCode (Par_RscCod);
 
    /***** Get data of the program item from database *****/
    PrgRsc_GetDataOfResourceByCod (Item);
 
    if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
       /***** Try to get data of the program item from database *****/
-      Item->Hierarchy.ItmCod = Par_GetParLong ("ItmCod");
+      Item->Hierarchy.ItmCod = Par_GetParCode (Par_ItmCod);
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (Item);
@@ -1977,7 +1973,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      Prg_PutParamItmCod (&ParentItem.Hierarchy.ItmCod);
+      Par_PutParCode (Par_ItmCod,ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",Txt_New_item,
@@ -2016,12 +2012,9 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Prg_GetDataOfItemByCod (&Item);
    Prg_DB_GetItemTxt (Item.Hierarchy.ItmCod,Txt);
 
-   /***** Show pending alerts */
-   // Ale_ShowAlerts (NULL);
-
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      Prg_PutParamItmCod (&Item.Hierarchy.ItmCod);
+      Par_PutParCode (Par_ItmCod,Item.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",

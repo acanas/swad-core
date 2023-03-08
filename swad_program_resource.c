@@ -464,7 +464,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
+	    Par_PutParCode (Par_RscCod,Item->Resource.Hierarchy.RscCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
@@ -518,7 +518,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 
          /* Title */
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Prg_PutParamItmCod (&Item->Hierarchy.ItmCod);
+	    Par_PutParCode (Par_ItmCod,Item->Hierarchy.ItmCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
@@ -607,15 +607,6 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
       default:
          break;
      }
-  }
-
-/*****************************************************************************/
-/**************** Write parameter with code of program item ******************/
-/*****************************************************************************/
-
-void PrgRsc_PutParamRscCod (long RscCod)
-  {
-   Par_PutParLong (NULL,"RscCod",RscCod);
   }
 
 /*****************************************************************************/
@@ -915,10 +906,10 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
       if (Item->Resource.Hierarchy.RscCod > 0)
-         Prg_PutParamRscCod (&Item->Resource.Hierarchy.RscCod);
+         Par_PutParCode (Par_RscCod,Item->Resource.Hierarchy.RscCod);
       else
 	 /* No resource selected, so it's a new resource at the end of the item */
-         Prg_PutParamItmCod (&Item->Hierarchy.ItmCod);
+         Par_PutParCode (Par_ItmCod,Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");

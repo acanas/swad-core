@@ -1006,11 +1006,11 @@ static void Prj_PutHiddenParamFilterDptCod (long DptCod)
 static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects)
   {
    Projects->Filter.Assign = (unsigned) Par_GetParUnsignedLong (Prj_PARAM_FILTER_PRE_NON_NAME,
-                                                                  0,
-                                                                  (1 << Prj_ASSIGNED) |
-                                                                  (1 << Prj_NONASSIG),
-                                                                  (unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
-                                                                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT);
+                                                                0,
+                                                                (1 << Prj_ASSIGNED) |
+                                                                (1 << Prj_NONASSIG),
+                                                                (unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
+                                                                (unsigned) Prj_FILTER_NONASSIG_DEFAULT);
   }
 
 static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
@@ -1024,11 +1024,11 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
       case Rol_SYS_ADM:
 	 return (Prj_HiddenVisibl_t)
          Par_GetParUnsignedLong (Prj_PARAM_FILTER_HID_VIS_NAME,
-				   0,
-				   (1 << Prj_HIDDEN) |
-				   (1 << Prj_VISIBL),
-				   (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
-				   (unsigned) Prj_FILTER_VISIBL_DEFAULT);
+				 0,
+				 (1 << Prj_HIDDEN) |
+				 (1 << Prj_VISIBL),
+				 (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+				 (unsigned) Prj_FILTER_VISIBL_DEFAULT);
       default:
 	 Err_WrongRoleExit ();
          return Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;	// Not reached
@@ -1039,24 +1039,24 @@ static unsigned Prj_GetHiddenParamFaulti (void)
   {
    return (unsigned)
 	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_FAULTIN_NAME,
-                                    0,
-                                    (1 << Prj_FAULTY) |
-                                    (1 << Prj_FAULTLESS),
-                                    (unsigned) Prj_FILTER_FAULTY_DEFAULT |
-                                    (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
+                                  0,
+                                  (1 << Prj_FAULTY) |
+                                  (1 << Prj_FAULTLESS),
+                                  (unsigned) Prj_FILTER_FAULTY_DEFAULT |
+                                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
   }
 
 static unsigned Prj_GetHiddenParamReview (void)
   {
    return (unsigned)
 	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_REVIEW_NAME,
-                                    0,
-                                    (1 << Prj_UNREVIEWED) |
-                                    (1 << Prj_UNAPPROVED) |
-                                    (1 << Prj_APPROVED),
-                                    (unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
-                                    (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
-                                    (unsigned) Prj_FILTER_APPROVED_DEFAULT);
+                                  0,
+                                  (1 << Prj_UNREVIEWED) |
+                                  (1 << Prj_UNAPPROVED) |
+                                  (1 << Prj_APPROVED),
+                                  (unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
+                                  (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
+                                  (unsigned) Prj_FILTER_APPROVED_DEFAULT);
   }
 
 static long Prj_GetHiddenParamFilterDptCod (void)
@@ -1322,7 +1322,7 @@ void Prj_ShowOneProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   Projects.Prj.PrjCod = Prj_GetParamPrjCod ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Show project and (if possible) its file browser *****/
    Prj_ShowOneProjectWithFileBrowser (&Projects);
@@ -1413,7 +1413,7 @@ void Prj_PrintOneProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get project data *****/
-   Projects.Prj.PrjCod = Prj_GetParamPrjCod ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
    Prj_GetDataOfProjectByCod (&Projects.Prj);
 
    /***** Write header *****/
@@ -2865,8 +2865,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 
    /***** Get parameters *****/
    Prj_GetParams (Projects);
-   if ((Projects->Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Err_WrongProjectExit ();
+   Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Put form to select users *****/
    if (asprintf (&TxtButton,Txt_Add_USERS,
@@ -2941,8 +2940,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Add the selected users to project *****/
    Ptr = Prj_MembersToAdd.List[Rol_UNK];
@@ -3034,8 +3032,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 
    /***** Get parameters *****/
    Prj_GetParams (Projects);
-   if ((Projects->Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects->Prj);
@@ -3114,8 +3111,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3492,16 +3488,6 @@ void Prj_PutParamPrjCod (long PrjCod)
   }
 
 /*****************************************************************************/
-/******************** Get parameter with code of project *********************/
-/*****************************************************************************/
-
-long Prj_GetParamPrjCod (void)
-  {
-   /***** Get code of project *****/
-   return Par_GetParLong ("PrjCod");
-  }
-
-/*****************************************************************************/
 /**************** Ask for confirmation of removing a project *****************/
 /*****************************************************************************/
 
@@ -3519,8 +3505,7 @@ void Prj_ReqRemProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3560,8 +3545,7 @@ void Prj_RemoveProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
@@ -3616,8 +3600,7 @@ void Prj_HideProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3651,8 +3634,7 @@ void Prj_UnhideProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3698,8 +3680,7 @@ void Prj_RequestEditPrj (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) <= 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Form to edit project *****/
    Prj_RequestCreatOrEditPrj (&Projects);
@@ -4032,7 +4013,6 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 
 void Prj_ReceiveFormProject (void)
   {
-   extern const char *Par_CodeStr[];
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
@@ -4048,7 +4028,7 @@ void Prj_ReceiveFormProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   ItsANewProject = ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0);
+   ItsANewProject = ((Projects.Prj.PrjCod = Par_GetParCode (Par_PrjCod)) <= 0);
 
    if (ItsANewProject)
      {
@@ -4071,25 +4051,25 @@ void Prj_ReceiveFormProject (void)
       Par_GetParText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
 
       /* Get department */
-      Projects.Prj.DptCod = Par_GetParLong (Par_CodeStr[Par_DptCod]);
+      Projects.Prj.DptCod = Par_GetParCode (Par_DptCod);
 
       /* Get whether the project is assigned */
       Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
-					 	                Prj_NONASSIG;
+					 	              Prj_NONASSIG;
 
       /* Get number of students */
       Projects.Prj.NumStds = (unsigned)
 	                     Par_GetParUnsignedLong ("NumStds",
-	                                               0,
-	                                               UINT_MAX,
-	                                               1);
+	                                             0,
+	                                             UINT_MAX,
+	                                             1);
 
       /* Get status */
       Projects.Prj.Proposal = (Prj_Proposal_t)
 	                      Par_GetParUnsignedLong ("Proposal",
-							0,
-							Prj_NUM_PROPOSAL_TYPES - 1,
-							(unsigned long) Prj_PROPOSAL_DEFAULT);
+						      0,
+						      Prj_NUM_PROPOSAL_TYPES - 1,
+						      (unsigned long) Prj_PROPOSAL_DEFAULT);
 
       /* Get project description, required knowledge and required materials */
       Par_GetParHTML ("Description",Projects.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -4555,8 +4535,7 @@ void Prj_LockProjectEdition (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -4593,8 +4572,7 @@ void Prj_UnloProjectEdition (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -4631,8 +4609,7 @@ void Prj_ChangeReviewStatus (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   if ((Projects.Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
-      Err_WrongProjectExit ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);

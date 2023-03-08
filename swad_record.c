@@ -290,7 +290,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Name of the field */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Frm_BeginForm (ActRenFie);
-	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
@@ -302,7 +302,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Number of lines in the form */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgRowFie);
-	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
@@ -315,7 +315,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Visibility of a field */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgVisFie);
-	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"Visibility\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
@@ -552,24 +552,13 @@ void Rec_ReqRemField (void)
    unsigned NumRecords;
 
    /***** Get the code of field *****/
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Err_WrongRecordFieldExit ();
+   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
 
    /***** Check if exists any record with that field filled *****/
    if ((NumRecords = Rec_DB_CountNumRecordsWithFieldContent (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
       Rec_AskConfirmRemFieldWithRecords (NumRecords);
    else			// There are no records with that field filled
       Rec_RemoveFieldFromDB ();
-  }
-
-/*****************************************************************************/
-/************ Get a parameter with a code of field of records ****************/
-/*****************************************************************************/
-
-long Rec_GetFieldCod (void)
-  {
-   /***** Get the code of the field *****/
-   return Par_GetParLong ("FieldCod");
   }
 
 /*****************************************************************************/
@@ -634,7 +623,7 @@ void Rec_RemoveFieldFromDB (void)
 static void Rec_PutParamFieldCod (void *FieldCod)
   {
    if (FieldCod)
-      Par_PutParLong (NULL,"FieldCod",*((long *) FieldCod));
+      Par_PutParCode (Par_FldCod,*((long *) FieldCod));
   }
 
 /*****************************************************************************/
@@ -678,8 +667,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 void Rec_RemoveField (void)
   {
    /***** Get the code of the field *****/
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Err_WrongRecordFieldExit ();
+   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
 
    /***** Borrarlo from the database *****/
    Rec_RemoveFieldFromDB ();
@@ -698,8 +686,7 @@ void Rec_RenameField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Err_WrongRecordFieldExit ();
+   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
 
    /* Get the new group name */
    Par_GetParText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
@@ -755,8 +742,7 @@ void Rec_ChangeLinesField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Err_WrongRecordFieldExit ();
+   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
 
    /* Get the new number of lines */
    NewNumLines = (unsigned)
@@ -800,8 +786,7 @@ void Rec_ChangeVisibilityField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) <= 0)
-      Err_WrongRecordFieldExit ();
+   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)

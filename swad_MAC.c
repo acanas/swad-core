@@ -43,7 +43,7 @@
 /* Parameters used in forms to edit MAC address */
 struct MAC_Params
   {
-   long Cod;					// Code (i.e. room code)
+   long RooCod;					// Room code
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address
   };
 
@@ -63,8 +63,8 @@ static void MAC_PutParams (void *Args)
   {
    if (Args)
      {
-      Par_PutParLong   (NULL,"Cod",((struct MAC_Params *) Args)->Cod);
-      Par_PutParString (NULL,"MAC",((struct MAC_Params *) Args)->MACstr);
+      Par_PutParCode   (Par_RooCod,((struct MAC_Params *) Args)->RooCod);
+      Par_PutParString (NULL,"MAC"   ,((struct MAC_Params *) Args)->MACstr);
      }
   }
 
@@ -124,7 +124,7 @@ void MAC_ListMACAddresses (unsigned NumMACs,MYSQL_RES **mysql_res)
 /************************ List several MAC addresses *************************/
 /*****************************************************************************/
 
-void MAC_EditMACAddresses (long Cod,const char *Anchor,
+void MAC_EditMACAddresses (long RooCod,const char *Anchor,
                            unsigned NumMACs,MYSQL_RES **mysql_res)
   {
    MYSQL_ROW row;
@@ -143,7 +143,7 @@ void MAC_EditMACAddresses (long Cod,const char *Anchor,
       /* Write MAC address (row[0]) */
       if (sscanf (row[0],"%llu",&MACnum) == 1)
 	{
-         Params.Cod = Cod;				// Code (i.e. room code)
+         Params.RooCod = RooCod;				// Code (i.e. room code)
          MAC_MACnumToMACstr (MACnum,Params.MACstr);	// Current MAC address in xx:xx:xx:xx:xx:xx format
          MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
                                       MAC_PutParams,&Params);
@@ -154,7 +154,7 @@ void MAC_EditMACAddresses (long Cod,const char *Anchor,
      }
 
    /* Form to enter a new MAC address */
-   Params.Cod = Cod;		// Code (i.e. room code)
+   Params.RooCod = RooCod;	// Room code
    Params.MACstr[0] = '\0';	// Current MAC address in xx:xx:xx:xx:xx:xx format
    MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
                                 MAC_PutParams,&Params);

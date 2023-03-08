@@ -35,7 +35,7 @@
 /*****************************************************************************/
 
 void MAC_ListMACAddresses (unsigned NumMACs,MYSQL_RES **mysql_res);
-void MAC_EditMACAddresses (long Cod,const char *Anchor,
+void MAC_EditMACAddresses (long RooCod,const char *Anchor,
                            unsigned NumMACs,MYSQL_RES **mysql_res);
 
 unsigned long long MAC_GetMACnumFromForm (const char *ParamName);

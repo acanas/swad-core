@@ -1100,7 +1100,7 @@ static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
 
    /***** Get number of times this comment has been favourited *****/
    Com->NumFavs = Tml_DB_GetNumFavers (TmlUsr_FAV_UNF_COMM,
-                                      Com->PubCod,Com->UsrCod);
+                                       Com->PubCod,Com->UsrCod);
   }
 
 /*****************************************************************************/

@@ -1,4 +1,4 @@
-// swad_game_resource.c: links to games as program resources
+// swad_project_resource.c: links to projects as program resources
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -29,6 +29,7 @@
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
@@ -49,7 +50,7 @@ void PrjRsc_GetLinkToProject (void)
 
    /***** Get parameters *****/
    Prj_GetParams (&Projects);
-   Projects.Prj.PrjCod = Prj_GetParamPrjCod ();
+   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get project title *****/
    PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);
