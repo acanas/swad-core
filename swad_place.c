@@ -495,7 +495,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcSho);
-		  Plc_PutParamPlcCod (&Plc->PlcCod);
+		  Par_PutParCode (Par_PlcCod,Plc->PlcCod);
 		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -506,7 +506,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcFul);
-		  Plc_PutParamPlcCod (&Plc->PlcCod);
+		  Par_PutParCode (Par_PlcCod,Plc->PlcCod);
 		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -533,17 +533,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 static void Plc_PutParamPlcCod (void *PlcCod)
   {
    if (PlcCod)
-      Par_PutParLong (NULL,"PlcCod",*((long *) PlcCod));
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of place **********************/
-/*****************************************************************************/
-
-long Plc_GetParamPlcCod (void)
-  {
-   /***** Get code of place *****/
-   return Par_GetParLong ("PlcCod");
+      Par_PutParCode (Par_PlcCod,*((long *) PlcCod));
   }
 
 /*****************************************************************************/
@@ -559,8 +549,7 @@ void Plc_RemovePlace (void)
    Plc_EditingPlaceConstructor ();
 
    /***** Get place code *****/
-   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
-      Err_WrongPlaceExit ();
+   Plc_EditingPlc->PlcCod = Par_GetAndCheckParCode (Par_PlcCod);
 
    /***** Get data of the place from database *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -640,8 +629,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
-   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) <= 0)
-      Err_WrongPlaceExit ();
+   Plc_EditingPlc->PlcCod = Par_GetAndCheckParCode (Par_PlcCod);
 
    /* Get the new name for the place */
    Par_GetParText (ParamName,NewPlcName,MaxBytes);

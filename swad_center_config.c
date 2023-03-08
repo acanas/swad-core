@@ -631,6 +631,7 @@ static void CtrCfg_ShrtName (bool PutForm)
 
 static void CtrCfg_Place (bool PutForm)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
    struct Plc_Places Places;
@@ -648,7 +649,7 @@ static void CtrCfg_Place (bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "PlcCod" :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_PlcCod] :
 				      NULL,
 		       Txt_Place);
 
@@ -1060,7 +1061,7 @@ void CtrCfg_ChangeCtrPlc (void)
    long NewPlcCod;
 
    /***** Get parameter with place code *****/
-   NewPlcCod = Plc_GetParamPlcCod ();
+   NewPlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);

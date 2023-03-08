@@ -67,7 +67,6 @@ struct Plg_Plugin
 void Plg_ListPlugins (void);
 void Plg_EditPlugins (void);
 bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg);
-long Plg_GetParamPlgCod (void);
 void Plg_RemovePlugin (void);
 void Plg_RenamePlugin (void);
 void Plg_ChangePlgDescription (void);

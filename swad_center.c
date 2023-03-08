@@ -1050,7 +1050,7 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /***** Get parameter with place code *****/
-   NewPlcCod = Plc_GetParamPlcCod ();
+   NewPlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
 
    /***** Get data of center from database *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1535,8 +1535,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->InsCod = Gbl.Hierarchy.Ins.InsCod;
 
    /* Get place */
-   if ((Ctr_EditingCtr->PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
-      Err_WrongPlaceExit ();
+   Ctr_EditingCtr->PlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
    Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);

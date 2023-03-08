@@ -677,7 +677,8 @@ void Hld_ChangeHolidayPlace (void)
    Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
 
    /* Get the new place for the holiday */
-   NewPlace.PlcCod = Plc_GetParamPlcCod ();
+   // <0 (place unspecified/all places) and 0 (another place) are allowed here
+   NewPlace.PlcCod = Par_GetParCode (Par_PlcCod);
 
    /***** Get from the database the data of the place *****/
    Plc_GetDataOfPlaceByCod (&NewPlace);
@@ -1022,7 +1023,8 @@ void Hld_ReceiveFormNewHoliday (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get place code *****/
-   Hld_EditingHld->PlcCod = Plc_GetParamPlcCod ();
+   // <0 (place unspecified/all places) and 0 (another place) are allowed here
+   Hld_EditingHld->PlcCod = Par_GetParCode (Par_PlcCod);
 
    /***** Get the type of holiday *****/
    Hld_EditingHld->HldTyp = Hld_GetParamHldType ();

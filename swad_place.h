@@ -75,7 +75,6 @@ void Plc_PutIconToViewPlaces (void);
 void Plc_GetListPlaces (struct Plc_Places *Places);
 void Plc_FreeListPlaces (struct Plc_Places *Places);
 void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc);
-long Plc_GetParamPlcCod (void);
 void Plc_RemovePlace (void);
 void Plc_RenamePlaceShort (void);
 void Plc_RenamePlaceFull (void);
