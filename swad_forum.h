@@ -132,19 +132,19 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
 void For_ShowPostsOfAThread (struct For_Forums *Forums,
 			     Ale_AlertType_t AlertType,const char *Message);
 
-void For_PutAllHiddenParamsNewPost (void *Forums);
+void For_PutParsNewPost (void *Forums);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
                                        long PstCod,bool GetContent);
 
-void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
-                                  unsigned NumPagePosts,
-                                  For_ForumSet_t ForumSet,
-                                  Dat_StartEndTime_t Order,
-                                  long Location,
-                                  long ThrCod,
-                                  long PstCod);
+void For_PutAllParsForum (unsigned NumPageThreads,
+                          unsigned NumPagePosts,
+                          For_ForumSet_t ForumSet,
+                          Dat_StartEndTime_t Order,
+                          long Location,
+                          long ThrCod,
+                          long PstCod);
 
 void For_ShowForumList (struct For_Forums *Forums);
 
@@ -158,7 +158,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
 void For_ShowThreadPosts (void);
 
-void For_GetParamsForums (struct For_Forums *Forums);
+void For_GetParsForums (struct For_Forums *Forums);
 
 void For_ReceiveForumPost (void);
 void For_RemovePost (void);

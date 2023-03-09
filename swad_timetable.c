@@ -108,7 +108,7 @@ static void Tmt_TimeTableConfigureIntervalsAndAllocateTimeTable (struct Tmt_Time
 static void Tmt_FreeTimeTable (void);
 
 static void Tmt_ShowTimeTableGrpsSelected (void);
-static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable);
+static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable);
 static void Tmt_PutContextualIcons (void *Timetable);
 static void Tmt_PutFormToSelectWhichGroupsToShow (const struct Tmt_Timetable *Timetable);
 
@@ -247,7 +247,7 @@ static void Tmt_ShowTimeTableGrpsSelected (void)
 /******************** Get paramaters for timetable editing *******************/
 /*****************************************************************************/
 
-static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
+static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable)
   {
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    char StrClassType[Tmt_MAX_BYTES_STR_CLASS_TYPE + 1];
@@ -258,23 +258,23 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
    /***** Get day (0: monday, 1: tuesday,..., 6: sunday *****/
    Timetable->WhichCell.Weekday = (unsigned)
 				  Par_GetParUnsignedLong ("TTDay",
-							    0,
-							    Tmt_DAYS_PER_WEEK - 1,
-							    0);
+							  0,
+							  Tmt_DAYS_PER_WEEK - 1,
+							  0);
 
    /***** Get hour *****/
    Timetable->WhichCell.Interval = (unsigned)
 				   Par_GetParUnsignedLong ("TTInt",
-							     0,
-							     Timetable->Config.IntervalsPerDay - 1,
-							     0);
+							   0,
+							   Timetable->Config.IntervalsPerDay - 1,
+							   0);
 
    /***** Get number of column *****/
    Timetable->WhichCell.Column = (unsigned)
 				 Par_GetParUnsignedLong ("TTCol",
-							   0,
-							   Tmt_MAX_COLUMNS_PER_CELL - 1,
-							   0);
+							 0,
+							 Tmt_MAX_COLUMNS_PER_CELL - 1,
+							 0);
 
    /***** Get class type *****/
    Par_GetParText ("TTTyp",StrClassType,Tmt_MAX_BYTES_STR_CLASS_TYPE);
@@ -294,7 +294,7 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
 	                          Minutes / Timetable->Config.Range.MinutesPerInterval;
 
    /***** Get group code *****/
-   Timetable->GrpCod = Par_GetParLong ("TTGrp");
+   Timetable->GrpCod = Par_GetParCode (Par_GrpCod);
 
    /***** Get info *****/
    Par_GetParText ("TTInf",Timetable->Info,Tmt_MAX_BYTES_INFO);
@@ -352,7 +352,7 @@ void Tmt_ShowClassTimeTable (void)
    Timetable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/
-   Grp_GetParamWhichGroups ();
+   Grp_GetParWhichGroups ();
 
    /***** Begin box *****/
    if (Timetable.ContextualIcons.PutIconEditCrsTT ||
@@ -386,9 +386,9 @@ void Tmt_ShowClassTimeTable (void)
          Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
 
       /* Show form to change first day of week */
-      WhichGroups = Grp_GetParamWhichGroups ();
+      WhichGroups = Grp_GetParWhichGroups ();
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
-                                       Grp_PutParamWhichGroups,&WhichGroups);
+                                       Grp_PutParWhichGroups,&WhichGroups);
 
       Set_EndSettingsHead ();
      }
@@ -410,11 +410,11 @@ static void Tmt_PutContextualIcons (void *Timetable)
 
    if (Timetable)
      {
-      WhichGroups = Grp_GetParamWhichGroups ();
+      WhichGroups = Grp_GetParWhichGroups ();
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditCrsTT)
 	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
-				      Grp_PutParamWhichGroups,&WhichGroups);
+				      Grp_PutParWhichGroups,&WhichGroups);
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,
@@ -423,7 +423,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
 										                            ActPrnMyTT,
-				       Grp_PutParamWhichGroups,&WhichGroups);
+				       Grp_PutParWhichGroups,&WhichGroups);
      }
   }
 
@@ -549,7 +549,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
        Gbl.Action.Act == ActChgTut)
      {
       /* Get parameters for time table editing */
-      Tmt_GetParamsTimeTable (Timetable);
+      Tmt_GetParsTimeTable (Timetable);
 
       /* Modify timetable in memory */
       Tmt_ModifTimeTable (Timetable);
@@ -1480,6 +1480,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
@@ -1591,9 +1592,9 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	       HTM_Txt (Txt_Group);
 	    HTM_LABEL_End ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			      "id=\"TTGrp%s\" name=\"TTGrp\""
+			      "id=\"TTGrp%s\" name=\"%s\""
 			      " class=\"Tmt_GRP INPUT_%s\"",
-			      CellStr,
+			      CellStr,Par_CodeStr[Par_GrpCod],
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);

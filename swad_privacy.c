@@ -78,12 +78,12 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args);
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
-                                   Act_Action_t Action,const char *ParamName,
+                                   Act_Action_t Action,const char *ParName,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility);
 
 static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
-                                                        const char *FieldName,
+                                                        const char *FldName,
                                                         unsigned MaskAllowedVisibility);
 
 /*****************************************************************************/
@@ -160,7 +160,7 @@ static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
-                                   Act_Action_t Action,const char *ParamName,
+                                   Act_Action_t Action,const char *ParName,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
@@ -192,7 +192,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		     HTM_LI_Begin ("class=\"DAT_%s\"",
 		                   The_GetSuffix ());
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO (ParamName,Action != ActUnk,
+		     HTM_INPUT_RADIO (ParName,Action != ActUnk,
 				      "value=\"%u\"%s%s",
 				      (unsigned) Visibility,
 				      Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" :
@@ -234,15 +234,15 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 /**************** Get parameter with visibility from form ********************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
-                                         unsigned MaskAllowedVisibility)
+Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
+                                       unsigned MaskAllowedVisibility)
   {
    Pri_Visibility_t Visibility;
 
-   Visibility = (Pri_Visibility_t) Par_GetParUnsignedLong (ParamName,
-							     0,
-							     Pri_NUM_OPTIONS_PRIVACY - 1,
-							     (unsigned long) Pri_VISIBILITY_UNKNOWN);
+   Visibility = (Pri_Visibility_t) Par_GetParUnsignedLong (ParName,
+							   0,
+							   Pri_NUM_OPTIONS_PRIVACY - 1,
+							   (unsigned long) Pri_VISIBILITY_UNKNOWN);
    return (MaskAllowedVisibility & (1 << Visibility)) ? Visibility :
 	                                                Pri_VISIBILITY_UNKNOWN;
   }
@@ -323,7 +323,7 @@ void Pri_GetAndShowNumUsrsPerPrivacy (void)
 /*****************************************************************************/
 
 static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
-                                                        const char *FieldName,
+                                                        const char *FldName,
                                                         unsigned MaskAllowedVisibility)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
@@ -350,7 +350,7 @@ static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	{
 	 /* Get the number of users who have chosen this privacy option from database */
 	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
-		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
+		       FldName,Pri_VisibilityDB[Visibility]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 NumUsrs[Visibility] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);

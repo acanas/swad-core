@@ -46,7 +46,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
                                 char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
                                 char DegShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 bool Crs_DB_CheckIfCrsCodExists (long CrsCod);
-bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,long CrsCod,
                                              long DegCod,unsigned Year);
 unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);
 unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAccess);
@@ -66,7 +66,7 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod);
 
 void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
 void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);
-void Crs_DB_UpdateCrsName (long CrsCod,const char *FieldName,const char *NewCrsName);
+void Crs_DB_UpdateCrsName (long CrsCod,const char *FldName,const char *NewCrsName);
 void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod);
 void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status);
 

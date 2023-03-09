@@ -41,6 +41,6 @@ void Ses_CloseSession (void);
 bool Ses_GetSessionData (void);
 
 //---------------------------- Session parameters -----------------------------
-void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue);
+void Ses_InsertParInDB (const char *ParName,const char *ParValue);
 
 #endif

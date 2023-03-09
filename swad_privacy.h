@@ -62,8 +62,8 @@
 void Pri_EditMyPrivacy (void);
 
 Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
-                                         unsigned MaskAllowedVisibility);
+Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
+                                       unsigned MaskAllowedVisibility);
 
 bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct Usr_Data *UsrDat);
 

@@ -120,7 +120,7 @@ unsigned Ban_DB_GetDataOfBannerByCod (MYSQL_RES **mysql_res,long BanCod)
 /********************* Check if the name of banner exists ********************/
 /*****************************************************************************/
 
-bool Ban_DB_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
+bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long BanCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a banner already existed",
@@ -129,7 +129,7 @@ bool Ban_DB_CheckIfBannerNameExists (const char *FieldName,const char *Name,long
 		     " FROM ban_banners"
 		    " WHERE %s='%s'"
 		      " AND BanCod<>%ld)",
-		   FieldName,Name,
+		   FldName,Name,
 		   BanCod);
   }
 
@@ -170,14 +170,14 @@ void Ban_DB_HideOrUnhideBanner (long BanCod,bool Hide)
 /***************** Update banner name in table of banners ********************/
 /*****************************************************************************/
 
-void Ban_DB_UpdateBanName (long BanCod,const char *FieldName,
+void Ban_DB_UpdateBanName (long BanCod,const char *FldName,
 			   const char *NewBanName)
   {
    DB_QueryUPDATE ("can not update the name of a banner",
 		   "UPDATE ban_banners"
 		     " SET %s='%s'"
 		   " WHERE BanCod=%ld",
-	           FieldName,NewBanName,
+	           FldName,NewBanName,
 	           BanCod);
   }
 

@@ -104,8 +104,8 @@ int main (void)
    if (Par_GetQueryString ())
      {
       /***** Get parameters *****/
-      Par_CreateListOfParams ();
-      Par_GetMainParams ();
+      Par_CreateListOfPars ();
+      Par_GetMainPars ();
 
       /***** Kick out banned IPs *****/
       Fir_CheckFirewallAndExitIfBanned ();

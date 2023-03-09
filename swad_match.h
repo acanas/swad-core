@@ -113,8 +113,8 @@ void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod);
 
 void Mch_EditMatch (void);
 
-void Mch_PutParamsEdit (void *Games);
-void Mch_GetAndCheckParameters (struct Gam_Games *Games,
+void Mch_PutParsEdit (void *Games);
+void Mch_GetAndCheckPars (struct Gam_Games *Games,
                                 struct Mch_Match *Match);
 
 void Mch_CreateNewMatch (void);

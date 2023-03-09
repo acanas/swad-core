@@ -50,9 +50,9 @@ void AsgRsc_GetLinkToAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);

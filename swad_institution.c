@@ -79,7 +79,7 @@ static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
-static void Ins_GetParamInsOrder (void);
+static void Ins_GetParInsOrder (void);
 
 static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
@@ -90,10 +90,9 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row);
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
 
-static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
+static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewInsName);
 
 static void Ins_ShowAlertAndButtonToGoToIns (void);
-static void Ins_PutParamGoToIns (void *InsCod);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
@@ -213,7 +212,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
    if (PutLink)
      {
       Frm_BeginForm (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins->InsCod);
+	 Par_PutParCode (Par_InsCod,Ins->InsCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
@@ -234,7 +233,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Ins_PutParamInsCod (Ins->InsCod);
+      Par_PutParCode (Par_InsCod,Ins->InsCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ins->FullName),
@@ -264,7 +263,7 @@ void Ins_ShowInssOfCurrentCty (void)
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
-      Ins_GetParamInsOrder ();
+      Ins_GetParInsOrder ();
 
       /***** Get list of institutions *****/
       Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
@@ -515,13 +514,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 /******* Get parameter with the type or order in list of institutions ********/
 /*****************************************************************************/
 
-static void Ins_GetParamInsOrder (void)
+static void Ins_GetParInsOrder (void)
   {
    Gbl.Hierarchy.Inss.SelectedOrder = (Ins_Order_t)
 				      Par_GetParUnsignedLong ("Order",
-								0,
-								Ins_NUM_ORDERS - 1,
-								(unsigned long) Ins_ORDER_DEFAULT);
+							      0,
+							      Ins_NUM_ORDERS - 1,
+							      (unsigned long) Ins_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -974,7 +973,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemIns,NULL,
-						 Hie_PutParamOtherHieCod,&Ins->InsCod);
+						 Hie_PutParOtherHieCod,&Ins->InsCod);
 	    HTM_TD_End ();
 
 	    /* Institution code */
@@ -992,7 +991,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenInsSho);
-		     Hie_PutParamOtherHieCod (&Ins->InsCod);
+		     Par_PutParCode (Par_OthHieCod,Ins->InsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -1008,7 +1007,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
-		  Hie_PutParamOtherHieCod (&Ins->InsCod);
+		  Par_PutParCode (Par_OthHieCod,Ins->InsCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1024,7 +1023,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
-		     Hie_PutParamOtherHieCod (&Ins->InsCod);
+		     Par_PutParCode (Par_OthHieCod,Ins->InsCod);
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -1095,25 +1094,6 @@ static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins)
    return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
           ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod);	// I am the requester
-  }
-
-/*****************************************************************************/
-/************* Write parameter with code of current institution **************/
-/*****************************************************************************/
-
-void Ins_PutParamCurrentInsCod (void *InsCod)
-  {
-   if (InsCod)
-      Ins_PutParamInsCod (*((long *) InsCod));
-  }
-
-/*****************************************************************************/
-/***************** Write parameter with code of institution ******************/
-/*****************************************************************************/
-
-void Ins_PutParamInsCod (long InsCod)
-  {
-   Par_PutParLong (NULL,"ins",InsCod);
   }
 
 /*****************************************************************************/
@@ -1227,30 +1207,30 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentInsName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentInsName = NULL;	// Initialized to avoid warning
    char NewInsName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentInsName = Ins->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentInsName = Ins->FullName;
          break;
      }
 
    /***** Get the new name for the institution from form *****/
-   Par_GetParText (ParamName,NewInsName,MaxBytes);
+   Par_GetParText (ParName,NewInsName,MaxBytes);
 
    /***** Get from the database the old names of the institution *****/
    Ins_GetDataOfInstitByCod (Ins);
@@ -1263,7 +1243,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
       if (strcmp (CurrentInsName,NewInsName))	// Different names
         {
          /***** If institution was in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,
+         if (Ins_DB_CheckIfInsNameExistsInCty (ParName,NewInsName,Ins->InsCod,
                                             Gbl.Hierarchy.Cty.CtyCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
@@ -1271,7 +1251,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
          else
            {
             /* Update the table changing old name by new name */
-            Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
+            Ins_UpdateInsNameDB (Ins->InsCod,FldName,NewInsName);
 
             /* Create message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1294,10 +1274,10 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
-static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
+static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewInsName)
   {
    /***** Update institution changing old name by new name */
-   Ins_DB_UpdateInsName (InsCod,FieldName,NewInsName);
+   Ins_DB_UpdateInsName (InsCod,FldName,NewInsName);
 
    /***** Flush caches *****/
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
@@ -1359,7 +1339,7 @@ void Ins_ChangeInsStatus (void)
    Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
-   Status = Hie_GetParamStatus ();	// New status
+   Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of institution *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
@@ -1404,7 +1384,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
      {
       /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
-                                  Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
+                                  Ins_PutParInsCod,&Ins_EditingIns->InsCod,
                                   Btn_CONFIRM_BUTTON,
 				  Str_BuildGoToTitle (Ins_EditingIns->ShrtName));
       Str_FreeGoToTitle ();
@@ -1412,13 +1392,6 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
-  }
-
-static void Ins_PutParamGoToIns (void *InsCod)
-  {
-   if (InsCod)
-      /***** Put parameter *****/
-      Ins_PutParamInsCod (*((long *) InsCod));
   }
 
 /*****************************************************************************/
@@ -1881,7 +1854,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
-                                     Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
+                                     Ins_PutParInsCod,&Ins_EditingIns->InsCod,
 				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
@@ -2051,6 +2024,16 @@ unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
   }
 
 /*****************************************************************************/
+/***************** Write parameter with code of institution ******************/
+/*****************************************************************************/
+
+void Ins_PutParInsCod (void *InsCod)
+  {
+   if (InsCod)
+      Par_PutParCode (Par_InsCod,*((long *) InsCod));
+  }
+
+/*****************************************************************************/
 /****************** Get and show stats about institutions ********************/
 /*****************************************************************************/
 
@@ -2069,7 +2052,7 @@ void Ins_GetAndShowInstitutionsStats (void)
       Set_GetAndUpdatePrefsAboutUsrList ();
       Figures.Scope      = Gbl.Scope.Current;
       Figures.FigureType = Fig_INSTITS;
-      Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
+      Usr_ShowFormsToSelectUsrListType (Fig_PutParsFigures,&Figures);
 
       /***** Institutions ordered by number of centers *****/
       Ins_GetAndShowInssOrderedByNumCtrs ();
@@ -2319,7 +2302,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 				The_GetSuffix ());
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
-			Ins_PutParamInsCod (Ins.InsCod);
+			Par_PutParCode (Par_InsCod,Ins.InsCod);
 			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
 			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)

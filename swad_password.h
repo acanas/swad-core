@@ -39,7 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Pwd_GetParamUsrPwdLogin (void);
+void Pwd_GetParUsrPwdLogin (void);
 
 bool Pwd_CheckCurrentPassword (void);
 bool Pwd_CheckPendingPassword (void);

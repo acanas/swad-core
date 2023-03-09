@@ -124,10 +124,10 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 					       ActSeeAdmDocCrsGrp;	// All documents
       Frm_BeginForm (NextAction);
          if (FileMetadata.FilCod > 0)
-	    Brw_PutParamsFileBrowser (NULL,		// Not used
-				      NULL,		// Not used
-				      Brw_IS_UNKNOWN,	// Not used
-				      FileMetadata.FilCod);
+	    Brw_PutParsFileBrowser (NULL,		// Not used
+				    NULL,		// Not used
+				    Brw_IS_UNKNOWN,	// Not used
+				    FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
@@ -205,10 +205,10 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 					       ActSeeAdmMrk;		// All marks files
       Frm_BeginForm (NextAction);
          if (FileMetadata.FilCod > 0)
-	    Brw_PutParamsFileBrowser (NULL,		// Not used
-				      NULL,		// Not used
-				      Brw_IS_UNKNOWN,	// Not used
-				      FileMetadata.FilCod);
+	    Brw_PutParsFileBrowser (NULL,		// Not used
+				    NULL,		// Not used
+				    Brw_IS_UNKNOWN,	// Not used
+				    FileMetadata.FilCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

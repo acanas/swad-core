@@ -110,13 +110,13 @@ static struct
    .TimeSendInMicroseconds       = 0L,
   };
 
-static const char *Dat_ParamName[Dat_NUM_START_END_TIME] =
+static const char *Dat_ParName[Dat_NUM_START_END_TIME] =
   {
    [Dat_STR_TIME] = "Start",
    [Dat_END_TIME] = "End",
   };
 
-static const char *Dat_ParamTimeUTCName[Dat_NUM_START_END_TIME] =
+static const char *Dat_ParTimeUTCName[Dat_NUM_START_END_TIME] =
   {
    [Dat_STR_TIME] = "StartTimeUTC",
    [Dat_END_TIME] = "EndTimeUTC",
@@ -127,7 +127,7 @@ static const char *Dat_ParamTimeUTCName[Dat_NUM_START_END_TIME] =
 /*****************************************************************************/
 
 static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
-static unsigned Dat_GetParamDateFormat (void);
+static unsigned Dat_GetParDateFormat (void);
 
 /*****************************************************************************/
 /*********************** Set/get start execution time ************************/
@@ -372,7 +372,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 void Dat_ChangeDateFormat (void)
   {
    /***** Get param with date format *****/
-   Gbl.Prefs.DateFormat = Dat_GetParamDateFormat ();
+   Gbl.Prefs.DateFormat = Dat_GetParDateFormat ();
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -386,12 +386,12 @@ void Dat_ChangeDateFormat (void)
 /********************** Get parameter with date format ***********************/
 /*****************************************************************************/
 
-static Dat_Format_t Dat_GetParamDateFormat (void)
+static Dat_Format_t Dat_GetParDateFormat (void)
   {
    return (Dat_Format_t) Par_GetParUnsignedLong ("DateFormat",
-                                                   0L,
-                                                   (unsigned long) (Dat_NUM_OPTIONS_FORMAT - 1),
-                                                   (unsigned long) Dat_FORMAT_DEFAULT);
+                                                 0L,
+                                                 (unsigned long) (Dat_NUM_OPTIONS_FORMAT - 1),
+                                                 (unsigned long) Dat_FORMAT_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -755,7 +755,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "this.form.submit();return false;\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id,Id);
 	    else
@@ -765,7 +765,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id,Id);
 	    for (Year  = FirstYear;
@@ -786,7 +786,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');"
 				 "this.form.submit();return false;\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id,Id);
 	    else
@@ -796,7 +796,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " onchange=\""
 				 "adjustDateForm('%s');"
 				 "setUTCFromLocalDateTimeForm('%s');\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id,Id);
 	    for (Month = 1;
@@ -815,7 +815,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "this.form.submit();return false;\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    else
@@ -823,7 +823,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sDay\" name=\"%sDay\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    for (Day  = 1;
@@ -842,7 +842,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "this.form.submit();return false;\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    else
@@ -850,7 +850,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sHour\" name=\"%sHour\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    for (Hour  = 0;
@@ -869,7 +869,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				 "this.form.submit();return false;\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    else
@@ -877,7 +877,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				 "id=\"%sMinute\" name=\"%sMinute\""
 				 " class=\"INPUT_%s\""
 				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				 Id,Dat_ParamName[StartEndTime],
+				 Id,Dat_ParName[StartEndTime],
 				 The_GetSuffix (),
 				 Id);
 	    for (Minute = 0;
@@ -898,7 +898,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
 				    "this.form.submit();return false;\"",
-				    Id,Dat_ParamName[StartEndTime],
+				    Id,Dat_ParName[StartEndTime],
 				    The_GetSuffix (),
 				    Id);
 	       else
@@ -906,7 +906,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 				    "id=\"%sSecond\" name=\"%sSecond\""
 				    " class=\"INPUT_%s\""
 				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParamName[StartEndTime],
+				    Id,Dat_ParName[StartEndTime],
 				    The_GetSuffix (),
 				    Id);
 	       for (Second  = 0;
@@ -925,7 +925,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    if (asprintf (&IdTimeUTC,"%sTimeUTC",Id) < 0)
       Err_NotEnoughMemoryExit ();
-   Par_PutParLong (IdTimeUTC,Dat_ParamTimeUTCName[StartEndTime],(long) TimeUTC);
+   Par_PutParLong (IdTimeUTC,Dat_ParTimeUTCName[StartEndTime],(long) TimeUTC);
    free (IdTimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
@@ -947,7 +947,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime)
   {
-   return Par_GetParLong (Dat_ParamTimeUTCName[StartEndTime]);
+   return Par_GetParLong (Dat_ParTimeUTCName[StartEndTime]);
   }
 
 /*****************************************************************************/
@@ -956,7 +956,7 @@ time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime)
 /**************** in minutes                              ********************/
 /*****************************************************************************/
 
-void Dat_PutHiddenParBrowserTZDiff (void)
+void Dat_PutParBrowserTZDiff (void)
   {
    Par_PutParString ("BrowserTZName","BrowserTZName","");
    Par_PutParLong ("BrowserTZDiff","BrowserTZDiff",0);
@@ -1160,17 +1160,17 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 /*************************** Get a date from a form **************************/
 /*****************************************************************************/
 
-void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
+void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const char *ParNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
    /**** Get day ****/
-   *Day   = (unsigned) Par_GetParUnsignedLong (ParamNameDay  ,1,31,0);
+   *Day   = (unsigned) Par_GetParUnsignedLong (ParNameDay  ,1,31,0);
 
    /**** Get month ****/
-   *Month = (unsigned) Par_GetParUnsignedLong (ParamNameMonth,1,12,0);
+   *Month = (unsigned) Par_GetParUnsignedLong (ParNameMonth,1,12,0);
 
    /**** Get year ****/
-   *Year  = (unsigned) Par_GetParUnsignedLong (ParamNameYear ,0,UINT_MAX,0);
+   *Year  = (unsigned) Par_GetParUnsignedLong (ParNameYear ,0,UINT_MAX,0);
   }
 
 /*****************************************************************************/
@@ -1199,10 +1199,10 @@ void Dat_SetIniEndDatesToRecentWeeks (void)
 /******** Write parameters of initial and final dates *****/
 /*****************************************************************************/
 
-void Dat_WriteParamsIniEndDates (void)
+void Dat_WriteParsIniEndDates (void)
   {
-   Par_PutParUnsigned (NULL,Dat_ParamTimeUTCName[Dat_STR_TIME],Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
-   Par_PutParUnsigned (NULL,Dat_ParamTimeUTCName[Dat_END_TIME],Dat_Time.Range.TimeUTC[Dat_END_TIME]);
+   Par_PutParUnsigned (NULL,Dat_ParTimeUTCName[Dat_STR_TIME],Dat_Time.Range.TimeUTC[Dat_STR_TIME]);
+   Par_PutParUnsigned (NULL,Dat_ParTimeUTCName[Dat_END_TIME],Dat_Time.Range.TimeUTC[Dat_END_TIME]);
   }
 
 /*****************************************************************************/

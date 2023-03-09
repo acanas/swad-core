@@ -203,8 +203,9 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 /********************** Show shortcut in configuration ***********************/
 /*****************************************************************************/
 
-void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
+void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Shortcut;
 
    /***** Short cut *****/
@@ -217,24 +218,24 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 if (!PrintView)
 	   {
-	    if (ParamName)
-	       HTM_A_Begin ("href=\"%s/?%s=%ld\" target=\"_blank\""
-			    " class=\"DAT_%s\"",
-			    Cfg_URL_SWAD_CGI,
-			    ParamName,HieCod,
-			    The_GetSuffix ());
-	    else
+	    if (ParCode == Par_None)
 	       HTM_A_Begin ("href=\"%s/\" target=\"_blank\" class=\"DAT_%s\"",
 			    Cfg_URL_SWAD_CGI,
 			    The_GetSuffix ());
+	    else
+	       HTM_A_Begin ("href=\"%s/?%s=%ld\" target=\"_blank\""
+			    " class=\"DAT_%s\"",
+			    Cfg_URL_SWAD_CGI,
+			    Par_CodeStr[ParCode],HieCod,
+			    The_GetSuffix ());
 	   }
-	 if (ParamName)
-	    HTM_TxtF ("%s/?%s=%ld",
-		      Cfg_URL_SWAD_CGI,
-		      ParamName,HieCod);
-	 else
+	 if (ParCode == Par_None)
 	    HTM_TxtF ("%s/",
 		      Cfg_URL_SWAD_CGI);
+	 else
+	    HTM_TxtF ("%s/?%s=%ld",
+		      Cfg_URL_SWAD_CGI,
+		      Par_CodeStr[ParCode],HieCod);
 	 if (!PrintView)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -263,7 +264,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	       Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 	                     Gbl.Hierarchy.Ins.ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
@@ -311,7 +312,7 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
 /************************* Show QR in configuration **************************/
 /*****************************************************************************/
 
-void HieCfg_QR (const char *ParamName,long HieCod)
+void HieCfg_QR (Par_Code_t ParCode,long HieCod)
   {
    extern const char *Txt_QR_code;
 
@@ -323,7 +324,7 @@ void HieCfg_QR (const char *ParamName,long HieCod)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 QR_LinkTo (250,ParamName,HieCod);
+	 QR_LinkTo (250,ParCode,HieCod);
       HTM_TD_End ();
 
    HTM_TR_End ();

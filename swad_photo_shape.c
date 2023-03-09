@@ -115,7 +115,7 @@ static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args)
 void PhoSha_ChangePhotoShape (void)
   {
    /***** Get param with user photo shape *****/
-   Gbl.Prefs.PhotoShape = PhoSha_GetParamPhotoShape ();
+   Gbl.Prefs.PhotoShape = PhoSha_GetParPhotoShape ();
 
    /***** Store side colums in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -129,7 +129,7 @@ void PhoSha_ChangePhotoShape (void)
 /************** Get parameter used to change user photo shape ****************/
 /*****************************************************************************/
 
-PhoSha_Shape_t PhoSha_GetParamPhotoShape (void)
+PhoSha_Shape_t PhoSha_GetParPhotoShape (void)
   {
    return (PhoSha_Shape_t) Par_GetParUnsignedLong ("PhotoShape",
 						  (PhoSha_Shape_t) 0,

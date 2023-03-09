@@ -166,7 +166,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 /*****************************************************************************/
 
 // Notify me notification events
-static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
+static const char *Ntf_ParNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "NotifyNtfEventUnknown",
    /* Start tab */
@@ -205,7 +205,7 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   };
 
 // Email me about notification events
-static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
+static const char *Ntf_ParEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = "EmailNtfEventUnknown",
    /* Start tab */
@@ -294,7 +294,7 @@ static bool Ntf_GetAllNotificationsFromForm (void);
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                              long CrsCod,struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums);
-static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
+static void Ntf_PutParNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
 static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat,
                                                  unsigned *NumNotif,
@@ -306,7 +306,7 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     unsigned NumEvents,unsigned NumMails);
 
-static void Ntf_GetParamsNotifyEvents (void);
+static void Ntf_GetParsNotifyEvents (void);
 
 /*****************************************************************************/
 /*************************** Show my notifications ***************************/
@@ -770,8 +770,8 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 Action = ActSeeGblTL;
          Frm_BeginForm (Action);
 	    Par_PutParCode (Par_PubCod,Cod);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	    Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Ntf_PutParNotifyEvent (NotifyEvent);
 	 break;
       case Ntf_EVENT_FOLLOWER:
          if (UsrDat->EnUsrCod[0])	// User's code found ==>
@@ -780,7 +780,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             Action = ActSeeOthPubPrf;
             Frm_BeginForm (Action);
 	       /* Put param to go to follower's profile */
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
            }
          else	// No user's code found ==> go to see my followers
            {
@@ -792,13 +792,13 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_FORUM_REPLY:
 	 Action = For_ActionsSeeFor[Forums->Forum.Type];
 	 Frm_BeginForm (Action);
-	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					 1,	// Page of posts   = first
-					 Forums->ForumSet,
-					 Forums->ThreadsOrder,
-					 Forums->Forum.Location,
-					 Forums->Thread.Selected,
-					 -1L);
+	    For_PutAllParsForum (1,	// Page of threads = first
+				 1,	// Page of posts   = first
+				 Forums->ForumSet,
+				 Forums->ThreadsOrder,
+				 Forums->Forum.Location,
+				 Forums->Thread.Selected,
+				 -1L);
 	 break;
       case Ntf_EVENT_NOTICE:
 	 Action = ActSeeOneNot;
@@ -822,22 +822,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       if (CrsCod > 0)					// Course specified
 	{
 	 if (CrsCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	    Crs_PutParamCrsCod (CrsCod);		// Go to another course
+	    Par_PutParCode (Par_CrsCod,CrsCod);		// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
 	 if (DegCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-	    Deg_PutParamDegCod (DegCod);		// Go to another degree
+	    Par_PutParCode (Par_DegCod,DegCod);		// Go to another degree
 	}
       else if (CtrCod > 0)				// Center specified
 	{
 	 if (CtrCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
-	    Ctr_PutParamCtrCod (CtrCod);		// Go to another center
+	    Par_PutParCode (Par_CtrCod,CtrCod);		// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
 	 if (InsCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-	    Ins_PutParamInsCod (InsCod);		// Go to another institution
+	    Par_PutParCode (Par_InsCod,InsCod);		// Go to another institution
 	}
      }
 
@@ -848,7 +848,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 /******************* Get parameter with notify event type ********************/
 /*****************************************************************************/
 
-static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
+static void Ntf_PutParNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
   {
    Par_PutParUnsigned (NULL,"NotifyEvent",(unsigned) NotifyEvent);
   }
@@ -857,13 +857,13 @@ static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 /******************* Get parameter with notify event type ********************/
 /*****************************************************************************/
 
-Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
+Ntf_NotifyEvent_t Ntf_GetParNotifyEvent (void)
   {
    return (Ntf_NotifyEvent_t)
 	  Par_GetParUnsignedLong ("NotifyEvent",
-                                    0,
-                                    Ntf_NUM_NOTIFY_EVENTS - 1,
-                                    (unsigned long) Ntf_EVENT_UNKNOWN);
+                                  0,
+                                  Ntf_NUM_NOTIFY_EVENTS - 1,
+                                  (unsigned long) Ntf_EVENT_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -1580,7 +1580,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
-			HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"%s",
 					    (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
 					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
@@ -1588,7 +1588,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
-			HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"%s",
 					    (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
 					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
@@ -1617,7 +1617,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 /** Get parameter with the sending of email to notify me that I have msgs. ***/
 /*****************************************************************************/
 
-static void Ntf_GetParamsNotifyEvents (void)
+static void Ntf_GetParsNotifyEvents (void)
   {
    Ntf_NotifyEvent_t NotifyEvent;
    bool CreateNotifForThisEvent;
@@ -1628,13 +1628,13 @@ static void Ntf_GetParamsNotifyEvents (void)
 	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
 	NotifyEvent++)	// 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      if ((CreateNotifForThisEvent = Par_GetParBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))
+      if ((CreateNotifForThisEvent = Par_GetParBool (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent])))
          Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif |= (1 << NotifyEvent);
 
       if (CreateNotifForThisEvent)
 	{
-         Par_GetParBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
-         if (Par_GetParBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]))
+         Par_GetParBool (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent]);
+         if (Par_GetParBool (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent]))
             Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail |= (1 << NotifyEvent);
 	}
      }
@@ -1649,7 +1649,7 @@ void Ntf_ChangeNotifyEvents (void)
    extern const char *Txt_Your_settings_about_notifications_have_changed;
 
    /***** Get param with whether notify me about events *****/
-   Ntf_GetParamsNotifyEvents ();
+   Ntf_GetParsNotifyEvents ();
 
    /***** Store settings about notify events *****/
    Set_DB_UpdateMySettingsAboutNotifyEvents ();

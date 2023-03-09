@@ -48,13 +48,13 @@ void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk)
 /************ Update link name in table of institutional links ***************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateLnkName (long LnkCod,const char *FieldName,const char *NewLnkName)
+void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName)
   {
    DB_QueryUPDATE ("can not update the name of an institutional link",
 		   "UPDATE lnk_links"
 		     " SET %s='%s'"
 		   " WHERE LnkCod=%ld",
-	           FieldName,NewLnkName,
+	           FldName,NewLnkName,
 	           LnkCod);
   }
 
@@ -110,7 +110,7 @@ unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod)
 /********************** Check if the name of link exists *********************/
 /*****************************************************************************/
 
-bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
+bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long LnkCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of an institutional link already existed",
@@ -119,7 +119,7 @@ bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long L
 		     " FROM lnk_links"
 		    " WHERE %s='%s'"
 		      " AND LnkCod<>%ld)",
-		   FieldName,Name,
+		   FldName,Name,
 		   LnkCod);
   }
 

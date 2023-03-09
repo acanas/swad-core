@@ -292,7 +292,7 @@ unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
 /********************* Check if the name of center exists ********************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
+bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 				       long CtrCod,long InsCod)
   {
    return
@@ -304,7 +304,7 @@ bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 		      " AND %s='%s'"
 		      " AND CtrCod<>%ld)",
 		   InsCod,
-		   FieldName,
+		   FldName,
 		   Name,
 		   CtrCod);
   }
@@ -535,14 +535,14 @@ void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod)
 /****************** Update center name in table of centers *******************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName)
+void Ctr_DB_UpdateCtrName (long CtrCod,const char *FldName,const char *NewCtrName)
   {
    /***** Update center changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a center",
 		   "UPDATE ctr_centers"
 		     " SET %s='%s'"
 		   " WHERE CtrCod=%ld",
-	           FieldName,
+	           FldName,
 	           NewCtrName,
 	           CtrCod);
   }

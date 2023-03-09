@@ -55,7 +55,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
-bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
                                        long DegCod,long CtrCod);
 
 unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
@@ -72,7 +72,7 @@ unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
 
 void Deg_DB_UpdateDegTypName (long DegTypCod,
                               const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_UpdateDegNameDB (long DegCod,const char *FieldName,
+void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
                              const char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);

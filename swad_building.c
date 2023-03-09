@@ -58,7 +58,7 @@ static struct Bld_Building *Bld_EditingBuilding = NULL;	// Static variable to ke
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Bld_Order_t Bld_GetParamBuildingOrder (void);
+static Bld_Order_t Bld_GetParBuildingOrder (void);
 static bool Bld_CheckIfICanCreateBuildings (void);
 static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args);
 static void Bld_PutIconToEditBuildings (void);
@@ -67,7 +67,7 @@ static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
 static void Bld_EditBuildingsInternal (void);
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
-static void Bld_PutParamBldCod (void *BldCod);
+static void Bld_PutParBldCod (void *BldCod);
 
 static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -111,7 +111,7 @@ void Bld_SeeBuildings (void)
    Bld_ResetBuildings (&Buildings);
 
    /***** Get parameter with the type of order in the list of buildings *****/
-   Buildings.SelectedOrder = Bld_GetParamBuildingOrder ();
+   Buildings.SelectedOrder = Bld_GetParBuildingOrder ();
 
    /***** Get list of buildings *****/
    Bld_GetListBuildings (&Buildings,Bld_ALL_DATA);
@@ -193,12 +193,12 @@ void Bld_SeeBuildings (void)
 /********* Get parameter with the type or order in list of buildings *********/
 /*****************************************************************************/
 
-static Bld_Order_t Bld_GetParamBuildingOrder (void)
+static Bld_Order_t Bld_GetParBuildingOrder (void)
   {
    return (Bld_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Bld_NUM_ORDERS - 1,
-						  (unsigned long) Bld_ORDER_DEFAULT);
+						0,
+						Bld_NUM_ORDERS - 1,
+						(unsigned long) Bld_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -432,7 +432,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Put icon to remove building */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemBld,NULL,
-					      Bld_PutParamBldCod,&Building->BldCod);
+					      Bld_PutParBldCod,&Building->BldCod);
 	    HTM_TD_End ();
 
 	    /* Building code */
@@ -445,7 +445,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building short name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldSho,Anchor);
-		  Bld_PutParamBldCod (&Building->BldCod);
+		  Par_PutParCode (Par_BldCod,Building->BldCod);
 		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -456,7 +456,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building full name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldFul,Anchor);
-		  Bld_PutParamBldCod (&Building->BldCod);
+		  Par_PutParCode (Par_BldCod,Building->BldCod);
 		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -467,7 +467,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldLoc,Anchor);
-		  Bld_PutParamBldCod (&Building->BldCod);
+		  Par_PutParCode (Par_BldCod,Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -486,7 +486,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 /******************* Write parameter with code of building *******************/
 /*****************************************************************************/
 
-static void Bld_PutParamBldCod (void *BldCod)
+static void Bld_PutParBldCod (void *BldCod)
   {
    if (BldCod)
       Par_PutParCode (Par_BldCod,*((long *) BldCod));
@@ -556,23 +556,23 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_The_building_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentClaName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentClaName = NULL;	// Initialized to avoid warning
    char NewClaName[Bld_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Bld_MAX_BYTES_SHRT_NAME;
          CurrentClaName = Bld_EditingBuilding->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Bld_MAX_BYTES_FULL_NAME;
          CurrentClaName = Bld_EditingBuilding->FullName;
          break;
@@ -583,7 +583,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
 
    /* Get the new name for the building */
-   Par_GetParText (ParamName,NewClaName,MaxBytes);
+   Par_GetParText (ParName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the building *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -596,14 +596,14 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If building was in database... *****/
-         if (Bld_DB_CheckIfBuildingNameExists (ParamName,NewClaName,Bld_EditingBuilding->BldCod))
+         if (Bld_DB_CheckIfBuildingNameExists (ParName,NewClaName,Bld_EditingBuilding->BldCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_building_X_already_exists,
                              NewClaName);
          else
            {
             /* Update the table changing old name by new name */
-            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,FieldName,NewClaName);
+            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,FldName,NewClaName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,

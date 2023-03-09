@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args);
-static void Con_PutParamScope (__attribute__((unused)) void *Args);
+static void Con_PutParScope (__attribute__((unused)) void *Args);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
@@ -136,13 +136,13 @@ void Con_ShowConnectedUsrs (void)
 static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstCon,NULL,
-                                  Con_PutParamScope,NULL,
+                                  Con_PutParScope,NULL,
 				  "recycle.svg",Ico_BLACK);
   }
 
-static void Con_PutParamScope (__attribute__((unused)) void *Args)
+static void Con_PutParScope (__attribute__((unused)) void *Args)
   {
-   Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
+   Sco_PutParScope ("ScopeCon",Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -412,7 +412,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
 	       Frm_BeginForm (ActLstCon);
-		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
+		  Sco_PutParScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
 		                   Txt_Connected_users,
 				   "class=\"ICO16x16 ICO_HIGHLIGHT ICO_BLACK_%s\"",
@@ -601,7 +601,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
          Frm_BeginForm (NextAction[Role]);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
 	       HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
@@ -709,7 +709,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     if (!NextAction[Role])
 			Err_WrongRoleExit ();
 		     Frm_BeginForm (NextAction[Role]);
-			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 		    }
 
 		  if (PutLinkToRecord)

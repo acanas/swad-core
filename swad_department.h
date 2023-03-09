@@ -79,7 +79,7 @@ void Dpt_FlushCacheNumDptsInIns (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
-                                  const char *ParamName,
+                                  const char *ParName,
 		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,

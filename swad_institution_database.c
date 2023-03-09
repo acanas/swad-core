@@ -97,14 +97,14 @@ void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status)
 /*************************** Update institution name *************************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsName (long InsCod,const char *FieldName,const char *NewInsName)
+void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewInsName)
   {
    /***** Update institution changing old name by new name */
    DB_QueryUPDATE ("can not update the name of an institution",
 		   "UPDATE ins_instits"
 		     " SET %s='%s'"
 		   " WHERE InsCod=%ld",
-	           FieldName,NewInsName,
+	           FldName,NewInsName,
 	           InsCod);
   }
 
@@ -190,7 +190,7 @@ unsigned Ins_DB_GetShrtNameAndCtyOfIns (MYSQL_RES **mysql_res,long InsCod)
 /****** Check if the name of institution exists in the current country *******/
 /*****************************************************************************/
 
-bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
+bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
 				       long InsCod,
 				       long CtyCod)
@@ -204,7 +204,7 @@ bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
 		      " AND %s='%s'"
 		      " AND InsCod<>%ld)",
 		   CtyCod,
-		   FieldName,Name,
+		   FldName,Name,
 		   InsCod);
   }
 

@@ -75,7 +75,7 @@ static struct Sch_Search Sch_Search =
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultScope);
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
-static void Sch_GetParamSearchStr (void);
+static void Sch_GetParSearchStr (void);
 static void Sch_SearchInDB (void);
 
 static unsigned Sch_SearchCountrsInDB (const char *RangeQuery);
@@ -109,7 +109,7 @@ struct Sch_Search *Sch_GetSearch (void)
 void Sch_ReqSysSearch (void)
   {
    /***** Search courses, teachers, documents... *****/
-   Sch_GetParamWhatToSearch ();
+   Sch_GetParWhatToSearch ();
    Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_SYS);
   }
 
@@ -259,7 +259,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
       /***** Put form *****/
       Frm_BeginForm (ActSch);
-	 Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
+	 Sco_PutParScope ("ScopeSch",HieLvl_SYS);
 	 Sch_PutInputStringToSearch ("head_search_text");
 	 Sch_PutMagnifyingGlassButton (Ico_WHITE);
       Frm_EndForm ();
@@ -299,7 +299,7 @@ void Sch_PutMagnifyingGlassButton (Ico_Color_t Color)
 /************* Get parameter "what to search" from search form ***************/
 /*****************************************************************************/
 
-void Sch_GetParamWhatToSearch (void)
+void Sch_GetParWhatToSearch (void)
   {
    Sch_WhatToSearch_t WhatToSearch;
    struct Sch_Search *Search = Sch_GetSearch ();
@@ -307,9 +307,9 @@ void Sch_GetParamWhatToSearch (void)
    /***** Get what to search from form *****/
    WhatToSearch = (Sch_WhatToSearch_t)
 	          Par_GetParUnsignedLong ("WhatToSearch",
-	                                    0,
-	                                    Sch_NUM_WHAT_TO_SEARCH - 1,
-	                                    (unsigned long) Sch_SEARCH_UNKNOWN);
+	                                  0,
+	                                  Sch_NUM_WHAT_TO_SEARCH - 1,
+	                                  (unsigned long) Sch_SEARCH_UNKNOWN);
 
    /***** If parameter WhatToSearch is not present,
           use parameter from session *****/
@@ -321,7 +321,7 @@ void Sch_GetParamWhatToSearch (void)
 /*********************** Get string from search form *************************/
 /*****************************************************************************/
 
-static void Sch_GetParamSearchStr (void)
+static void Sch_GetParSearchStr (void)
   {
    struct Sch_Search *Search = Sch_GetSearch ();
 
@@ -333,13 +333,13 @@ static void Sch_GetParamSearchStr (void)
 /************************* Get parameters to search **************************/
 /*****************************************************************************/
 
-void Sch_GetParamsSearch (void)
+void Sch_GetParsSearch (void)
   {
    /***** What to search? *****/
-   Sch_GetParamWhatToSearch ();
+   Sch_GetParWhatToSearch ();
 
    /***** Get search string *****/
-   Sch_GetParamSearchStr ();
+   Sch_GetParSearchStr ();
 
    /***** Save my search in order to show it in current session *****/
    if (Gbl.Usrs.Me.Logged)
@@ -482,7 +482,7 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
-   char FieldName[4+1+2+1];	// Example: Name_en
+   char FldName[4+1+2+1];	// Example: Name_en
    MYSQL_RES *mysql_res;
    unsigned NumCtys;
 
@@ -495,10 +495,10 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
 	{
 	 /***** Split countries string into words *****/
-	 snprintf (FieldName,sizeof (FieldName),"Name_%s",
+	 snprintf (FldName,sizeof (FldName),"Name_%s",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
-	                           FieldName,NULL,NULL))
+	                           FldName,NULL,NULL))
 	   {
 	    /***** Query database and list countries found *****/
 	    NumCtys = Cty_DB_SearchCtys (&mysql_res,SearchQuery,RangeQuery);
@@ -760,7 +760,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 
 bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                            const struct Sch_Search *Search,
-                           const char *FieldName,
+                           const char *FldName,
                            const char *CharSet,const char *Collate)
   {
    const char *Ptr;
@@ -815,7 +815,7 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 	       break;
 	    if (NumWords)
 	       Str_Concat (SearchQuery," AND ",Sch_MAX_BYTES_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,FieldName,Sch_MAX_BYTES_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,FldName,Sch_MAX_BYTES_SEARCH_QUERY);
 	    Str_Concat (SearchQuery," LIKE ",Sch_MAX_BYTES_SEARCH_QUERY);
 	    if (CharSet)
 	       if (CharSet[0])
@@ -868,8 +868,8 @@ static void Sch_SaveLastSearchIntoSession (void)
 /*************** Write parameters for link to search courses *****************/
 /*****************************************************************************/
 
-void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args)
+void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) void *Args)
   {
-   Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
+   Sco_PutParScope ("ScopeSch",HieLvl_SYS);
    Par_PutParUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }

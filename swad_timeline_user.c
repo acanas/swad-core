@@ -127,7 +127,7 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
       [TmlUsr_FAV_UNF_COMM] = TmlFrm_ALL_FAV_COMM,
       [TmlUsr_SHA_UNS_NOTE] = TmlFrm_ALL_SHA_NOTE,
      };
-   static const char *ParamFormat[TmlUsr_NUM_FAV_SHA] =
+   static const char *ParFormat[TmlUsr_NUM_FAV_SHA] =
      {
       [TmlUsr_FAV_UNF_NOTE] = "NotCod=%ld",
       [TmlUsr_FAV_UNF_COMM] = "PubCod=%ld",
@@ -136,8 +136,8 @@ static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
    struct Tml_Form Form =
      {
       .Action      = Action[FavSha],
-      .ParamFormat = ParamFormat[FavSha],
-      .ParamCod    = Cod,
+      .ParFormat = ParFormat[FavSha],
+      .ParCod    = Cod,
       .Icon        = "ellipsis-h.svg",
       .Color       = Ico_BLACK,
      };

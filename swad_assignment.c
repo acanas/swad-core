@@ -72,7 +72,7 @@ static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_PutButtonToCreateNewAsg (void *Assignments);
-static void Asg_ParamsWhichGroupsToShow (void *Assignments);
+static void Asg_ParsWhichGroupsToShow (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    bool OnlyOneAssignment,
@@ -82,7 +82,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 
 static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor);
-static void Asg_PutParams (void *Assignments);
+static void Asg_PutPars (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
                                      MYSQL_RES **mysql_res,
@@ -123,9 +123,9 @@ void Asg_SeeAssignments (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all assignments *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -162,7 +162,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	{
 	 Set_BeginSettingsHead ();
 	 Grp_ShowFormToSelWhichGrps (ActSeeAsg,
-				     Asg_ParamsWhichGroupsToShow,Assignments);
+				     Asg_ParsWhichGroupsToShow,Assignments);
 	 Set_EndSettingsHead ();
 	}
 
@@ -243,9 +243,9 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	      {
 	       /* Begin form */
 	       Frm_BeginForm (ActSeeAsg);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
-		  Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
+		  WhichGroups = Grp_GetParWhichGroups ();
+		  Grp_PutParWhichGroups (&WhichGroups);
+		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
 		  Par_PutParOrder ((unsigned) Order);
 
 	          /* Begin link to select order */
@@ -306,7 +306,7 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 	{
          ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-					 Asg_PutParams,Assignments);
+					 Asg_PutPars,Assignments);
 	}
      }
 
@@ -323,7 +323,7 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments)
    if (Assignments)
      {
       ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
-      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutParams,Assignments);
+      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutPars,Assignments);
      }
   }
 
@@ -340,7 +340,7 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
       /* Begin form */
       Frm_BeginForm (ActFrmNewAsg);
 	 ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
-	 Asg_PutParams (Assignments);
+	 Asg_PutPars (Assignments);
 
          /* Button to create new assignment */
 	 Btn_PutConfirmButton (Txt_New_assignment);
@@ -354,12 +354,12 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Asg_ParamsWhichGroupsToShow (void *Assignments)
+static void Asg_ParsWhichGroupsToShow (void *Assignments)
   {
    if (Assignments)
      {
       Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
-      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,
+      Pag_PutParPagNum (Pag_ASSIGNMENTS,
                                 ((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
@@ -377,9 +377,9 @@ void Asg_SeeOneAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
@@ -551,7 +551,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneAsg);
-	    Asg_PutParams (Assignments);
+	    Asg_PutPars (Assignments);
 	    HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
 	                             "class=\"LT BT_LINK %s_%s\"",
 				     Assignments->Asg.Hidden ? "ASG_TITLE_LIGHT" :
@@ -674,7 +674,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
 		   sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
 	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
       Frm_EndForm ();
@@ -708,13 +708,13 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
 /******* Get parameter with the type or order in list of assignments *********/
 /*****************************************************************************/
 
-Dat_StartEndTime_t Asg_GetParamAsgOrder (void)
+Dat_StartEndTime_t Asg_GetParAsgOrder (void)
   {
    return (Dat_StartEndTime_t)
    Par_GetParUnsignedLong ("Order",
-			     0,
-			     Dat_NUM_START_END_TIME - 1,
-			     (unsigned long) Asg_ORDER_DEFAULT);
+			   0,
+			   Dat_NUM_START_END_TIME - 1,
+			   (unsigned long) Asg_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -736,28 +736,28 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
       case Rol_SYS_ADM:
 	 /***** Icon to remove assignment *****/
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,NULL,
-	                                Asg_PutParams,Assignments);
+	                                Asg_PutPars,Assignments);
 
 	 /***** Icon to hide/unhide assignment *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					    Asg_PutParams,Assignments,
+					    Asg_PutPars,Assignments,
 					    Assignments->Asg.Hidden);
 
 	 /***** Icon to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
-	                              Asg_PutParams,Assignments);
+	                              Asg_PutPars,Assignments);
 
 	 /***** Link to get resource link *****/
 	 if (PrgRsc_CheckIfICanGetLink ())
 	    Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-					    Asg_PutParams,Assignments);
+					    Asg_PutPars,Assignments);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Icon to print assignment *****/
 	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
-	                               Asg_PutParams,Assignments);
+	                               Asg_PutPars,Assignments);
 	 break;
       default:
          break;
@@ -768,7 +768,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Asg_PutParams (void *Assignments)
+static void Asg_PutPars (void *Assignments)
   {
    Grp_WhichGroups_t WhichGroups;
 
@@ -776,9 +776,9 @@ static void Asg_PutParams (void *Assignments)
      {
       Par_PutParCode (Par_AsgCod,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
       Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
 
@@ -1017,9 +1017,9 @@ void Asg_ReqRemAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
@@ -1029,7 +1029,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
-                           Asg_PutParams,&Assignments,
+                           Asg_PutPars,&Assignments,
                            Btn_REMOVE_BUTTON,Txt_Remove_assignment,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_assignment_X,
                            Assignments.Asg.Title);
@@ -1051,9 +1051,9 @@ void Asg_RemoveAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
@@ -1094,9 +1094,9 @@ void Asg_HideAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
@@ -1123,9 +1123,9 @@ void Asg_UnhideAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
@@ -1174,9 +1174,9 @@ void Asg_RequestCreatOrEditAsg (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    ItsANewAssignment = ((Assignments.Asg.AsgCod = Par_GetParCode (Par_AsgCod)) <= 0);
@@ -1214,7 +1214,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Frm_BeginForm (ActChgAsg);
       // Assignments.Asg.AsgCod = Asg.AsgCod;
      }
-   Asg_PutParams (&Assignments);
+   Asg_PutPars (&Assignments);
 
       /***** Begin box and table *****/
       if (ItsANewAssignment)
@@ -1394,9 +1394,9 @@ void Asg_ReceiveFormAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParamAsgOrder ();
-   Grp_GetParamWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
+   Grp_GetParWhichGroups ();
+   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    ItsANewAssignment = ((Assignments.Asg.AsgCod = Par_GetParCode (Par_AsgCod)) <= 0);

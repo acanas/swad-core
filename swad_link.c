@@ -83,7 +83,7 @@ static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
 static void Lnk_FreeListLinks (struct Lnk_Links *Links);
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links);
-static void Lnk_PutParamLnkCod (void *LnkCod);
+static void Lnk_PutParLnkCod (void *LnkCod);
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -422,7 +422,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    /* Put icon to remove link */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemLnk,NULL,
-					      Lnk_PutParamLnkCod,&Lnk->LnkCod);
+					      Lnk_PutParLnkCod,&Lnk->LnkCod);
 	    HTM_TD_End ();
 
 	    /* Link code */
@@ -476,7 +476,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 /******************** Write parameter with code of link **********************/
 /*****************************************************************************/
 
-static void Lnk_PutParamLnkCod (void *LnkCod)
+static void Lnk_PutParLnkCod (void *LnkCod)
   {
    if (LnkCod)
       Par_PutParCode (Par_LnkCod,*((long *) LnkCod));
@@ -543,23 +543,23 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentLnkName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentLnkName = NULL;	// Initialized to avoid warning
    char NewLnkName[Lnk_MAX_BYTES_LINK_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Lnk_MAX_BYTES_LINK_SHRT_NAME;
          CurrentLnkName = Lnk_EditingLnk->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Lnk_MAX_BYTES_LINK_FULL_NAME;
          CurrentLnkName = Lnk_EditingLnk->FullName;
          break;
@@ -570,7 +570,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    Lnk_EditingLnk->LnkCod = Par_GetAndCheckParCode (Par_LnkCod);
 
    /* Get the new name for the link */
-   Par_GetParText (ParamName,NewLnkName,MaxBytes);
+   Par_GetParText (ParName,NewLnkName,MaxBytes);
 
    /***** Get link data from the database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -583,14 +583,14 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentLnkName,NewLnkName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_DB_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk_EditingLnk->LnkCod))
+         if (Lnk_DB_CheckIfLinkNameExists (ParName,NewLnkName,Lnk_EditingLnk->LnkCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_link_X_already_exists,
                              NewLnkName);
          else
            {
             /* Update the table changing old name by new name */
-            Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,FieldName,NewLnkName);
+            Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,FldName,NewLnkName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,

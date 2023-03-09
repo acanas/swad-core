@@ -53,17 +53,17 @@ void Set_GetSettingsFromIP (void);
 void Set_SetSettingsFromIP (void);
 
 void Set_ChangeSideCols (void);
-unsigned Set_GetParamSideCols (void);
+unsigned Set_GetParSideCols (void);
 unsigned Set_GetSideColsFromStr (const char *Str);
 
 //------------------------ My settings on users' list -------------------------
-void Set_PutParamsPrefsAboutUsrList (void);
+void Set_PutParsPrefsAboutUsrList (void);
 void Set_GetAndUpdatePrefsAboutUsrList (void);
-void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType);
+void Set_PutParUsrListType (Set_ShowUsrsType_t ListType);
 void Set_GetAndUpdateColsClassPhoto (void);
 void Set_GetMyColsClassPhotoFromDB (void);
-void Set_PutParamColsClassPhoto (void);
-void Set_PutParamListWithPhotos (void);
+void Set_PutParColsClassPhoto (void);
+void Set_PutParListWithPhotos (void);
 void Set_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Set_BeginSettingsHead (void);

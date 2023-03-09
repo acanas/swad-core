@@ -165,9 +165,9 @@ struct Grp_Groups
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Args,
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
-void Grp_PutParamsCodGrps (void);
+void Grp_PutParsCodGrps (void);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrps (void);
 void Grp_FreeListCodSelectedGrps (void);
@@ -223,17 +223,16 @@ void Grp_ChangeMaxStdsGrp (void);
 unsigned Grp_ConvertToNumMaxStdsGrp (const char *StrMaxStudents);
 void Grp_RenameGroupType (void);
 void Grp_RenameGroup (void);
-void Grp_PutParamGrpCod (void *GrpCod);
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted);
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
-void Grp_PutParamAllGroups (void);
+void Grp_PutParAllGroups (void);
 
-void Grp_PutParamWhichGroups (void *WhichGrps);
-void Grp_PutParamWhichGrpsOnlyMyGrps (void);
-void Grp_PutParamWhichGrpsAllGrps (void);
+void Grp_PutParWhichGroups (void *WhichGrps);
+void Grp_PutParWhichGrpsOnlyMyGrps (void);
+void Grp_PutParWhichGrpsAllGrps (void);
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
-                                 void (*FuncParams) (void *Args),void *Args);
-Grp_WhichGroups_t Grp_GetParamWhichGroups (void);
+                                 void (*FuncPars) (void *Args),void *Args);
+Grp_WhichGroups_t Grp_GetParWhichGroups (void);
 
 void Grp_DB_RemoveCrsGrps (long CrsCod);
 

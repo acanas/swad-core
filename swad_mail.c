@@ -77,7 +77,7 @@ static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail d
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Mai_DomainsOrder_t Mai_GetParamMaiOrder (void);
+static Mai_DomainsOrder_t Mai_GetParMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args);
 static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails);
@@ -86,7 +86,7 @@ static void Mai_GetMailDomain (const char *Email,
 static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
-static void Mai_PutParamMaiCod (void *MaiCod);
+static void Mai_PutParMaiCod (void *MaiCod);
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -99,8 +99,8 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args);
 static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 				        bool IMustFillInEmail,
 				        bool IShouldConfirmEmail);
-static void Mai_PutParamsRemoveMyEmail (void *Email);
-static void Mai_PutParamsRemoveOtherEmail (void *Email);
+static void Mai_PutParsRemoveMyEmail (void *Email);
+static void Mai_PutParsRemoveOtherEmail (void *Email);
 
 static void Mai_RemoveEmail (struct Usr_Data *UsrDat);
 static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe);
@@ -130,7 +130,7 @@ void Mai_SeeMailDomains (void)
    Mai_InitializeMailDomainList (&Mails);
 
    /***** Get parameter with the type of order in the list of mail domains *****/
-   Mails.SelectedOrder = Mai_GetParamMaiOrder ();
+   Mails.SelectedOrder = Mai_GetParMaiOrder ();
 
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif (&Mails);
@@ -203,13 +203,13 @@ void Mai_SeeMailDomains (void)
 /******* Get parameter with the type or order in list of mail domains ********/
 /*****************************************************************************/
 
-static Mai_DomainsOrder_t Mai_GetParamMaiOrder (void)
+static Mai_DomainsOrder_t Mai_GetParMaiOrder (void)
   {
    return (Mai_DomainsOrder_t)
 	  Par_GetParUnsignedLong ("Order",
-				    0,
-				    Mai_NUM_ORDERS - 1,
-				    (unsigned long) Mai_ORDER_DEFAULT);
+				  0,
+				  Mai_NUM_ORDERS - 1,
+				  (unsigned long) Mai_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -460,7 +460,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 	    /* Put icon to remove mail */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemMai,NULL,
-					      Mai_PutParamMaiCod,&Mai->MaiCod);
+					      Mai_PutParMaiCod,&Mai->MaiCod);
 	    HTM_TD_End ();
 
 	    /* Mail code */
@@ -506,7 +506,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 /******************** Write parameter with code of mail **********************/
 /*****************************************************************************/
 
-static void Mai_PutParamMaiCod (void *MaiCod)
+static void Mai_PutParMaiCod (void *MaiCod)
   {
    if (MaiCod)
       Par_PutParCode (Par_MaiCod,*((long *) MaiCod));
@@ -573,23 +573,23 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
    extern const char *Txt_The_email_domain_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentMaiName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentMaiName = NULL;	// Initialized to avoid warning
    char NewMaiName[Mai_MAX_BYTES_MAIL_INFO + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "Domain";
-         FieldName = "Domain";
+         ParName = "Domain";
+         FldName = "Domain";
          MaxBytes = Cns_MAX_BYTES_EMAIL_ADDRESS;
          CurrentMaiName = Mai_EditingMai->Domain;
          break;
       case Cns_FULL_NAME:
-         ParamName = "Info";
-         FieldName = "Info";
+         ParName = "Info";
+         FldName = "Info";
          MaxBytes = Mai_MAX_BYTES_MAIL_INFO;
          CurrentMaiName = Mai_EditingMai->Info;
          break;
@@ -600,7 +600,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    Mai_EditingMai->MaiCod = Par_GetAndCheckParCode (Par_MaiCod);
 
    /* Get the new name for the mail */
-   Par_GetParText (ParamName,NewMaiName,MaxBytes);
+   Par_GetParText (ParName,NewMaiName,MaxBytes);
 
    /***** Get from the database the old names of the mail *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -613,14 +613,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentMaiName,NewMaiName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_DB_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai_EditingMai->MaiCod))
+         if (Mai_DB_CheckIfMailDomainNameExists (ParName,NewMaiName,Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
                              NewMaiName);
          else
            {
             /* Update the table changing old name by new name */
-            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FieldName,NewMaiName);
+            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName,NewMaiName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
@@ -846,7 +846,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	 while (*Ptr)
 	   {
 	    /* Get next user */
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
 					       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
@@ -1160,10 +1160,10 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 /* Form to remove email */
 	 if (ItsMe)
 	    Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
-					   Mai_PutParamsRemoveMyEmail,row[0]);
+					   Mai_PutParsRemoveMyEmail,row[0]);
 	 else
 	    Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Mai_EMAIL_SECTION_ID,
-					   Mai_PutParamsRemoveOtherEmail,row[0]);
+					   Mai_PutParsRemoveOtherEmail,row[0]);
 
 	 /* Email */
 	 HTM_Txt (row[0]);
@@ -1186,7 +1186,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    else
 	      {
 	       Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		  Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	      }
 	       Par_PutParString (NULL,"NewEmail",row[0]);
 	       Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
@@ -1220,7 +1220,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 else
 	   {
 	    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
 			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"18\"",
@@ -1237,17 +1237,17 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    HTM_TABLE_End ();
   }
 
-static void Mai_PutParamsRemoveMyEmail (void *Email)
+static void Mai_PutParsRemoveMyEmail (void *Email)
   {
    if (Email)
       Par_PutParString (NULL,"Email",Email);
   }
 
-static void Mai_PutParamsRemoveOtherEmail (void *Email)
+static void Mai_PutParsRemoveOtherEmail (void *Email)
   {
    if (Email)
      {
-      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+      Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutParString (NULL,"Email",Email);
      }
   }
@@ -1272,7 +1272,7 @@ void Mai_RemoveMyUsrEmail (void)
 void Mai_RemoveOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -1339,7 +1339,7 @@ void May_NewMyUsrEmail (void)
 void Mai_NewOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{

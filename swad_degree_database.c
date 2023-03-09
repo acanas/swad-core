@@ -516,7 +516,7 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
 /********************* Check if the name of degree exists ********************/
 /*****************************************************************************/
 
-bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
                                        long DegCod,long CtrCod)
   {
    return
@@ -528,7 +528,7 @@ bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
 		      " AND %s='%s'"
 		      " AND DegCod<>%ld)",
 		   CtrCod,
-		   FieldName,Name,
+		   FldName,Name,
 		   DegCod);
   }
 
@@ -679,14 +679,14 @@ void Deg_DB_UpdateDegTypName (long DegTypCod,
 /***************** Update degree name in table of degrees ********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegNameDB (long DegCod,const char *FieldName,
+void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
                              const char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    DB_QueryUPDATE ("can not update the name of a degree",
 		   "UPDATE deg_degrees"
 		     " SET %s='%s'"
 		   " WHERE DegCod=%ld",
-	           FieldName,
+	           FldName,
 	           NewDegName,
 	           DegCod);
   }

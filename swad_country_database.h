@@ -67,7 +67,7 @@ unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod);
 bool Cty_DB_CheckIfMapIsAvailable (long CtyCod);
 
-void Cty_DB_UpdateCtyField (long CtyCod,const char *FieldName,const char *FieldValue);
+void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 
 unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod);

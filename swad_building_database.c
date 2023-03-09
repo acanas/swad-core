@@ -115,7 +115,7 @@ unsigned Bld_DB_GetDataOfBuildingByCod (MYSQL_RES **mysql_res,long BldCod)
 /******************** Check if the name of building exists *******************/
 /*****************************************************************************/
 
-bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod)
+bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long BldCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a building already existed",
@@ -126,7 +126,7 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,lo
 		      " AND %s='%s'"
 		      " AND BldCod<>%ld)",
 		   Gbl.Hierarchy.Ctr.CtrCod,
-		   FieldName,Name,
+		   FldName,Name,
 		   BldCod);
   }
 
@@ -135,13 +135,13 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,lo
 /*************** Update building changing old name by new name ***************/
 /*****************************************************************************/
 
-void Bld_DB_UpdateBuildingName (long BldCod,const char *FieldName,const char *NewBuildingName)
+void Bld_DB_UpdateBuildingName (long BldCod,const char *FldName,const char *NewBuildingName)
   {
    DB_QueryUPDATE ("can not update the name of a building",
 		   "UPDATE bld_buildings"
 		     " SET %s='%s'"
 		   " WHERE BldCod=%ld",
-		   FieldName,
+		   FldName,
 		   NewBuildingName,
 		   BldCod);
   }

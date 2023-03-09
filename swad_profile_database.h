@@ -47,10 +47,10 @@ void Prf_DB_IncrementNumFileViewsUsr (long UsrCod);
 void Prf_DB_IncrementNumForPstUsr (long UsrCod);
 void Prf_DB_IncrementNumMsgSntUsr (long UsrCod);
 
-unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName);
-unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName);
+unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName);
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName);
 unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res);
-unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName);
+unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName);
 unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);

@@ -83,7 +83,7 @@ static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
 static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins);
-static void Plg_PutParamPlgCod (void *PlgCod);
+static void Plg_PutParPlgCod (void *PlgCod);
 static void Plg_GetListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
@@ -366,7 +366,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Put icon to remove plugin */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemPlg,NULL,
-					      Plg_PutParamPlgCod,&Plg->PlgCod);
+					      Plg_PutParPlgCod,&Plg->PlgCod);
 	    HTM_TD_End ();
 
 	    /* Plugin code */
@@ -460,7 +460,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 /******************* Write parameter with code of plugin *********************/
 /*****************************************************************************/
 
-static void Plg_PutParamPlgCod (void *PlgCod)
+static void Plg_PutParPlgCod (void *PlgCod)
   {
    if (PlgCod)
       Par_PutParCode (Par_PlgCod,*((long *) PlgCod));

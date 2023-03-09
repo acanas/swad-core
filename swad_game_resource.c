@@ -32,6 +32,7 @@
 #include "swad_game.h"
 #include "swad_game_database.h"
 #include "swad_game_resource.h"
+#include "swad_parameter.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -49,7 +50,7 @@ void GamRsc_GetLinkToGame (void)
    Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   GamCod = Gam_GetParams (&Games);
+   GamCod = Gam_GetPars (&Games);
 
    /***** Get game title *****/
    GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
@@ -85,7 +86,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
       NextAction = (GamCod > 0)	? ActSeeGam :	// Game specified
 				  ActSeeAllGam;	// All games
       Frm_BeginForm (NextAction);
-         Gam_PutParamGamCod (GamCod);
+         Par_PutParCode (Par_GamCod,GamCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

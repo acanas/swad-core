@@ -62,7 +62,6 @@ void Ban_EditBanners (void);
 void Ban_PutIconToViewBanners (void);
 
 void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban);
-long Ban_GetParamLnkCod (void);
 void Ban_RemoveBanner (void);
 void Ban_ShowBanner (void);
 void Ban_HideBanner (void);

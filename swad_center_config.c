@@ -582,7 +582,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
-		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+		  Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ins.ShrtName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -704,7 +704,7 @@ static void CtrCfg_WWW (bool PrintView,bool PutForm)
 
 static void CtrCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_Shortcut (PrintView,Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -713,7 +713,7 @@ static void CtrCfg_Shortcut (bool PrintView)
 
 static void CtrCfg_QR (void)
   {
-   HieCfg_QR ("ctr",Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_QR (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -757,7 +757,7 @@ static void CtrCfg_NumDegs (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
@@ -872,7 +872,7 @@ void CtrCfg_ReceivePhoto (void)
   {
    extern const char *Txt_Wrong_file_type;
    char Path[PATH_MAX + 1];
-   struct Param *Param;
+   struct Par_Param *Par;
    char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
    size_t LengthExtension;
@@ -885,8 +885,8 @@ void CtrCfg_ReceivePhoto (void)
    char ErrorMsg[256];
 
    /***** Copy in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                     FileNameImgSrc,MIMEType);
+   Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                   FileNameImgSrc,MIMEType);
 
    /* Check if the file type is image/ or application/octet-stream */
    if (strncmp (MIMEType,"image/",strlen ("image/")))
@@ -924,7 +924,7 @@ void CtrCfg_ReceivePhoto (void)
    /* End the reception of image in a temporary file */
    snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),"%s/%s.%s",
              Cfg_PATH_MEDIA_TMP_PRIVATE,Cry_GetUniqueNameEncrypted (),PtrExtension);
-   if (!Fil_EndReceptionOfFile (PathFileImgTmp,Param))
+   if (!Fil_EndReceptionOfFile (PathFileImgTmp,Par))
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
       return;

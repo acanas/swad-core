@@ -133,7 +133,7 @@ static void Adm_ReqAddAdm (HieLvl_Level_t Scope,long Cod,
    if (Cod > 0)
      {
       /***** Get user's identificator of the user to register as admin *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/center/degree */
 	 ICanRegister = ((Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
@@ -159,7 +159,7 @@ static void Adm_ReqAddAdm (HieLvl_Level_t Scope,long Cod,
 
 	       /* End alert */
 	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
-	                                Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	                                Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
@@ -228,7 +228,7 @@ static void Enr_AddAdm (HieLvl_Level_t Scope,long Cod,
    if (Cod > 0)
      {
       /***** Get plain user's ID of the user to add/modify *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if I am allowed to register user as administrator in institution/center/degree */
 	 ICanRegister = ((Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
@@ -351,7 +351,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
    if (Cod > 0)
      {
       /***** Get user to be removed *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if it's forbidden to remove an administrator */
          ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -422,7 +422,7 @@ static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
 
       /* End alert */
       Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
-                               Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+                               Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
                                Btn_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);

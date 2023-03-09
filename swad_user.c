@@ -130,7 +130,7 @@ static const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
    [Rol_NET] = "SEL_UNSEL_NETS",
    [Rol_TCH] = "SEL_UNSEL_TCHS",
   };
-static const char *Usr_ParamUsrCod[Rol_NUM_ROLES] =
+static const char *Usr_ParUsrCod[Rol_NUM_ROLES] =
   {
    [Rol_UNK] = "UsrCodAll",	//  here means all users
    [Rol_GST] = "UsrCodGst",
@@ -155,7 +155,7 @@ extern struct Globals Gbl;
 /****************************** Private variables ****************************/
 /*****************************************************************************/
 
-static void (*Usr_FuncParamsBigList) (void *Args);	// Used to pass pointer to function
+static void (*Usr_FuncParsBigList) (void *Args);	// Used to pass pointer to function
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -165,7 +165,7 @@ static void Usr_GetMyLastData (void);
 static void Usr_GetUsrCommentsFromString (char *Str,struct Usr_Data *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
-static void Usr_GetParamOtherUsrIDNickOrEMail (void);
+static void Usr_GetParOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
 static bool Usr_ChkUsrAndGetUsrDataFromSession (void);
@@ -191,19 +191,19 @@ static void Usr_GetGstsLst (HieLvl_Level_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncParams) (void *Args),void *Args,
+                                                     void (*FuncPars) (void *Args),void *Args,
                                                      const char *OnSubmit);
-static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args);
+static void Usr_PutParsConfirmIWantToSeeBigList (void *Args);
 
-static void Usr_BuildParamName (char **ParamName,
-				const char *ParamRoot,
-				const char *ParamSuffix);
+static void Usr_BuildParName (char **ParName,
+			      const char *ParRoot,
+			      const char *ParSuffix);
 
 static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
+static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType);
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
 			                     struct Usr_SelectedUsrs *SelectedUsrs);
@@ -244,9 +244,9 @@ static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
-static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args);
-static void Usr_ShowStdsAllDataParams (__attribute__((unused)) void *Args);
-static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args);
+static void Usr_ShowGstsAllDataPars (__attribute__((unused)) void *Args);
+static void Usr_ShowStdsAllDataPars (__attribute__((unused)) void *Args);
+static void Usr_ShowTchsAllDataPars (__attribute__((unused)) void *Args);
 
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
@@ -1133,7 +1133,7 @@ void Usr_PutLinkToLogin (void)
 /************************ Write form for user log in *************************/
 /*****************************************************************************/
 
-void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
+void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
   {
    extern const char *Hlp_PROFILE_LogIn;
    extern const char *Txt_Log_in;
@@ -1153,8 +1153,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
       /***** Begin form *****/
       Frm_BeginForm (NextAction);
-	 if (FuncParams)
-	    FuncParams ();
+	 if (FuncPars)
+	    FuncPars ();
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,Txt_Log_in,
@@ -1422,7 +1422,7 @@ void Usr_PutFormLogOut (void)
 /******* Get parameter with my plain user's ID or nickname from a form *******/
 /*****************************************************************************/
 
-void Usr_GetParamUsrIdLogin (void)
+void Usr_GetParUsrIdLogin (void)
   {
    Par_GetParText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,sizeof (Gbl.Usrs.Me.UsrIdLogin) - 1);
    // Users' IDs are always stored internally without leading zeros
@@ -1433,7 +1433,7 @@ void Usr_GetParamUsrIdLogin (void)
 /******* Get parameter user's identificator of other user from a form ********/
 /*****************************************************************************/
 
-static void Usr_GetParamOtherUsrIDNickOrEMail (void)
+static void Usr_GetParOtherUsrIDNickOrEMail (void)
   {
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParText ("OtherUsrIDNickOrEMail",
@@ -1455,7 +1455,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
 /*****************************************************************************/
 // Returns the number of users for a given ID, @nick or email
 
-unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods)
+unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods)
   {
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
    bool Wrong = false;
@@ -1465,7 +1465,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods 
    ListUsrCods->Lst = NULL;
 
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
-   Usr_GetParamOtherUsrIDNickOrEMail ();
+   Usr_GetParOtherUsrIDNickOrEMail ();
 
    /***** Check if it's an ID, a nickname or an email address *****/
    if (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0])
@@ -1524,17 +1524,17 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods 
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_PutParamMyUsrCodEncrypted (void *EncryptedUsrCod)
+void Usr_PutParMyUsrCodEncrypted (void *EncryptedUsrCod)
   {
-   Usr_PutParamUsrCodEncrypted ((const char *) EncryptedUsrCod);
+   Usr_PutParUsrCodEncrypted ((const char *) EncryptedUsrCod);
   }
 
-void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod)
+void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod)
   {
-   Usr_PutParamUsrCodEncrypted ((const char *) EncryptedUsrCod);
+   Usr_PutParUsrCodEncrypted ((const char *) EncryptedUsrCod);
   }
 
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
+void Usr_PutParUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    Par_PutParString (NULL,"OtherUsrCod",EncryptedUsrCod);
   }
@@ -1543,7 +1543,7 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED
 /********* Get hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
+void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
   {
    Par_GetParText ("OtherUsrCod",UsrDat->EnUsrCod,
                      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -1561,9 +1561,9 @@ void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
 /********* Get hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void)
+void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void)
   {
-   Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
+   Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If parameter exists...
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
    else       					// Parameter does not exist
@@ -1579,10 +1579,10 @@ void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void)
 /*****************************************************************************/
 // Return true if user exists
 
-bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
+bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
   {
    /***** Get parameter with encrypted user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Check if user exists and get her/his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -1605,7 +1605,7 @@ void Usr_ChkUsrAndGetUsrData (void)
      {
       bool PutForm;
       Act_Action_t Action;
-      void (*FuncParams) (void);
+      void (*FuncPars) (void);
      } FormLogin =
      {
       false,
@@ -1688,14 +1688,14 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       if (Gbl.Action.Act == ActLogInUsrAgd)
 		 {
 	          FormLogin.Action = ActLogInUsrAgd;
-	          FormLogin.FuncParams = Agd_PutParamAgd;
+	          FormLogin.FuncPars = Agd_PutParAgd;
 		 }
 	      }
 	   }
 	 else if (Gbl.Action.Act == ActLogInNew)	// Empty account without password, login using encrypted user's code
 	   {
 	    /***** Get user's data *****/
-	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
+	    Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
             Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
                                                          Usr_GET_PREFS,
@@ -1719,7 +1719,7 @@ void Usr_ChkUsrAndGetUsrData (void)
    /***** If session disconnected or error in login, show form to login *****/
    if (FormLogin.PutForm)
      {
-      Usr_WriteFormLogin (FormLogin.Action,FormLogin.FuncParams);
+      Usr_WriteFormLogin (FormLogin.Action,FormLogin.FuncPars);
       Err_ShowErrorAndExit (NULL);
      }
 
@@ -2989,7 +2989,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /*****************************************************************************/
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncParams) (void *Args),void *Args,
+                           void (*FuncPars) (void *Args),void *Args,
                            const char *OnSubmit)
   {
    bool ShowBigList;
@@ -3001,7 +3001,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
              to see a big list of users *****/
       if (!(ShowBigList = Par_GetParBool ("ShowBigList")))
 	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,
-	                                          FuncParams,Args,
+	                                          FuncPars,Args,
 	                                          OnSubmit);
 
       return ShowBigList;
@@ -3015,27 +3015,27 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
 /*****************************************************************************/
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncParams) (void *Args),void *Args,
+                                                     void (*FuncPars) (void *Args),void *Args,
                                                      const char *OnSubmit)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
-   Usr_FuncParamsBigList = FuncParams;	// Used to pass pointer to function
+   Usr_FuncParsBigList = FuncPars;	// Used to pass pointer to function
    Ale_ShowAlertAndButton (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
-                           Usr_PutParamsConfirmIWantToSeeBigList,Args,
+                           Usr_PutParsConfirmIWantToSeeBigList,Args,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
                            NumUsrs);
   }
 
-static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
+static void Usr_PutParsConfirmIWantToSeeBigList (void *Args)
   {
-   Grp_PutParamsCodGrps ();
-   Set_PutParamsPrefsAboutUsrList ();
-   if (Usr_FuncParamsBigList)
-      Usr_FuncParamsBigList (Args);
+   Grp_PutParsCodGrps ();
+   Set_PutParsPrefsAboutUsrList ();
+   if (Usr_FuncParsBigList)
+      Usr_FuncParsBigList (Args);
    Par_PutParChar ("ShowBigList",'Y');
   }
 
@@ -3061,9 +3061,9 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs 
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
+void Usr_PutParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
-   char *ParamName;
+   char *ParName;
 
    /***** Put a parameter indicating that a list of several users is present *****/
    Par_PutParChar ("MultiUsrs",'Y');
@@ -3072,16 +3072,16 @@ void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
    /* Build name of the parameter.
       Sometimes a unique action needs several distinct lists of users,
       so, it's necessary to use distinct names for the parameters. */
-   Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs->ParamSuffix);
+   Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
    /* Put the parameter *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertParamInDB (ParamName,SelectedUsrs->List[Rol_UNK]);
+      Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
    else
-      Par_PutParString (NULL,ParamName,SelectedUsrs->List[Rol_UNK]);
+      Par_PutParString (NULL,ParName,SelectedUsrs->List[Rol_UNK]);
 
    /***** Free allocated memory for parameter name *****/
-   free (ParamName);
+   free (ParName);
   }
 
 /*****************************************************************************/
@@ -3091,7 +3091,7 @@ void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
-   char *ParamName;
+   char *ParName;
    unsigned Length;
    Rol_Role_t Role;
 
@@ -3100,40 +3100,40 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
       /***** Build name of the parameter.
 	     Sometimes a unique action needs several distinct lists of users,
 	     so, it's necessary to use distinct names for the parameters. *****/
-      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Rol_UNK],SelectedUsrs->ParamSuffix);
+      Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
       /***** Get possible list of all selected users *****/
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 Ses_DB_GetParam (ParamName,SelectedUsrs->List[Rol_UNK],
+	 Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
 			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
 	}
       else
-	 Par_GetParMultiToText (ParamName,SelectedUsrs->List[Rol_UNK],
+	 Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
       /***** Free allocated memory for parameter name *****/
-      free (ParamName);
+      free (ParName);
 
       /***** Get list of selected users for each possible role *****/
       for (Role  = Rol_TCH;	// From the highest possible role of selected users...
 	   Role >= Rol_GST;	// ...downto the lowest possible role of selected users
 	   Role--)
-	 if (Usr_ParamUsrCod[Role])
+	 if (Usr_ParUsrCod[Role])
 	   {
             /* Build name of the parameter */
-	    Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
+	    Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 
 	    /* Get parameter with selected users with this role */
 	    Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Role);
-	    Par_GetParMultiToText (ParamName,SelectedUsrs->List[Role],
+	    Par_GetParMultiToText (ParName,SelectedUsrs->List[Role],
 				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
 	    /* Free allocated memory for parameter name */
-	    free (ParamName);
+	    free (ParName);
 
 	    /* Add selected users with this role
 	       to the list with all selected users */
@@ -3156,21 +3156,21 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
      }
   }
 
-static void Usr_BuildParamName (char **ParamName,
-				const char *ParamRoot,
-				const char *ParamSuffix)
+static void Usr_BuildParName (char **ParName,
+			      const char *ParRoot,
+			      const char *ParSuffix)
   {
    /* Build name of the parameter.
       Sometimes a unique action needs several distinct lists of users,
       so, it's necessary to use distinct names for the parameters. */
-   if (ParamSuffix)
+   if (ParSuffix)
      {
-      if (asprintf (ParamName,"%s%s",ParamRoot,ParamSuffix) < 0)
+      if (asprintf (ParName,"%s%s",ParRoot,ParSuffix) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (ParamName,"%s",ParamRoot) < 0)
+      if (asprintf (ParName,"%s",ParRoot) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
   }
@@ -3372,7 +3372,7 @@ bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *Encryp
       Ptr = SelectedUsrs->List[Rol_UNK];
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,
+	 Par_GetNextStrUntilSeparParMult (&Ptr,EncryptedUsrCod,
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
 	    return true;        // Found!
@@ -3394,7 +3394,7 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_Selecte
    Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
@@ -3417,7 +3417,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUs
    Ptr = SelectedUsrs->List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
@@ -3496,7 +3496,7 @@ void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 	NumUsr < NumUsrsInList && *Ptr;
 	NumUsr++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
@@ -3582,7 +3582,7 @@ void Usr_FreeListOtherRecipients (void)
 /*************************** Selection of list type **************************/
 /*****************************************************************************/
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
+void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args)
   {
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
@@ -3590,18 +3590,18 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO);
 
-      Set_FormToSelectUsrListType (FuncParams,Args,
+      Set_FormToSelectUsrListType (FuncPars,Args,
 				   Set_USR_LIST_AS_CLASS_PHOTO);
 
       /* Number of columns in the class photo */
       Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParamsCodGrps ();
-	 Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
-	 Set_PutParamListWithPhotos ();
+	 Grp_PutParsCodGrps ();
+	 Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
+	 Set_PutParListWithPhotos ();
 	 Usr_PutSelectorNumColsClassPhoto ();
-	 if (FuncParams)
-	    FuncParams (Args);
+	 if (FuncPars)
+	    FuncPars (Args);
       Frm_EndForm ();
 
    Set_EndPref ();
@@ -3609,16 +3609,16 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    /***** Select Usr_LIST_AS_LISTING *****/
    Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING);
 
-      Set_FormToSelectUsrListType (FuncParams,Args,
+      Set_FormToSelectUsrListType (FuncPars,Args,
 				   Set_USR_LIST_AS_LISTING);
 
       /* See the photos in list? */
       Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParamsCodGrps ();
-	 Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
-	 if (FuncParams)
-	    FuncParams (Args);
+	 Grp_PutParsCodGrps ();
+	 Set_PutParUsrListType (Set_USR_LIST_AS_LISTING);
+	 if (FuncPars)
+	    FuncPars (Args);
 	 Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
 
@@ -3632,7 +3632,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
+static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType)
   {
    extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
@@ -3640,11 +3640,11 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
    /***** Begin form *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 	                Usr_USER_LIST_SECTION_ID);
-      Grp_PutParamsCodGrps ();
-      Set_PutParamUsrListType (ListType);
-      Set_PutParamListWithPhotos ();
-      if (FuncParams)
-	 FuncParams (Args);
+      Grp_PutParsCodGrps ();
+      Set_PutParUsrListType (ListType);
+      Set_PutParListWithPhotos ();
+      if (FuncPars)
+	 FuncPars (Args);
 
       /***** Link and image *****/
       HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
@@ -3667,7 +3667,7 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
-				       void (*FuncParams) (void *Args),void *Args,
+				       void (*FuncPars) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
@@ -3709,7 +3709,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		    HelpLink,Box_NOT_CLOSABLE);
 
 	 /***** Show form to select the groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (FuncParams,Args,
+	 Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,
 					    Grp_MY_GROUPS);
 
 	 /***** Begin section with user list *****/
@@ -3718,11 +3718,11 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	    if (NumTotalUsrs)
 	      {
 	       if (Usr_GetIfShowBigList (NumTotalUsrs,
-					 FuncParams,Args,
+					 FuncPars,Args,
 					 NULL))
 		 {
 		  /***** Form to select type of list used for select several users *****/
-		  Usr_ShowFormsToSelectUsrListType (FuncParams,Args);
+		  Usr_ShowFormsToSelectUsrListType (FuncPars,Args);
 
 		  /***** Link to register students *****/
 		  Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -3732,14 +3732,14 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  Frm_BeginForm (NextAction);
 
 		     /* Hidden parameters */
-		     Grp_PutParamsCodGrps ();
+		     Grp_PutParsCodGrps ();
 		     if (NextAction == ActAdmAsgWrkCrs)
 		       {
 			Gbl.FileBrowser.FullTree = true;	// By default, show all files
-			Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+			Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 		       }
-		     if (FuncParams)
-			FuncParams (Args);
+		     if (FuncPars)
+			FuncPars (Args);
 
 		     HTM_TABLE_BeginCenterPadding (2);
 
@@ -3855,7 +3855,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *ParamName;
+   char *ParName;
    Usr_Sex_t Sex;
 
    HTM_TR_Begin (NULL);
@@ -3863,13 +3863,13 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
       HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,Usr_GetColumnsForSelectUsrs (),"BG_HIGHLIGHT");
 
 	 HTM_LABEL_Begin (NULL);
-	    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
+	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
-	       Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
+	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],HTM_DONT_SUBMIT_ON_CHANGE,
 				   "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
-				   ParamName);
-	       free (ParamName);
+				   ParName);
+	       free (ParName);
 	      }
 	    else
 	       Err_WrongRoleExit ();
@@ -3930,9 +3930,9 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
    bool CheckboxChecked;
-   char *ParamName;
+   char *ParName;
 
-   if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
+   if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
      {
       /***** Check box must be checked? *****/
       if (UsrIsTheMsgSender)
@@ -3942,14 +3942,14 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (EncryptedUsrCod,SelectedUsrs);
 
       /***** Check box *****/
-      Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
-      HTM_INPUT_CHECKBOX (ParamName,HTM_DONT_SUBMIT_ON_CHANGE,
+      Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
+      HTM_INPUT_CHECKBOX (ParName,HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,
 			  CheckboxChecked ? " checked=\"checked\"" :
 				            "",
 			  Usr_NameSelUnsel[Role]);
-      free (ParamName);
+      free (ParName);
      }
    else
       Err_WrongRoleExit ();
@@ -4902,7 +4902,7 @@ void Usr_ListDataAdms (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
-	    Set_PutParamListWithPhotos ();
+	    Set_PutParListWithPhotos ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -4916,7 +4916,7 @@ void Usr_ListDataAdms (void)
 	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActLstOth);
-		  Sco_PutParamCurrentScope (&Gbl.Scope.Current);
+		  Sco_PutParCurrentScope (&Gbl.Scope.Current);
 		  Usr_PutCheckboxListWithPhotos ();
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
@@ -5043,7 +5043,7 @@ void Usr_SeeGuests (void)
 	{
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActLstGst);
-	       Set_PutParamsPrefsAboutUsrList ();
+	       Set_PutParsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 	                        The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
@@ -5059,11 +5059,11 @@ void Usr_SeeGuests (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-				      Sco_PutParamCurrentScope,&Gbl.Scope.Current,
+				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5190,7 +5190,7 @@ void Usr_SeeStudents (void)
 	 case Rol_SYS_ADM:
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActLstStd);
-		  Set_PutParamsPrefsAboutUsrList ();
+		  Set_PutParsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 		                   The_GetSuffix ());
 		     HTM_TxtColonNBSP (Txt_Scope);
@@ -5205,7 +5205,7 @@ void Usr_SeeStudents (void)
 
       /***** Form to select groups *****/
       if (Gbl.Scope.Current == HieLvl_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
+	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,&Gbl.Scope.Current,
 					    Grp_MY_GROUPS);
 
       /***** Begin section with user list *****/
@@ -5214,11 +5214,11 @@ void Usr_SeeStudents (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-				      Sco_PutParamCurrentScope,&Gbl.Scope.Current,
+				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5241,7 +5241,7 @@ void Usr_SeeStudents (void)
 	       if (PutForm)
 		 {
 		  Frm_BeginForm (ActDoActOnSevStd);
-		     Grp_PutParamsCodGrps ();
+		     Grp_PutParsCodGrps ();
 		 }
 
 	       /* Begin table */
@@ -5371,7 +5371,7 @@ void Usr_SeeTeachers (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstTch);
-	    Set_PutParamsPrefsAboutUsrList ();
+	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 	                     The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
@@ -5382,7 +5382,7 @@ void Usr_SeeTeachers (void)
 
       /***** Form to select groups *****/
       if (Gbl.Scope.Current == HieLvl_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
+	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,&Gbl.Scope.Current,
 					    Grp_MY_GROUPS);
 
       /***** Begin section with user list *****/
@@ -5391,11 +5391,11 @@ void Usr_SeeTeachers (void)
 	 if (NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumUsrs,
-				      Sco_PutParamCurrentScope,&Gbl.Scope.Current,
+				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5418,7 +5418,7 @@ void Usr_SeeTeachers (void)
 	       if (PutForm)
 		 {
 		  Frm_BeginForm (ActDoActOnSevTch);
-		     Grp_PutParamsCodGrps ();
+		     Grp_PutParsCodGrps ();
 		 }
 
 	       /* Begin table */
@@ -5774,9 +5774,9 @@ void Usr_DoActionOnSeveralUsrs2 (void)
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction)
   {
    return (Usr_ListUsrsOption_t) Par_GetParUnsignedLong ("ListUsrsAction",
-							   0,
-							   Usr_LIST_USRS_NUM_OPTIONS - 1,
-							   (unsigned long) DefaultAction);
+							 0,
+							 Usr_LIST_USRS_NUM_OPTIONS - 1,
+							 (unsigned long) DefaultAction);
   }
 
 /*****************************************************************************/
@@ -5861,19 +5861,19 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
 static void Usr_PutIconToPrintGsts (void)
   {
    Ico_PutContextualIconToPrint (ActPrnGstPho,
-                                 Usr_ShowGstsAllDataParams,NULL);
+                                 Usr_ShowGstsAllDataPars,NULL);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
    Ico_PutContextualIconToPrint (ActPrnStdPho,
-                                 Usr_ShowStdsAllDataParams,NULL);
+                                 Usr_ShowStdsAllDataPars,NULL);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
    Ico_PutContextualIconToPrint (ActPrnTchPho,
-                                 Usr_ShowTchsAllDataParams,NULL);
+                                 Usr_ShowTchsAllDataPars,NULL);
   }
 
 /*****************************************************************************/
@@ -5883,39 +5883,39 @@ static void Usr_PutIconToPrintTchs (void)
 static void Usr_PutIconToShowGstsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
-                                  Usr_ShowGstsAllDataParams,NULL,
+                                  Usr_ShowGstsAllDataPars,NULL,
 				  "table.svg",Ico_BLACK);
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
-                                  Usr_ShowStdsAllDataParams,NULL,
+                                  Usr_ShowStdsAllDataPars,NULL,
 			          "table.svg",Ico_BLACK);
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
-                                  Usr_ShowTchsAllDataParams,NULL,
+                                  Usr_ShowTchsAllDataPars,NULL,
 			          "table.svg",Ico_BLACK);
   }
 
-static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args)
+static void Usr_ShowGstsAllDataPars (__attribute__((unused)) void *Args)
   {
-   Set_PutParamListWithPhotos ();
+   Set_PutParListWithPhotos ();
   }
 
-static void Usr_ShowStdsAllDataParams (__attribute__((unused)) void *Args)
+static void Usr_ShowStdsAllDataPars (__attribute__((unused)) void *Args)
   {
-   Grp_PutParamsCodGrps ();
-   Set_PutParamListWithPhotos ();
+   Grp_PutParsCodGrps ();
+   Set_PutParListWithPhotos ();
   }
 
-static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args)
+static void Usr_ShowTchsAllDataPars (__attribute__((unused)) void *Args)
   {
-   Sco_PutParamCurrentScope (&Gbl.Scope.Current);
-   Set_PutParamListWithPhotos ();
+   Sco_PutParCurrentScope (&Gbl.Scope.Current);
+   Set_PutParListWithPhotos ();
   }
 
 /*****************************************************************************/
@@ -6421,7 +6421,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
      {
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,
 	                          "class=\"LT BT_LINK MSG_AUT_%s\"",
 	                          The_GetSuffix ());
@@ -6501,7 +6501,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 /*************** Put hidden param for which users are involved ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParamWho (Usr_Who_t Who)
+void Usr_PutParWho (Usr_Who_t Who)
   {
    Par_PutParUnsigned (NULL,"Who",(unsigned) Who);
   }
@@ -6510,12 +6510,12 @@ void Usr_PutHiddenParamWho (Usr_Who_t Who)
 /*************** Get hidden param for which users are involved ***************/
 /*****************************************************************************/
 
-Usr_Who_t Usr_GetHiddenParamWho (void)
+Usr_Who_t Usr_GetParWho (void)
   {
    return (Usr_Who_t) Par_GetParUnsignedLong ("Who",
-                                                1,
-                                                Usr_NUM_WHO - 1,
-                                                Usr_WHO_UNKNOWN);
+                                              1,
+                                              Usr_NUM_WHO - 1,
+                                              Usr_WHO_UNKNOWN);
   }
 
 /*****************************************************************************/

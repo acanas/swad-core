@@ -191,7 +191,7 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
-void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree);
+void Brw_PutParFullTreeIfSelected (void *FullTree);
 
 void Brw_CreateDirDownloadTmp (void);
 
@@ -252,9 +252,9 @@ void Brw_PutIconFile (const char *FileName,
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_PutImplicitParamsFileBrowser (void *FilFolLnk);
-void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
-                               Brw_FileType_t FileType,long FilCod);
+void Brw_PutImplicitParsFileBrowser (void *FilFolLnk);
+void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
+                             Brw_FileType_t FileType,long FilCod);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);

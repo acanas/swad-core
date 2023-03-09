@@ -109,7 +109,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Session.IsOpen = false;
    Gbl.Session.HasBeenDisconnected = false;
    Gbl.Session.Id[0] = '\0';
-   Gbl.Session.ParamsInsertedIntoDB = false;
+   Gbl.Session.ParsInsertedIntoDB = false;
 
    Gbl.Usrs.Me.UsrIdLogin[0] = '\0';
    Gbl.Usrs.Me.LoginPlainPassword[0] = '\0';
@@ -149,7 +149,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.Tab = TabUnk;
 
    Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
-   Gbl.Usrs.Selected.ParamSuffix = NULL;// Don't add suffix to param names
+   Gbl.Usrs.Selected.ParSuffix = NULL;	// Don't add suffix to param names
    Gbl.Usrs.Selected.Option = Usr_OPTION_UNKNOWN;
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
@@ -295,7 +295,7 @@ void Gbl_Cleanup (void)
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-      Ses_DB_RemoveParam ();
+      Ses_DB_RemovePar ();
    Enr_FreeMyCourses ();
    Deg_FreeMyDegrees ();
    Ctr_FreeMyCenters ();
@@ -320,6 +320,6 @@ void Gbl_Cleanup (void)
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
    Syl_FreeListItemsSyllabus ();
-   Par_FreeParams ();
+   Par_FreePars ();
    Ale_ResetAllAlerts ();
   }

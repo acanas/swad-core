@@ -55,7 +55,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not);
 void TmlSha_ShowAllSharersNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show all sharers *****/
    TmlSha_ShowAllSharersNoteGbl ();
@@ -82,7 +82,7 @@ void TmlSha_ShowAllSharersNoteGbl (void)
 void TmlSha_ShaNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Share note *****/
    TmlSha_ShaNoteGbl ();
@@ -141,7 +141,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
 void TmlSha_UnsNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unshare note *****/
    TmlSha_UnsNoteGbl ();

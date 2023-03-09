@@ -212,7 +212,7 @@ bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
 /********** Check if the name of course exists in existing courses ***********/
 /*****************************************************************************/
 
-bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,long CrsCod,
                                              long DegCod,unsigned Year)
   {
    return
@@ -226,7 +226,7 @@ bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *N
 		      " AND CrsCod<>%ld)",
 		   DegCod,
 		   Year,
-		   FieldName,
+		   FldName,
 		   Name,
 		   CrsCod);
   }
@@ -502,13 +502,13 @@ void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear)
 /***************** Update course name in table of courses ********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsName (long CrsCod,const char *FieldName,const char *NewCrsName)
+void Crs_DB_UpdateCrsName (long CrsCod,const char *FldName,const char *NewCrsName)
   {
    DB_QueryUPDATE ("can not update the name of a course",
 		   "UPDATE crs_courses"
 		     " SET %s='%s'"
 		   " WHERE CrsCod=%ld",
-	           FieldName,NewCrsName,
+	           FldName,NewCrsName,
 	           CrsCod);
   }
 

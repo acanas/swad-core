@@ -106,7 +106,7 @@ unsigned Att_GetNumAttEvents (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 void Att_SeeOneAttEvent (void);
 
-void Att_PutParamsCodGrps (long AttCod);
+void Att_PutParsCodGrps (long AttCod);
 
 void Att_RegisterMeAsStdInAttEvent (void);
 void Att_RegisterStudentsInAttEvent (void);

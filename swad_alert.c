@@ -293,7 +293,7 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
 /*****************************************************************************/
 
 void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                                 void (*FuncParams) (void *Args),void *Args,
+                                 void (*FuncPars) (void *Args),void *Args,
 				 Btn_Button_t Button,const char *TxtButton)
   {
    /***** Show last alert and then reset it *****/
@@ -301,7 +301,7 @@ void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,cons
 
    /***** Show button *****/
    Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
-                            FuncParams,Args,
+                            FuncPars,Args,
                             Button,TxtButton);
   }
 
@@ -323,7 +323,7 @@ void Ale_ShowLastAlertAndButton1 (void)
 /*****************************************************************************/
 
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                             void (*FuncParams) (void *Args),void *Args,
+                             void (*FuncPars) (void *Args),void *Args,
                              Btn_Button_t Button,const char *TxtButton,
 			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
@@ -341,7 +341,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
    /****** Print fix alert and button ******/
    Ale_ShowFixAlertAndButton1 (AlertType,Txt);
    Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
-                            FuncParams,Args,
+                            FuncPars,Args,
                             Button,TxtButton);
 
    /***** Free text *****/
@@ -447,7 +447,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
 /*****************************************************************************/
 
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                              void (*FuncParams) (void *Args),void *Args,
+                              void (*FuncPars) (void *Args),void *Args,
                               Btn_Button_t Button,const char *TxtButton)
   {
       /***** Optional button *****/
@@ -458,8 +458,8 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 	   {
 	    /* Begin form */
 	    Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
-	       if (FuncParams)
-		  FuncParams (Args);
+	       if (FuncPars)
+		  FuncPars (Args);
 
 	       /* Put button */
 	       Btn_PutButton (Button,TxtButton);

@@ -305,7 +305,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
       /***** Begin form *****/
       Frm_BeginForm (ActCht);
 
-	 Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
+	 Cht_WriteParsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
 	 /* Begin button */
 	 HTM_BUTTON_Submit_Begin (RoomFullName,
@@ -348,7 +348,7 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 /*** Write parameters with code and names (short and full) of a chat room ****/
 /*****************************************************************************/
 
-void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName)
+void Cht_WriteParsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName)
   {
    Par_PutParString (NULL,"RoomCode",RoomCode);
    Par_PutParString (NULL,"RoomShrtName",RoomShrtName);

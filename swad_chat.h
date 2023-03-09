@@ -31,7 +31,7 @@
 void Cht_ShowChatRooms (void);
 void Cht_ShowListOfAvailableChatRooms (void);
 void Cht_ShowListOfChatRoomsWithUsrs (void);
-void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShortName,const char *RoomFullName);
+void Cht_WriteParsRoomCodeAndNames (const char *RoomCode,const char *RoomShortName,const char *RoomFullName);
 void Cht_OpenChatWindow (void);
 
 #endif

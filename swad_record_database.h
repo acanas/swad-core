@@ -34,24 +34,24 @@
 /*****************************************************************************/
 
 void Rec_DB_CreateField (long CrsCod,const struct RecordField *Field);
-void Rec_DB_CreateFieldContent (long FieldCod,long UsrCod,const char *Text);
-void Rec_DB_UpdateFieldTxt (long FieldCod,long UsrCod,const char *Text);
-void Rec_DB_UpdateFieldName (long FieldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1]);
-void Rec_DB_UpdateFieldNumLines (long FieldCod,unsigned NewNumLines);
-void Rec_DB_UpdateFieldVisibility (long FieldCod,Rec_VisibilityRecordFields_t NewVisibility);
+void Rec_DB_CreateFieldContent (long FldCod,long UsrCod,const char *Text);
+void Rec_DB_UpdateFieldTxt (long FldCod,long UsrCod,const char *Text);
+void Rec_DB_UpdateFieldName (long FldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1]);
+void Rec_DB_UpdateFieldNumLines (long FldCod,unsigned NewNumLines);
+void Rec_DB_UpdateFieldVisibility (long FldCod,Rec_VisibilityRecordFields_t NewVisibility);
 
-unsigned Rec_DB_CountNumRecordsWithFieldContent (long FieldCod);
+unsigned Rec_DB_CountNumRecordsWithFieldContent (long FldCod);
 unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FieldCod);
+unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FldCod);
 unsigned Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
-                                          long FieldCod,long UsrCod);
+                                          long FldCod,long UsrCod);
 
-void Rec_DB_RemoveFieldContentFromAllUsrsRecords (long FieldCod);
-void Rec_DB_RemoveFieldContentFromUsrRecord (long FieldCod,long UsrCod);
+void Rec_DB_RemoveFieldContentFromAllUsrsRecords (long FldCod);
+void Rec_DB_RemoveFieldContentFromUsrRecord (long FldCod,long UsrCod);
 void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long CrsCod);
 void Rec_DB_RemoveAllFieldContentsFromUsrRecords (long UsrCod);
 void Rec_DB_RemoveAllFieldContentsInCrs (long CrsCod);
-void Rec_DB_RemoveField (long FieldCod);
+void Rec_DB_RemoveField (long FldCod);
 void Rec_DB_RemoveAllFieldsInCrs (long CrsCod);
 
 #endif

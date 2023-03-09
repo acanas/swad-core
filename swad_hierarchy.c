@@ -102,6 +102,7 @@ void Hie_SeePending (void)
 
 void Hie_WriteMenuHierarchy (void)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Center;
@@ -115,7 +116,7 @@ void Hie_WriteMenuHierarchy (void)
       HTM_TR_Begin (NULL);
 
 	 /* Label */
-	 Frm_LabelColumn ("RT","cty",Txt_Country);
+	 Frm_LabelColumn ("RT",Par_CodeStr[Par_CtyCod],Txt_Country);
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
@@ -131,7 +132,7 @@ void Hie_WriteMenuHierarchy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","ins",Txt_Institution);
+	    Frm_LabelColumn ("RT",Par_CodeStr[Par_InsCod],Txt_Institution);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -147,7 +148,7 @@ void Hie_WriteMenuHierarchy (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT","ctr",Txt_Center);
+	       Frm_LabelColumn ("RT",Par_CodeStr[Par_CtrCod],Txt_Center);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -163,7 +164,7 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT","deg",Txt_Degree);
+		  Frm_LabelColumn ("RT",Par_CodeStr[Par_DegCod],Txt_Degree);
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"LT\"");
@@ -179,7 +180,7 @@ void Hie_WriteMenuHierarchy (void)
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("RT","crs",Txt_Course);
+		     Frm_LabelColumn ("RT",Par_CodeStr[Par_CrsCod],Txt_Course);
 
 		     /* Data */
 		     HTM_TD_Begin ("class=\"LT\"");
@@ -231,7 +232,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	    Par_PutParCode (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
@@ -266,7 +267,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	    Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ins.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
@@ -313,7 +314,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ctr.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
@@ -360,7 +361,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	    Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Deg.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
@@ -802,7 +803,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 	{
 	 /* Begin form */
 	 Frm_BeginForm (NextAction);
-	    Hie_PutParamOtherHieCod (&HieCod);
+	    Par_PutParCode (Par_OthHieCod,HieCod);
 
 	    /* Selector */
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -832,7 +833,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 /**************************** Get parameter status ***************************/
 /*****************************************************************************/
 
-Hie_Status_t Hie_GetParamStatus (void)
+Hie_Status_t Hie_GetParStatus (void)
   {
    Hie_Status_t Status;
    Hie_StatusTxt_t StatusTxt;
@@ -840,9 +841,9 @@ Hie_Status_t Hie_GetParamStatus (void)
    /***** Get parameter with status *****/
    Status = (Hie_Status_t)
 	    Par_GetParUnsignedLong ("Status",
-	                              0,
-	                              (unsigned long) Hie_MAX_STATUS,
-                                      (unsigned long) Hie_WRONG_STATUS);
+	                            0,
+	                            (unsigned long) Hie_MAX_STATUS,
+                                    (unsigned long) Hie_WRONG_STATUS);
 
    if (Status == Hie_WRONG_STATUS)
       Err_WrongStatusExit ();
@@ -897,7 +898,7 @@ static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
 /**** Write parameter with code of other institution/center/degree/course ****/
 /*****************************************************************************/
 
-void Hie_PutParamOtherHieCod (void *HieCod)
+void Hie_PutParOtherHieCod (void *HieCod)
   {
    if (HieCod)
       Par_PutParCode (Par_OthHieCod,*((long *) HieCod));

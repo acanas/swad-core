@@ -262,7 +262,7 @@ struct Usr_SelectedUsrs
   {
    char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
    bool Filled;			// If lists are already filled/readed
-   char *ParamSuffix;
+   char *ParSuffix;
    Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
   };
 
@@ -316,7 +316,7 @@ void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
 void Usr_Logout (void);
 void Usr_PutLinkToLogin (void);
-void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void));
+void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void));
 void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
@@ -326,15 +326,15 @@ void Usr_FilterUsrBirthday (struct Dat_Date *Birthday);
 void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);
 void Usr_PutFormLogOut (void);
-void Usr_GetParamUsrIdLogin (void);
-unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods);
+void Usr_GetParUsrIdLogin (void);
+unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 
-void Usr_PutParamMyUsrCodEncrypted (void *EncryptedUsrCod);
-void Usr_PutParamOtherUsrCodEncrypted (void *EncryptedUsrCod);
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
-void Usr_GetParamOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
-void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
-bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);
+void Usr_PutParMyUsrCodEncrypted (void *EncryptedUsrCod);
+void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod);
+void Usr_PutParUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
+void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void);
+bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void);
 
 void Usr_ChkUsrAndGetUsrData (void);
 
@@ -363,11 +363,11 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncParams) (void *Args),void *Args,
+                           void (*FuncPars) (void *Args),void *Args,
                            const char *OnSubmit);
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs);
-void Usr_PutHiddenParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_PutParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
@@ -390,14 +390,14 @@ void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args);
+void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
-				       void (*FuncParams) (void *Args),void *Args,
+				       void (*FuncPars) (void *Args),void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
@@ -437,8 +437,8 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);
 
 void Usr_PutWhoIcon (Usr_Who_t Who);
-void Usr_PutHiddenParamWho (Usr_Who_t Who);
-Usr_Who_t Usr_GetHiddenParamWho (void);
+void Usr_PutParWho (Usr_Who_t Who);
+Usr_Who_t Usr_GetParWho (void);
 
 //-------------------------------- Figures ------------------------------------
 void Usr_GetAndShowUsersStats (void);

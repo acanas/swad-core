@@ -71,7 +71,7 @@ extern struct Globals Gbl;
 #define Prj_PARAM_FILTER_HID_VIS_NAME	"FilHidVis"
 #define Prj_PARAM_FILTER_FAULTIN_NAME	"FilFaulti"
 #define Prj_PARAM_FILTER_REVIEW_NAME	"FilReview"
-#define Prj_PARAM_FILTER_DPT_COD_NAME	"FilDptCod"
+#define Prj_PAR_FILTER_DPT_COD_NAME	"FilDptCod"
 
 /***** User roles are shown in this order *****/
 static const Prj_RoleInProject_t Prj_RolesToShow[] =
@@ -137,7 +137,7 @@ struct Usr_SelectedUsrs Prj_MembersToAdd =
       NULL,	// Rol_SYS_ADM
      },
    .Filled      = false,
-   .ParamSuffix = "Member",
+   .ParSuffix = "Member",
    .Option      = Usr_OPTION_UNKNOWN,
   };
 
@@ -179,18 +179,18 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
 static bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
 
-static void Prj_PutCurrentParams (void *Projects);
-static void Prj_PutHiddenParamAssign (unsigned Assign);
-static void Prj_PutHiddenParamHidden (unsigned Hidden);
-static void Prj_PutHiddenParamFaulti (unsigned Faulti);
-static void Prj_PutHiddenParamReview (unsigned Review);
-static void Prj_PutHiddenParamFilterDptCod (long DptCod);
-static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects);
-static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void);
-static unsigned Prj_GetHiddenParamFaulti (void);
-static unsigned Prj_GetHiddenParamReview (void);
-static long Prj_GetHiddenParamFilterDptCod (void);
-static Usr_Who_t Prj_GetParamWho (void);
+static void Prj_PutCurrentPars (void *Projects);
+static void Prj_PutParAssign (unsigned Assign);
+static void Prj_PutParHidden (unsigned Hidden);
+static void Prj_PutParFaulti (unsigned Faulti);
+static void Prj_PutParReview (unsigned Review);
+static void Prj_PutParFilterDptCod (long DptCod);
+static void Prj_GetParPreNon (struct Prj_Projects *Projects);
+static Prj_HiddenVisibl_t Prj_GetParHidVis (void);
+static unsigned Prj_GetParFaulti (void);
+static unsigned Prj_GetParReview (void);
+static long Prj_GetParFilterDptCod (void);
+static Usr_Who_t Prj_GetParWho (void);
 
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
@@ -274,7 +274,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
                                   Prj_RoleInProject_t RoleInPrj);
 static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj);
 
-static Prj_Order_t Prj_GetParamPrjOrder (void);
+static Prj_Order_t Prj_GetParPrjOrder (void);
 
 static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor);
@@ -304,7 +304,7 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 
 //---------------------------- Review status ----------------------------------
-static Prj_ReviewStatus_t Prj_GetHiddenParamReviewStatus (void);
+static Prj_ReviewStatus_t Prj_GetParReviewStatus (void);
 
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
@@ -355,7 +355,7 @@ void Prj_ListUsrsToSelect (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Show list of users to select some of them *****/
    Prj_ReqUsrsToSelect (&Projects);
@@ -370,7 +370,7 @@ static void Prj_ReqUsrsToSelect (void *Projects)
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeePrj,
-				     Prj_PutCurrentParams,Projects,
+				     Prj_PutCurrentPars,Projects,
 				     Txt_Projects,
 				     Hlp_ASSESSMENT_Projects,
 				     Txt_View_projects,
@@ -389,7 +389,7 @@ void Prj_SeeProjects (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Show projects *****/
    Prj_ShowProjects (&Projects);
@@ -443,7 +443,7 @@ void Prj_ShowTableSelectedPrjs (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Get list of projects *****/
    Prj_GetListProjects (&Projects);
@@ -629,7 +629,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	       Filter.Faulti = Projects->Filter.Faulti;
 	       Filter.Review = Projects->Filter.Review;
 	       Filter.DptCod = Projects->Filter.DptCod;
-	       Prj_PutParams (&Filter,
+	       Prj_PutPars (&Filter,
 			      Projects->SelectedOrder,
 			      Projects->CurrentPage,
 			      -1L);
@@ -663,7 +663,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	    Filter.Faulti = Projects->Filter.Faulti;
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
+	    Prj_PutPars (&Filter,
 			   Projects->SelectedOrder,
 			   Projects->CurrentPage,
 			   -1L);
@@ -707,7 +707,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	    Filter.Faulti = Projects->Filter.Faulti;
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
+	    Prj_PutPars (&Filter,
 			   Projects->SelectedOrder,
 			   Projects->CurrentPage,
 			   -1L);
@@ -752,7 +752,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	    Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
+	    Prj_PutPars (&Filter,
 			   Projects->SelectedOrder,
 			   Projects->CurrentPage,
 			   -1L);
@@ -788,7 +788,7 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 	    Filter.Faulti = Projects->Filter.Faulti;
 	    Filter.Review = Projects->Filter.Review ^ (1 << ReviewStatus);	// Toggle
 	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
+	    Prj_PutPars (&Filter,
 			   Projects->SelectedOrder,
 			   Projects->CurrentPage,
 			   -1L);
@@ -820,7 +820,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 Filter.Faulti = Projects->Filter.Faulti;
 	 Filter.Review = Projects->Filter.Review;
 	 Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
-	 Prj_PutParams (&Filter,
+	 Prj_PutPars (&Filter,
 			Projects->SelectedOrder,
 			Projects->CurrentPage,
 			-1L);
@@ -831,7 +831,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	    Err_NotEnoughMemoryExit ();
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
 				      Projects->Filter.DptCod,		// Selected department
-				      Prj_PARAM_FILTER_DPT_COD_NAME,	// Parameter name
+				      Prj_PAR_FILTER_DPT_COD_NAME,	// Parameter name
 				      SelectClass,			// Selector class
 				      -1L,				// First option
 				      Txt_Any_department,		// Text when no department selected
@@ -907,10 +907,10 @@ bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
 /********************** Put parameters used in projects **********************/
 /*****************************************************************************/
 
-static void Prj_PutCurrentParams (void *Projects)
+static void Prj_PutCurrentPars (void *Projects)
   {
    if (Projects)
-      Prj_PutParams (&((struct Prj_Projects *) Projects)->Filter,
+      Prj_PutPars (&((struct Prj_Projects *) Projects)->Filter,
 		      ((struct Prj_Projects *) Projects)->SelectedOrder,
 		      ((struct Prj_Projects *) Projects)->CurrentPage,
 		      ((struct Prj_Projects *) Projects)->Prj.PrjCod);
@@ -920,34 +920,34 @@ static void Prj_PutCurrentParams (void *Projects)
    when one or more parameters must be passed explicitely.
    Each parameter is passed only if its value is distinct to default. */
 
-void Prj_PutParams (struct Prj_Filter *Filter,
+void Prj_PutPars (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod)
   {
    /***** Put filter parameters (which projects to show) *****/
    if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
-      Usr_PutHiddenParamWho (Filter->Who);
+      Usr_PutParWho (Filter->Who);
 
    if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
 	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
-      Prj_PutHiddenParamAssign (Filter->Assign);
+      Prj_PutParAssign (Filter->Assign);
 
    if (Filter->Hidden != ((unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 	                  (unsigned) Prj_FILTER_VISIBL_DEFAULT))
-      Prj_PutHiddenParamHidden (Filter->Hidden);
+      Prj_PutParHidden (Filter->Hidden);
 
    if (Filter->Faulti != ((unsigned) Prj_FILTER_FAULTY_DEFAULT |
 	                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT))
-      Prj_PutHiddenParamFaulti (Filter->Faulti);
+      Prj_PutParFaulti (Filter->Faulti);
 
    if (Filter->Review != ((unsigned) Prj_FILTER_UNREVIEWED_DEFAULT |
 	                  (unsigned) Prj_FILTER_UNAPPROVED_DEFAULT |
 	                  (unsigned) Prj_FILTER_APPROVED_DEFAULT))
-      Prj_PutHiddenParamReview (Filter->Review);
+      Prj_PutParReview (Filter->Review);
 
    if (Filter->DptCod != Prj_FILTER_DPT_DEFAULT)
-      Prj_PutHiddenParamFilterDptCod (Filter->DptCod);
+      Prj_PutParFilterDptCod (Filter->DptCod);
 
    /***** Put order field *****/
    if (Order != Prj_ORDER_DEFAULT)
@@ -955,55 +955,54 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put number of page *****/
    if (NumPage > 1)
-      Pag_PutHiddenParamPagNum (Pag_PROJECTS,NumPage);
+      Pag_PutParPagNum (Pag_PROJECTS,NumPage);
 
    /***** Put selected project code *****/
-   if (PrjCod > 0)
-      Prj_PutParamPrjCod (PrjCod);
+   Par_PutParCode (Par_PrjCod,PrjCod);
 
    /***** Put another user's code *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /***** Put selected users' codes *****/
    if (Filter->Who == Usr_WHO_SELECTED)
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
 /*********************** Put hidden params for projects **********************/
 /*****************************************************************************/
 
-static void Prj_PutHiddenParamAssign (unsigned Assign)
+static void Prj_PutParAssign (unsigned Assign)
   {
    Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_PRE_NON_NAME,Assign);
   }
 
-static void Prj_PutHiddenParamHidden (unsigned Hidden)
+static void Prj_PutParHidden (unsigned Hidden)
   {
    Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_HID_VIS_NAME,Hidden);
   }
 
-static void Prj_PutHiddenParamFaulti (unsigned Faulti)
+static void Prj_PutParFaulti (unsigned Faulti)
   {
    Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_FAULTIN_NAME,Faulti);
   }
 
-static void Prj_PutHiddenParamReview (unsigned Review)
+static void Prj_PutParReview (unsigned Review)
   {
    Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_REVIEW_NAME,Review);
   }
 
-static void Prj_PutHiddenParamFilterDptCod (long DptCod)
+static void Prj_PutParFilterDptCod (long DptCod)
   {
-   Par_PutParUnsigned (NULL,Prj_PARAM_FILTER_DPT_COD_NAME,DptCod);
+   Par_PutParUnsigned (NULL,Prj_PAR_FILTER_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/
 /*********************** Get hidden params for projects **********************/
 /*****************************************************************************/
 
-static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects)
+static void Prj_GetParPreNon (struct Prj_Projects *Projects)
   {
    Projects->Filter.Assign = (unsigned) Par_GetParUnsignedLong (Prj_PARAM_FILTER_PRE_NON_NAME,
                                                                 0,
@@ -1013,7 +1012,7 @@ static void Prj_GetHiddenParamPreNon (struct Prj_Projects *Projects)
                                                                 (unsigned) Prj_FILTER_NONASSIG_DEFAULT);
   }
 
-static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
+static Prj_HiddenVisibl_t Prj_GetParHidVis (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1035,7 +1034,7 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
      }
   }
 
-static unsigned Prj_GetHiddenParamFaulti (void)
+static unsigned Prj_GetParFaulti (void)
   {
    return (unsigned)
 	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_FAULTIN_NAME,
@@ -1046,7 +1045,7 @@ static unsigned Prj_GetHiddenParamFaulti (void)
                                   (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
   }
 
-static unsigned Prj_GetHiddenParamReview (void)
+static unsigned Prj_GetParReview (void)
   {
    return (unsigned)
 	  Par_GetParUnsignedLong (Prj_PARAM_FILTER_REVIEW_NAME,
@@ -1059,28 +1058,28 @@ static unsigned Prj_GetHiddenParamReview (void)
                                   (unsigned) Prj_FILTER_APPROVED_DEFAULT);
   }
 
-static long Prj_GetHiddenParamFilterDptCod (void)
+static long Prj_GetParFilterDptCod (void)
   {
-   return Par_GetParLong (Prj_PARAM_FILTER_DPT_COD_NAME);
+   return Par_GetParLong (Prj_PAR_FILTER_DPT_COD_NAME);
   }
 
 /*****************************************************************************/
 /***************** Get generic parameters to list projects *******************/
 /*****************************************************************************/
 
-void Prj_GetParams (struct Prj_Projects *Projects)
+void Prj_GetPars (struct Prj_Projects *Projects)
   {
    /***** Get filter (which projects to show) *****/
-   Projects->Filter.Who = Prj_GetParamWho ();
-   Prj_GetHiddenParamPreNon (Projects);
-   Projects->Filter.Hidden = Prj_GetHiddenParamHidVis ();
-   Projects->Filter.Faulti = Prj_GetHiddenParamFaulti ();
-   Projects->Filter.Review = Prj_GetHiddenParamReview ();
-   Projects->Filter.DptCod = Prj_GetHiddenParamFilterDptCod ();
+   Projects->Filter.Who = Prj_GetParWho ();
+   Prj_GetParPreNon (Projects);
+   Projects->Filter.Hidden = Prj_GetParHidVis ();
+   Projects->Filter.Faulti = Prj_GetParFaulti ();
+   Projects->Filter.Review = Prj_GetParReview ();
+   Projects->Filter.DptCod = Prj_GetParFilterDptCod ();
 
    /***** Get order and page *****/
-   Projects->SelectedOrder = Prj_GetParamPrjOrder ();
-   Projects->CurrentPage = Pag_GetParamPagNum (Pag_PROJECTS);
+   Projects->SelectedOrder = Prj_GetParPrjOrder ();
+   Projects->CurrentPage = Pag_GetParPagNum (Pag_PROJECTS);
 
    /***** Get selected users *****/
    if (Projects->Filter.Who == Usr_WHO_SELECTED)
@@ -1091,12 +1090,12 @@ void Prj_GetParams (struct Prj_Projects *Projects)
 /************* Get parameter with whose users' projects to view **************/
 /*****************************************************************************/
 
-static Usr_Who_t Prj_GetParamWho (void)
+static Usr_Who_t Prj_GetParWho (void)
   {
    Usr_Who_t Who;
 
    /***** Get which users I want to see *****/
-   Who = Usr_GetHiddenParamWho ();
+   Who = Usr_GetParWho ();
 
    /***** If parameter Who is unknown, set it to default *****/
    if (Who == Usr_WHO_UNKNOWN)
@@ -1150,7 +1149,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
 	       case Prj_LIST_PROJECTS:
 	       case Prj_FILE_BROWSER_PROJECT:
 		  Frm_BeginForm (ActSeePrj);
-		     Prj_PutParams (&Projects->Filter,
+		     Prj_PutPars (&Projects->Filter,
 				    Order,
 				    Projects->CurrentPage,
 				    -1L);
@@ -1266,7 +1265,7 @@ static void Prj_PutIconsListProjects (void *Projects)
       /***** Link to get resource link *****/
       if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
-					 Prj_PutCurrentParams,Projects);
+					 Prj_PutCurrentPars,Projects);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_PROJECTS);
@@ -1280,7 +1279,7 @@ static void Prj_PutIconsListProjects (void *Projects)
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects)
   {
    Projects->Prj.PrjCod = -1L;
-   Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,Prj_PutCurrentParams,Projects);
+   Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,Prj_PutCurrentPars,Projects);
   }
 
 /*****************************************************************************/
@@ -1293,7 +1292,7 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
 
    Projects->Prj.PrjCod = -1L;
    Frm_BeginForm (ActFrmNewPrj);
-      Prj_PutCurrentParams (Projects);
+      Prj_PutCurrentPars (Projects);
       Btn_PutConfirmButton (Txt_New_project);
    Frm_EndForm ();
   }
@@ -1305,7 +1304,7 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
-                                  Prj_PutCurrentParams,Projects,
+                                  Prj_PutCurrentPars,Projects,
 			          "table.svg",Ico_BLACK);
   }
 
@@ -1321,7 +1320,7 @@ void Prj_ShowOneProject (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Show project and (if possible) its file browser *****/
@@ -1623,7 +1622,7 @@ static void Prj_ShowProjectFirstRow (struct Prj_Projects *Projects,
 	       NextAction = Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) ? ActAdmDocPrj :
 										     ActSeeOnePrj;
 	       Frm_BeginForm (NextAction);
-		  Prj_PutCurrentParams (Projects);
+		  Prj_PutCurrentPars (Projects);
 		  HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 					   "class=\"LT BT_LINK %s_%s\"",
 					   Projects->Prj.Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
@@ -1744,7 +1743,7 @@ static void Prj_ShowProjectReviewStatus (struct Prj_Projects *Projects,
 	{
 	 /***** Begin form to change review status and text *****/
 	 Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
-	    Prj_PutCurrentParams (Projects);
+	    Prj_PutCurrentPars (Projects);
 
 	    /***** Selector to change review status *****/
 	    Prj_PutSelectorReviewStatus (Projects);
@@ -2104,7 +2103,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 			  {
 			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
-							     Prj_PutCurrentParams,Projects,
+							     Prj_PutCurrentPars,Projects,
 							     "trash.svg",Ico_RED);
 			   HTM_TD_End ();
 			  }
@@ -2135,7 +2134,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 		     HTM_TR_Begin (NULL);
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
-						       Prj_PutCurrentParams,Projects);
+						       Prj_PutCurrentPars,Projects);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
@@ -2864,7 +2863,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    char *TxtButton;
 
    /***** Get parameters *****/
-   Prj_GetParams (Projects);
+   Prj_GetPars (Projects);
    Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Put form to select users *****/
@@ -2873,7 +2872,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
       Err_NotEnoughMemoryExit ();
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
 				     ActionAddUsr[RoleInPrj],
-				     Prj_PutCurrentParams,Projects,
+				     Prj_PutCurrentPars,Projects,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton,
@@ -2939,7 +2938,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Add the selected users to project *****/
@@ -2947,7 +2946,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
    while (*Ptr)
      {
       /* Get next user */
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 
@@ -3031,14 +3030,14 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Prj_AllocMemProject (&Projects->Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (Projects);
+   Prj_GetPars (Projects);
    Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects->Prj);
 
    /***** Get user to be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Prj_CheckIfICanEditProject (&Projects->Prj))
 	{
@@ -3054,7 +3053,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 
 	    /* Show form to request confirmation */
 	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
-	       Prj_PutCurrentParams (Projects);
+	       Prj_PutCurrentPars (Projects);
 	       if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
 	                     Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
 		  Err_NotEnoughMemoryExit ();
@@ -3110,14 +3109,14 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
 
    /***** Get user to be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Prj_CheckIfICanEditProject (&Projects.Prj))
 	{
@@ -3151,13 +3150,13 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 /********* Get parameter with the type or order in list of projects **********/
 /*****************************************************************************/
 
-static Prj_Order_t Prj_GetParamPrjOrder (void)
+static Prj_Order_t Prj_GetParPrjOrder (void)
   {
    return (Prj_Order_t)
 	  Par_GetParUnsignedLong ("Order",
-				    0,
-				    Prj_NUM_ORDERS - 1,
-				    (unsigned long) Prj_ORDER_DEFAULT);
+				  0,
+				  Prj_NUM_ORDERS - 1,
+				  (unsigned long) Prj_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -3177,26 +3176,26 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
      {
       /***** Icon to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,NULL,
-                                     Prj_PutCurrentParams,Projects);
+                                     Prj_PutCurrentPars,Projects);
 
       /***** Icon to hide/unhide project *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 Prj_PutCurrentParams,Projects,
+					 Prj_PutCurrentPars,Projects,
 					 Projects->Prj.Hidden == Prj_HIDDEN);
 
       /***** Icon to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
-                                   Prj_PutCurrentParams,Projects);
+                                   Prj_PutCurrentPars,Projects);
      }
 
    /***** Icon to admin project documents *****/
    if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod))
       Ico_PutContextualIconToViewFiles (ActAdmDocPrj,
-                                        Prj_PutCurrentParams,Projects);
+                                        Prj_PutCurrentPars,Projects);
 
    /***** Icon to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,
-                                 Prj_PutCurrentParams,Projects);
+                                 Prj_PutCurrentPars,Projects);
 
    /***** Locked/unlocked project edition *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -3214,7 +3213,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
    /***** Link to get resource link *****/
    if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
-				      Prj_PutCurrentParams,Projects);
+				      Prj_PutCurrentPars,Projects);
   }
 
 /*****************************************************************************/
@@ -3478,16 +3477,6 @@ void Prj_FreeListProjects (struct Prj_Projects *Projects)
   }
 
 /*****************************************************************************/
-/******************* Write parameter with code of project ********************/
-/*****************************************************************************/
-
-void Prj_PutParamPrjCod (long PrjCod)
-  {
-   if (PrjCod > 0)
-      Par_PutParLong (NULL,"PrjCod",PrjCod);
-  }
-
-/*****************************************************************************/
 /**************** Ask for confirmation of removing a project *****************/
 /*****************************************************************************/
 
@@ -3504,7 +3493,7 @@ void Prj_ReqRemProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -3513,7 +3502,7 @@ void Prj_ReqRemProject (void)
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
       /***** Show question and button to remove the project *****/
       Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,
-                              Prj_PutCurrentParams,&Projects,
+                              Prj_PutCurrentPars,&Projects,
 			      Btn_REMOVE_BUTTON,Txt_Remove_project,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
 	                      Projects.Prj.Title);
@@ -3544,7 +3533,7 @@ void Prj_RemoveProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -3599,7 +3588,7 @@ void Prj_HideProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -3633,7 +3622,7 @@ void Prj_UnhideProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -3664,7 +3653,7 @@ void Prj_RequestCreatePrj (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = -1L;	// It's a new, non existing, project
 
    /***** Form to create project *****/
@@ -3679,7 +3668,7 @@ void Prj_RequestEditPrj (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Form to edit project *****/
@@ -3778,7 +3767,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    /* Begin data form */
    Frm_BeginForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
-      Prj_PutCurrentParams (Projects);
+      Prj_PutCurrentPars (Projects);
 
       /* Begin box and table */
       Box_BoxTableBegin (NULL,Txt_Data,
@@ -4027,7 +4016,7 @@ void Prj_ReceiveFormProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    ItsANewProject = ((Projects.Prj.PrjCod = Par_GetParCode (Par_PrjCod)) <= 0);
 
    if (ItsANewProject)
@@ -4298,12 +4287,12 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects)
   {
    /***** Put icon to lock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,
-                                  Prj_PutCurrentParams,Projects,
+                                  Prj_PutCurrentPars,Projects,
 			          "lock.svg",Ico_RED);
 
    /***** Put icon to unlock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,
-                                  Prj_PutCurrentParams,Projects,
+                                  Prj_PutCurrentPars,Projects,
 			          "unlock.svg",Ico_GREEN);
   }
 
@@ -4322,7 +4311,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Show question and button to lock all selected projects *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -4333,7 +4322,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
       /* Show question and button */
       if (Projects.Num)
 	 Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
-	                         Prj_PutCurrentParams,&Projects,
+	                         Prj_PutCurrentPars,&Projects,
 				 Btn_REMOVE_BUTTON,Txt_Lock_editing,
 				 Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
 				 Projects.Num);
@@ -4361,7 +4350,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Show question and button to unlock all selected projects *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -4372,7 +4361,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
       /* Show question and button */
       if (Projects.Num)
 	 Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
-	                         Prj_PutCurrentParams,&Projects,
+	                         Prj_PutCurrentPars,&Projects,
 				 Btn_CREATE_BUTTON,Txt_Unlock_editing,
 				 Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
 				 Projects.Num);
@@ -4403,7 +4392,7 @@ void Prj_LockSelectedPrjsEdition (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Lock all selected projects *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -4440,7 +4429,7 @@ void Prj_UnloSelectedPrjsEdition (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
 
    /***** Unlock all selected projects *****/
    if (Prj_CheckIfICanConfigAllProjects ())
@@ -4534,7 +4523,7 @@ void Prj_LockProjectEdition (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -4571,7 +4560,7 @@ void Prj_UnloProjectEdition (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -4608,7 +4597,7 @@ void Prj_ChangeReviewStatus (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get data of the project from database *****/
@@ -4617,7 +4606,7 @@ void Prj_ChangeReviewStatus (void)
    /***** Hide project *****/
    if (Prj_CheckIfICanReviewProjects ())
      {
-      Projects.Prj.Review.Status = Prj_GetHiddenParamReviewStatus ();
+      Projects.Prj.Review.Status = Prj_GetParReviewStatus ();
       Par_GetParHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
       Prj_DB_UpdateReview (&Projects.Prj);
      }
@@ -4635,13 +4624,13 @@ void Prj_ChangeReviewStatus (void)
 /********************** Get parameter with review status *********************/
 /*****************************************************************************/
 
-static Prj_ReviewStatus_t Prj_GetHiddenParamReviewStatus (void)
+static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
   {
    return (Prj_ReviewStatus_t)
 	  Par_GetParUnsignedLong ("ReviewStatus",
-				    0,
-				    Prj_NUM_REVIEW_STATUS - 1,
-				    (unsigned long) Prj_REVIEW_STATUS_DEFAULT);
+				  0,
+				  Prj_NUM_REVIEW_STATUS - 1,
+				  (unsigned long) Prj_REVIEW_STATUS_DEFAULT);
   }
 
 /*****************************************************************************/

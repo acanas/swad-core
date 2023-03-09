@@ -338,13 +338,13 @@ void Mai_DB_CreateMailDomain (const struct Mail *Mai)
 /*****************************************************************************/
 
 void Mai_DB_UpdateMailDomainName (long MaiCod,
-                                  const char *FieldName,const char *NewMaiName)
+                                  const char *FldName,const char *NewMaiName)
   {
    DB_QueryUPDATE ("can not update the name of a mail domain",
 		   "UPDATE ntf_mail_domains"
 		     " SET %s='%s'"
 		   " WHERE MaiCod=%ld",
-	           FieldName,NewMaiName,
+	           FldName,NewMaiName,
 	           MaiCod);
   }
 
@@ -409,7 +409,7 @@ unsigned Mai_DB_GetDataOfMailDomainByCod (MYSQL_RES **mysql_res,long MaiCod)
 /********************** Check if the name of mail exists *********************/
 /*****************************************************************************/
 
-bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
+bool Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a mail domain already existed",
@@ -418,7 +418,7 @@ bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,
 		     " FROM ntf_mail_domains"
 		    " WHERE %s='%s'"
 		      " AND MaiCod<>%ld)",
-		   FieldName,Name,
+		   FldName,Name,
 		   MaiCod);
   }
 

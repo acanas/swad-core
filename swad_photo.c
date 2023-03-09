@@ -105,7 +105,7 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      Pho_AvgPhotoTypeOfAverage_t TypeOfAverage,const char *DirAvgPhotosRelPath,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,long *TimeToComputeAvgPhotoInMicroseconds);
 static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_PutParamsDegPhoto (void *DegPhotos);
+static void Pho_PutParsDegPhoto (void *DegPhotos);
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos);
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void);
 static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos);
@@ -114,7 +114,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
 
 static void Pho_PutIconToPrintDegreeStats (void *DegPhotos);
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos);
+static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos);
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos);
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
@@ -194,7 +194,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
    else	// Not me
       if (Pho_ICanChangeOtherUsrPhoto (UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
-				        Rec_PutParamUsrCodEncrypted,NULL,
+				        Rec_PutParUsrCodEncrypted,NULL,
 	                                "camera.svg",Ico_BLACK);
   }
 
@@ -236,7 +236,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
-				     Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+				     Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
   }
 
@@ -303,7 +303,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
       else
 	{
 	 Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
 
 	 /***** Show help message *****/
@@ -330,7 +330,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 void Pho_SendPhotoUsr (void)
   {
    /***** Get user whose photo must be sent or removed *****/
-   if (!Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (!Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {	// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
       return;
@@ -372,7 +372,7 @@ void Pho_RecMyPhotoDetFaces (void)
 void Pho_RecOtherUsrPhotoDetFaces (void)
   {
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -485,7 +485,7 @@ void Pho_ReqRemoveUsrPhoto (void)
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -508,7 +508,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
@@ -531,7 +531,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 void Pho_RemoveUsrPhoto (void)
   {
    /***** Get user's code from form *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -566,7 +566,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    extern const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_;
    extern const char *Txt_Faces_detected;
    char PathPhotosPriv[PATH_MAX + 1];
-   struct Param *Param;
+   struct Par_Param *Par;
    char FileNamePhotoSrc[PATH_MAX + 1];
    char FileNamePhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
    char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
@@ -621,7 +621,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PUBLIC);
 
    /***** First of all, copy in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+   Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNamePhotoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
@@ -641,7 +641,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    /* End the reception of photo in a temporary file */
    snprintf (FileNamePhotoTmp,sizeof (FileNamePhotoTmp),"%s/%s.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,UniqueNameEncrypted);
-   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
+   if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Par))
      {
       Ale_ShowAlert (Ale_ERROR,"Error copying file.");
       return false;
@@ -687,7 +687,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
                else
         	 {
 		  Frm_BeginFormId (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],FormId);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
 		  Par_PutParString (NULL,"FileName",StrFileName);
 		  Frm_EndForm ();
@@ -809,7 +809,7 @@ void Pho_UpdateMyPhoto2 (void)
 void Pho_UpdateUsrPhoto1 (void)
   {
    /***** Get user's code from form and user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -1260,7 +1260,7 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    if (PutLinkToPublicProfile)
      {
       Frm_BeginForm (ActSeeOthPubPrf);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+         Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (NULL,"class=\"BT_LINK\"");
      }
 
@@ -1371,8 +1371,8 @@ void Pho_UpdatePhotoName (struct Usr_Data *UsrDat)
 void Pho_ChangePhotoVisibility (void)
   {
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho",
-	                                                        Pri_PHOTO_ALLOWED_VIS);
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParVisibility ("VisPho",
+	                                                      Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
    Set_DB_UpdateMySettingsAboutPhotoVisibility ();
@@ -1735,13 +1735,13 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /**************** Put parameter for degree average photos ********************/
 /*****************************************************************************/
 
-static void Pho_PutParamsDegPhoto (void *DegPhotos)
+static void Pho_PutParsDegPhoto (void *DegPhotos)
   {
    if (DegPhotos)
      {
-      Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
-      Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
-      Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
+      Pho_PutParTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
+      Pho_PutParPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
+      Pho_PutParOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
      }
   }
 
@@ -1765,9 +1765,9 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	    Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"AvgType\" name=\"AvgType\""
 			      " class=\"INPUT_%s\"",
@@ -1792,7 +1792,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 /**************** Put hidden parameter for the type of average ***************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
+void Pho_PutParTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
   {
    Par_PutParUnsigned (NULL,"AvgType",(unsigned) TypeOfAverage);
   }
@@ -1805,9 +1805,9 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
    return (Pho_AvgPhotoTypeOfAverage_t)
 	  Par_GetParUnsignedLong ("AvgType",
-                                    0,
-                                    Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
-                                    (unsigned long) Pho_PHOTO_AVG_DEFAULT);
+                                  0,
+                                  Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
+                                  (unsigned long) Pho_PHOTO_AVG_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1830,9 +1830,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	    Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
 			      " class=\"INPUT_%s\"",
@@ -1857,7 +1857,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 /**************** Put hidden parameter for the size of photos ****************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
+void Pho_PutParPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
   {
    Par_PutParUnsigned (NULL,"PhotoSize",(unsigned) HowComputePhotoSize);
   }
@@ -1870,9 +1870,9 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
    return (Pho_HowComputePhotoSize_t)
 	  Par_GetParUnsignedLong ("PhotoSize",
-                                    0,
-                                    Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
-                                    (unsigned long) Pho_PHOTO_SIZE_DEFAULT);
+                                  0,
+                                  Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
+                                  (unsigned long) Pho_PHOTO_SIZE_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1895,9 +1895,9 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	    Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"Order\" name=\"Order\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1921,7 +1921,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 /**************** Put hidden parameter for the order of degrees **************/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
+void Pho_PutParOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
   {
    Par_PutParUnsigned (NULL,"Order",(unsigned) HowOrderDegrees);
   }
@@ -1934,9 +1934,9 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
    return (Pho_HowOrderDegrees_t)
 	  Par_GetParUnsignedLong ("Order",
-                                    0,
-                                    Pho_NUM_HOW_ORDER_DEGREES - 1,
-                                    (unsigned long) Pho_ORDER_DEFAULT);
+                                  0,
+                                  Pho_NUM_HOW_ORDER_DEGREES - 1,
+                                  (unsigned long) Pho_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1946,15 +1946,15 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 static void Pho_PutIconToPrintDegreeStats (void *DegPhotos)
   {
    Ico_PutContextualIconToPrint (ActPrnPhoDeg,
-				 Pho_PutLinkToPrintViewOfDegreeStatsParams,DegPhotos);
+				 Pho_PutLinkToPrintViewOfDegreeStatsPars,DegPhotos);
   }
 
-static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
+static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos)
   {
-   Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
-   Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
-   Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
-   Set_PutParamsPrefsAboutUsrList ();
+   Pho_PutParTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
+   Pho_PutParPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
+   Pho_PutParOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
+   Set_PutParsPrefsAboutUsrList ();
   }
 
 /*****************************************************************************/
@@ -1987,10 +1987,10 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 	 /* Begin form */
 	 Frm_BeginForm (ActCalPhoDeg);
-	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	    Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParsPrefsAboutUsrList ();
 
 	    /***** Put button to refresh *****/
 	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
@@ -2100,7 +2100,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos);
 
       HTM_TABLE_BeginCenter ();
 
@@ -2182,7 +2182,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
@@ -2349,7 +2349,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
-	 Deg_PutParamDegCod (Deg->DegCod);
+	 Par_PutParCode (Par_DegCod,Deg->DegCod);
 	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
 	                          "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();

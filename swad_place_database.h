@@ -34,12 +34,12 @@
 /*****************************************************************************/
 
 void Plc_DB_CreatePlace (const struct Plc_Place *Plc);
-void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName);
+void Plc_DB_UpdatePlcName (long PlcCod,const char *FldName,const char *NewPlcName);
 
 unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder);
 unsigned Plc_DB_GetDataOfPlaceByCod (MYSQL_RES **mysql_res,long PlcCod);
 bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                    const char *FieldName,const char *Name);
+                                    const char *FldName,const char *Name);
 
 void Plc_DB_RemovePlace (long PlcCod);
 

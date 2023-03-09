@@ -49,7 +49,7 @@ void ExaRsc_GetLinkToExam (void)
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
 
    /***** Get exam title *****/
    ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);

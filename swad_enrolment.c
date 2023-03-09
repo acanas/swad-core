@@ -180,7 +180,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
 				 1 << Rol_STD))	// No students in course
 	{
 	 Frm_BeginForm (ActReqEnrSevStd);
-	    Crs_PutParamCrsCod (CrsCod);
+	    Par_PutParCode (Par_CrsCod,CrsCod);
 	    Btn_PutCreateButtonInline (Txt_Register_students);
 	 Frm_EndForm ();
 	}
@@ -330,15 +330,15 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
 /****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
-void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
+void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (void))
   {
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
    /***** Form to request user's ID, @nickname or email address *****/
    Frm_BeginForm (NextAction);
-      if (FuncParams)
-	 FuncParams ();
+      if (FuncPars)
+	 FuncPars ();
 
       /***** Label *****/
       HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"RM FORM_IN_%s\"",
@@ -713,9 +713,9 @@ void Enr_RemoveOldUsrs (void)
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
 	                 Par_GetParUnsignedLong ("Months",
-                                                   Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
-                                                   Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
-                                                   (unsigned long) UINT_MAX);
+                                                 Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
+                                                 Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
+                                                 (unsigned long) UINT_MAX);
    if (MonthsWithoutAccess == UINT_MAX)
       Err_ShowErrorAndExit ("Wrong number of months.");
    SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
@@ -944,9 +944,9 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
    RegRemUsrsAction = (Enr_RegRemUsrsAction_t)
 	              Par_GetParUnsignedLong ("RegRemAction",
-                                                0,
-                                                Enr_NUM_REG_REM_USRS_ACTIONS - 1,
-                                                (unsigned long) Enr_REG_REM_USRS_UNKNOWN_ACTION);
+                                              0,
+                                              Enr_NUM_REG_REM_USRS_ACTIONS - 1,
+                                              (unsigned long) Enr_REG_REM_USRS_UNKNOWN_ACTION);
    switch (RegRemUsrsAction)
      {
       case Enr_REGISTER_SPECIFIED_USRS_IN_CRS:
@@ -1706,7 +1706,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 
 	 /* Show form to request confirmation */
 	 Frm_BeginForm (ActRemAllStdCrs);
-	    Grp_PutParamAllGroups ();
+	    Grp_PutParAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
 	    Btn_PutRemoveButton (Txt_Remove_all_students);
 	 Frm_EndForm ();
@@ -1822,9 +1822,9 @@ void Enr_SignUpInCrs (void)
       /***** Get new role from record form *****/
       RoleFromForm = (Rol_Role_t)
 	             Par_GetParUnsignedLong ("Role",
-                                               0,
-                                               Rol_NUM_ROLES - 1,
-                                               (unsigned long) Rol_UNK);
+                                             0,
+                                             Rol_NUM_ROLES - 1,
+                                             (unsigned long) Rol_UNK);
 
       /* Check if role is correct */
       if (!(RoleFromForm == Rol_STD ||
@@ -1925,7 +1925,7 @@ void Enr_AskIfRejectSignUp (void)
    Rol_Role_t Role;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
@@ -1963,7 +1963,7 @@ void Enr_AskIfRejectSignUp (void)
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
-	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
@@ -1984,7 +1984,7 @@ void Enr_RejectSignUp (void)
    extern const char *Txt_Enrolment_of_X_rejected;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
@@ -2226,7 +2226,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Deg_GetDataOfDegreeByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
-			   Crs_PutParamCrsCod (Crs.CrsCod);
+			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
 			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 						    "class=\"LT BT_LINK\"");
 			   Str_FreeGoToTitle ();
@@ -2274,8 +2274,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
-			   Crs_PutParamCrsCod (Crs.CrsCod);
-			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
+			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutCreateButtonInline (Txt_Register);
 			Frm_EndForm ();
 		     HTM_TD_End ();
@@ -2284,8 +2284,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
 		                   The_GetSuffix ());
 			Frm_BeginForm (ActReqRejSignUp);
-			   Crs_PutParamCrsCod (Crs.CrsCod);
-			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
+			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutRemoveButtonInline (Txt_Reject);
 			Frm_EndForm ();
 		     HTM_TD_End ();
@@ -2496,7 +2496,7 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
    struct Usr_ListUsrCods ListUsrCods;
 
    /***** Check if UsrCod is present in parameters *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** If UsrCod is present in parameters,
@@ -2508,7 +2508,7 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
    else        // Parameter with user code not present
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled /removed *****/
-      Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
+      Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
 
    Enr_AskIfRegRemUsr (&ListUsrCods,Role);
   }
@@ -2643,7 +2643,7 @@ void Enr_ReqRemMeFromCrs (void)
 void Enr_ReqRemUsrFromCrs (void)
   {
    /***** Get user to be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Enr_CheckIfICanRemUsrFromCrs ())
 	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
@@ -2663,7 +2663,7 @@ void Enr_RemUsrFromCrs1 (void)
    if (Pwd_GetConfirmationOnDangerousAction ())
      {
       /***** Get user to be removed *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
 	{
 	 if (Enr_CheckIfICanRemUsrFromCrs ())
 	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.Hierarchy.Crs,
@@ -2754,7 +2754,7 @@ void Enr_CreateNewUsr1 (void)
      };
 
    /***** Get user's ID from form *****/
-   ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
+   ID_GetParOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
      {
@@ -2857,16 +2857,16 @@ void Enr_ModifyUsr1 (void)
      };
 
    /***** Get user from form *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Get the action to do *****/
       Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
 	                      Par_GetParUnsignedLong ("RegRemAction",
-                                                        0,
-                                                        Enr_REG_REM_ONE_USR_NUM_ACTIONS - 1,
-                                                        (unsigned long) Enr_REG_REM_ONE_USR_UNKNOWN_ACTION);
+                                                      0,
+                                                      Enr_REG_REM_ONE_USR_NUM_ACTIONS - 1,
+                                                      (unsigned long) Enr_REG_REM_ONE_USR_UNKNOWN_ACTION);
       switch (Gbl.Usrs.RegRemAction)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
@@ -3074,7 +3074,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
       if (!NextAction[UsrDat->Roles.InCurrentCrs])
 	 Err_WrongRoleExit ();
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
 				      Txt_Remove_user_from_this_course);

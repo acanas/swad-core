@@ -154,9 +154,8 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 
 bool Prg_CheckIfICanEditProgram (void);
 
-void Prg_PutParamRscCod (void *RscCod);
-void Prg_PutParamItmCod (void *ItmCod);
-void Prg_GetParams (struct Prg_Item *Item);
+void Prg_PutParItmCod (void *ItmCod);
+void Prg_GetPars (struct Prg_Item *Item);
 
 void Prg_GetListItems (void);
 void Prg_FreeListItems (void);

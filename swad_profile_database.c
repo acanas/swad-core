@@ -237,7 +237,7 @@ void Prf_DB_IncrementNumMsgSntUsr (long UsrCod)
 /***************** Get ranking of a user according to a figure ***************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName)
+unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName)
   {
    /***** Select number of rows with figure
           greater than the figure of this user *****/
@@ -250,8 +250,8 @@ unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName)
 			      " FROM usr_figures"
 			     " WHERE UsrCod=%ld)",
 		  UsrCod,
-		  FieldName,
-		  FieldName,
+		  FldName,
+		  FldName,
 		  UsrCod);
   }
 
@@ -259,7 +259,7 @@ unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName)
 /************************** Get ranking of a figure **************************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
   {
    switch (Gbl.Scope.Current)
      {
@@ -276,9 +276,9 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY %s DESC,"
 			        "UsrCod"
 			 " LIMIT 100",
-			 FieldName,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName,
+			 FldName);
       case HieLvl_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -304,10 +304,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY usr_figures.%s DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 FieldName,
+			 FldName,
 			 Gbl.Hierarchy.Cty.CtyCod,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName);
       case HieLvl_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -331,10 +331,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY usr_figures.%s DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 FieldName,
+			 FldName,
 			 Gbl.Hierarchy.Ins.InsCod,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName);
       case HieLvl_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -356,10 +356,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY usr_figures.%s DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 FieldName,
+			 FldName,
 			 Gbl.Hierarchy.Ctr.CtrCod,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName);
       case HieLvl_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -379,10 +379,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY usr_figures.%s DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 FieldName,
+			 FldName,
 			 Gbl.Hierarchy.Deg.DegCod,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName);
       case HieLvl_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -400,10 +400,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
 		      " ORDER BY usr_figures.%s DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 FieldName,
+			 FldName,
 			 Gbl.Hierarchy.Crs.CrsCod,
-			 FieldName,
-			 FieldName);
+			 FldName,
+			 FldName);
       default:
          Err_WrongScopeExit ();
          return 0;	// Not reached
@@ -563,7 +563,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 /********************* Get number of users with a figure *********************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName)
+unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName)
   {
    /***** Select number of rows with values already calculated *****/
    return (unsigned)
@@ -571,7 +571,7 @@ unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName)
 		  "SELECT COUNT(*)"
 		   " FROM usr_figures"
 		  " WHERE %s>=0",
-		  FieldName);
+		  FldName);
   }
 
 /*****************************************************************************/

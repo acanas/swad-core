@@ -89,7 +89,7 @@ struct MediaUploader
   {
    Med_FormType_t FormType;
    const char *IconSuffix;
-   const char *ParamSuffix;
+   const char *ParSuffix;
    const char *FunctionName;
    const char *Icon;
    const char *Title;
@@ -113,13 +113,13 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      struct MediaUploader *MediaUploader);
 static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 						struct MediaUploader *MediaUploader,
-					        struct ParamUploadMedia *ParamUploadMedia);
+					        struct Med_ParUpload *ParUpload);
 
-static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
-static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
-static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media);
-static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media);
-static void Med_GetAndProcessFileFromForm (const char *ParamFile,
+static Med_Action_t Med_GetMediaActionFromForm (const char *ParAction);
+static Med_FormType_t Usr_GetFormTypeFromForm (struct Med_ParUpload *ParUpload);
+static void Usr_GetURLFromForm (const char *ParName,struct Med_Media *Media);
+static void Usr_GetTitleFromForm (const char *ParName,struct Med_Media *Media);
+static void Med_GetAndProcessFileFromForm (const char *ParFile,
                                            struct Med_Media *Media);
 static bool Med_DetectIfAnimated (struct Med_Media *Media,
 			          const char PathFileOrg[PATH_MAX + 1]);
@@ -137,9 +137,9 @@ static int Med_ResizeImage (struct Med_Media *Media,
 static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
                               const char PathFileProcessed[PATH_MAX + 1]);
 
-static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
+static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
                                               struct Med_Media *Media);
-static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
+static void Med_GetAndProcessEmbedFromForm (const char *ParURL,
                                             struct Med_Media *Media);
 
 static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
@@ -366,7 +366,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
    extern const char *Txt_Image_video;
    extern const char *Txt_Title_attribution;
    extern const char *Txt_Link;
-   struct ParamUploadMedia ParamUploadMedia;
+   struct Med_ParUpload ParUpload;
    char Id[Frm_MAX_BYTES_ID + 1];
    size_t NumUploader;
    struct MediaUploader MediaUploader[Med_NUM_MEDIA_UPLOADERS] =
@@ -374,7 +374,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	{// Upload
 	 .FormType     = Med_FORM_FILE,
 	 .IconSuffix   = "ico_upl",			// <id>_ico_upl
-	 .ParamSuffix  = "par_upl",			// <id>_par_upl
+	 .ParSuffix  = "par_upl",			// <id>_par_upl
 	 .FunctionName = "mediaClickOnActivateUpload",
 	 .Icon         = "photo-video.svg",
 	 .Title        = Txt_Image_video
@@ -382,7 +382,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	{// YouTube
 	 .FormType     = Med_FORM_YOUTUBE,
 	 .IconSuffix   = "ico_you",			// <id>_ico_you
-	 .ParamSuffix  = "par_you",			// <id>_par_you
+	 .ParSuffix  = "par_you",			// <id>_par_you
 	 .FunctionName = "mediaClickOnActivateYoutube",
 	 .Icon         = "youtube-brands.svg",
 	 .Title        = "YouTube"
@@ -390,7 +390,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	{// Embed
 	 .FormType     = Med_FORM_EMBED,
 	 .IconSuffix   = "ico_emb",			// <id>_ico_emb
-	 .ParamSuffix  = "par_emb",			// <id>_par_emb
+	 .ParSuffix  = "par_emb",			// <id>_par_emb
 	 .FunctionName = "mediaClickOnActivateEmbed",
 	 .Icon         = "code.svg",
 	 .Title        = "Embed"
@@ -398,7 +398,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
      };
 
    /***** Set names of parameters depending on number of media in form *****/
-   Med_SetParamNames (&ParamUploadMedia,NumMedia);
+   Med_SetParsNames (&ParUpload,NumMedia);
 
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
@@ -430,7 +430,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 		       Hlp_Multimedia,Box_NOT_CLOSABLE);
 
 	    /***** Action to perform on media *****/
-	    Par_PutParUnsigned (NULL,ParamUploadMedia.Action,
+	    Par_PutParUnsigned (NULL,ParUpload.Action,
 					(unsigned) Med_ACTION_NEW_MEDIA);
 
 	    /***** Icons *****/
@@ -453,14 +453,14 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 		 NumUploader < Med_NUM_MEDIA_UPLOADERS;
 		 NumUploader++)
 	       Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
-						   &ParamUploadMedia);
+						   &ParUpload);
 
 	    /***** Media file *****/
 	    /* Begin container */
 	    HTM_DIV_Begin (NULL);
 
 	       /* Media file */
-	       HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",
+	       HTM_INPUT_FILE (ParUpload.File,"image/,video/",
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"%s_fil\" class=\"%s\""		// <id>_fil
 			       " disabled=\"disabled\" style=\"display:none;\"",
@@ -474,7 +474,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	    HTM_DIV_Begin (NULL);
 
 	       /* Media URL */
-	       HTM_INPUT_URL (ParamUploadMedia.URL,"",
+	       HTM_INPUT_URL (ParUpload.URL,"",
 			      HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"%s_url\" class=\"%s\""			// <id>_url
 			      " placeholder=\"%s\" maxlength=\"%u\""
@@ -489,7 +489,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	    HTM_DIV_Begin (NULL);
 
 	       /* Media title */
-	       HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",
+	       HTM_INPUT_TEXT (ParUpload.Title,Med_MAX_CHARS_TITLE,"",
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"%s_tit\" class=\"%s\""		// <id>_tit
 			       " placeholder=\"%s\""
@@ -539,15 +539,15 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 
 static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 						struct MediaUploader *MediaUploader,
-					        struct ParamUploadMedia *ParamUploadMedia)
+					        struct Med_ParUpload *ParUpload)
   {
    char *Id;
 
    /***** Hidden field with form type *****/
-   if (asprintf (&Id,"%s_%s",UniqueId,MediaUploader->ParamSuffix) < 0)	// <id>_ParamSuffix
+   if (asprintf (&Id,"%s_%s",UniqueId,MediaUploader->ParSuffix) < 0)	// <id>_ParSuffix
       Err_NotEnoughMemoryExit ();
-   Par_PutParUnsignedDisabled (Id,ParamUploadMedia->FormType,
-			               (unsigned) MediaUploader->FormType);
+   Par_PutParUnsignedDisabled (Id,ParUpload->FormType,
+			       (unsigned) MediaUploader->FormType);
    free (Id);
   }
 
@@ -563,23 +563,23 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media
 			   const char *SectionForAlerts)
   {
    extern const char *Txt_Error_sending_or_processing_image_video;
-   struct ParamUploadMedia ParamUploadMedia;
+   struct Med_ParUpload ParUploadMedia;
    Med_Action_t Action;
    Med_FormType_t FormType;
 
    /***** Set names of parameters depending on number of media in form *****/
-   Med_SetParamNames (&ParamUploadMedia,NumMedia);
+   Med_SetParsNames (&ParUploadMedia,NumMedia);
 
    /***** Get action and initialize media (image/video)
           (except title, that will be get after the media file) *****/
-   Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
+   Action = Med_GetMediaActionFromForm (ParUploadMedia.Action);
 
    /***** Get the media (image/video) name and the file *****/
    switch (Action)
      {
       case Med_ACTION_NEW_MEDIA:	// Upload new image/video
 	 /***** Get form type *****/
-	 FormType = Usr_GetFormTypeFromForm (&ParamUploadMedia);
+	 FormType = Usr_GetFormTypeFromForm (&ParUploadMedia);
 
          /***** Get new media *****/
 	 switch (FormType)
@@ -589,26 +589,26 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media
 
 	       /* Get image/video (if present ==>
 	                           process and create temporary file) */
-	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
+	       Med_GetAndProcessFileFromForm (ParUploadMedia.File,Media);
 
 	       /* Check status of media after getting and processing it */
 	       if (Media->Status == Med_PROCESSED)
 	         {
-		  Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
-		  Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
+		  Usr_GetURLFromForm (ParUploadMedia.URL,Media);
+		  Usr_GetTitleFromForm (ParUploadMedia.Title,Media);
 	         }
 	       break;
 	    case Med_FORM_YOUTUBE:
 	       Media->Action = Med_ACTION_NEW_MEDIA;
 
 	       /* Get and process embed YouTube video from form */
-	       Med_GetAndProcessYouTubeFromForm (ParamUploadMedia.URL,Media);
+	       Med_GetAndProcessYouTubeFromForm (ParUploadMedia.URL,Media);
 	       break;
 	    case Med_FORM_EMBED:
 	       Media->Action = Med_ACTION_NEW_MEDIA;
 
 	       /* Get and process other embed media from form */
-	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
+	       Med_GetAndProcessEmbedFromForm (ParUploadMedia.URL,Media);
 	       break;
 	    default:	// No media form selected
 	       Media->Action = Med_ACTION_NO_MEDIA;
@@ -646,23 +646,23 @@ void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media
 // If NumMedia <  0, params have no suffix
 // If NumMedia >= 0, the number is a suffix of the params
 
-void Med_SetParamNames (struct ParamUploadMedia *ParamUpl,int NumMedia)
+void Med_SetParsNames (struct Med_ParUpload *ParUpl,int NumMedia)
   {
    if (NumMedia < 0)	// One unique media in form ==> no suffix needed
      {
-      Str_Copy (ParamUpl->Action  ,"MedAct",sizeof (ParamUpl->Action  ) - 1);
-      Str_Copy (ParamUpl->FormType,"MedFrm",sizeof (ParamUpl->FormType) - 1);
-      Str_Copy (ParamUpl->File    ,"MedFil",sizeof (ParamUpl->File    ) - 1);
-      Str_Copy (ParamUpl->Title   ,"MedTit",sizeof (ParamUpl->Title   ) - 1);
-      Str_Copy (ParamUpl->URL     ,"MedURL",sizeof (ParamUpl->URL     ) - 1);
+      Str_Copy (ParUpl->Action  ,"MedAct",sizeof (ParUpl->Action  ) - 1);
+      Str_Copy (ParUpl->FormType,"MedFrm",sizeof (ParUpl->FormType) - 1);
+      Str_Copy (ParUpl->File    ,"MedFil",sizeof (ParUpl->File    ) - 1);
+      Str_Copy (ParUpl->Title   ,"MedTit",sizeof (ParUpl->Title   ) - 1);
+      Str_Copy (ParUpl->URL     ,"MedURL",sizeof (ParUpl->URL     ) - 1);
      }
    else				// Several video/images in form ==> add suffix
      {
-      snprintf (ParamUpl->Action  ,sizeof (ParamUpl->Action),"MedAct%u",NumMedia);
-      snprintf (ParamUpl->FormType,sizeof (ParamUpl->Action),"MedFrm%u",NumMedia);
-      snprintf (ParamUpl->File    ,sizeof (ParamUpl->File  ),"MedFil%u",NumMedia);
-      snprintf (ParamUpl->Title   ,sizeof (ParamUpl->Title ),"MedTit%u",NumMedia);
-      snprintf (ParamUpl->URL     ,sizeof (ParamUpl->URL   ),"MedURL%u",NumMedia);
+      snprintf (ParUpl->Action  ,sizeof (ParUpl->Action),"MedAct%u",NumMedia);
+      snprintf (ParUpl->FormType,sizeof (ParUpl->Action),"MedFrm%u",NumMedia);
+      snprintf (ParUpl->File    ,sizeof (ParUpl->File  ),"MedFil%u",NumMedia);
+      snprintf (ParUpl->Title   ,sizeof (ParUpl->Title ),"MedTit%u",NumMedia);
+      snprintf (ParUpl->URL     ,sizeof (ParUpl->URL   ),"MedURL%u",NumMedia);
      }
   }
 
@@ -670,40 +670,40 @@ void Med_SetParamNames (struct ParamUploadMedia *ParamUpl,int NumMedia)
 /************************* Get media action from form ************************/
 /*****************************************************************************/
 
-static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
+static Med_Action_t Med_GetMediaActionFromForm (const char *ParAction)
   {
    /***** Get parameter with the action to perform on media *****/
    return (Med_Action_t)
-   Par_GetParUnsignedLong (ParamAction,
-			     0,
-			     Med_NUM_ACTIONS - 1,
-			     (unsigned long) Med_ACTION_DEFAULT);
+   Par_GetParUnsignedLong (ParAction,
+			   0,
+			   Med_NUM_ACTIONS - 1,
+			   (unsigned long) Med_ACTION_DEFAULT);
   }
 
 /*****************************************************************************/
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia)
+static Med_FormType_t Usr_GetFormTypeFromForm (struct Med_ParUpload *ParUpload)
   {
    return (Med_FormType_t)
-   Par_GetParUnsignedLong (ParamUploadMedia->FormType,
-			     0,
-			     Med_NUM_FORM_TYPES - 1,
-			     (unsigned long) Med_FORM_NONE);
+   Par_GetParUnsignedLong (ParUpload->FormType,
+			   0,
+			   Med_NUM_FORM_TYPES - 1,
+			   (unsigned long) Med_FORM_NONE);
   }
 
 /*****************************************************************************/
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
+static void Usr_GetURLFromForm (const char *ParName,struct Med_Media *Media)
   {
    char URL[Cns_MAX_BYTES_WWW + 1];
    size_t Length;
 
    /***** Get media URL from form *****/
-   Par_GetParText (ParamName,URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText (ParName,URL,Cns_MAX_BYTES_WWW);
    /* If the URL coming from the form is empty, keep current media URL unchanged
       If not empty, copy it to current media URL */
    if ((Length = strlen (URL)) > 0)
@@ -721,13 +721,13 @@ static void Usr_GetURLFromForm (const char *ParamName,struct Med_Media *Media)
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
+static void Usr_GetTitleFromForm (const char *ParName,struct Med_Media *Media)
   {
    char Title[Med_MAX_BYTES_TITLE + 1];
    size_t Length;
 
    /***** Get image/video title from form *****/
-   Par_GetParText (ParamName,Title,Med_MAX_BYTES_TITLE);
+   Par_GetParText (ParName,Title,Med_MAX_BYTES_TITLE);
    /* If the title coming from the form is empty, keep current media title unchanged
       If not empty, copy it to current media title */
    if ((Length = strlen (Title)) > 0)
@@ -745,7 +745,7 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
 /**************************** Get media from form ****************************/
 /*****************************************************************************/
 
-static void Med_GetAndProcessFileFromForm (const char *ParamFile,
+static void Med_GetAndProcessFileFromForm (const char *ParFile,
                                            struct Med_Media *Media)
   {
    static void (*Process[Med_NUM_TYPES]) (struct Med_Media *Media,
@@ -757,7 +757,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
       [Med_WEBM] = Med_ProcessVideo,
       [Med_OGG ] = Med_ProcessVideo,
      };
-   struct Param *Param;
+   struct Par_Param *Par;
    char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
    size_t LengthExtension;
@@ -768,7 +768,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
    Media->Status = Med_STATUS_NONE;
 
    /***** Get filename and MIME type *****/
-   Param = Fil_StartReceptionOfFile (ParamFile,FileNameImgSrc,MIMEType);
+   Par = Fil_StartReceptionOfFile (ParFile,FileNameImgSrc,MIMEType);
    if (!FileNameImgSrc[0])	// No file present
       return;
 
@@ -806,7 +806,7 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
    snprintf (PathFileOrg,sizeof (PathFileOrg),"%s/%s_original.%s",
 	     Cfg_PATH_MEDIA_TMP_PRIVATE,Media->Name,PtrExtension);
 
-   if (Fil_EndReceptionOfFile (PathFileOrg,Param))	// Success
+   if (Fil_EndReceptionOfFile (PathFileOrg,Par))	// Success
      {
       /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)
@@ -1059,7 +1059,7 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
 /************* Get link from form and transform to YouTube code **************/
 /*****************************************************************************/
 
-static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
+static void Med_GetAndProcessYouTubeFromForm (const char *ParURL,
                                               struct Med_Media *Media)
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
@@ -1082,7 +1082,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
    Media->Status = Med_STATUS_NONE;
 
    /***** Get embed URL from form *****/
-   Usr_GetURLFromForm (ParamURL,Media);
+   Usr_GetURLFromForm (ParURL,Media);
 
    /***** Process URL trying to convert it to a YouTube embed URL *****/
    if (Media->URL)
@@ -1230,7 +1230,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
 /************************ Get embed link from form ***************************/
 /*****************************************************************************/
 
-static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
+static void Med_GetAndProcessEmbedFromForm (const char *ParURL,
                                             struct Med_Media *Media)
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
@@ -1241,7 +1241,7 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
    Media->Status = Med_STATUS_NONE;
 
    /***** Get embed URL from form *****/
-   Usr_GetURLFromForm (ParamURL,Media);
+   Usr_GetURLFromForm (ParURL,Media);
 
    /***** Process URL trying to convert it to a YouTube embed URL *****/
    if (Media->URL)

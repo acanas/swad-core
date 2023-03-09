@@ -117,6 +117,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources);
+static void PrgRsc_PutParRscCod (void *RscCod);
 static void PrgRsc_HideOrUnhideResource (bool Hide);
 
 static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
@@ -146,7 +147,7 @@ void PrgRsc_ViewResourcesAfterEdit (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_END_EDIT_RES,Item.Hierarchy.ItmCod,-1L);
@@ -167,7 +168,7 @@ void PrgRsc_EditResources (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,-1L);
@@ -243,7 +244,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	 if (Gbl.Action.Act == ActReqRemPrgRsc)
 	    /* Alert with button to remove resource */
 	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
-					Prg_PutParamRscCod,&SelectedRscCod,
+					PrgRsc_PutParRscCod,&SelectedRscCod,
 					Btn_REMOVE_BUTTON,Txt_Remove_resource);
 	 else
 	    Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
@@ -326,7 +327,7 @@ static void PrgRsc_PutIconsViewResources (void *ItmCod)
       if (*(long *) ItmCod > 0)
 	 if (Prg_CheckIfICanEditProgram ())
 	    Ico_PutContextualIconToView (ActFrmSeePrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamItmCod,ItmCod);
+					 Prg_PutParItmCod,ItmCod);
   }
 
 static void PrgRsc_PutIconsEditResources (void *ItmCod)
@@ -336,7 +337,7 @@ static void PrgRsc_PutIconsEditResources (void *ItmCod)
       if (*(long *) ItmCod > 0)
 	 if (Prg_CheckIfICanEditProgram ())
 	    Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamItmCod,ItmCod);
+					 Prg_PutParItmCod,ItmCod);
   }
 
 /*****************************************************************************/
@@ -565,14 +566,14 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	 /***** Icon to remove item resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+					   PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
 	 /***** Icon to hide/unhide item resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
-					       Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
+					       PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod,
 					       Item->Resource.Hierarchy.Hidden);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
@@ -580,15 +581,15 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	 /***** Put icon to edit the item resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod);
+					 PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod);
 	 else
 	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+					 Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to move up the item resource *****/
 	 if (NumRsc > 0 && NumRsc < NumResources)
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
+	                                   PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod,
 	 			           "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -596,7 +597,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	 /***** Put icon to move down the item resource *****/
 	 if (NumRsc < NumResources - 1)
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-	                                   Prg_PutParamRscCod,&Item->Resource.Hierarchy.RscCod,
+	                                   PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod,
 	                                   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -607,6 +608,16 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/********************** Param used to edit a recource ************************/
+/*****************************************************************************/
+
+static void PrgRsc_PutParRscCod (void *RscCod)
+  {
+   if (RscCod)
+      Par_PutParCode (Par_RscCod,*((long *) RscCod));
   }
 
 /*****************************************************************************/
@@ -622,7 +633,7 @@ void PrgRsc_CreateResource (void)
 
    /***** Get parameters *****/
    /* Get program item */
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /* Get the new title for the new resource */
    Par_GetParText ("Title",Item.Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
@@ -650,7 +661,7 @@ void PrgRsc_RenameResource (void)
    Prg_GetListItems ();
 
    /***** Get program item and resource *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -681,7 +692,7 @@ void PrgRsc_ReqRemResource (void)
    Prg_GetListItems ();
 
    /***** Get program item and resource *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -710,7 +721,7 @@ void PrgRsc_RemoveResource (void)
    Prg_GetListItems ();
 
    /***** Get data of the item resource from database *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -750,7 +761,7 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
    Prg_GetListItems ();
 
    /***** Get program item and resource *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -794,7 +805,7 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    Prg_GetListItems ();
 
    /***** Get program item and resource *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -876,7 +887,7 @@ void PrgRsc_ShowClipboardToChgLink (void)
    Prg_GetListItems ();
 
    /***** Get program item and resource *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 
@@ -1065,7 +1076,7 @@ void PrgRsc_ChangeLink (void)
 
    /***** Get parameters *****/
    /* Get program item and resource */
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongResourceExit ();
 

@@ -1168,7 +1168,7 @@ static void Inf_AsignInfoType (struct Inf_Info *Info,
          Info->Type = Inf_TEACHING_GUIDE;
          break;
       case ActSeeSyl:
-	 Syllabus->WhichSyllabus = Syl_GetParamWhichSyllabus ();
+	 Syllabus->WhichSyllabus = Syl_GetParWhichSyllabus ();
 	 Info->Type = (Syllabus->WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
 	                                                         Inf_PRACTICALS);
 	 break;
@@ -1784,7 +1784,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Get text with course information from form *****/
-   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
+   Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
    Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
@@ -1823,7 +1823,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Get text with course information from form *****/
-   Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
+   Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
    Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
@@ -1918,7 +1918,7 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_No_file_index_html_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
    struct Syl_Syllabus Syllabus;
-   struct Param *Param;
+   struct Par_Param *Par;
    char SourceFileName[PATH_MAX + 1];
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
@@ -1935,8 +1935,8 @@ void Inf_ReceivePagInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** First of all, store in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                     SourceFileName,MIMEType);
+   Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                   SourceFileName,MIMEType);
 
    /***** Check that MIME type is HTML or ZIP *****/
    if (strcmp (MIMEType,"text/html"))
@@ -1964,7 +1964,7 @@ void Inf_ReceivePagInfo (void)
          Fil_CreateDirIfNotExists (PathRelDirHTML);
          snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
 		   PathRelDirHTML);
-         if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
+         if (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
            {
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
             FileIsOK = true;
@@ -1980,7 +1980,7 @@ void Inf_ReceivePagInfo (void)
                    Gbl.Crs.PathPriv,
                    Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
 
-         if (Fil_EndReceptionOfFile (PathRelFileZIP,Param))
+         if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
            {
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 

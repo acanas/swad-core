@@ -73,7 +73,7 @@ const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
 
 static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args);
 
-static unsigned Cal_GetParamFirstDayOfWeek (void);
+static unsigned Cal_GetParFirstDayOfWeek (void);
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
@@ -115,7 +115,7 @@ static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
-                                      void (*FuncParams) (void *Args),void *Args)
+                                      void (*FuncPars) (void *Args),void *Args)
   {
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS[7];
@@ -132,8 +132,8 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	    Set_BeginPref (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek);
 	       Frm_BeginForm (Action);
 		  Par_PutParUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
-		  if (FuncParams)	// Extra parameters depending on the action
-		     FuncParams (Args);
+		  if (FuncPars)	// Extra parameters depending on the action
+		     FuncPars (Args);
 		  snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
 		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
 				Txt_DAYS[FirstDayOfWeek]) < 0)
@@ -153,7 +153,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 void Cal_ChangeFirstDayOfWeek (void)
   {
    /***** Get param with icon set *****/
-   Gbl.Prefs.FirstDayOfWeek = Cal_GetParamFirstDayOfWeek ();
+   Gbl.Prefs.FirstDayOfWeek = Cal_GetParFirstDayOfWeek ();
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -167,15 +167,15 @@ void Cal_ChangeFirstDayOfWeek (void)
 /*********************** Get parameter with icon set *************************/
 /*****************************************************************************/
 
-static unsigned Cal_GetParamFirstDayOfWeek (void)
+static unsigned Cal_GetParFirstDayOfWeek (void)
   {
    unsigned FirstDayOfWeek;
 
    FirstDayOfWeek = (unsigned)
 	            Par_GetParUnsignedLong ("FirstDayOfWeek",
-                                              0,
-                                              6,
-                                              Cal_FIRST_DAY_OF_WEEK_DEFAULT);
+                                            0,
+                                            6,
+                                            Cal_FIRST_DAY_OF_WEEK_DEFAULT);
    if (!Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
       FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 
@@ -204,7 +204,7 @@ unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
 void Cal_DrawCurrentMonth (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
+   char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
@@ -220,10 +220,10 @@ void Cal_DrawCurrentMonth (void)
 		Gbl.Hierarchy.Ctr.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-      Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
-      HTM_TxtF ("'%s',",ParamsStr);
-      Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
-      HTM_TxtF ("'%s');",ParamsStr);
+      Frm_SetParsForm (ParsStr,ActSeeCal,true);
+      HTM_TxtF ("'%s',",ParsStr);
+      Frm_SetParsForm (ParsStr,ActSeeDatCfe,true);
+      HTM_TxtF ("'%s');",ParsStr);
    HTM_SCRIPT_End ();
   }
 
@@ -252,7 +252,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
   {
    extern const char *Hlp_START_Calendar;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
+   char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
@@ -291,10 +291,10 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 			       "false",
 		   The_GetSuffix (),
 		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-	 Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
-	 HTM_TxtF ("'%s',",ParamsStr);
-	 Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
-	 HTM_TxtF ("'%s');",ParamsStr);
+	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,true);
+	 HTM_TxtF ("'%s',",ParsStr);
+	 Frm_SetParsForm (ParsStr,ActSeeDatCfe,true);
+	 HTM_TxtF ("'%s');",ParsStr);
       HTM_SCRIPT_End ();
 
    /***** End box *****/

@@ -46,7 +46,7 @@ struct Rub_Criterion
 void RubCri_CriterionConstructor (struct Rub_Criterion *Criterion);
 void RubCri_CriterionDestructor (struct Rub_Criterion *Criterion);
 
-void RubCri_PutParamCriCod (void *CriCod);
+void RubCri_PutParCriCod (void *CriCod);
 
 bool RubCri_GetCriterionDataFromDB (struct Rub_Criterion *Criterion);
 
@@ -59,8 +59,8 @@ void RubCri_WriteCriterionTitle (const char *Title,const char *ClassTitle,bool V
 void RubCri_PutIconToAddNewCriterion (void *Rubrics);
 void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics);
 
-void RubCri_PutParamCriInd (unsigned CriInd);
-unsigned RubCri_GetParamCriInd (void);
+void RubCri_PutParCriInd (unsigned CriInd);
+unsigned RubCri_GetParCriInd (void);
 
 void RubCri_ListRubricCriteria (struct Rub_Rubrics *Rubrics);
 

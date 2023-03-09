@@ -109,7 +109,7 @@ static void ExaPrn_WriteJSToUpdateExamPrint (const struct ExaPrn_Print *Print,
 
 static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd);
 
-static unsigned ExaPrn_GetParamQstInd (void);
+static unsigned ExaPrn_GetParQstInd (void);
 
 static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Print,
                                                         unsigned QstInd);
@@ -174,7 +174,7 @@ void ExaPrn_ShowExamPrint (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Session);
+   ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if I can access to this session *****/
    if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
@@ -680,7 +680,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
 
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
-      ExaSes_PutParamsEdit (Exams);
+      ExaSes_PutParsEdit (Exams);
       Btn_PutCreateButton (Txt_I_have_finished);
    Frm_EndForm ();
   }
@@ -995,7 +995,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       Err_WrongExamExit ();
 
    /***** Get question index from form *****/
-   QstInd = ExaPrn_GetParamQstInd ();
+   QstInd = ExaPrn_GetParQstInd ();
 
    /***** Set log print code, action and question index *****/
    ExaLog_SetPrnCod (Print.PrnCod);
@@ -1036,7 +1036,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 
       /***** Form to end/close this exam print *****/
       Frm_BeginForm (ActEndExaPrn);
-	 ExaSes_PutParamsEdit (&Exams);
+	 ExaSes_PutParsEdit (&Exams);
 	 Btn_PutCreateButton (Txt_Continue);
       Frm_EndForm ();
      }
@@ -1057,7 +1057,7 @@ static void ExaPrn_GetAnswerFromForm (struct ExaPrn_Print *Print,unsigned QstInd
 /********************* Get parameter with question index *********************/
 /*****************************************************************************/
 
-static unsigned ExaPrn_GetParamQstInd (void)
+static unsigned ExaPrn_GetParQstInd (void)
   {
    long QstInd;
 

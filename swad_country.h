@@ -92,7 +92,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class);
 bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
-void Cty_PutHiddenParamCtyOrder (void);
+void Cty_PutParCtyOrder (void);
 void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
 void Cty_GetFullListOfCountries (void);
@@ -103,7 +103,6 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty);
 void Cty_FlushCacheCountryName (void);
 void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
 			 char CtyName[Cty_MAX_BYTES_NAME + 1]);
-void Cty_PutParamCtyCod (long CtyCod);
 void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);

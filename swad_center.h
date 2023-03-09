@@ -93,7 +93,6 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder);
 bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr);
 void Ctr_FreeListCenters (void);
 void Ctr_WriteSelectorOfCenter (void);
-void Ctr_PutParamCtrCod (long CtrCod);
 void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
 void Ctr_RenameCenterShort (void);

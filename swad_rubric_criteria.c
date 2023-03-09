@@ -53,7 +53,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 						    unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res,
 						    bool ICanEditCriteria);
-static void RubCri_PutParamsOneCriterion (void *Rubrics);
+static void RubCri_PutParsOneCriterion (void *Rubrics);
 
 /*****************************************************************************/
 /********************** Initialize a new citerion to zero ********************/
@@ -77,7 +77,7 @@ void RubCri_CriterionDestructor (struct Rub_Criterion *Criterion)
 /*********** Put parameter with criterion code to edit, remove... ************/
 /*****************************************************************************/
 
-void RubCri_PutParamCriCod (void *CriCod)	// Should be a pointer to long
+void RubCri_PutParCriCod (void *CriCod)	// Should be a pointer to long
   {
    if (CriCod)
       if (*((long *) CriCod) > 0)	// If criterion exists
@@ -209,7 +209,7 @@ void RubCri_WriteCriterionTitle (const char *Title,const char *ClassTitle,bool V
 
 void RubCri_PutIconToAddNewCriterion (void *Rubrics)
   {
-   Ico_PutContextualIconToAdd (ActFrmNewRubCri,NULL,Rub_PutParams,Rubrics);
+   Ico_PutContextualIconToAdd (ActFrmNewRubCri,NULL,Rub_PutPars,Rubrics);
   }
 
 /*****************************************************************************/
@@ -221,7 +221,7 @@ void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics)
    extern const char *Txt_New_criterion;
 
    Frm_BeginForm (ActFrmNewRubCri);
-      Rub_PutParams (Rubrics);
+      Rub_PutPars (Rubrics);
 
       Btn_PutConfirmButton (Txt_New_criterion);
 
@@ -232,7 +232,7 @@ void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics)
 /****************** Write parameter with index of criterion ******************/
 /*****************************************************************************/
 
-void RubCri_PutParamCriInd (unsigned CriInd)
+void RubCri_PutParCriInd (unsigned CriInd)
   {
    Par_PutParUnsigned (NULL,"CriInd",CriInd);
   }
@@ -241,7 +241,7 @@ void RubCri_PutParamCriInd (unsigned CriInd)
 /******************* Get parameter with index of criterion *******************/
 /*****************************************************************************/
 
-unsigned RubCri_GetParamCriInd (void)
+unsigned RubCri_GetParCriInd (void)
   {
    long CriInd;
 
@@ -367,14 +367,14 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       /* Put icon to remove the criterion */
 	       if (ICanEditCriteria)
 		  Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
-						 RubCri_PutParamsOneCriterion,Rubrics);
+						 RubCri_PutParsOneCriterion,Rubrics);
 	       else
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to move up the criterion */
 	       if (ICanEditCriteria && CriInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
-						 RubCri_PutParamsOneCriterion,Rubrics,
+						 RubCri_PutParsOneCriterion,Rubrics,
 						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -383,7 +383,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       /* Put icon to move down the criterion */
 	       if (ICanEditCriteria && CriInd < MaxCriInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
-						 RubCri_PutParamsOneCriterion,Rubrics,
+						 RubCri_PutParsOneCriterion,Rubrics,
 						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
@@ -392,7 +392,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       /* Put icon to edit the criterion */
 	       if (ICanEditCriteria)
 		  Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-					       RubCri_PutParamCriCod,&Criterion.CriCod);
+					       RubCri_PutParCriCod,&Criterion.CriCod);
 
 	    HTM_TD_End ();
 
@@ -418,10 +418,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 /**************** Put parameter to move/remove one criterion *****************/
 /*****************************************************************************/
 
-static void RubCri_PutParamsOneCriterion (void *Rubrics)
+static void RubCri_PutParsOneCriterion (void *Rubrics)
   {
    if (Rubrics)
-      Rub_PutParams (Rubrics);
+      Rub_PutPars (Rubrics);
   }
 
 /*****************************************************************************/
@@ -447,7 +447,7 @@ void RubCri_RequestCreatOrEditCri (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   ItsANewCriterion = ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0);
+   ItsANewCriterion = ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0);
 
    /***** Get rubric data *****/
    if (ItsANewCriterion)

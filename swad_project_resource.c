@@ -49,7 +49,7 @@ void PrjRsc_GetLinkToProject (void)
    Prj_ResetProjects (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetParams (&Projects);
+   Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
 
    /***** Get project title *****/
@@ -89,7 +89,7 @@ void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
       NextAction = (PrjCod > 0)	? ActSeeOnePrj :	// Project specified
 				  ActSeePrj;		// All projects
       Frm_BeginForm (NextAction);
-	 Prj_PutParamPrjCod (PrjCod);
+	 Par_PutParCode (Par_PrjCod,PrjCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 				  "class=\"LM BT_LINK PRG_LNK_%s\"",
 				  The_GetSuffix ());

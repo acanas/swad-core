@@ -51,7 +51,7 @@ typedef enum
 
 void The_PutIconsToSelectTheme (void);
 void The_ChangeTheme (void);
-The_Theme_t The_GetParamTheme (void);
+The_Theme_t The_GetParTheme (void);
 The_Theme_t The_GetThemeFromStr (const char *Str);
 
 const char *The_GetSuffix (void);

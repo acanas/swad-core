@@ -42,13 +42,13 @@ struct StartLength
    size_t Length;
   };
 
-struct Param
+struct Par_Param
   {
    struct StartLength Name;		// Parameter name
    struct StartLength FileName;		// optional, present only when uploading files
    struct StartLength ContentType;	// optional, present only when uploading files
    struct StartLength Value;		// Parameter value or file content
-   struct Param *Next;
+   struct Par_Param *Next;
   };
 
 typedef enum
@@ -65,45 +65,54 @@ typedef enum
 
 typedef enum
   {
-   Par_AgdCod,
-   Par_AnnCod,
-   Par_AsgCod,
-   Par_AttCod,
-   Par_BanCod,
-   Par_BldCod,
-   Par_DptCod,
-   Par_ExaCod,
-   Par_FilCod,
-   Par_FilterCrsCod,
-   Par_FldCod,
-   Par_GamCod,
-   Par_GrpCod,
-   Par_GrpTypCod,
-   Par_HldCod,
-   Par_ItmCod,
-   Par_LnkCod,
-   Par_MaiCod,
-   Par_MchCod,
-   Par_MsgCod,
-   Par_NotCod,
-   Par_OrgActCod,
-   Par_OthCtrCod,
-   Par_OthCtyCod,
-   Par_OthDegCod,
-   Par_OthDegTypCod,
-   Par_OthHieCod,
-   Par_OthInsCod,
-   Par_PlcCod,
-   Par_PlgCod,
-   Par_PrjCod,
-   Par_PstCod,
-   Par_PubCod,
-   Par_QstCod,
-   Par_RooCod,
-   Par_RscCod,
-   Par_SesCod,
-   Par_SvyCod,
-   Par_ThrCod,
+   Par_None,		// Special code
+   Par_AgdCod,		// Agenda event code
+   Par_AnnCod,		// Announcement code
+   Par_AsgCod,		// Assignment code
+   Par_AttCod,		// Attendance event code
+   Par_BanCod,		// Banner code
+   Par_BldCod,		// Building code
+   Par_CrsCod,		// Course code
+   Par_CtrCod,		// Center code
+   Par_CtyCod,		// Country code
+   Par_DegCod,		// Degree code
+   Par_DptCod,		// Department code
+   Par_ExaCod,		// Exam code in calls-for-exam/exam
+   Par_FilCod,		// File code
+   Par_FldCod,		// Field code in course record
+   Par_GamCod,		// Game code
+   Par_GrpCod,		// Group code
+   Par_GrpTypCod,	// Group type code
+   Par_HldCod,		// Holiday code
+   Par_InsCod,		// Institution code
+   Par_ItmCod,		// Item code in course program
+   Par_LnkCod,		// Link code
+   Par_MaiCod,		// Domain mail code
+   Par_MchCod,		// Match code in game
+   Par_MsgCod,		// Message code
+   Par_NotCod,		// Note code in timeline
+   Par_OrgActCod,	// Original action code
+   Par_OthCrsCod,	// Other course code
+   Par_OthCtrCod,	// Other center code
+   Par_OthCtyCod,	// Other country code
+   Par_OthDegCod,	// Other degree code
+   Par_OthDegTypCod,	// Other degree type code
+   Par_OthHieCod,	// Other hierarchy code
+   Par_OthInsCod,	// Other institution code
+   Par_PlcCod,		// Place code
+   Par_PlgCod,		// Plugin code
+   Par_PrjCod,		// Project code
+   Par_PrnCod,		// Print code in assessment test
+   Par_PstCod,		// Post code in forum
+   Par_PubCod,		// Publication code in timeline
+   Par_QstCod,		// Question code in assessment/survey
+   Par_RooCod,		// Room code
+   Par_RscCod,		// Resource code in course program
+   Par_RubCod,		// Rubric code
+   Par_SesCod,		// Session code in exam
+   Par_SvyCod,		// Syrvey code
+   Par_TagCod,		// Tag code in assessment question
+   Par_ThrCod,		// Thread code in forum
   } Par_Code_t;
 
 /*****************************************************************************/
@@ -114,41 +123,41 @@ Act_Content_t Par_GetContentReceivedByCGI (void);
 
 bool Par_GetQueryString (void);
 Par_Method_t Par_GetMethod (void);
-void Par_CreateListOfParams (void);
-void Par_FreeParams (void);
-unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
-                           char *ParamValue,size_t MaxBytes,
-                           struct Param **ParamPtr);
+void Par_CreateListOfPars (void);
+void Par_FreePars (void);
+unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
+                     char *ParValue,size_t MaxBytes,
+                     struct Par_Param **ParPtr);
 
-void Par_GetMainParams (void);
+void Par_GetMainPars (void);
 
 //------------------------------ Get parameters -------------------------------
-unsigned Par_GetParText (const char *ParamName,char *ParamValue,size_t MaxBytes);
-unsigned long Par_GetParUnsignedLong (const char *ParamName,
+unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes);
+unsigned long Par_GetParUnsignedLong (const char *ParName,
                                       unsigned long Min,
                                       unsigned long Max,
                                       unsigned long Default);
-long Par_GetParLong (const char *ParamName);
+long Par_GetParLong (const char *ParName);
 long Par_GetAndCheckParCode (Par_Code_t ParCod);
 long Par_GetAndCheckParCodeMin (Par_Code_t ParCod,long MinCodAllowed);
 long Par_GetParCode (Par_Code_t ParCod);
-bool Par_GetParBool (const char *ParamName);
-unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes);
-unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
-unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
+bool Par_GetParBool (const char *ParName);
+unsigned Par_GetParHTML (const char *ParName,char *ParValue,size_t MaxBytes);
+unsigned Par_GetParMultiToText (const char *ParName,char *ParValue,size_t MaxBytes);
+unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces);
 
-bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t LongMax);
+bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,size_t LongMax);
 bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
 //------------------------------ Put parameters -------------------------------
-void Par_PutParUnsigned (const char *Id,const char *ParamName,unsigned Value);
-void Par_PutParUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutParUnsigned (const char *Id,const char *ParName,unsigned Value);
+void Par_PutParUnsignedDisabled (const char *Id,const char *ParName,unsigned Value);
 void Par_PutParCode (Par_Code_t ParCod,long Cod);
-void Par_PutParLong (const char *Id,const char *ParamName,long Value);
-void Par_PutParChar (const char *ParamName,char Value);
-void Par_PutParString (const char *Id,const char *ParamName,const char *Value);
+void Par_PutParLong (const char *Id,const char *ParName,long Value);
+void Par_PutParChar (const char *ParName,char Value);
+void Par_PutParString (const char *Id,const char *ParName,const char *Value);
 void Par_PutParOrder (unsigned SelectedOrder);
 
 //----------------------------- Client IP address -----------------------------

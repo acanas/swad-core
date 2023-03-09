@@ -476,7 +476,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
      };
    char Ch;
    size_t Length;
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
+   char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
    struct Usr_Data UsrDat;
    bool ShowPhoto = false;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -540,14 +540,14 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     (*Link)->NickAnchor[2].Str = NULL;
 
 		     /***** Store first part of anchor *****/
-		     Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
+		     Frm_SetParsForm (ParsStr,ActSeeOthPubPrf,true);
 		     if (asprintf (&(*Link)->NickAnchor[0].Str,
 				   "<form method=\"post\" action=\"%s/%s\">"
 				   "%s"	// Parameters
 				   "<input type=\"hidden\" name=\"usr\" value=\"",
 				   Cfg_URL_SWAD_CGI,
 				   Lan_STR_LANG_ID[Gbl.Prefs.Language],
-				   ParamsStr) < 0)
+				   ParsStr) < 0)
 			Err_NotEnoughMemoryExit ();
 		     (*Link)->NickAnchor[0].Len = strlen ((*Link)->NickAnchor[0].Str);
 

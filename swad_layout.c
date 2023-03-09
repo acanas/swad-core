@@ -91,7 +91,7 @@ static void Lay_WriteRedirToMyLangOnViewUsrAgd (void);
 static void Lay_WriteScripts (void);
 static void Lay_WriteScriptMathJax (void);
 static void Lay_WriteScriptInit (void);
-static void Lay_WriteScriptParamsAJAX (void);
+static void Lay_WriteScriptParsAJAX (void);
 static void Lay_WriteScriptCustomDropzone (void);
 
 static void Lay_WritePageTopHeading (void);
@@ -516,7 +516,7 @@ static void Lay_WriteScripts (void)
    Lay_WriteScriptInit ();
 
    /***** Write script to set parameters needed by AJAX *****/
-   Lay_WriteScriptParamsAJAX ();
+   Lay_WriteScriptParsAJAX ();
 
    /***** Write script to initialize variables used to draw dates *****/
    HTM_SCRIPT_Begin (NULL,NULL);
@@ -848,7 +848,7 @@ static void Lay_WriteScriptInit (void)
 /************** Write script to set parameters needed by AJAX ****************/
 /*****************************************************************************/
 
-static void Lay_WriteScriptParamsAJAX (void)
+static void Lay_WriteScriptParsAJAX (void)
   {
    /***** Begin script *****/
    HTM_SCRIPT_Begin (NULL,NULL);
@@ -908,7 +908,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    /* In all actions related to view or editing user's timeline ==>
 	       put parameters used by AJAX */
 	    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-	       Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
+	       Usr_GetParOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
 	    // Refresh parameters
 	    HTM_TxtF ("var refreshParamNxtActOldPub = \"act=%ld\";\n"
 		      "var refreshParamUsr = \"OtherUsrCod=%s\";\n",
@@ -1192,13 +1192,13 @@ static void Lay_ShowRightColumn (void)
 /*****************************************************************************/
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void *Args),void *Args,
+				    void (*FuncPars) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color)
   {
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-      if (FuncParams)
-	 FuncParams (Args);
+      if (FuncPars)
+	 FuncPars (Args);
 
       /***** Put icon with link *****/
       Ico_PutIconLink (Icon,Color,NextAction);
@@ -1212,7 +1212,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void *Args),void *Args,
+				    void (*FuncPars) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color,
 				    const char *Text,const char *OnSubmit)
   {
@@ -1222,8 +1222,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-      if (FuncParams)
-	 FuncParams (Args);
+      if (FuncPars)
+	 FuncPars (Args);
 
       /***** Put icon and text with link *****/
 	 if (OnSubmit)
@@ -1250,7 +1250,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
-                                void (*FuncParams) (void),
+                                void (*FuncPars) (void),
                                 const char *CheckboxName,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
@@ -1262,8 +1262,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Begin form *****/
    Frm_BeginForm (NextAction);
-      if (FuncParams)
-	 FuncParams ();
+      if (FuncPars)
+	 FuncPars ();
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",

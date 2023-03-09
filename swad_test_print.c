@@ -226,7 +226,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
      {
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
-	 TstPrn_PutParamPrnCod (Print->PrnCod);
+	 Par_PutParCode (Par_PrnCod,Print->PrnCod);
 	 Par_PutParUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
 
 	 /***** Begin table *****/
@@ -300,7 +300,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
 	 /* Write parameter with question code */
-	 Qst_WriteParamQstCod (QstInd,Question->QstCod);
+	 Qst_WriteParQstCod (QstInd,Question->QstCod);
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",true);
@@ -1773,7 +1773,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
       Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	 Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -2006,7 +2006,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 {
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
-		     TstPrn_PutParamPrnCod (Print.PrnCod);
+		     Par_PutParCode (Par_PrnCod,Print.PrnCod);
 		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,
 		                      Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								            ActSeeOneTstResOth);
@@ -2065,25 +2065,6 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
    DB_FreeMySQLResult (&mysql_res);
 
    The_ChangeRowColor ();
-  }
-
-/*****************************************************************************/
-/***************** Write parameter with code of test print ******************/
-/*****************************************************************************/
-
-void TstPrn_PutParamPrnCod (long ExaCod)
-  {
-   Par_PutParLong (NULL,"PrnCod",ExaCod);
-  }
-
-/*****************************************************************************/
-/***************** Get parameter with code of test print *********************/
-/*****************************************************************************/
-
-long TstPrn_GetParamPrnCod (void)
-  {
-   /***** Get code of test print *****/
-   return Par_GetParLong ("PrnCod");
   }
 
 /*****************************************************************************/
@@ -2224,8 +2205,7 @@ void TstPrn_ShowOnePrint (void)
 
    /***** Get the code of the test *****/
    TstPrn_ResetPrint (&Print);
-   if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
-      Err_WrongTestExit ();
+   Print.PrnCod = Par_GetAndCheckParCode (Par_PrnCod);
 
    /***** Get test data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);

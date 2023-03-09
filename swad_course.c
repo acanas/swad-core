@@ -107,7 +107,7 @@ static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
-static void Crs_GetParamsNewCourse (struct Crs_Course *Crs);
+static void Crs_GetParsNewCourse (struct Crs_Course *Crs);
 
 static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row);
 
@@ -187,7 +187,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    IsLastItemInLevel[1] = true;
 	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	    Frm_BeginForm (ActMyCrs);
-	       Cty_PutParamCtyCod (-1L);
+	       // Cty_PutParCtyCod (-1L);
 	       HTM_BUTTON_Submit_Begin (Txt_System,
 	                                "class=\"BT_LINK FORM_IN_%s\"",
 					The_GetSuffix ());
@@ -219,7 +219,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
-		  Cty_PutParamCtyCod (Hie.Cty.CtyCod);
+		  Par_PutParCode (Par_CtyCod,Hie.Cty.CtyCod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
@@ -253,7 +253,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
-		     Ins_PutParamInsCod (Hie.Ins.InsCod);
+		     Par_PutParCode (Par_InsCod,Hie.Ins.InsCod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
@@ -287,7 +287,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
-			Ctr_PutParamCtrCod (Hie.Ctr.CtrCod);
+			Par_PutParCode (Par_CtrCod,Hie.Ctr.CtrCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
@@ -321,7 +321,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
-			   Deg_PutParamDegCod (Hie.Deg.DegCod);
+			   Par_PutParCode (Par_DegCod,Hie.Deg.DegCod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
@@ -355,7 +355,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
-			      Crs_PutParamCrsCod (Hie.Crs.CrsCod);
+			      Par_PutParCode (Par_CrsCod,Hie.Crs.CrsCod);
 			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),
 						       "class=\"BT_LINK FORM_IN_%s\"",
 						       The_GetSuffix ());
@@ -994,7 +994,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  Crs_PutParamCrsCod (Crs->CrsCod);
+		  Par_PutParCode (Par_CrsCod,Crs->CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
 					   "class=\"LM BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -1175,7 +1175,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else	// Crs->NumUsrs == 0 && ICanEdit
 		  Ico_PutContextualIconToRemove (ActRemCrs,NULL,
-						 Hie_PutParamOtherHieCod,&Crs->CrsCod);
+						 Hie_PutParOtherHieCod,&Crs->CrsCod);
 	    HTM_TD_End ();
 
 	    /* Course code */
@@ -1188,7 +1188,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
-		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
+		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE INPUT_%s\"",
@@ -1204,7 +1204,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
-		  Hie_PutParamOtherHieCod (&Crs->CrsCod);
+		  Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthCrsYear\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -1229,7 +1229,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
-		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
+		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -1245,7 +1245,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
-		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
+		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1509,7 +1509,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
    Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.DegCod;
 
    /* Get parameters of the new course */
-   Crs_GetParamsNewCourse (Crs_EditingCrs);
+   Crs_GetParsNewCourse (Crs_EditingCrs);
 
    /***** Check if year is correct *****/
    if (Crs_EditingCrs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
@@ -1549,7 +1549,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 /************** Get the parameters of a new course from form *****************/
 /*****************************************************************************/
 
-static void Crs_GetParamsNewCourse (struct Crs_Course *Crs)
+static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
   {
    char YearStr[2 + 1];
 
@@ -1968,23 +1968,23 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_course_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentCrsName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentCrsName = NULL;	// Initialized to avoid warning
    char NewCrsName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentCrsName = Crs->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentCrsName = Crs->FullName;
          break;
@@ -1992,7 +1992,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParText (ParamName,NewCrsName,MaxBytes);
+   Par_GetParText (ParName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetDataOfCourseByCod (Crs);
@@ -2007,7 +2007,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
          if (strcmp (CurrentCrsName,NewCrsName))	// Different names
            {
             /***** If course was in database... *****/
-            if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParamName,NewCrsName,Crs->CrsCod,
+            if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->CrsCod,
                                                         Crs->DegCod,Crs->Year))
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 		                Txt_The_course_X_already_exists,
@@ -2015,7 +2015,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
             else
               {
                /* Update the table changing old name by new name */
-               Crs_DB_UpdateCrsName (Crs->CrsCod,FieldName,NewCrsName);
+               Crs_DB_UpdateCrsName (Crs->CrsCod,FldName,NewCrsName);
 
                /* Create alert to show the change made */
 	       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2054,7 +2054,7 @@ void Crs_ChangeCrsStatus (void)
    Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
-   Status = Hie_GetParamStatus ();	// New status
+   Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of course *****/
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -2138,7 +2138,7 @@ static void Crs_PutButtonToGoToCrs (void)
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
      {
       Frm_BeginForm (ActSeeCrsInf);
-	 Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
+	 Par_PutParCode (Par_CrsCod,Crs_EditingCrs->CrsCod);
 	 Btn_PutConfirmButton (Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
 	 Str_FreeGoToTitle ();
       Frm_EndForm ();
@@ -2157,7 +2157,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-	 Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
+	 Par_PutParCode (Par_CrsCod,Crs_EditingCrs->CrsCod);
 
       if (asprintf (&TxtButton,Txt_Register_me_in_X,Crs_EditingCrs->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -2192,7 +2192,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
 static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
-				  Sch_PutLinkToSearchCoursesParams,NULL,
+				  Sch_PutLinkToSearchCoursesPars,NULL,
 				  "search.svg",Ico_BLACK);
   }
 
@@ -2229,15 +2229,6 @@ void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
       Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
 				     NULL,NULL,
 				     "sitemap.svg",Ico_BLACK);
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of course ********************/
-/*****************************************************************************/
-
-void Crs_PutParamCrsCod (long CrsCod)
-  {
-   Par_PutParLong (NULL,"crs",CrsCod);
   }
 
 /*****************************************************************************/
@@ -2454,7 +2445,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
-	    Deg_PutParamDegCod (Deg.DegCod);
+	    Par_PutParCode (Par_DegCod,Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
@@ -2474,7 +2465,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
-	    Crs_PutParamCrsCod (CrsCod);
+	    Par_PutParCode (Par_CrsCod,CrsCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
@@ -2599,9 +2590,9 @@ void Crs_RemoveOldCrss (void)
    /***** Get parameter with number of months without access *****/
    MonthsWithoutAccess = (unsigned)
 	                 Par_GetParUnsignedLong ("Months",
-                                                   Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
-                                                   Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
-                                                   UINT_MAX);
+                                                 Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                                 Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                                 UINT_MAX);
    if (MonthsWithoutAccess == UINT_MAX)
       Err_ShowErrorAndExit ("Wrong number of months without clicks.");
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;

@@ -41,7 +41,7 @@
 /*****************************************************************************/
 
 /* Parameters used in forms to edit MAC address */
-struct MAC_Params
+struct MAC_Pars
   {
    long RooCod;					// Room code
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address
@@ -51,20 +51,20 @@ struct MAC_Params
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MAC_PutParams (void *Args);
+static void MAC_PutPars (void *Args);
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncParams) (void *Args),void *Args);
+                                         void (*FuncPars) (void *Args),void *Args);
 
 /*****************************************************************************/
 /**************** Put hidden parameters to edit a MAC address ****************/
 /*****************************************************************************/
 
-static void MAC_PutParams (void *Args)
+static void MAC_PutPars (void *Args)
   {
    if (Args)
      {
-      Par_PutParCode   (Par_RooCod,((struct MAC_Params *) Args)->RooCod);
-      Par_PutParString (NULL,"MAC"   ,((struct MAC_Params *) Args)->MACstr);
+      Par_PutParCode   (Par_RooCod,((struct MAC_Pars *) Args)->RooCod);
+      Par_PutParString (NULL,"MAC",((struct MAC_Pars *) Args)->MACstr);
      }
   }
 
@@ -73,12 +73,12 @@ static void MAC_PutParams (void *Args)
 /*****************************************************************************/
 
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncParams) (void *Args),void *Args)
+                                         void (*FuncPars) (void *Args),void *Args)
   {
    /***** Form to enter a new MAC address *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-      FuncParams (Args);
-      HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MACstr,
+      FuncPars (Args);
+      HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Pars *) Args)->MACstr,
 		      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"8\" class=\"INPUT_%s\"",
 		      The_GetSuffix ());
@@ -130,7 +130,7 @@ void MAC_EditMACAddresses (long RooCod,const char *Anchor,
    MYSQL_ROW row;
    unsigned NumMAC;
    unsigned long long MACnum;
-   struct MAC_Params Params;
+   struct MAC_Pars Pars;
 
    /***** Write the forms to enter the MAC addresses *****/
    for (NumMAC = 0;
@@ -143,10 +143,10 @@ void MAC_EditMACAddresses (long RooCod,const char *Anchor,
       /* Write MAC address (row[0]) */
       if (sscanf (row[0],"%llu",&MACnum) == 1)
 	{
-         Params.RooCod = RooCod;				// Code (i.e. room code)
-         MAC_MACnumToMACstr (MACnum,Params.MACstr);	// Current MAC address in xx:xx:xx:xx:xx:xx format
+         Pars.RooCod = RooCod;				// Code (i.e. room code)
+         MAC_MACnumToMACstr (MACnum,Pars.MACstr);	// Current MAC address in xx:xx:xx:xx:xx:xx format
          MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
-                                      MAC_PutParams,&Params);
+                                      MAC_PutPars,&Pars);
 
 	 /* Write break line */
 	 HTM_BR ();
@@ -154,10 +154,10 @@ void MAC_EditMACAddresses (long RooCod,const char *Anchor,
      }
 
    /* Form to enter a new MAC address */
-   Params.RooCod = RooCod;	// Room code
-   Params.MACstr[0] = '\0';	// Current MAC address in xx:xx:xx:xx:xx:xx format
+   Pars.RooCod = RooCod;	// Room code
+   Pars.MACstr[0] = '\0';	// Current MAC address in xx:xx:xx:xx:xx:xx format
    MAC_PutFormToEditMACAddress (ActChgRooMAC,Anchor,
-                                MAC_PutParams,&Params);
+                                MAC_PutPars,&Pars);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
@@ -167,14 +167,14 @@ void MAC_EditMACAddresses (long RooCod,const char *Anchor,
 /****************** Get MAC address as a number from a form ******************/
 /*****************************************************************************/
 
-unsigned long long MAC_GetMACnumFromForm (const char *ParamName)
+unsigned long long MAC_GetMACnumFromForm (const char *ParName)
   {
    char MACstr[MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR + 1];
    unsigned long long MAC[MAC_NUM_BYTES];
    unsigned long long MACnum;
 
    /***** Get parameter *****/
-   Par_GetParText (ParamName,MACstr,MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR);
+   Par_GetParText (ParName,MACstr,MAC_LENGTH_MAC_ADDRESS * Str_MAX_BYTES_PER_CHAR);
 
    if (MACstr[0])	// Not empty
      {

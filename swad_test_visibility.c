@@ -146,7 +146,7 @@ unsigned TstVis_GetVisibilityFromForm (void)
 	  )
 	{
 	 /* Get next visibility item selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
          if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
             if (UnsignedNum < TstVis_NUM_ITEMS_VISIBILITY)
               {

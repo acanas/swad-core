@@ -140,9 +140,6 @@ void TstPrn_SelDatesToSeeMyPrints (void);
 void TstPrn_ShowMyPrints (void);
 void TstPrn_GetUsrsAndShowPrints (void);
 
-void TstPrn_PutParamPrnCod (long ExaCod);
-long TstPrn_GetParamPrnCod (void);
-
 void TstPrn_ShowOnePrint (void);
 void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
 			      unsigned NumQsts,

@@ -53,8 +53,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void QstImp_PutParamsExportQsts (void *Questions);
-static void QstImp_PutCreateXMLParam (void);
+static void QstImp_PutParsExportQsts (void *Questions);
+static void QstImp_PutCreateXMLPar (void);
 
 static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML);
 
@@ -79,7 +79,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
   {
    Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
-                                  QstImp_PutParamsExportQsts,Questions,
+                                  QstImp_PutParsExportQsts,Questions,
 				  "file-import.svg",Ico_BLACK);
   }
 
@@ -87,14 +87,14 @@ void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void QstImp_PutParamsExportQsts (void *Questions)
+static void QstImp_PutParsExportQsts (void *Questions)
   {
    if (Questions)
      {
-      Qst_PutParamsEditQst (Questions);
+      Qst_PutParsEditQst (Questions);
       Par_PutParChar ("OnlyThisQst",'N');
       Par_PutParUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Questions)->SelectedOrder));
-      QstImp_PutCreateXMLParam ();
+      QstImp_PutCreateXMLPar ();
      }
   }
 
@@ -102,12 +102,12 @@ static void QstImp_PutParamsExportQsts (void *Questions)
 /************************ Parameter to create XML file ***********************/
 /*****************************************************************************/
 
-static void QstImp_PutCreateXMLParam (void)
+static void QstImp_PutCreateXMLPar (void)
   {
    Par_PutParChar ("CreateXML",'Y');
   }
 
-bool QstImp_GetCreateXMLParamFromForm (void)
+bool QstImp_GetCreateXMLParFromForm (void)
   {
    return Par_GetParBool ("CreateXML");
   }
@@ -374,7 +374,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
 void QstImp_ImpQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
-   struct Param *Param;
+   struct Par_Param *Par;
    char FileNameXMLSrc[PATH_MAX + 1];
    char FileNameXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
@@ -384,8 +384,8 @@ void QstImp_ImpQstsFromXML (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_TEST_PRIVATE);
 
    /***** First of all, copy in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                     FileNameXMLSrc,MIMEType);
+   Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+                                   FileNameXMLSrc,MIMEType);
 
    /* Check if the file type is XML */
    if (strcmp (MIMEType,"text/xml"))
@@ -403,7 +403,7 @@ void QstImp_ImpQstsFromXML (void)
       /* End the reception of XML in a temporary file */
       snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
 		Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
-      if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
+      if (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
          /***** Get questions from XML file and store them in database *****/
          QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
       else

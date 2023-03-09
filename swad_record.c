@@ -102,8 +102,8 @@ static struct
 
 static void Rec_WriteHeadingRecordFields (void);
 
-static void Rec_PutParamFieldCod (void *FieldCod);
-static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
+static void Rec_PutParFldCod (void *FldCod);
+static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
 static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView);
@@ -116,23 +116,23 @@ static void Rec_ShowRecordOneTchCrs (void);
 static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
-static void Rec_GetParamRecordsPerPage (void);
+static void Rec_GetParRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours);
 static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours);
-static void Rec_PutParamsShowOfficeHoursOneTch (void);
-static void Rec_PutParamsShowOfficeHoursSeveralTchs (void);
-static bool Rec_GetParamShowOfficeHours (void);
+static void Rec_PutParsShowOfficeHoursOneTch (void);
+static void Rec_PutParsShowOfficeHoursSeveralTchs (void);
+static bool Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args);
-static void Rec_PutParamsMyTsts (__attribute__((unused)) void *Args);
-static void Rec_PutParamsStdTsts (__attribute__((unused)) void *Args);
-static void Rec_PutParamsWorks (__attribute__((unused)) void *Args);
-static void Rec_PutParamsStudent (__attribute__((unused)) void *Args);
-static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args);
+static void Rec_PutParsMyTsts (__attribute__((unused)) void *Args);
+static void Rec_PutParsStdTsts (__attribute__((unused)) void *Args);
+static void Rec_PutParsWorks (__attribute__((unused)) void *Args);
+static void Rec_PutParsStudent (__attribute__((unused)) void *Args);
+static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args);
 static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
 static void Rec_ShowFullName (struct Usr_Data *UsrDat);
@@ -284,7 +284,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Write icon to remove the field */
 	 HTM_TD_Begin ("class=\"BM\"");
 	    Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
-					   Rec_PutParamFieldCod,&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+					   Rec_PutParFldCod,&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	 HTM_TD_End ();
 
 	 /* Name of the field */
@@ -447,17 +447,17 @@ void Rec_ReceiveFormField (void)
 
    /* Get the number of lines */
    Gbl.Crs.Records.Field.NumLines = (unsigned)
-	                                   Par_GetParUnsignedLong ("NumLines",
-                                                                     Rec_MIN_LINES_IN_EDITION_FIELD,
-                                                                     Rec_MAX_LINES_IN_EDITION_FIELD,
-                                                                     Rec_DEF_LINES_IN_EDITION_FIELD);
+	                            Par_GetParUnsignedLong ("NumLines",
+                                                            Rec_MIN_LINES_IN_EDITION_FIELD,
+                                                            Rec_MAX_LINES_IN_EDITION_FIELD,
+                                                            Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get the field visibility by students */
    Gbl.Crs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
-	                                     Par_GetParUnsignedLong ("Visibility",
-                                                                       0,
-                                                                       Rec_NUM_TYPES_VISIBILITY - 1,
-                                                                       (unsigned long) Rec_VISIBILITY_DEFAULT);
+	                              Par_GetParUnsignedLong ("Visibility",
+                                                              0,
+                                                              Rec_NUM_TYPES_VISIBILITY - 1,
+                                                              (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    if (Gbl.Crs.Records.Field.Name[0])	// If there's a name
      {
@@ -496,7 +496,7 @@ unsigned Rec_ConvertToNumLinesField (const char *StrNumLines)
 /* Check if the name of the field of record equals any of the existing ones **/
 /*****************************************************************************/
 
-bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
+bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName)
   {
    bool FieldIsRepeated = false;
    MYSQL_RES *mysql_res;
@@ -514,7 +514,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
 	 row = mysql_fetch_row (mysql_res);
 
          /* The name of the field is in row[1] */
-         if (!strcasecmp (FieldName,row[1]))
+         if (!strcasecmp (FldName,row[1]))
            {
             FieldIsRepeated = true;
             break;
@@ -578,7 +578,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 
    /***** Show question and button to remove my photo *****/
    Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,
-                           Rec_PutParamFieldCod,&Gbl.Crs.Records.Field.FieldCod,
+                           Rec_PutParFldCod,&Gbl.Crs.Records.Field.FieldCod,
 			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
 		           Gbl.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.FullName,
@@ -586,6 +586,16 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 
    /***** List record fields again *****/
    Rec_ReqEditRecordFields ();
+  }
+
+/*****************************************************************************/
+/********************** Put parameter with field code ************************/
+/*****************************************************************************/
+
+static void Rec_PutParFldCod (void *FldCod)
+  {
+   if (FldCod)
+      Par_PutParCode (Par_FldCod,*((long *) FldCod));
   }
 
 /*****************************************************************************/
@@ -617,20 +627,10 @@ void Rec_RemoveFieldFromDB (void)
   }
 
 /*****************************************************************************/
-/********************** Put parameter with field code ************************/
-/*****************************************************************************/
-
-static void Rec_PutParamFieldCod (void *FieldCod)
-  {
-   if (FieldCod)
-      Par_PutParCode (Par_FldCod,*((long *) FieldCod));
-  }
-
-/*****************************************************************************/
 /************** Get the data of a field of records from its code *************/
 /*****************************************************************************/
 
-static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
+static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility)
   {
    MYSQL_RES *mysql_res;
@@ -638,7 +638,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
+   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Crs.CrsCod,FldCod) != 1)
       Err_WrongRecordFieldExit ();
 
    /***** Get the field *****/
@@ -747,9 +747,9 @@ void Rec_ChangeLinesField (void)
    /* Get the new number of lines */
    NewNumLines = (unsigned)
 	         Par_GetParUnsignedLong ("NumLines",
-                                           Rec_MIN_LINES_IN_EDITION_FIELD,
-                                           Rec_MAX_LINES_IN_EDITION_FIELD,
-                                           Rec_DEF_LINES_IN_EDITION_FIELD);
+                                         Rec_MIN_LINES_IN_EDITION_FIELD,
+                                         Rec_MAX_LINES_IN_EDITION_FIELD,
+                                         Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get from the database the number of lines of the field */
    Rec_GetFieldByCod (Gbl.Crs.Records.Field.FieldCod,Gbl.Crs.Records.Field.Name,&Gbl.Crs.Records.Field.NumLines,&Gbl.Crs.Records.Field.Visibility);
@@ -791,9 +791,9 @@ void Rec_ChangeVisibilityField (void)
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
 	           Par_GetParUnsignedLong ("Visibility",
-                                             0,
-                                             Rec_NUM_TYPES_VISIBILITY - 1,
-                                             (unsigned long) Rec_VISIBILITY_DEFAULT);
+                                           0,
+                                           Rec_NUM_TYPES_VISIBILITY - 1,
+                                           (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    /* Get from the database the visibility of the field */
    Rec_GetFieldByCod (Gbl.Crs.Records.Field.FieldCod,Gbl.Crs.Records.Field.Name,&Gbl.Crs.Records.Field.NumLines,&Gbl.Crs.Records.Field.Visibility);
@@ -880,7 +880,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (TypeOfView == Rec_SHA_RECORD_PRINT)
-      Rec_GetParamRecordsPerPage ();
+      Rec_GetParRecordsPerPage ();
 
    if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
@@ -889,7 +889,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevGst);
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -906,7 +906,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get guest's data from database
@@ -956,7 +956,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 void Rec_GetUsrAndShowRecOneStdCrs (void)
   {
    /***** Get the selected student *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get student's data from database
                                                 Usr_DONT_GET_PREFS,
@@ -990,7 +990,7 @@ static void Rec_ShowRecordOneStdCrs (void)
       /* Print view */
       Frm_BeginForm (ActPrnRecSevStd);
 	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
@@ -1075,7 +1075,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (ShaTypeOfView == Rec_SHA_RECORD_PRINT)
-      Rec_GetParamRecordsPerPage ();
+      Rec_GetParRecordsPerPage ();
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -1091,7 +1091,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevStd);
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -1105,7 +1105,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
@@ -1176,7 +1176,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 void Rec_GetUsrAndShowRecOneTchCrs (void)
   {
    /***** Get the selected teacher *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show the record *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
@@ -1208,7 +1208,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
-   ShowOfficeHours = Rec_GetParamShowOfficeHours ();
+   ShowOfficeHours = Rec_GetParShowOfficeHours ();
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -1219,7 +1219,7 @@ static void Rec_ShowRecordOneTchCrs (void)
       /* Print view */
       Frm_BeginForm (ActPrnRecSevTch);
 	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Par_PutParChar ("ParamOfficeHours",'Y');
 	 Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
@@ -1292,11 +1292,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
-   ShowOfficeHours = Rec_GetParamShowOfficeHours ();
+   ShowOfficeHours = Rec_GetParShowOfficeHours ();
 
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (Gbl.Action.Act == ActPrnRecSevTch)
-      Rec_GetParamRecordsPerPage ();
+      Rec_GetParRecordsPerPage ();
 
    if (Gbl.Action.Act == ActSeeRecSevTch)
      {
@@ -1308,7 +1308,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevTch);
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Par_PutParChar ("ParamOfficeHours",'Y');
 	    Par_PutParChar ("ShowOfficeHours",
 				    ShowOfficeHours ? 'Y' :
@@ -1326,7 +1326,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
@@ -1422,13 +1422,13 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 /** Get parameter with number of user records per page (only for printing) ***/
 /*****************************************************************************/
 
-static void Rec_GetParamRecordsPerPage (void)
+static void Rec_GetParRecordsPerPage (void)
   {
    Gbl.Usrs.Listing.RecsPerPag = (unsigned)
 	                         Par_GetParUnsignedLong ("RecsPerPag",
-                                                           Rec_MIN_RECORDS_PER_PAGE,
-                                                           Rec_MAX_RECORDS_PER_PAGE,
-                                                           Rec_DEF_RECORDS_PER_PAGE);
+                                                         Rec_MIN_RECORDS_PER_PAGE,
+                                                         Rec_MAX_RECORDS_PER_PAGE,
+                                                         Rec_DEF_RECORDS_PER_PAGE);
   }
 
 /*****************************************************************************/
@@ -1440,7 +1440,7 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecOneTch,
-                              Rec_PutParamsShowOfficeHoursOneTch,
+                              Rec_PutParsShowOfficeHoursOneTch,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_tutoring_hours,
@@ -1452,22 +1452,22 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecSevTch,
-                              Rec_PutParamsShowOfficeHoursSeveralTchs,
+                              Rec_PutParsShowOfficeHoursSeveralTchs,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
 
-static void Rec_PutParamsShowOfficeHoursOneTch (void)
+static void Rec_PutParsShowOfficeHoursOneTch (void)
   {
-   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
    Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
-static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
+static void Rec_PutParsShowOfficeHoursSeveralTchs (void)
   {
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+   Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
@@ -1476,7 +1476,7 @@ static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
 /*****************************************************************************/
 // Returns true if office hours must be shown
 
-static bool Rec_GetParamShowOfficeHours (void)
+static bool Rec_GetParShowOfficeHours (void)
   {
    if (Par_GetParBool ("ParamOfficeHours"))
       return Par_GetParBool ("ShowOfficeHours");
@@ -1521,7 +1521,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    Gbl.Action.Original = Act_GetActionFromActCod (Par_GetParCode (Par_OrgActCod));
 
    /***** Get the user whose record we want to modify *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                             Usr_DONT_GET_PREFS,
                                             Usr_GET_ROLE_IN_CURRENT_CRS);
@@ -1634,9 +1634,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    ICanEdit = true;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
 	       Par_PutParCode (Par_OrgActCod,Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+		  Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	   }
 	 break;
       default:
@@ -1791,7 +1791,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 void Rec_GetFieldsCrsRecordFromForm (void)
   {
    unsigned NumField;
-   char FieldParamName[5 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char FieldParName[5 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
@@ -1799,9 +1799,9 @@ void Rec_GetFieldsCrsRecordFromForm (void)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /* Get text from the form */
-         snprintf (FieldParamName,sizeof (FieldParamName),"Field%ld",
+         snprintf (FieldParName,sizeof (FieldParName),"Field%ld",
 		   Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-         Par_GetParHTML (FieldParamName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
+         Par_GetParHTML (FieldParName,Gbl.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
         }
   }
 
@@ -2183,7 +2183,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			break;
 		    }
 		  Frm_BeginForm (NextAction);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 		  break;
 	       case Rec_SHA_OTHER_NEW_USR_FORM:
 		  switch (Gbl.Action.Act)
@@ -2202,7 +2202,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			break;
 		    }
 		  Frm_BeginForm (NextAction);
-		     ID_PutParamOtherUsrIDPlain ();				// New user
+		     ID_PutParOtherUsrIDPlain ();				// New user
 		  break;
 	       default:
 		  break;
@@ -2335,18 +2335,18 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	 if (ICanViewUsrProfile)
 	    /***** Button to view user's profile *****/
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
-					   Rec_PutParamUsrCodEncrypted,NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user.svg",Ico_BLACK);
 
 	 /***** Button to view user's record card *****/
 	 if (Usr_CheckIfICanViewRecordStd (Rec_Record.UsrDat))
 	    /* View student's records: common record card and course record card */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
-					   Rec_PutParamUsrCodEncrypted,NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
-					   Rec_PutParamUsrCodEncrypted,NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 
 	 /***** Button to view user's agenda *****/
@@ -2356,7 +2356,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   "calendar.svg",Ico_BLACK);
 	 else if (Usr_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat))
 	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
-					   Rec_PutParamUsrCodEncrypted,NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
 					   "calendar.svg",Ico_BLACK);
 
 	 /***** Button to admin user *****/
@@ -2367,7 +2367,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[Rec_Record.UsrDat->Roles.InCurrentCrs],NULL,
-					   Rec_PutParamUsrCodEncrypted,NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user-cog.svg",Ico_BLACK);
 
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
@@ -2381,30 +2381,30 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		    {
 		     /* My test results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
-						    Rec_PutParamsMyTsts,NULL,
+						    Rec_PutParsMyTsts,NULL,
 						    "check.svg",Ico_BLACK);
 		     /* My exam results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
-						    Rec_PutParamsMyTsts,NULL,
+						    Rec_PutParsMyTsts,NULL,
 						    "file-signature.svg",Ico_BLACK);
 		     /* My match results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
-						    Rec_PutParamsMyTsts,NULL,
+						    Rec_PutParsMyTsts,NULL,
 						    "gamepad.svg",Ico_BLACK);
 		    }
 		  else	// Not me
 		    {
 		     /* User's test results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
-						    Rec_PutParamsStdTsts,NULL,
+						    Rec_PutParsStdTsts,NULL,
 						    "check.svg",Ico_BLACK);
 		     /* User's exam results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
-						    Rec_PutParamsStdTsts,NULL,
+						    Rec_PutParsStdTsts,NULL,
 						    "file-signature.svg",Ico_BLACK);
 		     /* User's match results in course */
 		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
-						    Rec_PutParamsStdTsts,NULL,
+						    Rec_PutParsStdTsts,NULL,
 						    "gamepad.svg",Ico_BLACK);
 		    }
 		 }
@@ -2418,7 +2418,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 						    "folder-open.svg",Ico_BLACK);
 		  else	// Not me, I am not a student in current course
 		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
-						    Rec_PutParamsWorks,NULL,
+						    Rec_PutParsWorks,NULL,
 						    "folder-open.svg",Ico_BLACK);
 		 }
 
@@ -2431,7 +2431,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 						    "calendar-check.svg",Ico_BLACK);
 		  else	// Not me
 		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
-						    Rec_PutParamsStudent,NULL,
+						    Rec_PutParsStudent,NULL,
 						    "calendar-check.svg",Ico_BLACK);
 		 }
 	      }
@@ -2439,14 +2439,14 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 	 /***** Button to print QR code *****/
 	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-				  Rec_PutParamUsrCodEncrypted,NULL);
+				  Rec_PutParUsrCodEncrypted,NULL);
 
 	 /***** Button to send a message *****/
 	 RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,	// From:
 							   Rec_Record.UsrDat->UsrCod);	// To:
 	 if (!RecipientHasBannedMe)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
-					   Rec_PutParamsMsgUsr,NULL,
+					   Rec_PutParsMsgUsr,NULL,
 					   "envelope.svg",Ico_BLACK);
 
 	 /***** Button to follow / unfollow *****/
@@ -2456,11 +2456,11 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					     Rec_Record.UsrDat->UsrCod))
 	       // I follow user
 	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
-					      Rec_PutParamUsrCodEncrypted,NULL,
+					      Rec_PutParUsrCodEncrypted,NULL,
 					      "user-check.svg",Ico_BLACK);	// Put button to unfollow, even if I can not view user's profile
 	    else if (ICanViewUsrProfile)
 	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
-					      Rec_PutParamUsrCodEncrypted,NULL,
+					      Rec_PutParUsrCodEncrypted,NULL,
 					      "user-plus.svg",Ico_BLACK);	// Put button to follow
 	   }
 
@@ -2475,42 +2475,42 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
      }
   }
 
-void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args)
+void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args)
   {
-   Usr_PutParamUsrCodEncrypted (Rec_Record.UsrDat->EnUsrCod);
+   Usr_PutParUsrCodEncrypted (Rec_Record.UsrDat->EnUsrCod);
   }
 
-static void Rec_PutParamsMyTsts (__attribute__((unused)) void *Args)
+static void Rec_PutParsMyTsts (__attribute__((unused)) void *Args)
   {
    Dat_SetIniEndDatesToPastAndNow ();
-   Dat_WriteParamsIniEndDates ();
+   Dat_WriteParsIniEndDates ();
   }
 
-static void Rec_PutParamsStdTsts (__attribute__((unused)) void *Args)
+static void Rec_PutParsStdTsts (__attribute__((unused)) void *Args)
   {
-   Rec_PutParamsStudent (NULL);
+   Rec_PutParsStudent (NULL);
    Dat_SetIniEndDatesToPastAndNow ();
-   Dat_WriteParamsIniEndDates ();
+   Dat_WriteParsIniEndDates ();
   }
 
-static void Rec_PutParamsWorks (__attribute__((unused)) void *Args)
+static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
   {
-   Rec_PutParamsStudent (NULL);
+   Rec_PutParsStudent (NULL);
    Par_PutParChar ("FullTree",'Y');	// By default, show all files
    Gbl.FileBrowser.FullTree = true;
-   Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
   }
 
-static void Rec_PutParamsStudent (__attribute__((unused)) void *Args)
+static void Rec_PutParsStudent (__attribute__((unused)) void *Args)
   {
    Par_PutParString (NULL,"UsrCodStd",Rec_Record.UsrDat->EnUsrCod);
-   Grp_PutParamAllGroups ();
+   Grp_PutParAllGroups ();
   }
 
-static void Rec_PutParamsMsgUsr (__attribute__((unused)) void *Args)
+static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args)
   {
-   Rec_PutParamUsrCodEncrypted (NULL);
-   Grp_PutParamAllGroups ();
+   Rec_PutParUsrCodEncrypted (NULL);
+   Grp_PutParAllGroups ();
    Par_PutParChar ("ShowOnlyOneRecipient",'Y');
   }
 
@@ -2528,7 +2528,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       Ins_PutParamInsCod (Ins->InsCod);
+	       Par_PutParCode (Par_InsCod,Ins->InsCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
@@ -2549,7 +2549,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       Ins_PutParamInsCod (Ins->InsCod);
+	       Par_PutParCode (Par_InsCod,Ins->InsCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
@@ -2626,7 +2626,7 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
 	       /* Put form to go to public profile */
 	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	       Frm_BeginForm (ActSeeOthPubPrf);
-		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		  Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		  HTM_BUTTON_Submit_Begin (ItsMe ? Txt_My_public_profile :
 						   Txt_Another_user_s_profile,
 					   "class=\"BT_LINK\"");
@@ -3547,9 +3547,9 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
    /***** Get role as a parameter from form *****/
    Role = (Rol_Role_t)
 	  Par_GetParUnsignedLong ("Role",
-				    0,
-				    Rol_NUM_ROLES - 1,
-				    (unsigned long) Rol_UNK);
+				  0,
+				  Rol_NUM_ROLES - 1,
+				  (unsigned long) Rol_UNK);
 
    /***** Check if I can register a user
           with the received role in current course *****/
@@ -3623,9 +3623,9 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
    /***** Get sex from form *****/
    UsrDat->Sex = (Usr_Sex_t)
 	         Par_GetParUnsignedLong ("Sex",
-                                           (unsigned long) Usr_SEX_FEMALE,
-                                           (unsigned long) Usr_SEX_MALE,
-                                           (unsigned long) Usr_SEX_UNKNOWN);
+                                         (unsigned long) Usr_SEX_FEMALE,
+                                         (unsigned long) Usr_SEX_MALE,
+                                         (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
    UsrDat->CtyCod = Par_GetAndCheckParCodeMin (Par_OthCtyCod,0);	// 0 (another country) is allowed here

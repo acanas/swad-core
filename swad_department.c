@@ -66,14 +66,14 @@ static struct Dpt_Department *Dpt_EditingDpt = NULL;	// Static variable to keep 
 
 static void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
 
-static Dpt_Order_t Dpt_GetParamDptOrder (void);
+static Dpt_Order_t Dpt_GetParDptOrder (void);
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
 static void Dpt_EditDepartmentsInternal (void);
 
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
-static void Dpt_PutParamDptCod (void *DptCod);
+static void Dpt_PutParDptCod (void *DptCod);
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -126,7 +126,7 @@ void Dpt_SeeDepts (void)
    Dpt_ResetDepartments (&Departments);
 
    /***** Get parameter with the type of order in the list of departments *****/
-   Departments.SelectedOrder = Dpt_GetParamDptOrder ();
+   Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
    Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
@@ -237,12 +237,12 @@ void Dpt_SeeDepts (void)
 /******** Get parameter with the type or order in list of departments ********/
 /*****************************************************************************/
 
-static Dpt_Order_t Dpt_GetParamDptOrder (void)
+static Dpt_Order_t Dpt_GetParDptOrder (void)
   {
    return (Dpt_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Dpt_NUM_ORDERS - 1,
-						  (unsigned long) Dpt_ORDER_DEFAULT);
+						0,
+						Dpt_NUM_ORDERS - 1,
+						(unsigned long) Dpt_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -477,7 +477,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDpt,NULL,
-						 Dpt_PutParamDptCod,&Dpt->DptCod);
+						 Dpt_PutParDptCod,&Dpt->DptCod);
 	    HTM_TD_End ();
 
 	    /* Department code */
@@ -488,7 +488,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Institution */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptIns);
-		  Dpt_PutParamDptCod (&Dpt->DptCod);
+		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -508,7 +508,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptSho);
-		  Dpt_PutParamDptCod (&Dpt->DptCod);
+		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
 		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -519,7 +519,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptFul);
-		  Dpt_PutParamDptCod (&Dpt->DptCod);
+		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -530,7 +530,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptWWW);
-		  Dpt_PutParamDptCod (&Dpt->DptCod);
+		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
 		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
@@ -554,12 +554,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 /****************** Write parameter with code of department ******************/
 /*****************************************************************************/
 
-static void Dpt_PutParamDptCod (void *DptCod)
+static void Dpt_PutParDptCod (void *DptCod)
   {
-   extern const char *Par_CodeStr[];
-
    if (DptCod)
-      Par_PutParLong (NULL,Par_CodeStr[Par_DptCod],*((long *) DptCod));
+      Par_PutParCode (Par_DptCod,*((long *) DptCod));
   }
 
 /*****************************************************************************/
@@ -661,23 +659,23 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   size_t MaxBytes = 0;			// Initialized to avoid warning
-   char *CurrentDptName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   size_t MaxBytes = 0;		// Initialized to avoid warning
+   char *CurrentDptName = NULL;	// Initialized to avoid warning
    char NewDptName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentDptName = Dpt_EditingDpt->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentDptName = Dpt_EditingDpt->FullName;
          break;
@@ -688,7 +686,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
 
    /* Get the new name for the department */
-   Par_GetParText (ParamName,NewDptName,MaxBytes);
+   Par_GetParText (ParName,NewDptName,MaxBytes);
 
    /***** Get from the database the old names of the department *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -701,14 +699,14 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentDptName,NewDptName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt_EditingDpt->DptCod))
+         if (Dpt_DB_CheckIfDepartmentNameExists (ParName,NewDptName,Dpt_EditingDpt->DptCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
                              NewDptName);
          else
            {
             /* Update the table changing old name by new name */
-            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
+            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,FldName,NewDptName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -987,7 +985,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 /*****************************************************************************/
 
 void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
-                                  const char *ParamName,
+                                  const char *ParName,
 		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,
@@ -1008,7 +1006,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    /* Begin selector */
    HTM_SELECT_Begin (SubmitFormOnChange,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
-		     ParamName,ParamName,SelectClass);
+		     ParName,ParName,SelectClass);
 
       if (FirstOption <= 0)
 	{

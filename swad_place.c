@@ -60,7 +60,7 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Plc_Order_t Plc_GetParamPlcOrder (void);
+static Plc_Order_t Plc_GetParPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
 static void Plc_PutIconToEditPlaces (void);
@@ -68,7 +68,7 @@ static void Plc_EditPlacesInternal (void);
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
-static void Plc_PutParamPlcCod (void *PlcCod);
+static void Plc_PutParPlcCod (void *PlcCod);
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -114,7 +114,7 @@ void Plc_SeePlaces (void)
       Plc_ResetPlaces (&Places);
 
       /***** Get parameter with the type of order in the list of places *****/
-      Places.SelectedOrder = Plc_GetParamPlcOrder ();
+      Places.SelectedOrder = Plc_GetParPlcOrder ();
 
       /***** Get list of places *****/
       Plc_GetListPlaces (&Places);
@@ -231,12 +231,12 @@ void Plc_SeePlaces (void)
 /********** Get parameter with the type or order in list of places ***********/
 /*****************************************************************************/
 
-static Plc_Order_t Plc_GetParamPlcOrder (void)
+static Plc_Order_t Plc_GetParPlcOrder (void)
   {
    return (Plc_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Plc_NUM_ORDERS - 1,
-						  (unsigned long) Plc_ORDER_DEFAULT);
+						0,
+						Plc_NUM_ORDERS - 1,
+						(unsigned long) Plc_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -339,7 +339,7 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
 void Plc_PutIconToViewPlaces (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
-                                  Ins_PutParamCurrentInsCod,&Gbl.Hierarchy.Ins.InsCod,
+                                  Ins_PutParInsCod,&Gbl.Hierarchy.Ins.InsCod,
 				  "map-marker-alt.svg",Ico_BLACK);
   }
 
@@ -484,7 +484,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemPlc,NULL,
-						 Plc_PutParamPlcCod,&Plc->PlcCod);
+						 Plc_PutParPlcCod,&Plc->PlcCod);
 	    HTM_TD_End ();
 
 	    /* Place code */
@@ -530,7 +530,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 /******************** Write parameter with code of place *********************/
 /*****************************************************************************/
 
-static void Plc_PutParamPlcCod (void *PlcCod)
+static void Plc_PutParPlcCod (void *PlcCod)
   {
    if (PlcCod)
       Par_PutParCode (Par_PlcCod,*((long *) PlcCod));
@@ -605,23 +605,23 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentPlcName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentPlcName = NULL;	// Initialized to avoid warning
    char NewPlcName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Plc_MAX_BYTES_PLACE_SHRT_NAME;
          CurrentPlcName = Plc_EditingPlc->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Plc_MAX_BYTES_PLACE_FULL_NAME;
          CurrentPlcName = Plc_EditingPlc->FullName;
          break;
@@ -632,7 +632,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    Plc_EditingPlc->PlcCod = Par_GetAndCheckParCode (Par_PlcCod);
 
    /* Get the new name for the place */
-   Par_GetParText (ParamName,NewPlcName,MaxBytes);
+   Par_GetParText (ParName,NewPlcName,MaxBytes);
 
    /***** Get from the database the old names of the place *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -645,14 +645,14 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentPlcName,NewPlcName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,ParamName,NewPlcName))
+         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,ParName,NewPlcName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_place_X_already_exists,
                              NewPlcName);
          else
            {
             /* Update the table changing old name by new name */
-            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,FieldName,NewPlcName);
+            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,FldName,NewPlcName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,

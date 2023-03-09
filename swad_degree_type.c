@@ -66,7 +66,7 @@ static struct DegTyp_DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable
 
 static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
                                    DegTyp_Order_t DefaultOrder);
-static DegTyp_Order_t DegTyp_GetParamDegTypOrder (DegTyp_Order_t DefaultOrder);
+static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder);
 
 static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
                                     Act_Action_t NextAction,
@@ -88,7 +88,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
                                                 DegTyp_Order_t SelectedOrder);
 static void DegTyp_PutHeadDegreeTypesForEdition (void);
 
-static void DegTyp_PutParamOtherDegTypCod (void *DegTypCod);
+static void DegTyp_PutParOtherDegTypCod (void *DegTypCod);
 
 static void DegTyp_RemoveDegreeTypeCompletely (long DegTypCod);
 
@@ -152,7 +152,7 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
    struct DegTyp_DegTypes DegTypes;
 
    /***** Get parameter with the type of order in the list of degree types *****/
-   SelectedOrder = DegTyp_GetParamDegTypOrder (DefaultOrder);
+   SelectedOrder = DegTyp_GetParDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
    DegTyp_GetListDegreeTypes (&DegTypes,Scope,SelectedOrder);
@@ -168,12 +168,12 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
 /******* Get parameter with the type or order in list of degree types ********/
 /*****************************************************************************/
 
-static DegTyp_Order_t DegTyp_GetParamDegTypOrder (DegTyp_Order_t DefaultOrder)
+static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
   {
    return (DegTyp_Order_t) Par_GetParUnsignedLong ("Order",
-						     0,
-						     DegTyp_NUM_ORDERS - 1,
-						     (unsigned long) DefaultOrder);
+						   0,
+						   DegTyp_NUM_ORDERS - 1,
+						   (unsigned long) DefaultOrder);
   }
 
 /*****************************************************************************/
@@ -410,7 +410,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDegTyp,NULL,
-						 DegTyp_PutParamOtherDegTypCod,
+						 DegTyp_PutParOtherDegTypCod,
 						 &DegTypes->Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
@@ -422,7 +422,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 	    /* Name of degree type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDegTyp);
-		  DegTyp_PutParamOtherDegTypCod (&DegTypes->Lst[NumDegTyp].DegTypCod);
+		  DegTyp_PutParOtherDegTypCod (&DegTypes->Lst[NumDegTyp].DegTypCod);
 		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,
 				  DegTypes->Lst[NumDegTyp].DegTypName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -543,7 +543,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 		 {
 		  Figures.Scope      = Scope;
 		  Figures.FigureType = Fig_DEGREE_TYPES;
-		  Fig_PutHiddenParamFigures (&Figures);
+		  Fig_PutParsFigures (&Figures);
 		 }
 	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
@@ -726,7 +726,7 @@ void DegTyp_RemoveDegreeType (void)
 /***************** Write parameter with code of degree type ******************/
 /*****************************************************************************/
 
-static void DegTyp_PutParamOtherDegTypCod (void *DegTypCod)
+static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
   {
    if (DegTypCod)
       Par_PutParCode (Par_OthDegTypCod,*((long *) DegTypCod));

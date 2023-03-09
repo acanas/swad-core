@@ -143,7 +143,8 @@ static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
 static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
-static void Grp_PutParamGrpTypCod (void *GrpTypCod);
+static void Grp_PutParGrpTypCod (void *GrpTypCod);
+static void Grp_PutParGrpCod (void *GrpCod);
 
 /*****************************************************************************/
 /******************* Write the names of the selected groups ******************/
@@ -348,7 +349,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Args,
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
@@ -378,9 +379,9 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 	  depending on the groups selected *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
-      Set_PutParamsPrefsAboutUsrList ();
-      if (FuncParams)
-	 FuncParams (Args);
+      Set_PutParsPrefsAboutUsrList ();
+      if (FuncPars)
+	 FuncPars (Args);
 
       /***** Select all groups *****/
       Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
@@ -463,7 +464,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 /************ Put parameters with the groups of students selected ************/
 /*****************************************************************************/
 
-void Grp_PutParamsCodGrps (void)
+void Grp_PutParsCodGrps (void)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    unsigned NumGrpSel;
@@ -558,7 +559,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
 
 void Grp_GetParCodsSeveralGrps (void)
   {
-   char *ParamLstCodGrps;
+   char *ParLstCodGrps;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrp;
@@ -570,19 +571,19 @@ void Grp_GetParCodsSeveralGrps (void)
    if (Gbl.Crs.Grps.NumGrps)	// If course has groups
      {
       /***** Allocate memory for the list of group codes selected *****/
-      if ((ParamLstCodGrps = malloc (MaxSizeLstGrpCods + 1)) == NULL)
+      if ((ParLstCodGrps = malloc (MaxSizeLstGrpCods + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
 
       /***** Get parameter with list of groups to list *****/
-      Par_GetParMultiToText ("GrpCods",ParamLstCodGrps,MaxSizeLstGrpCods);
+      Par_GetParMultiToText ("GrpCods",ParLstCodGrps,MaxSizeLstGrpCods);
 
-      if (ParamLstCodGrps[0])
+      if (ParLstCodGrps[0])
 	{
 	 /***** Count number of groups selected from LstCodGrps *****/
-	 for (Ptr = ParamLstCodGrps, NumGrp = 0;
+	 for (Ptr = ParLstCodGrps, NumGrp = 0;
 	      *Ptr;
 	      NumGrp++)
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
 	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
@@ -591,18 +592,18 @@ void Grp_GetParCodsSeveralGrps (void)
 	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,
 	                                                   sizeof (*Gbl.Crs.Grps.LstGrpsSel.GrpCods))) == NULL)
 	       Err_NotEnoughMemoryExit ();
-	    for (Ptr = ParamLstCodGrps, NumGrp = 0;
+	    for (Ptr = ParLstCodGrps, NumGrp = 0;
 		 *Ptr;
 		 NumGrp++)
 	      {
-	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	       Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	       Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }
 	}
 
       /***** Free memory used for the list of groups to show *****/
-      free (ParamLstCodGrps);
+      free (ParLstCodGrps);
      }
   }
 
@@ -1247,13 +1248,13 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Put icon to remove group type */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
-					      Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+					      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 	    HTM_TD_End ();
 
 	    /* Name of group type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -1265,7 +1266,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it mandatory to register in any group? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
@@ -1283,7 +1284,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it possible to register in multiple groups? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
@@ -1301,7 +1302,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Open time */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_TABLE_BeginCenterPadding (2);
 		     HTM_TR_Begin (NULL);
 
@@ -1440,7 +1441,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Icon to remove group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
 		  Ico_PutContextualIconToRemove (ActReqRemGrp,Grp_GROUPS_SECTION_ID,
-						 Grp_PutParamGrpCod,&Grp->GrpCod);
+						 Grp_PutParGrpCod,&Grp->GrpCod);
 	       HTM_TD_End ();
 
 	       /***** Icon to open/close group *****/
@@ -1448,7 +1449,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->Open ? ActCloGrp :
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
 			                          "lock.svg",
 			              Grp->Open ? Ico_GREEN :
@@ -1463,7 +1464,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     Ico_PutIconLink (Grp->FileZones ? "folder-open.svg" :
 			                               "folder.svg",
 			              Grp->FileZones ? Ico_GREEN :
@@ -1477,7 +1478,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
@@ -1502,7 +1503,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Group name *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"20\" class=\"INPUT_%s\"",
@@ -1514,7 +1515,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
@@ -1556,7 +1557,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Maximum number of students of the group (row[3]) *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
-		     Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1620,7 +1621,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    static const struct
      {
       const char *Table;
-      Par_Code_t ParamCode;
+      Par_Code_t ParCode;
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
       [Grp_ASSIGNMENT] = {"asg_groups",Par_AsgCod},
@@ -1652,7 +1653,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
 	 AssociatedToGrp = Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].ParamCode,
+	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].ParCode,
 	                                                  Cod,Grp->GrpCod);
       else
          AssociatedToGrp = false;
@@ -3400,13 +3401,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Show question and button to remove type of group *****/
    if (NumGrps == 1)
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParamGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
@@ -3443,19 +3444,19 @@ static void Grp_AskConfirmRemGrp (void)
    /***** Show question and button to remove group *****/
    if (NumStds == 0)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
                               GrpDat.GrpName);
    else if (NumStds == 1)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
                               GrpDat.GrpName);
    else
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParamGrpCod,&Gbl.Crs.Grps.GrpCod,
+			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                               GrpDat.GrpName,NumStds);
@@ -3959,9 +3960,9 @@ void Grp_ChangeMaxStdsGrp (void)
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
 	        Par_GetParUnsignedLong ("MaxStudents",
-                                          0,
-                                          Grp_MAX_STUDENTS_IN_A_GROUP,
-                                          Grp_NUM_STUDENTS_NOT_LIMITED);
+                                        0,
+                                        Grp_MAX_STUDENTS_IN_A_GROUP,
+                                        Grp_NUM_STUDENTS_NOT_LIMITED);
 
    /* Get from the database the type, name, and old maximum of students of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -4173,7 +4174,7 @@ void Grp_RenameGroup (void)
 /****************** Write parameter with code of group type ******************/
 /*****************************************************************************/
 
-static void Grp_PutParamGrpTypCod (void *GrpTypCod)
+static void Grp_PutParGrpTypCod (void *GrpTypCod)
   {
    if (GrpTypCod)
       Par_PutParCode (Par_GrpTypCod,*((long *) GrpTypCod));
@@ -4183,7 +4184,7 @@ static void Grp_PutParamGrpTypCod (void *GrpTypCod)
 /********************* Write parameter with code of group ********************/
 /*****************************************************************************/
 
-void Grp_PutParamGrpCod (void *GrpCod)
+static void Grp_PutParGrpCod (void *GrpCod)
   {
    if (GrpCod)
       Par_PutParCode (Par_GrpCod,*((long *) GrpCod));
@@ -4196,7 +4197,7 @@ void Grp_PutParamGrpCod (void *GrpCod)
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
   {
    unsigned NumGrpTyp;
-   char Param[6 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char Par[6 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char LongStr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char **LstStrCodGrps;
    const char *Ptr;
@@ -4219,9 +4220,9 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
-      snprintf (Param,sizeof (Param),"GrpCod%ld",
+      snprintf (Par,sizeof (Par),"GrpCod%ld",
                 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],
+      Par_GetParMultiToText (Par,LstStrCodGrps[NumGrpTyp],
                              ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])
         {
@@ -4229,7 +4230,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
          for (Ptr = LstStrCodGrps[NumGrpTyp], NumGrpWanted = 0;
               *Ptr;
               NumGrpWanted++)
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 
          /***** Add the number of groups selected of this type to the number of groups selected total *****/
          LstGrpsWanted->NumGrps += NumGrpWanted;
@@ -4254,7 +4255,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
               *Ptr;
               NumGrpWanted++)
            {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */
@@ -4282,7 +4283,7 @@ void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps)
 /*********** Put parameter that indicates all groups selected ****************/
 /*****************************************************************************/
 
-void Grp_PutParamAllGroups (void)
+void Grp_PutParAllGroups (void)
   {
    Par_PutParChar ("AllGroups",'Y');
   }
@@ -4291,19 +4292,19 @@ void Grp_PutParamAllGroups (void)
 /************* Parameter to show only my groups or all groups ****************/
 /*****************************************************************************/
 
-void Grp_PutParamWhichGroups (void *WhichGrps)
+void Grp_PutParWhichGroups (void *WhichGrps)
   {
    if (WhichGrps)
       Par_PutParUnsigned (NULL,"WhichGrps",
 				  (unsigned) *((Grp_WhichGroups_t *) WhichGrps));
   }
 
-void Grp_PutParamWhichGrpsOnlyMyGrps (void)
+void Grp_PutParWhichGrpsOnlyMyGrps (void)
   {
    Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) Grp_MY_GROUPS);
   }
 
-void Grp_PutParamWhichGrpsAllGrps (void)
+void Grp_PutParWhichGrpsAllGrps (void)
   {
    Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) Grp_ALL_GROUPS);
   }
@@ -4313,7 +4314,7 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 /*****************************************************************************/
 
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
-                                 void (*FuncParams) (void *Args),void *Args)
+                                 void (*FuncPars) (void *Args),void *Args)
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
@@ -4329,8 +4330,8 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	 Set_BeginPref (WhichGrps == Gbl.Crs.Grps.WhichGrps);
 	    Frm_BeginForm (Action);
 	       Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-	       if (FuncParams)	// Extra parameters depending on the action
-		  FuncParams (Args);
+	       if (FuncPars)	// Extra parameters depending on the action
+		  FuncPars (Args);
 	       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
 								    "sitemap.svg",
 				       Ico_BLACK,Txt_GROUP_WHICH_GROUPS[WhichGrps]);
@@ -4346,7 +4347,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 /************* Get whether to show only my groups or all groups **************/
 /*****************************************************************************/
 
-Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
+Grp_WhichGroups_t Grp_GetParWhichGroups (void)
   {
    static bool AlreadyGot = false;
    Grp_WhichGroups_t WhichGroupsDefault;
@@ -4386,9 +4387,9 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
       /* Get parameter */
       Gbl.Crs.Grps.WhichGrps = (Grp_WhichGroups_t)
 	                       Par_GetParUnsignedLong ("WhichGrps",
-	                                                 0,
-	                                                 Grp_NUM_WHICH_GROUPS - 1,
-	                                                 (unsigned long) WhichGroupsDefault);
+	                                               0,
+	                                               Grp_NUM_WHICH_GROUPS - 1,
+	                                               (unsigned long) WhichGroupsDefault);
 
       AlreadyGot = true;
      }

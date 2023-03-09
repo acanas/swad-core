@@ -72,13 +72,13 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators);
-static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators);
+static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators);
+static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators);
 static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
                                   unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
                                                      unsigned NumCrss);
-static void Ind_PutParamsConfirmIWantToSeeBigList (void *Indicators);
+static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -115,7 +115,7 @@ void Ind_ReqIndicatorsCourses (void)
    unsigned Ind;
 
    /***** Get parameters *****/
-   Ind_GetParamsIndicators (&Indicators);
+   Ind_GetParsIndicators (&Indicators);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Indicators_of_courses,
@@ -220,7 +220,7 @@ void Ind_ReqIndicatorsCourses (void)
 
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
-	    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
+	    Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
 	    Par_PutParCode (Par_OthDegTypCod,Indicators.DegTypCod);
 	    Par_PutParCode (Par_DptCod      ,Indicators.DptCod   );
 	    if (Indicators.StrIndicatorsSelected[0])
@@ -240,7 +240,7 @@ void Ind_ReqIndicatorsCourses (void)
 /************* Get parameters related to indicators of courses ***************/
 /*****************************************************************************/
 
-static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
+static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
   {
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -261,7 +261,7 @@ static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
    Indicators->DptCod = Par_GetParCode (Par_DptCod);		// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
-   Ind_GetParamNumIndicators (Indicators);
+   Ind_GetParNumIndicators (Indicators);
   }
 
 /*****************************************************************************/
@@ -276,7 +276,7 @@ void Ind_ShowIndicatorsCourses (void)
    unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
 
    /***** Get parameters *****/
-   Ind_GetParamsIndicators (&Indicators);
+   Ind_GetParsIndicators (&Indicators);
 
    /***** Get courses from database *****/
    NumCrss = Ind_DB_GetTableOfCourses (&mysql_res,&Indicators);
@@ -298,7 +298,7 @@ void Ind_ShowIndicatorsCourses (void)
 /*************** Get parameter with the number of indicators *****************/
 /*****************************************************************************/
 
-static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators)
+static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
   {
    unsigned Ind;
    const char *Ptr;
@@ -323,7 +323,7 @@ static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators)
 	   )
 	{
 	 /* Get next indicator selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Indicator = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each indicator in list StrIndicatorsSelected as selected */
@@ -374,19 +374,19 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Ale_ShowAlertAndButton (Gbl.Action.Act,NULL,NULL,
-                           Ind_PutParamsConfirmIWantToSeeBigList,Indicators,
+                           Ind_PutParsConfirmIWantToSeeBigList,Indicators,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
                            NumCrss);
   }
 
-static void Ind_PutParamsConfirmIWantToSeeBigList (void *Indicators)
+static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators)
   {
    extern const char *Par_CodeStr[];
 
    if (Indicators)
      {
-      Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
+      Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
       Par_PutParCode (Par_OthDegTypCod,((struct Ind_Indicators *) Indicators)->DegTypCod);
       Par_PutParCode (Par_DptCod      ,((struct Ind_Indicators *) Indicators)->DptCod   );
       if (((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected[0])

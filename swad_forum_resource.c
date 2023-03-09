@@ -53,7 +53,7 @@ void ForRsc_GetLinkToThread (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forums *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Get thread subject *****/
    ForRsc_GetTitleFromThrCod (Forums.Thread.Current,Subject,sizeof (Subject) - 1);
@@ -105,7 +105,7 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
 				  ActSeeForCrsUsr;	// All threads
       Frm_BeginFormAnchor (NextAction,ThrCod > 0 ? For_FORUM_POSTS_SECTION_ID :
 					           For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsNewPost (&Forums);
+	 For_PutParsNewPost (&Forums);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

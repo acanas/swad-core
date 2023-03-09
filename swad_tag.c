@@ -55,8 +55,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static long Tag_GetParamTagCode (void);
-
 static void Tag_PutIconEnable (long TagCod);
 static void Tag_PutIconDisable (long TagCod);
 
@@ -109,7 +107,7 @@ void Tag_PutIconToEditTags (void)
 
 void Tag_EnableTag (void)
   {
-   long TagCod = Tag_GetParamTagCode ();
+   long TagCod = Par_GetAndCheckParCode (Par_TagCod);
 
    /***** Change tag status to enabled *****/
    Tag_DB_EnableOrDisableTag (TagCod,false);
@@ -124,28 +122,13 @@ void Tag_EnableTag (void)
 
 void Tag_DisableTag (void)
   {
-   long TagCod = Tag_GetParamTagCode ();
+   long TagCod = Par_GetAndCheckParCode (Par_TagCod);
 
    /***** Change tag status to disabled *****/
    Tag_DB_EnableOrDisableTag (TagCod,true);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();
-  }
-
-/*****************************************************************************/
-/************************* Get parameter with tag code ***********************/
-/*****************************************************************************/
-
-static long Tag_GetParamTagCode (void)
-  {
-   long TagCod;
-
-   /***** Get tag code *****/
-   if ((TagCod = Par_GetParLong ("TagCod")) <= 0)
-      Err_WrongTagExit ();
-
-   return TagCod;
   }
 
 /*****************************************************************************/
@@ -277,7 +260,7 @@ unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags)
    Ptr = Tags->List;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+      Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
       NumTags++;
      }
 
@@ -362,7 +345,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  Ptr = Tags->List;
 		  while (*Ptr)
 		    {
-		     Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+		     Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
 		     if (!strcmp (row[1],TagText))
 		       {
 			Checked = true;
@@ -470,7 +453,7 @@ static void Tag_PutIconEnable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
-	 Par_PutParLong (NULL,"TagCod",TagCod);
+	 Par_PutParCode (Par_TagCod,TagCod);
 	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,ActEnaTag);
       Frm_EndForm ();
    HTM_TD_End ();
@@ -484,7 +467,7 @@ static void Tag_PutIconDisable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
-	 Par_PutParLong (NULL,"TagCod",TagCod);
+	 Par_PutParCode (Par_TagCod,TagCod);
 	 Ico_PutIconLink ("eye.svg",Ico_GREEN,ActDisTag);
       Frm_EndForm ();
    HTM_TD_End ();

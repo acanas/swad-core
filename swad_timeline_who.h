@@ -41,7 +41,7 @@
 
 void TmlWho_PutFormWho (struct Tml_Timeline *Timeline);
 
-void TmlWho_GetParamWho (void);
+void TmlWho_GetParWho (void);
 
 void TmlWho_SaveWhoInDB (struct Tml_Timeline *Timeline);
 

@@ -269,7 +269,7 @@ void TmlPst_ReceivePostUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);

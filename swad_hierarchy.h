@@ -68,8 +68,8 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
 void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);
-Hie_Status_t Hie_GetParamStatus (void);
-void Hie_PutParamOtherHieCod (void *HieCod);
+Hie_Status_t Hie_GetParStatus (void);
+void Hie_PutParOtherHieCod (void *HieCod);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);

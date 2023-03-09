@@ -317,7 +317,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
       Ptr = Questions->Tags.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
             Err_QuerySizeExceededExit ();
@@ -340,7 +340,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
       Ptr = Questions->AnswerTypes.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnsType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnsType]) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
@@ -453,7 +453,7 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
       Ptr = Questions->Tags.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();
@@ -476,7 +476,7 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
       Ptr = Questions->AnswerTypes.List;
       while (*Ptr)
         {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
+         Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnswerType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnswerType]) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)

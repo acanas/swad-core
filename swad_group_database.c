@@ -679,7 +679,7 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 /*********** exam session or match is associated to a given group ************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParamCode,
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParCode,
                                     long Cod,long GrpCod)
   {
    extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
@@ -692,7 +692,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParamCode,
 		    " WHERE %s=%ld"
 		      " AND GrpCod=%ld)",
 		   Table,
-		   Par_CodeStr[ParamCode],Cod,
+		   Par_CodeStr[ParCode],Cod,
 		   GrpCod);
   }
 
@@ -701,7 +701,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParamCode,
 /************ exam session or match is associated to any group  **************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParamCode,long Cod)
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParCode,long Cod)
   {
    extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
 
@@ -718,7 +718,7 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParamCode,long
 		     " FROM %s"
 		    " WHERE %s=%ld)",
 		   Table,
-		   Par_CodeStr[ParamCode],Cod);
+		   Par_CodeStr[ParCode],Cod);
   }
 
 /*****************************************************************************/

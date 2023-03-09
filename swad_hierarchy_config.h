@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_parameter.h"
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
@@ -40,10 +46,10 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
-void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
+void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
-void HieCfg_QR (const char *ParamName,long HieCod);
+void HieCfg_QR (Par_Code_t ParCode,long HieCod);
 void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 #endif

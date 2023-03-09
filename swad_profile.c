@@ -108,7 +108,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 
 static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures);
 
-static void Prf_GetAndShowRankingFigure (const char *FieldName);
+static void Prf_GetAndShowRankingFigure (const char *FldName);
 static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool ItsMe);
 
 /*****************************************************************************/
@@ -149,7 +149,7 @@ void Prf_PutLinkMyPublicProfile (void)
    extern const char *Txt_My_public_profile;
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
-				  Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
+				  Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				  "user-circle.svg",Ico_BLACK,
 				  Txt_My_public_profile,NULL);
   }
@@ -231,7 +231,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    /***** Get user's data *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-      Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+      Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show profile and timeline *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -346,7 +346,7 @@ bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
 void Prf_ChangeBasicProfileVis (void)
   {
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParamVisibility ("VisBasPrf",
+   Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParVisibility ("VisBasPrf",
 	                                                        Pri_BASIC_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private basic profile visibility in database *****/
@@ -359,7 +359,7 @@ void Prf_ChangeBasicProfileVis (void)
 void Prf_ChangeExtendedProfileVis (void)
   {
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParamVisibility ("VisExtPrf",
+   Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParVisibility ("VisExtPrf",
 	                                                        Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private extended profile visibility in database *****/
@@ -777,7 +777,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
    extern const char *Txt_Calculate;
 
    Frm_BeginForm (ActCalFig);
-      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
 
       /***** Put button to refresh *****/
       HTM_BUTTON_Submit_Begin (Txt_Calculate,
@@ -855,7 +855,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
 
    /***** Rank in form to go to ranking *****/
    Frm_BeginForm (ActSeeUseGbl);
-      Sco_PutParamScope ("ScopeSta",HieLvl_SYS);
+      Sco_PutParScope ("ScopeSta",HieLvl_SYS);
       Par_PutParUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
@@ -878,7 +878,7 @@ void Prf_CalculateFigures (void)
    struct Prf_UsrFigures UsrFigures;
 
    /***** Get user's code *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get first click time from log and store as user's figure *****/
    Prf_GetUsrFigures (Gbl.Usrs.Other.UsrDat.UsrCod,&UsrFigures);
@@ -1157,13 +1157,13 @@ void Prf_GetAndShowRankingMsgsSnt (void)
    Prf_GetAndShowRankingFigure ("NumMsgSnt");
   }
 
-static void Prf_GetAndShowRankingFigure (const char *FieldName)
+static void Prf_GetAndShowRankingFigure (const char *FldName)
   {
    MYSQL_RES *mysql_res;
    unsigned NumUsrs;
 
    /***** Get ranking from database *****/
-   NumUsrs = Prf_DB_GetRankingFigure (&mysql_res,FieldName);
+   NumUsrs = Prf_DB_GetRankingFigure (&mysql_res,FldName);
 
    Prf_ShowRankingFigure (&mysql_res,NumUsrs);
   }
@@ -1342,7 +1342,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool Its
       if (Visible)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
 				     "class=\"LM BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);

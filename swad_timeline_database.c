@@ -983,7 +983,7 @@ long Tml_DB_GetNotCodFromPubCod (long PubCod)
 
 long Tml_DB_GetPubCodFromSession (TmlPub_FirstLast_t FirstLast)
   {
-   static const char *FieldName[TmlPub_NUM_FIRST_LAST] =
+   static const char *FldName[TmlPub_NUM_FIRST_LAST] =
      {
       [TmlPub_FIRST] = "FirstPubCod",
       [TmlPub_LAST ] = "LastPubCod",
@@ -995,7 +995,7 @@ long Tml_DB_GetPubCodFromSession (TmlPub_FirstLast_t FirstLast)
 		                "SELECT %s"		// row[0]
 		                 " FROM ses_sessions"
 		                " WHERE SessionId='%s'",
-		                FieldName[FirstLast],
+		                FldName[FirstLast],
 		                Gbl.Session.Id);
    if (PubCod < 0)
       PubCod = 0;

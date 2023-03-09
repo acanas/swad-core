@@ -59,18 +59,18 @@ static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Hld_Order_t Hld_GetParamHldOrder (void);
+static Hld_Order_t Hld_GetParHldOrder (void);
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
 static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld);
 
-static Hld_HolidayType_t Hld_GetParamHldType (void);
+static Hld_HolidayType_t Hld_GetParHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
 static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					const struct Plc_Places *Places);
-static void Hld_PutParamHldCod (void *HldCod);
+static void Hld_PutParHldCod (void *HldCod);
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places);
 static void Hld_PutHeadHolidays (void);
@@ -116,7 +116,7 @@ void Hld_SeeHolidays (void)
       Hld_ResetHolidays (&Holidays);
 
       /***** Get parameter with the type of order in the list of holidays *****/
-      Holidays.SelectedOrder = Hld_GetParamHldOrder ();
+      Holidays.SelectedOrder = Hld_GetParHldOrder ();
 
       /***** Get list of holidays *****/
       Hld_GetListHolidays (&Holidays);
@@ -223,12 +223,12 @@ void Hld_SeeHolidays (void)
 /********* Get parameter with the type or order in list of holidays **********/
 /*****************************************************************************/
 
-static Hld_Order_t Hld_GetParamHldOrder (void)
+static Hld_Order_t Hld_GetParHldOrder (void)
   {
    return (Hld_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Hld_NUM_ORDERS - 1,
-						  (unsigned long) Hld_DEFAULT_ORDER_TYPE);
+						0,
+						Hld_NUM_ORDERS - 1,
+						(unsigned long) Hld_DEFAULT_ORDER_TYPE);
   }
 
 /*****************************************************************************/
@@ -455,13 +455,13 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
 /************ Get parameter from form with the type of a holiday *************/
 /*****************************************************************************/
 
-static Hld_HolidayType_t Hld_GetParamHldType (void)
+static Hld_HolidayType_t Hld_GetParHldType (void)
   {
    return (Hld_HolidayType_t)
 	  Par_GetParUnsignedLong ("HldTyp",
-	                            0,
-	                            Hld_NUM_TYPES_HOLIDAY - 1,
-	                            (unsigned long) Hld_HOLIDAY_TYPE_DEFAULT);
+	                          0,
+	                          Hld_NUM_TYPES_HOLIDAY - 1,
+	                          (unsigned long) Hld_HOLIDAY_TYPE_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -535,7 +535,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Put icon to remove holiday */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemHld,NULL,
-					      Hld_PutParamHldCod,&Hld->HldCod);
+					      Hld_PutParHldCod,&Hld->HldCod);
 	    HTM_TD_End ();
 
 	    /* Holiday code */
@@ -546,7 +546,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday place */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldPlc);
-		  Hld_PutParamHldCod (&Hld->HldCod);
+		  Par_PutParCode (Par_HldCod,Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 				    The_GetSuffix ());
@@ -565,7 +565,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday type */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldTyp);
-		  Hld_PutParamHldCod (&Hld->HldCod);
+		  Par_PutParCode (Par_HldCod,Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"HldTyp\" class=\"INPUT_%s\""
 				    " style=\"width:62px;\"",	// TODO: Use a CSS class
@@ -586,7 +586,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday date / Non school period start date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldStrDat);
-		  Hld_PutParamHldCod (&Hld->HldCod);
+		  Par_PutParCode (Par_HldCod,Hld->HldCod);
 		  Dat_WriteFormDate (CurrentYear - 1,
 				     CurrentYear + 1,
 				     "Start",
@@ -598,7 +598,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Non school period end date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldEndDat);
-		  Hld_PutParamHldCod (&Hld->HldCod);
+		  Par_PutParCode (Par_HldCod,Hld->HldCod);
 		  Dat_WriteFormDate (CurrentYear - 1,
 				     CurrentYear + 1,
 				     "End",
@@ -610,7 +610,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenHld);
-		  Hld_PutParamHldCod (&Hld->HldCod);
+		  Par_PutParCode (Par_HldCod,Hld->HldCod);
 		  HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_%s\"",
@@ -628,7 +628,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 /******************** Write parameter with code of holiday *******************/
 /*****************************************************************************/
 
-static void Hld_PutParamHldCod (void *HldCod)
+static void Hld_PutParHldCod (void *HldCod)
   {
    if (HldCod)
       Par_PutParCode (Par_HldCod,*((long *) HldCod));
@@ -716,7 +716,7 @@ void Hld_ChangeHolidayType (void)
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Get the new type for the holiday *****/
-   Hld_EditingHld->HldTyp = Hld_GetParamHldType ();
+   Hld_EditingHld->HldTyp = Hld_GetParHldType ();
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
@@ -1027,7 +1027,7 @@ void Hld_ReceiveFormNewHoliday (void)
    Hld_EditingHld->PlcCod = Par_GetParCode (Par_PlcCod);
 
    /***** Get the type of holiday *****/
-   Hld_EditingHld->HldTyp = Hld_GetParamHldType ();
+   Hld_EditingHld->HldTyp = Hld_GetParHldType ();
 
    /***** Get start date *****/
    Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",

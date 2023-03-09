@@ -50,14 +50,14 @@ void Lay_WriteHTTPStatus204NoContent (void);
 void Lay_WriteEndOfPage (void);
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void *Args),void *Args,
+				    void (*FuncPars) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color);
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncParams) (void *Args),void *Args,
+				    void (*FuncPars) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color,
 				    const char *Text,const char *OnSubmit);
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
-                                void (*FuncParams) (void),
+                                void (*FuncPars) (void),
                                 const char *CheckboxName,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text);

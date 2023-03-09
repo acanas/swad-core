@@ -243,7 +243,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	       Ptr = AnswerTypes->List;
 	       while (*Ptr)
 		 {
-		  Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 		  if (Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
 		    {
 		     Checked = true;
@@ -333,7 +333,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQstForSet);
-	    ExaSet_PutParamsOneSet (Exams);
+	    ExaSet_PutParsOneSet (Exams);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -396,7 +396,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActGamLstTstQst);
-	    Gam_PutParams (Games);
+	    Gam_PutPars (Games);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -473,7 +473,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
       case ActRemOneTstQst:	// Remove a question
       case ActChgShfTstQst:	// Change shuffle of a question
 	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,NULL,
-					Qst_PutParamsEditQst,Questions);
+					Qst_PutParsEditQst,Questions);
 	 break;
       default:
 	 break;
@@ -642,20 +642,20 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
    extern const char *Txt_Current_image_video;
    extern const char *Txt_Change_image_video;
    static unsigned UniqueId = 0;
-   struct ParamUploadMedia ParamUploadMedia;
+   struct Med_ParUpload ParUploadMedia;
    char *ClassInput;
 
    if (Media->Name[0])
      {
       /***** Set names of parameters depending on number of image in form *****/
-      Med_SetParamNames (&ParamUploadMedia,NumMedia);
+      Med_SetParsNames (&ParUploadMedia,NumMedia);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"Tst_MED_EDIT_FORM\"");
 
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
 			     "value=\"%u\"%s",
 			     (unsigned) Med_ACTION_NO_MEDIA,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
@@ -665,7 +665,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 
 	 /***** Choice 2: Current media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
 			     "value=\"%u\"%s checked=\"checked\"",
 			     (unsigned) Med_ACTION_KEEP_MEDIA,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
@@ -678,7 +678,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
 			     "id=\"chg_img_%u\" value=\"%u\"%s",
 			     UniqueId,
 			     (unsigned) Med_ACTION_NEW_MEDIA,
@@ -749,13 +749,13 @@ void Qst_ListQuestionsToEdit (void)
    Qst_Constructor (&Questions);
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
+   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
      {
       /***** Get question codes from database *****/
       if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
         {
 	 /* Contextual menu */
-	 if (QstImp_GetCreateXMLParamFromForm ())
+	 if (QstImp_GetCreateXMLParFromForm ())
 	   {
             Mnu_ContextMenuBegin ();
 	       QstImp_CreateXML (Questions.NumQsts,mysql_res);	// Create XML file with exported questions...
@@ -791,7 +791,7 @@ void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams)
    Qst_Constructor (&Questions);
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
+   if (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
      {
       if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
 	 /* Show the table with the questions */
@@ -821,7 +821,7 @@ void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
    Qst_Constructor (&Questions);
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
+   if (Tst_GetParsTst (&Questions,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
      {
       if ((Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions)))
 	 /* Show the table with the questions */
@@ -930,7 +930,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	    if (Questions->NumQsts > 1)
 	      {
 	       Frm_BeginForm (ActLstTstQst);
-		  Qst_PutParamsEditQst (Questions);
+		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_TST_STR_ORDER_FULL[Order],
 		                           "class=\"BT_LINK\"");
@@ -973,11 +973,11 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	    /* Write icon to remove the question */
 	    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
-					   Qst_PutParamsEditQst,Questions);
+					   Qst_PutParsEditQst,Questions);
 
 	    /* Write icon to edit the question */
 	    Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-					 Qst_PutParamQstCod,&Questions->Question.QstCod);
+					 Qst_PutParQstCod,&Questions->Question.QstCod);
 
 	 HTM_TD_End ();
 
@@ -1020,7 +1020,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		Questions->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	      {
 	       Frm_BeginForm (ActChgShfTstQst);
-		  Qst_PutParamsEditQst (Questions);
+		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s",
@@ -1115,7 +1115,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 
       /***** Begin form *****/
       Frm_BeginForm (ActAddQstToExa);
-	 ExaSet_PutParamsOneSet (Exams);
+	 ExaSet_PutParsOneSet (Exams);
 
 	 /***** Select all questions *****/
 	 Qst_PutCheckboxToSelectAllQuestions ();
@@ -1197,7 +1197,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 
       /***** Begin form *****/
       Frm_BeginForm (ActAddTstQstToGam);
-	 Gam_PutParams (Games);
+	 Gam_PutPars (Games);
 
 	 /***** Select all questions *****/
 	 Qst_PutCheckboxToSelectAllQuestions ();
@@ -1365,7 +1365,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 /************ Put hidden parameters for edition of test questions ************/
 /*****************************************************************************/
 
-void Qst_PutParamsEditQst (void *Questions)
+void Qst_PutParsEditQst (void *Questions)
   {
    if (Questions)
      {
@@ -1377,10 +1377,10 @@ void Qst_PutParamsEditQst (void *Questions)
 								                                      'N');
       Par_PutParString (NULL,"AnswerType",((struct Qst_Questions *) Questions)->AnswerTypes.List);
 
-      Qst_PutParamQstCod (&((struct Qst_Questions *) Questions)->Question.QstCod);
+      Par_PutParCode (Par_QstCod,((struct Qst_Questions *) Questions)->Question.QstCod);
       // if (Test->NumQsts == 1)
-      //    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
-      Dat_WriteParamsIniEndDates ();
+      //    Par_PutParChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
+      Dat_WriteParsIniEndDates ();
      }
   }
 
@@ -1715,7 +1715,7 @@ void Qst_WriteAnsTF (char AnsTF)
 /*************** Write parameter with the code of a question *****************/
 /*****************************************************************************/
 
-void Qst_WriteParamQstCod (unsigned QstInd,long QstCod)
+void Qst_WriteParQstCod (unsigned QstInd,long QstCod)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -1896,7 +1896,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvTstQst);
-      Qst_PutParamQstCod (&Question->QstCod);
+      Par_PutParCode (Par_QstCod,Question->QstCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -2729,9 +2729,9 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    /***** Get answer type *****/
    Question->Answer.Type = (Qst_AnswerType_t)
 			   Par_GetParUnsignedLong ("AnswerType",
-						     0,
-						     Qst_NUM_ANS_TYPES - 1,
-						     (unsigned long) Qst_ANS_UNKNOWN);
+						   0,
+						   Qst_NUM_ANS_TYPES - 1,
+						   (unsigned long) Qst_ANS_UNKNOWN);
    if (Question->Answer.Type == Qst_ANS_UNKNOWN)
       Err_WrongAnswerExit ();
 
@@ -2857,9 +2857,9 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
          if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
            {
 	    NumCorrectAns = (unsigned) Par_GetParUnsignedLong ("AnsUni",
-	                                                         0,
-	                                                         Qst_MAX_OPTIONS_PER_QUESTION - 1,
-	                                                         0);
+	                                                       0,
+	                                                       Qst_MAX_OPTIONS_PER_QUESTION - 1,
+	                                                       0);
             Question->Answer.Options[NumCorrectAns].Correct = true;
            }
       	 else if (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
@@ -2868,7 +2868,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
-  	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+  	       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
 	          Err_WrongAnswerExit ();
                if (NumCorrectAns >= Qst_MAX_OPTIONS_PER_QUESTION)
@@ -3239,11 +3239,11 @@ void Qst_RequestRemoveSelectedQsts (void)
    Qst_Constructor (&Questions);
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
+   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
      {
       /***** Show question and button to remove question *****/
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			      Qst_PutParamsEditQst,&Questions,
+			      Qst_PutParsEditQst,&Questions,
 			      Btn_REMOVE_BUTTON,Txt_Remove_questions,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
@@ -3274,7 +3274,7 @@ void Qst_RemoveSelectedQsts (void)
    Qst_Constructor (&Questions);
 
    /***** Get parameters *****/
-   if (Tst_GetParamsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters
+   if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters
      {
       /***** Get question codes *****/
       Questions.NumQsts = Qst_DB_GetQsts (&mysql_res,&Questions);
@@ -3311,7 +3311,7 @@ void Qst_RemoveSelectedQsts (void)
 void Qst_PutIconToRemoveOneQst (void *QstCod)
   {
    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
-                                  Qst_PutParamsRemoveOnlyThisQst,QstCod);
+                                  Qst_PutParsRemoveOnlyThisQst,QstCod);
   }
 
 /*****************************************************************************/
@@ -3338,19 +3338,19 @@ void Qst_RequestRemoveOneQst (void)
 
    /* Get other parameters */
    if (!EditingOnlyThisQst)
-      if (!Tst_GetParamsTst (&Questions,Tst_EDIT_QUESTIONS))
+      if (!Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))
 	 Err_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
    if (EditingOnlyThisQst)
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Qst_PutParamsRemoveOnlyThisQst,&Questions.Question.QstCod,
+			      Qst_PutParsRemoveOnlyThisQst,&Questions.Question.QstCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Questions.Question.QstCod);
    else
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Qst_PutParamsEditQst,&Questions,
+			      Qst_PutParsEditQst,&Questions,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Questions.Question.QstCod);
@@ -3369,11 +3369,11 @@ void Qst_RequestRemoveOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-void Qst_PutParamsRemoveOnlyThisQst (void *QstCod)
+void Qst_PutParsRemoveOnlyThisQst (void *QstCod)
   {
    if (QstCod)
      {
-      Qst_PutParamQstCod (QstCod);
+      Par_PutParCode (Par_QstCod,*(long *) QstCod);
       Par_PutParChar ("OnlyThisQst",'Y');
      }
   }
@@ -3472,13 +3472,10 @@ void Qst_ChangeShuffleQst (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Qst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
+void Qst_PutParQstCod (void *QstCod)	// Should be a pointer to long
   {
-   extern const char *Par_CodeStr[];
-
    if (QstCod)
-      if (*((long *) QstCod) > 0)	// If question exists
-	 Par_PutParLong (NULL,Par_CodeStr[Par_QstCod],*((long *) QstCod));
+      Par_PutParCode (Par_QstCod,*((long *) QstCod));
   }
 
 /*****************************************************************************/
@@ -3559,7 +3556,7 @@ unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerType
    Ptr = AnswerTypes->List;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
       Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
       NumAnsTypes++;
      }
@@ -3581,7 +3578,7 @@ unsigned Qst_CountNumQuestionsInList (const char *ListQuestions)
    Ptr = ListQuestions;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if (sscanf (LongStr,"%ld",&QstCod) != 1)
          Err_WrongQuestionExit ();
       NumQuestions++;

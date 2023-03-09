@@ -117,7 +117,7 @@ void Ses_CloseSession (void)
       Con_DB_RemoveOldConnected ();
 
       /***** Remove unused data associated to expired sessions *****/
-      Ses_DB_RemoveParamsFromExpiredSessions ();
+      Ses_DB_RemoveParsFromExpiredSessions ();
       Fil_DB_RemovePublicDirsFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
@@ -179,7 +179,7 @@ bool Ses_GetSessionData (void)
          Gbl.Usrs.Me.Role.FromSession = Rol_UNK;
 
       /***** Get country code (row[3]),
-                 institution code (row[4]),
+                 instit. code (row[4]),
                  center code (row[5]),
                  degree code (row[6]),
              and course code (row[7]) *****/
@@ -219,20 +219,20 @@ bool Ses_GetSessionData (void)
 /******************* Insert session parameter in the database ****************/
 /*****************************************************************************/
 
-void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue)
+void Ses_InsertParInDB (const char *ParName,const char *ParValue)
   {
    /***** Before of inserting the first session parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
-   Ses_DB_RemoveParam ();
+   Ses_DB_RemovePar ();
 
    /***** For a unique session-parameter,
           don't insert a parameter more than one time *****/
-   if (ParamName)
-      if (ParamName[0])
-         if (!Ses_DB_CheckIfParamIsAlreadyStored (ParamName))
+   if (ParName)
+      if (ParName[0])
+         if (!Ses_DB_CheckIfParIsAlreadyStored (ParName))
 	   {
 	    /***** Insert session parameter in the database *****/
-	    Ses_DB_InsertParam (ParamName,ParamValue);
-	    Gbl.Session.ParamsInsertedIntoDB = true;
+	    Ses_DB_InsertPar (ParName,ParValue);
+	    Gbl.Session.ParsInsertedIntoDB = true;
 	   }
   }

@@ -57,21 +57,26 @@ const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 
 // Parameter name for codes, some of them also used as database fields (so change carefully)
 const char *Par_CodeStr[] =
   {
+   [Par_None        ] = NULL,
    [Par_AgdCod      ] = "AgdCod",	// Agenda event code
    [Par_AnnCod      ] = "AnnCod",	// Announcement code
    [Par_AsgCod      ] = "AsgCod",	// Assignment code
    [Par_AttCod      ] = "AttCod",	// Attendance event code
    [Par_BanCod      ] = "BanCod",	// Banner code
    [Par_BldCod      ] = "BldCod",	// Building code
+   [Par_CrsCod      ] = "crs",		// Course code
+   [Par_CtrCod      ] = "ctr",		// Center code
+   [Par_CtyCod      ] = "cty",		// Country code
+   [Par_DegCod      ] = "deg",		// Degree code
    [Par_DptCod      ] = "DptCod",	// Department code
-   [Par_ExaCod      ] = "ExaCod",	// Exam code in calls for exams and exams
+   [Par_ExaCod      ] = "ExaCod",	// Exam code in calls-for-exam/exam
    [Par_FilCod      ] = "FilCod",	// File code
-   [Par_FilterCrsCod] = "FilterCrsCod",	// Course code filtering messages
    [Par_FldCod      ] = "FldCod",	// Field code in course record
    [Par_GamCod      ] = "GamCod",	// Game code
    [Par_GrpCod      ] = "GrpCod",	// Group code
    [Par_GrpTypCod   ] = "GrpTypCod",	// Group type code
    [Par_HldCod      ] = "HldCod",	// Holiday code
+   [Par_InsCod      ] = "ins",		// Institution code
    [Par_ItmCod      ] = "ItmCod",	// Item code in course program
    [Par_LnkCod      ] = "LnkCod",	// Link code
    [Par_MaiCod      ] = "MaiCod",	// Domain mail code
@@ -79,6 +84,7 @@ const char *Par_CodeStr[] =
    [Par_MsgCod      ] = "MsgCod",	// Message code
    [Par_NotCod      ] = "NotCod",	// Note code in timeline
    [Par_OrgActCod   ] = "OrgActCod",	// Original action code
+   [Par_OthCrsCod   ] = "OthCrsCod",	// Other course code
    [Par_OthCtrCod   ] = "OthCtrCod",	// Other center code
    [Par_OthCtyCod   ] = "OthCtyCod",	// Other country code
    [Par_OthDegCod   ] = "OthDegCod",	// Other degree code
@@ -88,13 +94,16 @@ const char *Par_CodeStr[] =
    [Par_PlcCod      ] = "PlcCod",	// Place code
    [Par_PlgCod      ] = "PlgCod",	// Plugin code
    [Par_PrjCod      ] = "PrjCod",	// Project code
+   [Par_PrnCod      ] = "PrnCod",	// Print code in assessment test
    [Par_PstCod      ] = "PstCod",	// Post code in forum
    [Par_PubCod      ] = "PubCod",	// Publication code in timeline
    [Par_QstCod      ] = "QstCod",	// Question code in assessment/survey
    [Par_RooCod      ] = "RooCod",	// Room code
    [Par_RscCod      ] = "RscCod",	// Resource code in course program
+   [Par_RubCod      ] = "RubCod",	// Rubric code
    [Par_SesCod      ] = "SesCod",	// Session code in exam
    [Par_SvyCod      ] = "SvyCod",	// Syrvey code
+   [Par_TagCod      ] = "TagCod",	// Tag code in assessment question
    [Par_ThrCod      ] = "ThrCod",	// Thread code in forum
   };
 
@@ -117,7 +126,7 @@ static struct
    Act_Content_t ContentReceivedByCGI;
    size_t ContentLength;
    char *QueryString;	// String allocated dynamically with the arguments sent to the CGI
-   struct Param *List;	// Linked list of parameters
+   struct Par_Param *List;	// Linked list of parameters
    Par_Method_t Method;
    bool GetMethod;	// Am I accessing using GET method?
    struct
@@ -128,7 +137,7 @@ static struct
       size_t LengthWithCRLF;
      } Boundary;
    char IP[Cns_MAX_BYTES_IP + 1];
-  } Par_Params =
+  } Par_Pars =
   {
    .ContentReceivedByCGI = Act_CONT_NORM,
    .ContentLength = 0,
@@ -145,12 +154,12 @@ static inline void Par_SetContentReceivedByCGI (Act_Content_t ContentReceivedByC
 
 static void Par_GetBoundary (void);
 
-static void Par_CreateListOfParamsFromQueryString (void);
-static void Par_CreateListOfParamsFromTmpFile (void);
+static void Par_CreateListOfParsFromQueryString (void);
+static void Par_CreateListOfParsFromTmpFile (void);
 static int Par_ReadTmpFileUntilQuote (FILE *QueryFile);
 static int Par_ReadTmpFileUntilReturn (FILE *QueryFile);
 
-static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
+static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName);
 
 /*****************************************************************************/
 /********************** Type of content received by CGI **********************/
@@ -158,12 +167,12 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
 
 static inline void Par_SetContentReceivedByCGI (Act_Content_t ContentReceivedByCGI)
   {
-   Par_Params.ContentReceivedByCGI = ContentReceivedByCGI;
+   Par_Pars.ContentReceivedByCGI = ContentReceivedByCGI;
   }
 
 Act_Content_t Par_GetContentReceivedByCGI (void)
   {
-   return Par_Params.ContentReceivedByCGI;
+   return Par_Pars.ContentReceivedByCGI;
   }
 
 /*****************************************************************************/
@@ -185,24 +194,24 @@ bool Par_GetQueryString (void)
    if (!strcmp (Method,"GET"))
      {
       /***** GET method *****/
-      Par_Params.Method = Par_METHOD_GET;
+      Par_Pars.Method = Par_METHOD_GET;
       Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
       /* Get content length */
-      Par_Params.ContentLength = strlen (getenv ("QUERY_STRING"));
+      Par_Pars.ContentLength = strlen (getenv ("QUERY_STRING"));
 
       /* Allocate memory for query string */
-      if ((Par_Params.QueryString = malloc (Par_Params.ContentLength + 1)) == NULL)
+      if ((Par_Pars.QueryString = malloc (Par_Pars.ContentLength + 1)) == NULL)
 	 return false;
 
       /* Copy query string from environment variable */
-      Str_Copy (Par_Params.QueryString,getenv ("QUERY_STRING"),
-                Par_Params.ContentLength);
+      Str_Copy (Par_Pars.QueryString,getenv ("QUERY_STRING"),
+                Par_Pars.ContentLength);
      }
    else
      {
       /***** POST method *****/
-      Par_Params.Method = Par_METHOD_POST;
+      Par_Pars.Method = Par_METHOD_POST;
 
       /* Get content length */
       if (getenv ("CONTENT_LENGTH"))
@@ -211,7 +220,7 @@ bool Par_GetQueryString (void)
                    sizeof (UnsignedLongStr) - 1);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
-         Par_Params.ContentLength = (size_t) UnsignedLong;
+         Par_Pars.ContentLength = (size_t) UnsignedLong;
 	}
       else
          return false;
@@ -239,17 +248,17 @@ bool Par_GetQueryString (void)
          Par_SetContentReceivedByCGI (Act_CONT_NORM);
 
 	 /* Allocate memory for query string */
-	 if ((Par_Params.QueryString = malloc (Par_Params.ContentLength + 1)) == NULL)
+	 if ((Par_Pars.QueryString = malloc (Par_Pars.ContentLength + 1)) == NULL)
 	    return false;
 
 	 /* Copy query string from stdin */
-         if (fread (Par_Params.QueryString,sizeof (char),
-                    Par_Params.ContentLength,stdin) != Par_Params.ContentLength)
+         if (fread (Par_Pars.QueryString,sizeof (char),
+                    Par_Pars.ContentLength,stdin) != Par_Pars.ContentLength)
            {
-            Par_Params.QueryString[0] = '\0';
+            Par_Pars.QueryString[0] = '\0';
             return false;
            }
-	 Par_Params.QueryString[Par_Params.ContentLength] = '\0';
+	 Par_Pars.QueryString[Par_Pars.ContentLength] = '\0';
         }
      }
 
@@ -258,7 +267,7 @@ bool Par_GetQueryString (void)
 
 Par_Method_t Par_GetMethod (void)
   {
-   return Par_Params.Method;
+   return Par_Pars.Method;
   }
 
 /*****************************************************************************/
@@ -284,14 +293,14 @@ static void Par_GetBoundary (void)
       Err_ShowErrorAndExit ("Delimiter string too long.");
 
    /***** Create boundary strings *****/
-   snprintf (Par_Params.Boundary.StrWithoutCRLF,sizeof (Par_Params.Boundary.StrWithoutCRLF),
+   snprintf (Par_Pars.Boundary.StrWithoutCRLF,sizeof (Par_Pars.Boundary.StrWithoutCRLF),
 	     "--%s",PtrToBoundary);
-   snprintf (Par_Params.Boundary.StrWithCRLF,sizeof (Par_Params.Boundary.StrWithCRLF),
-	     "%c%c%s",0x0D,0x0A,Par_Params.Boundary.StrWithoutCRLF);
+   snprintf (Par_Pars.Boundary.StrWithCRLF,sizeof (Par_Pars.Boundary.StrWithCRLF),
+	     "%c%c%s",0x0D,0x0A,Par_Pars.Boundary.StrWithoutCRLF);
 
    /***** Compute lengths *****/
-   Par_Params.Boundary.LengthWithoutCRLF = strlen (Par_Params.Boundary.StrWithoutCRLF);
-   Par_Params.Boundary.LengthWithCRLF    = 2 + Par_Params.Boundary.LengthWithoutCRLF;
+   Par_Pars.Boundary.LengthWithoutCRLF = strlen (Par_Pars.Boundary.StrWithoutCRLF);
+   Par_Pars.Boundary.LengthWithCRLF    = 2 + Par_Pars.Boundary.LengthWithoutCRLF;
   }
 
 /*****************************************************************************/
@@ -320,72 +329,72 @@ List --> |Name.Start        |    -> |Name.Start        |
          +------------------+       +------------------+
 */
 
-void Par_CreateListOfParams (void)
+void Par_CreateListOfPars (void)
   {
-   static void (*CreateListOfParams[Act_NUM_CONTENTS]) (void) =
+   static void (*CreateListOfPars[Act_NUM_CONTENTS]) (void) =
      {
-      [Act_CONT_NORM] = Par_CreateListOfParamsFromQueryString,
-      [Act_CONT_DATA] = Par_CreateListOfParamsFromTmpFile,
+      [Act_CONT_NORM] = Par_CreateListOfParsFromQueryString,
+      [Act_CONT_DATA] = Par_CreateListOfParsFromTmpFile,
      };
 
    /***** Initialize empty list of parameters *****/
-   Par_Params.List = NULL;
+   Par_Pars.List = NULL;
 
    /***** Get list *****/
-   if (Par_Params.ContentLength)
-      CreateListOfParams[Par_GetContentReceivedByCGI ()] ();
+   if (Par_Pars.ContentLength)
+      CreateListOfPars[Par_GetContentReceivedByCGI ()] ();
   }
 
 /*****************************************************************************/
 /**************** Create list of parameters from query string ****************/
 /*****************************************************************************/
 
-static void Par_CreateListOfParamsFromQueryString (void)
+static void Par_CreateListOfParsFromQueryString (void)
   {
    unsigned long CurPos;	// Current position in query string
-   struct Param *Param = NULL;	// Initialized to avoid warning
-   struct Param *NewParam;
+   struct Par_Param *Par = NULL;	// Initialized to avoid warning
+   struct Par_Param *NewPar;
 
    /***** Check if query string is empty *****/
-   if (!Par_Params.QueryString)    return;
-   if (!Par_Params.QueryString[0]) return;
+   if (!Par_Pars.QueryString)    return;
+   if (!Par_Pars.QueryString[0]) return;
 
    /***** Go over the query string
           getting start positions and lengths of parameters *****/
    for (CurPos = 0;
-	CurPos < Par_Params.ContentLength;
+	CurPos < Par_Pars.ContentLength;
 	)
      {
       /* Allocate space for a new parameter initialized to 0 */
-      if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
+      if ((NewPar = calloc (1,sizeof (*NewPar))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /* Link the previous element in list with the current element */
       if (CurPos == 0)
-	 Par_Params.List = NewParam;	// Pointer to first param
+	 Par_Pars.List = NewPar;	// Pointer to first param
       else
-	 Param->Next = NewParam;	// Pointer from former param to new param
+	 Par->Next = NewPar;	// Pointer from former param to new param
 
       /* Make the current element to be the just created */
-      Param = NewParam;
+      Par = NewPar;
 
       /* Get parameter name */
-      Param->Name.Start = CurPos;
-      Param->Name.Length = strcspn (&Par_Params.QueryString[CurPos],"=");
-      CurPos += Param->Name.Length;
+      Par->Name.Start = CurPos;
+      Par->Name.Length = strcspn (&Par_Pars.QueryString[CurPos],"=");
+      CurPos += Par->Name.Length;
 
       /* Get parameter value */
-      if (CurPos < Par_Params.ContentLength)
-	 if (Par_Params.QueryString[CurPos] == '=')
+      if (CurPos < Par_Pars.ContentLength)
+	 if (Par_Pars.QueryString[CurPos] == '=')
 	   {
 	    CurPos++;	// Skip '='
-	    if (CurPos < Par_Params.ContentLength)
+	    if (CurPos < Par_Pars.ContentLength)
 	      {
-	       Param->Value.Start = CurPos;
-	       Param->Value.Length = strcspn (&Par_Params.QueryString[CurPos],"&");
-	       CurPos += Param->Value.Length;
-	       if (CurPos < Par_Params.ContentLength)
-		  if (Par_Params.QueryString[CurPos] == '&')
+	       Par->Value.Start = CurPos;
+	       Par->Value.Length = strcspn (&Par_Pars.QueryString[CurPos],"&");
+	       CurPos += Par->Value.Length;
+	       if (CurPos < Par_Pars.ContentLength)
+		  if (Par_Pars.QueryString[CurPos] == '&')
 		     CurPos++;	// Skip '&'
 	      }
 	   }
@@ -401,14 +410,14 @@ static void Par_CreateListOfParamsFromQueryString (void)
 #define Par_LENGTH_OF_STR_CONTENT_TYPE	14		// Length of "Content-Type: "
 #define Par_MAX_BYTES_STR_AUX		(38 + 1)	// Space to read any of the three preceding strings
 
-static void Par_CreateListOfParamsFromTmpFile (void)
+static void Par_CreateListOfParsFromTmpFile (void)
   {
-   static const char *StringBeforeParam = "Content-Disposition: form-data; name=\"";
+   static const char *StringBeforePar = "Content-Disposition: form-data; name=\"";
    static const char *StringFilename = "; filename=\"";
    static const char *StringContentType = "Content-Type: ";
    unsigned long CurPos;	// Current position in temporal file
-   struct Param *Param = NULL;	// Initialized to avoid warning
-   struct Param *NewParam;
+   struct Par_Param *Par = NULL;	// Initialized to avoid warning
+   struct Par_Param *NewPar;
    int Ch;
    char StrAux[Par_MAX_BYTES_STR_AUX + 1];
    FILE *QueryFile = Fil_GetQueryFile ();
@@ -416,12 +425,12 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    /***** Go over the file
           getting start positions and lengths of parameters *****/
    if (Str_ReadFileUntilBoundaryStr (QueryFile,NULL,
-                                     Par_Params.Boundary.StrWithoutCRLF,
-                                     Par_Params.Boundary.LengthWithoutCRLF,
+                                     Par_Pars.Boundary.StrWithoutCRLF,
+                                     Par_Pars.Boundary.LengthWithoutCRLF,
                                      Fil_MAX_FILE_SIZE) == 1)	// Delimiter string found
 
       for (CurPos = 0;
-	   CurPos < Par_Params.ContentLength;
+	   CurPos < Par_Pars.ContentLength;
 	  )
 	{
 	 /***** Skip \r\n after delimiter string *****/
@@ -430,27 +439,27 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
 	 Str_GetNextStrFromFileConvertingToLower (QueryFile,StrAux,
 	                                          Par_LENGTH_OF_STR_BEFORE_PARAM);
-	 if (!strcasecmp (StrAux,StringBeforeParam)) // Start of a parameter
+	 if (!strcasecmp (StrAux,StringBeforePar)) // Start of a parameter
 	   {
 	    /* Allocate space for a new parameter initialized to 0 */
-	    if ((NewParam = calloc (1,sizeof (*NewParam))) == NULL)
+	    if ((NewPar = calloc (1,sizeof (*NewPar))) == NULL)
                Err_NotEnoughMemoryExit ();
 
 	    /* Link the previous element in list with the current element */
 	    if (CurPos == 0)
-	       Par_Params.List = NewParam;	// Pointer to first param
+	       Par_Pars.List = NewPar;	// Pointer to first param
 	    else
-	       Param->Next = NewParam;	// Pointer from former param to new param
+	       Par->Next = NewPar;	// Pointer from former param to new param
 
 	    /* Make the current element to be the just created */
-	    Param = NewParam;
+	    Par = NewPar;
 
 	    /***** Get parameter name *****/
 	    CurPos = (unsigned long) ftell (QueryFile);	// At start of parameter name
-	    Param->Name.Start = CurPos;
+	    Par->Name.Start = CurPos;
 	    Ch = Par_ReadTmpFileUntilQuote (QueryFile);
 	    CurPos = (unsigned long) ftell (QueryFile);	// Just after quote
-	    Param->Name.Length = CurPos - 1 - Param->Name.Start;
+	    Par->Name.Length = CurPos - 1 - Par->Name.Start;
 
 	    /* Check if last character read after parameter name is a quote */
 	    if (Ch != (int) '\"') break;		// '\"'
@@ -467,10 +476,10 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 		 {
 		  /* Get filename */
 		  CurPos = (unsigned long) ftell (QueryFile);	// At start of filename
-		  Param->FileName.Start = CurPos;
+		  Par->FileName.Start = CurPos;
 		  Ch = Par_ReadTmpFileUntilQuote (QueryFile);
 		  CurPos = (unsigned long) ftell (QueryFile);	// Just after quote
-		  Param->FileName.Length = CurPos - 1 - Param->FileName.Start;
+		  Par->FileName.Length = CurPos - 1 - Par->FileName.Start;
 
 		  /* Check if last character read after filename is a quote */
 		  if (Ch != (int) '\"') break;		// '\"'
@@ -486,10 +495,10 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 		    {
 		     /* Get content type */
 		     CurPos = (unsigned long) ftell (QueryFile);	// At start of content type
-		     Param->ContentType.Start = CurPos;
+		     Par->ContentType.Start = CurPos;
 		     Ch = Par_ReadTmpFileUntilReturn (QueryFile);
 		     CurPos = (unsigned long) ftell (QueryFile);	// Just after return
-		     Param->ContentType.Length = CurPos - 1 - Param->ContentType.Start;
+		     Par->ContentType.Length = CurPos - 1 - Par->ContentType.Start;
 		    }
 		 }
 	      }
@@ -506,15 +515,15 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	    /***** Get parameter value or file content *****/
 	    CurPos = (unsigned long) ftell (QueryFile);	// At start of value or file content
 	    if (Str_ReadFileUntilBoundaryStr (QueryFile,NULL,
-					      Par_Params.Boundary.StrWithCRLF,
-					      Par_Params.Boundary.LengthWithCRLF,
+					      Par_Pars.Boundary.StrWithCRLF,
+					      Par_Pars.Boundary.LengthWithCRLF,
 					      Fil_MAX_FILE_SIZE) != 1) break;	// Boundary string not found
 
 	    // Delimiter string found
-	    Param->Value.Start = CurPos;
+	    Par->Value.Start = CurPos;
 	    CurPos = (unsigned long) ftell (QueryFile);	// Just after delimiter string
-	    Param->Value.Length = CurPos - Par_Params.Boundary.LengthWithCRLF -
-		                  Param->Value.Start;
+	    Par->Value.Length = CurPos - Par_Pars.Boundary.LengthWithCRLF -
+		                  Par->Value.Start;
 	   }
         }
   }
@@ -557,13 +566,13 @@ static int Par_ReadTmpFileUntilReturn (FILE *QueryFile)
 /***************** Free memory allocated for query string ********************/
 /*****************************************************************************/
 
-void Par_FreeParams (void)
+void Par_FreePars (void)
   {
-   struct Param *Param;
-   struct Param *NextParam;
+   struct Par_Param *Param;
+   struct Par_Param *NextParam;
 
    /***** Free list of parameters *****/
-   for (Param = Par_Params.List;
+   for (Param = Par_Pars.List;
 	Param != NULL;
 	Param = NextParam)
      {
@@ -572,88 +581,88 @@ void Par_FreeParams (void)
      }
 
    /***** Free query string *****/
-   if (Par_Params.QueryString)
-      free (Par_Params.QueryString);
+   if (Par_Pars.QueryString)
+      free (Par_Pars.QueryString);
   }
 
 /*****************************************************************************/
 /************************* Get the value of a parameter **********************/
 /*****************************************************************************/
 // Return the number of parameters found
-// If ParamPtr is not NULL, on return it will point to the first ocurrence in list of parameters
-// ParamValue can be NULL (if so, no value is copied)
+// If ParPtr is not NULL, on return it will point to the first ocurrence in list of parameters
+// ParValue can be NULL (if so, no value is copied)
 
-unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
-                           char *ParamValue,size_t MaxBytes,
-                           struct Param **ParamPtr)	// NULL if not used
+unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
+                     char *ParValue,size_t MaxBytes,
+                     struct Par_Param **ParPtr)	// NULL if not used
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    FILE *QueryFile = Fil_GetQueryFile ();
    size_t BytesAlreadyCopied = 0;
    unsigned i;
-   struct Param *Param;
+   struct Par_Param *Par;
    char *PtrDst;
    unsigned NumTimes;
-   bool ParamFound = false;
-   unsigned ParamNameLength;
+   bool ParFound = false;
+   unsigned ParNameLength;
    bool FindMoreThanOneOcurrence;
    char ErrorTxt[256];
 
    /***** Default values returned *****/
-   if (ParamValue)
-      ParamValue[0] = '\0'; // By default, the value of the parameter will be an empty string
+   if (ParValue)
+      ParValue[0] = '\0'; // By default, the value of the parameter will be an empty string
 
    /***** Only some selected parameters can be passed by GET method *****/
    if (Par_GetMethod () == Par_METHOD_GET)
-      if (!Par_CheckIsParamCanBeUsedInGETMethod (ParamName))
+      if (!Par_CheckIsParCanBeUsedInGETMethod (ParName))
 	 return 0;	// Return no-parameters-found
 
    /***** Initializations *****/
-   ParamNameLength = strlen (ParamName);
-   PtrDst = ParamValue;
-   FindMoreThanOneOcurrence = (ParamType == Par_PARAM_MULTIPLE);
+   ParNameLength = strlen (ParName);
+   PtrDst = ParValue;
+   FindMoreThanOneOcurrence = (ParType == Par_PARAM_MULTIPLE);
 
    /***** For multiple parameters, loop for any ocurrence of the parameter
           For unique parameter, find only the first ocurrence *****/
-   for (Param = Par_Params.List, NumTimes = 0;
-	Param != NULL && (FindMoreThanOneOcurrence || NumTimes == 0);
+   for (Par = Par_Pars.List, NumTimes = 0;
+	Par != NULL && (FindMoreThanOneOcurrence || NumTimes == 0);
 	)
       /***** Find next ocurrence of parameter in list of parameters *****/
-      for (ParamFound = false;
-	   Param != NULL && !ParamFound;
-	   Param = Param->Next)
+      for (ParFound = false;
+	   Par != NULL && !ParFound;
+	   Par = Par->Next)
 	{
-	 if (Param->Name.Length == ParamNameLength)
+	 if (Par->Name.Length == ParNameLength)
 	   {
 	    // The current element in the list has the length of the searched parameter
 	    // Check if the name of the parameter is the same
 	    switch (Par_GetContentReceivedByCGI ())
 	      {
 	       case Act_CONT_NORM:
-		  ParamFound = !strncmp (ParamName,&Par_Params.QueryString[Param->Name.Start],
-					 Param->Name.Length);
+		  ParFound = !strncmp (ParName,&Par_Pars.QueryString[Par->Name.Start],
+					 Par->Name.Length);
 		  break;
 	       case Act_CONT_DATA:
-		  fseek (QueryFile,Param->Name.Start,SEEK_SET);
-		  for (i = 0, ParamFound = true;
-		       i < Param->Name.Length && ParamFound;
+		  fseek (QueryFile,Par->Name.Start,SEEK_SET);
+		  for (i = 0, ParFound = true;
+		       i < Par->Name.Length && ParFound;
 		       i++)
-		     if (ParamName[i] != (char) fgetc (QueryFile))
-			ParamFound = false;
+		     if (ParName[i] != (char) fgetc (QueryFile))
+			ParFound = false;
 		  break;
 	      }
 
-	    if (ParamFound)
+	    if (ParFound)
 	      {
 	       NumTimes++;
 	       if (NumTimes == 1)	// NumTimes == 1 ==> the first ocurrence of this parameter
 		 {
 		  /***** Get the first ocurrence of this parameter in list *****/
-		  if (ParamPtr)
-		     *ParamPtr = Param;
+		  if (ParPtr)
+		     *ParPtr = Par;
 
 		  /***** If this parameter is a file ==> do not find more ocurrences ******/
-		  if (Param->FileName.Start != 0)	// It's a file
+		  if (Par->FileName.Start != 0)	// It's a file
 		     FindMoreThanOneOcurrence = false;
 		 }
 	       else			// NumTimes > 1 ==> not the first ocurrence of this parameter
@@ -665,7 +674,7 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 		     snprintf (ErrorTxt,sizeof (ErrorTxt),
 	                       "Multiple parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
-			       ParamName,(unsigned long) MaxBytes);
+			       ParName,(unsigned long) MaxBytes);
 		     Err_ShowErrorAndExit (ErrorTxt);
 		    }
 
@@ -676,15 +685,15 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 		 }
 
 	       /***** Copy parameter value *****/
-	       if (Param->Value.Length)
+	       if (Par->Value.Length)
 		 {
 		  /* Check if there is space to copy the parameter value */
-		  if (BytesAlreadyCopied + Param->Value.Length > MaxBytes)
+		  if (BytesAlreadyCopied + Par->Value.Length > MaxBytes)
 		    {
 		     snprintf (ErrorTxt,sizeof (ErrorTxt),
 	                       "Parameter <strong>%s</strong> too large,"
 			       " it exceed the maximum allowed size (%lu bytes).",
-			       ParamName,(unsigned long) MaxBytes);
+			       ParName,(unsigned long) MaxBytes);
 		     Err_ShowErrorAndExit (ErrorTxt);
 		    }
 
@@ -693,23 +702,23 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 		    {
 		     case Act_CONT_NORM:
 			if (PtrDst)
-			   strncpy (PtrDst,&Par_Params.QueryString[Param->Value.Start],
-				    Param->Value.Length);
+			   strncpy (PtrDst,&Par_Pars.QueryString[Par->Value.Start],
+				    Par->Value.Length);
 			break;
 		     case Act_CONT_DATA:
-		        if (Param->FileName.Start == 0 &&	// Copy into destination only if it's not a file
+		        if (Par->FileName.Start == 0 &&	// Copy into destination only if it's not a file
 		            PtrDst)
 		          {
-			   fseek (QueryFile,Param->Value.Start,SEEK_SET);
-			   if (fread (PtrDst,sizeof (char),Param->Value.Length,QueryFile) !=
-			       Param->Value.Length)
+			   fseek (QueryFile,Par->Value.Start,SEEK_SET);
+			   if (fread (PtrDst,sizeof (char),Par->Value.Length,QueryFile) !=
+			       Par->Value.Length)
 			      Err_ShowErrorAndExit ("Error while getting value of parameter.");
 		          }
 			break;
 		    }
-		  BytesAlreadyCopied += Param->Value.Length;
+		  BytesAlreadyCopied += Par->Value.Length;
 		  if (PtrDst)
-		     PtrDst += Param->Value.Length;
+		     PtrDst += Par->Value.Length;
 		 }
 	      }
 	   }
@@ -725,9 +734,9 @@ unsigned Par_GetParameter (Par_ParamType_t ParamType,const char *ParamName,
 /*************** Check if parameter can be used in GET method ****************/
 /*****************************************************************************/
 
-static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
+static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName)
   {
-   static const char *ValidParamsInGETMethod[] =
+   static const char *ValidParsInGETMethod[] =
      {
       "cty",	// To enter directly to a country
       "ins",	// To enter directly to an institution
@@ -740,13 +749,13 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
       "ses",	// To use an open session when redirecting from one language to another
       "key",	// To verify an email address
      };
-#define NUM_VALID_PARAMS (sizeof (ValidParamsInGETMethod) / sizeof (ValidParamsInGETMethod[0]))
+#define NUM_VALID_PARAMS (sizeof (ValidParsInGETMethod) / sizeof (ValidParsInGETMethod[0]))
    unsigned i;
 
    for (i = 0;
 	i < NUM_VALID_PARAMS;
 	i++)
-      if (!strcmp (ParamName,ValidParamsInGETMethod[i]))
+      if (!strcmp (ParName,ValidParsInGETMethod[i]))
          return true;
    return false;
   }
@@ -755,8 +764,9 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
 /****************** Get the parameters sent to this CGI **********************/
 /*****************************************************************************/
 
-void Par_GetMainParams (void)
+void Par_GetMainPars (void)
   {
+   extern const char *Par_CodeStr[];
    long ActCod;
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -875,12 +885,12 @@ void Par_GetMainParams (void)
       case ActLogIn:
       case ActFrmLogInUsrAgd:
       case ActLogInUsrAgd:	// This action is necessary here when log in fails
-         Pwd_GetParamUsrPwdLogin ();
+         Pwd_GetParUsrPwdLogin ();
 	 /* falls through */
 	 /* no break */
       case ActReqSndNewPwd:
       case ActSndNewPwd:
-         Usr_GetParamUsrIdLogin ();
+         Usr_GetParUsrIdLogin ();
 	 break;
      }
 
@@ -888,8 +898,8 @@ void Par_GetMainParams (void)
    Set_GetSettingsFromIP ();
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParText ("cty",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-   if (LongStr[0])	// Parameter "cty" available
+   Par_GetParText (Par_CodeStr[Par_CtyCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Ins.InsCod =
@@ -899,8 +909,8 @@ void Par_GetMainParams (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParText ("ins",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-   if (LongStr[0])	// Parameter "ins" available
+   Par_GetParText (Par_CodeStr[Par_InsCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Ctr.CtrCod =
@@ -909,8 +919,8 @@ void Par_GetMainParams (void)
      }
 
    /***** Get center if exists (from menu) *****/
-   Par_GetParText ("ctr",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-   if (LongStr[0])	// Parameter "ctr" available
+   Par_GetParText (Par_CodeStr[Par_CtrCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Deg.DegCod =
@@ -918,16 +928,16 @@ void Par_GetMainParams (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParText ("deg",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-   if (LongStr[0])	// Parameter "deg" available
+   Par_GetParText (Par_CodeStr[Par_DegCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Crs.CrsCod = -1L;	// Reset possible course from session
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParText ("crs",LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-   if (LongStr[0])	// Parameter "crs" available
+   Par_GetParText (Par_CodeStr[Par_CrsCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   if (LongStr[0])	// Parameter available
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
    /***** Get tab to activate *****/
@@ -936,9 +946,9 @@ void Par_GetMainParams (void)
      {
       Gbl.Action.Tab = (Tab_Tab_t)
 	               Par_GetParUnsignedLong ("NxtTab",
-                                                 (unsigned long) TabUnk,
-                                                 Tab_NUM_TABS - 1,
-                                                 (unsigned long) TabUnk);
+                                               (unsigned long) TabUnk,
+                                               Tab_NUM_TABS - 1,
+                                               (unsigned long) TabUnk);
       Tab_DisableIncompatibleTabs ();
      }
    else	// Set tab depending on current action
@@ -994,37 +1004,37 @@ long Par_GetParLong (const char *ParamName)
 /******************** Get the value of a code parameter **********************/
 /*****************************************************************************/
 
-long Par_GetAndCheckParCode (Par_Code_t ParamCode)
+long Par_GetAndCheckParCode (Par_Code_t ParCode)
   {
-   return Par_GetAndCheckParCodeMin (ParamCode,1);
+   return Par_GetAndCheckParCodeMin (ParCode,1);
   }
 
-long Par_GetAndCheckParCodeMin (Par_Code_t ParamCode,long MinCodAllowed)
+long Par_GetAndCheckParCodeMin (Par_Code_t ParCode,long MinCodAllowed)
   {
    long Cod;
 
    /***** Get code and check that is a valid code (>= minimum) *****/
-   if ((Cod = Par_GetParCode (ParamCode)) < MinCodAllowed)
+   if ((Cod = Par_GetParCode (ParCode)) < MinCodAllowed)
       Err_WrongCodeExit ();
 
    return Cod;
   }
 
-long Par_GetParCode (Par_Code_t ParamCode)
+long Par_GetParCode (Par_Code_t ParCode)
   {
-   return Par_GetParLong (Par_CodeStr[ParamCode]);
+   return Par_GetParLong (Par_CodeStr[ParCode]);
   }
 
 /*****************************************************************************/
 /************************ Get a boolean Y/N parameter ************************/
 /*****************************************************************************/
 
-bool Par_GetParBool (const char *ParamName)
+bool Par_GetParBool (const char *ParName)
   {
    char YN[1 + 1];
 
    /***** Get parameter "Y"/"N" and convert to boolean *****/
-   Par_GetParText (ParamName,YN,1);
+   Par_GetParText (ParName,YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
   }
 
@@ -1046,7 +1056,7 @@ unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes)
 
 unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes)
   {
-   unsigned NumTimes = Par_GetParameter (Par_PARAM_MULTIPLE,ParamName,
+   unsigned NumTimes = Par_GetPar (Par_PARAM_MULTIPLE,ParamName,
                                          ParamValue,MaxBytes,NULL);
 
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
@@ -1062,7 +1072,7 @@ unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t Ma
 unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces)
   {
-   unsigned NumTimes = Par_GetParameter (Par_PARAM_SINGLE,ParamName,
+   unsigned NumTimes = Par_GetPar (Par_PARAM_SINGLE,ParamName,
                                          ParamValue,MaxBytes,NULL);
 
    Str_ChangeFormat (Str_FROM_FORM,ChangeTo,
@@ -1077,7 +1087,7 @@ unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_
 // When StrDst is NULL, nothing is stored
 // Return true if characters found
 
-bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t LongMax)
+bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,size_t LongMax)
   {
    size_t i = 0;
    unsigned char Ch;	// Must be unsigned to work with characters > 127
@@ -1248,12 +1258,12 @@ The IP address of the remote host making the request.
 void Par_SetIP (void)
   {
    if (getenv ("REMOTE_ADDR"))
-      Str_Copy (Par_Params.IP,getenv ("REMOTE_ADDR"),sizeof (Par_Params.IP) - 1);
+      Str_Copy (Par_Pars.IP,getenv ("REMOTE_ADDR"),sizeof (Par_Pars.IP) - 1);
    else
-      Par_Params.IP[0] = '\0';
+      Par_Pars.IP[0] = '\0';
   }
 
 const char *Par_GetIP (void)
   {
-   return Par_Params.IP;
+   return Par_Pars.IP;
   }

@@ -112,7 +112,7 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod);
 
 static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline);
-static void TmlNot_PutParamsRemoveNote (void *Timeline);
+static void TmlNot_PutParsRemoveNote (void *Timeline);
 static void TmlNot_RemoveNote (void);
 static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
 
@@ -142,10 +142,10 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
    /***** Get other parameters *****/
    /* Get the publisher who did the action
       (publishing, commenting, faving, sharing, mentioning) */
-   Usr_GetParamOtherUsrCodEncrypted (&PublisherDat);
+   Usr_GetParOtherUsrCodEncrypted (&PublisherDat);
 
    /* Get what he/she did */
-   NotifyEvent = Ntf_GetParamNotifyEvent ();
+   NotifyEvent = Ntf_GetParNotifyEvent ();
 
    /***** Get data of the note *****/
    TmlNot_GetDataOfNoteByCod (Not);
@@ -354,7 +354,7 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
    Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
       HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
@@ -627,28 +627,28 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Par_PutParCode (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-		     Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
+		     Par_PutParCode (Par_InsCod,Not->HieCod);	// Go to another institution
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Par_PutParCode (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
-		     Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
+		     Par_PutParCode (Par_CtrCod,Not->HieCod);	// Go to another center
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Par_PutParCode (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-		     Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
+		     Par_PutParCode (Par_DegCod,Not->HieCod);	// Go to another degree
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  Par_PutParCode (Par_FilCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+		     Par_PutParCode (Par_CrsCod,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
@@ -657,21 +657,21 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_FreeAnchorStr (Anchor);
 		  Par_PutParCode (Par_ExaCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+		     Par_PutParCode (Par_CrsCod,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_POST:	// Not applicable
 	       return;
 	    case TmlNot_FORUM_POST:
 	       Frm_BeginForm (For_ActionsSeeFor[Forums->Forum.Type]);
-		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					       1,	// Page of posts   = first
-					       Forums->ForumSet,
-					       Forums->ThreadsOrder,
-					       Forums->Forum.Location,
-					       Forums->Thread.Selected,
-					       -1L);
+		  For_PutAllParsForum (1,	// Page of threads = first
+				       1,	// Page of posts   = first
+				       Forums->ForumSet,
+				       Forums->ThreadsOrder,
+				       Forums->Forum.Location,
+				       Forums->Thread.Selected,
+				       -1L);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+		     Par_PutParCode (Par_CrsCod,Not->HieCod);		// Go to another course
 	       break;
 	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
@@ -679,7 +679,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_FreeAnchorStr (Anchor);
 		  Par_PutParCode (Par_NotCod,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
+		     Par_PutParCode (Par_CrsCod,Not->HieCod);		// Go to another course
 	       break;
 	    default:			// Not applicable
 	       return;
@@ -971,7 +971,7 @@ void TmlNot_RequestRemNoteUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
@@ -1034,21 +1034,21 @@ static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
    TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_NOTE,
-			  TmlNot_PutParamsRemoveNote);
+			  TmlNot_PutParsRemoveNote);
   }
 
 /*****************************************************************************/
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void TmlNot_PutParamsRemoveNote (void *Timeline)
+static void TmlNot_PutParsRemoveNote (void *Timeline)
   {
    if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// User's timeline
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
-	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
+	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->Who);
       Par_PutParCode (Par_NotCod,((struct Tml_Timeline *) Timeline)->NotCod);
      }
   }
@@ -1065,7 +1065,7 @@ void TmlNot_RemoveNoteUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);

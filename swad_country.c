@@ -72,19 +72,19 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args);
 static void Cty_PutIconToEditCountries (void);
 
-static void Cty_GetParamCtyOrder (void);
+static void Cty_GetParCtyOrder (void);
 
 static void Cty_EditCountriesInternal (void);
 static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
 static void Cty_PutIconToViewCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
-static void Cty_PutParamOtherCtyCod (void *CtyCod);
+static void Cty_PutParOthCtyCod (void *CtyCod);
 
-static void Cty_UpdateCtyName (long CtyCod,const char *FieldName,const char *NewCtyName);
+static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCtyName);
 
 static void Cty_ShowAlertAndButtonToGoToCty (void);
-static void Cty_PutParamGoToCty (void *CtyCod);
+static void Cty_PutParGoToCty (void *CtyCod);
 
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
@@ -199,7 +199,7 @@ void Cty_ListCountries (void)
 void Cty_ListCountries1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
-   Cty_GetParamCtyOrder ();
+   Cty_GetParCtyOrder ();
 
    /***** Get list of countries *****/
    Cty_GetFullListOfCountries ();
@@ -512,7 +512,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Cty_PutParamCtyCod (Cty->CtyCod);
+      Par_PutParCode (Par_CtyCod,Cty->CtyCod);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
@@ -654,13 +654,13 @@ void Cty_WriteScriptGoogleGeochart (void)
 /******** Get parameter with the type or order in list of countries **********/
 /*****************************************************************************/
 
-static void Cty_GetParamCtyOrder (void)
+static void Cty_GetParCtyOrder (void)
   {
    Gbl.Hierarchy.Ctys.SelectedOrder = (Cty_Order_t)
 				      Par_GetParUnsignedLong ("Order",
-								0,
-								Cty_NUM_ORDERS - 1,
-								(unsigned long) Cty_ORDER_DEFAULT);
+							      0,
+							      Cty_NUM_ORDERS - 1,
+							      (unsigned long) Cty_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -918,7 +918,7 @@ void Cty_WriteCountryName (long CtyCod)
      {
       /***** Write country name with link to country information *****/
       Frm_BeginForm (ActSeeCtyInf);
-	 Cty_PutParamCtyCod (CtyCod);
+	 Par_PutParCode (Par_CtyCod,CtyCod);
 	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 	                          "class=\"BT_LINK\"");
 	    HTM_Txt (CtyName);
@@ -1089,7 +1089,7 @@ static void Cty_ListCountriesForEdition (void)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemCty,NULL,
-						 Cty_PutParamOtherCtyCod,&Cty->CtyCod);
+						 Cty_PutParOthCtyCod,&Cty->CtyCod);
 	    HTM_TD_End ();
 
 	    /* Numerical country code (ISO 3166-1) */
@@ -1135,7 +1135,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* Name */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActRenCty);
-		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		     Par_PutParCode (Par_OthCtyCod,Cty->CtyCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1147,7 +1147,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* WWW */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActChgCtyWWW);
-		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		     Par_PutParCode (Par_OthCtyCod,Cty->CtyCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
@@ -1168,16 +1168,7 @@ static void Cty_ListCountriesForEdition (void)
 /******************** Write parameter with code of country *******************/
 /*****************************************************************************/
 
-void Cty_PutParamCtyCod (long CtyCod)
-  {
-   Par_PutParLong (NULL,"cty",CtyCod);
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of country *******************/
-/*****************************************************************************/
-
-static void Cty_PutParamOtherCtyCod (void *CtyCod)
+static void Cty_PutParOthCtyCod (void *CtyCod)
   {
    if (CtyCod)
       Par_PutParCode (Par_OthCtyCod,*((long *) CtyCod));
@@ -1251,7 +1242,7 @@ void Cty_RenameCountry (void)
    extern const char *Txt_The_name_X_has_not_changed;
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
    Lan_Language_t Language;
-   char FieldName[4 + 1 + 2 + 1];	// Example: "Name_en"
+   char FldName[4 + 1 + 2 + 1];	// Example: "Name_en"
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1260,7 +1251,7 @@ void Cty_RenameCountry (void)
    Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Get the lenguage *****/
-   Language = Lan_GetParamLanguage ();
+   Language = Lan_GetParLanguage ();
 
    /***** Get the new name for the country *****/
    Par_GetParText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
@@ -1285,9 +1276,9 @@ void Cty_RenameCountry (void)
 	 else
 	   {
 	    /* Update the table changing old name by new name */
-	    snprintf (FieldName,sizeof (FieldName),"Name_%s",
+	    snprintf (FldName,sizeof (FldName),"Name_%s",
 		      Lan_STR_LANG_ID[Language]);
-	    Cty_UpdateCtyName (Cty_EditingCty->CtyCod,FieldName,NewCtyName);
+	    Cty_UpdateCtyName (Cty_EditingCty->CtyCod,FldName,NewCtyName);
 
 	    /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1311,10 +1302,10 @@ void Cty_RenameCountry (void)
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
-static void Cty_UpdateCtyName (long CtyCod,const char *FieldName,const char *NewCtyName)
+static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCtyName)
   {
    /***** Update country changing old name by new name */
-   Cty_DB_UpdateCtyField (CtyCod,FieldName,NewCtyName);
+   Cty_DB_UpdateCtyField (CtyCod,FldName,NewCtyName);
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1330,7 +1321,7 @@ void Cty_ChangeCtyWWW (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
-   char FieldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
+   char FldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1339,7 +1330,7 @@ void Cty_ChangeCtyWWW (void)
    Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
 
    /***** Get the lenguage *****/
-   Language = Lan_GetParamLanguage ();
+   Language = Lan_GetParLanguage ();
 
    /***** Get the new WWW for the country *****/
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1348,9 +1339,9 @@ void Cty_ChangeCtyWWW (void)
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
 
    /***** Update the table changing old WWW by new WWW *****/
-   snprintf (FieldName,sizeof (FieldName),"Name_%s",
+   snprintf (FldName,sizeof (FldName),"Name_%s",
 	     Lan_STR_LANG_ID[Language]);
-   Cty_DB_UpdateCtyField (Cty_EditingCty->CtyCod,FieldName,NewWWW);
+   Cty_DB_UpdateCtyField (Cty_EditingCty->CtyCod,FldName,NewWWW);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
 	     sizeof (Cty_EditingCty->WWW[Language]) - 1);
 
@@ -1389,7 +1380,7 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
      {
       /***** Alert with button to go to couuntry *****/
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
-                                  Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
+                                  Cty_PutParGoToCty,&Cty_EditingCty->CtyCod,
                                   Btn_CONFIRM_BUTTON,
 				  Str_BuildGoToTitle (Cty_EditingCty->Name[Gbl.Prefs.Language]));
       Str_FreeGoToTitle ();
@@ -1399,11 +1390,10 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Cty_PutParamGoToCty (void *CtyCod)
+static void Cty_PutParGoToCty (void *CtyCod)
   {
    if (CtyCod)
-      /***** Put parameter *****/
-      Cty_PutParamCtyCod (*((long *) CtyCod));
+      Par_PutParCode (Par_CtyCod,*((long *) CtyCod));
   }
 
 /*****************************************************************************/
@@ -1556,7 +1546,7 @@ void Cty_ReceiveFormNewCountry (void)
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name;
    extern const char *Txt_Created_new_country_X;
-   char ParamName[32];
+   char ParName[32];
    bool CreateCountry = true;
    Lan_Language_t Lan;
    unsigned i;
@@ -1611,8 +1601,8 @@ void Cty_ReceiveFormNewCountry (void)
         	 Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
         	 Lan++)
               {
-               snprintf (ParamName,sizeof (ParamName),"Name_%s",Lan_STR_LANG_ID[Lan]);
-               Par_GetParText (ParamName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
+               snprintf (ParName,sizeof (ParName),"Name_%s",Lan_STR_LANG_ID[Lan]);
+               Par_GetParText (ParName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
 
                if (Cty_EditingCty->Name[Lan][0])	// If there's a country name
                  {
@@ -1634,8 +1624,8 @@ void Cty_ReceiveFormNewCountry (void)
                   break;
                  }
 
-               snprintf (ParamName,sizeof (ParamName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
-               Par_GetParText (ParamName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
+               snprintf (ParName,sizeof (ParName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
+               Par_GetParText (ParName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
         }
@@ -1883,7 +1873,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
-                                     Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
+                                     Cty_PutParGoToCty,&Cty_EditingCty->CtyCod,
 				     "map-marker-alt.svg",Ico_BLACK);
      }
   }

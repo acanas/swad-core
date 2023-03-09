@@ -92,7 +92,7 @@ void Svy_ResetSurveys (struct Svy_Surveys *Surveys);
 void Svy_SeeAllSurveys (void);
 void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
 void Svy_SeeOneSurvey (void);
-void Svy_PutHiddenParamSvyOrder (Dat_StartEndTime_t SelectedOrder);
+void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_RequestCreatOrEditSvy (void);
 void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Svy_Survey *Svy);

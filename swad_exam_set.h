@@ -35,7 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaSet_PutParamsOneSet (void *Exams);
+void ExaSet_PutParsOneSet (void *Exams);
 
 void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set);
 

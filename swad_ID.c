@@ -77,8 +77,8 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
 
 static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID);
 
-static void ID_PutParamsRemoveMyID (void *ID);
-static void ID_PutParamsRemoveOtherID (void *ID);
+static void ID_PutParsRemoveMyID (void *ID);
+static void ID_PutParsRemoveOtherID (void *ID);
 
 static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
 static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
@@ -216,19 +216,19 @@ unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
 /******* Put hidden parameter with the plain user's ID of other user *********/
 /*****************************************************************************/
 
-void ID_PutParamOtherUsrIDPlain (void)
+void ID_PutParOtherUsrIDPlain (void)
   {
    Par_PutParString (NULL,"OtherUsrID",
-	                     (Gbl.Usrs.Other.UsrDat.IDs.Num &&
-	                      Gbl.Usrs.Other.UsrDat.IDs.List) ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
-	                                                        "");
+	             (Gbl.Usrs.Other.UsrDat.IDs.Num &&
+	             Gbl.Usrs.Other.UsrDat.IDs.List) ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
+	                                               "");
   }
 
 /*****************************************************************************/
 /********* Get parameter plain user's ID of other user from a form ***********/
 /*****************************************************************************/
 
-void ID_GetParamOtherUsrIDPlain (void)
+void ID_GetParOtherUsrIDPlain (void)
   {
    /***** Allocate space for the list *****/
    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
@@ -417,13 +417,13 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
 	    case ActSeeRecSevGst:
 	    case ActSeeRecSevStd:
 	    case ActSeeRecSevTch:
-	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	       break;
 	    default:
 	       break;
 	   }
 	}
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Par_PutParString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
       /***** Put link *****/
@@ -571,10 +571,10 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	       /* Form to remove user's ID */
 	       if (ItsMe)
 		  Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
-						 ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
+						 ID_PutParsRemoveMyID,UsrDat->IDs.List[NumID].ID);
 	       else
 		  Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,ID_ID_SECTION_ID,
-						 ID_PutParamsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
+						 ID_PutParsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
 	      }
 	   }
 
@@ -628,7 +628,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	       else
 		 {
 		  Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,ID_ID_SECTION_ID);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		 }
 		  HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
 				  UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
@@ -648,17 +648,17 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
    HTM_TABLE_End ();
   }
 
-static void ID_PutParamsRemoveMyID (void *ID)
+static void ID_PutParsRemoveMyID (void *ID)
   {
    if (ID)
       Par_PutParString (NULL,"UsrID",(char *) ID);
   }
 
-static void ID_PutParamsRemoveOtherID (void *ID)
+static void ID_PutParsRemoveOtherID (void *ID)
   {
    if (ID)
      {
-      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+      Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutParString (NULL,"UsrID",(char *) ID);
      }
   }
@@ -687,7 +687,7 @@ void ID_RemoveMyUsrID (void)
 void ID_RemoveOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -777,7 +777,7 @@ void ID_NewMyUsrID (void)
 void ID_NewOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -894,7 +894,7 @@ void ID_ConfirmOtherUsrID (void)
 
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
         {
 	 /* If user is a student in current course,

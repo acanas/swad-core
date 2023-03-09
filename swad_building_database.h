@@ -41,9 +41,9 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
                                   Bld_WhichData_t WhichData,
                                   Bld_Order_t SelectedOrder);
 unsigned Bld_DB_GetDataOfBuildingByCod (MYSQL_RES **mysql_res,long BldCod);
-bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod);
+bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long BldCod);
 
-void Bld_DB_UpdateBuildingName (long BldCod,const char *FieldName,const char *NewBuildingName);
+void Bld_DB_UpdateBuildingName (long BldCod,const char *FldName,const char *NewBuildingName);
 
 void Bld_DB_RemoveBuilding (long BldCod);
 void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod);

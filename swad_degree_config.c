@@ -248,7 +248,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
-		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+		  Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),
 					   "class=\"LB BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -304,7 +304,7 @@ static void DegCfg_WWW (bool PrintView,bool PutForm)
 
 static void DegCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,"deg",Gbl.Hierarchy.Deg.DegCod);
+   HieCfg_Shortcut (PrintView,Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/
@@ -313,7 +313,7 @@ static void DegCfg_Shortcut (bool PrintView)
 
 static void DegCfg_QR (void)
   {
-   HieCfg_QR ("deg",Gbl.Hierarchy.Deg.DegCod);
+   HieCfg_QR (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/
@@ -336,7 +336,7 @@ static void DegCfg_NumCrss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	    Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");

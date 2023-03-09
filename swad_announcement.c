@@ -56,7 +56,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     unsigned Roles,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit);
-static void Ann_PutParams (void *AnnCod);
+static void Ann_PutParAnnCod (void *AnnCod);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
 
@@ -245,11 +245,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	{
 	 /***** Icon to remove announcement *****/
 	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
-					Ann_PutParams,&AnnCod);
+					Ann_PutParAnnCod,&AnnCod);
 
 	 /***** Icon to hide/unhide the announcement *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
-					    Ann_PutParams,&AnnCod,
+					    Ann_PutParAnnCod,&AnnCod,
 					    Status == Ann_OBSOLETE_ANNOUNCEMENT);
 	}
 
@@ -287,7 +287,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	 else
 	    /***** Put form to mark announcement as seen *****/
 	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-					   Ann_PutParams,&AnnCod,
+					   Ann_PutParAnnCod,&AnnCod,
 					   "times.svg",Ico_BLACK,
 					   Txt_Do_not_show_again,NULL);
 
@@ -302,9 +302,10 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Ann_PutParams (void *AnnCod)
+static void Ann_PutParAnnCod (void *AnnCod)
   {
-   Par_PutParCode (Par_AnnCod,*((long *) AnnCod));
+   if (AnnCod)
+      Par_PutParCode (Par_AnnCod,*((long *) AnnCod));
   }
 
 /*****************************************************************************/

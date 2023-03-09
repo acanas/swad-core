@@ -118,9 +118,8 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
 void Gam_ShowOnlyOneGameEnd (void);
 
 void Gam_SetCurrentGamCod (long GamCod);
-void Gam_PutParams (void *Games);
-void Gam_PutParamGamCod (long GamCod);
-long Gam_GetParams (struct Gam_Games *Games);
+void Gam_PutPars (void *Games);
+long Gam_GetPars (struct Gam_Games *Games);
 
 void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder);
 void Gam_GetListSelectedGamCods (struct Gam_Games *Games);
@@ -144,8 +143,8 @@ void Gam_ReceiveFormGame (void);
 void Gam_ReqSelectQstsToAddToGame (void);
 void Gam_ListQstsToAddToGame (void);
 
-void Gam_PutParamQstInd (unsigned QstInd);
-unsigned Gam_GetParamQstInd (void);
+void Gam_PutParQstInd (unsigned QstInd);
+unsigned Gam_GetParQstInd (void);
 
 void Gam_AddQstsToGame (void);
 

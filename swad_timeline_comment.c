@@ -104,7 +104,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 static long TmlCom_ReceiveComm (void);
 
 static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline);
-static void TmlCom_PutParamsRemoveComm (void *Timeline);
+static void TmlCom_PutParsRemoveComm (void *Timeline);
 static void TmlCom_RemoveComm (void);
 
 static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
@@ -353,7 +353,7 @@ void TmlCom_WriteCommsInNote (const struct Tml_Timeline *Timeline,
 void TmlCom_ShowHiddenCommsUsr (void)
   {
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show hidden comments *****/
    TmlCom_ShowHiddenCommsGbl ();
@@ -620,7 +620,7 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
    Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
       HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
@@ -724,7 +724,7 @@ void TmlCom_ReceiveCommUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
@@ -829,7 +829,7 @@ void TmlCom_RequestRemComUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
@@ -904,7 +904,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
    /* End alert */
    Timeline->PubCod = Com.PubCod;	// Publication to be removed
    TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_COMM,
-			  TmlCom_PutParamsRemoveComm);
+			  TmlCom_PutParsRemoveComm);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
@@ -914,14 +914,14 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TmlCom_PutParamsRemoveComm (void *Timeline)
+static void TmlCom_PutParsRemoveComm (void *Timeline)
   {
    if (Timeline)
      {
       if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// User's timeline
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
-	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
+	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->Who);
       Par_PutParCode (Par_PubCod,((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }
@@ -938,7 +938,7 @@ void TmlCom_RemoveComUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+   Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);

@@ -216,11 +216,11 @@ void Prj_ShowTableSelectedPrjs (void);
 bool Prj_CheckIfICanViewProjectDocuments (long PrjCod);
 bool Prj_CheckIfICanViewProjectAssessment (long PrjCod);
 
-void Prj_PutParams (struct Prj_Filter *Filter,
+void Prj_PutPars (struct Prj_Filter *Filter,
                     Prj_Order_t Order,
                     unsigned NumPage,
                     long PrjCod);
-void Prj_GetParams (struct Prj_Projects *Projects);
+void Prj_GetPars (struct Prj_Projects *Projects);
 
 void Prj_ShowOneProject (void);
 void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects);
@@ -255,7 +255,6 @@ void Prj_FreeMemProject (struct Prj_Project *Prj);
 void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
 void Prj_FreeListProjects (struct Prj_Projects *Projects);
 
-void Prj_PutParamPrjCod (long PrjCod);
 void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
 void Prj_HideProject (void);

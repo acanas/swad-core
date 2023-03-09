@@ -58,10 +58,10 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void QR_PutLinkToPrintQRCode (Act_Action_t Action,
-                              void (*FuncParams) (void *Args),void *Args)
+                              void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (Action,NULL,
-                                  FuncParams,Args,
+                                  FuncPars,Args,
 				  "qrcode.svg",Ico_BLACK);
   }
 
@@ -69,7 +69,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,
 /************************* Put parameter QR string ***************************/
 /*****************************************************************************/
 
-void QR_PutParamQRString (void *QRString)
+void QR_PutParQRString (void *QRString)
   {
    Par_PutParString (NULL,"QRString",QRString);
   }
@@ -97,7 +97,7 @@ void QR_PrintUsrQRCode (void)
   {
    char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Begin box *****/
       Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,
@@ -145,26 +145,29 @@ void QR_ImageQRCode (const char *QRString)
 /*************** Show QR code with direct link (shortcut URL) ****************/
 /*****************************************************************************/
 
-void QR_LinkTo (unsigned Size,const char *ParamName,long Cod)
+void QR_LinkTo (unsigned Size,Par_Code_t ParCode,long Cod)
   {
+   extern const char *Par_CodeStr[];
    extern const char *Txt_Shortcut;
    char *URL;
 
    /***** Show QR code with link *****/
-   if (ParamName)
+   if (ParCode == Par_None)
      {
-      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?%s=%ld",
-		    Size,Size,Cfg_URL_SWAD_CGI,ParamName,Cod) < 0)
+      if (asprintf (&URL,"https://chart.googleapis.com/"
+	                 "chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/",
+		    Size,Size,Cfg_URL_SWAD_CGI) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/",
-		    Size,Size,Cfg_URL_SWAD_CGI) < 0)
+      if (asprintf (&URL,"https://chart.googleapis.com/"
+	                 "chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?%s=%ld",
+		    Size,Size,Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
-   HTM_IMG (URL,NULL,Txt_Shortcut,
-	    "style=\"width:%upx;height:%upx;\"",Size,Size);
+
+   HTM_IMG (URL,NULL,Txt_Shortcut,"style=\"width:%upx;height:%upx;\"",Size,Size);
    free (URL);
   }
 

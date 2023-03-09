@@ -113,20 +113,20 @@ extern struct Globals Gbl;
 static void Exa_PutIconsListExams (void *Exams);
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams);
-static void Exa_PutParamsToCreateNewExam (void *Exams);
+static void Exa_PutParsToCreateNewExam (void *Exams);
 
 static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam);
 
 static void Exa_PutIconsOneExam (void *Exams);
 static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
-static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder);
+static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder);
 
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const char *Anchor);
 
-static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder);
-static Exa_Order_t Exa_GetParamOrder (void);
+static void Exa_PutParOrder (Exa_Order_t SelectedOrder);
+static Exa_Order_t Exa_GetParOrder (void);
 
 static void Exa_RemoveExamFromAllTables (long ExaCod);
 
@@ -198,7 +198,7 @@ void Exa_SeeAllExams (void)
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,false); // Don't check exam code
+   Exa_GetPars (&Exams,false); // Don't check exam code
 
    /***** Show all exams *****/
    Exa_ListAllExams (&Exams);
@@ -257,7 +257,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
-			Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
+			Pag_PutParPagNum (Pag_EXAMS,Exams->CurrentPage);
 			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 			HTM_BUTTON_Submit_Begin (Txt_EXAMS_ORDER_HELP[Order],
 			                         "class=\"BT_LINK\"");
@@ -354,7 +354,7 @@ static void Exa_PutIconsListExams (void *Exams)
       /***** Link to get resource link *****/
       if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-					 Exa_PutParams,Exams);
+					 Exa_PutPars,Exams);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_EXAMS);
@@ -368,7 +368,7 @@ static void Exa_PutIconsListExams (void *Exams)
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
   {
    Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,
-                               Exa_PutParamsToCreateNewExam,Exams);
+                               Exa_PutParsToCreateNewExam,Exams);
   }
 
 /*****************************************************************************/
@@ -380,7 +380,7 @@ static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
    extern const char *Txt_New_exam;
 
    Frm_BeginForm (ActFrmNewExa);
-      Exa_PutParamsToCreateNewExam (Exams);
+      Exa_PutParsToCreateNewExam (Exams);
       Btn_PutConfirmButton (Txt_New_exam);
    Frm_EndForm ();
   }
@@ -389,12 +389,12 @@ static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
 /******************* Put parameters to create a new exam *******************/
 /*****************************************************************************/
 
-static void Exa_PutParamsToCreateNewExam (void *Exams)
+static void Exa_PutParsToCreateNewExam (void *Exams)
   {
    if (Exams)
      {
-      Exa_PutHiddenParamExamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
-      Pag_PutHiddenParamPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+      Exa_PutParExamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
+      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
      }
   }
 
@@ -413,7 +413,7 @@ void Exa_SeeOneExam (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
 
    /***** Get exam data *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -529,7 +529,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
       /* Exam title */
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
-	    Exa_PutParams (Exams);
+	    Exa_PutPars (Exams);
 	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
 				     Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
 							  "ASG_TITLE",
@@ -561,7 +561,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
       Frm_BeginForm (ActSeeExa);
-	 Exa_PutParams (Exams);
+	 Exa_PutPars (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
 				  Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
 						       "ASG_TITLE",
@@ -654,7 +654,7 @@ static void Exa_WriteAuthor (struct Exa_Exam *Exam)
 /****** Put a hidden parameter with the type of order in list of exams *******/
 /*****************************************************************************/
 
-static void Exa_PutHiddenParamExamOrder (Exa_Order_t SelectedOrder)
+static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder)
   {
    Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
@@ -683,44 +683,44 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
      {
       /***** Icon to remove exam *****/
       Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
-				     Exa_PutParams,Exams);
+				     Exa_PutPars,Exams);
 
       /***** Icon to hide/unhide exam *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 Exa_PutParams,Exams,
+					 Exa_PutPars,Exams,
 					 Exams->Exam.Hidden);
 
       /***** Icon to edit exam *****/
       Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
-				   Exa_PutParams,Exams);
+				   Exa_PutPars,Exams);
      }
 
    /***** Put icon to view results of sessions in exam *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
       Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
-					  Exa_PutParams,Exams);
+					  Exa_PutPars,Exams);
 
    /***** Link to get resource link *****/
    if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-				      Exa_PutParams,Exams);
+				      Exa_PutPars,Exams);
   }
 
 /*****************************************************************************/
 /*********************** Params used to edit an exam **************************/
 /*****************************************************************************/
 
-void Exa_PutParams (void *Exams)
+void Exa_PutPars (void *Exams)
   {
    Grp_WhichGroups_t WhichGroups;
 
    if (Exams)
      {
       Par_PutParCode (Par_ExaCod,((struct Exa_Exams *) Exams)->Exam.ExaCod);
-      Exa_PutHiddenParamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+      Exa_PutParOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
      }
   }
 
@@ -728,17 +728,17 @@ void Exa_PutParams (void *Exams)
 /******************* Get parameters used to edit an exam **********************/
 /*****************************************************************************/
 
-void Exa_GetParams (struct Exa_Exams *Exams,bool CheckExaCod)
+void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod)
   {
-   long (*GetExaCo[2]) (Par_Code_t ParamCode) =
+   long (*GetExaCo[2]) (Par_Code_t ParCode) =
      {
       [false] = Par_GetParCode,
       [true ] = Par_GetAndCheckParCode,
      };
 
    /***** Get other parameters *****/
-   Exams->SelectedOrder = Exa_GetParamOrder ();
-   Exams->CurrentPage = Pag_GetParamPagNum (Pag_EXAMS);
+   Exams->SelectedOrder = Exa_GetParOrder ();
+   Exams->CurrentPage = Pag_GetParPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
    Exams->Exam.ExaCod = GetExaCo[CheckExaCod] (Par_ExaCod);
@@ -748,7 +748,7 @@ void Exa_GetParams (struct Exa_Exams *Exams,bool CheckExaCod)
 /****** Put a hidden parameter with the type of order in list of exams *******/
 /*****************************************************************************/
 
-static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder)
+static void Exa_PutParOrder (Exa_Order_t SelectedOrder)
   {
    if (SelectedOrder != Exa_ORDER_DEFAULT)
       Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
@@ -758,12 +758,12 @@ static void Exa_PutHiddenParamOrder (Exa_Order_t SelectedOrder)
 /********** Get parameter with the type or order in list of exams ************/
 /*****************************************************************************/
 
-static Exa_Order_t Exa_GetParamOrder (void)
+static Exa_Order_t Exa_GetParOrder (void)
   {
    return (Exa_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Exa_NUM_ORDERS - 1,
-						  (unsigned long) Exa_ORDER_DEFAULT);
+						0,
+						Exa_NUM_ORDERS - 1,
+						(unsigned long) Exa_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -844,7 +844,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 	   )
 	{
 	 /* Get next exam selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 ExaCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each exam in *StrExaCodsSelected as selected */
@@ -990,14 +990,14 @@ void Exa_AskRemExam (void)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Show question and button to remove exam *****/
    Ale_ShowAlertAndButton (ActRemExa,NULL,NULL,
-                           Exa_PutParams,&Exams,
+                           Exa_PutPars,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_exam,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_exam_X,
                            Exams.Exam.Title);
@@ -1212,7 +1212,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -1244,7 +1244,7 @@ void Exa_RequestCreatOrEditExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,false);	// Don't check exam code
+   Exa_GetPars (&Exams,false);	// Don't check exam code
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get exam data *****/
@@ -1309,7 +1309,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Frm_BeginForm (ItsANewExam ? ActNewExa :
 				ActChgExa);
-      Exa_PutParams (Exams);
+      Exa_PutPars (Exams);
 
       /***** Begin box and table *****/
       if (ItsANewExam)
@@ -1417,7 +1417,7 @@ void Exa_ReceiveFormExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,false);	// Don't check exam code
+   Exa_GetPars (&Exams,false);	// Don't check exam code
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get all current exam data from database *****/

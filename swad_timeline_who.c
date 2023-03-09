@@ -96,12 +96,12 @@ void TmlWho_PutFormWho (struct Tml_Timeline *Timeline)
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-void TmlWho_GetParamWho (void)
+void TmlWho_GetParWho (void)
   {
    Usr_Who_t Who;
 
    /***** Get which users I want to see *****/
-   Who = Usr_GetHiddenParamWho ();
+   Who = Usr_GetParWho ();
 
    /***** If parameter Who is not present, get it from database *****/
    if (Who == Usr_WHO_UNKNOWN)

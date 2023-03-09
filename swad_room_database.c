@@ -168,13 +168,13 @@ void Roo_DB_UpdateRoomType (long RooCod,Roo_RoomType_t NewType)
 /*****************************************************************************/
 
 void Roo_DB_UpdateRoomName (long RooCod,
-                            const char *FieldName,const char *NewRoomName)
+                            const char *FldName,const char *NewRoomName)
   {
    DB_QueryUPDATE ("can not update the name of a room",
 		   "UPDATE roo_rooms"
 		     " SET %s='%s'"
 		   " WHERE RooCod=%ld",
-		   FieldName,NewRoomName,
+		   FldName,NewRoomName,
 		   RooCod);
   }
 
@@ -264,7 +264,7 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
-                                   const char *FieldName,const char *Name)
+                                   const char *FldName,const char *Name)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a room already existed",
@@ -275,7 +275,7 @@ bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
 		      " AND %s='%s'"
 		      " AND RooCod<>%ld)",
 		   CtrCod,
-		   FieldName,Name,
+		   FldName,Name,
 		   RooCod);
   }
 

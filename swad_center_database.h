@@ -49,7 +49,7 @@ unsigned Ctr_DB_GetDataOfCenterByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
-bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
+bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 				       long CtrCod,long InsCod);
 
 unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
@@ -69,7 +69,7 @@ unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
 
 void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);
-void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
+void Ctr_DB_UpdateCtrName (long CtrCod,const char *FldName,const char *NewCtrName);
 void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ctr_DB_UpdateCtrPhotoAttribution (long CtrCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 void Ctr_DB_UpdateCtrCoordinate (long CtrCod,

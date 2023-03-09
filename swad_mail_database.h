@@ -64,11 +64,11 @@ void Mai_DB_RemoveExpiredPendingEmails (void);
 void Mai_DB_CreateTmpTables (void);
 void Mai_DB_CreateMailDomain (const struct Mail *Mai);
 void Mai_DB_UpdateMailDomainName (long MaiCod,
-                                  const char *FieldName,const char *NewMaiName);
+                                  const char *FldName,const char *NewMaiName);
 
 unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t SelectedOrder);
 unsigned Mai_DB_GetDataOfMailDomainByCod (MYSQL_RES **mysql_res,long MaiCod);
-bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
+bool Mai_DB_CheckIfMailDomainNameExists (const char *FldName,const char *Name,long MaiCod);
 bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_DB_RemoveMailDomain (long MaiCod);

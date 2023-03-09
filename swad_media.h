@@ -126,7 +126,7 @@ struct Med_Media
 
 /***** Parameters used in a form to upload an image/video *****/
 #define Med_MAX_BYTES_PARAM_UPLOAD_MEDIA (32 - 1)
-struct ParamUploadMedia
+struct Med_ParUpload
   {
    char Action  [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
    char FormType[Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
@@ -149,7 +149,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput);
 void Med_GetMediaFromForm (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media,
                            void (*GetMediaFromDB) (long CrsCod,long QstCod,int NumMedia,struct Med_Media *Media),
 			   const char *SectionForAlerts);
-void Med_SetParamNames (struct ParamUploadMedia *ParamUpl,int NumMedia);
+void Med_SetParsNames (struct Med_ParUpload *ParUpl,int NumMedia);
 
 void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Med_Media *Media);
 void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media);

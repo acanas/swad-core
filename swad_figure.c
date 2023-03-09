@@ -65,8 +65,8 @@ extern struct Globals Gbl;
 
 static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
 
-static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType);
-static void Fig_PutHiddenParamScopeFig (HieLvl_Level_t ScopeFig);
+static void Fig_PutParFigureType (Fig_FigureType_t FigureType);
+static void Fig_PutParScopeFig (HieLvl_Level_t ScopeFig);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -153,7 +153,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    Figures.Scope      = Gbl.Scope.Current;
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
-                                  Fig_PutHiddenParamFigures,&Figures,
+                                  Fig_PutParsFigures,&Figures,
 				  "chart-pie.svg",Ico_BLACK);
   }
 
@@ -161,12 +161,12 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
 /************* Put hidden parameters for figures (statistics) ****************/
 /*****************************************************************************/
 
-void Fig_PutHiddenParamFigures (void *Figures)
+void Fig_PutParsFigures (void *Figures)
   {
    if (Figures)
      {
-      Fig_PutHiddenParamScopeFig (((struct Fig_Figures *) Figures)->Scope);
-      Fig_PutHiddenParamFigureType (((struct Fig_Figures *) Figures)->FigureType);
+      Fig_PutParScopeFig (((struct Fig_Figures *) Figures)->Scope);
+      Fig_PutParFigureType (((struct Fig_Figures *) Figures)->FigureType);
      }
   }
 
@@ -174,7 +174,7 @@ void Fig_PutHiddenParamFigures (void *Figures)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType)
+static void Fig_PutParFigureType (Fig_FigureType_t FigureType)
   {
    Par_PutParUnsigned (NULL,"FigureType",(unsigned) FigureType);
   }
@@ -183,9 +183,9 @@ static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutHiddenParamScopeFig (HieLvl_Level_t ScopeFig)
+static void Fig_PutParScopeFig (HieLvl_Level_t ScopeFig)
   {
-   Sco_PutParamScope ("ScopeFig",ScopeFig);
+   Sco_PutParScope ("ScopeFig",ScopeFig);
   }
 
 /*****************************************************************************/
@@ -235,9 +235,9 @@ void Fig_ShowFigures (void)
    /***** Get the type of figure ******/
    SelectedFigureType = (Fig_FigureType_t)
 		        Par_GetParUnsignedLong ("FigureType",
-						  0,
-						  Fig_NUM_FIGURES - 1,
-						  (unsigned long) Fig_FIGURE_TYPE_DEF);
+						0,
+						Fig_NUM_FIGURES - 1,
+						(unsigned long) Fig_FIGURE_TYPE_DEF);
 
    /***** Show again the form to see use of the platform *****/
    Fig_ReqShowFigure (SelectedFigureType);

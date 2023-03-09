@@ -275,7 +275,7 @@ static void SysCfg_Platform (void)
 
 static void SysCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,NULL,-1L);
+   HieCfg_Shortcut (PrintView,Par_None,-1L);
   }
 
 /*****************************************************************************/
@@ -284,7 +284,7 @@ static void SysCfg_Shortcut (bool PrintView)
 
 static void SysCfg_QR (void)
   {
-   HieCfg_QR (NULL,-1L);
+   HieCfg_QR (Par_None,-1L);
   }
 
 /*****************************************************************************/

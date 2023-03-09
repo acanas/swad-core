@@ -86,7 +86,7 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
-static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs);
+static void Fol_PutParSelectedUsrsCods (void *SelectedUsrs);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
@@ -359,7 +359,7 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
 		 {
 		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
 					      ActFolUsr);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
 				      IFollowUsr ? "user-check.svg" :
 						   "user-plus.svg",
@@ -397,7 +397,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 	{
 	 /* Form to list users */
 	 Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	}
       HTM_Unsigned (NumUsrs);
@@ -416,7 +416,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 	   {
 	    /* Form to list users */
 	    Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Title);
@@ -438,7 +438,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 void Fol_ListFollowing (void)
   {
    /***** Get user to view user he/she follows *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -517,7 +517,7 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
 void Fol_ListFollowers (void)
   {
    /***** Get user to view user he/she follows *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+   Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -623,7 +623,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	{
 	 /* Put form to go to public profile */
 	 Frm_BeginForm (ActSeeOthPubPrf);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"LT FOLLOW_USR_NAME DAT_%s\"",	// Limited width
 	                   The_GetSuffix ());
 	       HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
@@ -685,7 +685,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 	   {
 	    /* Put form to go to public profile */
 	    Frm_BeginForm (ActSeeOthPubPrf);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
 		  HTM_BUTTON_Submit_Begin (Txt_Another_user_s_profile,
 		                           "class=\"LT BT_LINK\"");
@@ -740,7 +740,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    Frm_BeginForm (ActFolUsr);
-      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
                        Act_GetActionText (ActFolUsr),
                        "class=\"FOLLOW_USR_ICO ICO16x16 ICO_%s_%s ICO_HIGHLIGHT\"",
@@ -755,7 +755,7 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
 static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    Frm_BeginForm (ActUnfUsr);
-      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 		       Act_GetActionText (ActUnfUsr),
 		       "class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16\"");
@@ -769,7 +769,7 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
 void Fol_FollowUsr1 (void)
   {
    /***** Get user to be followed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       // Follow only if I do not follow him/her
       if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -804,7 +804,7 @@ void Fol_FollowUsr2 (void)
 void Fol_UnfollowUsr1 (void)
   {
    /***** Get user to be unfollowed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       // Unfollow only if I follow him/her
       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -866,12 +866,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
+				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
+				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
@@ -910,12 +910,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
+				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutHiddenParSelectedUsrsCods,&Gbl.Usrs.Selected,
+				 Fol_PutParSelectedUsrsCods,&Gbl.Usrs.Selected,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
@@ -925,10 +925,10 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
-static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs)
+static void Fol_PutParSelectedUsrsCods (void *SelectedUsrs)
   {
    if (SelectedUsrs)
-      Usr_PutHiddenParSelectedUsrsCods ((struct Usr_SelectedUsrs *) SelectedUsrs);
+      Usr_PutParSelectedUsrsCods ((struct Usr_SelectedUsrs *) SelectedUsrs);
   }
 
 /*****************************************************************************/
@@ -951,7 +951,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
@@ -999,7 +999,7 @@ void Fol_FollowUsrs ()
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
@@ -1048,7 +1048,7 @@ void Fol_UnfollowUsrs (void)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me

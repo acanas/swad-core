@@ -85,15 +85,15 @@ void Sch_PutFormToSearchInPageTopHeading (void);
 
 void Sch_PutInputStringToSearch (const char *IdInputText);
 void Sch_PutMagnifyingGlassButton (Ico_Color_t Color);
-void Sch_GetParamWhatToSearch (void);
-void Sch_GetParamsSearch (void);
+void Sch_GetParWhatToSearch (void);
+void Sch_GetParsSearch (void);
 void Sch_SysSearch (void);
 
 bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                            const struct Sch_Search *Search,
-                           const char *FieldName,
+                           const char *FldName,
                            const char *CharSet,const char *Collate);
 
-void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args);
+void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) void *Args);
 
 #endif

@@ -63,8 +63,8 @@ unsigned ID_GetListUsrCodsFromUsrID (struct Usr_Data *UsrDat,
                                      struct Usr_ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs);
 
-void ID_PutParamOtherUsrIDPlain (void);
-void ID_GetParamOtherUsrIDPlain (void);
+void ID_PutParOtherUsrIDPlain (void);
+void ID_GetParOtherUsrIDPlain (void);
 
 bool ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);

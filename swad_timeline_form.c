@@ -100,57 +100,57 @@ void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
 	{
 	 [false] = // I have not faved ==> fav
 	   {
-	    .Action      = TmlFrm_FAV_NOTE,
-	    .ParamFormat = "NotCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlFav_ICON_FAV,
-	    .Color       = Ico_BLACK,
+	    .Action    = TmlFrm_FAV_NOTE,
+	    .ParFormat = "NotCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlFav_ICON_FAV,
+	    .Color     = Ico_BLACK,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
-	    .Action      = TmlFrm_UNF_NOTE,
-	    .ParamFormat = "NotCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlFav_ICON_FAV,
-	    .Color       = Ico_RED,
+	    .Action    = TmlFrm_UNF_NOTE,
+	    .ParFormat = "NotCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlFav_ICON_FAV,
+	    .Color     = Ico_RED,
 	   },
 	},
       [TmlUsr_FAV_UNF_COMM] =
 	{
 	 [false] = // I have not faved ==> fav
 	   {
-	    .Action      = TmlFrm_FAV_COMM,
-	    .ParamFormat = "PubCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlFav_ICON_FAV,
-	    .Color       = Ico_BLACK,
+	    .Action    = TmlFrm_FAV_COMM,
+	    .ParFormat = "PubCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlFav_ICON_FAV,
+	    .Color     = Ico_BLACK,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
-	    .Action      = TmlFrm_UNF_COMM,
-	    .ParamFormat = "PubCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlFav_ICON_FAV,
-	    .Color       = Ico_RED,
+	    .Action    = TmlFrm_UNF_COMM,
+	    .ParFormat = "PubCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlFav_ICON_FAV,
+	    .Color     = Ico_RED,
 	   },
 	},
       [TmlUsr_SHA_UNS_NOTE] =
 	{
 	 [false] = // I have not shared ==> share
 	   {
-	    .Action      = TmlFrm_SHA_NOTE,
-	    .ParamFormat = "NotCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlSha_ICON_SHARE,
-	    .Color       = Ico_BLACK,
+	    .Action    = TmlFrm_SHA_NOTE,
+	    .ParFormat = "NotCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlSha_ICON_SHARE,
+	    .Color     = Ico_BLACK,
 	   },
 	 [true] = // I have shared ==> unshare
 	   {
-	    .Action      = TmlFrm_UNS_NOTE,
-	    .ParamFormat = "NotCod=%ld",
-	    .ParamCod    = Cod,
-	    .Icon        = TmlSha_ICON_SHARE,
-	    .Color       = Ico_GREEN,
+	    .Action    = TmlFrm_UNS_NOTE,
+	    .ParFormat = "NotCod=%ld",
+	    .ParCod    = Cod,
+	    .Icon      = TmlSha_ICON_SHARE,
+	    .Color     = Ico_GREEN,
 	   },
 	},
      };
@@ -172,13 +172,13 @@ void TmlFrm_BeginForm (const struct Tml_Timeline *Timeline,
      {
       /***** Begin form in user timeline *****/
       Frm_BeginFormAnchor (TmlFrm_ActionUsr[Action],"timeline");
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {
       /***** Begin form in global timeline *****/
       Frm_BeginForm (TmlFrm_ActionGbl[Action]);
-	 Usr_PutHiddenParamWho (Timeline->Who);
+	 Usr_PutParWho (Timeline->Who);
      }
   }
 
@@ -194,10 +194,10 @@ void TmlFrm_EndForm (void)
 void TmlFrm_FormFavSha (const struct Tml_Form *Form)
   {
    char *OnSubmit;
-   char ParamStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char ParStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Create parameter string *****/
-   sprintf (ParamStr,Form->ParamFormat,Form->ParamCod);
+   sprintf (ParStr,Form->ParFormat,Form->ParCod);
 
    /*
     ___________________________________________________________________________
@@ -223,7 +223,7 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (TmlFrm_ActionUsr[Form->Action]),
 		    Gbl.Session.Id,
-		    ParamStr,
+		    ParStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Err_NotEnoughMemoryExit ();
       Frm_BeginFormAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
@@ -238,7 +238,7 @@ void TmlFrm_FormFavSha (const struct Tml_Form *Form)
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (TmlFrm_ActionGbl[Form->Action]),
 		    Gbl.Session.Id,
-		    ParamStr) < 0)
+		    ParStr) < 0)
 	 Err_NotEnoughMemoryExit ();
       Frm_BeginFormAnchorOnSubmit (ActUnk,NULL,OnSubmit);
       free (OnSubmit);
@@ -335,14 +335,14 @@ void TmlFrm_BeginAlertRemove (const char *QuestionTxt)
 
 void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
                             TmlFrm_Action_t Action,
-                            void (*FuncParams) (void *Args))
+                            void (*FuncPars) (void *Args))
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Ale_ShowAlertAndButton2 (TmlFrm_ActionUsr[Action],"timeline",NULL,
-			       FuncParams,Timeline,
+			       FuncPars,Timeline,
 			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionUsr[Action]));
    else
       Ale_ShowAlertAndButton2 (TmlFrm_ActionGbl[Action],NULL,NULL,
-			       FuncParams,Timeline,
+			       FuncPars,Timeline,
 			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionGbl[Action]));
   }

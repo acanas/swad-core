@@ -122,7 +122,7 @@ void Rec_ListFieldsRecordsForEdition (void);
 void Rec_ShowFormCreateRecordField (void);
 void Rec_ReceiveFormField (void);
 unsigned Rec_ConvertToNumLinesField (const char *StrNumLines);
-bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName);
+bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName);
 void Rec_CreateRecordField (void);
 void Rec_ReqRemField (void);
 void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords);
@@ -161,7 +161,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat);
 void Rec_ShowPublicSharedRecordOtherUsr (void);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct Usr_Data *UsrDat,const char *Anchor);
-void Rec_PutParamUsrCodEncrypted (__attribute__((unused)) void *Args);
+void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args);
 
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);

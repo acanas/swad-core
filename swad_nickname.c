@@ -58,8 +58,8 @@ const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
 
 static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
                                            bool IMustFillNickname);
-static void Nck_PutParamsRemoveMyNick (void *Nick);
-static void Nck_PutParamsRemoveOtherNick (void *Nick);
+static void Nck_PutParsRemoveMyNick (void *Nick);
+static void Nck_PutParsRemoveOtherNick (void *Nick);
 
 static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat);
 
@@ -244,10 +244,10 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  /* Form to remove old nickname */
 		  if (ItsMe)
 		     Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
-						    Nck_PutParamsRemoveMyNick,row[0]);
+						    Nck_PutParsRemoveMyNick,row[0]);
 		  else
 		     Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Nck_NICKNAME_SECTION_ID,
-						    Nck_PutParamsRemoveOtherNick,row[0]);
+						    Nck_PutParsRemoveOtherNick,row[0]);
 		 }
 
 	       /* Nickname */
@@ -256,7 +256,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 	       /* Link to QR code */
 	       if (NumNick == 1 && UsrDat->Nickname[0])
 		  QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-					   Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+					   Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
 	       /* Form to change the nickname */
 	       if (NumNick > 1)
@@ -267,7 +267,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  else
 		    {
 		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-			Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
 
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
@@ -302,7 +302,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  else
 		    {
 		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-			Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
 			       Gbl.Usrs.Me.UsrDat.Nickname);
@@ -326,17 +326,17 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    HTM_SECTION_End ();
   }
 
-static void Nck_PutParamsRemoveMyNick (void *Nick)
+static void Nck_PutParsRemoveMyNick (void *Nick)
   {
    if (Nick)
       Par_PutParString (NULL,"Nick",Nick);
   }
 
-static void Nck_PutParamsRemoveOtherNick (void *Nick)
+static void Nck_PutParsRemoveOtherNick (void *Nick)
   {
    if (Nick)
      {
-      Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+      Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       Par_PutParString (NULL,"Nick",Nick);
      }
   }
@@ -383,7 +383,7 @@ void Nck_RemoveOtherUsrNick (void)
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Get user whose nick must be removed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -429,7 +429,7 @@ void Nck_UpdateMyNick (void)
 void Nck_UpdateOtherUsrNick (void)
   {
    /***** Get user whose nick must be changed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{

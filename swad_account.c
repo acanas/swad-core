@@ -89,14 +89,14 @@ extern struct Globals Gbl;
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_Data *UsrDat);
-static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNickWithoutArr,
-                                                     const char *NewEmail);
-static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
-                                     char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
-                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
+static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr,
+                                                   const char *NewEmail);
+static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+                                   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+                                   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
 static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
-static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod);
+static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod);
 
 static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
@@ -316,7 +316,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       /***** Button to login with this account *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Frm_BeginForm (ActLogInNew);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Btn_PutCreateButtonInline (Txt_Its_me);
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -353,15 +353,15 @@ void Acc_ShowFormCreateMyAccount (void)
    Mnu_ContextMenuEnd ();
 
    /**** Show form to create a new account *****/
-   Acc_ShowFormRequestNewAccountWithParams ("","");
+   Acc_ShowFormRequestNewAccountWithPars ("","");
   }
 
 /*****************************************************************************/
 /************ Show form to create a new account using parameters *************/
 /*****************************************************************************/
 
-static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNickWithoutArr,
-                                                     const char *NewEmail)
+static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr,
+                                                   const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_Create_account;
@@ -528,7 +528,7 @@ void Acc_ShowFormChgMyAccount (void)
 void Acc_ShowFormChgOtherUsrAccount (void)
   {
    /***** Get user whose account must be changed *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -574,15 +574,15 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
   {
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
-				     Acc_PutParamsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
+				     Acc_PutParsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
   }
 
-static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
+static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod)
   {
-   Usr_PutParamMyUsrCodEncrypted (EncryptedUsrCod);
+   Usr_PutParMyUsrCodEncrypted (EncryptedUsrCod);
    Par_PutParUnsigned (NULL,"RegRemAction",
-                               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
+                       (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
 
 /*****************************************************************************/
@@ -597,7 +597,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
-   if (Acc_GetParamsNewAccount (NewNickWithoutArr,NewEmail,NewEncryptedPassword))
+   if (Acc_GetParsNewAccount (NewNickWithoutArr,NewEmail,NewEncryptedPassword))
      {
       /***** User's has no ID *****/
       Gbl.Usrs.Me.UsrDat.IDs.Num = 0;
@@ -631,7 +631,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
    else
      {
       /***** Show form again ******/
-      Acc_ShowFormRequestNewAccountWithParams (NewNickWithoutArr,NewEmail);
+      Acc_ShowFormRequestNewAccountWithPars (NewNickWithoutArr,NewEmail);
       return false;
      }
   }
@@ -641,9 +641,9 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 // Return false on error
 
-static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
-                                     char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
-                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
+static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],
+                                   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+                                   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
   {
    extern const char *Txt_The_nickname_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_is_not_valid_;
@@ -812,7 +812,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
   {
    bool Error = false;
 
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
          Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
@@ -925,7 +925,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
       /* Show form to request confirmation */
       Frm_BeginForm (ActRemUsrGbl);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
 	 Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Frm_EndForm ();
@@ -1135,6 +1135,6 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
    else	// Not me
       if (Usr_ICanEditOtherUsr (UsrDat))
 	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
-	                                Rec_PutParamUsrCodEncrypted,NULL,
+	                                Rec_PutParUsrCodEncrypted,NULL,
 	                                "at.svg",Ico_BLACK);
   }

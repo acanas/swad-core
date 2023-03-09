@@ -75,10 +75,8 @@ void Rub_ShowOnlyOneRubricBegin (struct Rub_Rubrics *Rubrics,
 void Rub_ShowOnlyOneRubricEnd (void);
 
 void Rub_SetCurrentRubCod (long GamCod);
-void Rub_PutParams (void *Rubrics);
-void Rub_PutParamRubCod (long RubCod);
-long Rub_GetParamRubCod (void);
-long Rub_GetParams (struct Rub_Rubrics *Rubrics);
+void Rub_PutPars (void *Rubrics);
+long Rub_GetPars (struct Rub_Rubrics *Rubrics);
 
 void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics);
 void Rub_GetDataOfRubricByCod (struct Rub_Rubric *Rubric);

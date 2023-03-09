@@ -78,7 +78,7 @@ static bool Ctr_CheckIfICanCreateCenters (void);
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args);
 static void Ctr_PutIconToEditCenters (void);
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr);
-static void Ctr_GetParamCtrOrder (void);
+static void Ctr_GetParCtrOrder (void);
 
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
@@ -89,7 +89,6 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
-static void Ctr_PutParamGoToCtr (void *CtrCod);
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
@@ -102,6 +101,8 @@ static void Ctr_EditingCenterConstructor (void);
 static void Ctr_EditingCenterDestructor (void);
 
 static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
+
+static void Ctr_PutParCtrCod (void *CtrCod);
 
 /*****************************************************************************/
 /******************* List centers with pending degrees ***********************/
@@ -189,7 +190,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Ctr_PutParamCtrCod (Ctr->CtrCod);
+      Par_PutParCode (Par_CtrCod,Ctr->CtrCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),
@@ -221,7 +222,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       return;
 
    /***** Get parameter with the type of order in the list of centers *****/
-   Ctr_GetParamCtrOrder ();
+   Ctr_GetParCtrOrder ();
 
    /***** Get list of centers *****/
    Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.InsCod,
@@ -413,13 +414,13 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 /********** Get parameter with the type or order in list of centers **********/
 /*****************************************************************************/
 
-static void Ctr_GetParamCtrOrder (void)
+static void Ctr_GetParCtrOrder (void)
   {
    Gbl.Hierarchy.Ctrs.SelectedOrder = (Ctr_Order_t)
 				      Par_GetParUnsignedLong ("Order",
-							        0,
-							        Ctr_NUM_ORDERS - 1,
-							        (unsigned long) Ctr_ORDER_DEFAULT);
+							      0,
+							      Ctr_NUM_ORDERS - 1,
+							      (unsigned long) Ctr_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -794,12 +795,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_Begin ("class=\"BM\"");
 	       if (!ICanEdit ||				// I cannot edit
 		   NumDegs ||				// Center has degrees
-		   NumUsrsCtr ||				// Center has users who claim to belong to it
+		   NumUsrsCtr ||			// Center has users who claim to belong to it
 		   NumUsrsInCrssOfCtr)			// Center has users
 		  Ico_PutIconRemovalNotAllowed ();
 	       else	// I can remove center
 		  Ico_PutContextualIconToRemove (ActRemCtr,NULL,
-						 Hie_PutParamOtherHieCod,&Ctr->CtrCod);
+						 Hie_PutParOtherHieCod,&Ctr->CtrCod);
 	    HTM_TD_End ();
 
 	    /* Center code */
@@ -817,7 +818,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
-		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"PlcCod\""
 				       " class=\"PLC_SEL INPUT_%s\"",
@@ -847,7 +848,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
-		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -863,7 +864,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
-		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -879,7 +880,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
-		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -950,15 +951,6 @@ static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr)
    return  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
            ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
            Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod);	// I am the requester
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of center ********************/
-/*****************************************************************************/
-
-void Ctr_PutParamCtrCod (long CtrCod)
-  {
-   Par_PutParLong (NULL,"ctr",CtrCod);
   }
 
 /*****************************************************************************/
@@ -1098,23 +1090,23 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentCtrName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentCtrName = NULL;	// Initialized to avoid warning
    char NewCtrName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentCtrName = Ctr->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentCtrName = Ctr->FullName;
          break;
@@ -1122,7 +1114,7 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the center */
-   Par_GetParText (ParamName,NewCtrName,MaxBytes);
+   Par_GetParText (ParName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the center *****/
    Ctr_GetDataOfCenterByCod (Ctr);
@@ -1137,14 +1129,14 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.Hierarchy.Ins.InsCod))
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParName,NewCtrName,Ctr->CtrCod,Gbl.Hierarchy.Ins.InsCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
 			     NewCtrName);
          else
            {
             /* Update the table changing old name by new name */
-            Ctr_DB_UpdateCtrName (Ctr->CtrCod,FieldName,NewCtrName);
+            Ctr_DB_UpdateCtrName (Ctr->CtrCod,FldName,NewCtrName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1216,7 +1208,7 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
-   Status = Hie_GetParamStatus ();	// New status
+   Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of center *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1261,7 +1253,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
      {
       /***** Alert with button to go to center *****/
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
-                                  Ctr_PutParamGoToCtr,&Ctr_EditingCtr->CtrCod,
+                                  Ctr_PutParCtrCod,&Ctr_EditingCtr->CtrCod,
                                   Btn_CONFIRM_BUTTON,
                                   Str_BuildGoToTitle (Ctr_EditingCtr->ShrtName));
       Str_FreeGoToTitle ();
@@ -1269,12 +1261,6 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
-  }
-
-static void Ctr_PutParamGoToCtr (void *CtrCod)
-  {
-   if (CtrCod)
-      Ctr_PutParamCtrCod (*((long *) CtrCod));
   }
 
 /*****************************************************************************/
@@ -1909,7 +1895,7 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr)
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the center
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,
-                                     Ctr_PutParamGoToCtr,&Ctr_EditingCtr->CtrCod,
+                                     Ctr_PutParCtrCod,&Ctr_EditingCtr->CtrCod,
 				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
@@ -2086,4 +2072,14 @@ unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
       NumUsrsCtr = Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
 
    return NumUsrsCtr;
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with code of center ********************/
+/*****************************************************************************/
+
+static void Ctr_PutParCtrCod (void *CtrCod)
+  {
+   if (CtrCod)
+      Par_PutParCode (Par_CtrCod,*((long *) CtrCod));
   }

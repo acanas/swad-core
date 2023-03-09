@@ -59,8 +59,8 @@ typedef enum
 struct Tml_Form
   {
    TmlFrm_Action_t Action;
-   const char *ParamFormat;
-   long ParamCod;
+   const char *ParFormat;
+   long ParCod;
    const char *Icon;
    Ico_Color_t Color;
   };
@@ -84,6 +84,6 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 void TmlFrm_BeginAlertRemove (const char *QuestionTxt);
 void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
                             TmlFrm_Action_t Action,
-                            void (*FuncParams) (void *Args));
+                            void (*FuncPars) (void *Args));
 
 #endif

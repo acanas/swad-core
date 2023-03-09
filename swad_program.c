@@ -446,7 +446,7 @@ static void Prg_PutIconToCreateNewItem (void)
    long ItmCod = -1L;
 
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-                               Prg_PutParamItmCod,&ItmCod);
+                               Prg_PutParItmCod,&ItmCod);
   }
 
 /*****************************************************************************/
@@ -675,7 +675,7 @@ static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
       [true ][true ] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
      };
    static void (*PutContextualIcon[2]) (const Act_Action_t NextAction,const char *Anchor,
-                                        void (*FuncParams) (void *Args),void *Args) =
+                                        void (*FuncPars) (void *Args),void *Args) =
      {
       [false] = Ico_PutContextualIconToExpand,		// Contracted ==> function to expand
       [true ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
@@ -683,7 +683,7 @@ static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
 
    /***** Icon to hide/unhide program item *****/
    PutContextualIcon[Expanded] (NextAction[Expanded][Editing],Prg_HIGHLIGHTED_SECTION_ID,
-			        Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+			        Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -994,31 +994,31 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
       case Rol_SYS_ADM:
 	 /***** Icon to remove program item *****/
 	 Ico_PutContextualIconToRemove (ActReqRemPrgItm,NULL,
-	                                Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+	                                Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to hide/unhide program item *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Prg_HIGHLIGHTED_SECTION_ID,
-					    Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
+					    Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					    Item->Hierarchy.Hidden);
 
 	 /***** Icon to edit program item *****/
 	 if (ListingType == Prg_FORM_EDIT_ITEM && HighlightItem)
 	    Ico_PutContextualIconToView (ActSeePrgItm,Prg_ITEM_SECTION_ID,
-					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+					 Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 	 else
 	    Ico_PutContextualIconToEdit (ActFrmChgPrgItm,Prg_ITEM_SECTION_ID,
-					 Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+					 Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to add a new child item inside this item *****/
 	 Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
-	                             Prg_PutParamItmCod,&Item->Hierarchy.ItmCod);
+	                             Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 HTM_BR ();
 
 	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,Prg_HIGHLIGHTED_SECTION_ID,
-	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
+	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1026,7 +1026,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
-	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
+	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1034,7 +1034,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
-	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
+	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1042,7 +1042,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
-	                                   Prg_PutParamItmCod,&Item->Hierarchy.ItmCod,
+	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -1129,19 +1129,13 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 /******************** Params used to edit a program item *********************/
 /*****************************************************************************/
 
-void Prg_PutParamItmCod (void *ItmCod)
+void Prg_PutParItmCod (void *ItmCod)
   {
    if (ItmCod)
       Par_PutParCode (Par_ItmCod,*((long *) ItmCod));
   }
 
-void Prg_PutParamRscCod (void *RscCod)
-  {
-   if (RscCod)
-      Par_PutParCode (Par_RscCod,*((long *) RscCod));
-  }
-
-void Prg_GetParams (struct Prg_Item *Item)
+void Prg_GetPars (struct Prg_Item *Item)
   {
    /***** Try to get item resource *****/
    Item->Resource.Hierarchy.RscCod = Par_GetParCode (Par_RscCod);
@@ -1398,13 +1392,13 @@ void Prg_ReqRemItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
    /***** Show question and button to remove the program item *****/
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
-                           Prg_PutParamItmCod,&Item.Hierarchy.ItmCod,
+                           Prg_PutParItmCod,&Item.Hierarchy.ItmCod,
                            Btn_REMOVE_BUTTON,Txt_Remove_item,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
@@ -1430,7 +1424,7 @@ void Prg_RemoveItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1477,7 +1471,7 @@ static void Prg_HideOrUnhideItem (bool Hide)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1521,7 +1515,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1722,7 +1716,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1777,7 +1771,7 @@ static void Prg_ExpandContractItem (Prg_ExpandContract_t ExpandContract)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -1884,7 +1878,7 @@ void Prg_ViewItemAfterEdit (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_END_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);
@@ -1905,7 +1899,7 @@ void Prg_RequestChangeItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_FORM_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);
@@ -1926,7 +1920,7 @@ void Prg_RequestCreateItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
 
    /***** Add item to table of expanded items
           to ensure that child items are displayed *****/
@@ -2100,7 +2094,7 @@ void Prg_ReceiveFormChgItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    if (Item.Hierarchy.ItmCod <= 0)
       Err_WrongItemExit ();
 
@@ -2144,7 +2138,7 @@ void Prg_ReceiveFormNewItem (void)
    Prg_GetListItems ();
 
    /***** Get program item *****/
-   Prg_GetParams (&Item);
+   Prg_GetPars (&Item);
    // If item code <= 0 ==> this is the first item in the program
 
    /***** Set new item code *****/

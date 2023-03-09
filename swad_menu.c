@@ -348,7 +348,7 @@ static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args)
 void Mnu_ChangeMenu (void)
   {
    /***** Get param with menu *****/
-   Gbl.Prefs.Menu = Mnu_GetParamMenu ();
+   Gbl.Prefs.Menu = Mnu_GetParMenu ();
 
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -362,13 +362,13 @@ void Mnu_ChangeMenu (void)
 /************************* Get parameter with menu ***************************/
 /*****************************************************************************/
 
-Mnu_Menu_t Mnu_GetParamMenu (void)
+Mnu_Menu_t Mnu_GetParMenu (void)
   {
    return (Mnu_Menu_t)
 	  Par_GetParUnsignedLong ("Menu",
-	                            0,
-	                            Mnu_NUM_MENUS - 1,
-	                            (unsigned long) Mnu_MENU_DEFAULT);
+	                          0,
+	                          Mnu_NUM_MENUS - 1,
+	                          (unsigned long) Mnu_MENU_DEFAULT);
   }
 
 /*****************************************************************************/

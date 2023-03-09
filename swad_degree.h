@@ -92,8 +92,6 @@ void Deg_ReceiveFormReqDeg (void);
 void Deg_ReceiveFormNewDeg (void);
 void Deg_RemoveDegree (void);
 
-void Deg_PutParamDegCod (long DegCod);
-
 bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);

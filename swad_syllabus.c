@@ -108,7 +108,7 @@ struct LstItemsSyllabus Syl_LstItemsSyllabus;
 
 static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected);
 
-static unsigned Syl_GetParamItemNumber (void);
+static unsigned Syl_GetParItemNumber (void);
 
 static void Syl_SetSyllabusTypeFromAction (struct Syl_Syllabus *Syllabus);
 static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus);
@@ -116,7 +116,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
                                      bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
-static void Syl_PutParamNumItem (void *ParamNumItem);
+static void Syl_PutParNumItem (void *ParNumItem);
 
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
@@ -144,14 +144,14 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
 /************* Get parameter about which syllabus I want to see **************/
 /*****************************************************************************/
 
-Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
+Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void)
   {
    /***** Get which syllabus I want to see *****/
    return (Syl_WhichSyllabus_t)
 	  Par_GetParUnsignedLong ("WhichSyllabus",
-				    0,
-				    Syl_NUM_WHICH_SYLLABUS - 1,
-				    (unsigned long) Syl_DEFAULT_WHICH_SYLLABUS);
+				  0,
+				  Syl_NUM_WHICH_SYLLABUS - 1,
+				  (unsigned long) Syl_DEFAULT_WHICH_SYLLABUS);
   }
 
 /*****************************************************************************/
@@ -192,12 +192,12 @@ static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 /************ Get parameter item number in edition of syllabus ***************/
 /*****************************************************************************/
 
-static unsigned Syl_GetParamItemNumber (void)
+static unsigned Syl_GetParItemNumber (void)
   {
    return (unsigned) Par_GetParUnsignedLong ("NumI",
-					       0,
-					       UINT_MAX,
-					       0);
+					     0,
+					     UINT_MAX,
+					     0);
   }
 
 /*****************************************************************************/
@@ -617,7 +617,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
    Subtree.MovAllowed = false;
 
-   Syllabus->ParamNumItem = NumItem;	// Used as parameter in forms
+   Syllabus->ParNumItem = NumItem;	// Used as parameter in forms
 
    if (!NewItem)	// If the item is new (not stored in file), it has no number
       Syl_WriteNumItem (StrItemCod,NULL,Level,CodItem);
@@ -642,7 +642,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       else
 		  Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 										     ActDelItmSylPra,NULL,
-						 Syl_PutParamNumItem,&Syllabus->ParamNumItem);
+						 Syl_PutParNumItem,&Syllabus->ParNumItem);
 	    HTM_TD_End ();
 
 	    /***** Icon to get up an item *****/
@@ -652,7 +652,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 										     ActUp_IteSylPra,
 						 NULL,
-						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 Syl_PutParNumItem,&Syllabus->ParNumItem,
 						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -666,7 +666,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 										     ActDwnIteSylPra,
 						 NULL,
-						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 Syl_PutParNumItem,&Syllabus->ParNumItem,
 						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
@@ -679,7 +679,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 										     ActRgtIteSylPra,
 						 NULL,
-						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 Syl_PutParNumItem,&Syllabus->ParNumItem,
 						 "arrow-left.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
@@ -693,7 +693,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 										     ActLftIteSylPra,
 						 NULL,
-						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 Syl_PutParNumItem,&Syllabus->ParNumItem,
 						 "arrow-right.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
@@ -855,8 +855,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 								    ActInsIteSylPra) :
 			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
 								    ActModIteSylPra));
-	 Syllabus->ParamNumItem = NumItem;
-	 Syl_PutParamNumItem (&Syllabus->ParamNumItem);
+	 Syllabus->ParNumItem = NumItem;
+	 Syl_PutParNumItem (&Syllabus->ParNumItem);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
 			 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"%s",
@@ -872,10 +872,10 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 /***** Write parameter with the number of an item in a syllabus form *********/
 /*****************************************************************************/
 
-static void Syl_PutParamNumItem (void *ParamNumItem)
+static void Syl_PutParNumItem (void *ParNumItem)
   {
-   if (ParamNumItem)
-      Par_PutParUnsigned (NULL,"NumI",*((unsigned *) ParamNumItem));
+   if (ParNumItem)
+      Par_PutParUnsigned (NULL,"NumI",*((unsigned *) ParNumItem));
   }
 
 /*****************************************************************************/
@@ -934,7 +934,7 @@ void Syl_RemoveItemSyllabus (void)
    Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
-   Syllabus.NumItem = Syl_GetParamItemNumber ();
+   Syllabus.NumItem = Syl_GetParItemNumber ();
 
    /***** Create a new file to make the update *****/
    Syl_BuildPathFileSyllabus (&Syllabus,PathFile);
@@ -1011,7 +1011,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
-   Syllabus.NumItem = Syl_GetParamItemNumber ();
+   Syllabus.NumItem = Syl_GetParItemNumber ();
 
    Subtree.ToGetUp.Ini   = Subtree.ToGetUp.End   = 0;
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
@@ -1197,7 +1197,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
    Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
-   Syllabus.NumItem = Syl_GetParamItemNumber ();
+   Syllabus.NumItem = Syl_GetParItemNumber ();
 
    /***** Create a new file to do the update *****/
    Syl_BuildPathFileSyllabus (&Syllabus,PathFile);
@@ -1260,7 +1260,7 @@ void Syl_InsertItemSyllabus (void)
    Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
-   Syllabus.NumItem = Syl_GetParamItemNumber ();
+   Syllabus.NumItem = Syl_GetParItemNumber ();
 
    /***** Get item body *****/
    Par_GetParHTML ("Txt",Txt,Syl_MAX_BYTES_TEXT_ITEM);
@@ -1329,7 +1329,7 @@ void Syl_ModifyItemSyllabus (void)
    Syllabus.EditionIsActive = true;
 
    /***** Get item number *****/
-   Syllabus.NumItem = Syl_GetParamItemNumber ();
+   Syllabus.NumItem = Syl_GetParItemNumber ();
 
    /***** Get item body *****/
    Par_GetParHTML ("Txt",Syl_LstItemsSyllabus.Lst[Syllabus.NumItem].Text,

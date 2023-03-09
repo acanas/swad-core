@@ -294,7 +294,7 @@ void Net_UpdateMyWebsAndSocialNets (void)
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
    Net_WebsAndSocialNetworks_t NumURL;
-   char ParamName[3 + 10 + 1];
+   char ParName[3 + 10 + 1];
    char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get URLs *****/
@@ -303,8 +303,8 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 	NumURL++)
      {
       /***** Get URL from the form *****/
-      snprintf (ParamName,sizeof (ParamName),"URL%u",(unsigned) NumURL);
-      Par_GetParText (ParamName,URL,Cns_MAX_BYTES_WWW);
+      snprintf (ParName,sizeof (ParName),"URL%u",(unsigned) NumURL);
+      Par_GetParText (ParName,URL,Cns_MAX_BYTES_WWW);
 
       if (URL[0])
 	 /***** Insert or replace web / social network *****/

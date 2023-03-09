@@ -96,7 +96,7 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
 
-static Roo_Order_t Roo_GetParamRoomOrder (void);
+static Roo_Order_t Roo_GetParRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
 static void Roo_PutIconToEditRooms (void);
@@ -110,14 +110,14 @@ static void Roo_EditRoomsInternal (void);
 
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms);
+static void Roo_PutParRooCod (void *RooCod);
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
                                      HTM_SubmitOnChange_t SubmitOnChange);
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
                                  HTM_SubmitOnChange_t SubmitOnChange);
-static void Roo_PutParamRooCod (void *RooCod);
-static int Roo_GetParamFloor (void);
-static Roo_RoomType_t Roo_GetParamType (void);
+static int Roo_GetParFloor (void);
+static Roo_RoomType_t Roo_GetParType (void);
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName);
 
@@ -167,7 +167,7 @@ void Roo_SeeRooms (void)
    Roo_ResetRooms (&Rooms);
 
    /***** Get parameter with the type of order in the list of rooms *****/
-   Rooms.SelectedOrder = Roo_GetParamRoomOrder ();
+   Rooms.SelectedOrder = Roo_GetParRoomOrder ();
 
    /***** Get list of rooms *****/
    Roo_GetListRooms (&Rooms,Roo_ALL_DATA);
@@ -372,7 +372,7 @@ void Roo_ChangeMAC (void)
 /*********** Get parameter with the type or order in list of rooms ***********/
 /*****************************************************************************/
 
-static Roo_Order_t Roo_GetParamRoomOrder (void)
+static Roo_Order_t Roo_GetParRoomOrder (void)
   {
    return (Roo_Order_t) Par_GetParUnsignedLong ("Order",
 						  0,
@@ -686,7 +686,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Put icon to remove room */
 	    HTM_TD_Begin ("class=\"BT\"");
 	       Ico_PutContextualIconToRemove (ActRemRoo,NULL,
-					      Roo_PutParamRooCod,&Room->RooCod);
+					      Roo_PutParRooCod,&Room->RooCod);
 	    HTM_TD_End ();
 
 	    /* Room code */
@@ -774,6 +774,16 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
   }
 
 /*****************************************************************************/
+/********************* Write parameter with code of room *********************/
+/*****************************************************************************/
+
+static void Roo_PutParRooCod (void *RooCod)
+  {
+   if (RooCod)
+      Par_PutParCode (Par_RooCod,*((long *) RooCod));
+  }
+
+/*****************************************************************************/
 /********** Put selector of the building to which the room belongs ***********/
 /*****************************************************************************/
 
@@ -841,22 +851,11 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
   }
 
 /*****************************************************************************/
-/********************* Write parameter with code of room *********************/
-/*****************************************************************************/
-
-static void Roo_PutParamRooCod (void *RooCod)
-  {
-   if (RooCod)
-      Par_PutParCode (Par_RooCod,*((long *) RooCod));
-  }
-
-/*****************************************************************************/
 /************************** Get parameter with floor *************************/
 /*****************************************************************************/
 
-static int Roo_GetParamFloor (void)
+static int Roo_GetParFloor (void)
   {
-   /***** Get floor *****/
    return (int) Par_GetParLong ("Floor");
   }
 
@@ -864,7 +863,7 @@ static int Roo_GetParamFloor (void)
 /************************** Get parameter with type **************************/
 /*****************************************************************************/
 
-static Roo_RoomType_t Roo_GetParamType (void)
+static Roo_RoomType_t Roo_GetParType (void)
   {
    long TypeLong;
 
@@ -971,7 +970,7 @@ void Roo_ChangeFloor (void)
    Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
 
    /* Get room floor */
-   NewFloor = Roo_GetParamFloor ();
+   NewFloor = Roo_GetParFloor ();
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1017,7 +1016,7 @@ void Roo_ChangeType (void)
    Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
 
    /* Get room type */
-   NewType = Roo_GetParamType ();
+   NewType = Roo_GetParType ();
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1081,23 +1080,23 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_The_room_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentClaName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentClaName = NULL;	// Initialized to avoid warning
    char NewClaName[Roo_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Roo_MAX_BYTES_SHRT_NAME;
          CurrentClaName = Roo_EditingRoom->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Roo_MAX_BYTES_FULL_NAME;
          CurrentClaName = Roo_EditingRoom->FullName;
          break;
@@ -1108,7 +1107,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
    Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
 
    /* Get the new name for the room */
-   Par_GetParText (ParamName,NewClaName,MaxBytes);
+   Par_GetParText (ParName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the room *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1123,14 +1122,14 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If room was in database... *****/
          if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Ctr.CtrCod,
                                            Roo_EditingRoom->RooCod,
-                                           ParamName,NewClaName))
+                                           ParName,NewClaName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_room_X_already_exists,
                              NewClaName);
          else
            {
             /* Update the table changing old name by new name */
-            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,FieldName,NewClaName);
+            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,FldName,NewClaName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1370,8 +1369,8 @@ void Roo_ReceiveFormNewRoom (void)
    /***** Get parameters from form *****/
    /* Get room building, floor and type */
    Roo_EditingRoom->BldCod = Par_GetAndCheckParCode (Par_BldCod);
-   Roo_EditingRoom->Floor  = Roo_GetParamFloor ();
-   Roo_EditingRoom->Type   = Roo_GetParamType ();
+   Roo_EditingRoom->Floor  = Roo_GetParFloor ();
+   Roo_EditingRoom->Type   = Roo_GetParType ();
 
    /* Get room short name and full name */
    Par_GetParText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);

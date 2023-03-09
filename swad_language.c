@@ -76,7 +76,7 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 
 static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args);
 
-static void Lan_PutParamLanguage (void *Language);
+static void Lan_PutParLanguage (void *Language);
 
 /*****************************************************************************/
 /*************** Put link to change language (edit settings) *****************/
@@ -156,11 +156,11 @@ void Lan_AskChangeLanguage (void)
    Lan_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
-   Gbl.Prefs.Language = Lan_GetParamLanguage ();	// Change temporarily language to set form action
+   Gbl.Prefs.Language = Lan_GetParLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
    Ale_ShowAlertAndButton (ActChgLan,NULL,NULL,
-                           Lan_PutParamLanguage,&Gbl.Prefs.Language,
+                           Lan_PutParLanguage,&Gbl.Prefs.Language,
                            Btn_CONFIRM_BUTTON,
                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language],
                            Ale_QUESTION,Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
@@ -176,7 +176,7 @@ void Lan_AskChangeLanguage (void)
 /******************************* Change language *****************************/
 /*****************************************************************************/
 
-static void Lan_PutParamLanguage (void *Language)
+static void Lan_PutParLanguage (void *Language)
   {
    if (Language)
       Par_PutParUnsigned (NULL,"Lan",(unsigned) *((Lan_Language_t *) Language));
@@ -189,7 +189,7 @@ static void Lan_PutParamLanguage (void *Language)
 void Lan_ChangeLanguage (void)
   {
    /***** Get param language *****/
-   Gbl.Prefs.Language = Lan_GetParamLanguage ();
+   Gbl.Prefs.Language = Lan_GetParLanguage ();
 
    /***** Store language in database *****/
    if (Gbl.Usrs.Me.Logged &&
@@ -217,15 +217,15 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
 /*************************** Get parameter language **************************/
 /*****************************************************************************/
 
-Lan_Language_t Lan_GetParamLanguage (void)
+Lan_Language_t Lan_GetParLanguage (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
 
    return (Lan_Language_t)
 	  Par_GetParUnsignedLong ("Lan",
-                                    1,
-                                    Lan_NUM_LANGUAGES,
-                                    (unsigned long) Txt_Current_CGI_SWAD_Language);
+                                  1,
+                                  Lan_NUM_LANGUAGES,
+                                  (unsigned long) Txt_Current_CGI_SWAD_Language);
   }
 
 /*****************************************************************************/

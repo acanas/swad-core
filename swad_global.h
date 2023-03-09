@@ -75,7 +75,7 @@ struct Globals
       bool HasBeenDisconnected;
       char Id[Cns_BYTES_SESSION_ID + 1];
       long UsrCod;
-      bool ParamsInsertedIntoDB;	// If parameters are inserted in the database in this session
+      bool ParsInsertedIntoDB;	// If parameters are inserted in the database in this session
      } Session;
    struct
      {

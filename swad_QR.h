@@ -24,18 +24,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_parameter.h"
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void QR_PutLinkToPrintQRCode (Act_Action_t Action,
-                              void (*FuncParams) (void *Args),void *Args);
-void QR_PutParamQRString (void *QRString);
+                              void (*FuncPars) (void *Args),void *Args);
+void QR_PutParQRString (void *QRString);
 
 void QR_PrintQRCode (void);
 void QR_PrintUsrQRCode (void);
 void QR_ImageQRCode (const char *QRString);
 
-void QR_LinkTo (unsigned Size,const char *ParamName,long Cod);
+void QR_LinkTo (unsigned Size,Par_Code_t ParCode,long Cod);
 void QR_ExamAnnnouncement (void);
 
 #endif

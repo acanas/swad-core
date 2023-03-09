@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams);
+static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams);
 
 static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams);
 static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
@@ -82,7 +82,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			         bool HighLight);
 static void Cfe_PutIconsCallForExam (void *CallsForExams);
 
-static void Cfe_PutParamExaCodToEdit (void *ExaCod);
+static void Cfe_PutParExaCod (void *ExaCod);
 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr);
@@ -146,7 +146,7 @@ void Cfe_PutFrmEditACallForExam (void)
    Cfe_AllocMemCallForExam (&CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Cfe_GetParamsCallsForExams (&CallsForExams);
+   ExaCod = Cfe_GetParsCallsForExams (&CallsForExams);
 
    if (ExaCod > 0)	// -1 indicates that this is a new call for exam
       /***** Read call for exam from the database *****/
@@ -164,7 +164,7 @@ void Cfe_PutFrmEditACallForExam (void)
 /****************** Get parameters of a call for exam ************************/
 /*****************************************************************************/
 
-static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
+static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
   {
    long ExaCod;
 
@@ -181,9 +181,9 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    /***** Get the year *****/
    CallsForExams->CallForExam.Year = (unsigned)
    Par_GetParUnsignedLong ("Year",
-			     0,	// N.A.
-			     Deg_MAX_YEARS_PER_DEGREE,
-			     (unsigned long) Gbl.Hierarchy.Crs.Year);
+			   0,	// N.A.
+			   Deg_MAX_YEARS_PER_DEGREE,
+			   (unsigned long) Gbl.Hierarchy.Crs.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
@@ -204,15 +204,15 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 
    /***** Get the hour of the exam *****/
    CallsForExams->CallForExam.StartTime.Hour   = (unsigned) Par_GetParUnsignedLong ("ExamHour",
-                                                                                      0,23,0);
+                                                                                    0,23,0);
    CallsForExams->CallForExam.StartTime.Minute = (unsigned) Par_GetParUnsignedLong ("ExamMinute",
-                                                                                      0,59,0);
+                                                                                    0,59,0);
 
    /***** Get the duration of the exam *****/
    CallsForExams->CallForExam.Duration.Hour    = (unsigned) Par_GetParUnsignedLong ("DurationHour",
-                                                                                       0,23,0);
+                                                                                    0,23,0);
    CallsForExams->CallForExam.Duration.Minute  = (unsigned) Par_GetParUnsignedLong ("DurationMinute",
-                                                                                      0,59,0);
+                                                                                    0,59,0);
 
    /***** Get the place where the exam will happen, the modality of exam,
           the structure of exam, the mandatory documentation, the mandatory material,
@@ -321,7 +321,7 @@ void Cfe_ReceiveCallForExam1 (void)
    Cfe_AllocMemCallForExam (CallsForExams);
 
    /***** Get parameters of the call for exam *****/
-   ExaCod = Cfe_GetParamsCallsForExams (CallsForExams);
+   ExaCod = Cfe_GetParsCallsForExams (CallsForExams);
    NewCallForExam = (ExaCod < 0);
 
    /***** Add the call for exam to the database and read it again from the database *****/
@@ -421,7 +421,7 @@ void Cfe_ReqRemoveCallForExam (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemCfe,NULL,NULL,
-                            Cfe_PutParamExaCodToEdit,&CallsForExams.ExaCod,
+                            Cfe_PutParExaCod,&CallsForExams.ExaCod,
 			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemCfe));
   }
 
@@ -1489,7 +1489,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 	{
 	 /***** Icon to remove call for exam *****/
 	 Ico_PutContextualIconToRemove (ActReqRemCfe,NULL,
-					Cfe_PutParamExaCodToEdit,
+					Cfe_PutParExaCod,
 					&((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
 	 /***** Icon to hide/unhide call for exam *****/
@@ -1498,7 +1498,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 	    case Cfe_VISIBLE_CALL_FOR_EXAM:
 	    case Cfe_HIDDEN_CALL_FOR_EXAM:
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
-					          Cfe_PutParamExaCodToEdit,
+					          Cfe_PutParExaCod,
 					          &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod,
 					          ((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status == Cfe_HIDDEN_CALL_FOR_EXAM);
 	       break;
@@ -1508,19 +1508,19 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 
 	 /***** Icon to edit call for exam *****/
 	 Ico_PutContextualIconToEdit (ActEdiCfe,NULL,
-				      Cfe_PutParamExaCodToEdit,
+				      Cfe_PutParExaCod,
 				      &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 	}
 
       /***** Link to print view *****/
       Ico_PutContextualIconToPrint (ActPrnCfe,
-				    Cfe_PutParamExaCodToEdit,
+				    Cfe_PutParExaCod,
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
       if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
-					 Cfe_PutParamExaCodToEdit,
+					 Cfe_PutParExaCod,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
      }
   }
@@ -1544,7 +1544,7 @@ bool Cfe_CheckIfICanEditCallsForExams (void)
 /***************** Param with the code of a call for exam ********************/
 /*****************************************************************************/
 
-static void Cfe_PutParamExaCodToEdit (void *ExaCod)
+static void Cfe_PutParExaCod (void *ExaCod)
   {
    if (ExaCod)
       Par_PutParCode (Par_ExaCod,*((long *) ExaCod));

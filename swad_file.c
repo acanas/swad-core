@@ -238,58 +238,58 @@ Content-Type: image/pjpeg
 000020  03030304 03030405 08050504 04050A07  ················
 etc, etc.
 */
-struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
-                                        char *FileName,char *MIMEType)
+struct Par_Param *Fil_StartReceptionOfFile (const char *ParFile,
+                                            char *FileName,char *MIMEType)
   {
-   struct Param *Param;
+   struct Par_Param *Par;
    FILE *QueryFile = Fil_GetQueryFile ();
 
    /***** Set default values *****/
    FileName[0] = 0;
 
    /***** Get parameter *****/
-   Par_GetParameter (Par_PARAM_SINGLE,ParamFile,NULL,Fil_MAX_FILE_SIZE,&Param);
+   Par_GetPar (Par_PARAM_SINGLE,ParFile,NULL,Fil_MAX_FILE_SIZE,&Par);
 
    /***** Get filename *****/
    /* Check if filename exists */
-   if (Param->FileName.Start == 0 ||
-       Param->FileName.Length == 0)
+   if (Par->FileName.Start == 0 ||
+       Par->FileName.Length == 0)
      {
       FileName[0] = MIMEType[0] = '\0';
-      return Param;
+      return Par;
      }
-   if (Param->FileName.Length > PATH_MAX)
+   if (Par->FileName.Length > PATH_MAX)
       Err_ShowErrorAndExit ("Error while getting filename.");
 
    /* Copy filename */
-   fseek (QueryFile,Param->FileName.Start,SEEK_SET);
-   if (fread (FileName,sizeof (char),Param->FileName.Length,QueryFile) !=
-       Param->FileName.Length)
+   fseek (QueryFile,Par->FileName.Start,SEEK_SET);
+   if (fread (FileName,sizeof (char),Par->FileName.Length,QueryFile) !=
+       Par->FileName.Length)
       Err_ShowErrorAndExit ("Error while getting filename.");
-   FileName[Param->FileName.Length] = '\0';
+   FileName[Par->FileName.Length] = '\0';
 
    /***** Get MIME type *****/
    /* Check if MIME type exists */
-   if (Param->ContentType.Start == 0 ||
-       Param->ContentType.Length == 0 ||
-       Param->ContentType.Length > Brw_MAX_BYTES_MIME_TYPE)
+   if (Par->ContentType.Start == 0 ||
+       Par->ContentType.Length == 0 ||
+       Par->ContentType.Length > Brw_MAX_BYTES_MIME_TYPE)
       Err_ShowErrorAndExit ("Error while getting content type.");
 
    /* Copy MIME type */
-   fseek (QueryFile,Param->ContentType.Start,SEEK_SET);
-   if (fread (MIMEType,sizeof (char),Param->ContentType.Length,QueryFile) !=
-       Param->ContentType.Length)
+   fseek (QueryFile,Par->ContentType.Start,SEEK_SET);
+   if (fread (MIMEType,sizeof (char),Par->ContentType.Length,QueryFile) !=
+       Par->ContentType.Length)
       Err_ShowErrorAndExit ("Error while getting content type.");
-   MIMEType[Param->ContentType.Length] = '\0';
+   MIMEType[Par->ContentType.Length] = '\0';
 
-   return Param;
+   return Par;
   }
 
 /*****************************************************************************/
 /****************** End the reception of data of a file **********************/
 /*****************************************************************************/
 
-bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
+bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Par_Param *Param)
   {
    FILE *FileDataTmp;
    unsigned char Bytes[Fil_NUM_BYTES_PER_CHUNK];

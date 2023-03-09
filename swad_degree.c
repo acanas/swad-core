@@ -102,10 +102,11 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status);
 static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
-static void Deg_PutParamGoToDeg (void *DegCod);
 
 static void Deg_EditingDegreeConstructor (void);
 static void Deg_EditingDegreeDestructor (void);
+
+static void Deg_PutParDegCod (void *DegCod);
 
 /*****************************************************************************/
 /******************* List degrees with pending courses ***********************/
@@ -193,7 +194,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Deg_PutParamDegCod (Deg->DegCod);
+      Par_PutParCode (Par_DegCod,Deg->DegCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
@@ -351,7 +352,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDeg,NULL,
-						 Hie_PutParamOtherHieCod,&Deg->DegCod);
+						 Hie_PutParOtherHieCod,&Deg->DegCod);
 	    HTM_TD_End ();
 
 	    /* Degree code */
@@ -369,7 +370,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
-		     Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -385,7 +386,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
-		     Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -401,7 +402,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		     Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -432,7 +433,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		     Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -1168,15 +1169,6 @@ void Deg_RemoveDegree (void)
   }
 
 /*****************************************************************************/
-/******************** Write parameter with code of degree ********************/
-/*****************************************************************************/
-
-void Deg_PutParamDegCod (long DegCod)
-  {
-   Par_PutParLong (NULL,"deg",DegCod);
-  }
-
-/*****************************************************************************/
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
 // Returns true if degree found
@@ -1335,23 +1327,23 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentDegName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentDegName = NULL;	// Initialized to avoid warning
    char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
          CurrentDegName = Deg->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
          CurrentDegName = Deg->FullName;
          break;
@@ -1359,7 +1351,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Par_GetParText (ParamName,NewDegName,MaxBytes);
+   Par_GetParText (ParName,NewDegName,MaxBytes);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg);
@@ -1372,14 +1364,14 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
       if (strcmp (CurrentDegName,NewDegName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (ParamName,NewDegName,Deg->DegCod,Deg->CtrCod))
+         if (Deg_DB_CheckIfDegNameExistsInCtr (ParName,NewDegName,Deg->DegCod,Deg->CtrCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_degree_X_already_exists,
 		             NewDegName);
          else
            {
             /* Update the table changing old name by new name */
-            Deg_DB_UpdateDegNameDB (Deg->DegCod,FieldName,NewDegName);
+            Deg_DB_UpdateDegNameDB (Deg->DegCod,FldName,NewDegName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1487,7 +1479,7 @@ void Deg_ChangeDegStatus (void)
    Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
 
    /* Get parameter with status */
-   Status = Hie_GetParamStatus ();	// New status
+   Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1532,7 +1524,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
      {
       /***** Alert with button to go to degree *****/
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
-                                  Deg_PutParamGoToDeg,&Deg_EditingDeg->DegCod,
+                                  Deg_PutParDegCod,&Deg_EditingDeg->DegCod,
                                   Btn_CONFIRM_BUTTON,
 				  Str_BuildGoToTitle (Deg_EditingDeg->ShrtName));
       Str_FreeGoToTitle ();
@@ -1540,12 +1532,6 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
-  }
-
-static void Deg_PutParamGoToDeg (void *DegCod)
-  {
-   if (DegCod)
-      Deg_PutParamDegCod (*((long *) DegCod));
   }
 
 /*****************************************************************************/
@@ -1996,4 +1982,14 @@ bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
    Gbl.Cache.UsrBelongsToDeg.DegCod = DegCod;
    Gbl.Cache.UsrBelongsToDeg.Belongs = Deg_DB_CheckIfUsrBelongsToDeg (UsrCod,DegCod);
    return Gbl.Cache.UsrBelongsToDeg.Belongs;
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with code of degree ********************/
+/*****************************************************************************/
+
+static void Deg_PutParDegCod (void *DegCod)
+  {
+   if (DegCod)
+      Par_PutParCode (Par_DegCod,*((long *) DegCod));
   }

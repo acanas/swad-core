@@ -54,7 +54,7 @@ static bool Frm_Inside = false;
 
 static inline void Frm_SetInside (bool Inside);
 
-static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
@@ -105,11 +105,11 @@ void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)
    Frm_BeginFormInternal (NextAction,true,Id,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
-static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
+static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
+   char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
 
    if (!Frm_CheckIfInside ())
      {
@@ -146,8 +146,8 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       HTM_Txt (" accept-charset=\"windows-1252\">");
 
       /* Put basic form parameters */
-      Frm_SetParamsForm (ParamsStr,NextAction,PutParameterLocationIfNoSesion);
-      HTM_Txt (ParamsStr);
+      Frm_SetParsForm (ParsStr,NextAction,PutParLocationIfNoSesion);
+      HTM_Txt (ParsStr);
 
       Frm_SetInside (true);
      }
@@ -172,28 +172,28 @@ void Frm_BeginFormNoAction (void)
      }
   }
 
-void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
-                        bool PutParameterLocationIfNoSession)
+void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
+                      bool PutParLocationIfNoSession)
   {
-   char ParamAction[Frm_MAX_BYTES_PARAM_ACTION + 1];
-   char ParamSession[Frm_MAX_BYTES_PARAM_SESSION + 1];
-   char ParamLocation[Frm_MAX_BYTES_PARAM_LOCATION + 1];
+   char ParAction[Frm_MAX_BYTES_PARAM_ACTION + 1];
+   char ParSession[Frm_MAX_BYTES_PARAM_SESSION + 1];
+   char ParLocation[Frm_MAX_BYTES_PARAM_LOCATION + 1];
 
-   ParamAction[0] = '\0';
-   ParamSession[0] = '\0';
-   ParamLocation[0] = '\0';
+   ParAction[0] = '\0';
+   ParSession[0] = '\0';
+   ParLocation[0] = '\0';
 
    if (NextAction != ActUnk)
      {
-      snprintf (ParamAction,sizeof (ParamAction),
+      snprintf (ParAction,sizeof (ParAction),
 	        "<input type=\"hidden\" name=\"act\" value=\"%ld\" />",
 	        Act_GetActCod (NextAction));
 
       if (Gbl.Session.Id[0])
-	 snprintf (ParamSession,sizeof (ParamSession),
+	 snprintf (ParSession,sizeof (ParSession),
 		   "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
 		   Gbl.Session.Id);
-      else if (PutParameterLocationIfNoSession)
+      else if (PutParLocationIfNoSession)
 	 // Extra parameters necessary when there's no open session
 	{
 	 /* If session is open, course code will be get from session data,
@@ -202,27 +202,27 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	 switch (Gbl.Hierarchy.Level)
 	   {
 	    case HieLvl_CTY:	// Country
-	       snprintf (ParamLocation,sizeof (ParamLocation),
+	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Cty.CtyCod);
 	       break;
 	    case HieLvl_INS:	// Institution
-	       snprintf (ParamLocation,sizeof (ParamLocation),
+	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ins.InsCod);
 	       break;
 	    case HieLvl_CTR:	// Center
-	       snprintf (ParamLocation,sizeof (ParamLocation),
+	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ctr.CtrCod);
 	       break;
 	    case HieLvl_DEG:	// Degree
-	       snprintf (ParamLocation,sizeof (ParamLocation),
+	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Deg.DegCod);
 	       break;
 	    case HieLvl_CRS:	// Course
-	       snprintf (ParamLocation,sizeof (ParamLocation),
+	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Crs.CrsCod);
 	       break;
@@ -232,8 +232,8 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	}
      }
 
-   snprintf (ParamsStr,Frm_MAX_BYTES_PARAMS_STR + 1,"%s%s%s",
-	     ParamAction,ParamSession,ParamLocation);
+   snprintf (ParsStr,Frm_MAX_BYTES_PARAMS_STR + 1,"%s%s%s",
+	     ParAction,ParSession,ParLocation);
   }
 
 void Frm_EndForm (void)

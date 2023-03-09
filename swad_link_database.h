@@ -36,12 +36,12 @@
 /*****************************************************************************/
 
 void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk);
-void Lnk_DB_UpdateLnkName (long LnkCod,const char *FieldName,const char *NewLnkName);
+void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName);
 void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
 unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod);
-bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
+bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long LnkCod);
 
 void Lnk_DB_RemoveLink (long LnkCod);
 

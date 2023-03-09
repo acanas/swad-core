@@ -68,10 +68,10 @@ static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
 static void Set_GetMyUsrListTypeFromDB (void);
 
-static void Set_GetParamColsClassPhotoFromForm (void);
+static void Set_GetParColsClassPhotoFromForm (void);
 
 static void Set_GetAndUpdatePrefAboutListWithPhotos (void);
-static bool Set_GetParamListWithPhotosFromForm (void);
+static bool Set_GetParListWithPhotosFromForm (void);
 
 /*****************************************************************************/
 /***************************** Edit settings ******************************/
@@ -247,7 +247,7 @@ static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args)
 void Set_ChangeSideCols (void)
   {
    /***** Get param side-columns *****/
-   Gbl.Prefs.SideCols = Set_GetParamSideCols ();
+   Gbl.Prefs.SideCols = Set_GetParSideCols ();
 
    /***** Store side colums in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -261,12 +261,12 @@ void Set_ChangeSideCols (void)
 /************** Get parameter used to show/hide side columns *****************/
 /*****************************************************************************/
 
-unsigned Set_GetParamSideCols (void)
+unsigned Set_GetParSideCols (void)
   {
    return (unsigned) Par_GetParUnsignedLong ("SideCols",
-                                               0,
-                                               Lay_SHOW_BOTH_COLUMNS,
-                                               Cfg_DEFAULT_COLUMNS);
+                                             0,
+                                             Lay_SHOW_BOTH_COLUMNS,
+                                             Cfg_DEFAULT_COLUMNS);
   }
 
 /*****************************************************************************/
@@ -290,11 +290,11 @@ unsigned Set_GetSideColsFromStr (const char *Str)
 /**************** and preference about viewing photos      *******************/
 /*****************************************************************************/
 
-void Set_PutParamsPrefsAboutUsrList (void)
+void Set_PutParsPrefsAboutUsrList (void)
   {
-   Set_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Set_PutParamColsClassPhoto ();
-   Set_PutParamListWithPhotos ();
+   Set_PutParUsrListType (Gbl.Usrs.Me.ListType);
+   Set_PutParColsClassPhoto ();
+   Set_PutParListWithPhotos ();
   }
 
 /*****************************************************************************/
@@ -337,7 +337,7 @@ static void Set_GetAndUpdateUsrListType (void)
 /************* Put a hidden parameter with the users' list type **************/
 /*****************************************************************************/
 
-void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType)
+void Set_PutParUsrListType (Set_ShowUsrsType_t ListType)
   {
    Par_PutParUnsigned (NULL,"UsrListType",(unsigned) ListType);
   }
@@ -350,9 +350,9 @@ static void Set_GetUsrListTypeFromForm (void)
   {
    Gbl.Usrs.Me.ListType = (Set_ShowUsrsType_t)
 	                  Par_GetParUnsignedLong ("UsrListType",
-                                                    0,
-                                                    Set_NUM_USR_LIST_TYPES - 1,
-                                                    (unsigned long) Set_USR_LIST_UNKNOWN);
+                                                  0,
+                                                  Set_NUM_USR_LIST_TYPES - 1,
+                                                  (unsigned long) Set_USR_LIST_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -398,7 +398,7 @@ static void Set_GetMyUsrListTypeFromDB (void)
 void Set_GetAndUpdateColsClassPhoto (void)
   {
    /***** Get the number of columns in class photo from form *****/
-   Set_GetParamColsClassPhotoFromForm ();
+   Set_GetParColsClassPhotoFromForm ();
 
    if (Gbl.Usrs.ClassPhoto.Cols)
       /* Save the number of columns into the database */
@@ -445,7 +445,7 @@ void Set_GetMyColsClassPhotoFromDB (void)
 /****** Put a hidden parameter with the number of colums in class photo ******/
 /*****************************************************************************/
 
-void Set_PutParamColsClassPhoto (void)
+void Set_PutParColsClassPhoto (void)
   {
    Par_PutParUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
   }
@@ -454,13 +454,13 @@ void Set_PutParamColsClassPhoto (void)
 /************* Get from form the number of colums in class photo *************/
 /*****************************************************************************/
 
-static void Set_GetParamColsClassPhotoFromForm (void)
+static void Set_GetParColsClassPhotoFromForm (void)
   {
    Gbl.Usrs.ClassPhoto.Cols = (unsigned)
 	                      Par_GetParUnsignedLong ("ColsClassPhoto",
-                                                        1,
-                                                        Usr_CLASS_PHOTO_COLS_MAX,
-                                                        0);
+                                                      1,
+                                                      Usr_CLASS_PHOTO_COLS_MAX,
+                                                      0);
   }
 
 /*****************************************************************************/
@@ -470,7 +470,7 @@ static void Set_GetParamColsClassPhotoFromForm (void)
 static void Set_GetAndUpdatePrefAboutListWithPhotos (void)
   {
    /***** Get my preference about photos in users' list from form *****/
-   if (Set_GetParamListWithPhotosFromForm ())
+   if (Set_GetParListWithPhotosFromForm ())
       /* Save preference about photos in users' list into the database */
       Set_DB_UpdateMyPrefAboutListWithPhotosPhoto ();
    else
@@ -483,7 +483,7 @@ static void Set_GetAndUpdatePrefAboutListWithPhotos (void)
 /** Put a hidden parameter with the preference about photos in users' list ***/
 /*****************************************************************************/
 
-void Set_PutParamListWithPhotos (void)
+void Set_PutParListWithPhotos (void)
   {
    Par_PutParChar ("WithPhotosExists",'Y');
    Par_PutParChar ("WithPhotos",
@@ -495,7 +495,7 @@ void Set_PutParamListWithPhotos (void)
 /********* Get from form the preference about photos in users' list **********/
 /*****************************************************************************/
 
-static bool Set_GetParamListWithPhotosFromForm (void)
+static bool Set_GetParListWithPhotosFromForm (void)
   {
    /***** Get if exists parameter with preference about photos in users' list *****/
    if (Par_GetParBool ("WithPhotosExists"))

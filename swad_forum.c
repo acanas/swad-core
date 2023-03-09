@@ -326,10 +326,10 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             struct Med_Media *Media);
 static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod);
 
-static void For_PutParamsForum (void *Forums);
+static void For_PutParsForum (void *Forums);
 
-static void For_PutParamForumSet (For_ForumSet_t ForumSet);
-static void For_PutParamForumLocation (long Location);
+static void For_PutParForumSet (For_ForumSet_t ForumSet);
+static void For_PutParForumLocation (long Location);
 
 static void For_PutIconsForums (__attribute__((unused)) void *Args);
 static void For_PutFormWhichForums (const struct For_Forums *Forums);
@@ -363,7 +363,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static void For_WriteNumberOfThrs (unsigned NumThrs);
 
 static void For_PutIconsThreads (void *Forums);
-static void For_PutAllHiddenParamsNewThread (void *Forums);
+static void For_PutParsNewThread (void *Forums);
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
@@ -376,7 +376,7 @@ static void For_RestrictAccess (const struct For_Forums *Forums);
 static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    bool IsReply,const char *Subject);
 
-static void For_PutAllHiddenParamsRemThread (void *Forums);
+static void For_PutParsRemThread (void *Forums);
 
 static bool For_CheckIfICanMoveThreads (void);
 static void For_InsertThrInClipboard (long ThrCod);
@@ -424,7 +424,7 @@ void For_EnablePost (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Delete post from table of disabled posts *****/
    For_DB_RemovePstFromDisabled (Forums.PstCod);
@@ -449,7 +449,7 @@ void For_DisablePost (void)
    struct For_Forums Forums;
 
    /***** Get parameters related to forums *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Check if post really exists, if it has not been removed *****/
    if (For_DB_CheckIfForumPstExists (Forums.PstCod))
@@ -826,26 +826,26 @@ static void For_PutIconsOneThread (void *Forums)
       /***** Put icon to write a new post *****/
       Ico_PutContextualIconToAdd (For_ActionsSeePstFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_POST_SECTION_ID,
-				  For_PutAllHiddenParamsNewPost,Forums);
+				  For_PutParsNewPost,Forums);
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
           PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
-					 For_PutAllHiddenParamsNewPost,Forums);
+					 For_PutParsNewPost,Forums);
      }
   }
 
-void For_PutAllHiddenParamsNewPost (void *Forums)
+void For_PutParsNewPost (void *Forums)
   {
    if (Forums)
-      For_PutAllHiddenParamsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
-				   UINT_MAX,						// Page of posts   = last
-				   ((struct For_Forums *) Forums)->ForumSet,
-				   ((struct For_Forums *) Forums)->ThreadsOrder,
-				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->Thread.Current,
-				   -1L);
+      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+			   UINT_MAX,						// Page of posts   = last
+			   ((struct For_Forums *) Forums)->ForumSet,
+			   ((struct For_Forums *) Forums)->ThreadsOrder,
+			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Thread.Current,
+			   -1L);
   }
 
 /*****************************************************************************/
@@ -944,7 +944,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	    Frm_BeginFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
-	       For_PutParamsForum (Forums);
+	       For_PutParsForum (Forums);
 	       Ico_PutIconLink (Enabled ? "eye.svg" :
 					  "eye-slash.svg",
 				Enabled ? Ico_GREEN :
@@ -975,7 +975,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	       Ico_PutContextualIconToRemove (For_ActionsDelPstFor[Forums->Forum.Type],
 					      PstNum == 1 ? For_FORUM_THREADS_SECTION_ID : 	// First and unique post in thread
 							    For_FORUM_POSTS_SECTION_ID,	// Last of several posts in thread
-					      For_PutParamsForum,Forums);
+					      For_PutParsForum,Forums);
 
       HTM_TD_End ();
 
@@ -1116,31 +1116,31 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 /************** Put all hidden parameters related to forums ******************/
 /*****************************************************************************/
 
-static void For_PutParamsForum (void *Forums)
+static void For_PutParsForum (void *Forums)
   {
    if (Forums)
-      For_PutAllHiddenParamsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
-                                   ((struct For_Forums *) Forums)->CurrentPagePsts,	// Page of posts   = current
-                                   ((struct For_Forums *) Forums)->ForumSet,
-				   ((struct For_Forums *) Forums)->ThreadsOrder,
-				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->Thread.Current,
-				   ((struct For_Forums *) Forums)->PstCod);
+      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+                           ((struct For_Forums *) Forums)->CurrentPagePsts,	// Page of posts   = current
+                           ((struct For_Forums *) Forums)->ForumSet,
+			   ((struct For_Forums *) Forums)->ThreadsOrder,
+			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Thread.Current,
+			   ((struct For_Forums *) Forums)->PstCod);
   }
 
-void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
-                                  unsigned NumPagePosts,
-                                  For_ForumSet_t ForumSet,
-                                  Dat_StartEndTime_t Order,
-                                  long Location,
-                                  long ThrCod,
-                                  long PstCod)
+void For_PutAllParsForum (unsigned NumPageThreads,
+                          unsigned NumPagePosts,
+                          For_ForumSet_t ForumSet,
+                          Dat_StartEndTime_t Order,
+                          long Location,
+                          long ThrCod,
+                          long PstCod)
   {
-   Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,NumPageThreads);
-   Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,NumPagePosts);
-   For_PutParamForumSet (ForumSet);
+   Pag_PutParPagNum (Pag_THREADS_FORUM,NumPageThreads);
+   Pag_PutParPagNum (Pag_POSTS_FORUM,NumPagePosts);
+   For_PutParForumSet (ForumSet);
    Par_PutParOrder ((unsigned) Order);
-   For_PutParamForumLocation (Location);
+   For_PutParForumLocation (Location);
    Par_PutParCode (Par_ThrCod,ThrCod);
    Par_PutParCode (Par_PstCod,PstCod);
   }
@@ -1149,7 +1149,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
 /********* Put a hidden parameter with set of forums I want to see ***********/
 /*****************************************************************************/
 
-static void For_PutParamForumSet (For_ForumSet_t ForumSet)
+static void For_PutParForumSet (For_ForumSet_t ForumSet)
   {
    Par_PutParUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
   }
@@ -1159,7 +1159,7 @@ static void For_PutParamForumSet (For_ForumSet_t ForumSet)
 /************** forum institution, center, degree and course *****************/
 /*****************************************************************************/
 
-static void For_PutParamForumLocation (long Location)
+static void For_PutParForumLocation (long Location)
   {
    if (Location > 0)
       /***** Put a hidden parameter with the
@@ -1696,13 +1696,13 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	   {
 	    Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
 				 For_FORUM_THREADS_SECTION_ID);
-	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					    1,	// Page of posts   = first
-					    Forums->ForumSet,
-					    Forums->ThreadsOrder,
-					    Forum->Location,
-					    Forums->Thread.ToMove,
-					    -1L);
+	       For_PutAllParsForum (1,	// Page of threads = first
+				    1,	// Page of posts   = first
+				    Forums->ForumSet,
+				    Forums->ThreadsOrder,
+				    Forum->Location,
+				    Forums->Thread.ToMove,
+				    -1L);
 	       Ico_PutIconPaste (For_ActionsPasThrFor[Forum->Type]);
 	    Frm_EndForm ();
 	   }
@@ -1711,13 +1711,13 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
       /***** Write link to forum *****/
       Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
 			   For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
-				      1,	// Page of posts   = first
-				      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forum->Location,
-				      -1L,
-				      -1L);
+	 For_PutAllParsForum (1,	// Page of threads = first
+			      1,	// Page of posts   = first
+			      Forums->ForumSet,
+			      Forums->ThreadsOrder,
+			      Forum->Location,
+			      -1L,
+			      -1L);
 
 	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
 				  NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
@@ -1950,7 +1950,7 @@ void For_ShowForumTheads (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forums *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -2047,13 +2047,13 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
 			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
-			   For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-							1,				// Page of posts   = first
-							Forums->ForumSet,
-							Order,
-							Forums->Forum.Location,
-							-1L,
-							-1L);
+			   For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+					        1,				// Page of posts   = first
+					        Forums->ForumSet,
+					        Order,
+				                Forums->Forum.Location,
+					        -1L,
+					        -1L);
 			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
 			                            "class=\"BT_LINK\"");
 			      if (Order == Forums->ThreadsOrder)
@@ -2107,26 +2107,26 @@ static void For_PutIconsThreads (void *Forums)
       /***** Put icon to write a new thread *****/
       Ico_PutContextualIconToAdd (For_ActionsSeeFor[((struct For_Forums *) Forums)->Forum.Type],
 				  For_NEW_THREAD_SECTION_ID,
-				  For_PutAllHiddenParamsNewThread,Forums);
+				  For_PutParsNewThread,Forums);
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
           PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
-					 For_PutAllHiddenParamsNewPost,Forums);
+					 For_PutParsNewPost,Forums);
      }
   }
 
-static void For_PutAllHiddenParamsNewThread (void *Forums)
+static void For_PutParsNewThread (void *Forums)
   {
    if (Forums)
-      For_PutAllHiddenParamsForum (1,	// Page of threads = first
-				   1,	// Page of posts = first
-				   ((struct For_Forums *)Forums)->ForumSet,
-				   ((struct For_Forums *)Forums)->ThreadsOrder,
-				   ((struct For_Forums *)Forums)->Forum.Location,
-				   -1L,
-				   -1L);
+      For_PutAllParsForum (1,	// Page of threads = first
+			   1,	// Page of posts = first
+			   ((struct For_Forums *)Forums)->ForumSet,
+			   ((struct For_Forums *)Forums)->ThreadsOrder,
+			   ((struct For_Forums *)Forums)->Forum.Location,
+			   -1L,
+			   -1L);
   }
 
 /*****************************************************************************/
@@ -2213,7 +2213,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	      {
 	       HTM_BR ();
 	       Ico_PutContextualIconToRemove (For_ActionsReqDelThr[Forums->Forum.Type],For_REMOVE_THREAD_SECTION_ID,
-					      For_PutParamsForum,Forums);
+					      For_PutParsForum,Forums);
 	      }
 
 	    /***** Put button to cut the thread for moving it to another forum *****/
@@ -2222,13 +2222,13 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       HTM_BR ();
 	       Frm_BeginFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
 				    For_FORUM_THREADS_SECTION_ID);
-		  For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-					       1,			// Page of posts   = first
-					       Forums->ForumSet,
-					       Forums->ThreadsOrder,
-					       Forums->Forum.Location,
-					       Thr.ThrCod,
-					       -1L);
+		  For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+				       1,			// Page of posts   = first
+				       Forums->ForumSet,
+				       Forums->ThreadsOrder,
+				       Forums->Forum.Location,
+				       Thr.ThrCod,
+				       -1L);
 		  Ico_PutIconCut (For_ActionsCutThrFor[Forums->Forum.Type]);
 	       Frm_EndForm ();
 	      }
@@ -2399,7 +2399,7 @@ void For_ShowThreadPosts (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forums *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -2415,7 +2415,7 @@ void For_ShowThreadPosts (void)
 /********************* Get parameters related to a forum *********************/
 /*****************************************************************************/
 
-void For_GetParamsForums (struct For_Forums *Forums)
+void For_GetParsForums (struct For_Forums *Forums)
   {
    /***** Set forum type *****/
    For_SetForumType (Forums);
@@ -2448,20 +2448,20 @@ void For_GetParamsForums (struct For_Forums *Forums)
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)
 		      Par_GetParUnsignedLong ("ForumSet",
-					        0,
-					        For_NUM_FORUM_SETS - 1,
-					        (unsigned long) For_DEFAULT_FORUM_SET);
+					      0,
+					      For_NUM_FORUM_SETS - 1,
+					      (unsigned long) For_DEFAULT_FORUM_SET);
 
    /***** Get order type *****/
    Forums->ThreadsOrder = (Dat_StartEndTime_t)
 			  Par_GetParUnsignedLong ("Order",
-						    0,
-						    Dat_NUM_START_END_TIME - 1,
-						    (unsigned long) For_DEFAULT_ORDER);
+						  0,
+						  Dat_NUM_START_END_TIME - 1,
+						  (unsigned long) For_DEFAULT_ORDER);
 
    /***** Get optional page numbers for threads and posts *****/
-   Forums->CurrentPageThrs = Pag_GetParamPagNum (Pag_THREADS_FORUM);
-   Forums->CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
+   Forums->CurrentPageThrs = Pag_GetParPagNum (Pag_THREADS_FORUM);
+   Forums->CurrentPagePsts = Pag_GetParPagNum (Pag_POSTS_FORUM);
 
    /***** Restrict access to forum *****/
    For_RestrictAccess (Forums);
@@ -2691,13 +2691,13 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
      {
       Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
-	 For_PutAllHiddenParamsNewPost (Forums);
+	 For_PutParsNewPost (Forums);
      }
    else		// Form to write the first post of a new thread
      {
       Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
-	 For_PutAllHiddenParamsNewThread (Forums);
+	 For_PutParsNewThread (Forums);
      }
 
       /***** Subject and content *****/
@@ -2780,7 +2780,7 @@ void For_ReceiveForumPost (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Get the code of the thread y the número of page *****/
    if (Gbl.Action.Act == ActRcvRepForCrsUsr || Gbl.Action.Act == ActRcvRepForCrsTch ||
@@ -2898,7 +2898,7 @@ void For_RemovePost (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Media);
@@ -2973,7 +2973,7 @@ void For_RequestRemoveThread (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Get subject of the thread to delete *****/
    For_DB_GetThrSubject (Forums.Thread.Current,Subject);
@@ -2986,14 +2986,14 @@ void For_RequestRemoveThread (void)
       if (Subject[0])
 	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 				 For_FORUM_THREADS_SECTION_ID,NULL,
-				 For_PutAllHiddenParamsRemThread,&Forums,
+				 For_PutParsRemThread,&Forums,
 				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
 				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
 				 Subject);
       else
 	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 				 For_FORUM_THREADS_SECTION_ID,NULL,
-				 For_PutAllHiddenParamsRemThread,&Forums,
+				 For_PutParsRemThread,&Forums,
 				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
 				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();
@@ -3002,16 +3002,16 @@ void For_RequestRemoveThread (void)
    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,NULL);
   }
 
-static void For_PutAllHiddenParamsRemThread (void *Forums)
+static void For_PutParsRemThread (void *Forums)
   {
    if (Forums)
-      For_PutAllHiddenParamsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
-				   1,				// Page of posts   = first
-				   ((struct For_Forums *) Forums)->ForumSet,
-				   ((struct For_Forums *) Forums)->ThreadsOrder,
-				   ((struct For_Forums *) Forums)->Forum.Location,
-				   ((struct For_Forums *) Forums)->Thread.Current,
-				   -1L);
+      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+			   1,				// Page of posts   = first
+			   ((struct For_Forums *) Forums)->ForumSet,
+			   ((struct For_Forums *) Forums)->ThreadsOrder,
+			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Thread.Current,
+			   -1L);
   }
 
 /*****************************************************************************/
@@ -3030,7 +3030,7 @@ void For_RemoveThread (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    if (PermissionThreadDeletion[Forums.Forum.Type] &
        (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
@@ -3074,7 +3074,7 @@ void For_CutThread (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Get subject of thread to cut *****/
    For_DB_GetThrSubject (Forums.Thread.Current,Subject);
@@ -3115,7 +3115,7 @@ void For_PasteThread (void)
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forum *****/
-   For_GetParamsForums (&Forums);
+   For_GetParsForums (&Forums);
 
    /***** Get subject of thread to paste *****/
    For_DB_GetThrSubject (Forums.Thread.Current,Subject);
@@ -3311,7 +3311,7 @@ static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
       const char *Icon;
       const char **ForumName1;
       const char **ForumName2;
-     } Params[For_NUM_TYPES_FORUM] =
+     } Pars[For_NUM_TYPES_FORUM] =
      {
       [For_FORUM_COURSE_USRS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&EmptyName        },
       [For_FORUM_COURSE_TCHS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&Txt_only_teachers},
@@ -3327,11 +3327,11 @@ static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
       [For_FORUM__SWAD__TCHS] = {"swad64x64.png"         ,&PlatformShortName,&Txt_only_teachers},
      };
 
-   if (Params[ForumType].Icon)
+   if (Pars[ForumType].Icon)
       For_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-				    Params[ForumType].Icon,FiguresForum,
-				   *Params[ForumType].ForumName1,
-				   *Params[ForumType].ForumName2);
+				    Pars[ForumType].Icon,FiguresForum,
+				   *Pars[ForumType].ForumName1,
+				   *Pars[ForumType].ForumName2);
   }
 
 /*****************************************************************************/

@@ -88,7 +88,7 @@ static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
-static void Ban_PutParamBanCodToEdit (void *BanCod);
+static void Ban_PutParBanCod (void *BanCod);
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
@@ -425,14 +425,14 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Icon to remove banner */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActRemBan,NULL,
-					      Ban_PutParamBanCodToEdit,
+					      Ban_PutParBanCod,
 					      &Banners->BanCodToEdit);
 	    HTM_TD_End ();
 
 	    /* Icon to hide/unhide banner */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-						  Ban_PutParamBanCodToEdit,
+						  Ban_PutParBanCod,
 						  &Banners->BanCodToEdit,
 						  Ban->Hidden);
 	    HTM_TD_End ();
@@ -450,7 +450,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanSho);
-		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -461,7 +461,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanFul);
-		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -472,7 +472,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanImg);
-		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
@@ -483,7 +483,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanWWW);
-		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
@@ -505,7 +505,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 /******************* Write parameter with code of banner *********************/
 /*****************************************************************************/
 
-static void Ban_PutParamBanCodToEdit (void *BanCod)
+static void Ban_PutParBanCod (void *BanCod)
   {
    if (BanCod)
       Par_PutParCode (Par_BanCod,*((long *) BanCod));
@@ -625,23 +625,23 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParamName = NULL;	// Initialized to avoid warning
-   const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentBanName = NULL;		// Initialized to avoid warning
+   const char *ParName = NULL;	// Initialized to avoid warning
+   const char *FldName = NULL;	// Initialized to avoid warning
+   unsigned MaxBytes = 0;	// Initialized to avoid warning
+   char *CurrentBanName = NULL;	// Initialized to avoid warning
    char NewBanName[Ban_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
-         ParamName = "ShortName";
-         FieldName = "ShortName";
+         ParName = "ShortName";
+         FldName = "ShortName";
          MaxBytes = Ban_MAX_BYTES_SHRT_NAME;
          CurrentBanName = Ban->ShrtName;
          break;
       case Cns_FULL_NAME:
-         ParamName = "FullName";
-         FieldName = "FullName";
+         ParName = "FullName";
+         FldName = "FullName";
          MaxBytes = Ban_MAX_BYTES_FULL_NAME;
          CurrentBanName = Ban->FullName;
          break;
@@ -652,7 +652,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
 
    /* Get the new name for the banner */
-   Par_GetParText (ParamName,NewBanName,MaxBytes);
+   Par_GetParText (ParName,NewBanName,MaxBytes);
 
    /***** Get banner data from the database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -667,14 +667,14 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       if (strcmp (CurrentBanName,NewBanName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_DB_CheckIfBannerNameExists (ParamName,NewBanName,Ban->BanCod))
+         if (Ban_DB_CheckIfBannerNameExists (ParName,NewBanName,Ban->BanCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_banner_X_already_exists,
                              NewBanName);
          else
            {
             /* Update the table changing old name by new name */
-            Ban_DB_UpdateBanName (Ban->BanCod,FieldName,NewBanName);
+            Ban_DB_UpdateBanName (Ban->BanCod,FldName,NewBanName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,

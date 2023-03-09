@@ -245,11 +245,11 @@ static int API_GenerateNewAPIKey (struct soap *soap,
                                   char APIKey[API_BYTES_KEY + 1]);
 static bool API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,long CrsCod);
 
-static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
-                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
-                                      char *NewEmail,			// Input-output
-                                      char *NewPlainPassword,		// Input
-                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);	// Output
+static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
+                                    char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
+                                    char *NewEmail,			// Input-output
+                                    char *NewPlainPassword,		// Input
+                                    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);	// Output
 
 static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
                                             struct Syl_Syllabus *Syllabus,
@@ -619,7 +619,7 @@ int swad__createAccount (struct soap *soap,
       return ReturnCode;
 
    /***** Check parameters used to create the new account *****/
-   Result = API_CheckParamsNewAccount (userNickname,		// Input
+   Result = API_CheckParsNewAccount (userNickname,		// Input
                                        NewNickWithoutArr,	// Output
                                        userEmail,		// Input-output
                                        userPassword,		// Input
@@ -670,11 +670,11 @@ int swad__createAccount (struct soap *soap,
 /*****************************************************************************/
 // Return false on error
 //char *userNickname,char *userEmail,char *userID,char *userPassword
-static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
-                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
-                                      char *NewEmail,			// Input-output
-                                      char *NewPlainPassword,		// Input
-                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])	// Output
+static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
+                                    char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
+                                    char *NewEmail,			// Input-output
+                                    char *NewPlainPassword,		// Input
+                                    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])	// Output
   {
    char CopyOfNewNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 

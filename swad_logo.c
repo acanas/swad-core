@@ -318,7 +318,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
    long Cod;
    const char *Folder;
    char Path[PATH_MAX + 1];
-   struct Param *Param;
+   struct Par_Param *Par;
    char FileNameLogoSrc[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
@@ -359,7 +359,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
    Fil_CreateDirIfNotExists (Path);
 
    /***** Copy in disk the file received *****/
-   Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+   Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
                                      FileNameLogoSrc,MIMEType);
 
    /* Check if the file type is image/jpeg or image/pjpeg or application/octet-stream */
@@ -380,7 +380,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
 	        (unsigned) (Cod % 100),
 	        (unsigned)  Cod,
 	        (unsigned)  Cod);
-      if (!Fil_EndReceptionOfFile (FileNameLogo,Param))
+      if (!Fil_EndReceptionOfFile (FileNameLogo,Par))
 	 Ale_ShowAlert (Ale_ERROR,"Error copying file.");
      }
   }

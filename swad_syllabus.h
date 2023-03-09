@@ -70,7 +70,7 @@ struct Syl_Syllabus
   {
    char PathDir[PATH_MAX + 1];
    unsigned NumItem;		// Item being edited
-   unsigned ParamNumItem;	// Used as parameter in forms
+   unsigned ParNumItem;	// Used as parameter in forms
    bool EditionIsActive;
    Syl_WhichSyllabus_t WhichSyllabus;
   };
@@ -81,7 +81,7 @@ struct Syl_Syllabus
 
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
-Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void);
+Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void);
 
 bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod);
 bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus);

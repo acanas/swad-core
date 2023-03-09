@@ -91,8 +91,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
-void Ins_PutParamCurrentInsCod (void *InsCod);
-void Ins_PutParamInsCod (long InsCod);
+
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
@@ -126,6 +125,8 @@ bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
 void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
+
+void Ins_PutParInsCod (void *InsCod);
 
 //-------------------------------- Figures ------------------------------------
 void Ins_GetAndShowInstitutionsStats (void);

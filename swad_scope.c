@@ -44,7 +44,7 @@ extern struct Globals Gbl;
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnChange)
+void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_System;
    extern const char *Txt_Country;
@@ -58,7 +58,7 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
 
    HTM_SELECT_Begin (SubmitOnChange,
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
-		     ParamName,ParamName,The_GetSuffix ());
+		     ParName,ParName,The_GetSuffix ());
 
       for (Scope  = (HieLvl_Level_t) 0;
 	   Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
@@ -159,29 +159,29 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParamCurrentScope (void *Scope)
+void Sco_PutParCurrentScope (void *Scope)
   {
    if (Scope)
-      Sco_PutParamScope ("ScopeUsr",*((HieLvl_Level_t *) Scope));
+      Sco_PutParScope ("ScopeUsr",*((HieLvl_Level_t *) Scope));
   }
 
-void Sco_PutParamScope (const char *ParamName,HieLvl_Level_t Scope)
+void Sco_PutParScope (const char *ParName,HieLvl_Level_t Scope)
   {
-   Par_PutParUnsigned (NULL,ParamName,(unsigned) Scope);
+   Par_PutParUnsigned (NULL,ParName,(unsigned) Scope);
   }
 
 /*****************************************************************************/
 /*************************** Get parameter scope *****************************/
 /*****************************************************************************/
 
-void Sco_GetScope (const char *ParamName)
+void Sco_GetScope (const char *ParName)
   {
    /***** Get parameter with scope *****/
    Gbl.Scope.Current = (HieLvl_Level_t)
-	               Par_GetParUnsignedLong (ParamName,
-                                                 0,
-                                                 HieLvl_NUM_LEVELS - 1,
-                                                 (unsigned long) HieLvl_UNK);
+	               Par_GetParUnsignedLong (ParName,
+                                               0,
+                                               HieLvl_NUM_LEVELS - 1,
+                                               (unsigned long) HieLvl_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
    Sco_AdjustScope ();

@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaSet_PutParamsOneQst (void *Exams);
+static void ExaSet_PutParsOneQst (void *Exams);
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
@@ -85,7 +85,7 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
 static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
 
-static void ExaSet_PutParamSetCod (long SetCod);
+static void ExaSet_PutParSetCod (long SetCod);
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
                                      const struct ExaSet_Set *Set);
@@ -113,8 +113,8 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod);
 
 static void ExaSet_ChangeValidityQst (Qst_Validity_t Valid);
 
-static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                          struct ExaSet_Set *Set);
+static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
+                                    struct ExaSet_Set *Set);
 
 static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
@@ -126,12 +126,12 @@ static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
 /************ Put parameter to move/remove one set of questions **************/
 /*****************************************************************************/
 
-void ExaSet_PutParamsOneSet (void *Exams)
+void ExaSet_PutParsOneSet (void *Exams)
   {
    if (Exams)
      {
-      Exa_PutParams (Exams);
-      ExaSet_PutParamSetCod (((struct Exa_Exams *) Exams)->SetCod);
+      Exa_PutPars (Exams);
+      ExaSet_PutParSetCod (((struct Exa_Exams *) Exams)->SetCod);
      }
   }
 
@@ -139,10 +139,13 @@ void ExaSet_PutParamsOneSet (void *Exams)
 /**************** Put parameter to move/remove one question ******************/
 /*****************************************************************************/
 
-static void ExaSet_PutParamsOneQst (void *Exams)
+static void ExaSet_PutParsOneQst (void *Exams)
   {
-   ExaSet_PutParamsOneSet (Exams);
-   Qst_PutParamQstCod (&(((struct Exa_Exams *) Exams)->QstCod));
+   if (Exams)
+     {
+      ExaSet_PutParsOneSet (Exams);
+      Par_PutParCode (Par_QstCod,((struct Exa_Exams *) Exams)->QstCod);
+     }
   }
 
 /*****************************************************************************/
@@ -212,7 +215,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewExaSet);
-      Exa_PutParams (Exams);
+      Exa_PutPars (Exams);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
@@ -282,7 +285,7 @@ void ExaSet_ReceiveFormSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
    Set.ExaCod = Exams.Exam.ExaCod;
    Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
    ItsANewSet = (Set.SetCod <= 0);
@@ -317,9 +320,9 @@ static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
 
    /***** Get number of questions in set to appear in exam print *****/
    Set->NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
-                                                              0,
-                                                              UINT_MAX,
-                                                              0);
+                                                            0,
+                                                            UINT_MAX,
+                                                            0);
   }
 
 static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
@@ -374,7 +377,7 @@ void ExaSet_ChangeSetTitle (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -418,7 +421,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -426,9 +429,9 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Get number of questions in set to appear in exam print *****/
    NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
-                                                         0,
-                                                         UINT_MAX,
-                                                         0);
+                                                       0,
+                                                       UINT_MAX,
+                                                       0);
 
    /***** Check if title should be changed *****/
    if (NumQstsToPrint != Set.NumQstsToPrint)
@@ -501,7 +504,7 @@ void ExaSet_RequestCreatOrEditSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
    Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
    ItsANewSet = (Set.SetCod <= 0);
 
@@ -540,7 +543,7 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Show form to select questions for set *****/
    Qst_RequestSelectQstsForExamSet (&Exams);
@@ -565,7 +568,7 @@ void ExaSet_ListQstsToAddToSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -583,7 +586,7 @@ void ExaSet_ListQstsToAddToSet (void)
 /**************** Write parameter with index of set of questions *****************/
 /*****************************************************************************/
 
-static void ExaSet_PutParamSetCod (long SetCod)
+static void ExaSet_PutParSetCod (long SetCod)
   {
    Par_PutParUnsigned (NULL,"SetCod",SetCod);
   }
@@ -742,14 +745,14 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to remove the set */
 	       if (ICanEditSets)
 		  Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
-						 ExaSet_PutParamsOneSet,Exams);
+						 ExaSet_PutParsOneSet,Exams);
 	       else
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to move up the question */
 	       if (ICanEditSets && Set.SetInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
-						 ExaSet_PutParamsOneSet,Exams,
+						 ExaSet_PutParsOneSet,Exams,
 						 "arrow-up.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -758,7 +761,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to move down the set */
 	       if (ICanEditSets && Set.SetInd < MaxSetInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
-						 ExaSet_PutParamsOneSet,Exams,
+						 ExaSet_PutParsOneSet,Exams,
 						 "arrow-down.svg",Ico_BLACK);
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
@@ -778,7 +781,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		  if (ICanEditSets)
 		    {
 		     Frm_BeginFormAnchor (ActChgTitExaSet,Anchor);
-			ExaSet_PutParamsOneSet (Exams);
+			ExaSet_PutParsOneSet (Exams);
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\""
@@ -808,7 +811,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       if (ICanEditSets)
 		 {
 		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
-		     ExaSet_PutParamsOneSet (Exams);
+		     ExaSet_PutParsOneSet (Exams);
 		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
 				     HTM_SUBMIT_ON_CHANGE,false,
 				      "class=\"INPUT_LONG\" required=\"required\"");
@@ -949,13 +952,13 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to remove the question */
 	       if (ICanEditQuestions)
 		  Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
-						 ExaSet_PutParamsOneQst,Exams);
+						 ExaSet_PutParsOneQst,Exams);
 	       else
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to validate/invalidate the question */
 	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
-					      ExaSet_PutParamsOneQst,Exams,
+					      ExaSet_PutParsOneQst,Exams,
 					      ValInv[Question.Validity].Icon,
 					      ValInv[Question.Validity].Color);
 
@@ -1204,7 +1207,7 @@ void ExaSet_AddQstsToSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get set data from database *****/
    ExaSet_GetDataOfSetByCod (&Set);
@@ -1226,7 +1229,7 @@ void ExaSet_AddQstsToSet (void)
       while (*Ptr)
 	{
 	 /* Get next code */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	    Err_WrongQuestionExit ();
 
@@ -1357,7 +1360,7 @@ void ExaSet_RequestRemoveSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -1365,7 +1368,7 @@ void ExaSet_RequestRemoveSet (void)
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
-			   ExaSet_PutParamsOneSet,&Exams,
+			   ExaSet_PutParsOneSet,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_set_of_questions,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_set_of_questions_X,
 			   Set.Title);
@@ -1391,7 +1394,7 @@ void ExaSet_RemoveSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -1433,7 +1436,7 @@ void ExaSet_MoveUpSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -1480,7 +1483,7 @@ void ExaSet_MoveDownSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -1529,7 +1532,7 @@ void ExaSet_RequestRemoveQstFromSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
    Exams.QstCod = Par_GetAndCheckParCode (Par_QstCod);
@@ -1539,7 +1542,7 @@ void ExaSet_RequestRemoveQstFromSet (void)
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaQst,Anchor,NULL,
-			   ExaSet_PutParamsOneQst,&Exams,
+			   ExaSet_PutParsOneQst,&Exams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			   Exams.QstCod);
@@ -1569,7 +1572,7 @@ void ExaSet_RemoveQstFromSet (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
    QstCod = Par_GetAndCheckParCode (Par_QstCod);
@@ -1650,7 +1653,7 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
    ExaSet_ResetSet (&Set);
 
    /***** Get and check parameters *****/
-   ExaSet_GetAndCheckParameters (&Exams,&Set);
+   ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
    QstCod = Par_GetAndCheckParCode (Par_QstCod);
@@ -1668,12 +1671,12 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
 /************************** Get and check parameters *************************/
 /*****************************************************************************/
 
-static void ExaSet_GetAndCheckParameters (struct Exa_Exams *Exams,
-                                          struct ExaSet_Set *Set)
+static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
+                                    struct ExaSet_Set *Set)
   {
    /***** Get parameters *****/
-   Exa_GetParams (Exams,true);
-   Grp_GetParamWhichGroups ();
+   Exa_GetPars (Exams,true);
+   Grp_GetParWhichGroups ();
    Set->SetCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get exam data from database *****/
@@ -1740,7 +1743,7 @@ static void ExaSet_ExchangeSets (long ExaCod,
 static void ExaSet_PutIconToAddNewQuestions (void *Exams)
   {
    Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
-			       ExaSet_PutParamsOneSet,Exams);
+			       ExaSet_PutParsOneSet,Exams);
   }
 
 /*****************************************************************************/
@@ -1752,7 +1755,7 @@ static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
    extern const char *Txt_Add_questions;
 
    Frm_BeginForm (ActReqAddQstExaSet);
-      ExaSet_PutParamsOneSet (Exams);
+      ExaSet_PutParsOneSet (Exams);
       Btn_PutConfirmButtonInline (Txt_Add_questions);
    Frm_EndForm ();
   }

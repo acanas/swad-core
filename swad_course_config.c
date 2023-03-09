@@ -253,7 +253,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+		  Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),
 					   "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -404,7 +404,7 @@ static void CrsCfg_InternalCode (void)
 
 static void CrsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,"crs",Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_Shortcut (PrintView,Par_CrsCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -413,7 +413,7 @@ static void CrsCfg_Shortcut (bool PrintView)
 
 static void CrsCfg_QR (void)
   {
-   HieCfg_QR ("crs",Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_QR (Par_CrsCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

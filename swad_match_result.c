@@ -161,7 +161,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Games.Game);
 
@@ -211,7 +211,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Match.MchCod = Par_GetAndCheckParCode (Par_MchCod);
    Gam_GetDataOfGameByCod (&Games.Game);
@@ -301,7 +301,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -365,7 +365,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Gam_GetDataOfGameByCod (&Games.Game);
 
@@ -437,7 +437,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetParams (&Games)) <= 0)
+   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Match.MchCod = Par_GetAndCheckParCode (Par_MchCod);
    Gam_GetDataOfGameByCod (&Games.Game);
@@ -551,8 +551,8 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
       /***** Begin form to update the results
 	     depending on the games selected *****/
       Frm_BeginFormAnchor (Gbl.Action.Act,MchRes_RESULTS_TABLE_ID);
-	 Grp_PutParamsCodGrps ();
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Grp_PutParsCodGrps ();
+	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWidePadding (2);
@@ -900,13 +900,13 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 		 {
 		  case Usr_ME:
 		     Frm_BeginForm (ActSeeOneMchResMe);
-			Mch_PutParamsEdit (Games);
+			Mch_PutParsEdit (Games);
 		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
 		     break;
 		  case Usr_OTHER:
 		     Frm_BeginForm (ActSeeOneMchResOth);
-			Mch_PutParamsEdit (Games);
-			Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			Mch_PutParsEdit (Games);
+			Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
 		     break;
 		 }
@@ -1085,7 +1085,7 @@ void MchRes_ShowOneMchResult (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
@@ -1098,7 +1098,7 @@ void MchRes_ShowOneMchResult (void)
       case Usr_OTHER:
       default:
 	 UsrDat = &Gbl.Usrs.Other.UsrDat;
-         Usr_GetParamOtherUsrCodEncrypted (UsrDat);
+         Usr_GetParOtherUsrCodEncrypted (UsrDat);
 	 break;
      }
 

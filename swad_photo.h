@@ -137,8 +137,8 @@ void Pho_CalcPhotoDegree (void);
 void Pho_ShowPhotoDegree (void);
 void Pho_PrintPhotoDegree (void);
 
-void Pho_PutHiddenParamTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
-void Pho_PutHiddenParamPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize);
-void Pho_PutHiddenParamOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees);
+void Pho_PutParTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage);
+void Pho_PutParPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize);
+void Pho_PutParOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees);
 
 #endif

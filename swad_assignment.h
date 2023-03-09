@@ -88,7 +88,7 @@ void Asg_PrintOneAssignment (void);
 
 void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
 
-Dat_StartEndTime_t Asg_GetParamAsgOrder (void);
+Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 
 void Asg_RequestCreatOrEditAsg (void);
 void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg);

@@ -516,13 +516,13 @@ bool Cty_DB_CheckIfMapIsAvailable (long CtyCod)
 /******** Update country changing old field value by new field value *********/
 /*****************************************************************************/
 
-void Cty_DB_UpdateCtyField (long CtyCod,const char *FieldName,const char *FieldValue)
+void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue)
   {
    DB_QueryUPDATE ("can not update a field value of a country",
 		   "UPDATE cty_countrs"
 		     " SET %s='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           FieldName,FieldValue,
+	           FldName,FldValue,
 	           CtyCod);
   }
 

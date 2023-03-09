@@ -82,7 +82,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
 				  ActSeeAtt;		// All attendance events
       Frm_BeginForm (NextAction);
          Par_PutParCode (Par_AttCod,AttCod);
-	 Att_PutParamsCodGrps (AttCod);
+	 Att_PutParsCodGrps (AttCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

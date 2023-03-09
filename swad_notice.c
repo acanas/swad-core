@@ -92,7 +92,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t Status);
 
-static void Not_PutParams (void *NotCod);
+static void Not_PutParNotCod (void *NotCod);
 
 /*****************************************************************************/
 /***************************** Write a new notice ****************************/
@@ -268,7 +268,7 @@ void Not_RequestRemNotice (void)
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,
-                            Not_PutParams,&NotCod,
+                            Not_PutParNotCod,&NotCod,
 			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
 
    /***** Show all notices *****/
@@ -584,11 +584,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /***** Icon to remove announcement *****/
 	    Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
-					   Not_PutParams,&NotCod);
+					   Not_PutParNotCod,&NotCod);
 
 	    /***** Icon to change the status of the notice *****/
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
-				               Not_PutParams,&NotCod,
+				               Not_PutParNotCod,&NotCod,
 				               Status == Not_OBSOLETE_NOTICE);
 	   }
 
@@ -630,7 +630,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 /* Put form to view full notice */
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
-					   Not_PutParams,&NotCod,
+					   Not_PutParNotCod,&NotCod,
 					   "ellipsis-h.svg",Ico_BLACK);
 	 HTM_DIV_End ();
 	}
@@ -801,7 +801,7 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
 /*************** Put parameter with the code of a notice *********************/
 /*****************************************************************************/
 
-static void Not_PutParams (void *NotCod)
+static void Not_PutParNotCod (void *NotCod)
   {
    if (NotCod)
       Par_PutParCode (Par_NotCod,*((long *) NotCod));

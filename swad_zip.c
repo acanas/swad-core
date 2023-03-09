@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ZIP_PutLinkToCreateZIPAsgWrkParams (__attribute__((unused)) void *Args);
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args);
 
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
@@ -87,15 +87,15 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
    extern const char *Txt_Create_ZIP_file;
 
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
-				  ZIP_PutLinkToCreateZIPAsgWrkParams,NULL,
+				  ZIP_PutLinkToCreateZIPAsgWrkPars,NULL,
 				  "download.svg",Ico_BLACK,
 				  Txt_Create_ZIP_file,NULL);
   }
 
-static void ZIP_PutLinkToCreateZIPAsgWrkParams (__attribute__((unused)) void *Args)
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (__attribute__((unused)) void *Args)
   {
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+   Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
+   Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
    Par_PutParChar ("CreateZIP",'Y');
   }
 
@@ -144,7 +144,7 @@ void ZIP_CreateZIPAsgWrk (void)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 

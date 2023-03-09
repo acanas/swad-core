@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 static void Rub_PutIconsListRubrics (void *Rubrics);
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics);
 static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics);
-static void Rub_PutParamsToCreateNewRubric (void *Rubrics);
+static void Rub_PutParsToCreateNewRubric (void *Rubrics);
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
                                     bool ShowOnlyThisRubric);
@@ -121,7 +121,7 @@ void Rub_SeeAllRubrics (void)
    Rub_ResetRubrics (&Rubrics);
 
    /***** Get parameters *****/
-   Rub_GetParams (&Rubrics);	// Return value ignored
+   Rub_GetPars (&Rubrics);	// Return value ignored
 
    /***** Show all rubrics *****/
    Rub_ListAllRubrics (&Rubrics);
@@ -259,7 +259,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
   {
    Ico_PutContextualIconToAdd (ActFrmNewRub,NULL,
-                               Rub_PutParamsToCreateNewRubric,Rubrics);
+                               Rub_PutParsToCreateNewRubric,Rubrics);
   }
 
 /*****************************************************************************/
@@ -271,7 +271,7 @@ static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics)
    extern const char *Txt_New_rubric;
 
    Frm_BeginForm (ActFrmNewRub);
-      Rub_PutParamsToCreateNewRubric (Rubrics);
+      Rub_PutParsToCreateNewRubric (Rubrics);
 
       Btn_PutConfirmButton (Txt_New_rubric);
 
@@ -282,10 +282,10 @@ static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics)
 /******************* Put parameters to create a new rubric *******************/
 /*****************************************************************************/
 
-static void Rub_PutParamsToCreateNewRubric (void *Rubrics)
+static void Rub_PutParsToCreateNewRubric (void *Rubrics)
   {
    if (Rubrics)
-      Pag_PutHiddenParamPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
+      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
   }
 
 /*****************************************************************************/
@@ -303,7 +303,7 @@ void Rub_SeeOneRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0)
+   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
       Err_WrongRubricExit ();
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
 
@@ -385,7 +385,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 
       /* Rubric title */
       Frm_BeginForm (ActSeeRub);
-	 Rub_PutParams (Rubrics);
+	 Rub_PutPars (Rubrics);
 	 HTM_BUTTON_Submit_Begin (Txt_View_rubric,"class=\"LT BT_LINK ASG_TITLE_%s\"",
 				  The_GetSuffix ());
 	    HTM_Txt (Rubrics->Rubric.Title);
@@ -466,11 +466,11 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
      {
       /***** Icon to remove rubric *****/
       Ico_PutContextualIconToRemove (ActReqRemRub,NULL,
-				     Rub_PutParams,Rubrics);
+				     Rub_PutPars,Rubrics);
 
       /***** Icon to edit rubric *****/
       Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,
-				   Rub_PutParams,Rubrics);
+				   Rub_PutPars,Rubrics);
      }
   }
 
@@ -478,47 +478,26 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
 /*********************** Params used to edit a rubric ************************/
 /*****************************************************************************/
 
-void Rub_PutParams (void *Rubrics)
+void Rub_PutPars (void *Rubrics)
   {
    if (Rubrics)
      {
-      if (((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod > 0)
-	 Rub_PutParamRubCod (((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
-      Pag_PutHiddenParamPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
+      Par_PutParCode (Par_RubCod,((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
+      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
      }
-  }
-
-/*****************************************************************************/
-/******************* Write parameter with code of rubric *********************/
-/*****************************************************************************/
-
-void Rub_PutParamRubCod (long RubCod)
-  {
-   if (RubCod > 0)
-      Par_PutParLong (NULL,"RubCod",RubCod);
-  }
-
-/*****************************************************************************/
-/******************** Get parameter with code of rubric **********************/
-/*****************************************************************************/
-
-long Rub_GetParamRubCod (void)
-  {
-   /***** Get code of rubric *****/
-   return Par_GetParLong ("RubCod");
   }
 
 /*****************************************************************************/
 /****************** Get parameters used to edit a rubric *********************/
 /*****************************************************************************/
 
-long Rub_GetParams (struct Rub_Rubrics *Rubrics)
+long Rub_GetPars (struct Rub_Rubrics *Rubrics)
   {
    /***** Get other parameters *****/
-   Rubrics->CurrentPage = Pag_GetParamPagNum (Pag_RUBRICS);
+   Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
-   return Rub_GetParamRubCod ();
+   return Par_GetParCode (Par_RubCod);
   }
 
 /*****************************************************************************/
@@ -632,7 +611,7 @@ void Rub_AskRemRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0)
+   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
       Err_WrongRubricExit ();
 
    /***** Get data of the rubric from database *****/
@@ -642,7 +621,7 @@ void Rub_AskRemRubric (void)
 
    /***** Show criterion and button to remove rubric *****/
    Ale_ShowAlertAndButton (ActRemRub,NULL,NULL,
-                           Rub_PutParams,&Rubrics,
+                           Rub_PutPars,&Rubrics,
 			   Btn_REMOVE_BUTTON,Txt_Remove_rubric,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_rubric_X,
                            Rubrics.Rubric.Title);
@@ -667,8 +646,7 @@ void Rub_RemoveRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get rubric code *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetParamRubCod ()) <= 0)
-      Err_WrongRubricExit ();
+   Rubrics.Rubric.RubCod = Par_GetAndCheckParCode (Par_RubCod);
 
    /***** Get data of the rubric from database *****/
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
@@ -728,7 +706,7 @@ void Rub_ListRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0)
+   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
       Err_WrongRubricExit ();
 
    /***** Get rubric data *****/
@@ -761,7 +739,7 @@ void Rub_RequestCreatOrEditRubric (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0);
+   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0);
 
    /***** Get rubric data *****/
    if (ItsANewRubric)
@@ -809,7 +787,7 @@ static void Rub_PutFormsEditionRubric (struct Rub_Rubrics *Rubrics,
    /***** Begin form *****/
    Frm_BeginForm (ItsANewRubric ? ActNewRub :
 				  ActChgRub);
-      Rub_PutParams (Rubrics);
+      Rub_PutPars (Rubrics);
 
       /***** Begin box and table *****/
       if (ItsANewRubric)
@@ -889,7 +867,7 @@ void Rub_ReceiveFormRubric (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetParams (&Rubrics)) <= 0);
+   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0);
 
    /***** If I can edit rubrics ==> receive rubric from form *****/
    if (Rub_CheckIfICanEditRubrics ())

@@ -45,7 +45,7 @@ typedef enum
 
 void PhoSha_PutIconsToSelectPhotoShape (void);
 void PhoSha_ChangePhotoShape (void);
-PhoSha_Shape_t PhoSha_GetParamPhotoShape (void);
+PhoSha_Shape_t PhoSha_GetParPhotoShape (void);
 PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str);
 
 void PhoSha_GetAndShowNumUsrsPerPhotoShape (void);

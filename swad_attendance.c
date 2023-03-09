@@ -86,28 +86,28 @@ typedef enum
 static void Att_ResetEvents (struct Att_Events *Events);
 
 static void Att_ShowAllAttEvents (struct Att_Events *Events);
-static void Att_ParamsWhichGroupsToShow (void *Events);
+static void Att_ParsWhichGroupsToShow (void *Events);
 static void Att_PutIconsInListOfAttEvents (void *Events);
 static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events);
 static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events);
-static void Att_PutParamsToCreateNewAttEvent (void *Events);
-static void Att_PutParamsToListUsrsAttendance (void *Events);
+static void Att_PutParsToCreateNewAttEvent (void *Events);
+static void Att_PutParsToListUsrsAttendance (void *Events);
 
 static void Att_ShowOneAttEventRow (struct Att_Events *Events,
                                     bool ShowOnlyThisAttEventComplete);
 static void Att_WriteAttEventAuthor (struct Att_Event *Event);
-static Dat_StartEndTime_t Att_GetParamAttOrder (void);
+static Dat_StartEndTime_t Att_GetParAttOrder (void);
 
 static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
                                               const char *Anchor);
-static void Att_PutParams (void *Events);
+static void Att_PutPars (void *Events);
 static void Att_GetListAttEvents (struct Att_Events *Events,
                                   Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event);
 static void Att_ResetAttendanceEvent (struct Att_Event *Event);
 static void Att_FreeListAttEvents (struct Att_Events *Events);
 
-static void Att_PutParamSelectedAttCod (void *Events);
+static void Att_PutParAttCod (void *Events);
 
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
 static void Att_CreateGroups (long AttCod);
@@ -139,9 +139,9 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView);
 static void Att_GetListSelectedAttCods (struct Att_Events *Events);
 
 static void Att_PutIconsMyAttList (void *Events);
-static void Att_PutFormToPrintMyListParams (void *Events);
+static void Att_PutFormToPrintMyListPars (void *Events);
 static void Att_PutIconsStdsAttList (void *Events);
-static void Att_PutParamsToPrintStdsList (void *Events);
+static void Att_PutParsToPrintStdsList (void *Events);
 
 static void Att_PutButtonToShowDetails (const struct Att_Events *Events);
 static void Att_ListEventsToSelect (struct Att_Events *Events,
@@ -190,9 +190,9 @@ void Att_SeeAttEvents (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParamAttOrder ();
-   Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Grp_GetParWhichGroups ();
+   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (&Events,Att_NEWEST_FIRST);
@@ -237,7 +237,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	{
 	 Set_BeginSettingsHead ();
 	 Grp_ShowFormToSelWhichGrps (ActSeeAtt,
-				     Att_ParamsWhichGroupsToShow,&Events);
+				     Att_ParsWhichGroupsToShow,&Events);
 	 Set_EndSettingsHead ();
 	}
 
@@ -261,9 +261,9 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
                   HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		     Frm_BeginForm (ActSeeAtt);
-			WhichGroups = Grp_GetParamWhichGroups ();
-			Grp_PutParamWhichGroups (&WhichGroups);
-			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
+			WhichGroups = Grp_GetParWhichGroups ();
+			Grp_PutParWhichGroups (&WhichGroups);
+			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Par_PutParOrder ((unsigned) Order);
 
 			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],
@@ -326,12 +326,12 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 /***************** Put params to select which groups to show *****************/
 /*****************************************************************************/
 
-static void Att_ParamsWhichGroupsToShow (void *Events)
+static void Att_ParsWhichGroupsToShow (void *Events)
   {
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -363,7 +363,7 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Ico_PutContextualIconToShowAttendanceList (ActReqLstUsrAtt,
-							  Att_PutParamsToListUsrsAttendance,Events);
+							  Att_PutParsToListUsrsAttendance,Events);
 	       break;
 	    default:
 	       break;
@@ -371,12 +371,12 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
       if (PrgRsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
-					 Att_PutParams,Events);
+					 Att_PutPars,Events);
      }
   }
 
@@ -387,7 +387,7 @@ static void Att_PutIconsInListOfAttEvents (void *Events)
 static void Att_PutIconToCreateNewAttEvent (struct Att_Events *Events)
   {
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
-                               Att_PutParamsToCreateNewAttEvent,Events);
+                               Att_PutParsToCreateNewAttEvent,Events);
   }
 
 /*****************************************************************************/
@@ -400,7 +400,7 @@ static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
 
    /***** Begin form *****/
    Frm_BeginForm (ActFrmNewAtt);
-      Att_PutParamsToCreateNewAttEvent (Events);
+      Att_PutParsToCreateNewAttEvent (Events);
 
       /***** Button to create new event *****/
       Btn_PutConfirmButton (Txt_New_event);
@@ -413,16 +413,16 @@ static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
 /************** Put parameters to create a new attendance event **************/
 /*****************************************************************************/
 
-static void Att_PutParamsToCreateNewAttEvent (void *Events)
+static void Att_PutParsToCreateNewAttEvent (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -430,16 +430,16 @@ static void Att_PutParamsToCreateNewAttEvent (void *Events)
 /***************** Put parameters to list users attendance *******************/
 /*****************************************************************************/
 
-static void Att_PutParamsToListUsrsAttendance (void *Events)
+static void Att_PutParsToListUsrsAttendance (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -581,13 +581,13 @@ static void Att_WriteAttEventAuthor (struct Att_Event *Event)
 /**** Get parameter with the type or order in list of attendance events ******/
 /*****************************************************************************/
 
-static Dat_StartEndTime_t Att_GetParamAttOrder (void)
+static Dat_StartEndTime_t Att_GetParAttOrder (void)
   {
    return (Dat_StartEndTime_t)
 	  Par_GetParUnsignedLong ("Order",
-				    0,
-				    Dat_NUM_START_END_TIME - 1,
-				    (unsigned long) Att_ORDER_DEFAULT);
+				  0,
+				  Dat_NUM_START_END_TIME - 1,
+				  (unsigned long) Att_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -607,22 +607,22 @@ static void Att_PutFormsToRemEditOneAttEvent (struct Att_Events *Events,
      {
       /***** Icon to remove attendance event *****/
       Ico_PutContextualIconToRemove (ActReqRemAtt,NULL,
-				     Att_PutParams,Events);
+				     Att_PutPars,Events);
 
       /***** Icon to hide/unhide attendance event *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 Att_PutParams,Events,
+					 Att_PutPars,Events,
 					 Events->Event.Hidden);
 
       /***** Icon to edit attendance event *****/
       Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,
-				   Att_PutParams,Events);
+				   Att_PutPars,Events);
      }
 
    /***** Icon to get resource link *****/
    if (PrgRsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
-                                      Att_PutParams,Events);
+                                      Att_PutPars,Events);
   }
 
 
@@ -645,7 +645,7 @@ bool Att_CheckIfICanEditAttEvents (void)
 /***************** Params used to edit an attendance event *******************/
 /*****************************************************************************/
 
-static void Att_PutParams (void *Events)
+static void Att_PutPars (void *Events)
   {
    Grp_WhichGroups_t WhichGroups;
 
@@ -653,9 +653,9 @@ static void Att_PutParams (void *Events)
      {
       Par_PutParCode (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -814,16 +814,6 @@ static void Att_FreeListAttEvents (struct Att_Events *Events)
   }
 
 /*****************************************************************************/
-/************** Write parameter with code of attendance event ****************/
-/*****************************************************************************/
-
-static void Att_PutParamSelectedAttCod (void *Events)
-  {
-   if (Events)
-      Par_PutParCode (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
-  }
-
-/*****************************************************************************/
 /********* Ask for confirmation of removing of an attendance event ***********/
 /*****************************************************************************/
 
@@ -837,9 +827,9 @@ void Att_AskRemAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParamAttOrder ();
-   Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Grp_GetParWhichGroups ();
+   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
@@ -849,7 +839,7 @@ void Att_AskRemAttEvent (void)
 
    /***** Show question and button to remove event *****/
    Ale_ShowAlertAndButton (ActRemAtt,NULL,NULL,
-                           Att_PutParams,&Events,
+                           Att_PutPars,&Events,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
 	                   Events.Event.Title);
@@ -974,9 +964,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParamAttOrder ();
-   Grp_GetParamWhichGroups ();
-   Events.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Grp_GetParWhichGroups ();
+   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    ItsANewAttEvent = ((Events.Event.AttCod = Par_GetParCode (Par_AttCod)) <= 0);
@@ -1013,9 +1003,9 @@ void Att_RequestCreatOrEditAttEvent (void)
 	 Par_PutParCode (Par_AttCod,Events.Event.AttCod);
      }
       Par_PutParOrder ((unsigned) Events.SelectedOrder);
-      WhichGroups = Grp_GetParamWhichGroups ();
-      Grp_PutParamWhichGroups (&WhichGroups);
-      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
+      WhichGroups = Grp_GetParWhichGroups ();
+      Grp_PutParWhichGroups (&WhichGroups);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
       /***** Begin box and table *****/
       if (ItsANewAttEvent)
@@ -1460,9 +1450,9 @@ static void Att_ShowEvent (struct Att_Events *Events)
    extern const char *Txt_Event;
 
    /***** Get parameters *****/
-   Events->SelectedOrder = Att_GetParamAttOrder ();
-   Grp_GetParamWhichGroups ();
-   Events->CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Events->SelectedOrder = Att_GetParAttOrder ();
+   Grp_GetParWhichGroups ();
+   Events->CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get data of this attendance event *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Event);
@@ -1601,8 +1591,7 @@ static void Att_ListAttStudents (struct Att_Events *Events)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Form to select groups *****/
-      Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Events,
-					 Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (Att_PutParAttCod,Events,Grp_MY_GROUPS);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -1618,7 +1607,7 @@ static void Att_ListAttStudents (struct Att_Events *Events)
 	    /* Begin form */
 	    Frm_BeginForm (ActRecAttStd);
 	       Par_PutParCode (Par_AttCod,Events->Event.AttCod);
-	       Grp_PutParamsCodGrps ();
+	       Grp_PutParsCodGrps ();
 
 	       /* Begin table */
 	       HTM_TABLE_BeginWideMarginPadding (2);
@@ -1676,6 +1665,16 @@ static void Att_ListAttStudents (struct Att_Events *Events)
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/************** Write parameter with code of attendance event ****************/
+/*****************************************************************************/
+
+static void Att_PutParAttCod (void *Events)
+  {
+   if (Events)
+      Par_PutParCode (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
   }
 
 /*****************************************************************************/
@@ -1852,7 +1851,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
       Par_PutParCode (Par_AttCod,Event->AttCod);
-      Att_PutParamsCodGrps (Event->AttCod);
+      Att_PutParsCodGrps (Event->AttCod);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
@@ -1870,7 +1869,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
 /****** Put parameters with the default groups in an attendance event ********/
 /*****************************************************************************/
 
-void Att_PutParamsCodGrps (long AttCod)
+void Att_PutParsCodGrps (long AttCod)
   {
    extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    MYSQL_RES *mysql_res;
@@ -1930,7 +1929,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    extern const char *Txt_Your_comment_has_been_updated;
    struct Att_Events Events;
    bool Present;
-   char *ParamName;
+   char *ParName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1946,10 +1945,10 @@ void Att_RegisterMeAsStdInAttEvent (void)
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Events.Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
-      if (asprintf (&ParamName,"CommentStd%s",Gbl.Usrs.Me.UsrDat.EnUsrCod) < 0)
+      if (asprintf (&ParName,"CommentStd%s",Gbl.Usrs.Me.UsrDat.EnUsrCod) < 0)
          Err_NotEnoughMemoryExit ();
-      Par_GetParHTML (ParamName,CommentStd,Cns_MAX_BYTES_TEXT);
-      free (ParamName);
+      Par_GetParHTML (ParName,CommentStd,Cns_MAX_BYTES_TEXT);
+      free (ParName);
 
       if (Present ||
 	  CommentStd[0] ||
@@ -1990,7 +1989,7 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumUsr;
    const char *Ptr;
    bool Present;
-   char *ParamName;
+   char *ParName;
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct Usr_Data UsrData;
@@ -2031,7 +2030,7 @@ void Att_RegisterStudentsInAttEvent (void)
       Ptr = Gbl.Usrs.Selected.List[Rol_STD];
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EnUsrCod,
+	 Par_GetNextStrUntilSeparParMult (&Ptr,UsrData.EnUsrCod,
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
 	 if (UsrData.UsrCod > 0)	// Student exists in database
@@ -2064,11 +2063,11 @@ void Att_RegisterStudentsInAttEvent (void)
 	                                                  Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
 	                                                  CommentStd,
 	                                                  CommentTch);
-	 if (asprintf (&ParamName,"CommentTch%s",
+	 if (asprintf (&ParName,"CommentTch%s",
 	               Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Par_GetParHTML (ParamName,CommentTch,Cns_MAX_BYTES_TEXT);
-	 free (ParamName);
+	 Par_GetParHTML (ParName,CommentTch,Cns_MAX_BYTES_TEXT);
+	 free (ParName);
 
 	 Present = !Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove;
 
@@ -2492,7 +2491,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	  )
 	{
 	 /* Get next attendance event selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each event in *StrAttCodsSelected as selected */
@@ -2568,15 +2567,15 @@ static void Att_PutIconsMyAttList (void *Events)
      {
       /***** Put icon to print my assistance (as student) to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstMyAtt,
-				    Att_PutFormToPrintMyListParams,Events);
+				    Att_PutFormToPrintMyListPars,Events);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
-static void Att_PutFormToPrintMyListParams (void *Events)
+static void Att_PutFormToPrintMyListPars (void *Events)
   {
    if (Events)
      {
@@ -2598,22 +2597,22 @@ static void Att_PutIconsStdsAttList (void *Events)
      {
       /***** Put icon to print assistance of students to several events *****/
       Ico_PutContextualIconToPrint (ActPrnLstUsrAtt,
-				    Att_PutParamsToPrintStdsList,Events);
+				    Att_PutParsToPrintStdsList,Events);
 
       /***** Put icon to print my QR code *****/
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
      }
   }
 
-static void Att_PutParamsToPrintStdsList (void *Events)
+static void Att_PutParsToPrintStdsList (void *Events)
   {
    if (Events)
      {
       if (((struct Att_Events *) Events)->ShowDetails)
 	 Par_PutParChar ("ShowDetails",'Y');
-      Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Grp_PutParsCodGrps ();
+      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
       if (((struct Att_Events *) Events)->StrAttCodsSelected)
 	 if (((struct Att_Events *) Events)->StrAttCodsSelected[0])
 	    Par_PutParString (NULL,"AttCods",((struct Att_Events *) Events)->StrAttCodsSelected);
@@ -2632,8 +2631,8 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
    /* Begin form */
    Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
       Par_PutParChar ("ShowDetails",'Y');
-      Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Grp_PutParsCodGrps ();
+      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
       if (Events->StrAttCodsSelected)
 	 if (Events->StrAttCodsSelected[0])
 	    Par_PutParString (NULL,"AttCods",Events->StrAttCodsSelected);
@@ -2688,8 +2687,8 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
       if (NormalView)
 	{
 	 Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
-	    Grp_PutParamsCodGrps ();
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Grp_PutParsCodGrps ();
+	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	}
 
       /***** Begin table *****/

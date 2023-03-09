@@ -263,7 +263,7 @@ void Ses_SB_RemoveCurrentSession (void)
 /******************* Insert session parameter in the database ****************/
 /*****************************************************************************/
 
-void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue)
+void Ses_DB_InsertPar (const char *ParName,const char *ParValue)
   {
    DB_QueryINSERT ("can not create session parameter",
 		   "INSERT INTO ses_params"
@@ -271,8 +271,8 @@ void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue)
 		   " VALUES"
 		   " ('%s','%s','%s')",
 		   Gbl.Session.Id,
-		   ParamName,
-		   ParamValue ? ParamValue :
+		   ParName,
+		   ParValue ? ParValue :
 				"");
   }
 
@@ -281,7 +281,7 @@ void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue)
 /*****************************************************************************/
 // Return true if the parameter already existed in database
 
-bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName)
+bool Ses_DB_CheckIfParIsAlreadyStored (const char *ParName)
   {
    return
    DB_QueryEXISTS ("can not check if a session parameter is already in database",
@@ -291,7 +291,7 @@ bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName)
 		    " WHERE SessionId='%s'"
 		      " AND ParamName='%s')",
 		   Gbl.Session.Id,
-		   ParamName);
+		   ParName);
   }
 
 /*****************************************************************************/
@@ -299,28 +299,28 @@ bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName)
 /*****************************************************************************/
 // StrSize is the size of the parameter value, not including the ending '\0'
 
-void Ses_DB_GetParam (const char *ParamName,char *ParamValue,size_t StrSize)
+void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize)
   {
-   ParamValue[0] = '\0';
+   ParValue[0] = '\0';
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
       /***** Get a session parameter from database *****/
-      DB_QuerySELECTString (ParamValue,StrSize,"can not get a session parameter",
+      DB_QuerySELECTString (ParValue,StrSize,"can not get a session parameter",
 			    "SELECT ParamValue"	// row[0]
 			     " FROM ses_params"
 			    " WHERE SessionId='%s'"
 			      " AND ParamName='%s'",
 			    Gbl.Session.Id,
-			    ParamName);
+			    ParName);
   }
 
 /*****************************************************************************/
 /************ Remove session parameters of a session from database ***********/
 /*****************************************************************************/
 
-void Ses_DB_RemoveParam (void)
+void Ses_DB_RemovePar (void)
   {
    if (Gbl.Session.IsOpen &&			// There is an open session
-       !Gbl.Session.ParamsInsertedIntoDB)		// No params just inserted
+       !Gbl.Session.ParsInsertedIntoDB)		// No params just inserted
       /***** Remove session parameters of this session *****/
       DB_QueryDELETE ("can not remove session parameters of current session",
 		      "DELETE FROM ses_params"
@@ -332,7 +332,7 @@ void Ses_DB_RemoveParam (void)
 /********* Remove expired hidden parameters (from expired sessions) **********/
 /*****************************************************************************/
 
-void Ses_DB_RemoveParamsFromExpiredSessions (void)
+void Ses_DB_RemoveParsFromExpiredSessions (void)
   {
    /***** Remove session parameters from expired sessions *****/
    DB_QueryDELETE ("can not remove session parameters of expired sessions",

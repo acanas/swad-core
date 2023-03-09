@@ -149,7 +149,7 @@ unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
 /******************* Check if the name of department exists ******************/
 /*****************************************************************************/
 
-bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
+bool Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *Name,long DptCod)
   {
    return
    DB_QueryEXISTS ("can not check if the department name already existed",
@@ -158,7 +158,7 @@ bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,
 		     " FROM dpt_departments"
 		    " WHERE %s='%s'"
 		      " AND DptCod<>%ld)",
-		   FieldName,Name,
+		   FldName,Name,
 		   DptCod);
   }
 
@@ -223,13 +223,13 @@ void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod)
 /************* Update department name in table of departments ****************/
 /*****************************************************************************/
 
-void Dpt_DB_UpdateDptName (long DptCod,const char *FieldName,const char *NewDptName)
+void Dpt_DB_UpdateDptName (long DptCod,const char *FldName,const char *NewDptName)
   {
    DB_QueryUPDATE ("can not update the name of a department",
 		   "UPDATE dpt_departments"
 		     " SET %s='%s'"
 		   " WHERE DptCod=%ld",
-	           FieldName,NewDptName,
+	           FldName,NewDptName,
 	           DptCod);
   }
 

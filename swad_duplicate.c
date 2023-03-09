@@ -69,7 +69,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
    extern const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user;
 
    /***** Get user to be reported as possible duplicate *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       /* Check if it's allowed to me to report users as possible duplicatedr */
       if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH &&
@@ -225,7 +225,7 @@ void Dup_ListDuplicateUsrs (void)
 void Dup_GetUsrCodAndListSimilarUsrs (void)
   {
    /***** Get user to be removed from list of possible duplicates *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       Dup_ListSimilarUsrs ();
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -352,7 +352,7 @@ static void Dup_PutButtonToViewSimilarUsrs (const struct Usr_Data *UsrDat)
    extern const char *Txt_Similar_users;
 
    Frm_BeginForm (ActLstSimUsr);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Btn_PutConfirmButtonInline (Txt_Similar_users);
    Frm_EndForm ();
   }
@@ -366,7 +366,7 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct Usr_Data *UsrDat)
    extern const char *Txt_Eliminate_user_account;
 
    Frm_BeginForm (ActUpdOth);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Par_PutParUnsigned (NULL,"RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
       Btn_PutRemoveButtonInline (Txt_Eliminate_user_account);
    Frm_EndForm ();
@@ -381,7 +381,7 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct Usr_Data *UsrDa
    extern const char *Txt_Not_duplicated;
 
    Frm_BeginForm (ActRemDupUsr);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Btn_PutConfirmButtonInline (Txt_Not_duplicated);
    Frm_EndForm ();
   }
@@ -393,7 +393,7 @@ static void Dup_PutButtonToRemoveFromListOfDupUsrs (const struct Usr_Data *UsrDa
 void Dup_RemoveUsrFromListDupUsrs (void)
   {
    /***** Get user to be removed from list of possible duplicates *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       /* Remove entry from database */
       Dup_DB_RemoveUsrFromDuplicated (Gbl.Usrs.Other.UsrDat.UsrCod);

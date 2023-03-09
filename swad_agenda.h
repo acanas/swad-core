@@ -105,21 +105,21 @@ typedef enum
 /*****************************************************************************/
 
 void Agd_PutFormLogInToShowUsrAgenda (void);
-void Agd_PutParamAgd (void);
+void Agd_PutParAgd (void);
 
-void Agd_GetParamsAndShowMyAgenda (void);
+void Agd_GetParsAndShowMyAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowOtherAgendaAfterLogIn (void);
 
 void Agd_RequestCreatOrEditEvent (void);
 
-void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
+void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
                             unsigned PrivatPublicEvents,
                             unsigned HiddenVisiblEvents,
 			    Dat_StartEndTime_t Order,
                             unsigned NumPage,
                             long AgdCodToEdit);
-void Agd_PutHiddenParamEventsOrder (Dat_StartEndTime_t SelectedOrder);
+void Agd_PutParEventsOrder (Dat_StartEndTime_t SelectedOrder);
 
 void Agd_AskRemEvent (void);
 void Agd_RemoveEvent (void);

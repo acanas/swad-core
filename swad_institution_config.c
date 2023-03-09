@@ -345,7 +345,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
-		  Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+		  Par_PutParCode (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -402,7 +402,7 @@ static void InsCfg_WWW (bool PrintView,bool PutForm)
 
 static void InsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,"ins",Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_Shortcut (PrintView,Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -411,7 +411,7 @@ static void InsCfg_Shortcut (bool PrintView)
 
 static void InsCfg_QR (void)
   {
-   HieCfg_QR ("ins",Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_QR (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

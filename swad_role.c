@@ -512,9 +512,9 @@ void Rol_ChangeMyRole (void)
    /***** Get parameter with the new logged role ******/
    NewRole = (Rol_Role_t)
 	     Par_GetParUnsignedLong ("MyRole",
-                                       0,
-                                       Rol_NUM_ROLES - 1,
-                                       (unsigned long) Rol_UNK);
+                                     0,
+                                     Rol_NUM_ROLES - 1,
+                                     (unsigned long) Rol_UNK);
    if (NewRole != Rol_UNK)
      {
       /* Check if new role is allowed for me */
@@ -572,7 +572,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 /******************** Put hidden param with users' roles *********************/
 /*****************************************************************************/
 
-void Rol_PutHiddenParamRoles (unsigned Roles)
+void Rol_PutParRoles (unsigned Roles)
   {
    Par_PutParUnsigned (NULL,"Roles",Roles);
   }
@@ -592,16 +592,16 @@ unsigned Rol_GetSelectedRoles (void)
    /***** Try to get param "Roles" with multiple roles *****/
    Roles = (unsigned)
 	   Par_GetParUnsignedLong ("Roles",
-                                     0,				// 000...000
-                                     (1 << Rol_NUM_ROLES) - 1,	// 111...111
-                                     0);			// 000...000
+                                   0,				// 000...000
+                                   (1 << Rol_NUM_ROLES) - 1,	// 111...111
+                                   0);				// 000...000
 
    /***** Try to get multiple param "Role" *****/
    Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
    for (Ptr = StrRoles;
         *Ptr;)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
       Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
       if (Role != Rol_UNK)
          Roles |= (1 << Role);

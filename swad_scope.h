@@ -36,10 +36,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnChange);
-void Sco_PutParamCurrentScope (void *Scope);
-void Sco_PutParamScope (const char *ParamName,HieLvl_Level_t Scope);
-void Sco_GetScope (const char *ParamName);
+void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange);
+void Sco_PutParCurrentScope (void *Scope);
+void Sco_PutParScope (const char *ParName,HieLvl_Level_t Scope);
+void Sco_GetScope (const char *ParName);
 void Sco_AdjustScope (void);
 
 void Sco_SetScopesForListingGuests (void);

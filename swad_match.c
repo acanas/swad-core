@@ -113,6 +113,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
                                                const char *Anchor);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned NumQsts);
+static void Mch_PutParMchCod (void *MchCod);
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
@@ -122,8 +123,6 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Mch_Match *Match);
-
-static void Mch_PutParamsPlay (void *MchCod);
 
 static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
                                       const struct Mch_Match *Match,
@@ -177,7 +176,7 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
 static void Mch_ShowNumQstInMch (const struct Mch_Match *Match);
 static void Mch_PutMatchControlButtons (const struct Mch_Match *Match);
 static void Mch_ShowFormColumns (const struct Mch_Match *Match);
-static void Mch_PutParamNumCols (unsigned NumCols);
+static void Mch_PutParNumCols (unsigned NumCols);
 
 static void Mch_ShowMatchTitleTch (const struct Mch_Match *Match);
 static void Mch_ShowMatchTitleStd (const struct Mch_Match *Match);
@@ -202,8 +201,8 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 			      unsigned NumRow,unsigned NumUsrs,unsigned MaxUsrs);
 static const char *Mch_GetClassBorder (unsigned NumRow);
 
-static void Mch_PutParamNumOpt (unsigned NumOpt);
-static unsigned Mch_GetParamNumOpt (void);
+static void Mch_PutParNumOpt (unsigned NumOpt);
+static unsigned Mch_GetParNumOpt (void);
 
 static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 			      long MchCod,const char *Icon,const char *Txt);
@@ -285,7 +284,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	      {
 	       Set_BeginSettingsHead ();
 	       Grp_ShowFormToSelWhichGrps (ActSeeGam,
-					   Gam_PutParams,Games);
+					   Gam_PutPars,Games);
 	       Set_EndSettingsHead ();
 	      }
 	    break;
@@ -363,7 +362,7 @@ static void Mch_PutIconsInListOfMatches (void *Games)
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games)
   {
    Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,
-                               Gam_PutParams,Games);
+                               Gam_PutPars,Games);
   }
 
 /*****************************************************************************/
@@ -562,11 +561,11 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 
 	 /***** Put icon to remove the match *****/
 	 Ico_PutContextualIconToRemove (ActReqRemMch,NULL,
-					Mch_PutParamsEdit,Games);
+					Mch_PutParsEdit,Games);
 
 	 /***** Put icon to edit the match *****/
 	 Ico_PutContextualIconToEdit (ActEdiMch,Anchor,
-				      Mch_PutParamsEdit,Games);
+				      Mch_PutParsEdit,Games);
 	}
       else
 	 Ico_PutIconRemovalNotAllowed ();
@@ -741,11 +740,21 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
       Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 									  ActResMch,
 				     NULL,
-				     Mch_PutParamsPlay,&Match->MchCod,
+				     Mch_PutParMchCod,&Match->MchCod,
 				     Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
 									"play.svg",Ico_BLACK);
 
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/******************** Write parameter with code of match *********************/
+/*****************************************************************************/
+
+static void Mch_PutParMchCod (void *MchCod)
+  {
+   if (MchCod)
+      Par_PutParCode (Par_MchCod,*((long *) MchCod));
   }
 
 /*****************************************************************************/
@@ -785,7 +794,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
       Games->Game.GamCod = Match->GamCod;
       Games->MchCod.Current = Match->MchCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,Games,
+				     Mch_PutParsEdit,Games,
 				     "trophy.svg",Ico_BLACK);
      }
    else
@@ -805,7 +814,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    /***** Show match results *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
-				     Mch_PutParamsEdit,Games,
+				     Mch_PutParsEdit,Games,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
@@ -814,11 +823,11 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
       /* I can edit visibility */
       if (Match->Status.ShowUsrResults)
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParamsEdit,Games,
+					Mch_PutParsEdit,Games,
 					"eye.svg",Ico_GREEN);
       else
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParamsEdit,Games,
+					Mch_PutParsEdit,Games,
 					"eye-slash.svg",Ico_RED);
      }
    else
@@ -848,7 +857,7 @@ void Mch_ToggleVisResultsMchUsr (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if visibility of match results can be changed *****/
    if (!Mch_CheckIfVisibilityOfResultsCanBeChanged (&Match))
@@ -969,11 +978,11 @@ void Mch_RequestRemoveMatch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,
-                           Mch_PutParamsEdit,&Games,
+                           Mch_PutParsEdit,&Games,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -1002,7 +1011,7 @@ void Mch_RemoveMatch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can remove this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1100,7 +1109,7 @@ void Mch_EditMatch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can edit this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1116,37 +1125,27 @@ void Mch_EditMatch (void)
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-void Mch_PutParamsEdit (void *Games)
+void Mch_PutParsEdit (void *Games)
   {
    if (Games)
      {
-      Gam_PutParams (Games);
+      Gam_PutPars (Games);
       Par_PutParCode (Par_MchCod,((struct Gam_Games *) Games)->MchCod.Current);
      }
-  }
-
-/*****************************************************************************/
-/*********************** Params used to edit a match *************************/
-/*****************************************************************************/
-
-static void Mch_PutParamsPlay (void *MchCod)
-  {
-   if (MchCod)
-      Par_PutParCode (Par_MchCod,*((long *) MchCod));
   }
 
 /*****************************************************************************/
 /************************** Get and check parameters *************************/
 /*****************************************************************************/
 
-void Mch_GetAndCheckParameters (struct Gam_Games *Games,
+void Mch_GetAndCheckPars (struct Gam_Games *Games,
                                 struct Mch_Match *Match)
   {
    /***** Get parameters *****/
    /* Get parameters of game */
-   if ((Games->Game.GamCod = Gam_GetParams (Games)) <= 0)
+   if ((Games->Game.GamCod = Gam_GetPars (Games)) <= 0)
       Err_WrongGameExit ();
-   Grp_GetParamWhichGroups ();
+   Grp_GetParWhichGroups ();
    Gam_GetDataOfGameByCod (&Games->Game);
 
    /* Get match code */
@@ -1178,7 +1177,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgMch,Anchor);
-      Mch_PutParamsEdit (Games);
+      Mch_PutParsEdit (Games);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Match->Title,
@@ -1234,8 +1233,8 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 
       /***** Begin form *****/
       Frm_BeginForm (ActNewMch);
-	 Gam_PutParamGamCod (Game->GamCod);
-	 Gam_PutParamQstInd (0);	// Start by first question in game
+	 Par_PutParCode (Par_GamCod,Game->GamCod);
+	 Gam_PutParQstInd (0);	// Start by first question in game
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,Txt_New_match,
@@ -1390,7 +1389,7 @@ void Mch_ChangeMatch (void)
    Mch_ResetMatch (&Match);
 
    /***** Get and check parameters *****/
-   Mch_GetAndCheckParameters (&Games,&Match);
+   Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can update this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1789,9 +1788,9 @@ void Mch_ChangeNumColsMch (void)
    /***** Get number of columns *****/
    Match.Status.NumCols = (unsigned)
 	                  Par_GetParUnsignedLong ("NumCols",
-						    1,
-						    Mch_MAX_COLS,
-						    Mch_NUM_COLS_DEFAULT);
+						  1,
+						  Mch_MAX_COLS,
+						  Mch_NUM_COLS_DEFAULT);
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -2599,7 +2598,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 	 /* Begin form */
 	 Frm_BeginForm (ActChgNumColMch);
 	    Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
-	    Mch_PutParamNumCols (NumCols);		// Number of columns
+	    Mch_PutParNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
 	    if (asprintf (&Title,"%u %s",NumCols,
@@ -2624,7 +2623,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 /******** Write parameter with number of columns in answers of match *********/
 /*****************************************************************************/
 
-static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
+static void Mch_PutParNumCols (unsigned NumCols)	// Number of columns
   {
    Par_PutParUnsigned (NULL,"NumCols",NumCols);
   }
@@ -2727,7 +2726,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
       /***** Begin form *****/
       Frm_BeginForm (ActRemMchAnsQstStd);
 	 Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
-	 Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+	 Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
 
 	 /***** Put icon with link *****/
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
@@ -2983,8 +2982,8 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  and not lose clicks due to refresh */
 	       Frm_BeginForm (ActAnsMchQstStd);
 		  Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
-		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-		  Mch_PutParamNumOpt (NumOpt);		// Number of button
+		  Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
+		  Mch_PutParNumOpt (NumOpt);		// Number of button
 
 		  HTM_BUTTON_Submit_Begin (NULL,
 					   "class=\"MCH_STD_BUTTON%s BT_%c\""
@@ -3218,7 +3217,7 @@ static const char *Mch_GetClassBorder (unsigned NumRow)
 /****** Write parameter with number of option (button) pressed by user *******/
 /*****************************************************************************/
 
-static void Mch_PutParamNumOpt (unsigned NumOpt)
+static void Mch_PutParNumOpt (unsigned NumOpt)
   {
    Par_PutParUnsigned (NULL,"NumOpt",NumOpt);
   }
@@ -3227,7 +3226,7 @@ static void Mch_PutParamNumOpt (unsigned NumOpt)
 /******* Get parameter with number of option (button) pressed by user ********/
 /*****************************************************************************/
 
-static unsigned Mch_GetParamNumOpt (void)
+static unsigned Mch_GetParNumOpt (void)
   {
    long NumOpt;
 
@@ -3385,7 +3384,7 @@ void Mch_RemMyQstAnsAndShowMchStatus (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Get question index from form *****/
-   QstInd = Gam_GetParamQstInd ();
+   QstInd = Gam_GetParQstInd ();
 
    /***** Remove my answer to this question *****/
    Mch_RemoveMyQuestionAnswer (&Match,QstInd);
@@ -3583,10 +3582,10 @@ void Mch_ReceiveQuestionAnswer (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Get question index from form *****/
-   QstInd = Gam_GetParamQstInd ();
+   QstInd = Gam_GetParQstInd ();
 
    /***** Get number of option selected by student from form *****/
-   UsrAnswer.NumOpt = Mch_GetParamNumOpt ();
+   UsrAnswer.NumOpt = Mch_GetParNumOpt ();
 
    /***** Store answer *****/
    Mch_StoreQuestionAnswer (&Match,QstInd,&UsrAnswer);

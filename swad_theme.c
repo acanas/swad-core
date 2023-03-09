@@ -137,7 +137,7 @@ static void The_PutIconsTheme (__attribute__((unused)) void *Args)
 void The_ChangeTheme (void)
   {
    /***** Get param theme *****/
-   Gbl.Prefs.Theme = The_GetParamTheme ();
+   Gbl.Prefs.Theme = The_GetParTheme ();
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -151,7 +151,7 @@ void The_ChangeTheme (void)
 /***************************** Get parameter theme ***************************/
 /*****************************************************************************/
 
-The_Theme_t The_GetParamTheme (void)
+The_Theme_t The_GetParTheme (void)
   {
    char ThemeId[The_MAX_BYTES_THEME_ID + 1];
    The_Theme_t Theme;

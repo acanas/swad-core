@@ -77,7 +77,7 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 
 static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat);
 
-static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin);
+static void Pwd_PutLinkToSendNewPasswdPars (void *UsrIdLogin);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
@@ -87,7 +87,7 @@ static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
 /************* Get parameter with my plain password from a form **************/
 /*****************************************************************************/
 
-void Pwd_GetParamUsrPwdLogin (void)
+void Pwd_GetParUsrPwdLogin (void)
   {
    /***** Get plain password from form *****/
    Par_GetParText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,
@@ -174,7 +174,7 @@ void Pwd_UpdateMyPwd (void)
 void Pwd_UpdateOtherUsrPwd (void)
   {
    /***** Get other user's code from form and get user's data *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
          /***** Check and update password *****/
@@ -234,12 +234,12 @@ void Pwd_PutLinkToSendNewPasswd (void)
    extern const char *Txt_Forgotten_password;
 
    Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
-				  Pwd_PutLinkToSendNewPasswdParams,Gbl.Usrs.Me.UsrIdLogin,
+				  Pwd_PutLinkToSendNewPasswdPars,Gbl.Usrs.Me.UsrIdLogin,
 				  "key.svg",Ico_BLACK,
 				  Txt_Forgotten_password,NULL);
   }
 
-static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin)
+static void Pwd_PutLinkToSendNewPasswdPars (void *UsrIdLogin)
   {
    if (UsrIdLogin)
       Par_PutParString (NULL,"UsrId",(char *) Gbl.Usrs.Me.UsrIdLogin);
@@ -751,7 +751,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 /***** Form to change password *****/
 	 /* Begin form */
 	 Frm_BeginFormAnchor (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],Pwd_PASSWORD_SECTION_ID);
-	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
 	    /* New password */
 	    HTM_TABLE_BeginWidePadding (2);

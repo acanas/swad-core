@@ -175,7 +175,7 @@ void Qst_PutCheckboxToSelectAllQuestions (void);
 void Qst_WriteQuestionRowForSelection (unsigned QstInd,
                                        struct Qst_Question *Question);
 
-void Qst_PutParamsEditQst (void *Questions);
+void Qst_PutParsEditQst (void *Questions);
 
 void Qst_WriteAnswersBank (struct Qst_Question *Question,
                            const char *ClassTxt,
@@ -209,7 +209,7 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question);
 
 void Qst_WriteAnsTF (char AnsTF);
 
-void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
+void Qst_WriteParQstCod (unsigned NumQst,long QstCod);
 
 void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
@@ -255,13 +255,13 @@ void Qst_RequestRemoveSelectedQsts (void);
 void Qst_RemoveSelectedQsts (void);
 void Qst_PutIconToRemoveOneQst (void *QstCod);
 void Qst_RequestRemoveOneQst (void);
-void Qst_PutParamsRemoveOnlyThisQst (void *QstCod);
+void Qst_PutParsRemoveOnlyThisQst (void *QstCod);
 void Qst_RemoveOneQst (void);
 void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
 void Qst_ChangeShuffleQst (void);
 
-void Qst_PutParamQstCod (void *QstCod);
+void Qst_PutParQstCod (void *QstCod);
 
 void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
 void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);

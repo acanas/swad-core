@@ -55,14 +55,14 @@ void Plc_DB_CreatePlace (const struct Plc_Place *Plc)
 /****************** Update place name in table of places *********************/
 /*****************************************************************************/
 
-void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName)
+void Plc_DB_UpdatePlcName (long PlcCod,const char *FldName,const char *NewPlcName)
   {
    /***** Update place changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a place",
 		   "UPDATE plc_places"
 		     " SET %s='%s'"
 		   " WHERE PlcCod=%ld",
-		   FieldName,NewPlcName,
+		   FldName,NewPlcName,
 		   PlcCod);
   }
 
@@ -148,7 +148,7 @@ unsigned Plc_DB_GetDataOfPlaceByCod (MYSQL_RES **mysql_res,long PlcCod)
 /*****************************************************************************/
 
 bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                    const char *FieldName,const char *Name)
+                                    const char *FldName,const char *Name)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a place already existed",
@@ -159,7 +159,7 @@ bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
 		      " AND %s='%s'"
 		      " AND PlcCod<>%ld)",
 		   Gbl.Hierarchy.Ins.InsCod,
-		   FieldName,Name,
+		   FldName,Name,
 		   PlcCod);
   }
 

@@ -194,7 +194,7 @@ void ExaRes_ShowMyResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -242,7 +242,7 @@ void ExaRes_ShowMyResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
    Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
    Exa_GetDataOfExamByCod (&Exams.Exam);
    ExaSes_GetDataOfSessionByCod (&Session);
@@ -355,7 +355,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+      Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -388,7 +388,7 @@ void ExaRes_ShowAllResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
    Exa_GetDataOfExamByCod (&Exams.Exam);
 
    /***** Exam begin *****/
@@ -456,7 +456,7 @@ void ExaRes_ShowAllResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetParams (&Exams,true);
+   Exa_GetPars (&Exams,true);
    Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
 
    /***** Get exam data and session *****/
@@ -578,8 +578,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
       /***** Begin form to update the results
 	     depending on the exams selected *****/
       Frm_BeginFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
-	 Grp_PutParamsCodGrps ();
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Grp_PutParsCodGrps ();
+	 Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWidePadding (2);
@@ -1027,13 +1027,13 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		    {
 		     case Usr_ME:
 			Frm_BeginForm (ActSeeOneExaResMe);
-			   ExaSes_PutParamsEdit (Exams);
+			   ExaSes_PutParsEdit (Exams);
 		           Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
 			break;
 		     case Usr_OTHER:
 			Frm_BeginForm (ActSeeOneExaResOth);
-			   ExaSes_PutParamsEdit (Exams);
-			   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			   ExaSes_PutParsEdit (Exams);
+			   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		           Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
 			break;
 		    }
@@ -1243,7 +1243,7 @@ void ExaRes_ShowExaResultAfterFinish (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Session);
+   ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Get exam print data *****/
    Print.SesCod = Session.SesCod;
@@ -1283,7 +1283,7 @@ void ExaRes_ShowOneExaResult (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get and check parameters *****/
-   ExaSes_GetAndCheckParameters (&Exams,&Session);
+   ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneExaResMe) ? Usr_ME :
@@ -1296,7 +1296,7 @@ void ExaRes_ShowOneExaResult (void)
       case Usr_OTHER:
       default:
 	 UsrDat = &Gbl.Usrs.Other.UsrDat;
-         Usr_GetParamOtherUsrCodEncrypted (UsrDat);
+         Usr_GetParOtherUsrCodEncrypted (UsrDat);
 	 break;
      }
 
