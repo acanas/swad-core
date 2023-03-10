@@ -82,6 +82,7 @@ const char *Par_CodeStr[] =
    [ParCod_Rsc      ] = "RscCod",	// Resource code in course program
    [ParCod_Rub      ] = "RubCod",	// Rubric code
    [ParCod_Ses      ] = "SesCod",	// Session code in exam
+   [ParCod_Set      ] = "SetCod",	// Set of questions code in exam
    [ParCod_Svy      ] = "SvyCod",	// Syrvey code
    [ParCod_Tag      ] = "TagCod",	// Tag code in assessment question
    [ParCod_Thr      ] = "ThrCod",	// Thread code in forum

@@ -74,6 +74,7 @@ typedef enum
    ParCod_Rsc,		// Resource code in course program
    ParCod_Rub,		// Rubric code
    ParCod_Ses,		// Session code in exam
+   ParCod_Set,		// Set of questions code in exam
    ParCod_Svy,		// Syrvey code
    ParCod_Tag,		// Tag code in assessment question
    ParCod_Thr,		// Thread code in forum

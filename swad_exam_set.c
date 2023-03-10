@@ -288,7 +288,7 @@ void ExaSet_ReceiveFormSet (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
    Set.ExaCod = Exams.Exam.ExaCod;
-   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Ses);
+   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Set);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -506,7 +506,7 @@ void ExaSet_RequestCreatOrEditSet (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
-   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Ses);
+   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Set);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -1678,7 +1678,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
    /***** Get parameters *****/
    Exa_GetPars (Exams,true);
    Grp_GetParWhichGroups ();
-   Set->SetCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Set->SetCod = ParCod_GetAndCheckPar (ParCod_Set);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams->Exam);
