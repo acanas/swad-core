@@ -1287,48 +1287,48 @@ const char *Hlp_COURSE_Links_edit =
 
 const char *Hlp_COURSE_Assessment =
 #if   L==1
-	"ASSESSMENT.System.es";
+	"COURSE.Assessment.es";
 #elif L==2
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==3
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==4
-	"ASSESSMENT.System.es";
+	"COURSE.Assessment.es";
 #elif L==5
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==6
-	"ASSESSMENT.System.es";
+	"COURSE.Assessment.es";
 #elif L==7
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==8
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==9
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #elif L==10	// tr
-	"ASSESSMENT.System.en";
+	"COURSE.Assessment.en";
 #endif
 
 const char *Hlp_COURSE_Assessment_edit =
 #if   L==1
-	"ASSESSMENT.System.es#editar";
+	"COURSE.Assessment.es#editar";
 #elif L==2
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==3
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==4
-	"ASSESSMENT.System.es#editar";
+	"COURSE.Assessment.es#editar";
 #elif L==5
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==6
-	"ASSESSMENT.System.es#editar";
+	"COURSE.Assessment.es#editar";
 #elif L==7
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==8
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==9
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #elif L==10	// tr
-	"ASSESSMENT.System.en#edit";
+	"COURSE.Assessment.en#edit";
 #endif
 
 /***** ASSESSMENT tab *****/
