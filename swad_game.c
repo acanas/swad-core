@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -50,6 +50,7 @@
 #include "swad_match_result.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
@@ -785,7 +786,7 @@ void Gam_PutPars (void *Games)
 
    if (Games)
      {
-      Par_PutParCode (Par_GamCod,((struct Gam_Games *) Games)->Game.GamCod);
+      ParCod_PutPar (ParCod_Gam,((struct Gam_Games *) Games)->Game.GamCod);
       Gam_PutParOrder (((struct Gam_Games *) Games)->SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
       Grp_PutParWhichGroups (&WhichGroups);
@@ -804,7 +805,7 @@ long Gam_GetPars (struct Gam_Games *Games)
    Games->CurrentPage = Pag_GetParPagNum (Pag_GAMES);
 
    /***** Get game code *****/
-   return Par_GetParCode (Par_GamCod);
+   return ParCod_GetPar (ParCod_Gam);
   }
 
 /*****************************************************************************/
@@ -895,7 +896,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of games selected *****/
-   Par_GetParMultiToText (Par_CodeStr[Par_GamCod],Games->GamCodsSelected,
+   Par_GetParMultiToText (Par_CodeStr[ParCod_Gam],Games->GamCodsSelected,
                           MaxSizeListGamCodsSelected);
 
    /***** Set which games will be shown as selected (checkboxes on) *****/
@@ -1085,7 +1086,7 @@ void Gam_RemoveGame (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Get game code *****/
-   Games.Game.GamCod = Par_GetAndCheckParCode (Par_GamCod);
+   Games.Game.GamCod = ParCod_GetAndCheckPar (ParCod_Gam);
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Games.Game);

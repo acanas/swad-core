@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -48,7 +48,7 @@
 #include "swad_HTML.h"
 #include "swad_match_database.h"
 #include "swad_notification.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program.h"
 #include "swad_project.h"
 #include "swad_setting.h"
@@ -1254,7 +1254,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Name of group type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -1266,7 +1266,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it mandatory to register in any group? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
@@ -1284,7 +1284,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it possible to register in multiple groups? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
@@ -1302,7 +1302,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Open time */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-		  Par_PutParCode (Par_GrpTypCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_TABLE_BeginCenterPadding (2);
 		     HTM_TR_Begin (NULL);
 
@@ -1449,7 +1449,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->Open ? ActCloGrp :
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
 			                          "lock.svg",
 			              Grp->Open ? Ico_GREEN :
@@ -1464,7 +1464,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     Ico_PutIconLink (Grp->FileZones ? "folder-open.svg" :
 			                               "folder.svg",
 			              Grp->FileZones ? Ico_GREEN :
@@ -1478,7 +1478,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
@@ -1503,7 +1503,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Group name *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"20\" class=\"INPUT_%s\"",
@@ -1515,7 +1515,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
@@ -1557,7 +1557,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Maximum number of students of the group (row[3]) *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
-		     Par_PutParCode (Par_GrpCod,Grp->GrpCod);
+		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1621,14 +1621,14 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    static const struct
      {
       const char *Table;
-      Par_Code_t ParCode;
+      const char *Field;
      } AssociationsToGrps[Grp_NUM_ASSOCIATIONS_TO_GROUPS] =
      {
-      [Grp_ASSIGNMENT] = {"asg_groups",Par_AsgCod},
-      [Grp_ATT_EVENT ] = {"att_groups",Par_AttCod},
-      [Grp_SURVEY    ] = {"svy_groups",Par_SvyCod},
-      [Grp_EXA_EVENT ] = {"exa_groups",Par_SesCod},
-      [Grp_MATCH     ] = {"mch_groups",Par_MchCod},
+      [Grp_ASSIGNMENT] = {"asg_groups","AsgCod"},
+      [Grp_ATT_EVENT ] = {"att_groups","AttCod"},
+      [Grp_SURVEY    ] = {"svy_groups","SvyCod"},
+      [Grp_EXA_EVENT ] = {"exa_groups","SesCod"},
+      [Grp_MATCH     ] = {"mch_groups","MchCod"},
      };
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
@@ -1653,7 +1653,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
 	 AssociatedToGrp = Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].ParCode,
+	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].Field,
 	                                                  Cod,Grp->GrpCod);
       else
          AssociatedToGrp = false;
@@ -3296,13 +3296,13 @@ void Grp_ReceiveFormNewGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get parameters from form *****/
-   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetParCode (Par_GrpTypCod)) > 0) // Group type valid
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetPar (ParCod_GrpTyp)) > 0) // Group type valid
      {
       /* Get group name */
       Par_GetParText ("GrpName",Gbl.Crs.Grps.GrpName,Grp_MAX_BYTES_GROUP_NAME);
 
       /* Get room */
-      Gbl.Crs.Grps.RooCod = Par_GetParCode (Par_RooCod);
+      Gbl.Crs.Grps.RooCod = ParCod_GetPar (ParCod_Roo);
 
       /* Get maximum number of students */
       Gbl.Crs.Grps.MaxStudents = (unsigned)
@@ -3360,7 +3360,7 @@ void Grp_ReqRemGroupType (void)
    unsigned NumGrps;
 
    /***** Get the code of the group type *****/
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Check if this group type has groups *****/
    if ((NumGrps = Grp_DB_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
@@ -3376,7 +3376,7 @@ void Grp_ReqRemGroupType (void)
 void Grp_ReqRemGroup (void)
   {
    /***** Get group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Confirm removing *****/
    Grp_AskConfirmRemGrp ();
@@ -3472,7 +3472,7 @@ static void Grp_AskConfirmRemGrp (void)
 void Grp_RemoveGroupType (void)
   {
    /***** Get param with code of group type *****/
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Remove group type and its groups *****/
    Grp_RemoveGroupTypeCompletely ();
@@ -3485,7 +3485,7 @@ void Grp_RemoveGroupType (void)
 void Grp_RemoveGroup (void)
   {
    /***** Get param with group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Remove group *****/
    Grp_RemoveGroupCompletely ();
@@ -3603,7 +3603,7 @@ void Grp_OpenGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3633,7 +3633,7 @@ void Grp_CloseGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3663,7 +3663,7 @@ void Grp_EnableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3694,7 +3694,7 @@ void Grp_DisableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3729,10 +3729,10 @@ void Grp_ChangeGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /* Get the new group type */
-   NewGrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   NewGrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get from the database the type and the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3778,10 +3778,10 @@ void Grp_ChangeGroupRoom (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /* Get the new room */
-   NewRooCod = Par_GetParCode (Par_RooCod);
+   NewRooCod = ParCod_GetPar (ParCod_Roo);
 
    /* Get from the database the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
@@ -3817,7 +3817,7 @@ void Grp_ChangeMandatGrpTyp (void)
 
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
    NewMandatoryEnrolment = Par_GetParBool ("MandatoryEnrolment");
@@ -3870,7 +3870,7 @@ void Grp_ChangeMultiGrpTyp (void)
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewMultipleEnrolment = Par_GetParBool ("MultipleEnrolment");
@@ -3916,7 +3916,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
 
    /***** Get the code of type of group *****/
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Get from the database the data of this type of group *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3955,7 +3955,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /***** Get parameters of the form *****/
    /* Get group code */
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /* Get the new maximum number of students of the group */
    NewMaxStds = (unsigned)
@@ -4043,7 +4043,7 @@ void Grp_RenameGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
-   Gbl.Crs.Grps.GrpTyp.GrpTypCod = Par_GetAndCheckParCode (Par_GrpTypCod);
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /* Get the new name for the group type */
    Par_GetParText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
@@ -4115,7 +4115,7 @@ void Grp_RenameGroup (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
-   Gbl.Crs.Grps.GrpCod = Par_GetAndCheckParCode (Par_GrpCod);
+   Gbl.Crs.Grps.GrpCod = ParCod_GetAndCheckPar (ParCod_Grp);
 
    /* Get the new name for the group */
    Par_GetParText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
@@ -4177,7 +4177,7 @@ void Grp_RenameGroup (void)
 static void Grp_PutParGrpTypCod (void *GrpTypCod)
   {
    if (GrpTypCod)
-      Par_PutParCode (Par_GrpTypCod,*((long *) GrpTypCod));
+      ParCod_PutPar (ParCod_GrpTyp,*((long *) GrpTypCod));
   }
 
 /*****************************************************************************/
@@ -4187,7 +4187,7 @@ static void Grp_PutParGrpTypCod (void *GrpTypCod)
 static void Grp_PutParGrpCod (void *GrpCod)
   {
    if (GrpCod)
-      Par_PutParCode (Par_GrpCod,*((long *) GrpCod));
+      ParCod_PutPar (ParCod_Grp,*((long *) GrpCod));
   }
 
 /*****************************************************************************/

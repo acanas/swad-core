@@ -5,7 +5,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -31,7 +31,7 @@
 #include "swad_attendance_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -45,7 +45,7 @@ void AttRsc_GetLinkToEvent (void)
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /***** Get attendance event code *****/
-   AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get attendance event title *****/
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
@@ -81,7 +81,7 @@ void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
       NextAction = (AttCod > 0)	? ActSeeOneAtt :	// Attendance events specified
 				  ActSeeAtt;		// All attendance events
       Frm_BeginForm (NextAction);
-         Par_PutParCode (Par_AttCod,AttCod);
+         ParCod_PutPar (ParCod_Att,AttCod);
 	 Att_PutParsCodGrps (AttCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",

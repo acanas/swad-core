@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -42,6 +42,7 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -546,7 +547,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday place */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldPlc);
-		  Par_PutParCode (Par_HldCod,Hld->HldCod);
+		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 				    The_GetSuffix ());
@@ -565,7 +566,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday type */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldTyp);
-		  Par_PutParCode (Par_HldCod,Hld->HldCod);
+		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"HldTyp\" class=\"INPUT_%s\""
 				    " style=\"width:62px;\"",	// TODO: Use a CSS class
@@ -586,7 +587,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday date / Non school period start date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldStrDat);
-		  Par_PutParCode (Par_HldCod,Hld->HldCod);
+		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 		  Dat_WriteFormDate (CurrentYear - 1,
 				     CurrentYear + 1,
 				     "Start",
@@ -598,7 +599,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Non school period end date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldEndDat);
-		  Par_PutParCode (Par_HldCod,Hld->HldCod);
+		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 		  Dat_WriteFormDate (CurrentYear - 1,
 				     CurrentYear + 1,
 				     "End",
@@ -610,7 +611,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenHld);
-		  Par_PutParCode (Par_HldCod,Hld->HldCod);
+		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 		  HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_%s\"",
@@ -631,7 +632,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 static void Hld_PutParHldCod (void *HldCod)
   {
    if (HldCod)
-      Par_PutParCode (Par_HldCod,*((long *) HldCod));
+      ParCod_PutPar (ParCod_Hld,*((long *) HldCod));
   }
 
 /*****************************************************************************/
@@ -646,7 +647,7 @@ void Hld_RemoveHoliday (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get holiday code *****/
-   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
+   Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get data of the holiday from database *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -674,11 +675,11 @@ void Hld_ChangeHolidayPlace (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
+   Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /* Get the new place for the holiday */
    // <0 (place unspecified/all places) and 0 (another place) are allowed here
-   NewPlace.PlcCod = Par_GetParCode (Par_PlcCod);
+   NewPlace.PlcCod = ParCod_GetPar (ParCod_Plc);
 
    /***** Get from the database the data of the place *****/
    Plc_GetDataOfPlaceByCod (&NewPlace);
@@ -710,7 +711,7 @@ void Hld_ChangeHolidayType (void)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
+   Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -762,7 +763,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
+   Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get from the database the data of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
@@ -826,7 +827,7 @@ void Hld_RenameHoliday (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   Hld_EditingHld->HldCod = Par_GetAndCheckParCode (Par_HldCod);
+   Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /* Get the new name for the holiday */
    Par_GetParText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
@@ -1024,7 +1025,7 @@ void Hld_ReceiveFormNewHoliday (void)
 
    /***** Get place code *****/
    // <0 (place unspecified/all places) and 0 (another place) are allowed here
-   Hld_EditingHld->PlcCod = Par_GetParCode (Par_PlcCod);
+   Hld_EditingHld->PlcCod = ParCod_GetPar (ParCod_Plc);
 
    /***** Get the type of holiday *****/
    Hld_EditingHld->HldTyp = Hld_GetParHldType ();

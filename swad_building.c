@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -40,6 +40,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_room_database.h"
 
 /*****************************************************************************/
@@ -445,7 +446,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building short name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldSho,Anchor);
-		  Par_PutParCode (Par_BldCod,Building->BldCod);
+		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
 		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -456,7 +457,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building full name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldFul,Anchor);
-		  Par_PutParCode (Par_BldCod,Building->BldCod);
+		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
 		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -467,7 +468,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldLoc,Anchor);
-		  Par_PutParCode (Par_BldCod,Building->BldCod);
+		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -489,7 +490,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 static void Bld_PutParBldCod (void *BldCod)
   {
    if (BldCod)
-      Par_PutParCode (Par_BldCod,*((long *) BldCod));
+      ParCod_PutPar (ParCod_Bld,*((long *) BldCod));
   }
 
 /*****************************************************************************/
@@ -504,7 +505,7 @@ void Bld_RemoveBuilding (void)
    Bld_EditingBuildingConstructor ();
 
    /***** Get building code *****/
-   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
+   Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /***** Get data of the building from database *****/
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
@@ -580,7 +581,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
+   Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /* Get the new name for the building */
    Par_GetParText (ParName,NewClaName,MaxBytes);
@@ -637,7 +638,7 @@ void Bld_ChangeBuildingLocation (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
-   Bld_EditingBuilding->BldCod = Par_GetAndCheckParCode (Par_BldCod);
+   Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /* Get the new location for the building */
    Par_GetParText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);

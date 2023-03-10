@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -30,9 +30,9 @@
 void Err_NotEnoughMemoryExit (void);
 void Err_PathTooLongExit (void);
 void Err_QuerySizeExceededExit (void);
+
 void Err_WrongActionExit (void);
 void Err_WrongScopeExit (void);
-void Err_WrongHierarchyExit (void);
 void Err_WrongCountrExit (void);
 void Err_WrongInstitExit (void);
 void Err_WrongCenterExit (void);
@@ -41,7 +41,6 @@ void Err_WrongDegreeExit (void);
 void Err_WrongCourseExit (void);
 void Err_WrongDepartmentExit (void);
 void Err_WrongPlaceExit (void);
-void Err_WrongOrderExit (void);
 void Err_WrongStatusExit (void);
 void Err_WrongDateExit (void);
 void Err_WrongPluginExit (void);
@@ -50,7 +49,9 @@ void Err_WrongItemExit (void);
 void Err_WrongResourceExit (void);
 void Err_WrongSyllabusFormatExit (void);
 void Err_WrongFileBrowserExit (void);
+
 void Err_FileFolderNotFoundExit (void);
+
 void Err_WrongCopySrcExit (void);
 void Err_WrongNumberOfRowsExit (void);
 void Err_WrongGrpTypExit (void);
@@ -93,6 +94,7 @@ void Err_WrongMessageExit (void);
 void Err_WrongMailDomainExit (void);
 void Err_WrongRoleExit (void);
 void Err_WrongUserExit (void);
+
 void Err_NoPermission (void);
 void Err_NoPermissionExit (void);
 void Err_ShowErrorAndExit (const char *Txt);

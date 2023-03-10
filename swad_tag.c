@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -41,6 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_tag.h"
 #include "swad_tag_database.h"
 #include "swad_theme.h"
@@ -107,7 +108,7 @@ void Tag_PutIconToEditTags (void)
 
 void Tag_EnableTag (void)
   {
-   long TagCod = Par_GetAndCheckParCode (Par_TagCod);
+   long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
 
    /***** Change tag status to enabled *****/
    Tag_DB_EnableOrDisableTag (TagCod,false);
@@ -122,7 +123,7 @@ void Tag_EnableTag (void)
 
 void Tag_DisableTag (void)
   {
-   long TagCod = Par_GetAndCheckParCode (Par_TagCod);
+   long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
 
    /***** Change tag status to disabled *****/
    Tag_DB_EnableOrDisableTag (TagCod,true);
@@ -453,7 +454,7 @@ static void Tag_PutIconEnable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
-	 Par_PutParCode (Par_TagCod,TagCod);
+	 ParCod_PutPar (ParCod_Tag,TagCod);
 	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,ActEnaTag);
       Frm_EndForm ();
    HTM_TD_End ();
@@ -467,7 +468,7 @@ static void Tag_PutIconDisable (long TagCod)
   {
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
-	 Par_PutParCode (Par_TagCod,TagCod);
+	 ParCod_PutPar (ParCod_Tag,TagCod);
 	 Ico_PutIconLink ("eye.svg",Ico_GREEN,ActDisTag);
       Frm_EndForm ();
    HTM_TD_End ();

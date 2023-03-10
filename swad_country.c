@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -47,6 +47,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_survey.h"
 
 /*****************************************************************************/
@@ -512,7 +513,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Par_PutParCode (Par_CtyCod,Cty->CtyCod);
+      ParCod_PutPar (ParCod_Cty,Cty->CtyCod);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
@@ -918,7 +919,7 @@ void Cty_WriteCountryName (long CtyCod)
      {
       /***** Write country name with link to country information *****/
       Frm_BeginForm (ActSeeCtyInf);
-	 Par_PutParCode (Par_CtyCod,CtyCod);
+	 ParCod_PutPar (ParCod_Cty,CtyCod);
 	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 	                          "class=\"BT_LINK\"");
 	    HTM_Txt (CtyName);
@@ -1135,7 +1136,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* Name */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActRenCty);
-		     Par_PutParCode (Par_OthCtyCod,Cty->CtyCod);
+		     ParCod_PutPar (ParCod_OthCty,Cty->CtyCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1147,7 +1148,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* WWW */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActChgCtyWWW);
-		     Par_PutParCode (Par_OthCtyCod,Cty->CtyCod);
+		     ParCod_PutPar (ParCod_OthCty,Cty->CtyCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
@@ -1171,7 +1172,7 @@ static void Cty_ListCountriesForEdition (void)
 static void Cty_PutParOthCtyCod (void *CtyCod)
   {
    if (CtyCod)
-      Par_PutParCode (Par_OthCtyCod,*((long *) CtyCod));
+      ParCod_PutPar (ParCod_OthCty,*((long *) CtyCod));
   }
 
 /*****************************************************************************/
@@ -1187,7 +1188,7 @@ void Cty_RemoveCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get country code *****/
-   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
+   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get data of the country from database *****/
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
@@ -1248,7 +1249,7 @@ void Cty_RenameCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
+   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParLanguage ();
@@ -1327,7 +1328,7 @@ void Cty_ChangeCtyWWW (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
+   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParLanguage ();
@@ -1393,7 +1394,7 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
 static void Cty_PutParGoToCty (void *CtyCod)
   {
    if (CtyCod)
-      Par_PutParCode (Par_CtyCod,*((long *) CtyCod));
+      ParCod_PutPar (ParCod_Cty,*((long *) CtyCod));
   }
 
 /*****************************************************************************/
@@ -1434,7 +1435,7 @@ static void Cty_PutFormToCreateCountry (void)
 		  snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
 	       else
 		  StrCtyCod[0] = '\0';
-	       HTM_INPUT_TEXT (Par_CodeStr[Par_OthCtyCod],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"3\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
@@ -1556,7 +1557,7 @@ void Cty_ReceiveFormNewCountry (void)
 
    /***** Get parameters from form *****/
    /* Get numeric country code */
-   if ((Cty_EditingCty->CtyCod = Par_GetParCode (Par_OthCtyCod)) < 0)
+   if ((Cty_EditingCty->CtyCod = ParCod_GetPar (ParCod_OthCty)) < 0)
      {
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_numerical_code_of_the_new_country);

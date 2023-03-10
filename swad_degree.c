@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -53,6 +53,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo_database.h"
 #include "swad_survey.h"
 
@@ -194,7 +195,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Par_PutParCode (Par_DegCod,Deg->DegCod);
+      ParCod_PutPar (ParCod_Deg,Deg->DegCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
@@ -370,7 +371,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
-		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
+		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -386,7 +387,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
-		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
+		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -402,7 +403,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
+		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -433,7 +434,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		     Par_PutParCode (Par_OthHieCod,Deg->DegCod);
+		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -1096,7 +1097,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
-   Deg_EditingDeg->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
+   Deg_EditingDeg->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /* Get degree WWW */
    Par_GetParText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
@@ -1145,7 +1146,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Get degree code *****/
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1304,7 +1305,7 @@ void Deg_RenameDegreeShort (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
 
@@ -1314,7 +1315,7 @@ void Deg_RenameDegreeFull (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
 
@@ -1404,10 +1405,10 @@ void Deg_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get the new degree type */
-   NewDegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
+   NewDegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1437,7 +1438,7 @@ void Deg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get the new WWW for the degree */
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1476,7 +1477,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with status */
    Status = Hie_GetParStatus ();	// New status
@@ -1991,5 +1992,5 @@ bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
 static void Deg_PutParDegCod (void *DegCod)
   {
    if (DegCod)
-      Par_PutParCode (Par_DegCod,*((long *) DegCod));
+      ParCod_PutPar (ParCod_Deg,*((long *) DegCod));
   }

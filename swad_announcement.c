@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_role.h"
 
 /*****************************************************************************/
@@ -305,7 +306,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 static void Ann_PutParAnnCod (void *AnnCod)
   {
    if (AnnCod)
-      Par_PutParCode (Par_AnnCod,*((long *) AnnCod));
+      ParCod_PutPar (ParCod_Ann,*((long *) AnnCod));
   }
 
 /*****************************************************************************/
@@ -429,7 +430,7 @@ void Ann_HideActiveAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement to hide *****/
-   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
+   AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
 
    /***** Set global announcement as hidden *****/
    Ann_DB_HideAnnouncement (AnnCod);
@@ -444,7 +445,7 @@ void Ann_RevealHiddenAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement to show *****/
-   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
+   AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
 
    /***** Set global announcement as not hidden *****/
    Ann_DB_UnhideAnnouncement (AnnCod);
@@ -460,7 +461,7 @@ void Ann_RemoveAnnouncement (void)
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
-   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
+   AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
 
    /***** Remove users who have seen the announcement *****/
    Ann_DB_RemoveUsrsWhoSawAnnouncement (AnnCod);
@@ -484,7 +485,7 @@ void Ann_MarkAnnouncementAsSeen (void)
    long AnnCod;
 
    /***** Get the code of the global announcement *****/
-   AnnCod = Par_GetAndCheckParCode (Par_AnnCod);
+   AnnCod = ParCod_GetAndCheckPar (ParCod_Ann);
 
    /***** Mark announcement as seen *****/
    Ann_DB_MarkAnnouncementAsSeenByMe (AnnCod);

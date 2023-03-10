@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -56,6 +56,7 @@
 #include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
 #include "swad_program_database.h"
@@ -1141,8 +1142,8 @@ void For_PutAllParsForum (unsigned NumPageThreads,
    For_PutParForumSet (ForumSet);
    Par_PutParOrder ((unsigned) Order);
    For_PutParForumLocation (Location);
-   Par_PutParCode (Par_ThrCod,ThrCod);
-   Par_PutParCode (Par_PstCod,PstCod);
+   ParCod_PutPar (ParCod_Thr,ThrCod);
+   ParCod_PutPar (ParCod_Pst,PstCod);
   }
 
 /*****************************************************************************/
@@ -2440,10 +2441,10 @@ void For_GetParsForums (struct For_Forums *Forums)
 
    /***** Get optional parameter with code of a selected thread *****/
    Forums->Thread.Current  =
-   Forums->Thread.Selected = Par_GetParCode (Par_ThrCod);
+   Forums->Thread.Selected = ParCod_GetPar (ParCod_Thr);
 
    /***** Get optional parameter with code of a selected post *****/
-   Forums->PstCod = Par_GetParCode (Par_PstCod);
+   Forums->PstCod = ParCod_GetPar (ParCod_Pst);
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)

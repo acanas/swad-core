@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -145,14 +145,14 @@ void QR_ImageQRCode (const char *QRString)
 /*************** Show QR code with direct link (shortcut URL) ****************/
 /*****************************************************************************/
 
-void QR_LinkTo (unsigned Size,Par_Code_t ParCode,long Cod)
+void QR_LinkTo (unsigned Size,ParCod_Param_t ParCode,long Cod)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Shortcut;
    char *URL;
 
    /***** Show QR code with link *****/
-   if (ParCode == Par_None)
+   if (ParCode == ParCod_None)
      {
       if (asprintf (&URL,"https://chart.googleapis.com/"
 	                 "chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/",

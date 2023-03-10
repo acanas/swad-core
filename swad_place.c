@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -41,6 +41,7 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_place.h"
 #include "swad_place_database.h"
 
@@ -495,7 +496,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcSho);
-		  Par_PutParCode (Par_PlcCod,Plc->PlcCod);
+		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
 		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -506,7 +507,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcFul);
-		  Par_PutParCode (Par_PlcCod,Plc->PlcCod);
+		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
 		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -533,7 +534,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 static void Plc_PutParPlcCod (void *PlcCod)
   {
    if (PlcCod)
-      Par_PutParCode (Par_PlcCod,*((long *) PlcCod));
+      ParCod_PutPar (ParCod_Plc,*((long *) PlcCod));
   }
 
 /*****************************************************************************/
@@ -549,7 +550,7 @@ void Plc_RemovePlace (void)
    Plc_EditingPlaceConstructor ();
 
    /***** Get place code *****/
-   Plc_EditingPlc->PlcCod = Par_GetAndCheckParCode (Par_PlcCod);
+   Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /***** Get data of the place from database *****/
    Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
@@ -629,7 +630,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
-   Plc_EditingPlc->PlcCod = Par_GetAndCheckParCode (Par_PlcCod);
+   Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /* Get the new name for the place */
    Par_GetParText (ParName,NewPlcName,MaxBytes);

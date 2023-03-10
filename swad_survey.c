@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -47,7 +47,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_pagination.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_role.h"
@@ -407,7 +407,7 @@ void Svy_SeeOneSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Show survey *****/
    Svy_ShowOneSurvey (&Surveys,true);
@@ -531,7 +531,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
-	    Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
+	    ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 	    Svy_PutParSvyOrder (Surveys->SelectedOrder);
 	    WhichGroups = Grp_GetParWhichGroups ();
 	    Grp_PutParWhichGroups (&WhichGroups);
@@ -575,7 +575,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-		  Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
+		  ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 		  Svy_PutParSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
@@ -591,7 +591,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-		  Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
+		  ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 		  Svy_PutParSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
@@ -934,7 +934,7 @@ static void Svy_PutPars (void *Surveys)
 
    if (Surveys)
      {
-      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      ParCod_PutPar (ParCod_Svy,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
       Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Surveys)->SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
       Grp_PutParWhichGroups (&WhichGroups);
@@ -1423,7 +1423,7 @@ void Svy_AskRemSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1459,7 +1459,7 @@ void Svy_RemoveSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1511,7 +1511,7 @@ void Svy_AskResetSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1547,7 +1547,7 @@ void Svy_ResetSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1585,7 +1585,7 @@ void Svy_HideSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1616,7 +1616,7 @@ void Svy_UnhideSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);
@@ -1664,7 +1664,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((Surveys.Svy.SvyCod = Par_GetParCode (Par_SvyCod)) <= 0);
+   ItsANewSurvey = ((Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy)) <= 0);
 
    /***** Get from the database the data of the survey *****/
    if (ItsANewSurvey)
@@ -1927,7 +1927,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 		     HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
 					 Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
-					                                 Par_SvyCod,
+					                                 "SvyCod",
 					                                 SvyCod) ? "" :
 									           " checked=\"checked\"");
 		     HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1978,7 +1978,7 @@ void Svy_ReceiveFormSurvey (void)
    Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
-   ItsANewSurvey = ((NewSvy.SvyCod = Par_GetParCode (Par_SvyCod)) <= 0);
+   ItsANewSurvey = ((NewSvy.SvyCod = ParCod_GetPar (ParCod_Svy)) <= 0);
 
    if (ItsANewSurvey)
       NewSvy.Scope = HieLvl_UNK;
@@ -2264,10 +2264,10 @@ void Svy_RequestEditQuestion (void)
    Stem[0] = '\0';
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /* Get the question code */
-   SvyQst.QstCod = Par_GetParCode (Par_QstCod);
+   SvyQst.QstCod = ParCod_GetPar (ParCod_Qst);
 
    /***** Get other parameters *****/
    Surveys.SelectedOrder = Svy_GetParSvyOrder ();
@@ -2361,8 +2361,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvSvyQst);
-      Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
-      Par_PutParCode (Par_QstCod,SvyQst->QstCod);
+      ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
+      ParCod_PutPar (ParCod_Qst,SvyQst->QstCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
@@ -2556,10 +2556,10 @@ void Svy_ReceiveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /* Get question code */
-   SvyQst.QstCod = Par_GetParCode (Par_QstCod);
+   SvyQst.QstCod = ParCod_GetPar (ParCod_Qst);
 
    /* Get answer type */
    SvyQst.AnswerType = (Svy_AnswerType_t)
@@ -2742,7 +2742,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	{
 	 /***** Begin form to send answers to survey *****/
 	 Frm_BeginForm (ActAnsSvy);
-	    Par_PutParCode (Par_SvyCod,Surveys->Svy.SvyCod);
+	    ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 	}
 
       /***** Write the heading *****/
@@ -2870,8 +2870,8 @@ static void Svy_PutParsToEditQuestion (void *Surveys)
   {
    if (Surveys)
      {
-      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Par_PutParCode (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
+      ParCod_PutPar (ParCod_Svy,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      ParCod_PutPar (ParCod_Qst,((struct Svy_Surveys *) Surveys)->QstCod);
      }
   }
 
@@ -3095,8 +3095,8 @@ static void Svy_PutParsRemoveOneQst (void *Surveys)
   {
    if (Surveys)
      {
-      Par_PutParCode (Par_SvyCod,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
-      Par_PutParCode (Par_QstCod,((struct Svy_Surveys *) Surveys)->QstCod);
+      ParCod_PutPar (ParCod_Svy,((struct Svy_Surveys *) Surveys)->Svy.SvyCod);
+      ParCod_PutPar (ParCod_Qst,((struct Svy_Surveys *) Surveys)->QstCod);
      }
   }
 
@@ -3119,10 +3119,10 @@ void Svy_RequestRemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /* Get question code */
-   SvyQst.QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   SvyQst.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /* Get question index */
    SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3157,10 +3157,10 @@ void Svy_RemoveQst (void)
 
    /***** Get parameters from form *****/
    /* Get survey code */
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /* Get question code */
-   SvyQst.QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   SvyQst.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /* Get question index */
    SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
@@ -3196,7 +3196,7 @@ void Svy_ReceiveSurveyAnswers (void)
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Surveys.Svy);

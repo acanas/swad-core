@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -42,7 +42,7 @@
 #include "swad_hierarchy.h"
 #include "swad_notice.h"
 #include "swad_notification_database.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
@@ -625,39 +625,39 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_INS_DOC_PUB_FILE:
 	    case TmlNot_INS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Par_PutParCode (Par_FilCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Fil,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-		     Par_PutParCode (Par_InsCod,Not->HieCod);	// Go to another institution
+		     ParCod_PutPar (ParCod_Ins,Not->HieCod);	// Go to another institution
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Par_PutParCode (Par_FilCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Fil,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
-		     Par_PutParCode (Par_CtrCod,Not->HieCod);	// Go to another center
+		     ParCod_PutPar (ParCod_Ctr,Not->HieCod);	// Go to another center
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Par_PutParCode (Par_FilCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Fil,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-		     Par_PutParCode (Par_DegCod,Not->HieCod);	// Go to another degree
+		     ParCod_PutPar (ParCod_Deg,Not->HieCod);	// Go to another degree
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
-		  Par_PutParCode (Par_FilCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Fil,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Par_PutParCode (Par_CrsCod,Not->HieCod);	// Go to another course
+		     ParCod_PutPar (ParCod_Crs,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],
 				    Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
-		  Par_PutParCode (Par_ExaCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Exa,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Par_PutParCode (Par_CrsCod,Not->HieCod);	// Go to another course
+		     ParCod_PutPar (ParCod_Crs,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_POST:	// Not applicable
 	       return;
@@ -671,15 +671,15 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 				       Forums->Thread.Selected,
 				       -1L);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Par_PutParCode (Par_CrsCod,Not->HieCod);		// Go to another course
+		     ParCod_PutPar (ParCod_Crs,Not->HieCod);		// Go to another course
 	       break;
 	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
 	       Frm_FreeAnchorStr (Anchor);
-		  Par_PutParCode (Par_NotCod,Not->Cod);
+		  ParCod_PutPar (ParCod_Not,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-		     Par_PutParCode (Par_CrsCod,Not->HieCod);		// Go to another course
+		     ParCod_PutPar (ParCod_Crs,Not->HieCod);		// Go to another course
 	       break;
 	    default:			// Not applicable
 	       return;
@@ -867,7 +867,7 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_NOTE);
-      Par_PutParCode (Par_NotCod,NotCod);
+      ParCod_PutPar (ParCod_Not,NotCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
@@ -1009,7 +1009,7 @@ static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Do some checks *****/
@@ -1049,7 +1049,7 @@ static void TmlNot_PutParsRemoveNote (void *Timeline)
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->Who);
-      Par_PutParCode (Par_NotCod,((struct Tml_Timeline *) Timeline)->NotCod);
+      ParCod_PutPar (ParCod_Not,((struct Tml_Timeline *) Timeline)->NotCod);
      }
   }
 
@@ -1104,7 +1104,7 @@ static void TmlNot_RemoveNote (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check 1: note code should be > 0 *****/

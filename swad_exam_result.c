@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -51,6 +51,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_test_print.h"
 #include "swad_test_visibility.h"
@@ -243,7 +244,7 @@ void ExaRes_ShowMyResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
-   Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
+   Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
    Exa_GetDataOfExamByCod (&Exams.Exam);
    ExaSes_GetDataOfSessionByCod (&Session);
 
@@ -457,7 +458,7 @@ void ExaRes_ShowAllResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
-   Session.SesCod = Par_GetAndCheckParCode (Par_SesCod);
+   Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -605,7 +606,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
-		     HTM_INPUT_CHECKBOX (Par_CodeStr[Par_ExaCod],HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Exa],HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumExam,Exams->Lst[NumExam].ExaCod,
 					 Exams->Lst[NumExam].Selected ? " checked=\"checked\"" :

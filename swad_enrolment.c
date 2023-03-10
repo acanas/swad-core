@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -60,6 +60,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_record_database.h"
 #include "swad_role.h"
@@ -180,7 +181,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
 				 1 << Rol_STD))	// No students in course
 	{
 	 Frm_BeginForm (ActReqEnrSevStd);
-	    Par_PutParCode (Par_CrsCod,CrsCod);
+	    ParCod_PutPar (ParCod_Crs,CrsCod);
 	    Btn_PutCreateButtonInline (Txt_Register_students);
 	 Frm_EndForm ();
 	}
@@ -2226,7 +2227,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Deg_GetDataOfDegreeByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
-			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
+			   ParCod_PutPar (ParCod_Crs,Crs.CrsCod);
 			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 						    "class=\"LT BT_LINK\"");
 			   Str_FreeGoToTitle ();
@@ -2274,7 +2275,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
-			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
+			   ParCod_PutPar (ParCod_Crs,Crs.CrsCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutCreateButtonInline (Txt_Register);
 			Frm_EndForm ();
@@ -2284,7 +2285,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
 		                   The_GetSuffix ());
 			Frm_BeginForm (ActReqRejSignUp);
-			   Par_PutParCode (Par_CrsCod,Crs.CrsCod);
+			   ParCod_PutPar (ParCod_Crs,Crs.CrsCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutRemoveButtonInline (Txt_Reject);
 			Frm_EndForm ();

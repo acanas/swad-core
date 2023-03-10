@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -169,7 +169,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    long ExaCod;
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
    Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
@@ -379,7 +379,7 @@ void Cfe_PrintCallForExam (void)
    Cfe_AllocMemCallForExam (&CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Read call for exam from the database *****/
    Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
@@ -406,7 +406,7 @@ void Cfe_ReqRemoveCallForExam (void)
    Cfe_ResetCallsForExams (&CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Show question and button to remove call for exam *****/
    /* Begin alert */
@@ -440,7 +440,7 @@ void Cfe_RemoveCallForExam1 (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Mark the call for exam as deleted in the database *****/
    Cfe_DB_MarkACallForExamAsDeleted (ExaCod);
@@ -481,7 +481,7 @@ void Cfe_HideCallForExam (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Mark the call for exam as hidden in the database *****/
    Cfe_DB_HideCallForExam (ExaCod);
@@ -505,7 +505,7 @@ void Cfe_UnhideCallForExam (void)
    Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Mark the call for exam as visible in the database *****/
    Cfe_DB_UnhideCallForExam (ExaCod);
@@ -587,7 +587,7 @@ static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams)
   {
    /***** Get the call for exam code
           of the call for exam to highlight *****/
-   CallsForExams->HighlightExaCod = Par_GetParCode (Par_ExaCod);
+   CallsForExams->HighlightExaCod = ParCod_GetPar (ParCod_Exa);
   }
 
 /*****************************************************************************/
@@ -958,7 +958,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      {
       /***** Begin form *****/
       Frm_BeginFormAnchor (ActRcvCfe,Anchor);
-         Par_PutParCode (Par_ExaCod,ExaCod);
+         ParCod_PutPar (ParCod_Exa,ExaCod);
      }
 
       /***** Begin table *****/
@@ -1547,7 +1547,7 @@ bool Cfe_CheckIfICanEditCallsForExams (void)
 static void Cfe_PutParExaCod (void *ExaCod)
   {
    if (ExaCod)
-      Par_PutParCode (Par_ExaCod,*((long *) ExaCod));
+      ParCod_PutPar (ParCod_Exa,*((long *) ExaCod));
   }
 
 /*****************************************************************************/

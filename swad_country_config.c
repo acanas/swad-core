@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -425,7 +425,7 @@ static void CtyCfg_Name (bool PutLink)
 
 static void CtyCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
+   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/
@@ -434,7 +434,7 @@ static void CtyCfg_Shortcut (bool PrintView)
 
 static void CtyCfg_QR (void)
   {
-   HieCfg_QR (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
+   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
   }
 
 /*****************************************************************************/
@@ -478,7 +478,7 @@ static void CtyCfg_NumInss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    Par_PutParCode (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
 	                  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
 	       Err_NotEnoughMemoryExit ();

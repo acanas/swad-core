@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -290,7 +290,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Name of the field */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Frm_BeginForm (ActRenFie);
-	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       ParCod_PutPar (ParCod_Fld,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
@@ -302,7 +302,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Number of lines in the form */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgRowFie);
-	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       ParCod_PutPar (ParCod_Fld,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
@@ -315,7 +315,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Visibility of a field */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgVisFie);
-	       Par_PutParCode (Par_FldCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       ParCod_PutPar (ParCod_Fld,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"Visibility\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
@@ -552,7 +552,7 @@ void Rec_ReqRemField (void)
    unsigned NumRecords;
 
    /***** Get the code of field *****/
-   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
+   Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /***** Check if exists any record with that field filled *****/
    if ((NumRecords = Rec_DB_CountNumRecordsWithFieldContent (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
@@ -595,7 +595,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
 static void Rec_PutParFldCod (void *FldCod)
   {
    if (FldCod)
-      Par_PutParCode (Par_FldCod,*((long *) FldCod));
+      ParCod_PutPar (ParCod_Fld,*((long *) FldCod));
   }
 
 /*****************************************************************************/
@@ -667,7 +667,7 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
 void Rec_RemoveField (void)
   {
    /***** Get the code of the field *****/
-   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
+   Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /***** Borrarlo from the database *****/
    Rec_RemoveFieldFromDB ();
@@ -686,7 +686,7 @@ void Rec_RenameField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
-   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
+   Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /* Get the new group name */
    Par_GetParText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
@@ -742,7 +742,7 @@ void Rec_ChangeLinesField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
+   Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /* Get the new number of lines */
    NewNumLines = (unsigned)
@@ -786,7 +786,7 @@ void Rec_ChangeVisibilityField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   Gbl.Crs.Records.Field.FieldCod = Par_GetAndCheckParCode (Par_FldCod);
+   Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
@@ -1518,7 +1518,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
 
    /***** Get where we came from *****/
-   Gbl.Action.Original = Act_GetActionFromActCod (Par_GetParCode (Par_OrgActCod));
+   Gbl.Action.Original = Act_GetActionFromActCod (ParCod_GetPar (ParCod_OrgAct));
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
@@ -1633,7 +1633,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    ICanEdit = true;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
-	       Par_PutParCode (Par_OrgActCod,Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
+	       ParCod_PutPar (ParCod_OrgAct,Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		  Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -2528,7 +2528,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       Par_PutParCode (Par_InsCod,Ins->InsCod);
+	       ParCod_PutPar (ParCod_Ins,Ins->InsCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
@@ -2549,7 +2549,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       Par_PutParCode (Par_InsCod,Ins->InsCod);
+	       ParCod_PutPar (ParCod_Ins,Ins->InsCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
@@ -3152,7 +3152,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 	{
 	 if (asprintf (&Label,"%s*",Txt_Country) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthCtyCod],Label);
+	 Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCty],Label);
 	 free (Label);
 	}
       else
@@ -3189,7 +3189,6 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 
 static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
   {
-   extern const char *Par_CodeStr[];
    extern const char *Txt_Date_of_birth;
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
@@ -3628,7 +3627,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct Usr_Data *UsrDat)
                                          (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
-   UsrDat->CtyCod = Par_GetAndCheckParCodeMin (Par_OthCtyCod,0);	// 0 (another country) is allowed here
+   UsrDat->CtyCod = ParCod_GetAndCheckParMin (ParCod_OthCty,0);	// 0 (another country) is allowed here
 
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
                         &(UsrDat->Birthday.Day  ),
@@ -3809,7 +3808,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    /* Label */
 	    if (asprintf (&Label,"%s*",Txt_Institution) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthInsCod],Label);
+	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthIns],Label);
 	    free (Label);
 
 	    /* Data */
@@ -3852,7 +3851,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       if (asprintf (&Label,"%s*",Txt_Center) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_OthCtrCod],Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCtr],Label);
 	       free (Label);
 
 	       /* Data */
@@ -3893,7 +3892,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       if (asprintf (&Label,"%s*",Txt_Department) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[Par_DptCod],Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_Dpt],Label);
 	       free (Label);
 
 	       /* Data */
@@ -3904,7 +3903,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						  Par_CodeStr[Par_DptCod],		// Parameter name
+						  Par_CodeStr[ParCod_Dpt],		// Parameter name
 						  SelectClass,				// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected
@@ -3972,7 +3971,7 @@ void Rec_ChgCountryOfMyInstitution (void)
    unsigned NumInss;
 
    /***** Get country code of my institution *****/
-   Gbl.Usrs.Me.UsrDat.InsCtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
+   Gbl.Usrs.Me.UsrDat.InsCtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** When country changes, the institution, center and department must be reset *****/
    NumInss = Ins_GetNumInssInCty (Gbl.Usrs.Me.UsrDat.InsCtyCod);
@@ -4008,7 +4007,7 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   Ins.InsCod = Par_GetAndCheckParCodeMin (Par_OthInsCod,0);	// 0 (another institution) is allowed here
+   Ins.InsCod = ParCod_GetAndCheckParMin (ParCod_OthIns,0);	// 0 (another institution) is allowed here
 
    /* Get country of institution */
    if (Ins.InsCod > 0)
@@ -4044,7 +4043,7 @@ void Rec_UpdateMyCenter (void)
 
    /***** Get my center *****/
    /* Get center code */
-   Ctr.CtrCod = Par_GetAndCheckParCodeMin (Par_OthCtrCod,0);	// 0 (another center) is allowed here
+   Ctr.CtrCod = ParCod_GetAndCheckParMin (ParCod_OthCtr,0);	// 0 (another center) is allowed here
 
    /* Get institution of center */
    if (Ctr.CtrCod > 0)
@@ -4077,7 +4076,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Get my department *****/
    /* Get department code */
-   Dpt.DptCod = Par_GetAndCheckParCodeMin (Par_DptCod,0);	// 0 (another department) is allowed here
+   Dpt.DptCod = ParCod_GetAndCheckParMin (ParCod_Dpt,0);	// 0 (another department) is allowed here
 
    /* Get institution of department */
    if (Dpt.DptCod > 0)

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -317,7 +317,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthCtyCod] :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthCty] :
 				      NULL,
 		       Txt_Country);
 
@@ -345,7 +345,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
-		  Par_PutParCode (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
+		  ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -402,7 +402,7 @@ static void InsCfg_WWW (bool PrintView,bool PutForm)
 
 static void InsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_Shortcut (PrintView,ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -411,7 +411,7 @@ static void InsCfg_Shortcut (bool PrintView)
 
 static void InsCfg_QR (void)
   {
-   HieCfg_QR (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -540,7 +540,7 @@ void InsCfg_ChangeInsCty (void)
    struct Cty_Countr NewCty;
 
    /***** Get the new country code for the institution *****/
-   NewCty.CtyCod = Par_GetAndCheckParCode (Par_OthCtyCod);
+   NewCty.CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Check if country has changed *****/
    if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -962,7 +962,7 @@ void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
    if (NumPage > 1)
       Pag_PutParPagNum (Pag_MY_AGENDA,NumPage);
 
-   Par_PutParCode (Par_AgdCod,AgdCodToEdit);
+   ParCod_PutPar (ParCod_Agd,AgdCodToEdit);
   }
 
 /*****************************************************************************/
@@ -1172,7 +1172,7 @@ void Agd_AskRemEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1207,7 +1207,7 @@ void Agd_RemoveEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1240,7 +1240,7 @@ void Agd_HideEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1269,7 +1269,7 @@ void Agd_UnhideEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1299,7 +1299,7 @@ void Agd_MakeEventPrivate (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1333,7 +1333,7 @@ void Agd_MakeEventPublic (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get event code *****/
-   AgdEvent.AgdCod = Par_GetAndCheckParCode (Par_AgdCod);
+   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1382,7 +1382,7 @@ void Agd_RequestCreatOrEditEvent (void)
    Agd_GetPars (&Agenda,Agd_MY_AGENDA);
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Par_GetParCode (Par_AgdCod)) <= 0);
+   ItsANewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) <= 0);
 
    /***** Get from the database the data of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1528,7 +1528,7 @@ void Agd_ReceiveFormEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((AgdEvent.AgdCod = Par_GetParCode (Par_AgdCod)) <= 0);
+   ItsANewEvent = ((AgdEvent.AgdCod = ParCod_GetPar (ParCod_Agd)) <= 0);
 
    /***** Get start/end date-times *****/
    AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);

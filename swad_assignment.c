@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -48,7 +48,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_pagination.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_program_resource.h"
 #include "swad_role.h"
@@ -382,7 +382,7 @@ void Asg_SeeOneAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Show selected assignment in a box *****/
    Asg_ShowOneAssignmentInBox (&Assignments);
@@ -403,7 +403,7 @@ void Asg_PrintOneAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get the code of the assignment *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
@@ -774,7 +774,7 @@ static void Asg_PutPars (void *Assignments)
 
    if (Assignments)
      {
-      Par_PutParCode (Par_AsgCod,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
+      ParCod_PutPar (ParCod_Asg,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
       Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
       Grp_PutParWhichGroups (&WhichGroups);
@@ -1022,7 +1022,7 @@ void Asg_ReqRemAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
@@ -1056,7 +1056,7 @@ void Asg_RemoveAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
@@ -1099,7 +1099,7 @@ void Asg_HideAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
@@ -1128,7 +1128,7 @@ void Asg_UnhideAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
@@ -1179,7 +1179,7 @@ void Asg_RequestCreatOrEditAsg (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((Assignments.Asg.AsgCod = Par_GetParCode (Par_AsgCod)) <= 0);
+   ItsANewAssignment = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
 
    /***** Get from the database the data of the assignment *****/
    if (ItsANewAssignment)
@@ -1344,7 +1344,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
 					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-					                                    Par_AsgCod,
+					                                    "AsgCod",
 					                                    AsgCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1399,7 +1399,7 @@ void Asg_ReceiveFormAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((Assignments.Asg.AsgCod = Par_GetParCode (Par_AsgCod)) <= 0);
+   ItsANewAssignment = ((Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) <= 0);
 
    if (ItsANewAssignment)
      {

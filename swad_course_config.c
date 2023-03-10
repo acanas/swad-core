@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -219,7 +219,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthDegCod] :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthDeg] :
 				      NULL,
 		       Txt_Degree);
 
@@ -253,7 +253,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
+		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),
 					   "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -404,7 +404,7 @@ static void CrsCfg_InternalCode (void)
 
 static void CrsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_CrsCod,Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -413,7 +413,7 @@ static void CrsCfg_Shortcut (bool PrintView)
 
 static void CrsCfg_QR (void)
   {
-   HieCfg_QR (Par_CrsCod,Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -473,7 +473,7 @@ void CrsCfg_ChangeCrsDeg (void)
    struct Deg_Degree NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.DegCod = Par_GetAndCheckParCode (Par_OthDegCod);
+   NewDeg.DegCod = ParCod_GetAndCheckPar (ParCod_OthDeg);
 
    /***** Check if degree has changed *****/
    if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)

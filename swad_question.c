@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -40,6 +40,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_question.h"
 #include "swad_question_database.h"
 #include "swad_question_import.h"
@@ -1377,7 +1378,7 @@ void Qst_PutParsEditQst (void *Questions)
 								                                      'N');
       Par_PutParString (NULL,"AnswerType",((struct Qst_Questions *) Questions)->AnswerTypes.List);
 
-      Par_PutParCode (Par_QstCod,((struct Qst_Questions *) Questions)->Question.QstCod);
+      ParCod_PutPar (ParCod_Qst,((struct Qst_Questions *) Questions)->Question.QstCod);
       // if (Test->NumQsts == 1)
       //    Par_PutParChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParsIniEndDates ();
@@ -1817,7 +1818,7 @@ void Qst_ShowFormEditOneQst (void)
    Qst_QstConstructor (&Question);
 
    /***** Get question data *****/
-   Question.QstCod = Par_GetParCode (Par_QstCod);
+   Question.QstCod = ParCod_GetPar (ParCod_Qst);
    if (Question.QstCod <= 0)	// New question
       PutFormToEditQuestion = true;
    else
@@ -1896,7 +1897,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvTstQst);
-      Par_PutParCode (Par_QstCod,Question->QstCod);
+      ParCod_PutPar (ParCod_Qst,Question->QstCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginPadding (2);	// Table for this question
@@ -2724,7 +2725,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   Question->QstCod = Par_GetParCode (Par_QstCod);
+   Question->QstCod = ParCod_GetPar (ParCod_Qst);
 
    /***** Get answer type *****/
    Question->Answer.Type = (Qst_AnswerType_t)
@@ -3330,7 +3331,7 @@ void Qst_RequestRemoveOneQst (void)
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   Questions.Question.QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   Questions.Question.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
@@ -3373,7 +3374,7 @@ void Qst_PutParsRemoveOnlyThisQst (void *QstCod)
   {
    if (QstCod)
      {
-      Par_PutParCode (Par_QstCod,*(long *) QstCod);
+      ParCod_PutPar (ParCod_Qst,*(long *) QstCod);
       Par_PutParChar ("OnlyThisQst",'Y');
      }
   }
@@ -3389,7 +3390,7 @@ void Qst_RemoveOneQst (void)
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
-   QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
@@ -3442,7 +3443,7 @@ void Qst_ChangeShuffleQst (void)
    Qst_Constructor (&Questions);
 
    /***** Get the question code *****/
-   Questions.Question.QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   Questions.Question.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
@@ -3475,7 +3476,7 @@ void Qst_ChangeShuffleQst (void)
 void Qst_PutParQstCod (void *QstCod)	// Should be a pointer to long
   {
    if (QstCod)
-      Par_PutParCode (Par_QstCod,*((long *) QstCod));
+      ParCod_PutPar (ParCod_Qst,*((long *) QstCod));
   }
 
 /*****************************************************************************/

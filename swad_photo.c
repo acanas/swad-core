@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -53,6 +53,7 @@
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_photo_database.h"
 #include "swad_privacy.h"
@@ -1410,7 +1411,7 @@ void Pho_CalcPhotoDegree (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
 
    /***** Get the degree which photo will be computed *****/
-   if ((DegCod = Par_GetParCode (Par_OthDegCod)) > 0)	// Parameter may be omitted
+   if ((DegCod = ParCod_GetPar (ParCod_OthDeg)) > 0)	// Parameter may be omitted
      {							// (when selecting classphoto/list)
       /***** Prevent the computing of an average photo too recently updated *****/
       if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
@@ -2349,7 +2350,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
-	 Par_PutParCode (Par_DegCod,Deg->DegCod);
+	 ParCod_PutPar (ParCod_Deg,Deg->DegCod);
 	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
 	                          "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();

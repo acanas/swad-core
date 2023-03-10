@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -46,10 +46,10 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
-void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod);
+void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
-void HieCfg_QR (Par_Code_t ParCode,long HieCod);
+void HieCfg_QR (ParCod_Param_t ParCode,long HieCod);
 void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 #endif

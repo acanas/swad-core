@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -44,7 +44,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -116,7 +116,7 @@ void Hie_WriteMenuHierarchy (void)
       HTM_TR_Begin (NULL);
 
 	 /* Label */
-	 Frm_LabelColumn ("RT",Par_CodeStr[Par_CtyCod],Txt_Country);
+	 Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Cty],Txt_Country);
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
@@ -132,7 +132,7 @@ void Hie_WriteMenuHierarchy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[Par_InsCod],Txt_Institution);
+	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ins],Txt_Institution);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -148,7 +148,7 @@ void Hie_WriteMenuHierarchy (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[Par_CtrCod],Txt_Center);
+	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ctr],Txt_Center);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -164,7 +164,7 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT",Par_CodeStr[Par_DegCod],Txt_Degree);
+		  Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Deg],Txt_Degree);
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"LT\"");
@@ -180,7 +180,7 @@ void Hie_WriteMenuHierarchy (void)
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("RT",Par_CodeStr[Par_CrsCod],Txt_Course);
+		     Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Crs],Txt_Course);
 
 		     /* Data */
 		     HTM_TD_Begin ("class=\"LT\"");
@@ -232,7 +232,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    Par_PutParCode (Par_CtyCod,Gbl.Hierarchy.Cty.CtyCod);
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
@@ -267,7 +267,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
+	    ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ins.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
@@ -314,7 +314,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
+	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.CtrCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ctr.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
@@ -361,7 +361,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
+	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Deg.FullName,
 	                             "class=\"BT_LINK\"");
 	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
@@ -803,7 +803,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 	{
 	 /* Begin form */
 	 Frm_BeginForm (NextAction);
-	    Par_PutParCode (Par_OthHieCod,HieCod);
+	    ParCod_PutPar (ParCod_OthHie,HieCod);
 
 	    /* Selector */
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -901,7 +901,7 @@ static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
 void Hie_PutParOtherHieCod (void *HieCod)
   {
    if (HieCod)
-      Par_PutParCode (Par_OthHieCod,*((long *) HieCod));
+      ParCod_PutPar (ParCod_OthHie,*((long *) HieCod));
   }
 
 /*****************************************************************************/

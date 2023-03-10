@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -48,6 +48,7 @@
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_program_resource.h"
 #include "swad_project.h"
@@ -958,7 +959,7 @@ void Prj_PutPars (struct Prj_Filter *Filter,
       Pag_PutParPagNum (Pag_PROJECTS,NumPage);
 
    /***** Put selected project code *****/
-   Par_PutParCode (Par_PrjCod,PrjCod);
+   ParCod_PutPar (ParCod_Prj,PrjCod);
 
    /***** Put another user's code *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
@@ -1321,7 +1322,7 @@ void Prj_ShowOneProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Show project and (if possible) its file browser *****/
    Prj_ShowOneProjectWithFileBrowser (&Projects);
@@ -1412,7 +1413,7 @@ void Prj_PrintOneProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get project data *****/
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
    Prj_GetDataOfProjectByCod (&Projects.Prj);
 
    /***** Write header *****/
@@ -2864,7 +2865,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 
    /***** Get parameters *****/
    Prj_GetPars (Projects);
-   Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Put form to select users *****/
    if (asprintf (&TxtButton,Txt_Add_USERS,
@@ -2939,7 +2940,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Add the selected users to project *****/
    Ptr = Prj_MembersToAdd.List[Rol_UNK];
@@ -3031,7 +3032,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 
    /***** Get parameters *****/
    Prj_GetPars (Projects);
-   Projects->Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects->Prj);
@@ -3110,7 +3111,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3494,7 +3495,7 @@ void Prj_ReqRemProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3534,7 +3535,7 @@ void Prj_RemoveProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
@@ -3589,7 +3590,7 @@ void Prj_HideProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3623,7 +3624,7 @@ void Prj_UnhideProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -3669,7 +3670,7 @@ void Prj_RequestEditPrj (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Form to edit project *****/
    Prj_RequestCreatOrEditPrj (&Projects);
@@ -3796,7 +3797,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[Par_DptCod],Txt_Department);
+	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -3805,7 +3806,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Projects->Prj.DptCod,	// Selected department
-					    Par_CodeStr[Par_DptCod],	// Parameter name
+					    Par_CodeStr[ParCod_Dpt],	// Parameter name
 					    SelectClass,		// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
@@ -4017,7 +4018,7 @@ void Prj_ReceiveFormProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   ItsANewProject = ((Projects.Prj.PrjCod = Par_GetParCode (Par_PrjCod)) <= 0);
+   ItsANewProject = ((Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) <= 0);
 
    if (ItsANewProject)
      {
@@ -4040,7 +4041,7 @@ void Prj_ReceiveFormProject (void)
       Par_GetParText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
 
       /* Get department */
-      Projects.Prj.DptCod = Par_GetParCode (Par_DptCod);
+      Projects.Prj.DptCod = ParCod_GetPar (ParCod_Dpt);
 
       /* Get whether the project is assigned */
       Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
@@ -4524,7 +4525,7 @@ void Prj_LockProjectEdition (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -4561,7 +4562,7 @@ void Prj_UnloProjectEdition (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);
@@ -4598,7 +4599,7 @@ void Prj_ChangeReviewStatus (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = Par_GetAndCheckParCode (Par_PrjCod);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Projects.Prj);

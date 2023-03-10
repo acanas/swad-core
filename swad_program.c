@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -44,6 +44,7 @@
 #include "swad_HTML.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
@@ -1132,20 +1133,20 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem)
 void Prg_PutParItmCod (void *ItmCod)
   {
    if (ItmCod)
-      Par_PutParCode (Par_ItmCod,*((long *) ItmCod));
+      ParCod_PutPar (ParCod_Itm,*((long *) ItmCod));
   }
 
 void Prg_GetPars (struct Prg_Item *Item)
   {
    /***** Try to get item resource *****/
-   Item->Resource.Hierarchy.RscCod = Par_GetParCode (Par_RscCod);
+   Item->Resource.Hierarchy.RscCod = ParCod_GetPar (ParCod_Rsc);
 
    /***** Get data of the program item from database *****/
    PrgRsc_GetDataOfResourceByCod (Item);
 
    if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
       /***** Try to get data of the program item from database *****/
-      Item->Hierarchy.ItmCod = Par_GetParCode (Par_ItmCod);
+      Item->Hierarchy.ItmCod = ParCod_GetPar (ParCod_Itm);
 
    /***** Get data of the program item from database *****/
    Prg_GetDataOfItemByCod (Item);
@@ -1967,7 +1968,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      Par_PutParCode (Par_ItmCod,ParentItem.Hierarchy.ItmCod);
+      ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",Txt_New_item,
@@ -2008,7 +2009,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      Par_PutParCode (Par_ItmCod,Item.Hierarchy.ItmCod);
+      ParCod_PutPar (ParCod_Itm,Item.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin ("100%",

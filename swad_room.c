@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -40,7 +40,7 @@
 #include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_MAC.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_room.h"
 #include "swad_room_database.h"
 
@@ -347,7 +347,7 @@ void Roo_ChangeMAC (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the old MAC address of the room */
    OldMACnum = MAC_GetMACnumFromForm ("MAC");
@@ -699,7 +699,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Building */
 	    HTM_TD_Begin ("class=\"CT\"");
 	       Frm_BeginFormAnchor (ActChgRooBld,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_PutSelectorBuilding (Room->BldCod,Buildings,
 					   HTM_SUBMIT_ON_CHANGE);
 	       Frm_EndForm ();
@@ -708,7 +708,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Floor */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
 				  HTM_SUBMIT_ON_CHANGE,false,
 				  "class=\"INPUT_LONG INPUT_%s\"",
@@ -719,7 +719,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Room type */
 	    HTM_TD_Begin ("class=\"CT\"");
 	       Frm_BeginFormAnchor (ActChgRooTyp,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_PutSelectorType (Room->Type,
 				       HTM_SUBMIT_ON_CHANGE);
 	       Frm_EndForm ();
@@ -728,7 +728,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Room short name */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActRenRooSho,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\""
@@ -740,7 +740,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Room full name */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActRenRooFul,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\""
@@ -752,7 +752,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    /* Seating capacity */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActChgRooMaxUsr,Anchor);
-		  Par_PutParCode (Par_RooCod,Room->RooCod);
+		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_WriteCapacity (StrCapacity,Room->Capacity);
 		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -780,7 +780,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 static void Roo_PutParRooCod (void *RooCod)
   {
    if (RooCod)
-      Par_PutParCode (Par_RooCod,*((long *) RooCod));
+      ParCod_PutPar (ParCod_Roo,*((long *) RooCod));
   }
 
 /*****************************************************************************/
@@ -888,7 +888,7 @@ void Roo_RemoveRoom (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get room code *****/
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -920,10 +920,10 @@ void Roo_ChangeBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get room building */
-   NewBldCod = Par_GetAndCheckParCode (Par_BldCod);
+   NewBldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /***** Get data of the room from database *****/
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -967,7 +967,7 @@ void Roo_ChangeFloor (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get room floor */
    NewFloor = Roo_GetParFloor ();
@@ -1013,7 +1013,7 @@ void Roo_ChangeType (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get room type */
    NewType = Roo_GetParType ();
@@ -1104,7 +1104,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the new name for the room */
    Par_GetParText (ParName,NewClaName,MaxBytes);
@@ -1164,7 +1164,7 @@ void Roo_ChangeCapacity (void)
 
    /***** Get parameters from form *****/
    /* Get room code */
-   Roo_EditingRoom->RooCod = Par_GetAndCheckParCode (Par_RooCod);
+   Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
@@ -1368,7 +1368,7 @@ void Roo_ReceiveFormNewRoom (void)
 
    /***** Get parameters from form *****/
    /* Get room building, floor and type */
-   Roo_EditingRoom->BldCod = Par_GetAndCheckParCode (Par_BldCod);
+   Roo_EditingRoom->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
    Roo_EditingRoom->Floor  = Roo_GetParFloor ();
    Roo_EditingRoom->Type   = Roo_GetParType ();
 

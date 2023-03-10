@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -44,6 +44,7 @@
 #include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_program_resource.h"
@@ -465,7 +466,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Par_PutParCode (Par_RscCod,Item->Resource.Hierarchy.RscCod);
+	    ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
@@ -519,7 +520,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 
          /* Title */
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-	    Par_PutParCode (Par_ItmCod,Item->Hierarchy.ItmCod);
+	    ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
@@ -617,7 +618,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 static void PrgRsc_PutParRscCod (void *RscCod)
   {
    if (RscCod)
-      Par_PutParCode (Par_RscCod,*((long *) RscCod));
+      ParCod_PutPar (ParCod_Rsc,*((long *) RscCod));
   }
 
 /*****************************************************************************/
@@ -917,10 +918,10 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
       if (Item->Resource.Hierarchy.RscCod > 0)
-         Par_PutParCode (Par_RscCod,Item->Resource.Hierarchy.RscCod);
+         ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
       else
 	 /* No resource selected, so it's a new resource at the end of the item */
-         Par_PutParCode (Par_ItmCod,Item->Hierarchy.ItmCod);
+         ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");

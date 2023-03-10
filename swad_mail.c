@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -471,7 +471,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 	    /* Mail domain */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiSho);
-		  Par_PutParCode (Par_MaiCod,Mai->MaiCod);
+		  ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_%s\"",
@@ -482,7 +482,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 	    /* Mail domain info */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiFul);
-		  Par_PutParCode (Par_MaiCod,Mai->MaiCod);
+		  ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"40\" class=\"INPUT_%s\"",
@@ -509,7 +509,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 static void Mai_PutParMaiCod (void *MaiCod)
   {
    if (MaiCod)
-      Par_PutParCode (Par_MaiCod,*((long *) MaiCod));
+      ParCod_PutPar (ParCod_Mai,*((long *) MaiCod));
   }
 
 /*****************************************************************************/
@@ -524,7 +524,7 @@ void Mai_RemoveMailDomain (void)
    Mai_EditingMailDomainConstructor ();
 
    /***** Get mail domain code *****/
-   Mai_EditingMai->MaiCod = Par_GetAndCheckParCode (Par_MaiCod);
+   Mai_EditingMai->MaiCod = ParCod_GetAndCheckPar (ParCod_Mai);
 
    /***** Get data of the mail domain rom database *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
@@ -597,7 +597,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the mail */
-   Mai_EditingMai->MaiCod = Par_GetAndCheckParCode (Par_MaiCod);
+   Mai_EditingMai->MaiCod = ParCod_GetAndCheckPar (ParCod_Mai);
 
    /* Get the new name for the mail */
    Par_GetParText (ParName,NewMaiName,MaxBytes);

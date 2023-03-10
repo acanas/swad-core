@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -651,7 +651,7 @@ static void Att_PutPars (void *Events)
 
    if (Events)
      {
-      Par_PutParCode (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
+      ParCod_PutPar (ParCod_Att,((struct Att_Events *) Events)->Event.AttCod);
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
       Grp_PutParWhichGroups (&WhichGroups);
@@ -832,7 +832,7 @@ void Att_AskRemAttEvent (void)
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);
@@ -858,7 +858,7 @@ void Att_GetAndRemAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
@@ -900,7 +900,7 @@ void Att_HideAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -921,7 +921,7 @@ void Att_UnhideAttEvent (void)
    struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
@@ -969,7 +969,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((Events.Event.AttCod = Par_GetParCode (Par_AttCod)) <= 0);
+   ItsANewAttEvent = ((Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) <= 0);
 
    /***** Get from the database the data of the attendance event *****/
    if (ItsANewAttEvent)
@@ -1000,7 +1000,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    else
      {
       Frm_BeginForm (ActChgAtt);
-	 Par_PutParCode (Par_AttCod,Events.Event.AttCod);
+	 ParCod_PutPar (ParCod_Att,Events.Event.AttCod);
      }
       Par_PutParOrder ((unsigned) Events.SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
@@ -1134,7 +1134,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
 					    Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-					                                    Par_AttCod,
+					                                    "AttCod",
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1178,7 +1178,7 @@ void Att_ReceiveFormAttEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((ReceivedAtt.AttCod = Par_GetParCode (Par_AttCod)) <= 0);
+   ItsANewAttEvent = ((ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) <= 0);
 
    if (!ItsANewAttEvent)
      {
@@ -1438,7 +1438,7 @@ void Att_SeeOneAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Show event *****/
    Att_ShowEvent (&Events);
@@ -1527,7 +1527,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
       if (Event->Open)
 	{
 	 Frm_BeginForm (ActRecAttMe);
-	    Par_PutParCode (Par_AttCod,Event->AttCod);
+	    ParCod_PutPar (ParCod_Att,Event->AttCod);
 	}
 
 	 /***** List students (only me) *****/
@@ -1606,7 +1606,7 @@ static void Att_ListAttStudents (struct Att_Events *Events)
 
 	    /* Begin form */
 	    Frm_BeginForm (ActRecAttStd);
-	       Par_PutParCode (Par_AttCod,Events->Event.AttCod);
+	       ParCod_PutPar (ParCod_Att,Events->Event.AttCod);
 	       Grp_PutParsCodGrps ();
 
 	       /* Begin table */
@@ -1674,7 +1674,7 @@ static void Att_ListAttStudents (struct Att_Events *Events)
 static void Att_PutParAttCod (void *Events)
   {
    if (Events)
-      Par_PutParCode (Par_AttCod,((struct Att_Events *) Events)->Event.AttCod);
+      ParCod_PutPar (ParCod_Att,((struct Att_Events *) Events)->Event.AttCod);
   }
 
 /*****************************************************************************/
@@ -1850,7 +1850,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *Event,
   {
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
-      Par_PutParCode (Par_AttCod,Event->AttCod);
+      ParCod_PutPar (ParCod_Att,Event->AttCod);
       Att_PutParsCodGrps (Event->AttCod);
 
       /***** Link to view attendance event *****/
@@ -1937,7 +1937,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);	// This checks that event belong to current course
 
    if (Events.Event.Open)
@@ -2000,7 +2000,7 @@ void Att_RegisterStudentsInAttEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get attendance event code *****/
-   Events.Event.AttCod = Par_GetAndCheckParCode (Par_AttCod);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
    Att_GetDataOfAttEventByCodAndCheckCrs (&Events.Event);	// This checks that event belong to current course
 
    /***** Get groups selected *****/

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -47,6 +47,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -700,7 +701,7 @@ void DegTyp_RemoveDegreeType (void)
    DegTyp_EditingDegreeTypeConstructor ();
 
    /***** Get the code of the degree type *****/
-   DegTyp_EditingDegTyp->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
+   DegTyp_EditingDegTyp->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of the degree type from database *****/
    if (!DegTyp_GetDataOfDegreeTypeByCod (DegTyp_EditingDegTyp))
@@ -729,7 +730,7 @@ void DegTyp_RemoveDegreeType (void)
 static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
   {
    if (DegTypCod)
-      Par_PutParCode (Par_OthDegTypCod,*((long *) DegTypCod));
+      ParCod_PutPar (ParCod_OthDegTyp,*((long *) DegTypCod));
   }
 
 /*****************************************************************************/
@@ -810,7 +811,7 @@ void DegTyp_RenameDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
-   DegTyp_EditingDegTyp->DegTypCod = Par_GetAndCheckParCode (Par_OthDegTypCod);
+   DegTyp_EditingDegTyp->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /* Get the new name for the degree type */
    Par_GetParText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);

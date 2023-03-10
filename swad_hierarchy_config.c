@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -203,7 +203,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 /********************** Show shortcut in configuration ***********************/
 /*****************************************************************************/
 
-void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod)
+void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Shortcut;
@@ -218,7 +218,7 @@ void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod)
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 if (!PrintView)
 	   {
-	    if (ParCode == Par_None)
+	    if (ParCode == ParCod_None)
 	       HTM_A_Begin ("href=\"%s/\" target=\"_blank\" class=\"DAT_%s\"",
 			    Cfg_URL_SWAD_CGI,
 			    The_GetSuffix ());
@@ -229,7 +229,7 @@ void HieCfg_Shortcut (bool PrintView,Par_Code_t ParCode,long HieCod)
 			    Par_CodeStr[ParCode],HieCod,
 			    The_GetSuffix ());
 	   }
-	 if (ParCode == Par_None)
+	 if (ParCode == ParCod_None)
 	    HTM_TxtF ("%s/",
 		      Cfg_URL_SWAD_CGI);
 	 else
@@ -264,7 +264,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
+	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 	                     Gbl.Hierarchy.Ins.ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
@@ -312,7 +312,7 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
 /************************* Show QR in configuration **************************/
 /*****************************************************************************/
 
-void HieCfg_QR (Par_Code_t ParCode,long HieCod)
+void HieCfg_QR (ParCod_Param_t ParCode,long HieCod)
   {
    extern const char *Txt_QR_code;
 

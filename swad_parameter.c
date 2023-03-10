@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_password.h"
 #include "swad_session.h"
 #include "swad_setting.h"
@@ -53,59 +54,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 31
-
-// Parameter name for codes, some of them also used as database fields (so change carefully)
-const char *Par_CodeStr[] =
-  {
-   [Par_None        ] = NULL,
-   [Par_AgdCod      ] = "AgdCod",	// Agenda event code
-   [Par_AnnCod      ] = "AnnCod",	// Announcement code
-   [Par_AsgCod      ] = "AsgCod",	// Assignment code
-   [Par_AttCod      ] = "AttCod",	// Attendance event code
-   [Par_BanCod      ] = "BanCod",	// Banner code
-   [Par_BldCod      ] = "BldCod",	// Building code
-   [Par_CrsCod      ] = "crs",		// Course code
-   [Par_CtrCod      ] = "ctr",		// Center code
-   [Par_CtyCod      ] = "cty",		// Country code
-   [Par_DegCod      ] = "deg",		// Degree code
-   [Par_DptCod      ] = "DptCod",	// Department code
-   [Par_ExaCod      ] = "ExaCod",	// Exam code in calls-for-exam/exam
-   [Par_FilCod      ] = "FilCod",	// File code
-   [Par_FldCod      ] = "FldCod",	// Field code in course record
-   [Par_GamCod      ] = "GamCod",	// Game code
-   [Par_GrpCod      ] = "GrpCod",	// Group code
-   [Par_GrpTypCod   ] = "GrpTypCod",	// Group type code
-   [Par_HldCod      ] = "HldCod",	// Holiday code
-   [Par_InsCod      ] = "ins",		// Institution code
-   [Par_ItmCod      ] = "ItmCod",	// Item code in course program
-   [Par_LnkCod      ] = "LnkCod",	// Link code
-   [Par_MaiCod      ] = "MaiCod",	// Domain mail code
-   [Par_MchCod      ] = "MchCod",	// Match code in game
-   [Par_MsgCod      ] = "MsgCod",	// Message code
-   [Par_NotCod      ] = "NotCod",	// Note code in timeline
-   [Par_OrgActCod   ] = "OrgActCod",	// Original action code
-   [Par_OthCrsCod   ] = "OthCrsCod",	// Other course code
-   [Par_OthCtrCod   ] = "OthCtrCod",	// Other center code
-   [Par_OthCtyCod   ] = "OthCtyCod",	// Other country code
-   [Par_OthDegCod   ] = "OthDegCod",	// Other degree code
-   [Par_OthDegTypCod] = "OthDegTypCod",	// Other degree type code
-   [Par_OthHieCod   ] = "OthHieCod",	// Other hierarchy code
-   [Par_OthInsCod   ] = "OthInsCod",	// Other institution code
-   [Par_PlcCod      ] = "PlcCod",	// Place code
-   [Par_PlgCod      ] = "PlgCod",	// Plugin code
-   [Par_PrjCod      ] = "PrjCod",	// Project code
-   [Par_PrnCod      ] = "PrnCod",	// Print code in assessment test
-   [Par_PstCod      ] = "PstCod",	// Post code in forum
-   [Par_PubCod      ] = "PubCod",	// Publication code in timeline
-   [Par_QstCod      ] = "QstCod",	// Question code in assessment/survey
-   [Par_RooCod      ] = "RooCod",	// Room code
-   [Par_RscCod      ] = "RscCod",	// Resource code in course program
-   [Par_RubCod      ] = "RubCod",	// Rubric code
-   [Par_SesCod      ] = "SesCod",	// Session code in exam
-   [Par_SvyCod      ] = "SvyCod",	// Syrvey code
-   [Par_TagCod      ] = "TagCod",	// Tag code in assessment question
-   [Par_ThrCod      ] = "ThrCod",	// Thread code in forum
-  };
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
@@ -898,7 +846,7 @@ void Par_GetMainPars (void)
    Set_GetSettingsFromIP ();
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[Par_CtyCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Cty],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -909,7 +857,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[Par_InsCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Ins],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -919,7 +867,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get center if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[Par_CtrCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Ctr],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -928,7 +876,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[Par_DegCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Deg],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -936,7 +884,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[Par_CrsCod],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Crs],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
@@ -960,9 +908,9 @@ void Par_GetMainPars (void)
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParText (const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes)
   {
-   return Par_GetParAndChangeFormat (ParamName,ParamValue,MaxBytes,
+   return Par_GetParAndChangeFormat (ParName,ParValue,MaxBytes,
                                      Str_TO_TEXT,true);
   }
 
@@ -970,7 +918,7 @@ unsigned Par_GetParText (const char *ParamName,char *ParamValue,size_t MaxBytes)
 /****************** Get the unsigned value of a parameter ********************/
 /*****************************************************************************/
 
-unsigned long Par_GetParUnsignedLong (const char *ParamName,
+unsigned long Par_GetParUnsignedLong (const char *ParName,
                                       unsigned long Min,
                                       unsigned long Max,
                                       unsigned long Default)
@@ -979,7 +927,7 @@ unsigned long Par_GetParUnsignedLong (const char *ParamName,
    unsigned long UnsignedLongNum;
 
    /***** Get parameter with unsigned number *****/
-   Par_GetParText (ParamName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
+   Par_GetParText (ParName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
    if (sscanf (UnsignedLongStr,"%lu",&UnsignedLongNum) == 1)
       if (UnsignedLongNum >= Min && UnsignedLongNum <= Max)
          return UnsignedLongNum;
@@ -991,38 +939,13 @@ unsigned long Par_GetParUnsignedLong (const char *ParamName,
 /******************** Get the long value of a parameter **********************/
 /*****************************************************************************/
 
-long Par_GetParLong (const char *ParamName)
+long Par_GetParLong (const char *ParName)
   {
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Get parameter with long number *****/
-   Par_GetParText (ParamName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (ParName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    return Str_ConvertStrCodToLongCod (LongStr);
-  }
-
-/*****************************************************************************/
-/******************** Get the value of a code parameter **********************/
-/*****************************************************************************/
-
-long Par_GetAndCheckParCode (Par_Code_t ParCode)
-  {
-   return Par_GetAndCheckParCodeMin (ParCode,1);
-  }
-
-long Par_GetAndCheckParCodeMin (Par_Code_t ParCode,long MinCodAllowed)
-  {
-   long Cod;
-
-   /***** Get code and check that is a valid code (>= minimum) *****/
-   if ((Cod = Par_GetParCode (ParCode)) < MinCodAllowed)
-      Err_WrongCodeExit ();
-
-   return Cod;
-  }
-
-long Par_GetParCode (Par_Code_t ParCode)
-  {
-   return Par_GetParLong (Par_CodeStr[ParCode]);
   }
 
 /*****************************************************************************/
@@ -1043,9 +966,9 @@ bool Par_GetParBool (const char *ParName)
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParHTML (const char *ParName,char *ParValue,size_t MaxBytes)
   {
-   return Par_GetParAndChangeFormat (ParamName,ParamValue,MaxBytes,
+   return Par_GetParAndChangeFormat (ParName,ParValue,MaxBytes,
                                      Str_TO_HTML,true);
   }
 
@@ -1054,13 +977,13 @@ unsigned Par_GetParHTML (const char *ParamName,char *ParamValue,size_t MaxBytes)
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Par_GetParMultiToText (const char *ParName,char *ParValue,size_t MaxBytes)
   {
-   unsigned NumTimes = Par_GetPar (Par_PARAM_MULTIPLE,ParamName,
-                                         ParamValue,MaxBytes,NULL);
+   unsigned NumTimes = Par_GetPar (Par_PARAM_MULTIPLE,ParName,
+                                   ParValue,MaxBytes,NULL);
 
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                     ParamValue,MaxBytes,true);
+                     ParValue,MaxBytes,true);
    return NumTimes;
   }
 
@@ -1069,14 +992,14 @@ unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t Ma
 /*****************************************************************************/
 // Return the number of parameters found
 
-unsigned Par_GetParAndChangeFormat (const char *ParamName,char *ParamValue,size_t MaxBytes,
+unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t MaxBytes,
                                     Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces)
   {
-   unsigned NumTimes = Par_GetPar (Par_PARAM_SINGLE,ParamName,
-                                         ParamValue,MaxBytes,NULL);
+   unsigned NumTimes = Par_GetPar (Par_PARAM_SINGLE,ParName,
+                                   ParValue,MaxBytes,NULL);
 
    Str_ChangeFormat (Str_FROM_FORM,ChangeTo,
-                     ParamValue,MaxBytes,RemoveLeadingAndTrailingSpaces);
+                     ParValue,MaxBytes,RemoveLeadingAndTrailingSpaces);
    return NumTimes;
   }
 
@@ -1167,30 +1090,30 @@ void Par_ReplaceSeparatorMultipleByComma (char *Str)
 /********************** Put an unsigned hidden parameter *********************/
 /*****************************************************************************/
 
-void Par_PutParUnsigned (const char *Id,const char *ParamName,unsigned Value)
+void Par_PutParUnsigned (const char *Id,const char *ParName,unsigned ParValue)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%u\" />",ParamName,Value);
+   HTM_TxtF (" name=\"%s\" value=\"%u\" />",ParName,ParValue);
   }
 
-void Par_PutParUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value)
+void Par_PutParUnsignedDisabled (const char *Id,const char *ParName,unsigned ParValue)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
    HTM_TxtF (" name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
-	     ParamName,Value);
+	     ParName,ParValue);
   }
 
 /*****************************************************************************/
 /******************** Put the value of a code parameter **********************/
 /*****************************************************************************/
 
-void Par_PutParCode (Par_Code_t ParCod,long Cod)
+void ParCod_PutPar (ParCod_Param_t ParCod,long Cod)
   {
    extern const char *Par_CodeStr[];
 
@@ -1204,37 +1127,37 @@ void Par_PutParCode (Par_Code_t ParCod,long Cod)
 /************************* Put a long hidden parameter ***********************/
 /*****************************************************************************/
 
-void Par_PutParLong (const char *Id,const char *ParamName,long Value)
+void Par_PutParLong (const char *Id,const char *ParName,long ParValue)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
-   HTM_TxtF (" name=\"%s\" value=\"%ld\" />",ParamName,Value);
+   HTM_TxtF (" name=\"%s\" value=\"%ld\" />",ParName,ParValue);
   }
 
 /*****************************************************************************/
 /************************* Put a char hidden parameter ***********************/
 /*****************************************************************************/
 
-void Par_PutParChar (const char *ParamName,char Value)
+void Par_PutParChar (const char *ParName,char ParValue)
   {
    HTM_TxtF ("<input type=\"hidden\" name=\"%s\" value=\"%c\" />",
-             ParamName,Value);
+             ParName,ParValue);
   }
 
 /*****************************************************************************/
 /************************ Put a string hidden parameter **********************/
 /*****************************************************************************/
 
-void Par_PutParString (const char *Id,const char *ParamName,const char *Value)
+void Par_PutParString (const char *Id,const char *ParName,const char *ParValue)
   {
    HTM_Txt ("<input type=\"hidden\"");
    if (Id)
       if (Id[0])
          HTM_TxtF (" id=\"%s\"",Id);
    HTM_TxtF (" name=\"%s\" value=\"%s\" />",
-             ParamName,Value ? Value :
+             ParName,ParValue ? ParValue :
 	                     "");
   }
 

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -53,6 +53,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_place.h"
 #include "swad_room_database.h"
 #include "swad_survey.h"
@@ -190,7 +191,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Par_PutParCode (Par_CtrCod,Ctr->CtrCod);
+      ParCod_PutPar (ParCod_Ctr,Ctr->CtrCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),
@@ -818,7 +819,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
-		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
+		     ParCod_PutPar (ParCod_OthHie,Ctr->CtrCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"PlcCod\""
 				       " class=\"PLC_SEL INPUT_%s\"",
@@ -848,7 +849,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
-		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
+		     ParCod_PutPar (ParCod_OthHie,Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -864,7 +865,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
-		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
+		     ParCod_PutPar (ParCod_OthHie,Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -880,7 +881,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
-		     Par_PutParCode (Par_OthHieCod,Ctr->CtrCod);
+		     ParCod_PutPar (ParCod_OthHie,Ctr->CtrCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -967,7 +968,7 @@ void Ctr_RemoveCenter (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the center from database *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1039,10 +1040,10 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get parameter with place code *****/
-   NewPlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
+   NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Get data of center from database *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1067,7 +1068,7 @@ void Ctr_RenameCenterShort (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_SHRT_NAME);
   }
 
@@ -1077,7 +1078,7 @@ void Ctr_RenameCenterFull (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_FULL_NAME);
   }
 
@@ -1166,7 +1167,7 @@ void Ctr_ChangeCtrWWW (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get the code of the center *****/
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get the new WWW for the center *****/
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1205,7 +1206,7 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Get parameters from form *****/
    /* Get center code */
-   Ctr_EditingCtr->CtrCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with status */
    Status = Hie_GetParStatus ();	// New status
@@ -1521,7 +1522,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->InsCod = Gbl.Hierarchy.Ins.InsCod;
 
    /* Get place */
-   Ctr_EditingCtr->PlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
+   Ctr_EditingCtr->PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
    Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -2081,5 +2082,5 @@ unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
 static void Ctr_PutParCtrCod (void *CtrCod)
   {
    if (CtrCod)
-      Par_PutParCode (Par_CtrCod,*((long *) CtrCod));
+      ParCod_PutPar (ParCod_Ctr,*((long *) CtrCod));
   }

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -47,7 +47,7 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_plugin.h"
 #include "swad_plugin_database.h"
 #include "swad_session.h"
@@ -387,7 +387,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlg);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
@@ -398,7 +398,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin description */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgDes);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"30\" class=\"INPUT_%s\"",
@@ -409,7 +409,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin logo */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgLog);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"4\" class=\"INPUT_%s\"",
@@ -420,7 +420,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin application key */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgAppKey);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"16\" class=\"INPUT_%s\"",
@@ -431,7 +431,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin URL */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgURL);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
 				 "size=\"15\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
@@ -441,7 +441,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    /* Plugin IP */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgIP);
-		  Par_PutParCode (Par_PlgCod,Plg->PlgCod);
+		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
@@ -463,7 +463,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 static void Plg_PutParPlgCod (void *PlgCod)
   {
    if (PlgCod)
-      Par_PutParCode (Par_PlgCod,*((long *) PlgCod));
+      ParCod_PutPar (ParCod_Plg,*((long *) PlgCod));
   }
 
 /*****************************************************************************/
@@ -478,7 +478,7 @@ void Plg_RemovePlugin (void)
    Plg_EditingPluginConstructor ();
 
    /***** Get plugin code *****/
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /***** Get data of the plugin from database *****/
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
@@ -508,7 +508,7 @@ void Plg_RenamePlugin (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new name for the plugin */
    Par_GetParText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
@@ -564,7 +564,7 @@ void Plg_ChangePlgDescription (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new description for the plugin */
    Par_GetParText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
@@ -605,7 +605,7 @@ void Plg_ChangePlgLogo (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new logo for the plugin */
    Par_GetParText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
@@ -646,7 +646,7 @@ void Plg_ChangePlgAppKey (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new logo for the plugin */
    Par_GetParText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
@@ -687,7 +687,7 @@ void Plg_ChangePlgURL (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new URL for the plugin */
    Par_GetParText ("URL",NewURL,Cns_MAX_BYTES_WWW);
@@ -728,7 +728,7 @@ void Plg_ChangePlgIP (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   Plg_EditingPlg->PlgCod = Par_GetAndCheckParCode (Par_PlgCod);
+   Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new IP for the plugin */
    Par_GetParText ("IP",NewIP,Cns_MAX_BYTES_IP);

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -47,7 +47,7 @@
 #include "swad_match.h"
 #include "swad_match_database.h"
 #include "swad_match_result.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
@@ -630,7 +630,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 	 /***** Match title *****/
 	 Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 							     ActResMch);
-	    Par_PutParCode (Par_MchCod,Match->MchCod);
+	    ParCod_PutPar (ParCod_Mch,Match->MchCod);
 
 	    HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
@@ -754,7 +754,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 static void Mch_PutParMchCod (void *MchCod)
   {
    if (MchCod)
-      Par_PutParCode (Par_MchCod,*((long *) MchCod));
+      ParCod_PutPar (ParCod_Mch,*((long *) MchCod));
   }
 
 /*****************************************************************************/
@@ -1130,7 +1130,7 @@ void Mch_PutParsEdit (void *Games)
    if (Games)
      {
       Gam_PutPars (Games);
-      Par_PutParCode (Par_MchCod,((struct Gam_Games *) Games)->MchCod.Current);
+      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Current);
      }
   }
 
@@ -1149,7 +1149,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    Gam_GetDataOfGameByCod (&Games->Game);
 
    /* Get match code */
-   Match->MchCod = Par_GetAndCheckParCode (Par_MchCod);
+   Match->MchCod = ParCod_GetAndCheckPar (ParCod_Mch);
    Mch_GetDataOfMatchByCod (Match);
 
    /***** Ensure parameters are correct *****/
@@ -1233,7 +1233,7 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 
       /***** Begin form *****/
       Frm_BeginForm (ActNewMch);
-	 Par_PutParCode (Par_GamCod,Game->GamCod);
+	 ParCod_PutPar (ParCod_Gam,Game->GamCod);
 	 Gam_PutParQstInd (0);	// Start by first question in game
 
 	 /***** Begin box and table *****/
@@ -1317,7 +1317,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
 					    Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
-					                                    Par_MchCod,
+					                                    "MchCod",
 					                                    MchCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1357,7 +1357,7 @@ void Mch_CreateNewMatch (void)
 
    /***** Get form parameters *****/
    /* Get match code */
-   GamCod = Par_GetAndCheckParCode (Par_GamCod);
+   GamCod = ParCod_GetAndCheckPar (ParCod_Gam);
 
    /* Get match title */
    Par_GetParText ("Title",Title,Mch_MAX_BYTES_TITLE);
@@ -2597,7 +2597,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 
 	 /* Begin form */
 	 Frm_BeginForm (ActChgNumColMch);
-	    Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
+	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 	    Mch_PutParNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
@@ -2642,7 +2642,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActChgVisResMchQst);
-	 Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
+	 ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
 	 HTM_BUTTON_Submit_Begin (Txt_View_results,
@@ -2680,7 +2680,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	{
 	 /* Begin form */
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
-	    Par_PutParCode (Par_MchCod,Match->MchCod);	// Current match being played
+	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
 	    HTM_BUTTON_Submit_Begin (Txt_View_my_answer,
 	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
@@ -2725,7 +2725,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActRemMchAnsQstStd);
-	 Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
+	 ParCod_PutPar (ParCod_Mch,Match->MchCod);		// Current match being played
 	 Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
 
 	 /***** Put icon with link *****/
@@ -2981,7 +2981,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  is necessary in order to be fast
 		  and not lose clicks due to refresh */
 	       Frm_BeginForm (ActAnsMchQstStd);
-		  Par_PutParCode (Par_MchCod,Match->MchCod);		// Current match being played
+		  ParCod_PutPar (ParCod_Mch,Match->MchCod);		// Current match being played
 		  Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
 		  Mch_PutParNumOpt (NumOpt);		// Number of button
 
@@ -3246,7 +3246,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
   {
    /***** Begin form *****/
    Frm_BeginFormId (NextAction,Id);
-      Par_PutParCode (Par_MchCod,MchCod);
+      ParCod_PutPar (ParCod_Mch,MchCod);
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
@@ -3341,7 +3341,7 @@ void Mch_GetMatchBeingPlayed (void)
    long MchCodBeingPlayed;
 
    /***** Get match code ****/
-   MchCodBeingPlayed = Par_GetAndCheckParCode (Par_MchCod);
+   MchCodBeingPlayed = ParCod_GetAndCheckPar (ParCod_Mch);
 
    Mch_SetMchCodBeingPlayed (MchCodBeingPlayed);
   }

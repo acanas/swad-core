@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -411,7 +411,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
       if (Gbl.Action.Original != ActUnk)
 	{
-	 Par_PutParCode (Par_OrgActCod,Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
+	 ParCod_PutPar (ParCod_OrgAct,Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
 	 switch (Gbl.Action.Original)
 	   {
 	    case ActSeeRecSevGst:
@@ -890,7 +890,7 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Get where we came from *****/
-   Gbl.Action.Original = Act_GetActionFromActCod (Par_GetParCode (Par_OrgActCod));
+   Gbl.Action.Original = Act_GetActionFromActCod (ParCod_GetPar (ParCod_OrgAct));
 
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;

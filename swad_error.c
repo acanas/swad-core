@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -91,11 +91,6 @@ void Err_WrongScopeExit (void)
 /********* when wrong country, institution, center, degree or course *********/
 /*****************************************************************************/
 
-void Err_WrongHierarchyExit (void)
-  {
-   Err_ShowErrorAndExit ("Wrong hierarchy.");
-  }
-
 void Err_WrongCountrExit (void)
   {
    Err_ShowErrorAndExit ("Wrong country.");
@@ -142,15 +137,6 @@ void Err_WrongDepartmentExit (void)
 void Err_WrongPlaceExit (void)
   {
    Err_ShowErrorAndExit ("Wrong place.");
-  }
-
-/*****************************************************************************/
-/************* Write error message and exit when wrong order *****************/
-/*****************************************************************************/
-
-void Err_WrongOrderExit (void)
-  {
-   Err_ShowErrorAndExit ("Wrong order.");
   }
 
 /*****************************************************************************/

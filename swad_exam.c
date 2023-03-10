@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -54,6 +54,7 @@
 #include "swad_match_result.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
@@ -716,7 +717,7 @@ void Exa_PutPars (void *Exams)
 
    if (Exams)
      {
-      Par_PutParCode (Par_ExaCod,((struct Exa_Exams *) Exams)->Exam.ExaCod);
+      ParCod_PutPar (ParCod_Exa,((struct Exa_Exams *) Exams)->Exam.ExaCod);
       Exa_PutParOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
       WhichGroups = Grp_GetParWhichGroups ();
       Grp_PutParWhichGroups (&WhichGroups);
@@ -730,10 +731,10 @@ void Exa_PutPars (void *Exams)
 
 void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod)
   {
-   long (*GetExaCo[2]) (Par_Code_t ParCode) =
+   long (*GetExaCo[2]) (ParCod_Param_t ParCode) =
      {
-      [false] = Par_GetParCode,
-      [true ] = Par_GetAndCheckParCode,
+      [false] = ParCod_GetPar,
+      [true ] = ParCod_GetAndCheckPar,
      };
 
    /***** Get other parameters *****/
@@ -741,7 +742,7 @@ void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod)
    Exams->CurrentPage = Pag_GetParPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
-   Exams->Exam.ExaCod = GetExaCo[CheckExaCod] (Par_ExaCod);
+   Exams->Exam.ExaCod = GetExaCo[CheckExaCod] (ParCod_Exa);
   }
 
 /*****************************************************************************/
@@ -825,7 +826,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
       Err_NotEnoughMemoryExit ();
 
    /***** Get parameter multiple with list of exams selected *****/
-   Par_GetParMultiToText (Par_CodeStr[Par_ExaCod],Exams->ExaCodsSelected,
+   Par_GetParMultiToText (Par_CodeStr[ParCod_Exa],Exams->ExaCodsSelected,
                           MaxSizeListExaCodsSelected);
 
    /***** Set which exams will be shown as selected (checkboxes on) *****/
@@ -1024,7 +1025,7 @@ void Exa_RemoveExam (void)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get exam code *****/
-   Exams.Exam.ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   Exams.Exam.ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Get data of the exam from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);

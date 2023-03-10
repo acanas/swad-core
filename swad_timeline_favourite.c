@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -28,7 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_notification_database.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_favourite.h"
@@ -69,7 +69,7 @@ void TmlFav_ShowAllFaversNoteGbl (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
@@ -131,7 +131,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -161,7 +161,7 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -204,7 +204,7 @@ void TmlFav_ShowAllFaversComGbl (void)
 
    /***** Get data of comment *****/
    Med_MediaConstructor (&Com.Content.Media);
-   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
+   Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetDataOfCommByCod (&Com);
    Med_MediaDestructor (&Com.Content.Media);
 
@@ -268,7 +268,7 @@ static void TmlFav_FavComm (struct TmlCom_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = Par_GetAndCheckParCode (Par_PubCod);
+   Com->PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/
@@ -307,7 +307,7 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
    Med_MediaConstructor (&Com->Content.Media);
 
    /***** Get data of comment *****/
-   Com->PubCod = Par_GetAndCheckParCode (Par_PubCod);
+   Com->PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetDataOfCommByCod (Com);
 
    /***** Do some checks *****/

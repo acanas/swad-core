@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -679,11 +679,9 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 /*********** exam session or match is associated to a given group ************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParCode,
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod)
   {
-   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
-
    return
    DB_QueryEXISTS ("can not check if associated to a group",
 		   "SELECT EXISTS"
@@ -692,7 +690,7 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParCode,
 		    " WHERE %s=%ld"
 		      " AND GrpCod=%ld)",
 		   Table,
-		   Par_CodeStr[ParCode],Cod,
+		   Field,Cod,
 		   GrpCod);
   }
 
@@ -701,10 +699,8 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,Par_Code_t ParCode,
 /************ exam session or match is associated to any group  **************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParCode,long Cod)
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
   {
-   extern const char *Par_CodeStr[];	// Database field name must be equal to code parameter name
-
    /***** Trivial check *****/
    if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
       return false;
@@ -718,7 +714,7 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,Par_Code_t ParCode,long C
 		     " FROM %s"
 		    " WHERE %s=%ld)",
 		   Table,
-		   Par_CodeStr[ParCode],Cod);
+		   Field,Cod);
   }
 
 /*****************************************************************************/

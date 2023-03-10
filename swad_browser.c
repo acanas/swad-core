@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -64,7 +64,7 @@
 #include "swad_mark_database.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
@@ -1865,7 +1865,7 @@ void Brw_GetParAndInitFileBrowser (void)
    /***** Get other parameters *****/
    if (Brw_GetIfProjectFileBrowser ())
       /* Get project code */
-      Prj_SetPrjCod (Par_GetParCode (Par_PrjCod));
+      Prj_SetPrjCod (ParCod_GetPar (ParCod_Prj));
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /* Get lists of the selected users if not already got */
@@ -1978,7 +1978,7 @@ static long Brw_GetGrpSettings (void)
   {
    long GrpCod;
 
-   if ((GrpCod = Par_GetParCode (Par_GrpCod)) > 0)
+   if ((GrpCod = ParCod_GetPar (ParCod_Grp)) > 0)
       return GrpCod;
    else
       /***** Try to get group code from database *****/
@@ -2093,10 +2093,10 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
   {
    if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
       /***** Group code *****/
-      Par_PutParCode (Par_GrpCod,Gbl.Crs.Grps.GrpCod);
+      ParCod_PutPar (ParCod_Grp,Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
-      Par_PutParCode (Par_PrjCod,Prj_GetPrjCod ());
+      ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Users selected *****/
@@ -2112,7 +2112,7 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
       Par_PutParString (NULL,"Path",PathInTree);
    if (FilFolLnkName)
       Par_PutParString (NULL,Brw_FileTypeParName[FileType],FilFolLnkName);
-   Par_PutParCode (Par_FilCod,FilCod);
+   ParCod_PutPar (ParCod_Fil,FilCod);
   }
 
 /*****************************************************************************/
@@ -2849,7 +2849,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
 						     "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO (Par_CodeStr[Par_GrpCod],true,
+	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],true,
 				"value=\"-1\"%s",
 				IsCourseZone ? " checked=\"checked\"" : "");
 	       HTM_Txt (Gbl.Hierarchy.Crs.FullName);
@@ -2878,7 +2878,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   NULL,
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO (Par_CodeStr[Par_GrpCod],true,
+		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],true,
 				      "value=\"%ld\"%s",
 				      GrpDat.GrpCod,
 				      (IsGroupZone &&
@@ -3656,9 +3656,9 @@ static void Brw_PutCheckboxFullTree (void)
 static void Brw_PutParsFullTree (void)
   {
    if (Brw_GetIfGroupFileBrowser ())
-      Par_PutParCode (Par_GrpCod,Gbl.Crs.Grps.GrpCod);
+      ParCod_PutPar (ParCod_Grp,Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
-      Par_PutParCode (Par_PrjCod,Prj_GetPrjCod ());
+      ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
@@ -7470,7 +7470,7 @@ void Brw_ShowFileMetadata (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = Par_GetAndCheckParCode (Par_FilCod);
+   FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
    Brw_GetFileMetadataByCod (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
@@ -8280,7 +8280,7 @@ void Brw_ChgFileMetadata (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = Par_GetAndCheckParCode (Par_FilCod);
+   FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
    Brw_GetFileMetadataByCod (&FileMetadata);
    Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
@@ -9599,7 +9599,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    if (InsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
-		  Par_PutParCode (Par_InsCod,InsCod);
+		  ParCod_PutPar (ParCod_Ins,InsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (InsShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -9616,7 +9616,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    if (CtrCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
-		  Par_PutParCode (Par_CtrCod,CtrCod);
+		  ParCod_PutPar (ParCod_Ctr,CtrCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (CtrShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -9633,7 +9633,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    if (DegCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  Par_PutParCode (Par_DegCod,DegCod);
+		  ParCod_PutPar (ParCod_Deg,DegCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (DegShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -9650,7 +9650,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    if (CrsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  Par_PutParCode (Par_CrsCod,CrsCod);
+		  ParCod_PutPar (ParCod_Crs,CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (CrsShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -9725,24 +9725,24 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    if (CrsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (Action);
-		  Par_PutParCode (Par_CrsCod,CrsCod);	// Go to course
+		  ParCod_PutPar (ParCod_Crs,CrsCod);	// Go to course
 		  if (GrpCod > 0)
-		     Par_PutParCode (Par_GrpCod,GrpCod);
+		     ParCod_PutPar (ParCod_Grp,GrpCod);
 	      }
 	    else if (DegCod > 0)
 	      {
 	       Frm_BeginFormGoTo (Action);
-		  Par_PutParCode (Par_DegCod,DegCod);	// Go to degree
+		  ParCod_PutPar (ParCod_Deg,DegCod);	// Go to degree
 	      }
 	    else if (CtrCod > 0)
 	      {
 	       Frm_BeginFormGoTo (Action);
-		  Par_PutParCode (Par_CtrCod,CtrCod);	// Go to center
+		  ParCod_PutPar (ParCod_Ctr,CtrCod);	// Go to center
 	      }
 	    else if (InsCod > 0)
 	      {
 	       Frm_BeginFormGoTo (Action);
-		  Par_PutParCode (Par_InsCod,InsCod);	// Go to institution
+		  ParCod_PutPar (ParCod_Ins,InsCod);	// Go to institution
 	      }
 	    else
 	       Frm_BeginForm (Action);

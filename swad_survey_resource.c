@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -29,7 +29,7 @@
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"
@@ -49,7 +49,7 @@ void SvyRsc_GetLinkToSurvey (void)
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = Par_GetAndCheckParCode (Par_SvyCod);
+   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get survey title *****/
    SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);
@@ -85,7 +85,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
       NextAction = (SvyCod > 0)	? ActSeeSvy :	// Survey specified
 				  ActSeeAllSvy;	// All surveys
       Frm_BeginForm (NextAction);
-         Par_PutParCode (Par_SvyCod,SvyCod);
+         ParCod_PutPar (ParCod_Svy,SvyCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

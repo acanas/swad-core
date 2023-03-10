@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -629,10 +629,12 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.73 (2023-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 22.74 (2023-03-10)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.74:    Mar 10, 2023  New module swad_parameter_code. (336740 lines)
+	Version 22.73.1:  Mar 10, 2023  Code refactoring in parameters. (336657 lines)
 	Version 22.73:    Mar 10, 2023  Code refactoring in parameters. (336668 lines)
 	Version 22.72:    Mar 09, 2023  Code refactoring in parameters. Not finished. (336749 lines)
 	Version 22.71:    Mar 08, 2023  Code refactoring in parameters. Not finished. (336806 lines)

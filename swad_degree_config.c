@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -214,7 +214,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthCtrCod] :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthCtr] :
 				      NULL,
 		       Txt_Center);
 
@@ -248,7 +248,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
-		  Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
+		  ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.CtrCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),
 					   "class=\"LB BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -304,7 +304,7 @@ static void DegCfg_WWW (bool PrintView,bool PutForm)
 
 static void DegCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
+   HieCfg_Shortcut (PrintView,ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/
@@ -313,7 +313,7 @@ static void DegCfg_Shortcut (bool PrintView)
 
 static void DegCfg_QR (void)
   {
-   HieCfg_QR (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
+   HieCfg_QR (ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
   }
 
 /*****************************************************************************/
@@ -336,7 +336,7 @@ static void DegCfg_NumCrss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    Par_PutParCode (Par_DegCod,Gbl.Hierarchy.Deg.DegCod);
+	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
@@ -361,7 +361,7 @@ void DegCfg_ChangeDegCtr (void)
    struct Ctr_Center NewCtr;
 
    /***** Get parameter with center code *****/
-   NewCtr.CtrCod = Par_GetAndCheckParCode (Par_OthCtrCod);
+   NewCtr.CtrCod = ParCod_GetAndCheckPar (ParCod_OthCtr);
 
    /***** Check if center has changed *****/
    if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)

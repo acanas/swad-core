@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -49,7 +49,7 @@
 #include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_HTML.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_test.h"
@@ -521,7 +521,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutPars (Exams);
-	       Par_PutParCode (Par_SesCod,Session->SesCod);
+	       ParCod_PutPar (ParCod_Ses,Session->SesCod);
 	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
 					"class=\"LT BT_LINK %s_%s\"",
@@ -926,7 +926,7 @@ void ExaSes_PutParsEdit (void *Exams)
    if (Exams)
      {
       Exa_PutPars (Exams);
-      Par_PutParCode (Par_SesCod,((struct Exa_Exams *) Exams)->SesCod);
+      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod);
      }
   }
 
@@ -940,7 +940,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
    /***** Get parameters *****/
    Exa_GetPars (Exams,true);
    Grp_GetParWhichGroups ();
-   Session->SesCod = Par_GetAndCheckParCode (Par_SesCod);
+   Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams->Exam);
@@ -978,9 +978,9 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       /***** Begin form *****/
       Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
 				      ActChgExaSes);	// Existing session
-	 Par_PutParCode (Par_ExaCod,Session->ExaCod);
+	 ParCod_PutPar (ParCod_Exa,Session->ExaCod);
 	 if (!ItsANewSession)	// Existing session
-	    Par_PutParCode (Par_SesCod,Session->SesCod);
+	    ParCod_PutPar (ParCod_Ses,Session->SesCod);
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
@@ -1063,7 +1063,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
 					    Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
-					                                    Par_SesCod,
+					                                    "SesCod",
 					                                    SesCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
@@ -1122,7 +1122,7 @@ void ExaSes_RequestCreatOrEditSes (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
    Grp_GetParWhichGroups ();
-   Session.SesCod = Par_GetParCode (Par_SesCod);
+   Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
@@ -1168,7 +1168,7 @@ void ExaSes_ReceiveFormSession (void)
    /***** Get main parameters *****/
    Exa_GetPars (&Exams,true);
    Grp_GetParWhichGroups ();
-   Session.SesCod = Par_GetParCode (Par_SesCod);
+   Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/

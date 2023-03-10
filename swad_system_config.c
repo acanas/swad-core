@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -275,7 +275,7 @@ static void SysCfg_Platform (void)
 
 static void SysCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_None,-1L);
+   HieCfg_Shortcut (PrintView,ParCod_None,-1L);
   }
 
 /*****************************************************************************/
@@ -284,7 +284,7 @@ static void SysCfg_Shortcut (bool PrintView)
 
 static void SysCfg_QR (void)
   {
-   HieCfg_QR (Par_None,-1L);
+   HieCfg_QR (ParCod_None,-1L);
   }
 
 /*****************************************************************************/

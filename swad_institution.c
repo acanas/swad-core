@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -54,6 +54,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_place.h"
 #include "swad_survey.h"
 
@@ -212,7 +213,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
    if (PutLink)
      {
       Frm_BeginForm (ActSeeInsInf);
-	 Par_PutParCode (Par_InsCod,Ins->InsCod);
+	 ParCod_PutPar (ParCod_Ins,Ins->InsCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
@@ -233,7 +234,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      Par_PutParCode (Par_InsCod,Ins->InsCod);
+      ParCod_PutPar (ParCod_Ins,Ins->InsCod);
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ins->FullName),
@@ -991,7 +992,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenInsSho);
-		     Par_PutParCode (Par_OthHieCod,Ins->InsCod);
+		     ParCod_PutPar (ParCod_OthHie,Ins->InsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -1007,7 +1008,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
-		  Par_PutParCode (Par_OthHieCod,Ins->InsCod);
+		  ParCod_PutPar (ParCod_OthHie,Ins->InsCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1023,7 +1024,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
-		     Par_PutParCode (Par_OthHieCod,Ins->InsCod);
+		     ParCod_PutPar (ParCod_OthHie,Ins->InsCod);
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
@@ -1110,7 +1111,7 @@ void Ins_RemoveInstitution (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Get institution code *****/
-   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ins_EditingIns->InsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the institution from database *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
@@ -1184,7 +1185,7 @@ void Ins_RenameInsShort (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ins_EditingIns->InsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Ins_RenameInstitution (Ins_EditingIns,Cns_SHRT_NAME);
   }
 
@@ -1194,7 +1195,7 @@ void Ins_RenameInsFull (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ins_EditingIns->InsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Ins_RenameInstitution (Ins_EditingIns,Cns_FULL_NAME);
   }
 
@@ -1297,7 +1298,7 @@ void Ins_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ins_EditingIns->InsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get the new WWW for the institution */
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1336,7 +1337,7 @@ void Ins_ChangeInsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get institution code */
-   Ins_EditingIns->InsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Ins_EditingIns->InsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with status */
    Status = Hie_GetParStatus ();	// New status
@@ -2030,7 +2031,7 @@ unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
 void Ins_PutParInsCod (void *InsCod)
   {
    if (InsCod)
-      Par_PutParCode (Par_InsCod,*((long *) InsCod));
+      ParCod_PutPar (ParCod_Ins,*((long *) InsCod));
   }
 
 /*****************************************************************************/
@@ -2302,7 +2303,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 				The_GetSuffix ());
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
-			Par_PutParCode (Par_InsCod,Ins.InsCod);
+			ParCod_PutPar (ParCod_Ins,Ins.InsCod);
 			HTM_BUTTON_Submit_Begin (Ins.ShrtName,
 			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)

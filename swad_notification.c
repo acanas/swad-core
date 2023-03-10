@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -62,7 +62,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_survey.h"
@@ -714,7 +714,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 /* Begin form */
 	 Action = ActSeeOneCfe;
          Frm_BeginFormAnchor (ActSeeOneCfe,Anchor);
-            Par_PutParCode (Par_ExaCod,Cod);
+            ParCod_PutPar (ParCod_Exa,Cod);
 
 	 /* Free anchor string */
 	 Frm_FreeAnchorStr (Anchor);
@@ -758,8 +758,8 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 	    Frm_BeginForm (Action);
-	       Par_PutParCode (Par_GrpCod,GrpCod);
-	       Par_PutParCode (Par_FilCod,FileMetadata.FilCod);
+	       ParCod_PutPar (ParCod_Grp,GrpCod);
+	       ParCod_PutPar (ParCod_Fil,FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_TML_COMMENT:
@@ -769,7 +769,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 // Cod is the code of the social publishing
 	 Action = ActSeeGblTL;
          Frm_BeginForm (Action);
-	    Par_PutParCode (Par_PubCod,Cod);
+	    ParCod_PutPar (ParCod_Pub,Cod);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Ntf_PutParNotifyEvent (NotifyEvent);
 	 break;
@@ -803,12 +803,12 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_NOTICE:
 	 Action = ActSeeOneNot;
          Frm_BeginForm (Action);
-	    Par_PutParCode (Par_NotCod,Cod);
+	    ParCod_PutPar (ParCod_Not,Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
 	 Action = ActExpRcvMsg;
          Frm_BeginForm (Action);
-	    Par_PutParCode (Par_MsgCod,Cod);
+	    ParCod_PutPar (ParCod_Msg,Cod);
 	 break;
       default:
 	 Action = Ntf_DefaultActions[NotifyEvent];
@@ -822,22 +822,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       if (CrsCod > 0)					// Course specified
 	{
 	 if (CrsCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
-	    Par_PutParCode (Par_CrsCod,CrsCod);		// Go to another course
+	    ParCod_PutPar (ParCod_Crs,CrsCod);		// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
 	 if (DegCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
-	    Par_PutParCode (Par_DegCod,DegCod);		// Go to another degree
+	    ParCod_PutPar (ParCod_Deg,DegCod);		// Go to another degree
 	}
       else if (CtrCod > 0)				// Center specified
 	{
 	 if (CtrCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
-	    Par_PutParCode (Par_CtrCod,CtrCod);		// Go to another center
+	    ParCod_PutPar (ParCod_Ctr,CtrCod);		// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
 	 if (InsCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
-	    Par_PutParCode (Par_InsCod,InsCod);		// Go to another institution
+	    ParCod_PutPar (ParCod_Ins,InsCod);		// Go to another institution
 	}
      }
 

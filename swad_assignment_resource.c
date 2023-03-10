@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -33,7 +33,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_pagination.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -55,7 +55,7 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = Par_GetAndCheckParCode (Par_AsgCod);
+   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get assignment title *****/
    AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);
@@ -95,7 +95,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
       NextAction = (AsgCod > 0)	? ActSeeOneAsg :	// Assignment specified
 				  ActSeeAsg;		// All assignments
       Frm_BeginForm (NextAction);
-         Par_PutParCode (Par_AsgCod,AsgCod);
+         ParCod_PutPar (ParCod_Asg,AsgCod);
 	 // TODO: In the listing of assignments, the page is always the first.
 	 //       The page should be that corresponding to the selected assignment.
          HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],

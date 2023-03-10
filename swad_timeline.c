@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -134,7 +134,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #include "swad_global.h"
 #include "swad_message.h"
 #include "swad_notification.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
@@ -226,7 +226,7 @@ void Tml_ShowNoteAndTimelineGbl (struct Tml_Timeline *Timeline)
    // This parameter is optional. It can be provided by a notification.
    // If > 0 ==> the associated note will be shown highlighted
    //            get its code from database and show it above the timeline
-   if ((PubCod = Par_GetParCode (Par_PubCod)) > 0)
+   if ((PubCod = ParCod_GetPar (ParCod_Pub)) > 0)
      {
       if ((Not.NotCod = Tml_DB_GetNotCodFromPubCod (PubCod)) > 0)
           TmlNot_ShowHighlightedNote (Timeline,&Not);

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -48,6 +48,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_RSS.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
@@ -202,7 +203,7 @@ void Not_ListFullNotices (void)
 
 void Not_GetHighLightedNotCod (void)
   {
-   Gbl.Crs.Notices.HighlightNotCod = Par_GetParCode (Par_NotCod);
+   Gbl.Crs.Notices.HighlightNotCod = ParCod_GetPar (ParCod_Not);
   }
 
 /*****************************************************************************/
@@ -214,7 +215,7 @@ void Not_HideActiveNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to hide *****/
-   NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   NotCod = ParCod_GetAndCheckPar (ParCod_Not);
 
    /***** Set notice as hidden *****/
    Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
@@ -235,7 +236,7 @@ void Not_RevealHiddenNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to reveal *****/
-   NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   NotCod = ParCod_GetAndCheckPar (ParCod_Not);
 
    /***** Set notice as active *****/
    Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
@@ -257,7 +258,7 @@ void Not_RequestRemNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   NotCod = ParCod_GetAndCheckPar (ParCod_Not);
 
    /***** Show question and button to remove this notice *****/
    /* Begin alert */
@@ -285,7 +286,7 @@ void Not_RemoveNotice (void)
    long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   NotCod = ParCod_GetAndCheckPar (ParCod_Not);
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
@@ -600,7 +601,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
-	       Par_PutParCode (Par_NotCod,NotCod);
+	       ParCod_PutPar (ParCod_Not,NotCod);
 	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
 	                                "class=\"RT BT_LINK\"");
 	   }
@@ -804,7 +805,7 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
 static void Not_PutParNotCod (void *NotCod)
   {
    if (NotCod)
-      Par_PutParCode (Par_NotCod,*((long *) NotCod));
+      ParCod_PutPar (ParCod_Not,*((long *) NotCod));
   }
 
 /*****************************************************************************/

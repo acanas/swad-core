@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -51,6 +51,7 @@
 #include "swad_match_result.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
@@ -144,7 +145,7 @@ static void ExaSet_PutParsOneQst (void *Exams)
    if (Exams)
      {
       ExaSet_PutParsOneSet (Exams);
-      Par_PutParCode (Par_QstCod,((struct Exa_Exams *) Exams)->QstCod);
+      ParCod_PutPar (ParCod_Qst,((struct Exa_Exams *) Exams)->QstCod);
      }
   }
 
@@ -287,7 +288,7 @@ void ExaSet_ReceiveFormSet (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
    Set.ExaCod = Exams.Exam.ExaCod;
-   Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
+   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -505,7 +506,7 @@ void ExaSet_RequestCreatOrEditSet (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
-   Exams.SetCod = Set.SetCod = Par_GetParCode (Par_SesCod);
+   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
@@ -1535,7 +1536,7 @@ void ExaSet_RequestRemoveQstFromSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
-   Exams.QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   Exams.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (Set.SetCod,&Anchor);
@@ -1575,7 +1576,7 @@ void ExaSet_RemoveQstFromSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
-   QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Remove media associated to question *****/
    ExaSet_RemoveMediaFromStemOfQst (QstCod,Set.SetCod);
@@ -1656,7 +1657,7 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get question code *****/
-   QstCod = Par_GetAndCheckParCode (Par_QstCod);
+   QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Validate/unvalidate question *****/
    Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Crs.CrsCod,
@@ -1677,7 +1678,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
    /***** Get parameters *****/
    Exa_GetPars (Exams,true);
    Grp_GetParWhichGroups ();
-   Set->SetCod = Par_GetAndCheckParCode (Par_SesCod);
+   Set->SetCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams->Exam);

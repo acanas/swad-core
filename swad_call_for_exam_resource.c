@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -31,7 +31,7 @@
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_program_database.h"
 
 /*****************************************************************************/
@@ -46,7 +46,7 @@ void Cfe_GetLinkToCallForExam (void)
    char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
    /***** Get the code of the call for exam *****/
-   ExaCod = Par_GetAndCheckParCode (Par_ExaCod);
+   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Get session and date of the exam *****/
    CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
@@ -91,7 +91,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
       NextAction = (ExaCod > 0)	? ActSeeOneCfe :	// Call for exam specified
 				  ActSeeAllCfe;		// All calls for exams
       Frm_BeginFormAnchor (NextAction,Anchor);
-         Par_PutParCode (Par_ExaCod,ExaCod);
+         ParCod_PutPar (ParCod_Exa,ExaCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -39,6 +39,7 @@
 #include "swad_global.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
 #include "swad_rubric_database.h"
@@ -482,7 +483,7 @@ void Rub_PutPars (void *Rubrics)
   {
    if (Rubrics)
      {
-      Par_PutParCode (Par_RubCod,((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
+      ParCod_PutPar (ParCod_Rub,((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
       Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
      }
   }
@@ -497,7 +498,7 @@ long Rub_GetPars (struct Rub_Rubrics *Rubrics)
    Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
-   return Par_GetParCode (Par_RubCod);
+   return ParCod_GetPar (ParCod_Rub);
   }
 
 /*****************************************************************************/
@@ -646,7 +647,7 @@ void Rub_RemoveRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get rubric code *****/
-   Rubrics.Rubric.RubCod = Par_GetAndCheckParCode (Par_RubCod);
+   Rubrics.Rubric.RubCod = ParCod_GetAndCheckPar (ParCod_Rub);
 
    /***** Get data of the rubric from database *****/
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);

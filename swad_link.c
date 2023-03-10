@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -43,6 +43,7 @@
 #include "swad_link.h"
 #include "swad_link_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -433,7 +434,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    /* Link short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkSho);
-		  Par_PutParCode (Par_LnkCod,Lnk->LnkCod);
+		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
@@ -445,7 +446,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    /* Link full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkFul);
-		  Par_PutParCode (Par_LnkCod,Lnk->LnkCod);
+		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\""
@@ -457,7 +458,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgLnkWWW);
-	       Par_PutParCode (Par_LnkCod,Lnk->LnkCod);
+	       ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
 		  HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
@@ -479,7 +480,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 static void Lnk_PutParLnkCod (void *LnkCod)
   {
    if (LnkCod)
-      Par_PutParCode (Par_LnkCod,*((long *) LnkCod));
+      ParCod_PutPar (ParCod_Lnk,*((long *) LnkCod));
   }
 
 /*****************************************************************************/
@@ -494,7 +495,7 @@ void Lnk_RemoveLink (void)
    Lnk_EditingLinkConstructor ();
 
    /***** Get link code *****/
-   Lnk_EditingLnk->LnkCod = Par_GetAndCheckParCode (Par_LnkCod);
+   Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /***** Get data of the link from database *****/
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
@@ -567,7 +568,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   Lnk_EditingLnk->LnkCod = Par_GetAndCheckParCode (Par_LnkCod);
+   Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new name for the link */
    Par_GetParText (ParName,NewLnkName,MaxBytes);
@@ -623,7 +624,7 @@ void Lnk_ChangeLinkWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   Lnk_EditingLnk->LnkCod = Par_GetAndCheckParCode (Par_LnkCod);
+   Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new WWW for the link */
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);

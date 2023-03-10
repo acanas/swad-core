@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -38,6 +38,7 @@
 #include "swad_message.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"
@@ -223,7 +224,7 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
       /***** Begin form to write the post *****/
       TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_COMM);
-	 Par_PutParCode (Par_NotCod,NotCod);
+	 ParCod_PutPar (ParCod_Not,NotCod);
 
 	 /***** Textarea and button *****/
 	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH INPUT_%s",
@@ -372,7 +373,7 @@ void TmlCom_ShowHiddenCommsGbl (void)
 
    /***** Get parameters *****/
    /* Get note code, identifier and number of comments to get */
-   NotCod = Par_GetParCode (Par_NotCod);
+   NotCod = ParCod_GetPar (ParCod_Not);
    Par_GetParText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
    NumInitialCommsToGet = (unsigned) Par_GetParLong ("NumHidCom");
 
@@ -700,7 +701,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_COMM);
-      Par_PutParCode (Par_PubCod,PubCod);
+      ParCod_PutPar (ParCod_Pub,PubCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,
@@ -764,7 +765,7 @@ static long TmlCom_ReceiveComm (void)
    struct TmlPub_Publication Pub;
 
    /***** Get data of note *****/
-   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check: note code *****/
@@ -870,7 +871,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
+   Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Do some checks *****/
@@ -922,7 +923,7 @@ static void TmlCom_PutParsRemoveComm (void *Timeline)
 	 Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutParWho (((struct Tml_Timeline *) Timeline)->Who);
-      Par_PutParCode (Par_PubCod,((struct Tml_Timeline *) Timeline)->PubCod);
+      ParCod_PutPar (ParCod_Pub,((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }
 
@@ -980,7 +981,7 @@ static void TmlCom_RemoveComm (void)
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = Par_GetAndCheckParCode (Par_PubCod);
+   Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
    TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Trivial check 1: publication code *****/

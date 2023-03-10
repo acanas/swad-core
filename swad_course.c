@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -63,6 +63,7 @@
 #include "swad_notice_database.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_project.h"
 #include "swad_record_database.h"
 #include "swad_search.h"
@@ -219,7 +220,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
-		  Par_PutParCode (Par_CtyCod,Hie.Cty.CtyCod);
+		  ParCod_PutPar (ParCod_Cty,Hie.Cty.CtyCod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
@@ -253,7 +254,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
-		     Par_PutParCode (Par_InsCod,Hie.Ins.InsCod);
+		     ParCod_PutPar (ParCod_Ins,Hie.Ins.InsCod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
@@ -287,7 +288,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
-			Par_PutParCode (Par_CtrCod,Hie.Ctr.CtrCod);
+			ParCod_PutPar (ParCod_Ctr,Hie.Ctr.CtrCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
@@ -321,7 +322,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
-			   Par_PutParCode (Par_DegCod,Hie.Deg.DegCod);
+			   ParCod_PutPar (ParCod_Deg,Hie.Deg.DegCod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
@@ -355,7 +356,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
-			      Par_PutParCode (Par_CrsCod,Hie.Crs.CrsCod);
+			      ParCod_PutPar (ParCod_Crs,Hie.Crs.CrsCod);
 			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),
 						       "class=\"BT_LINK FORM_IN_%s\"",
 						       The_GetSuffix ());
@@ -994,7 +995,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  Par_PutParCode (Par_CrsCod,Crs->CrsCod);
+		  ParCod_PutPar (ParCod_Crs,Crs->CrsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
 					   "class=\"LM BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -1188,7 +1189,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
-		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE INPUT_%s\"",
@@ -1204,7 +1205,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
-		  Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
+		  ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthCrsYear\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -1229,7 +1230,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
-		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -1245,7 +1246,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
-		     Par_PutParCode (Par_OthHieCod,Crs->CrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1581,7 +1582,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -1816,7 +1817,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get institutional code */
    Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
@@ -1862,7 +1863,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with year */
    Par_GetParText ("OthCrsYear",YearStr,2);
@@ -1945,7 +1946,7 @@ void Crs_RenameCourseShort (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
   }
 
@@ -1955,7 +1956,7 @@ void Crs_RenameCourseFull (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
   }
 
@@ -2051,7 +2052,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Par_GetAndCheckParCode (Par_OthHieCod);
+   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with status */
    Status = Hie_GetParStatus ();	// New status
@@ -2138,7 +2139,7 @@ static void Crs_PutButtonToGoToCrs (void)
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
      {
       Frm_BeginForm (ActSeeCrsInf);
-	 Par_PutParCode (Par_CrsCod,Crs_EditingCrs->CrsCod);
+	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->CrsCod);
 	 Btn_PutConfirmButton (Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
 	 Str_FreeGoToTitle ();
       Frm_EndForm ();
@@ -2157,7 +2158,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-	 Par_PutParCode (Par_CrsCod,Crs_EditingCrs->CrsCod);
+	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->CrsCod);
 
       if (asprintf (&TxtButton,Txt_Register_me_in_X,Crs_EditingCrs->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -2445,7 +2446,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
-	    Par_PutParCode (Par_DegCod,Deg.DegCod);
+	    ParCod_PutPar (ParCod_Deg,Deg.DegCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
@@ -2465,7 +2466,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
-	    Par_PutParCode (Par_CrsCod,CrsCod);
+	    ParCod_PutPar (ParCod_Crs,CrsCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();

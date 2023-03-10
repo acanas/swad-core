@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -548,7 +548,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_OthInsCod] :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthIns] :
 				      NULL,
 		       Txt_Institution);
 
@@ -582,7 +582,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
-		  Par_PutParCode (Par_InsCod,Gbl.Hierarchy.Ins.InsCod);
+		  ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ins.ShrtName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -649,7 +649,7 @@ static void CtrCfg_Place (bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[Par_PlcCod] :
+      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_Plc] :
 				      NULL,
 		       Txt_Place);
 
@@ -704,7 +704,7 @@ static void CtrCfg_WWW (bool PrintView,bool PutForm)
 
 static void CtrCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_Shortcut (PrintView,ParCod_Ctr,Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -713,7 +713,7 @@ static void CtrCfg_Shortcut (bool PrintView)
 
 static void CtrCfg_QR (void)
   {
-   HieCfg_QR (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
+   HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Ctr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -757,7 +757,7 @@ static void CtrCfg_NumDegs (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    Par_PutParCode (Par_CtrCod,Gbl.Hierarchy.Ctr.CtrCod);
+	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.CtrCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
@@ -1008,7 +1008,7 @@ void CtrCfg_ChangeCtrIns (void)
    struct Ins_Instit NewIns;
 
    /***** Get parameter with institution code *****/
-   NewIns.InsCod = Par_GetAndCheckParCode (Par_OthInsCod);
+   NewIns.InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Check if institution has changed *****/
    if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)
@@ -1061,7 +1061,7 @@ void CtrCfg_ChangeCtrPlc (void)
    long NewPlcCod;
 
    /***** Get parameter with place code *****/
-   NewPlcCod = Par_GetAndCheckParCodeMin (Par_PlcCod,0);	// 0 (another place) is allowed here
+   NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);

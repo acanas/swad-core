@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -28,7 +28,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_notification_database.h"
-#include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_notification.h"
@@ -66,7 +66,7 @@ void TmlSha_ShowAllSharersNoteGbl (void)
    struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
@@ -107,7 +107,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/
@@ -165,7 +165,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not)
    long OriginalPubCod;
 
    /***** Get data of note *****/
-   Not->NotCod = Par_GetAndCheckParCode (Par_NotCod);
+   Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Do some checks *****/

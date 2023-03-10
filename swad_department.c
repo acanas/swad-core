@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -46,6 +46,7 @@
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -488,7 +489,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Institution */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptIns);
-		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -508,7 +509,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptSho);
-		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -519,7 +520,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptFul);
-		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -530,7 +531,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptWWW);
-		  Par_PutParCode (Par_DptCod,Dpt->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
@@ -557,7 +558,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 static void Dpt_PutParDptCod (void *DptCod)
   {
    if (DptCod)
-      Par_PutParCode (Par_DptCod,*((long *) DptCod));
+      ParCod_PutPar (ParCod_Dpt,*((long *) DptCod));
   }
 
 /*****************************************************************************/
@@ -573,7 +574,7 @@ void Dpt_RemoveDepartment (void)
    Dpt_EditingDepartmentConstructor ();
 
    /***** Get department code *****/
-   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
+   Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -608,10 +609,10 @@ void Dpt_ChangeDepartIns (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
+   Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get parameter with institution code */
-   NewInsCod = Par_GetAndCheckParCode (Par_OthInsCod);
+   NewInsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Get data of the department from database *****/
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
@@ -683,7 +684,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
+   Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new name for the department */
    Par_GetParText (ParName,NewDptName,MaxBytes);
@@ -739,7 +740,7 @@ void Dpt_ChangeDptWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt_EditingDpt->DptCod = Par_GetAndCheckParCode (Par_DptCod);
+   Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new WWW for the department */
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -904,7 +905,7 @@ void Dpt_ReceiveFormNewDpt (void)
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt_EditingDpt->InsCod = Par_GetAndCheckParCode (Par_OthInsCod);
+   Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name */
    Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);

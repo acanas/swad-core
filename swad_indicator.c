@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -50,6 +50,7 @@
 #include "swad_message.h"
 #include "swad_message_database.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -144,7 +145,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[Par_OthDegTypCod],Txt_Types_of_degree);
+	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_OthDegTyp],Txt_Types_of_degree);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
@@ -160,7 +161,7 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[Par_DptCod],Txt_Department);
+	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -169,7 +170,7 @@ void Ind_ReqIndicatorsCourses (void)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
-					       Par_CodeStr[Par_DptCod],		// Parameter name
+					       Par_CodeStr[ParCod_Dpt],		// Parameter name
 					       SelectClass,			// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected
@@ -221,8 +222,8 @@ void Ind_ReqIndicatorsCourses (void)
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
 	    Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
-	    Par_PutParCode (Par_OthDegTypCod,Indicators.DegTypCod);
-	    Par_PutParCode (Par_DptCod      ,Indicators.DptCod   );
+	    ParCod_PutPar (ParCod_OthDegTyp,Indicators.DegTypCod);
+	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
 	    if (Indicators.StrIndicatorsSelected[0])
 	       Par_PutParString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
 	    Btn_PutConfirmButton (Txt_Show_more_details);
@@ -254,11 +255,11 @@ static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
 
    /***** Get degree type code *****/
    Indicators->DegTypCod = (Gbl.Scope.Current == HieLvl_SYS) ?
-	                   Par_GetParCode (Par_OthDegTypCod) :	// -1L (any degree type) is allowed here
+	                   ParCod_GetPar (ParCod_OthDegTyp) :	// -1L (any degree type) is allowed here
                            -1L;
 
    /***** Get department code *****/
-   Indicators->DptCod = Par_GetParCode (Par_DptCod);		// -1L (any department) is allowed here
+   Indicators->DptCod = ParCod_GetPar (ParCod_Dpt);		// -1L (any department) is allowed here
 
    /***** Get number of indicators *****/
    Ind_GetParNumIndicators (Indicators);
@@ -382,13 +383,11 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
 
 static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators)
   {
-   extern const char *Par_CodeStr[];
-
    if (Indicators)
      {
       Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutParCode (Par_OthDegTypCod,((struct Ind_Indicators *) Indicators)->DegTypCod);
-      Par_PutParCode (Par_DptCod      ,((struct Ind_Indicators *) Indicators)->DptCod   );
+      ParCod_PutPar (ParCod_OthDegTyp,((struct Ind_Indicators *) Indicators)->DegTypCod);
+      ParCod_PutPar (ParCod_Dpt      ,((struct Ind_Indicators *) Indicators)->DptCod   );
       if (((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected[0])
 	 Par_PutParString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected);
       Par_PutParChar ("ShowBigList",'Y');

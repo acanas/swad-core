@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -42,6 +42,7 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_setting.h"
 #include "swad_timetable.h"
 #include "swad_timetable_database.h"
@@ -294,7 +295,7 @@ static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable)
 	                          Minutes / Timetable->Config.Range.MinutesPerInterval;
 
    /***** Get group code *****/
-   Timetable->GrpCod = Par_GetParCode (Par_GrpCod);
+   Timetable->GrpCod = ParCod_GetPar (ParCod_Grp);
 
    /***** Get info *****/
    Par_GetParText ("TTInf",Timetable->Info,Tmt_MAX_BYTES_INFO);
@@ -1594,7 +1595,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"TTGrp%s\" name=\"%s\""
 			      " class=\"Tmt_GRP INPUT_%s\"",
-			      CellStr,Par_CodeStr[Par_GrpCod],
+			      CellStr,Par_CodeStr[ParCod_Grp],
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);

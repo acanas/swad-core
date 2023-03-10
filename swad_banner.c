@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -43,6 +43,7 @@
 #include "swad_language.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 
 /*****************************************************************************/
@@ -450,7 +451,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanSho);
-		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
+		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -461,7 +462,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanFul);
-		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
+		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -472,7 +473,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanImg);
-		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
+		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
@@ -483,7 +484,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanWWW);
-		  Par_PutParCode (Par_BanCod,Banners->BanCodToEdit);
+		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
@@ -508,7 +509,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 static void Ban_PutParBanCod (void *BanCod)
   {
    if (BanCod)
-      Par_PutParCode (Par_BanCod,*((long *) BanCod));
+      ParCod_PutPar (ParCod_Ban,*((long *) BanCod));
   }
 
 /*****************************************************************************/
@@ -524,7 +525,7 @@ void Ban_RemoveBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Get banner code *****/
-   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -575,7 +576,7 @@ void Ban_HideBanner (void)
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
   {
    /***** Get banner code *****/
-   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -649,7 +650,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new name for the banner */
    Par_GetParText (ParName,NewBanName,MaxBytes);
@@ -707,7 +708,7 @@ void Ban_ChangeBannerImg (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new WWW for the banner */
    Par_GetParText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
@@ -749,7 +750,7 @@ void Ban_ChangeBannerWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   Ban->BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new WWW for the banner */
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -981,7 +982,7 @@ void Ban_WriteMenuWithBanners (void)
 
          /* Begin form */
 	 Frm_BeginForm (ActClkBan);
-	    Par_PutParCode (Par_BanCod,Banners.Lst[NumBan].BanCod);
+	    ParCod_PutPar (ParCod_Ban,Banners.Lst[NumBan].BanCod);
 	    Par_PutParString (NULL,"URL",Banners.Lst[NumBan].WWW);
 
 	    /* Banner image */
@@ -1009,7 +1010,7 @@ void Ban_ClickOnBanner (void)
    struct Ban_Banner Ban;
 
    /***** Get banner code *****/
-   Ban.BanCod = Par_GetAndCheckParCode (Par_BanCod);
+   Ban.BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
    Ban_GetDataOfBannerByCod (&Ban);

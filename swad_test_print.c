@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2022 Antonio Cañas Vargas
+    Copyright (C) 1999-2023 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -44,6 +44,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_question.h"
 #include "swad_question_database.h"
@@ -226,7 +227,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
      {
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
-	 Par_PutParCode (Par_PrnCod,Print->PrnCod);
+	 ParCod_PutPar (ParCod_Prn,Print->PrnCod);
 	 Par_PutParUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
 
 	 /***** Begin table *****/
@@ -2006,7 +2007,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 		 {
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
-		     Par_PutParCode (Par_PrnCod,Print.PrnCod);
+		     ParCod_PutPar (ParCod_Prn,Print.PrnCod);
 		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,
 		                      Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								            ActSeeOneTstResOth);
@@ -2205,7 +2206,7 @@ void TstPrn_ShowOnePrint (void)
 
    /***** Get the code of the test *****/
    TstPrn_ResetPrint (&Print);
-   Print.PrnCod = Par_GetAndCheckParCode (Par_PrnCod);
+   Print.PrnCod = ParCod_GetAndCheckPar (ParCod_Prn);
 
    /***** Get test data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
