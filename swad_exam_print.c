@@ -722,7 +722,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT\"");
-	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 

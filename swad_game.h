@@ -136,7 +136,7 @@ void Gam_UnhideGame (void);
 
 void Gam_ListGame (void);
 
-void Gam_RequestCreatOrEditGame (void);
+void Gam_ReqCreatOrEditGame (void);
 
 void Gam_ReceiveFormGame (void);
 
@@ -148,14 +148,14 @@ unsigned Gam_GetParQstInd (void);
 
 void Gam_AddQstsToGame (void);
 
-void Gam_RequestRemoveQstFromGame (void);
+void Gam_ReqRemQstFromGame (void);
 void Gam_RemoveQstFromGame (void);
 
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
 void Gam_PutButtonNewMatch (struct Gam_Games *Games);
-void Gam_RequestNewMatch (void);
+void Gam_ReqNewMatch (void);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
 

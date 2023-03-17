@@ -629,10 +629,19 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.74.2 (2023-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 22.75 (2023-03-17)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.75.1:  Mar 17, 2023  Fixed up and down criteria. (? lines)
+	Version 22.75:    Mar 17, 2023  New module swad_rubric_criteria. (337631 lines)
+					Code refactoring in exams.
+					2 changes necessary in database:
+DROP TABLE IF EXISTS rub_criteria;
+CREATE TABLE IF NOT EXISTS rub_criteria (CriCod INT NOT NULL AUTO_INCREMENT,RubCod INT NOT NULL,CriInd INT NOT NULL,MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(CriCod),UNIQUE INDEX(RubCod,CriInd));
+					If you want to use MyISAM:
+ALTER TABLE rub_criteria ENGINE=MyISAM;
+
 	Version 22.74.2:  Mar 10, 2023  Fixed bugs in exam sets. (336744 lines)
 	Version 22.74.1:  Mar 10, 2023  Fixed links to help. (336741 lines)
 	Version 22.74:    Mar 10, 2023  New module swad_parameter_code. (336740 lines)

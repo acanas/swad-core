@@ -246,8 +246,8 @@ void Prj_RemStd (void);
 void Prj_RemTut (void);
 void Prj_RemEvl (void);
 
-void Prj_RequestCreatePrj (void);
-void Prj_RequestEditPrj (void);
+void Prj_ReqCreatePrj (void);
+void Prj_ReqEditPrj (void);
 
 void Prj_AllocMemProject (struct Prj_Project *Prj);
 void Prj_FreeMemProject (struct Prj_Project *Prj);

@@ -84,9 +84,6 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
                                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
-static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
-
-static void ExaSet_PutParSetCod (long SetCod);
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
                                      const struct ExaSet_Set *Set);
@@ -132,7 +129,7 @@ void ExaSet_PutParsOneSet (void *Exams)
    if (Exams)
      {
       Exa_PutPars (Exams);
-      ExaSet_PutParSetCod (((struct Exa_Exams *) Exams)->SetCod);
+      ParCod_PutPar (ParCod_Set,((struct Exa_Exams *) Exams)->SetCod);
      }
   }
 
@@ -204,7 +201,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
   }
 
 /*****************************************************************************/
-/********************* Put a form to create/edit an exam **********************/
+/********************* Put a form to create/edit an exam *********************/
 /*****************************************************************************/
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
@@ -235,7 +232,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 
 	    /***** Index *****/
 	    HTM_TD_Begin ("class=\"RM\"");
-	       Qst_WriteNumQst (MaxSetInd + 1,"BIG_INDEX");
+	       Lay_WriteIndex (MaxSetInd + 1,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
@@ -278,7 +275,6 @@ void ExaSet_ReceiveFormSet (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
-   bool ItsANewSet;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -288,8 +284,6 @@ void ExaSet_ReceiveFormSet (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
    Set.ExaCod = Exams.Exam.ExaCod;
-   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Set);
-   ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exams.Exam);
@@ -301,13 +295,7 @@ void ExaSet_ReceiveFormSet (void)
    /***** If I can edit exams ==> receive set from form *****/
    ExaSet_ReceiveSetFieldsFromForm (&Set);
    if (ExaSet_CheckSetTitleReceivedFromForm (&Set,Set.Title))
-     {
-      /***** Create a new exam or update an existing one *****/
-      if (ItsANewSet)
-	 ExaSet_CreateSet (&Set);	// Add new set to database
-      else
-	 ExaSet_UpdateSet (&Set);	// Update set data in database
-     }
+      ExaSet_CreateSet (&Set);	// Add new set to database
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,
@@ -462,7 +450,8 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Set->ExaCod);
 
    /***** Create a new exam *****/
-   Set->SetCod = Exa_DB_CreateSet (Set,MaxSetInd + 1);
+   Set->SetInd = MaxSetInd + 1;
+   Set->SetCod = Exa_DB_CreateSet (Set);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_set_of_questions_X,
@@ -470,25 +459,10 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
   }
 
 /*****************************************************************************/
-/******************** Update an existing set of questions ********************/
-/*****************************************************************************/
-
-static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
-  {
-   extern const char *Txt_The_set_of_questions_has_been_modified;
-
-   /***** Update the data of the set of questions *****/
-   Exa_DB_UpdateSet (Set);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_modified);
-  }
-
-/*****************************************************************************/
 /********** Request the creation or edition of an set of questions ***********/
 /*****************************************************************************/
 
-void ExaSet_RequestCreatOrEditSet (void)
+void ExaSet_ReqCreatOrEditSet (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
@@ -581,15 +555,6 @@ void ExaSet_ListQstsToAddToSet (void)
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,
                         false);	// It's not a new exam
-  }
-
-/*****************************************************************************/
-/**************** Write parameter with index of set of questions *****************/
-/*****************************************************************************/
-
-static void ExaSet_PutParSetCod (long SetCod)
-  {
-   Par_PutParUnsigned (NULL,"SetCod",SetCod);
   }
 
 /*****************************************************************************/
@@ -707,6 +672,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	{
 	 /***** Create set of questions *****/
 	 ExaSet_ResetSet (&Set);
+	 Set.ExaCod = Exams->Exam.ExaCod;
 
 	 /***** Get set data *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -773,7 +739,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    /***** Index *****/
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
 	                  The_GetColorRows ());
-	       Qst_WriteNumQst (Set.SetInd,"BIG_INDEX");
+	       Lay_WriteIndex (Set.SetInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
@@ -1158,7 +1124,7 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-      Qst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
+      Lay_WriteIndex (QstInd,ClassNumQst[Question->Validity]);
       Qst_WriteAnswerType (Question->Answer.Type,
                            ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
@@ -1348,7 +1314,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 /***************** Request the removal of a set of questions *****************/
 /*****************************************************************************/
 
-void ExaSet_RequestRemoveSet (void)
+void ExaSet_ReqRemSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X;
    extern const char *Txt_Remove_set_of_questions;
@@ -1519,7 +1485,7 @@ void ExaSet_MoveDownSet (void)
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
-void ExaSet_RequestRemoveQstFromSet (void)
+void ExaSet_ReqRemQstFromSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;

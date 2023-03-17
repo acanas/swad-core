@@ -30,7 +30,7 @@
 void InsCfg_ShowConfiguration (void);
 void InsCfg_PrintConfiguration (void);
 
-void InsCfg_RequestLogo (void);
+void InsCfg_ReqLogo (void);
 void InsCfg_ReceiveLogo (void);
 void InsCfg_RemoveLogo (void);
 void InsCfg_ChangeInsCty (void);

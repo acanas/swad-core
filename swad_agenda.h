@@ -111,7 +111,7 @@ void Agd_GetParsAndShowMyAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowOtherAgendaAfterLogIn (void);
 
-void Agd_RequestCreatOrEditEvent (void);
+void Agd_ReqCreatOrEditEvent (void);
 
 void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
                             unsigned PrivatPublicEvents,

@@ -30,10 +30,10 @@
 void CtrCfg_ShowConfiguration (void);
 void CtrCfg_PrintConfiguration (void);
 
-void CtrCfg_RequestLogo (void);
+void CtrCfg_ReqLogo (void);
 void CtrCfg_ReceiveLogo (void);
 void CtrCfg_RemoveLogo (void);
-void CtrCfg_RequestPhoto (void);
+void CtrCfg_ReqPhoto (void);
 void CtrCfg_ReceivePhoto (void);
 void CtrCfg_ChangeCtrPhotoAttr (void);
 void CtrCfg_ChangeCtrIns (void);

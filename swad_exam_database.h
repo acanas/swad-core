@@ -54,12 +54,11 @@ void Exa_DB_RemoveExam (long ExaCod);
 void Exa_DB_RemoveAllExamsFromCrs (long CrsCod);
 
 //--------------------------------- Sets --------------------------------------
-long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd);
-void Exa_DB_UpdateSet (const struct ExaSet_Set *Set);
+long Exa_DB_CreateSet (const struct ExaSet_Set *Set);
 void Exa_DB_UpdateSetTitle (long SetCod,long ExaCod,
                             const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 void Exa_DB_UpdateNumQstsToExam (long SetCod,long ExaCod,unsigned NumQstsToPrint);
-void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,long SetInd);
+void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,unsigned SetInd);
 void Exa_DB_UpdateSetIndex (long SetInd,long SetCod,long ExaCod);
 void Exa_DB_LockTables (void);
 unsigned Exa_DB_GetNumSetsExam (long ExaCod);

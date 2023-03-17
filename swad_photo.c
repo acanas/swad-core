@@ -88,8 +88,8 @@ static const char *Pho_StrAvgPhotoPrograms[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Args);
-static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) void *Args);
+static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args);
+static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args);
 static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
@@ -203,7 +203,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 /************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Args)
+static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
   {
    if (Gbl.Usrs.Me.MyPhotoExists)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
@@ -215,7 +215,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Arg
 /********** Put a link to request the removal of a user's photo **************/
 /*****************************************************************************/
 
-static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) void *Args)
+static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args)
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    bool PhotoExists;
@@ -294,8 +294,8 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,
-                 ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-	                 Pho_PutIconToRequestRemoveOtherUsrPhoto,NULL,
+                 ItsMe ? Pho_PutIconToReqRemMyPhoto :
+	                 Pho_PutIconToReqRemOtherUsrPhoto,NULL,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -395,7 +395,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 /********************** Request the removal of my photo **********************/
 /*****************************************************************************/
 
-void Pho_ReqRemoveMyPhoto (void)
+void Pho_ReqRemMyPhoto (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
@@ -457,7 +457,7 @@ void Pho_RemoveMyPhoto2 (void)
 /**************** Request the removal of another user's photo ****************/
 /*****************************************************************************/
 
-void Pho_ReqRemoveUsrPhoto (void)
+void Pho_ReqRemUsrPhoto (void)
   {
    extern const char *Txt_Photo;
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;

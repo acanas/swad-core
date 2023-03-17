@@ -34,6 +34,9 @@ void DegCfg_ChangeDegCtr (void);
 void DegCfg_RenameDegreeShort (void);
 void DegCfg_RenameDegreeFull (void);
 void DegCfg_ChangeDegWWW (void);
+void DegCfg_ReqLogo (void);
+void DegCfg_ReceiveLogo (void);
+void DegCfg_RemoveLogo (void);
 void DegCfg_ContEditAfterChgDeg (void);
 
 #endif

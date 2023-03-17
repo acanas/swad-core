@@ -120,7 +120,7 @@ void Prf_SeeSocialProfiles (void)
    if (Gbl.Usrs.Me.Logged)
       Fol_SuggestUsrsToFollowMainZone ();
    else
-      Prf_RequestUserProfile ();
+      Prf_ReqUserProfile ();
   }
 
 /*****************************************************************************/
@@ -172,7 +172,7 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
 /************************** Request a user's profile *************************/
 /*****************************************************************************/
 
-void Prf_RequestUserProfile (void)
+void Prf_ReqUserProfile (void)
   {
    extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -261,7 +261,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
       /* Request a user's profile */
-      Prf_RequestUserProfile ();
+      Prf_ReqUserProfile ();
      }
 
    /***** If it's not me, mark possible notification as seen *****/

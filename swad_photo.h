@@ -102,10 +102,10 @@ void Pho_SendPhotoUsr (void);
 void Pho_RecMyPhotoDetFaces (void);
 void Pho_RecOtherUsrPhotoDetFaces (void);
 
-void Pho_ReqRemoveMyPhoto (void);
+void Pho_ReqRemMyPhoto (void);
 void Pho_RemoveMyPhoto1 (void);
 void Pho_RemoveMyPhoto2 (void);
-void Pho_ReqRemoveUsrPhoto (void);
+void Pho_ReqRemUsrPhoto (void);
 void Pho_RemoveUsrPhoto (void);
 
 void Pho_UpdateMyPhoto1 (void);

@@ -937,7 +937,7 @@ void Att_UnhideAttEvent (void)
 /*************** Put a form to create a new attendance event *****************/
 /*****************************************************************************/
 
-void Att_RequestCreatOrEditAttEvent (void)
+void Att_ReqCreatOrEditAttEvent (void)
   {
    extern const char *Hlp_USERS_Attendance_new_event;
    extern const char *Hlp_USERS_Attendance_edit_event;
@@ -1252,7 +1252,7 @@ void Att_ReceiveFormAttEvent (void)
       Grp_FreeListCodSelectedGrps ();
      }
    else
-      Att_RequestCreatOrEditAttEvent ();
+      Att_ReqCreatOrEditAttEvent ();
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();

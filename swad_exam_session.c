@@ -784,7 +784,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 /********** Request the removal of an exam session (exam instance) ***********/
 /*****************************************************************************/
 
-void ExaSes_RequestRemoveSession (void)
+void ExaSes_ReqRemSession (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_session_X;
    extern const char *Txt_Remove_session;
@@ -1108,7 +1108,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams)
 /****************** Request the creation of a new session ********************/
 /*****************************************************************************/
 
-void ExaSes_RequestCreatOrEditSes (void)
+void ExaSes_ReqCreatOrEditSes (void)
   {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;

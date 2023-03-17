@@ -1634,7 +1634,7 @@ void Svy_UnhideSurvey (void)
 /********************* Put a form to create a new survey *********************/
 /*****************************************************************************/
 
-void Svy_RequestCreatOrEditSvy (void)
+void Svy_ReqCreatOrEditSvy (void)
   {
    extern const char *Hlp_ANALYTICS_Surveys_new_survey;
    extern const char *Hlp_ANALYTICS_Surveys_edit_survey;
@@ -2093,7 +2093,7 @@ void Svy_ReceiveFormSurvey (void)
       Grp_FreeListCodSelectedGrps ();
      }
    else
-      Svy_RequestCreatOrEditSvy ();
+      Svy_ReqCreatOrEditSvy ();
 
    /***** Notify by email about the new survey *****/
    if (NewSvy.Scope == HieLvl_CRS)	// Notify only the surveys for a course, not for a degree or global
@@ -2248,7 +2248,7 @@ void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod)
 /*********** Put a form to edit/create a question in survey  *****************/
 /*****************************************************************************/
 
-void Svy_RequestEditQuestion (void)
+void Svy_ReqEditQuestion (void)
   {
    struct Svy_Surveys Surveys;
    struct Svy_Question SvyQst;
@@ -3104,7 +3104,7 @@ static void Svy_PutParsRemoveOneQst (void *Surveys)
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
-void Svy_RequestRemoveQst (void)
+void Svy_ReqRemQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;

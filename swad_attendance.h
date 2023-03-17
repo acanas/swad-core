@@ -87,7 +87,7 @@ void Att_SeeAttEvents (void);
 
 bool Att_CheckIfICanEditAttEvents (void);
 
-void Att_RequestCreatOrEditAttEvent (void);
+void Att_ReqCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
 
 void Att_AskRemAttEvent (void);

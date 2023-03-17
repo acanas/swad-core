@@ -24,37 +24,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define Rub_MAX_CHARS_CRITERION_TITLE	(128 - 1)	// 127
-#define Rub_MAX_BYTES_CRITERION_TITLE	((Rub_MAX_CHARS_CRITERION_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Rub_AFTER_LAST_CRITERION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database
-
-struct Rub_Criterion
-  {
-   long RubCod;			// Rubric code
-   long CriCod;			// Course code
-   char Title[Rub_MAX_BYTES_CRITERION_TITLE + 1];
-  };
+#include "swad_rubric_type.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void RubCri_CriterionConstructor (struct Rub_Criterion *Criterion);
-void RubCri_CriterionDestructor (struct Rub_Criterion *Criterion);
+void RubCri_CriterionConstructor (struct RubCri_Criterion *Criterion);
+void RubCri_CriterionDestructor (struct RubCri_Criterion *Criterion);
 
-void RubCri_PutParCriCod (void *CriCod);
-
-bool RubCri_GetCriterionDataFromDB (struct Rub_Criterion *Criterion);
-
-void RubCri_ListCriterionForEdition (struct Rub_Criterion *Criterion,
+void RubCri_ListCriterionForEdition (struct RubCri_Criterion *Criterion,
                                      unsigned CriInd,bool CriterionExists,
                                      const char *Anchor);
-void RubCri_WriteNumCriterion (unsigned NumDim,const char *Class);
-void RubCri_WriteCriterionTitle (const char *Title,const char *ClassTitle,bool Visible);
 
 void RubCri_PutIconToAddNewCriterion (void *Rubrics);
 void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics);
@@ -62,8 +46,30 @@ void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics);
 void RubCri_PutParCriInd (unsigned CriInd);
 unsigned RubCri_GetParCriInd (void);
 
-void RubCri_ListRubricCriteria (struct Rub_Rubrics *Rubrics);
+void RubCri_ReqCreatOrEditCriterion (void);
 
-void RubCri_RequestCreatOrEditCri (void);
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
+
+void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion);
+
+void RubCri_ReceiveFormCriterion (void);
+void RubCri_ChangeCriterionTitle (void);
+void RubCri_ChangeMinValueCriterion (void);
+void RubCri_ChangeMaxValueCriterion (void);
+
+void RubCri_ListCriteria (struct Rub_Rubrics *Rubrics,
+			  struct RubCri_Criterion *Criterion);
+
+void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion);
+
+void RubCri_ReqRemCriterion (void);
+void RubCri_RemoveCriterion (void);
+
+void RubCri_MoveUpCriterion (void);
+void RubCri_MoveDownCriterion (void);
+
+void RubCri_WriteCriterionTitle (const struct RubCri_Criterion *Criterion);
 
 #endif

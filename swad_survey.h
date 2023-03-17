@@ -93,7 +93,7 @@ void Svy_SeeAllSurveys (void);
 void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
 void Svy_SeeOneSurvey (void);
 void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder);
-void Svy_RequestCreatOrEditSvy (void);
+void Svy_ReqCreatOrEditSvy (void);
 void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Svy_Survey *Svy);
 void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
@@ -109,10 +109,10 @@ void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
 void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod);
 
-void Svy_RequestEditQuestion (void);
+void Svy_ReqEditQuestion (void);
 void Svy_ReceiveQst (void);
 
-void Svy_RequestRemoveQst (void);
+void Svy_ReqRemQst (void);
 void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);

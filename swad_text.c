@@ -1621,6 +1621,29 @@ const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
 	"Alphabetic<br />code<br />ISO 3166-1";			// Çeviri lazim!
 #endif
 
+const char *Txt_Already_existed_a_criterion_in_this_rubric_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Ja existia un criteri en aquesta r&uacute;brica amb el t&iacute;tol <strong>%s</strong>.";
+#elif L==2	// de
+	"In dieser Rubrik existierte bereits ein Kriterium mit dem Titel <strong>%s</strong>.";
+#elif L==3	// en
+	"Already existed a criterion in this rubric with the title <strong>%s</strong>.";
+#elif L==4	// es
+	"Ya exist&iacute;a un criterio en esta r&uacute;brica con el t&iacute;tulo <strong>%s</strong>.";
+#elif L==5	// fr
+	"Il existe d&eacute;j&agrave; un crit&egrave;re dans cette rubrique avec le titre <strong>%s</strong>.";
+#elif L==6	// gn
+	"Ya exist&iacute;a un criterio en esta r&uacute;brica con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Esiste gi&agrave; un criterio in questa rubrica con il titolo <strong>%s</strong>.";
+#elif L==8	// pl
+	"By&lstrok;o ju&zdot; kryterium w tej rubryce z tytu&lstrok;em <strong>%s</strong>.";
+#elif L==9	// pt
+	"J&aacute; existia um crit&eacute;rio nesta rubrica com o t&iacute;tulo <strong>%s</strong>.";
+#elif L==10	// tr
+	"Bu de&gbreve;erlendirme tablosunda <strong>%s</strong> ba&scedil;l&inodot;kl&inodot; bir &ouml;l&ccedil;&uuml;t zaten vard&inodot;.";
+#endif
+
 const char *Txt_Already_existed_a_game_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Ja existia un joc amb el t&iacute;tol <strong>%s</strong>.";
@@ -6730,6 +6753,29 @@ const char *Txt_Create_course =
 	"Create course";	// Çeviri lazim!
 #endif
 
+const char *Txt_Create_criterion =
+#if   L==1	// ca
+	"Crear criteri";
+#elif L==2	// de
+	"Kriterium eingeben";
+#elif L==3	// en
+	"Create criterion";
+#elif L==4	// es
+	"Crear criterio";
+#elif L==5	// fr
+	"Cr&eacute;er crit&egrave;re";
+#elif L==6	// gn
+	"Crear criterio";	// Okoteve traducción
+#elif L==7	// it
+	"Crear criterio";
+#elif L==8	// pl
+	"Utw&oacute;rz kryterium";
+#elif L==9	// pt
+	"Criar crit&eacute;rio";
+#elif L==10	// tr
+	"&Ouml;l&ccedil;&uuml;t olu&scedil;tur";
+#endif
+
 const char *Txt_Create_degree =
 #if   L==1	// ca
 	"Crear titulaci&oacute;";
@@ -7417,7 +7463,7 @@ const char *Txt_Created_new_assignment_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Criada nova atividade <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new assignment <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni atama <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_banner_X =	// Warning: it is very important to include %s in the following sentences
@@ -7440,7 +7486,7 @@ const char *Txt_Created_new_banner_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo banner <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new banner <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni banner <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_building_X =	// Warning: it is very important to include %s in the following sentences
@@ -7463,7 +7509,7 @@ const char *Txt_Created_new_building_X =	// Warning: it is very important to inc
 #elif L==9	// pt
 	"Criado novo edif&iacute;cio <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new building <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni bina <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_call_for_exam =
@@ -7486,7 +7532,7 @@ const char *Txt_Created_new_call_for_exam =
 #elif L==9	// pt
 	"Criado nova chamada para exame.";
 #elif L==10	// tr
-	"Created new call for exam.";		// Çeviri lazim!
+	"S&inodot;nav i&ccedil;in yeni &ccedil;a&gbreve;r&inodot; olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_center_X =	// Warning: it is very important to include %s in the following sentences
@@ -7509,7 +7555,7 @@ const char *Txt_Created_new_center_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo centro <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new center <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni merkez <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_country_X =	// Warning: it is very important to include %s in the following sentences
@@ -7532,7 +7578,7 @@ const char *Txt_Created_new_country_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado novo pa&iacute;s <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new country <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni &uuml;lke <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_course_X =	// Warning: it is very important to include %s in the following sentences
@@ -7555,7 +7601,30 @@ const char *Txt_Created_new_course_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criada nova disciplina <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new course <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni kurs <strong>%s</strong> olu&scedil;turuldu.";
+#endif
+
+const char *Txt_Created_new_criterion_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creat nou criteri <strong>%s</strong>.";
+#elif L==2	// de
+	"Neues Kriterium <strong>%s</strong> eingegeben.";
+#elif L==3	// en
+	"Created new criterion <strong>%s</strong>.";
+#elif L==4	// es
+	"Creado nuevo criterio <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute; nouveau crit&egrave;re <strong>%s</strong>.";
+#elif L==6	// gn
+	"Creado nuevo criterio <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"Creato nuovo criterio <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono nowe kryterium <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criado novo crit&eacute;rio <strong>%s</strong>.";
+#elif L==10	// tr
+	"Yeni kriter <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -7578,7 +7647,7 @@ const char *Txt_Created_new_degree_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criada novo grau <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new degree <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni derece <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_department_X =	// Warning: it is very important to include %s in the following sentences
@@ -7601,7 +7670,7 @@ const char *Txt_Created_new_department_X =	// Warning: it is very important to i
 #elif L==9	// pt
 	"Criado novo departamento <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new department <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni departman <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_email_domain_X =	// Warning: it is very important to include %s in the following sentences
@@ -7624,7 +7693,7 @@ const char *Txt_Created_new_email_domain_X =	// Warning: it is very important to
 #elif L==9	// pt
 	"Criado novo dom&iacute;nio de email <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new email domain <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni e-posta etki alan&inodot; <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_event_X =	// Warning: it is very important to include %s in the following sentences
@@ -7647,7 +7716,7 @@ const char *Txt_Created_new_event_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado novo evento <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new event <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni etkinlik <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_exam_X =	// Warning: it is very important to include %s in the following sentences
@@ -7670,7 +7739,7 @@ const char *Txt_Created_new_exam_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado novo exame <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new exam <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni s&inodot;nav <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_game_X =	// Warning: it is very important to include %s in the following sentences
@@ -7693,7 +7762,7 @@ const char *Txt_Created_new_game_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado novo jogo <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new game <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni oyun <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -7716,7 +7785,7 @@ const char *Txt_Created_new_group_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado novo grupo <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new group <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni grup <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_holiday_X =	// Warning: it is very important to include %s in the following sentences
@@ -7739,7 +7808,7 @@ const char *Txt_Created_new_holiday_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado nova f&eacute;ria <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new holiday <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni tatil <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_institution_X =	// Warning: it is very important to include %s in the following sentences
@@ -7762,7 +7831,7 @@ const char *Txt_Created_new_institution_X =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Criada nova institu&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new institution <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni kurum <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_link_X =	// Warning: it is very important to include %s in the following sentences
@@ -7785,7 +7854,7 @@ const char *Txt_Created_new_link_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criado nova liga&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new link <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni ba&gbreve;lant&inodot; <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_place_X =	// Warning: it is very important to include %s in the following sentences
@@ -7808,7 +7877,7 @@ const char *Txt_Created_new_place_X =	// Warning: it is very important to includ
 #elif L==9	// pt
 	"Criado nova localiza&ccedil;&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new place <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni yer <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_plugin_X =	// Warning: it is very important to include %s in the following sentences
@@ -7831,7 +7900,7 @@ const char *Txt_Created_new_plugin_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo plugin <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new plugin <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni eklenti <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_project_X =	// Warning: it is very important to include %s in the following sentences
@@ -7854,7 +7923,7 @@ const char *Txt_Created_new_project_X =	// Warning: it is very important to incl
 #elif L==9	// pt
 	"Criado novo projeto <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new project <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni proje <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_record_field_X =	// Warning: it is very important to include %s in the following sentences
@@ -7877,7 +7946,7 @@ const char *Txt_Created_new_record_field_X =	// Warning: it is very important to
 #elif L==9	// pt
 	"Criado novo campo de cart&atilde;o <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new record field <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni kay&inodot;t alan&inodot; <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_room_X =	// Warning: it is very important to include %s in the following sentences
@@ -7900,7 +7969,7 @@ const char *Txt_Created_new_room_X =	// Warning: it is very important to include
 #elif L==9	// pt
 	"Criada nova sala <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new room <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni oda <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_rubric_X =	// Warning: it is very important to include %s in the following sentences
@@ -7946,7 +8015,7 @@ const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very importan
 #elif L==9	// pt
 	"Criado novo conjunto de perguntas <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new set of questions <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni soru grubu <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -7969,7 +8038,7 @@ const char *Txt_Created_new_survey_X =	// Warning: it is very important to inclu
 #elif L==9	// pt
 	"Criado novo inqu&eacute;rito <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new survey <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni anket <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important to include %s in the following sentences
@@ -7992,7 +8061,7 @@ const char *Txt_Created_new_type_of_degree_X =	// Warning: it is very important 
 #elif L==9	// pt
 	"Criado novo tipo de grau <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new type of degree <strong>%s</strong>.";		// Çeviri lazim!
+	"Yeni tip derecesi <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_type_of_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -8015,7 +8084,7 @@ const char *Txt_Created_new_type_of_group_X =	// Warning: it is very important t
 #elif L==9	// pt
 	"Criado novo tipo de grupo <strong>%s</strong>.";
 #elif L==10	// tr
-	"Created new type of group <strong>%s</strong>.";	// Çeviri lazim!
+	"Yeni tip grubu <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_tables_in_the_database_that_did_not_exist =
@@ -10223,6 +10292,29 @@ const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it i
 	"Voc&ecirc; realmente deseja remover a atividade <strong>%s</strong>?";
 #elif L==10	// tr
 	"Do you really want to remove the assignment <strong>%s</strong>?";	// Çeviri lazim!
+#endif
+
+const char *Txt_Do_you_really_want_to_remove_the_criterion_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar el criteri <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie der Kriterium <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the criterion <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar el criterio <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer le crit&egrave;re <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar el criterio <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere il criterio <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usun&aogon;&cacute; kryterium <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o crit&eacute;rio <strong>%s</strong>?";
+#elif L==10	// tr
+	"<strong>%s</strong> kriterini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
@@ -20863,6 +20955,29 @@ const char *Txt_Max_BR_students =
 	"Max.<br />stud.";		// Çeviri lazim!
 #endif
 
+const char *Txt_Maximum =
+#if   L==1	// ca
+	"M&agrave;xim";
+#elif L==2	// de
+	"Maximum";
+#elif L==3	// en
+	"Maximum";
+#elif L==4	// es
+	"M&aacute;ximo";
+#elif L==5	// fr
+	"Maximum";
+#elif L==6	// gn
+	"M&aacute;ximo";	// Okoteve traducción
+#elif L==7	// it
+	"Massimo";
+#elif L==8	// pl
+	"Maksimum";
+#elif L==9	// pt
+	"M&aacute;ximo";
+#elif L==10	// tr
+	"Maksimum";
+#endif
+
 const char *Txt_maximum =
 #if   L==1	// ca
 	"m&agrave;xim";
@@ -20883,7 +20998,7 @@ const char *Txt_maximum =
 #elif L==9	// pt
 	"m&aacute;ximo";
 #elif L==10	// tr
-	"maximum";		// Çeviri lazim!
+	"maksimum";
 #endif
 
 const char *Txt_Maximum_grade =
@@ -20906,7 +21021,7 @@ const char *Txt_Maximum_grade =
 #elif L==9	// pt
 	"Nota m&aacute;xima";
 #elif L==10	// tr
-	"Maximum grade";	// Çeviri lazim!
+	"Maksimum derece";
 #endif
 
 const char *Txt_Members =	// Project members
@@ -23448,9 +23563,32 @@ const char *Txt_Messages_sent_from_A_COURSE =
 	"Messages sent from";		// Çeviri lazim!
 #endif
 
+const char *Txt_Minimum =
+#if   L==1	// ca
+	"M&iacute;nim";
+#elif L==2	// de
+	"Mindest";
+#elif L==3	// en
+	"Minimum";
+#elif L==4	// es
+	"M&iacute;nimo";
+#elif L==5	// fr
+	"Minimum";
+#elif L==6	// gn
+	"M&iacute;nimo";	// Okoteve traducción
+#elif L==7	// it
+	"Minimo";
+#elif L==8	// pl
+	"Minimum";
+#elif L==9	// pt
+	"M&iacute;nimo";
+#elif L==10	// tr
+	"Asgari";
+#endif
+
 const char *Txt_minimum =
 #if   L==1	// ca
-	"m&iacute;nimo";	// Necessita traducció
+	"m&iacute;nim";
 #elif L==2	// de
 	"Mindest";
 #elif L==3	// en
@@ -23468,7 +23606,7 @@ const char *Txt_minimum =
 #elif L==9	// pt
 	"m&iacute;nimo";
 #elif L==10	// tr
-	"minimum";		// Çeviri lazim!
+	"asgari";
 #endif
 
 const char *Txt_Minimum_time_seconds_per_question_between_two_tests =
@@ -35033,6 +35171,29 @@ const char *Txt_Remove_assignment =
 	"Remover atividade";
 #elif L==10	// tr
 	"Atamay&inodot; kald&inodot;r";
+#endif
+
+const char *Txt_Remove_criterion =
+#if   L==1	// ca
+	"Eliminar criteri";
+#elif L==2	// de
+	"Kriterium entfernen";
+#elif L==3	// en
+	"Remove criterion";
+#elif L==4	// es
+	"Eliminar criterio";
+#elif L==5	// fr
+	"Supprimer crit&egrave;re";
+#elif L==6	// gn
+	"Eliminar criterio";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere criterio";
+#elif L==8	// pl
+	"Usu&nacute; kryterium";
+#elif L==9	// pt
+	"Remover crit&eacute;rio";
+#elif L==10	// tr
+	"Kriter kald&inodot;r";
 #endif
 
 const char *Txt_Remove_event =
@@ -52704,7 +52865,7 @@ const char *Txt_The_session_has_expired =
 #elif L==10	// tr
 	"The session has expired.";		// Çeviri lazim!
 #endif
-
+/*
 const char *Txt_The_set_of_questions_has_been_modified =
 #if   L==1	// ca
 	"El conjunt de preguntes ha estat modificat.";
@@ -52727,7 +52888,7 @@ const char *Txt_The_set_of_questions_has_been_modified =
 #elif L==10	// tr
 	"Soru seti de&gbreve;i&scedil;tirildi.";
 #endif
-
+*/
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La mida del fitxer"

@@ -293,7 +293,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
@@ -640,7 +640,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
 	    Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();

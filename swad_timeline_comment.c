@@ -822,7 +822,7 @@ static long TmlCom_ReceiveComm (void)
 /**************** Request the removal of a comment in a note *****************/
 /*****************************************************************************/
 
-void TmlCom_RequestRemComUsr (void)
+void TmlCom_ReqRemComUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -848,7 +848,7 @@ void TmlCom_RequestRemComUsr (void)
    HTM_SECTION_End ();
   }
 
-void TmlCom_RequestRemComGbl (void)
+void TmlCom_ReqRemComGbl (void)
   {
    struct Tml_Timeline Timeline;
 

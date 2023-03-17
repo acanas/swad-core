@@ -2799,21 +2799,27 @@ mysql> DESCRIBE roo_check_in;
    /***** Table rub_criteria *****/
 /*
 mysql> DESCRIBE rub_criteria;
-+--------+------+------+-----+---------+-------+
-| Field  | Type | Null | Key | Default | Extra |
-+--------+------+------+-----+---------+-------+
-| RubCod | int  | NO   | PRI | NULL    |       |
-| CriInd | int  | NO   | PRI | NULL    |       |
-| CriCod | int  | NO   |     | NULL    |       |
-+--------+------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| CriCod | int           | NO   | PRI | NULL    | auto_increment |
+| RubCod | int           | NO   | MUL | NULL    |                |
+| CriInd | int           | NO   |     | NULL    |                |
+| MinVal | double        | NO   |     | 0       |                |
+| MaxVal | double        | NO   |     | 1       |                |
+| Title  | varchar(2047) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_criteria ("
+			"CriCod INT NOT NULL AUTO_INCREMENT,"
 			"RubCod INT NOT NULL,"
 			"CriInd INT NOT NULL,"
-			"CriCod INT NOT NULL,"
-		   "UNIQUE INDEX(RubCod,CriInd),"
-		   "UNIQUE INDEX(RubCod,CriCod))");
+			"MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,"
+			"MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,"
+			"Title VARCHAR(2047) NOT NULL,"
+		   "UNIQUE INDEX(CriCod),"
+		   "UNIQUE INDEX(RubCod,CriInd))");
 
    /***** Table rub_rubrics *****/
 /*

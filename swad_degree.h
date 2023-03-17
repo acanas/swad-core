@@ -102,10 +102,6 @@ void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
-void Deg_RequestLogo (void);
-void Deg_ReceiveLogo (void);
-void Deg_RemoveLogo (void);
-
 unsigned Deg_GetCachedNumDegsInSys (void);
 
 void Deg_FlushCacheNumDegsInCty (void);

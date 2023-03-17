@@ -36,6 +36,7 @@ typedef enum
    ParCod_Att,		// Attendance event code
    ParCod_Ban,		// Banner code
    ParCod_Bld,		// Building code
+   ParCod_Cri,		// Criterion code in rubric
    ParCod_Crs,		// Course code
    ParCod_Ctr,		// Center code
    ParCod_Cty,		// Country code

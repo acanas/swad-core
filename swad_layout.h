@@ -79,6 +79,8 @@ void Lay_HelpRichEditor (void);
 
 void Lay_BeginHTMLFile (FILE *File,const char *Title);
 
+void Lay_WriteIndex (unsigned Index,const char *Class);
+
 //-------------------------------- Figures ------------------------------------
 void Lay_GetAndShowNumUsrsPerSideColumns (void);
 

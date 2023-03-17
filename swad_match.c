@@ -963,7 +963,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 /************** Request the removal of a match (game instance) ***************/
 /*****************************************************************************/
 
-void Mch_RequestRemoveMatch (void)
+void Mch_ReqRemMatch (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
    extern const char *Txt_Remove_match;

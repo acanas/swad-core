@@ -67,7 +67,7 @@ void Exa_RemoveCrsExams (long CrsCod);
 void Exa_HideExam (void);
 void Exa_UnhideExam (void);
 
-void Exa_RequestCreatOrEditExam (void);
+void Exa_ReqCreatOrEditExam (void);
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 			  struct ExaSet_Set *Set,
 			  bool ItsANewExam);

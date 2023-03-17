@@ -31,9 +31,21 @@
 
 #include "swad_database.h"
 #include "swad_error.h"
-#include "swad_rubric.h"
 #include "swad_rubric_database.h"
 #include "swad_global.h"
+
+/*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+#define RubCri_AFTER_LAST_CRITERION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database
+
+// Fields in database for minimum/maximum criterion values
+static const char *RubCri_ValuesFields[RubCri_NUM_VALUES] =
+  {
+   [RubCri_MIN] = "MinVal",
+   [RubCri_MAX] = "MaxVal",
+  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -333,26 +345,73 @@ void Rub_DB_RemoveCrsRubrics (long CrsCod)
   }
 
 /*****************************************************************************/
-/**************** Insert criterion in the table of criteria *****************/
+/********************** Create a new rubric criterion ************************/
 /*****************************************************************************/
 
-void Rub_DB_InsertCriterionInRubric (long RubCod,unsigned CriInd,long CriCod)
+long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
   {
-   DB_QueryINSERT ("can not add criterion to rubric",
-		   "INSERT INTO rub_criteria"
-		   " (RubCod,CriInd,CriCod)"
-		   " VALUES"
-		   " (%ld,%u,%ld)",
-		   RubCod,
-		   CriInd,
-		   CriCod);
+   long CriCod;
+
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   CriCod =
+   DB_QueryINSERTandReturnCode ("can not create new criterion",
+				"INSERT INTO rub_criteria"
+				" (RubCod,CriInd,%s,%s,Title)"
+				" VALUES"
+				" (%ld,%u,%.15lg,%.15lg,'%s')",
+				RubCri_ValuesFields[RubCri_MIN],
+				RubCri_ValuesFields[RubCri_MAX],
+				Criterion->RubCod,
+				Criterion->CriInd,
+				Criterion->Values[RubCri_MIN],
+				Criterion->Values[RubCri_MAX],
+				Criterion->Title);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+
+   return CriCod;
   }
 
 /*****************************************************************************/
-/*********** Update indexes of criteria greater than a given one ***********/
+/********************* Update criterion title in database ********************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateIndexesOfCriteriaGreaterThan (long RubCod,unsigned CriInd)
+void Rub_DB_UpdateCriterionTitle (long CriCod,long RubCod,
+                                  const char NewTitle[RubCri_MAX_BYTES_TITLE + 1])
+  {
+   DB_QueryUPDATE ("can not update the title of a criterion",
+		   "UPDATE rub_criteria"
+		     " SET Title='%s'"
+		   " WHERE CriCod=%ld"
+		     " AND RubCod=%ld",	// Extra check
+	           NewTitle,
+	           CriCod,
+	           RubCod);
+  }
+
+/*****************************************************************************/
+/********************* Update criterion value in database ********************/
+/*****************************************************************************/
+
+void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
+                                  RubCri_ValueRange_t ValueRange,double Value)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update the value of a criterion",
+		   "UPDATE rub_criteria"
+		     " SET %s=%.15lg"
+		   " WHERE CriCod=%ld"
+		     " AND RubCod=%ld",	// Extra check
+	           RubCri_ValuesFields[ValueRange],Value,
+	           CriCod,
+	           RubCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/************ Update indexes of criteria greater than a given one ************/
+/*****************************************************************************/
+
+void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd)
   {
    DB_QueryUPDATE ("can not update indexes of criteria",
 		   "UPDATE rub_criteria"
@@ -403,22 +462,6 @@ unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod)
 		   " FROM rub_criteria"
 		  " WHERE RubCod=%ld",
 		  RubCod);
-  }
-
-/*****************************************************************************/
-/*********************** Get the criteria of a rubric ***********************/
-/*****************************************************************************/
-
-unsigned Rub_DB_GetRubricCriteriaBasic (MYSQL_RES **mysql_res,long RubCod)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get rubric criteria",
-		   "SELECT CriCod,"	// row[0]
-			  "CriInd"	// row[1]
-		    " FROM rub_criteria"
-		   " WHERE RubCod=%ld"
-		   " ORDER BY CriInd",
-		   RubCod);
   }
 
 /*****************************************************************************/
@@ -510,24 +553,73 @@ unsigned Rub_DB_GetNextCriterionIndexInRubric (long RubCod,unsigned CriInd)
 				   " FROM rub_criteria"
 				  " WHERE RubCod=%ld"
 				    " AND CriInd>%u",
-				  Rub_AFTER_LAST_CRITERION,	// End of criteria has been reached
+				  RubCri_AFTER_LAST_CRITERION,	// End of criteria has been reached
 				  RubCod,
 				  CriInd);
   }
 
 /*****************************************************************************/
-/****************** Get data of a criterion from database ********************/
+/********************* Get criteria in a given rubric ************************/
 /*****************************************************************************/
 
-unsigned Rub_DB_GetCriterionData (MYSQL_RES **mysql_res,long CriCod)
+unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get a criterion",
-		   "SELECT Title"	// row[0]
+   DB_QuerySELECT (mysql_res,"can not get criteria",
+		   "SELECT CriCod,"	// row[0]
+			  "CriInd,"	// row[1]
+			  "%s,"		// row[2]
+			  "%s,"		// row[3]
+			  "Title"	// row[4]
 		    " FROM rub_criteria"
-		   " WHERE CriCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   CriCod,
+		   " WHERE RubCod=%ld"
+		   " ORDER BY CriInd",
+		   RubCri_ValuesFields[RubCri_MIN],
+		   RubCri_ValuesFields[RubCri_MAX],
+		   RubCod);
+  }
+
+/*****************************************************************************/
+/***************** Get rubric criterion data using its code ******************/
+/*****************************************************************************/
+
+unsigned Rub_DB_GetDataOfCriterionByCod (MYSQL_RES **mysql_res,long CriCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get criterion data",
+		   "SELECT CriCod,"	// row[0]
+			  "RubCod,"	// row[1]
+			  "CriInd,"	// row[2]
+			  "%s,"		// row[3]
+			  "%s,"		// row[4]
+			  "Title"	// row[5]
+		    " FROM rub_criteria"
+		   " WHERE CriCod=%ld",
+		   RubCri_ValuesFields[RubCri_MIN],
+		   RubCri_ValuesFields[RubCri_MAX],
+		   CriCod);
+  }
+
+/*****************************************************************************/
+/************** Check if the title of a rubric criterion exists **************/
+/*****************************************************************************/
+
+bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criterion,
+                                           const char Title[RubCri_MAX_BYTES_TITLE + 1])
+  {
+   return
+   DB_QueryEXISTS ("can not check similar criterion",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM rub_criteria,"
+			   "rub_rubrics"
+		    " WHERE rub_criteria.ExaCod=%ld"
+		      " AND rub_criteria.Title='%s'"
+		      " AND rub_criteria.SetCod<>%ld"
+		      " AND rub_criteria.ExaCod=rub_rubrics.ExaCod"
+		      " AND rub_rubrics.CrsCod=%ld)",	// Extra check
+		   Criterion->RubCod,Title,
+		   Criterion->CriCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
@@ -634,15 +726,15 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 /*********************** Remove criterion from a rubric **********************/
 /*****************************************************************************/
 
-void Rub_DB_RemoveCriterionFromRubric (long RubCod,unsigned CriInd)
+void Rub_DB_RemoveCriterionFromRubric (long CriCod,long RubCod)
   {
-   DB_QueryDELETE ("can not remove a criterion",
+   DB_QueryDELETE ("can not remove rubric criterion",
 		   "DELETE FROM rub_criteria"
-		   " WHERE RubCod=%ld"
-		     " AND CriInd=%u",
-		   RubCod,
-		   CriInd);
-   }
+		   " WHERE CriCod=%ld"
+                     " AND RubCod=%ld",
+		   CriCod,
+		   RubCod);
+  }
 
 /*****************************************************************************/
 /**************************** Remove rubric criteria *************************/

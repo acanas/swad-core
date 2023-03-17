@@ -117,7 +117,7 @@ void Qst_Destructor (struct Qst_Questions *Questions)
 /*********************** Request the edition of tests ************************/
 /*****************************************************************************/
 
-void Qst_RequestEditQsts (void)
+void Qst_ReqEditQsts (void)
   {
    struct Qst_Questions Questions;
 
@@ -519,7 +519,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-      Qst_WriteNumQst (QstInd,"BIG_INDEX");
+      Lay_WriteIndex (QstInd,"BIG_INDEX");
       if (QuestionExists)
 	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
@@ -565,18 +565,6 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	   }
       HTM_ARTICLE_End ();
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/********************* Write the number of a test question *******************/
-/*****************************************************************************/
-// Number of question should be 1, 2, 3...
-
-void Qst_WriteNumQst (unsigned NumQst,const char *Class)
-  {
-   HTM_DIV_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
-      HTM_Unsigned (NumQst);
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -984,7 +972,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Number of question and answer type */
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	    Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	    Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	    Qst_WriteAnswerType (Questions->Question.Answer.Type,"DAT_SMALL");
 	 HTM_TD_End ();
 
@@ -3230,7 +3218,7 @@ long Qst_GetIntAnsFromStr (char *Str)
 /***************** Request the removal of selected questions *****************/
 /*****************************************************************************/
 
-void Qst_RequestRemoveSelectedQsts (void)
+void Qst_ReqRemSelectedQsts (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
    extern const char *Txt_Remove_questions;
@@ -3319,7 +3307,7 @@ void Qst_PutIconToRemoveOneQst (void *QstCod)
 /******************** Request the removal of a question **********************/
 /*****************************************************************************/
 
-void Qst_RequestRemoveOneQst (void)
+void Qst_ReqRemOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;

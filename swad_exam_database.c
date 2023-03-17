@@ -1,5 +1,4 @@
 // swad_exam_database.c: exams operations with database
-
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -524,7 +523,7 @@ void Exa_DB_RemoveAllExamsFromCrs (long CrsCod)
 /********************** Create a new set of questions ************************/
 /*****************************************************************************/
 
-long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd)
+long Exa_DB_CreateSet (const struct ExaSet_Set *Set)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new set of questions",
@@ -533,29 +532,9 @@ long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd)
 				" VALUES"
 				" (%ld,%u,%u,'%s')",
 				Set->ExaCod,
-				SetInd,
+				Set->SetInd,
 				Set->NumQstsToPrint,
 				Set->Title);
-  }
-
-/*****************************************************************************/
-/******************** Update an existing set of questions ********************/
-/*****************************************************************************/
-
-void Exa_DB_UpdateSet (const struct ExaSet_Set *Set)
-  {
-   DB_QueryUPDATE ("can not update set of questions",
-		   "UPDATE exa_sets"
-		     " SET ExaCod=%ld,"
-		          "SetInd=%u,"
-		          "NumQstsToPrint=%u,"
-		          "Title='%s'"
-		   " WHERE SetCod=%ld",
-		   Set->ExaCod,
-		   Set->SetInd,
-		   Set->NumQstsToPrint,
-	           Set->Title,
-	           Set->SetCod);
   }
 
 /*****************************************************************************/
@@ -565,7 +544,6 @@ void Exa_DB_UpdateSet (const struct ExaSet_Set *Set)
 void Exa_DB_UpdateSetTitle (long SetCod,long ExaCod,
                             const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
-   /***** Update set of questions changing old title by new title *****/
    DB_QueryUPDATE ("can not update the title of a set of questions",
 		   "UPDATE exa_sets"
 		     " SET Title='%s'"
@@ -597,7 +575,7 @@ void Exa_DB_UpdateNumQstsToExam (long SetCod,long ExaCod,unsigned NumQstsToPrint
 /************ Change indexes of sets greater than a given index **************/
 /*****************************************************************************/
 
-void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,long SetInd)
+void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,unsigned SetInd)
   {
    DB_QueryUPDATE ("can not update indexes of sets",
 		   "UPDATE exa_sets"

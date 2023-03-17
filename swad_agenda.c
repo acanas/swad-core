@@ -1354,7 +1354,7 @@ void Agd_MakeEventPublic (void)
 /******************** Put a form to create a new event ***********************/
 /*****************************************************************************/
 
-void Agd_RequestCreatOrEditEvent (void)
+void Agd_ReqCreatOrEditEvent (void)
   {
    extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
@@ -1590,7 +1590,7 @@ void Agd_ReceiveFormEvent (void)
      }
    else
       // TODO: The form should be filled with partial data, now is always empty
-      Agd_RequestCreatOrEditEvent ();
+      Agd_ReqCreatOrEditEvent ();
   }
 
 /*****************************************************************************/

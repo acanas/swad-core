@@ -286,7 +286,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects);
 
 static void Prj_ResetProject (struct Prj_Project *Prj);
 
-static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects);
+static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects);
 static void Prj_PutFormProject (struct Prj_Projects *Projects,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
@@ -2881,7 +2881,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    free (TxtButton);
 
    /***** Put a form to create/edit project *****/
-   Prj_RequestCreatOrEditPrj (Projects);
+   Prj_ReqCreatOrEditPrj (Projects);
   }
 
 /*****************************************************************************/
@@ -2974,7 +2974,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Prj_MembersToAdd);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_ReqCreatOrEditPrj (&Projects);
   }
 
 /*****************************************************************************/
@@ -3075,7 +3075,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Prj_FreeMemProject (&Projects->Prj);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (Projects);
+   Prj_ReqCreatOrEditPrj (Projects);
   }
 
 /*****************************************************************************/
@@ -3144,7 +3144,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Prj_FreeMemProject (&Projects.Prj);
 
    /***** Put form to edit project again *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_ReqCreatOrEditPrj (&Projects);
   }
 
 /*****************************************************************************/
@@ -3646,7 +3646,7 @@ void Prj_UnhideProject (void)
 /********************* Put a form to create/edit project *********************/
 /*****************************************************************************/
 
-void Prj_RequestCreatePrj (void)
+void Prj_ReqCreatePrj (void)
   {
    struct Prj_Projects Projects;
 
@@ -3658,10 +3658,10 @@ void Prj_RequestCreatePrj (void)
    Projects.Prj.PrjCod = -1L;	// It's a new, non existing, project
 
    /***** Form to create project *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_ReqCreatOrEditPrj (&Projects);
   }
 
-void Prj_RequestEditPrj (void)
+void Prj_ReqEditPrj (void)
   {
    struct Prj_Projects Projects;
 
@@ -3673,10 +3673,10 @@ void Prj_RequestEditPrj (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Form to edit project *****/
-   Prj_RequestCreatOrEditPrj (&Projects);
+   Prj_ReqCreatOrEditPrj (&Projects);
   }
 
-static void Prj_RequestCreatOrEditPrj (struct Prj_Projects *Projects)
+static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
   {
    bool ItsANewProject = (Projects->Prj.PrjCod < 0);
 
@@ -4101,7 +4101,7 @@ void Prj_ReceiveFormProject (void)
          Prj_PutFormProject (&Projects,ItsANewProject);
 
       /***** Show again form to edit project *****/
-      Prj_RequestCreatOrEditPrj (&Projects);
+      Prj_ReqCreatOrEditPrj (&Projects);
      }
    else
       Err_NoPermissionExit ();

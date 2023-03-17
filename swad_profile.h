@@ -56,7 +56,7 @@ char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
                                const char *NickWithoutArr);
 void Prf_PutLinkMyPublicProfile (void);
 void Prf_PutLinkRequestAnotherUserProfile (void);
-void Prf_RequestUserProfile (void);
+void Prf_ReqUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
 bool Prf_ShowUserProfile (struct Usr_Data *UsrDat);

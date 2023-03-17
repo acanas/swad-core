@@ -396,7 +396,7 @@ void Cfe_PrintCallForExam (void)
 /************************** Remove a call for exam ***************************/
 /*****************************************************************************/
 
-void Cfe_ReqRemoveCallForExam (void)
+void Cfe_ReqRemCallForExam (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_call_for_exam;
    struct Cfe_CallsForExams CallsForExams;

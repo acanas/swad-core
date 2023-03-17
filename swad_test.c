@@ -94,7 +94,7 @@ static unsigned Tst_GetParNumQsts (void);
 /********************* Request a self-assessment test ************************/
 /*****************************************************************************/
 
-void Tst_RequestTest (void)
+void Tst_ReqTest (void)
   {
    struct Qst_Questions Questions;
 

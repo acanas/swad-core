@@ -31,6 +31,7 @@
 
 #include "swad_game.h"
 #include "swad_hierarchy_level.h"
+#include "swad_rubric_type.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -53,22 +54,29 @@ void Rub_DB_RemoveRubric (long RubCod);
 void Rub_DB_RemoveCrsRubrics (long CrsCod);
 
 //--------------------------- Rubric criteria -------------------------------
-void Rub_DB_InsertCriterionInRubric (long RubCod,unsigned CriInd,long CriCod);
-void Rub_DB_UpdateIndexesOfCriteriaGreaterThan (long RubCod,unsigned CriInd);
+long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion);
+void Rub_DB_UpdateCriterionTitle (long CriCod,long RubCod,
+                                  const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
+void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
+                                  RubCri_ValueRange_t ValueRange,double Value);
+void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
 void Rub_DB_UpdateCriterionIndex (long CriInd,long RubCod,long CriCod);
 void Rub_DB_LockTable (void);
 
 unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod);
-unsigned Rub_DB_GetRubricCriteriaBasic (MYSQL_RES **mysql_res,long RubCod);
 long Rub_DB_GetCriCodFromCriInd (long RubCod,unsigned QstInd);
 unsigned Rub_DB_GetCriIndFromCriCod (long RubCod,long QstCod);
 unsigned Rub_DB_GetMaxCriterionIndexInRubric (long RubCod);
 unsigned Rub_DB_GetPrevCriterionIndexInRubric (long RubCod,unsigned QstInd);
 unsigned Rub_DB_GetNextCriterionIndexInRubric (long RubCod,unsigned QstInd);
-unsigned Rub_DB_GetCriterionData (MYSQL_RES **mysql_res,long CriCod);
+unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod);
+unsigned Rub_DB_GetDataOfCriterionByCod (MYSQL_RES **mysql_res,long CriCod);
+bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criterion,
+                                           const char Title[RubCri_MAX_BYTES_TITLE + 1]);
+
 double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope);
 
-void Rub_DB_RemoveCriterionFromRubric (long RubCod,unsigned CriInd);
+void Rub_DB_RemoveCriterionFromRubric (long CriCod,long RubCod);
 void Rub_DB_RemoveRubricCriteria (long RubCod);
 void Rub_DB_RemoveCrsRubricCriteria (long CrsCod);
 

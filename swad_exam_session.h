@@ -57,7 +57,7 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session);
 
 void ExaSes_ToggleVisResultsSesUsr (void);
 
-void ExaSes_RequestRemoveSession (void);
+void ExaSes_ReqRemSession (void);
 void ExaSes_RemoveSession (void);
 
 void ExaSes_HideSession (void);
@@ -68,7 +68,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
                                    struct ExaSes_Session *Session);
 
 void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams);
-void ExaSes_RequestCreatOrEditSes (void);
+void ExaSes_ReqCreatOrEditSes (void);
 void ExaSes_ReceiveFormSession (void);
 
 bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,

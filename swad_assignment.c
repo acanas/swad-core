@@ -1144,7 +1144,7 @@ void Asg_UnhideAssignment (void)
 /****************** Put a form to create a new assignment ********************/
 /*****************************************************************************/
 
-void Asg_RequestCreatOrEditAsg (void)
+void Asg_ReqCreatOrEditAsg (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
@@ -1527,7 +1527,7 @@ void Asg_ReceiveFormAssignment (void)
      }
    else
       // TODO: The form should be filled with partial data, now is always empty
-      Asg_RequestCreatOrEditAsg ();
+      Asg_ReqCreatOrEditAsg ();
   }
 
 /*****************************************************************************/

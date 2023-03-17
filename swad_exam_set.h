@@ -43,7 +43,8 @@ void ExaSet_ReceiveFormSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 
-void ExaSet_RequestCreatOrEditSet (void);
+void ExaSet_ReqCreatOrEditSet (void);
+
 void ExaSet_ReqSelectQstsToAddToSet (void);
 void ExaSet_ListQstsToAddToSet (void);
 
@@ -57,13 +58,13 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question);
 
 void ExaSet_AddQstsToSet (void);
 
-void ExaSet_RequestRemoveSet (void);
+void ExaSet_ReqRemSet (void);
 void ExaSet_RemoveSet (void);
 
 void ExaSet_MoveUpSet (void);
 void ExaSet_MoveDownSet (void);
 
-void ExaSet_RequestRemoveQstFromSet (void);
+void ExaSet_ReqRemQstFromSet (void);
 void ExaSet_RemoveQstFromSet (void);
 
 void ExaSet_ValidateQst (void);

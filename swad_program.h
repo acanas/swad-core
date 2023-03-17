@@ -169,8 +169,8 @@ unsigned Prg_GetItmIndFromNumItem (unsigned NumItem);
 unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
 
 void Prg_ViewItemAfterEdit (void);
-void Prg_RequestChangeItem (void);
-void Prg_RequestCreateItem (void);
+void Prg_ReqChangeItem (void);
+void Prg_ReqCreateItem (void);
 void Prg_ReceiveFormChgItem (void);
 void Prg_ReceiveFormNewItem (void);
 

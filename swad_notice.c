@@ -252,7 +252,7 @@ void Not_RevealHiddenNotice (void)
 /********************* Request the removal of a notice ***********************/
 /*****************************************************************************/
 
-void Not_RequestRemNotice (void)
+void Not_ReqRemNotice (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_notice;
    long NotCod;

@@ -112,7 +112,7 @@ void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
 void Cfe_ReceiveCallForExam1 (void);
 void Cfe_ReceiveCallForExam2 (void);
 void Cfe_PrintCallForExam (void);
-void Cfe_ReqRemoveCallForExam (void);
+void Cfe_ReqRemCallForExam (void);
 void Cfe_RemoveCallForExam1 (void);
 void Cfe_RemoveCallForExam2 (void);
 void Cfe_HideCallForExam (void);

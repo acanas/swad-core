@@ -1885,7 +1885,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	 Qst_WriteNumQst (QstInd + 1,ClassNumQst[Question->Validity]);
+	 Lay_WriteIndex (QstInd + 1,ClassNumQst[Question->Validity]);
 	 Qst_WriteAnswerType (Question->Answer.Type,
 	                      ClassAnswerType[Question->Validity]);
       HTM_TD_End ();

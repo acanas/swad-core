@@ -837,12 +837,12 @@ void Fol_UnfollowUsr2 (void)
 /***************** Request follow/unfollow several users *********************/
 /*****************************************************************************/
 
-void Fol_RequestFollowStds (void)
+void Fol_ReqFollowStds (void)
   {
    Fol_RequestFollowUsrs (ActFolSevStd);
   }
 
-void Fol_RequestFollowTchs (void)
+void Fol_ReqFollowTchs (void)
   {
    Fol_RequestFollowUsrs (ActFolSevTch);
   }
@@ -881,12 +881,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
-void Fol_RequestUnfollowStds (void)
+void Fol_ReqUnfollowStds (void)
   {
    Fol_RequestUnfollowUsrs (ActUnfSevStd);
   }
 
-void Fol_RequestUnfollowTchs (void)
+void Fol_ReqUnfollowTchs (void)
   {
    Fol_RequestUnfollowUsrs (ActUnfSevTch);
   }

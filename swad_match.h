@@ -103,7 +103,7 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match);
 
 void Mch_ToggleVisResultsMchUsr (void);
 
-void Mch_RequestRemoveMatch (void);
+void Mch_ReqRemMatch (void);
 void Mch_RemoveMatch (void);
 
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod);

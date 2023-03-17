@@ -90,7 +90,7 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
 
 Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 
-void Asg_RequestCreatOrEditAsg (void);
+void Asg_ReqCreatOrEditAsg (void);
 void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg);
 void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg);
 

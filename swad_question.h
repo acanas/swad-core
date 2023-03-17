@@ -131,7 +131,7 @@ struct Qst_Stats
 void Qst_Constructor (struct Qst_Questions *Questions);
 void Qst_Destructor (struct Qst_Questions *Questions);
 
-void Qst_RequestEditQsts (void);
+void Qst_ReqEditQsts (void);
 void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions);
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes);
 void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
@@ -149,7 +149,6 @@ void Qst_PutButtonToAddQuestion (void);
 void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);
-void Qst_WriteNumQst (unsigned NumQst,const char *Class);
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
@@ -251,10 +250,10 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question);
 
 long Qst_GetIntAnsFromStr (char *Str);
 
-void Qst_RequestRemoveSelectedQsts (void);
+void Qst_ReqRemSelectedQsts (void);
 void Qst_RemoveSelectedQsts (void);
 void Qst_PutIconToRemoveOneQst (void *QstCod);
-void Qst_RequestRemoveOneQst (void);
+void Qst_ReqRemOneQst (void);
 void Qst_PutParsRemoveOnlyThisQst (void *QstCod);
 void Qst_RemoveOneQst (void);
 void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);

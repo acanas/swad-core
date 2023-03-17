@@ -1226,10 +1226,10 @@ static void Exa_HideUnhideExam (bool Hide)
   }
 
 /*****************************************************************************/
-/**************** Request the creation or edition of an exam ******************/
+/*************** Request the creation or edition of an exam ******************/
 /*****************************************************************************/
 
-void Exa_RequestCreatOrEditExam (void)
+void Exa_ReqCreatOrEditExam (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
@@ -1427,8 +1427,7 @@ void Exa_ReceiveFormExam (void)
    if (!ItsANewExam)
       Exa_GetDataOfExamByCod (&Exams.Exam);
 
-   /***** If I can edit exams ==>
-          overwrite some exam data with the data received from form *****/
+   /***** Overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);
    if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam))
      {
@@ -1444,7 +1443,7 @@ void Exa_ReceiveFormExam (void)
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,
-			ItsANewExam);	// It's not a new exam
+			ItsANewExam);
   }
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,

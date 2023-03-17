@@ -58,7 +58,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Tst_RequestTest (void);
+void Tst_ReqTest (void);
 
 void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);

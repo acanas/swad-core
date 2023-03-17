@@ -60,7 +60,7 @@ void Not_GetHighLightedNotCod (void);
 void Not_HideActiveNotice (void);
 void Not_RevealHiddenNotice (void);
 
-void Not_RequestRemNotice (void);
+void Not_ReqRemNotice (void);
 void Not_RemoveNotice (void);
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod);

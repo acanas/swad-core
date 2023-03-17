@@ -796,7 +796,7 @@ static void CtrCfg_NumCrss (void)
 /*********** Show a form for sending a logo of the current center ************/
 /*****************************************************************************/
 
-void CtrCfg_RequestLogo (void)
+void CtrCfg_ReqLogo (void)
   {
    Lgo_RequestLogo (HieLvl_CTR);
   }
@@ -823,7 +823,7 @@ void CtrCfg_RemoveLogo (void)
 /*********** Show a form for sending a photo of the current center ***********/
 /*****************************************************************************/
 
-void CtrCfg_RequestPhoto (void)
+void CtrCfg_ReqPhoto (void)
   {
    extern const char *Txt_Photo;
    extern const char *Txt_Recommended_aspect_ratio;

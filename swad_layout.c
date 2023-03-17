@@ -1687,6 +1687,18 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title)
   }
 
 /*****************************************************************************/
+/************************** Write a div with an index ************************/
+/*****************************************************************************/
+// Index should be 1, 2, 3...
+
+void Lay_WriteIndex (unsigned Index,const char *Class)
+  {
+   HTM_DIV_Begin ("class=\"%s_%s\"",Class,The_GetSuffix ());
+      HTM_Unsigned (Index);
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /***** Get and show number of users who have chosen a layout of columns ******/
 /*****************************************************************************/
 

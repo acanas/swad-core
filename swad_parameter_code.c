@@ -44,6 +44,7 @@ const char *Par_CodeStr[] =
    [ParCod_Att      ] = "AttCod",	// Attendance event code
    [ParCod_Ban      ] = "BanCod",	// Banner code
    [ParCod_Bld      ] = "BldCod",	// Building code
+   [ParCod_Cri      ] = "CriCod",	// Criterion code in rubric
    [ParCod_Crs      ] = "crs",		// Course code
    [ParCod_Ctr      ] = "ctr",		// Center code
    [ParCod_Cty      ] = "cty",		// Country code

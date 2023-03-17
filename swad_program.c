@@ -1892,7 +1892,7 @@ void Prg_ViewItemAfterEdit (void)
 /*********** List program items with a form to change a given item ***********/
 /*****************************************************************************/
 
-void Prg_RequestChangeItem (void)
+void Prg_ReqChangeItem (void)
   {
    struct Prg_Item Item;
 
@@ -1913,7 +1913,7 @@ void Prg_RequestChangeItem (void)
 /************ List program items with a form to create a new item ************/
 /*****************************************************************************/
 
-void Prg_RequestCreateItem (void)
+void Prg_ReqCreateItem (void)
   {
    struct Prg_Item Item;
 

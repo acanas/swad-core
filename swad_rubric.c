@@ -73,9 +73,6 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics);
 
 static void Rub_RemoveRubricFromAllTables (long RubCod);
 
-static void Rub_PutFormsEditionRubric (struct Rub_Rubrics *Rubrics,
-				       char Txt[Cns_MAX_BYTES_TEXT + 1],
-				       bool ItsANewRubric);
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric,
 				             char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric);
@@ -122,7 +119,7 @@ void Rub_SeeAllRubrics (void)
    Rub_ResetRubrics (&Rubrics);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics);	// Return value ignored
+   Rub_GetPars (&Rubrics,false);
 
    /***** Show all rubrics *****/
    Rub_ListAllRubrics (&Rubrics);
@@ -237,6 +234,21 @@ bool Rub_CheckIfICanEditRubrics (void)
   }
 
 /*****************************************************************************/
+/*********************** Check if edition is possible ************************/
+/*****************************************************************************/
+
+bool Rub_CheckIfEditable (const struct Rub_Rubric *Rubric)
+  {
+   if (Rub_CheckIfICanEditRubrics ())
+      /***** Rubric is editable only if ... *****/
+      // TODO: Change to control that a rubric is not edited in some circunstances?
+      return Rubric->NumCriteria == 0 ||
+	     Rubric->NumCriteria != 0;
+   else
+      return false;	// Questions are not editable
+  }
+
+/*****************************************************************************/
 /****************** Put contextual icons in list of rubrics ******************/
 /*****************************************************************************/
 
@@ -304,8 +316,7 @@ void Rub_SeeOneRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
-      Err_WrongRubricExit ();
+   Rub_GetPars (&Rubrics,true);
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
 
    /***** Show rubric *****/
@@ -492,13 +503,19 @@ void Rub_PutPars (void *Rubrics)
 /****************** Get parameters used to edit a rubric *********************/
 /*****************************************************************************/
 
-long Rub_GetPars (struct Rub_Rubrics *Rubrics)
+void Rub_GetPars (struct Rub_Rubrics *Rubrics,bool CheckRubCod)
   {
+   long (*GetExaCo[2]) (ParCod_Param_t ParCode) =
+     {
+      [false] = ParCod_GetPar,
+      [true ] = ParCod_GetAndCheckPar,
+     };
+
    /***** Get other parameters *****/
    Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
-   return ParCod_GetPar (ParCod_Rub);
+   Rubrics->Rubric.RubCod = GetExaCo[CheckRubCod] (ParCod_Rub);
   }
 
 /*****************************************************************************/
@@ -612,8 +629,7 @@ void Rub_AskRemRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
-      Err_WrongRubricExit ();
+   Rub_GetPars (&Rubrics,true);
 
    /***** Get data of the rubric from database *****/
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
@@ -707,8 +723,7 @@ void Rub_ListRubric (void)
    Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   if ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0)
-      Err_WrongRubricExit ();
+   Rub_GetPars (&Rubrics,true);
 
    /***** Get rubric data *****/
    Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
@@ -723,58 +738,72 @@ void Rub_ListRubric (void)
 /*************** Request the creation or edition of a rubric *****************/
 /*****************************************************************************/
 
-void Rub_RequestCreatOrEditRubric (void)
+void Rub_ReqCreatOrEditRubric (void)
   {
    struct Rub_Rubrics Rubrics;
+   struct RubCri_Criterion Criterion;
    bool ItsANewRubric;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Reset rubrics context *****/
-   Rub_ResetRubrics (&Rubrics);
-
-   /***** Reset rubric *****/
-   Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Check if I can edit rubrics *****/
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+   Rub_ResetRubric (&Rubrics.Rubric);
+   RubCri_ResetCriterion (&Criterion);
+
    /***** Get parameters *****/
-   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0);
+   Rub_GetPars (&Rubrics,false);	// Don't check rubric code
+   ItsANewRubric = (Rubrics.Rubric.RubCod <= 0);
 
    /***** Get rubric data *****/
    if (ItsANewRubric)
-     {
       /* Initialize to empty rubric */
       Rub_ResetRubric (&Rubrics.Rubric);
-      Txt[0] = '\0';
-     }
    else
-     {
       /* Get rubric data from database */
       Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
-      Rub_DB_GetRubricTxt (Rubrics.Rubric.RubCod,Txt);
-     }
 
-   /***** Put forms to create/edit a rubric *****/
-   Rub_PutFormsEditionRubric (&Rubrics,Txt,ItsANewRubric);
+   /***** Put form to create/edit a rubric and show criteria *****/
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ItsANewRubric);
+  }
 
-   /***** Show rubrics or criteria *****/
+/*****************************************************************************/
+/******************** Put forms to create/edit a rubric **********************/
+/*****************************************************************************/
+
+void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
+			    struct RubCri_Criterion *Criterion,
+			    bool ItsANewRubric)
+  {
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Initialize text / get text from database *****/
+   if (ItsANewRubric)
+      Txt[0] = '\0';
+   else
+      Rub_DB_GetRubricTxt (Rubrics->Rubric.RubCod,Txt);
+
+   /***** Put form to create/edit an exam *****/
+   Rub_PutFormEditionRubric (Rubrics,Txt,ItsANewRubric);
+
+   /***** Show other lists *****/
    if (ItsANewRubric)
       /* Show rubrics again */
-      Rub_ListAllRubrics (&Rubrics);
+      Rub_ListAllRubrics (Rubrics);
    else
-      /* Show criteria of the rubric ready to be edited */
-      RubCri_ListRubricCriteria (&Rubrics);
+      /* Show list of criteria */
+      RubCri_ListCriteria (Rubrics,Criterion);
   }
 
 /*****************************************************************************/
 /******************** Put a form to create/edit a rubric *********************/
 /*****************************************************************************/
 
-static void Rub_PutFormsEditionRubric (struct Rub_Rubrics *Rubrics,
-				       char Txt[Cns_MAX_BYTES_TEXT + 1],
-				       bool ItsANewRubric)
+void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
+			       char Txt[Cns_MAX_BYTES_TEXT + 1],
+			       bool ItsANewRubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
@@ -854,57 +883,46 @@ static void Rub_PutFormsEditionRubric (struct Rub_Rubrics *Rubrics,
 void Rub_ReceiveFormRubric (void)
   {
    struct Rub_Rubrics Rubrics;
+   struct RubCri_Criterion Criterion;
    bool ItsANewRubric;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Reset rubrics context *****/
-   Rub_ResetRubrics (&Rubrics);
-
-   /***** Reset rubric *****/
-   Rub_ResetRubric (&Rubrics.Rubric);
 
    /***** Check if I can edit rubrics *****/
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+   Rub_ResetRubric (&Rubrics.Rubric);
+   RubCri_ResetCriterion (&Criterion);
+
    /***** Get parameters *****/
-   ItsANewRubric = ((Rubrics.Rubric.RubCod = Rub_GetPars (&Rubrics)) <= 0);
+   Rub_GetPars (&Rubrics,false);
+   ItsANewRubric = (Rubrics.Rubric.RubCod <= 0);
 
-   /***** If I can edit rubrics ==> receive rubric from form *****/
-   if (Rub_CheckIfICanEditRubrics ())
+   /***** Get all current rubric data from database *****/
+   // Some data, not received from form,
+   // are necessary to show rubric and criteria again
+   if (!ItsANewRubric)
+      Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+
+   /***** Overwrite some rubric data with the data received from form *****/
+   Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric,Txt);
+   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
      {
-      Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric,Txt);
-      if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
+      /***** Create a new rubric or update an existing one *****/
+      if (ItsANewRubric)
 	{
-         /***** Create a new rubric or update an existing one *****/
-	 if (ItsANewRubric)
-	    Rub_CreateRubric (&Rubrics.Rubric,Txt);	// Add new rubric to database
-	 else
-	    Rub_UpdateRubric (&Rubrics.Rubric,Txt);	// Update rubric data in database
-
-         /***** Put forms to edit the rubric created or updated *****/
-         Rub_PutFormsEditionRubric (&Rubrics,Txt,
-                                    false);	// No new rubric
-
-         /***** Show criteria of the rubric ready to be edited ******/
-         RubCri_ListRubricCriteria (&Rubrics);
+	 Rub_CreateRubric (&Rubrics.Rubric,Txt);	// Add new rubric to database
+	 ItsANewRubric = false;
 	}
       else
-	{
-         /***** Put forms to create/edit the rubric *****/
-         Rub_PutFormsEditionRubric (&Rubrics,Txt,ItsANewRubric);
-
-         /***** Show rubrics or criteria *****/
-         if (ItsANewRubric)
-            /* Show rubrics again */
-            Rub_ListAllRubrics (&Rubrics);
-         else
-            /* Show criteria of the rubric ready to be edited */
-            RubCri_ListRubricCriteria (&Rubrics);
-	}
+	 Rub_UpdateRubric (&Rubrics.Rubric,Txt);	// Update rubric data in database
      }
-   else
-      Err_NoPermissionExit ();
+
+   /***** Show current rubric and its criteria *****/
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
+			  ItsANewRubric);
   }
 
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric,

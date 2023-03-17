@@ -1233,7 +1233,7 @@ void Gam_ListGame (void)
 /**************** Request the creation or edition of a game ******************/
 /*****************************************************************************/
 
-void Gam_RequestCreatOrEditGame (void)
+void Gam_ReqCreatOrEditGame (void)
   {
    struct Gam_Games Games;
    bool ItsANewGame;
@@ -1912,7 +1912,7 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games)
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
-void Gam_RequestRemoveQstFromGame (void)
+void Gam_ReqRemQstFromGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
@@ -2180,7 +2180,7 @@ void Gam_PutButtonNewMatch (struct Gam_Games *Games)
 /************* Request the creation of a new match as a teacher **************/
 /*****************************************************************************/
 
-void Gam_RequestNewMatch (void)
+void Gam_ReqNewMatch (void)
   {
    struct Gam_Games Games;
 

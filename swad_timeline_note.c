@@ -111,7 +111,7 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod);
 
-static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline);
+static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline);
 static void TmlNot_PutParsRemoveNote (void *Timeline);
 static void TmlNot_RemoveNote (void);
 static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
@@ -963,7 +963,7 @@ void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 /*********************** Request the removal of a note ***********************/
 /*****************************************************************************/
 
-void TmlNot_RequestRemNoteUsr (void)
+void TmlNot_ReqRemNoteUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -980,7 +980,7 @@ void TmlNot_RequestRemNoteUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Request the removal of note *****/
-      TmlNot_RequestRemovalNote (&Timeline);
+      TmlNot_ReqRemNote (&Timeline);
 
       /***** Write timeline again (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -989,7 +989,7 @@ void TmlNot_RequestRemNoteUsr (void)
    HTM_SECTION_End ();
   }
 
-void TmlNot_RequestRemNoteGbl (void)
+void TmlNot_ReqRemNoteGbl (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -997,13 +997,13 @@ void TmlNot_RequestRemNoteGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Request the removal of note *****/
-   TmlNot_RequestRemovalNote (&Timeline);
+   TmlNot_ReqRemNote (&Timeline);
 
    /***** Write timeline again (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
+static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    struct TmlNot_Note Not;

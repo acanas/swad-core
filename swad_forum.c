@@ -2962,7 +2962,7 @@ void For_RemovePost (void)
 /***************** Request the removing of an existing thread ****************/
 /*****************************************************************************/
 
-void For_RequestRemoveThread (void)
+void For_ReqRemThread (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread;

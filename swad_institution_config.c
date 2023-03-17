@@ -506,7 +506,7 @@ static void InsCfg_NumDpts (void)
 /******** Show a form for sending a logo of the current institution **********/
 /*****************************************************************************/
 
-void InsCfg_RequestLogo (void)
+void InsCfg_ReqLogo (void)
   {
    Lgo_RequestLogo (HieLvl_INS);
   }

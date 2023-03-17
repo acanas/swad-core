@@ -62,10 +62,10 @@ void Fol_FollowUsr2 (void);
 void Fol_UnfollowUsr1 (void);
 void Fol_UnfollowUsr2 (void);
 
-void Fol_RequestFollowStds (void);
-void Fol_RequestFollowTchs (void);
-void Fol_RequestUnfollowStds (void);
-void Fol_RequestUnfollowTchs (void);
+void Fol_ReqFollowStds (void);
+void Fol_ReqFollowTchs (void);
+void Fol_ReqUnfollowStds (void);
+void Fol_ReqUnfollowTchs (void);
 void Fol_FollowUsrs (void);
 void Fol_UnfollowUsrs (void);
 

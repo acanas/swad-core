@@ -162,7 +162,7 @@ void For_GetParsForums (struct For_Forums *Forums);
 
 void For_ReceiveForumPost (void);
 void For_RemovePost (void);
-void For_RequestRemoveThread (void);
+void For_ReqRemThread (void);
 void For_RemoveThread (void);
 void For_CutThread (void);
 void For_PasteThread (void);

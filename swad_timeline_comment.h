@@ -65,8 +65,8 @@ void TmlCom_ShowHiddenCommsGbl (void);
 void TmlCom_ReceiveCommUsr (void);
 void TmlCom_ReceiveCommGbl (void);
 
-void TmlCom_RequestRemComUsr (void);
-void TmlCom_RequestRemComGbl (void);
+void TmlCom_ReqRemComUsr (void);
+void TmlCom_ReqRemComGbl (void);
 void TmlCom_RemoveComUsr (void);
 void TmlCom_RemoveComGbl (void);
 
