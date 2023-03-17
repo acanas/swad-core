@@ -767,15 +767,14 @@
 #define ActReqRemRub		(ActChgCrsTT1stDay + 225)
 #define ActRemRub		(ActChgCrsTT1stDay + 226)
 
-#define ActFrmNewRubCri		(ActChgCrsTT1stDay + 227)
-#define ActNewRubCri		(ActChgCrsTT1stDay + 228)
-#define ActReqRemRubCri		(ActChgCrsTT1stDay + 229)
-#define ActRemRubCri		(ActChgCrsTT1stDay + 230)
-#define ActUp_RubCri		(ActChgCrsTT1stDay + 231)
-#define ActDwnRubCri		(ActChgCrsTT1stDay + 232)
-#define ActChgTitRubCri		(ActChgCrsTT1stDay + 233)
-#define ActChgMinRubCri		(ActChgCrsTT1stDay + 234)
-#define ActChgMaxRubCri		(ActChgCrsTT1stDay + 235)
+#define ActNewRubCri		(ActChgCrsTT1stDay + 227)
+#define ActReqRemRubCri		(ActChgCrsTT1stDay + 228)
+#define ActRemRubCri		(ActChgCrsTT1stDay + 229)
+#define ActUp_RubCri		(ActChgCrsTT1stDay + 230)
+#define ActDwnRubCri		(ActChgCrsTT1stDay + 231)
+#define ActChgTitRubCri		(ActChgCrsTT1stDay + 232)
+#define ActChgMinRubCri		(ActChgCrsTT1stDay + 233)
+#define ActChgMaxRubCri		(ActChgCrsTT1stDay + 234)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
@@ -1768,7 +1767,7 @@
 
 #define ActLst_NUM_ACTIONS		(ActChgMyTT1stDay + 1)
 
-#define ActLst_MAX_ACTION_COD		1967
+#define ActLst_MAX_ACTION_COD		1966
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

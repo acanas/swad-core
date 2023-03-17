@@ -60,7 +60,7 @@ void Rub_DB_UpdateCriterionTitle (long CriCod,long RubCod,
 void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
                                   RubCri_ValueRange_t ValueRange,double Value);
 void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
-void Rub_DB_UpdateCriterionIndex (long CriInd,long RubCod,long CriCod);
+void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
 void Rub_DB_LockTable (void);
 
 unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod);

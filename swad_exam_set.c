@@ -154,7 +154,6 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
    if (Set->SetCod <= 0)
@@ -184,7 +183,6 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 
       /* Get set index (row[2]) */
       Set->SetInd = Str_ConvertStrToUnsigned (row[2]);
-      snprintf (StrSetInd,sizeof (Set->SetInd),"%u",Set->SetInd);
 
       /* Get set index (row[3]) */
       Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[3]);
@@ -653,7 +651,6 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    struct ExaSet_Set Set;
    MYSQL_ROW row;
    char *Anchor;
-   char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
    if (!NumSets)
@@ -687,7 +684,6 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
 	 /* Get set index (row[1]) */
 	 Set.SetInd = Str_ConvertStrToUnsigned (row[1]);
-	 snprintf (StrSetInd,sizeof (Set.SetInd),"%u",Set.SetInd);
 
 	 /* Get number of questions to exam (row[2]) */
 	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
@@ -1467,7 +1463,7 @@ void ExaSet_MoveDownSet (void)
      {
       /* Indexes of sets to be exchanged */
       SetIndBottom = Exa_DB_GetNextSetIndexInExam (Exams.Exam.ExaCod,SetIndTop);
-      if (SetIndBottom == 0)
+      if (SetIndBottom == 0)	// 0 means error reading from database
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */

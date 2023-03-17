@@ -20,35 +20,26 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <float.h>		// For DBL_MAX
-#include <linux/limits.h>	// For PATH_MAX
-#include <stddef.h>		// For NULL
-#include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For free
+#include <mysql/mysql.h>	// To access MySQL databases
 #include <string.h>		// For string functions
 
 #include "swad_action_list.h"
+#include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
-#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_HTML.h"
-#include "swad_match.h"
-#include "swad_match_result.h"
-#include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
-#include "swad_question_database.h"
-#include "swad_role.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
 #include "swad_rubric_database.h"
-#include "swad_test.h"
-#include "swad_test_visibility.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -60,19 +51,12 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define RubCri_MAX_SELECTED_QUESTIONS			10000
-#define RubCri_MAX_BYTES_LIST_SELECTED_QUESTIONS	(RubCri_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
-
 // Form parameters for minimum/maximum criterion values
 static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
   {
    [RubCri_MIN] = "MinVal",
    [RubCri_MAX] = "MaxVal",
   };
-
-/*****************************************************************************/
-/************************** Public types and constants ***********************/
-/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -105,189 +89,6 @@ static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
 
 /*****************************************************************************/
-/********************************* Headers ***********************************/
-/*****************************************************************************/
-
-#include <stdbool.h>		// For boolean type
-#include <mysql/mysql.h>	// To access MySQL databases
-#include <string.h>		// For string functions
-
-#include "swad_action_list.h"
-#include "swad_box.h"
-#include "swad_button.h"
-#include "swad_database.h"
-#include "swad_error.h"
-#include "swad_form.h"
-#include "swad_parameter.h"
-#include "swad_rubric.h"
-#include "swad_rubric_criteria.h"
-#include "swad_rubric_database.h"
-
-/*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-extern struct Globals Gbl;
-
-/*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
-
-
-/*****************************************************************************/
-/********************** Initialize a new citerion to zero ********************/
-/*****************************************************************************/
-
-void RubCri_CriterionConstructor (struct RubCri_Criterion *Criterion)
-  {
-   Criterion->CriCod = -1L;
-  }
-
-/*****************************************************************************/
-/*************** Free memory allocated for rubric criterion ******************/
-/*****************************************************************************/
-
-void RubCri_CriterionDestructor (struct RubCri_Criterion *Criterion)
-  {
-   Criterion->CriCod = -1L;
-  }
-
-/*****************************************************************************/
-/******************* List a rubric criterion for edition *********************/
-/*****************************************************************************/
-
-void RubCri_ListCriterionForEdition (struct RubCri_Criterion *Criterion,
-                                     unsigned CriInd,bool CriterionExists,
-                                     const char *Anchor)
-  {
-   extern const char *Txt_Criterion_removed;
-
-   /***** Number of criterion *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-      Lay_WriteIndex (CriInd,"BIG_INDEX");
-   HTM_TD_End ();
-
-   /***** Write criterion code *****/
-   HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s CT\"",
-                 The_GetSuffix (),The_GetColorRows ());
-      HTM_TxtF ("%ld&nbsp;",Criterion->CriCod);
-   HTM_TD_End ();
-
-   /***** Write title *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      HTM_ARTICLE_Begin (Anchor);
-	 if (CriterionExists)
-	    /* Write title */
-	    RubCri_WriteCriterionTitle (Criterion);	// Visible
-	 else
-	   {
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",
-	                    The_GetSuffix ());
-	       HTM_Txt (Txt_Criterion_removed);
-	    HTM_SPAN_End ();
-	   }
-      HTM_ARTICLE_End ();
-   HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/***************** Put icon to add a new criterion to rubric *****************/
-/*****************************************************************************/
-
-void RubCri_PutIconToAddNewCriterion (void *Rubrics)
-  {
-   Ico_PutContextualIconToAdd (ActFrmNewRubCri,NULL,Rub_PutPars,Rubrics);
-  }
-
-/*****************************************************************************/
-/***************** Put button to add new criteria to rubric ******************/
-/*****************************************************************************/
-
-void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics)
-  {
-   extern const char *Txt_New_criterion;
-
-   Frm_BeginForm (ActFrmNewRubCri);
-      Rub_PutPars (Rubrics);
-
-      Btn_PutConfirmButton (Txt_New_criterion);
-
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/****************** Write parameter with index of criterion ******************/
-/*****************************************************************************/
-
-void RubCri_PutParCriInd (unsigned CriInd)
-  {
-   Par_PutParUnsigned (NULL,"CriInd",CriInd);
-  }
-
-/*****************************************************************************/
-/******************* Get parameter with index of criterion *******************/
-/*****************************************************************************/
-
-unsigned RubCri_GetParCriInd (void)
-  {
-   long CriInd;
-
-   if ((CriInd = Par_GetParLong ("CriInd")) <= 0)	// In rubrics, criterion index should be 1, 2, 3...
-      Err_WrongCriterionIndexExit ();
-
-   return (unsigned) CriInd;
-  }
-
-/*****************************************************************************/
-/************ Request the creation or edition of a rubric criterion **********/
-/*****************************************************************************/
-
-void RubCri_ReqCreatOrEditCriterion (void)
-  {
-   struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
-   bool ItsANewCriterion;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
-      Err_NoPermissionExit ();
-
-   /***** Reset rubrics context *****/
-   Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
-
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
-   Rubrics.CriCod = Criterion.CriCod = ParCod_GetPar (ParCod_Cri);
-   ItsANewCriterion = (Criterion.CriCod <= 0);
-
-   /***** Get exam data from database *****/
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
-   Rub_DB_GetRubricTxt (Rubrics.Rubric.RubCod,Txt);
-
-   /***** Get rubric data *****/
-   if (ItsANewCriterion)
-      /* Initialize to empty rubric */
-      Rub_ResetRubric (&Rubrics.Rubric);
-   else
-     {
-      /* Get rubric data from database */
-      RubCri_GetDataOfCriterionByCod (&Criterion);
-      Rubrics.CriCod = Criterion.CriCod;
-     }
-
-   /***** Put form to edit the rubric created or updated *****/
-   Rub_PutFormEditionRubric (&Rubrics,Txt,
-			     false);	// No new rubric
-  }
-
-/****************************************************************************************************************************/
-/******************************************************* Headers ************************************************************/
-/****************************************************************************************************************************/
-
-/*****************************************************************************/
 /*************** Put parameter to edit one rubric criterion ******************/
 /*****************************************************************************/
 
@@ -308,7 +109,6 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrCriInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    RubCri_ValueRange_t ValueRange;
 
    /***** Trivial check *****/
@@ -340,7 +140,6 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
 
       /* Get criterion index (row[2]) */
       Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
-      snprintf (StrCriInd,sizeof (Criterion->CriInd),"%u",Criterion->CriInd);
 
       /* Get criterion minimum and maximum values (row[3], row[4]) */
       for (ValueRange  = (RubCri_ValueRange_t) 0;
@@ -699,7 +498,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    struct RubCri_Criterion Criterion;
    MYSQL_ROW row;
    char *Anchor;
-   char StrCriInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    RubCri_ValueRange_t ValueRange;
 
    /***** Trivial check *****/
@@ -735,7 +533,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	 /* Get criterion index (row[1]) */
 	 Criterion.CriInd = Str_ConvertStrToUnsigned (row[1]);
-	 snprintf (StrCriInd,sizeof (Criterion.CriInd),"%u",Criterion.CriInd);
 
 	 /* Get minimum value (row[2]) and maximum value (row[3]) */
 	 for (ValueRange  = (RubCri_ValueRange_t) 0;
@@ -1071,7 +868,7 @@ void RubCri_MoveDownCriterion (void)
      {
       /* Indexes of criteria to be exchanged */
       CriIndBottom = Rub_DB_GetNextCriterionIndexInRubric (Rubrics.Rubric.RubCod,CriIndTop);
-      if (CriIndBottom == 0)
+      if (CriIndBottom == 0)	// 0 means error reading from database
 	 Err_ShowErrorAndExit ("Wrong criterion index.");
 
       /* Exchange criteria */
@@ -1151,34 +948,4 @@ static void RubCri_ExchangeCriteria (long RubCod,
 
    /***** Unlock table *****/
    DB_UnlockTables ();
-  }
-
-/*****************************************************************************/
-/********************** Show title of rubric criterion ***********************/
-/*****************************************************************************/
-
-void RubCri_WriteCriterionTitle (const struct RubCri_Criterion *Criterion)
-  {
-   RubCri_ValueRange_t ValueRange;
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginWide ();
-
-      /***** Title *****/
-      HTM_TD_Begin ("class=\"CRI_TITLE\"");
-	 HTM_Txt (Criterion->Title);
-      HTM_TD_End ();
-
-      /***** Minimum and maximum values *****/
-      for (ValueRange  = (RubCri_ValueRange_t) 0;
-	   ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-	   ValueRange++)
-	{
-	 HTM_TD_Begin ("class=\"CRI_VALUE\"");
-	    HTM_Double (Criterion->Values[ValueRange]);
-	 HTM_TD_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
   }

@@ -844,15 +844,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqRemRub	] = {1957,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_AskRemRubric		,NULL},
    [ActRemRub		] = {1958,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RemoveRubric		,NULL},
 
-   [ActFrmNewRubCri	] = {1959,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReqCreatOrEditCriterion	,NULL},
-   [ActNewRubCri	] = {1960,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReceiveFormCriterion	,NULL},
-   [ActReqRemRubCri	] = {1961,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReqRemCriterion		,NULL},
-   [ActRemRubCri	] = {1962,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_RemoveCriterion		,NULL},
-   [ActUp_RubCri	] = {1963,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveUpCriterion		,NULL},
-   [ActDwnRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveDownCriterion	,NULL},
-   [ActChgTitRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeCriterionTitle	,NULL},
-   [ActChgMinRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValueCriterion	,NULL},
-   [ActChgMaxRubCri	] = {1967,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValueCriterion	,NULL},
+   [ActNewRubCri	] = {1959,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReceiveFormCriterion	,NULL},
+   [ActReqRemRubCri	] = {1960,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReqRemCriterion		,NULL},
+   [ActRemRubCri	] = {1961,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_RemoveCriterion		,NULL},
+   [ActUp_RubCri	] = {1962,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveUpCriterion		,NULL},
+   [ActDwnRubCri	] = {1963,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveDownCriterion	,NULL},
+   [ActChgTitRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeCriterionTitle	,NULL},
+   [ActChgMinRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValueCriterion	,NULL},
+   [ActChgMaxRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValueCriterion	,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -3843,13 +3842,12 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgRub,		// #1956
 	ActReqRemRub,		// #1957
 	ActRemRub,		// #1958
-	ActFrmNewRubCri,	// #1959
-	ActNewRubCri,		// #1960
-	ActReqRemRubCri,	// #1961
-	ActRemRubCri,		// #1962
-	ActUp_RubCri,		// #1963
-	ActDwnRubCri,		// #1964
-	ActChgTitRubCri,	// #1965
-	ActChgMinRubCri,	// #1966
-	ActChgMaxRubCri,	// #1967
+	ActNewRubCri,		// #1959
+	ActReqRemRubCri,	// #1960
+	ActRemRubCri,		// #1961
+	ActUp_RubCri,		// #1962
+	ActDwnRubCri,		// #1963
+	ActChgTitRubCri,	// #1964
+	ActChgMinRubCri,	// #1965
+	ActChgMaxRubCri,	// #1966
   };

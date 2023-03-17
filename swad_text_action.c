@@ -14046,27 +14046,188 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove rubric"			// Çeviri lazim!
 #endif
 	,
-	[ActFrmNewRubCri] =
+	[ActNewRubCri] =
 #if   L==1	// ca
-	"Edit new rubric criterion"			// Necessita traducció
+	"Create new rubric criterion"			// Necessita traducció
 #elif L==2	// de
-	"Edit new rubric criterion"			// Need Übersetzung
+	"Create new rubric criterion"			// Need Übersetzung
 #elif L==3	// en
-	"Edit new rubric criterion"
+	"Create new rubric criterion"
 #elif L==4	// es
-	"Editar nuevo criterio de r&uacute;brica"
+	"Crear nuevo criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Edit new rubric criterion"			// Besoin de traduction
+	"Create new rubric criterion"			// Besoin de traduction
 #elif L==6	// gn
-	"Editar nuevo criterio de r&uacute;brica"	// Okoteve traducción
+	"Crear nuevo criterio de r&uacute;brica"	// Okoteve traducción
 #elif L==7	// it
-	"Edit new rubric criterion"			// Bisogno di traduzione
+	"Create new rubric criterion"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit new rubric criterion"			// Potrzebujesz tlumaczenie
+	"Create new rubric criterion"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit new rubric criterion"			// Precisa de tradução
+	"Create new rubric criterion"			// Precisa de tradução
 #elif L==10	// tr
-	"Edit new rubric criterion"			// Çeviri lazim!
+	"Create new rubric criterion"			// Çeviri lazim!
+#endif
+	,
+	[ActReqRemRubCri] =
+#if   L==1	// ca
+	"Request rubric criterion removal"				// Necessita traducció
+#elif L==2	// de
+	"Request rubric criterion removal"				// Need Übersetzung
+#elif L==3	// en
+	"Request rubric criterion removal"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Request rubric criterion removal"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Request rubric criterion removal"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request rubric criterion removal"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request rubric criterion removal"				// Precisa de tradução
+#elif L==10	// tr
+	"Request rubric criterion removal"				// Çeviri lazim!
+#endif
+	,
+	[ActRemRubCri] =
+#if   L==1	// ca
+	"Remove rubric criterion"		// Necessita traducció
+#elif L==2	// de
+	"Remove rubric criterion"		// Need Übersetzung
+#elif L==3	// en
+	"Remove rubric criterion"
+#elif L==4	// es
+	"Eliminar criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Remove rubric criterion"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Remove rubric criterion"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove rubric criterion"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove rubric criterion"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove rubric criterion"		// Çeviri lazim!
+#endif
+	,
+	[ActUp_RubCri] =
+#if   L==1	// ca
+	"Move up rubric criterion"			// Necessita traducció
+#elif L==2	// de
+	"Move up rubric criterion"			// Need Übersetzung
+#elif L==3	// en
+	"Move up rubric criterion"
+#elif L==4	// es
+	"Mover hacia arriba criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Move up rubric criterion"			// Besoin de traduction
+#elif L==6	// gn
+	"Mover hacia arriba criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Move up rubric criterion"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up rubric criterion"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up rubric criterion"			// Precisa de tradução
+#elif L==10	// tr
+	"Move up rubric criterion"			// Çeviri lazim!
+#endif
+	,
+	[ActDwnRubCri] =
+#if   L==1	// ca
+	"Move down rubric criterion"			// Necessita traducció
+#elif L==2	// de
+	"Move down rubric criterion"			// Need Übersetzung
+#elif L==3	// en
+	"Move down rubric criterion"
+#elif L==4	// es
+	"Mover hacia abajo criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Move down rubric criterion"			// Besoin de traduction
+#elif L==6	// gn
+	"Mover hacia abajo criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Move down rubric criterion"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down rubric criterion"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down rubric criterion"			// Precisa de tradução
+#elif L==10	// tr
+	"Move down rubric criterion"			// Çeviri lazim!
+#endif
+	,
+	[ActChgTitRubCri] =
+#if   L==1	// ca
+	"Change rubric criterion title"				// Necessita traducció
+#elif L==2	// de
+	"Change rubric criterion title"				// Need Übersetzung
+#elif L==3	// en
+	"Change rubric criterion title"
+#elif L==4	// es
+	"Cambiar t&iacute;tulo de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Change rubric criterion title"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar t&iacute;tulo de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change rubric criterion title"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change rubric criterion title"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change rubric criterion title"				// Precisa de tradução
+#elif L==10	// tr
+	"Change rubric criterion title"				// Çeviri lazim!
+#endif
+	,
+	[ActChgMinRubCri] =
+#if   L==1	// ca
+	"Change minimum value of rubric criterion"			// Necessita traducció
+#elif L==2	// de
+	"Change minimum value of rubric criterion"			// Need Übersetzung
+#elif L==3	// en
+	"Change minimum value of rubric criterion"
+#elif L==4	// es
+	"Cambiar valor m&iacute;nimo de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Change minimum value of rubric criterion"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar valor m&iacute;nimo de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change minimum value of rubric criterion"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change minimum value of rubric criterion"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change minimum value of rubric criterion"			// Precisa de tradução
+#elif L==10	// tr
+	"Change minimum value of rubric criterion"			// Çeviri lazim!
+#endif
+	,
+	[ActChgMaxRubCri] =
+#if   L==1	// ca
+	"Change maximum value of rubric criterion"			// Necessita traducció
+#elif L==2	// de
+	"Change maximum value of rubric criterion"			// Need Übersetzung
+#elif L==3	// en
+	"Change maximum value of rubric criterion"
+#elif L==4	// es
+	"Cambiar valor m&aacute;ximo de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Change maximum value of rubric criterion"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar valor m&aacute;ximo de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change maximum value of rubric criterion"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change maximum value of rubric criterion"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change maximum value of rubric criterion"			// Precisa de tradução
+#elif L==10	// tr
+	"Change maximum value of rubric criterion"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeAdmDocIns] =

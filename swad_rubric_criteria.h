@@ -33,25 +33,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void RubCri_CriterionConstructor (struct RubCri_Criterion *Criterion);
-void RubCri_CriterionDestructor (struct RubCri_Criterion *Criterion);
-
-void RubCri_ListCriterionForEdition (struct RubCri_Criterion *Criterion,
-                                     unsigned CriInd,bool CriterionExists,
-                                     const char *Anchor);
-
-void RubCri_PutIconToAddNewCriterion (void *Rubrics);
-void RubCri_PutButtonToAddNewCriterion (struct Rub_Rubrics *Rubrics);
-
-void RubCri_PutParCriInd (unsigned CriInd);
-unsigned RubCri_GetParCriInd (void);
-
-void RubCri_ReqCreatOrEditCriterion (void);
-
-/*****************************************************************************/
-/***************************** Public prototypes *****************************/
-/*****************************************************************************/
-
 void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion);
 
 void RubCri_ReceiveFormCriterion (void);
@@ -69,7 +50,5 @@ void RubCri_RemoveCriterion (void);
 
 void RubCri_MoveUpCriterion (void);
 void RubCri_MoveDownCriterion (void);
-
-void RubCri_WriteCriterionTitle (const struct RubCri_Criterion *Criterion);
 
 #endif

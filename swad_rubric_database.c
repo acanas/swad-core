@@ -426,16 +426,16 @@ void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriIn
 /****************** Change index of a criterion in a rubric ******************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionIndex (long CriInd,long RubCod,long CriCod)
+void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod)
   {
    DB_QueryUPDATE ("can not exchange indexes of criteria",
 		   "UPDATE rub_criteria"
 		     " SET CriInd=%ld"
-		   " WHERE RubCod=%ld"
-		     " AND CriCod=%ld",
+		   " WHERE CriCod=%ld"
+		     " AND RubCod=%ld",	// Extra check
 		   CriInd,
-		   RubCod,
-		   CriCod);
+		   CriCod,
+		   RubCod);
   }
 
 /*****************************************************************************/
