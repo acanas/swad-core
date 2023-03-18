@@ -2807,9 +2807,10 @@ mysql> DESCRIBE rub_criteria;
 | CriInd | int           | NO   |     | NULL    |                |
 | MinVal | double        | NO   |     | 0       |                |
 | MaxVal | double        | NO   |     | 1       |                |
+| Weight | double        | NO   |     | 1       |                |
 | Title  | varchar(2047) | NO   |     | NULL    |                |
 +--------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_criteria ("
 			"CriCod INT NOT NULL AUTO_INCREMENT,"
@@ -2817,6 +2818,7 @@ mysql> DESCRIBE rub_criteria;
 			"CriInd INT NOT NULL,"
 			"MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,"
+			"Weight DOUBLE PRECISION NOT NULL DEFAULT 1,"
 			"Title VARCHAR(2047) NOT NULL,"
 		   "UNIQUE INDEX(CriCod),"
 		   "UNIQUE INDEX(RubCod,CriInd))");

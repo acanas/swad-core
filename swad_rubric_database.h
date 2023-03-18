@@ -59,6 +59,7 @@ void Rub_DB_UpdateCriterionTitle (long CriCod,long RubCod,
                                   const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
 void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
                                   RubCri_ValueRange_t ValueRange,double Value);
+void Rub_DB_UpdateCriterionWeight (long CriCod,long RubCod,double Weight);
 void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
 void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
 void Rub_DB_LockTable (void);

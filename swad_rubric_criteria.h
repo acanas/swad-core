@@ -39,6 +39,7 @@ void RubCri_ReceiveFormCriterion (void);
 void RubCri_ChangeCriterionTitle (void);
 void RubCri_ChangeMinValueCriterion (void);
 void RubCri_ChangeMaxValueCriterion (void);
+void RubCri_ChangeWeightCriterion (void);
 
 void RubCri_ListCriteria (struct Rub_Rubrics *Rubrics,
 			  struct RubCri_Criterion *Criterion);

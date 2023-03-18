@@ -59854,6 +59854,29 @@ const char *Txt_Week =
 	"Week";		// Çeviri lazim!
 #endif
 
+const char *Txt_Weight =
+#if   L==1	// ca
+	"Pes";
+#elif L==2	// de
+	"Gewicht";
+#elif L==3	// en
+	"Weight";
+#elif L==4	// es
+	"Peso";
+#elif L==5	// fr
+	"Poids";
+#elif L==6	// gn
+	"Peso";	// Okoteve traducción
+#elif L==7	// it
+	"Peso";
+#elif L==8	// pl
+	"Waga";
+#elif L==9	// pt
+	"Peso";
+#elif L==10	// tr
+	"A&gbreve;&inodot;rl&inodot;k";
+#endif
+
 const char *Txt_What_would_you_like_to_do =
 #if   L==1	// ca
 	"&iquest;Qu&egrave; voleu fer?";

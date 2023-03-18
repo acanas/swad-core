@@ -356,15 +356,16 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
    CriCod =
    DB_QueryINSERTandReturnCode ("can not create new criterion",
 				"INSERT INTO rub_criteria"
-				" (RubCod,CriInd,%s,%s,Title)"
+				" (RubCod,CriInd,%s,%s,Weight,Title)"
 				" VALUES"
-				" (%ld,%u,%.15lg,%.15lg,'%s')",
+				" (%ld,%u,%.15lg,%.15lg,%.15lg,'%s')",
 				RubCri_ValuesFields[RubCri_MIN],
 				RubCri_ValuesFields[RubCri_MAX],
 				Criterion->RubCod,
 				Criterion->CriInd,
 				Criterion->Values[RubCri_MIN],
 				Criterion->Values[RubCri_MAX],
+				Criterion->Weight,
 				Criterion->Title);
    Str_SetDecimalPointToLocal ();	// Return to local system
 
@@ -402,6 +403,24 @@ void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
 	           RubCri_ValuesFields[ValueRange],Value,
+	           CriCod,
+	           RubCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/********************* Update criterion weight in database *******************/
+/*****************************************************************************/
+
+void Rub_DB_UpdateCriterionWeight (long CriCod,long RubCod,double Weight)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update the value of a criterion",
+		   "UPDATE rub_criteria"
+		     " SET Weight=%.15lg"
+		   " WHERE CriCod=%ld"
+		     " AND RubCod=%ld",	// Extra check
+	           Weight,
 	           CriCod,
 	           RubCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -570,7 +589,8 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
 			  "CriInd,"	// row[1]
 			  "%s,"		// row[2]
 			  "%s,"		// row[3]
-			  "Title"	// row[4]
+                          "Weight,"	// row[4]
+			  "Title"	// row[5]
 		    " FROM rub_criteria"
 		   " WHERE RubCod=%ld"
 		   " ORDER BY CriInd",
@@ -592,7 +612,8 @@ unsigned Rub_DB_GetDataOfCriterionByCod (MYSQL_RES **mysql_res,long CriCod)
 			  "CriInd,"	// row[2]
 			  "%s,"		// row[3]
 			  "%s,"		// row[4]
-			  "Title"	// row[5]
+                          "Weight,"	// row[5]
+			  "Title"	// row[6]
 		    " FROM rub_criteria"
 		   " WHERE CriCod=%ld",
 		   RubCri_ValuesFields[RubCri_MIN],

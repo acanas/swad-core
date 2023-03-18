@@ -130,7 +130,8 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
       row[2] CriInd
       row[3] MinVal
       row[4] MaxVal
-      row[5] Title
+      row[5] Weight
+      row[6] Title
       */
       /* Get criterion code (row[0]) */
       Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -147,8 +148,11 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
 	   ValueRange++)
          Criterion->Values[ValueRange] = Str_GetDoubleFromStr (row[3 + ValueRange]);
 
-      /* Get the title of the criterion (row[5]) */
-      Str_Copy (Criterion->Title,row[3 + RubCri_NUM_VALUES],sizeof (Criterion->Title) - 1);
+      /* Get criterion weight (row[5]) */
+      Criterion->Weight = Str_GetDoubleFromStr (row[3 + RubCri_NUM_VALUES]);
+
+      /* Get the title of the criterion (row[6]) */
+      Str_Copy (Criterion->Title,row[3 + RubCri_NUM_VALUES + 1],sizeof (Criterion->Title) - 1);
      }
    else
       /* Initialize to empty criterion */
@@ -217,6 +221,14 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	       HTM_TD_End ();
 	      }
 
+	    /***** Weight of the criterion *****/
+	    HTM_TD_Begin ("class=\"RM\"");
+	       HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
+				Criterion->Weight,false,
+				" class=\"INPUT_%s\" required=\"required\"",
+				The_GetSuffix ());
+	    HTM_TD_End ();
+
 	 /***** End row *****/
 	 HTM_TR_End ();
 
@@ -267,6 +279,7 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
   {
    RubCri_ValueRange_t ValueRange;
    char ValueStr[64];
+   char WeightStr[64];
 
    /***** Get criterion title *****/
    Par_GetParText ("Title",Criterion->Title,RubCri_MAX_BYTES_TITLE);
@@ -279,6 +292,10 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
       Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
       Criterion->Values[ValueRange] = Str_GetDoubleFromStr (ValueStr);
      }
+
+   /***** Get criterion weight *****/
+   Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
+   Criterion->Weight = Str_GetDoubleFromStr (WeightStr);
   }
 
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
@@ -413,6 +430,51 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
   }
 
 /*****************************************************************************/
+/********* Receive form to change minimum/maximum value of criterion *********/
+/*****************************************************************************/
+
+void RubCri_ChangeWeightCriterion (void)
+  {
+   struct Rub_Rubrics Rubrics;
+   struct RubCri_Criterion Criterion;
+   char WeightStr[64];
+
+   /***** Check if I can edit rubrics *****/
+   if (!Rub_CheckIfICanEditRubrics ())
+      Err_NoPermissionExit ();
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+   Rub_ResetRubric (&Rubrics.Rubric);
+   RubCri_ResetCriterion (&Criterion);
+
+   /***** Get parameters *****/
+   Rub_GetPars (&Rubrics,true);
+   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.CriCod = Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+
+   /***** Get and check parameters *****/
+   RubCri_GetAndCheckPars (&Rubrics,&Criterion);
+
+   /***** Check if rubric is editable *****/
+   if (!Rub_CheckIfEditable (&Rubrics.Rubric))
+      Err_NoPermissionExit ();
+
+   /***** Receive new value from form *****/
+   Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
+   Criterion.Weight = Str_GetDoubleFromStr (WeightStr);
+
+   /***** Change value *****/
+   /* Update the table changing old value by new value */
+   Rub_DB_UpdateCriterionWeight (Criterion.CriCod,Criterion.RubCod,
+                                 Criterion.Weight);
+
+   /***** Show current rubric and its criteria *****/
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
+                          false);	// It's not a new rubric
+  }
+
+/*****************************************************************************/
 /************************ Create a new rubric criterion **********************/
 /*****************************************************************************/
 
@@ -526,7 +588,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 row[1] CriInd
 	 row[2] MinVal
 	 row[3] MaxVal
-	 row[4] Title
+	 row[4] Weight
+	 row[5] Title
 	 */
 	 /* Get criterion code (row[0]) */
 	 Criterion.CriCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -540,8 +603,11 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	      ValueRange++)
 	    Criterion.Values[ValueRange] = Str_GetDoubleFromStr (row[2 + ValueRange]);
 
-	 /* Get the title of the criterion (row[4]) */
-	 Str_Copy (Criterion.Title,row[2 + RubCri_NUM_VALUES],sizeof (Criterion.Title) - 1);
+	 /* Get weight (row[4]) */
+         Criterion.Weight = Str_GetDoubleFromStr (row[2 + RubCri_NUM_VALUES]);
+
+	 /* Get the title of the criterion (row[5]) */
+	 Str_Copy (Criterion.Title,row[2 + RubCri_NUM_VALUES + 1],sizeof (Criterion.Title) - 1);
 
 	 /* Initialize context */
 	 Rubrics->CriCod = Criterion.CriCod;
@@ -639,6 +705,26 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_TD_End ();
 	      }
 
+	    /***** Criterion weight *****/
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	       if (ICanEditCriteria)
+		 {
+		  Frm_BeginFormAnchor (ActChgWeiRubCri,Anchor);
+		     RubCri_PutParsOneCriterion (Rubrics);
+		     HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
+				      Criterion.Weight,false,
+				      " class=\"INPUT_%s\" required=\"required\"",
+				      The_GetSuffix ());
+		  Frm_EndForm ();
+		 }
+	       else
+		 {
+		  HTM_SPAN_Begin ("class=\"CRI_VALUE\"");
+		     HTM_Unsigned (Criterion.Weight);
+		  HTM_SPAN_End ();
+		 }
+	    HTM_TD_End ();
+
 	 /***** End first row *****/
 	 HTM_TR_End ();
 
@@ -672,6 +758,7 @@ static void RubCri_PutTableHeadingForCriteria (void)
    extern const char *Txt_Criterion;
    extern const char *Txt_Minimum;
    extern const char *Txt_Maximum;
+   extern const char *Txt_Weight;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -682,6 +769,7 @@ static void RubCri_PutTableHeadingForCriteria (void)
       HTM_TH (Txt_Criterion,HTM_HEAD_LEFT );
       HTM_TH (Txt_Minimum  ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Maximum  ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Weight   ,HTM_HEAD_RIGHT);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -701,14 +789,15 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
      };
    RubCri_ValueRange_t ValueRange;
 
-   Criterion->RubCod     = -1L;
-   Criterion->CriCod     = -1L;
-   Criterion->CriInd     = 0;
-   Criterion->Title[0]   = '\0';
+   Criterion->RubCod   = -1L;
+   Criterion->CriCod   = -1L;
+   Criterion->CriInd   = 0;
+   Criterion->Title[0] = '\0';
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
       Criterion->Values[ValueRange] = RubCri_DefaultValues[ValueRange];
+   Criterion->Weight  = 1.0;
   }
 
 /*****************************************************************************/

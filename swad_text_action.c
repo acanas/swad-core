@@ -14230,6 +14230,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change maximum value of rubric criterion"			// Çeviri lazim!
 #endif
 	,
+	[ActChgWeiRubCri] =
+#if   L==1	// ca
+	"Change weight of rubric criterion"		// Necessita traducció
+#elif L==2	// de
+	"Change weight of rubric criterion"		// Need Übersetzung
+#elif L==3	// en
+	"Change weight of rubric criterion"
+#elif L==4	// es
+	"Cambiar peso de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Change weight of rubric criterion"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar peso de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change weight of rubric criterion"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change weight of rubric criterion"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change weight of rubric criterion"		// Precisa de tradução
+#elif L==10	// tr
+	"Change weight of rubric criterion"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeAdmDocIns] =
 #if   L==1	// ca
 	"Documents zone of institution (see or manage)"			// Necessita traducció

@@ -152,7 +152,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRefNewPubGblTL	] = {1509,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,TmlWho_GetParWho		,Tml_RefreshNewTimelineGbl	,NULL},
    [ActRefOldPubGblTL	] = {1510,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,TmlWho_GetParWho		,Tml_RefreshOldTimelineGbl	,NULL},
    [ActRcvPstGblTL	] = {1492,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TmlWho_GetParWho		,TmlPst_ReceivePostGbl		,NULL},
-   [ActRcvComGblTL	] = {1503,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TmlWho_GetParWho		,TmlCom_ReceiveCommGbl	,NULL},
+   [ActRcvComGblTL	] = {1503,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TmlWho_GetParWho		,TmlCom_ReceiveCommGbl		,NULL},
    [ActShoHidComGblTL	] = {1806,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TmlCom_ShowHiddenCommsGbl	,NULL},
    [ActAllShaNotGblTL	] = {1766,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TmlSha_ShowAllSharersNoteGbl	,NULL},
    [ActAllFavNotGblTL	] = {1767,-1,TabUnk,ActSeeGblTL		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TmlFav_ShowAllFaversNoteGbl	,NULL},
@@ -354,7 +354,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttr	,NULL},
 
    [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_SeeDegreeTypesInDegTab	,NULL},
-   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_GetAndEditDegreeTypes		,NULL},
+   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_GetAndEditDegreeTypes	,NULL},
    [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_ReceiveFormNewDegreeType,DegTyp_ContEditAfterChgDegTyp	,NULL},
    [ActRemDegTyp	] = { 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RemoveDegreeType	,DegTyp_ContEditAfterChgDegTyp	,NULL},
    [ActRenDegTyp	] = { 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RenameDegreeType	,DegTyp_ContEditAfterChgDegTyp	,NULL},
@@ -598,8 +598,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeAllRubrics		,"tasks"		},
 
    // Actions not in menu:
-   [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg	,NULL},
-   [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg	,NULL},
+   [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
+   [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
    [ActSeeOneAsg	] = {1942,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeOneAssignment		,NULL},
    [ActPrnOneAsg	] = {1637,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Asg_PrintOneAssignment		,NULL},
    [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
@@ -852,6 +852,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgTitRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeCriterionTitle	,NULL},
    [ActChgMinRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValueCriterion	,NULL},
    [ActChgMaxRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValueCriterion	,NULL},
+   [ActChgWeiRubCri	] = {1967,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeWeightCriterion	,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -1771,8 +1772,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    [ActSeeSvy		] = { 982,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeOneSurvey		,NULL},
    [ActAnsSvy		] = { 983,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
-   [ActFrmNewSvy	] = { 973,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy	,NULL},
-   [ActEdiOneSvy	] = { 974,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy	,NULL},
+   [ActFrmNewSvy	] = { 973,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy		,NULL},
+   [ActEdiOneSvy	] = { 974,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy		,NULL},
    [ActNewSvy		] = { 968,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveFormSurvey		,NULL},
    [ActChgSvy		] = { 975,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveFormSurvey		,NULL},
    [ActReqRemSvy	] = { 976,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_AskRemSurvey		,NULL},
@@ -1866,7 +1867,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgCol		] = { 674,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ChangeSideCols		,Set_EditSettings		,NULL},
    [ActChgIco		] = {1092,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ico_ChangeIconSet		,Set_EditSettings		,NULL},
    [ActChgMnu		] = {1243,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Set_EditSettings		,NULL},
-   [ActChgUsrPho	] = {1917,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,PhoSha_ChangePhotoShape		,Set_EditSettings		,NULL},
+   [ActChgUsrPho	] = {1917,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,PhoSha_ChangePhotoShape	,Set_EditSettings		,NULL},
    [ActChgPriPho	] = { 774,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
    [ActChgBasPriPrf	] = {1404,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeBasicProfileVis	,NULL},
    [ActChgExtPriPrf	] = {1765,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeExtendedProfileVis	,NULL},
@@ -1968,7 +1969,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	-1,			// #82 (obsolete action)
 	-1,			// #83 (obsolete action)
 	ActSeeUseGbl,		// #84
-	ActSeeAllCfe,	// #85
+	ActSeeAllCfe,		// #85
 	-1,			// #86 (obsolete action)
 	ActRemAllStdCrs,	// #87
 	ActReqRemAllStdCrs,	// #88
@@ -3850,4 +3851,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgTitRubCri,	// #1964
 	ActChgMinRubCri,	// #1965
 	ActChgMaxRubCri,	// #1966
+	ActChgWeiRubCri,	// #1967
   };
