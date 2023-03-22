@@ -110,7 +110,8 @@ static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
 static void Crs_GetParsNewCourse (struct Crs_Course *Crs);
 
-static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row);
+static void Crs_GetDataOfCourseFromRow (MYSQL_RES *mysql_res,
+				        struct Crs_Course *Crs);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -707,10 +708,8 @@ void Crs_ShowCrssOfCurrentDeg (void)
 static void Crs_GetListCrssInCurrentDeg (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
-   struct Crs_Course *Crs;
 
    /***** Get courses of a degree from database *****/
    if ((NumCrss = Crs_DB_GetCrssInCurrentDegFull (&mysql_res))) // Courses found...
@@ -724,13 +723,8 @@ static void Crs_GetListCrssInCurrentDeg (void)
       for (NumCrs = 0;
 	   NumCrs < NumCrss;
 	   NumCrs++)
-        {
-         Crs = &Gbl.Hierarchy.Crss.Lst[NumCrs];
-
-         /* Get next course */
-         row = mysql_fetch_row (mysql_res);
-         Crs_GetDataOfCourseFromRow (Crs,row);
-        }
+         /* Get data of next course */
+         Crs_GetDataOfCourseFromRow (mysql_res,&Gbl.Hierarchy.Crss.Lst[NumCrs]);
      }
 
    Gbl.Hierarchy.Crss.Num = NumCrss;
@@ -1619,7 +1613,6 @@ void Crs_RemoveCourse (void)
 bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool CrsFound = false;
 
    /***** Clear data *****/
@@ -1637,8 +1630,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
       if (Crs_DB_GetDataOfCourseByCod (&mysql_res,Crs->CrsCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
-	 row = mysql_fetch_row (mysql_res);
-	 Crs_GetDataOfCourseFromRow (Crs,row);
+	 Crs_GetDataOfCourseFromRow (mysql_res,Crs);
 
          /* Set return value */
 	 CrsFound = true;
@@ -1655,8 +1647,14 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
 /********** Get data of a course from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row)
+static void Crs_GetDataOfCourseFromRow (MYSQL_RES *mysql_res,
+				        struct Crs_Course *Crs)
   {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
    /***** Get course code (row[0]) *****/
    if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongCourseExit ();

@@ -108,7 +108,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline);
 static void TmlCom_PutParsRemoveComm (void *Timeline);
 static void TmlCom_RemoveComm (void);
 
-static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
+static void TmlCom_GetDataOfCommFromRow (MYSQL_RES *mysql_res,
                                          struct TmlCom_Comment *Com);
 
 static void TmlCom_ResetComm (struct TmlCom_Comment *Com);
@@ -437,15 +437,13 @@ static void TmlCom_ListComms (const struct Tml_Timeline *Timeline,
 static void TmlCom_WriteOneCommInList (const struct Tml_Timeline *Timeline,
                                        MYSQL_RES *mysql_res)
   {
-   MYSQL_ROW row;
    struct TmlCom_Comment Com;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   row = mysql_fetch_row (mysql_res);
-   TmlCom_GetDataOfCommFromRow (row,&Com);
+   TmlCom_GetDataOfCommFromRow (mysql_res,&Com);
 
    /***** Write comment *****/
    HTM_LI_Begin ("class=\"Tml_COM\"");
@@ -1045,7 +1043,6 @@ void TmlCom_RemoveCommMediaAndDBEntries (long PubCod)
 void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Trivial check: publication code should be > 0 *****/
    if (Com->PubCod <= 0)
@@ -1057,11 +1054,7 @@ void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
 
    /***** Get data of comment from database *****/
    if (Tml_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
-     {
-      /* Get data of comment */
-      row = mysql_fetch_row (mysql_res);
-      TmlCom_GetDataOfCommFromRow (row,Com);
-     }
+      TmlCom_GetDataOfCommFromRow (mysql_res,Com);
    else
       /* Reset fields of comment */
       TmlCom_ResetComm (Com);
@@ -1074,9 +1067,13 @@ void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
+static void TmlCom_GetDataOfCommFromRow (MYSQL_RES *mysql_res,
                                          struct TmlCom_Comment *Com)
   {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
    /*
    row[0]: PubCod
    row[1]: PublisherCod]

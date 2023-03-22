@@ -137,7 +137,8 @@ unsigned Ins_DB_GetDataOfInstitutionByCod (MYSQL_RES **mysql_res,long InsCod)
 			  "RequesterUsrCod,"	// row[3]
 			  "ShortName,"		// row[4]
 			  "FullName,"		// row[5]
-			  "WWW"			// row[6]
+			  "WWW,"		// row[6]
+                  	  "0 AS NumUsrs"	// row[7] (not used)
 		    " FROM ins_instits"
 		   " WHERE InsCod=%ld",
 		   InsCod);
@@ -281,7 +282,8 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod
 			  "RequesterUsrCod,"	// row[3]
 			  "ShortName,"		// row[4]
 			  "FullName,"		// row[5]
-			  "WWW"			// row[6]
+			  "WWW,"		// row[6]
+                  	  "0 AS NumUsrs"	// row[7] (not used)
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
 		   " ORDER BY FullName",

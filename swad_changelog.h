@@ -629,11 +629,16 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.77 (2023-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 22.78 (2023-03-22)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
- *
+	Version 22.78:    Mar 22, 2023  New fields Source and Cod in rubric criteria. (337770 lines)
+					3 changes necessary in database:
+ALTER TABLE rub_criteria ADD COLUMN Source ENUM('teacher','rubric','exam','game') NOT NULL DEFAULT 'teacher' AFTER CriInd;
+ALTER TABLE rub_criteria ADD COLUMN Cod INT NOT NULL DEFAULT -1 AFTER Source;
+ALTER TABLE rub_criteria ADD INDEX (Source,Cod);
+
 	Version 22.77:    Mar 18, 2023  New field Weight in rubric criteria. (337735 lines)
 					1 change necessary in database:
 ALTER TABLE rub_criteria ADD COLUMN Weight DOUBLE PRECISION NOT NULL DEFAULT 1 AFTER MaxVal;

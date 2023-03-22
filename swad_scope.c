@@ -326,7 +326,7 @@ HieLvl_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
   }
 
 /*****************************************************************************/
-/*********************** Get scope from database string **********************/
+/*********************** Get database string from source *********************/
 /*****************************************************************************/
 
 const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope)

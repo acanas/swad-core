@@ -84,7 +84,9 @@ static void Ctr_GetParCtrOrder (void);
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 
-static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row);
+static void Ctr_GetDataOfCenterFromRow (MYSQL_RES *mysql_res,
+				        struct Ctr_Center *Ctr,
+                                        bool GetNumUsrsWhoClaimToBelongToCtr);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
@@ -516,9 +518,7 @@ void Ctr_PutIconToViewCenters (void)
 void Ctr_GetBasicListOfCenters (long InsCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumCtr;
-   struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
    Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFull (&mysql_res,InsCod);
@@ -534,16 +534,9 @@ void Ctr_GetBasicListOfCenters (long InsCod)
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
-        {
-         Ctr = &(Gbl.Hierarchy.Ctrs.Lst[NumCtr]);
-
          /* Get center data */
-         row = mysql_fetch_row (mysql_res);
-         Ctr_GetDataOfCenterFromRow (Ctr,row);
-
-	 /* Reset number of users who claim to belong to this center */
-         Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
-        }
+         Ctr_GetDataOfCenterFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
+                                     false);	// Don't get number of users who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -558,9 +551,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumCtr;
-   struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
    Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFullWithNumUsrs (&mysql_res,InsCod,SelectedOrder);
@@ -576,18 +567,9 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
-        {
-         Ctr = &(Gbl.Hierarchy.Ctrs.Lst[NumCtr]);
-
          /* Get center data */
-         row = mysql_fetch_row (mysql_res);
-         Ctr_GetDataOfCenterFromRow (Ctr,row);
-
-	 /* Get number of users who claim to belong to this center (row[11]) */
-         Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
-	 if (sscanf (row[11],"%u",&(Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs)) == 1)
-	    Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
-        }
+         Ctr_GetDataOfCenterFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
+                                     true);	// Get number of users who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -601,7 +583,6 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
 bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool CtrFound = false;
 
    /***** Clear data *****/
@@ -620,9 +601,9 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
       /***** Get data of a center from database *****/
       if (Ctr_DB_GetDataOfCenterByCod (&mysql_res,Ctr->CtrCod)) // Center found...
         {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-         Ctr_GetDataOfCenterFromRow (Ctr,row);
+         /* Get center data */
+         Ctr_GetDataOfCenterFromRow (mysql_res,Ctr,
+                                     false);	// Don't get number of users who claim to belong to this center
 
          /* Set return value */
          CtrFound = true;
@@ -639,8 +620,15 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
+static void Ctr_GetDataOfCenterFromRow (MYSQL_RES *mysql_res,
+				        struct Ctr_Center *Ctr,
+                                        bool GetNumUsrsWhoClaimToBelongToCtr)
   {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
    /***** Get center code (row[0]) *****/
    if ((Ctr->CtrCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongCenterExit ();
@@ -668,6 +656,12 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
    Str_Copy (Ctr->ShrtName,row[ 8],sizeof (Ctr->ShrtName) - 1);
    Str_Copy (Ctr->FullName,row[ 9],sizeof (Ctr->FullName) - 1);
    Str_Copy (Ctr->WWW     ,row[10],sizeof (Ctr->WWW     ) - 1);
+
+   /* Get number of users who claim to belong to this center (row[11]) */
+   Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = false;
+   if (GetNumUsrsWhoClaimToBelongToCtr)
+      if (sscanf (row[11],"%u",&(Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs)) == 1)
+	 Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
   }
 
 /*****************************************************************************/

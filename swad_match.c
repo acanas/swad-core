@@ -884,7 +884,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    Dat_StartEndTime_t StartEndTime;
    long LongNum;
 
-   /***** Get match data *****/
+   /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[ 0]	MchCod

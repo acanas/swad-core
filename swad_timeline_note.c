@@ -116,7 +116,8 @@ static void TmlNot_PutParsRemoveNote (void *Timeline);
 static void TmlNot_RemoveNote (void);
 static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
 
-static void TmlNot_GetDataOfNoteFromRow (MYSQL_ROW row,struct TmlNot_Note *Not);
+static void TmlNot_GetDataOfNoteFromRow (MYSQL_RES *mysql_res,
+                                         struct TmlNot_Note *Not);
 
 static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str);
 
@@ -127,7 +128,7 @@ static void TmlNot_ResetNote (struct TmlNot_Note *Not);
 /*****************************************************************************/
 
 void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
-                                  struct TmlNot_Note *Not)
+                                 struct TmlNot_Note *Not)
   {
    struct Usr_Data PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
@@ -1195,8 +1196,13 @@ static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not)
 /************************ Get data of note from row **************************/
 /*****************************************************************************/
 
-static void TmlNot_GetDataOfNoteFromRow (MYSQL_ROW row,struct TmlNot_Note *Not)
+static void TmlNot_GetDataOfNoteFromRow (MYSQL_RES *mysql_res,
+                                         struct TmlNot_Note *Not)
   {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
    /*
    row[0]: NotCod
    row[1]: NoteType
@@ -1269,7 +1275,6 @@ static void TmlNot_ResetNote (struct TmlNot_Note *Not)
 void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Trivial check: note code should be > 0 *****/
    if (Not->NotCod <= 0)
@@ -1281,11 +1286,7 @@ void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
 
    /***** Get data of note from database *****/
    if (Tml_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
-     {
-      /* Get data of note */
-      row = mysql_fetch_row (mysql_res);
-      TmlNot_GetDataOfNoteFromRow (row,Not);
-     }
+      TmlNot_GetDataOfNoteFromRow (mysql_res,Not);
    else
       /* Reset fields of note */
       TmlNot_ResetNote (Not);

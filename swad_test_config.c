@@ -70,7 +70,7 @@ static void TstCfg_ShowFormConfig (void);
 static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value);
 
-static void TstCfg_GetConfigFromRow (MYSQL_ROW row);
+static void TstCfg_GetConfigFromRow (MYSQL_RES *mysql_res);
 
 static TstCfg_Pluggable_t TstCfg_GetPluggableFromForm (void);
 static void TstCfg_CheckAndCorrectMinDefMax (void);
@@ -308,14 +308,10 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
 void TstCfg_GetConfig (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Get configuration of test for current course from database *****/
    if (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Crs.CrsCod))
-     {
-      row = mysql_fetch_row (mysql_res);
-      TstCfg_GetConfigFromRow (row);
-     }
+      TstCfg_GetConfigFromRow (mysql_res);
    else
      {
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
@@ -334,12 +330,16 @@ void TstCfg_GetConfig (void)
 /************ Get configuration values from a database table row *************/
 /*****************************************************************************/
 
-static void TstCfg_GetConfigFromRow (MYSQL_ROW row)
+static void TstCfg_GetConfigFromRow (MYSQL_RES *mysql_res)
   {
    extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
+   MYSQL_ROW row;
    int IntNum;
    long LongNum;
    TstCfg_Pluggable_t Pluggable;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
 
    /***** Get whether test are visible via plugins or not *****/
    TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);

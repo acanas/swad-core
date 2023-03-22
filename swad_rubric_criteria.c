@@ -80,6 +80,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					            unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res,
                                                     bool ICanEditCriteria);
+
+static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
+                                            struct RubCri_Criterion *Criterion);
+
 static void RubCri_PutTableHeadingForCriteria (void);
 
 static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
@@ -108,8 +112,6 @@ static void RubCri_PutParsOneCriterion (void *Rubrics)
 void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   RubCri_ValueRange_t ValueRange;
 
    /***** Trivial check *****/
    if (Criterion->CriCod <= 0)
@@ -121,39 +123,7 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
 
    /***** Get data of rubric criterion from database *****/
    if (Rub_DB_GetDataOfCriterionByCod (&mysql_res,Criterion->CriCod)) // Criterion found...
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] CriCod
-      row[1] RubCod
-      row[2] CriInd
-      row[3] MinVal
-      row[4] MaxVal
-      row[5] Weight
-      row[6] Title
-      */
-      /* Get criterion code (row[0]) */
-      Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get rubric code (row[0]) */
-      Criterion->RubCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get criterion index (row[2]) */
-      Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
-
-      /* Get criterion minimum and maximum values (row[3], row[4]) */
-      for (ValueRange  = (RubCri_ValueRange_t) 0;
-	   ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-	   ValueRange++)
-         Criterion->Values[ValueRange] = Str_GetDoubleFromStr (row[3 + ValueRange]);
-
-      /* Get criterion weight (row[5]) */
-      Criterion->Weight = Str_GetDoubleFromStr (row[3 + RubCri_NUM_VALUES]);
-
-      /* Get the title of the criterion (row[6]) */
-      Str_Copy (Criterion->Title,row[3 + RubCri_NUM_VALUES + 1],sizeof (Criterion->Title) - 1);
-     }
+      RubCri_GetCriterionDataFromRow (mysql_res,Criterion);
    else
       /* Initialize to empty criterion */
       RubCri_ResetCriterion (Criterion);
@@ -558,7 +528,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
      };
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
-   MYSQL_ROW row;
    char *Anchor;
    RubCri_ValueRange_t ValueRange;
 
@@ -579,35 +548,9 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	{
 	 /***** Create criterion of questions *****/
 	 RubCri_ResetCriterion (&Criterion);
-	 Criterion.RubCod = Rubrics->Rubric.RubCod;
 
 	 /***** Get criterion data *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] CriCod
-	 row[1] CriInd
-	 row[2] MinVal
-	 row[3] MaxVal
-	 row[4] Weight
-	 row[5] Title
-	 */
-	 /* Get criterion code (row[0]) */
-	 Criterion.CriCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get criterion index (row[1]) */
-	 Criterion.CriInd = Str_ConvertStrToUnsigned (row[1]);
-
-	 /* Get minimum value (row[2]) and maximum value (row[3]) */
-	 for (ValueRange  = (RubCri_ValueRange_t) 0;
-	      ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-	      ValueRange++)
-	    Criterion.Values[ValueRange] = Str_GetDoubleFromStr (row[2 + ValueRange]);
-
-	 /* Get weight (row[4]) */
-         Criterion.Weight = Str_GetDoubleFromStr (row[2 + RubCri_NUM_VALUES]);
-
-	 /* Get the title of the criterion (row[5]) */
-	 Str_Copy (Criterion.Title,row[2 + RubCri_NUM_VALUES + 1],sizeof (Criterion.Title) - 1);
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
 	 /* Initialize context */
 	 Rubrics->CriCod = Criterion.CriCod;
@@ -749,6 +692,92 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
+/************************** Get rubric criteria data *************************/
+/*****************************************************************************/
+
+static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
+                                            struct RubCri_Criterion *Criterion)
+  {
+   MYSQL_ROW row;
+   RubCri_ValueRange_t ValueRange;
+
+   /* Get row */
+   row = mysql_fetch_row (mysql_res);
+   /*
+   row[0] CriCod
+   row[1] RubCod
+   row[2] CriInd
+   row[3] Source
+   row[4] Cod
+   row[5] MinVal
+   row[6] MaxVal
+   row[7] Weight
+   row[8] Title
+   */
+   /* Get criterion code (row[0]) */
+   Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0]);
+
+   /* Get rubric code (row[0]) */
+   Criterion->RubCod = Str_ConvertStrCodToLongCod (row[1]);
+
+   /* Get criterion index (row[2]) */
+   Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
+
+   /* Get source (row[3]) and code (row[4]) */
+   Criterion->Source = RubCri_GetSourceFromDBStr (row[3]);
+   Criterion->Cod    = Str_ConvertStrCodToLongCod (row[4]);
+
+   /* Get criterion minimum and maximum values (row[5], row[6]) */
+   for (ValueRange  = (RubCri_ValueRange_t) 0;
+	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
+	ValueRange++)
+      Criterion->Values[ValueRange] = Str_GetDoubleFromStr (row[5 + ValueRange]);
+
+   /* Get criterion weight (row[7]) */
+   Criterion->Weight = Str_GetDoubleFromStr (row[5 + RubCri_NUM_VALUES]);
+
+   /* Get the title of the criterion (row[8]) */
+   Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],sizeof (Criterion->Title) - 1);
+  }
+
+/*****************************************************************************/
+/*********************** Get source from database string *********************/
+/*****************************************************************************/
+
+RubCri_Source_t RubCri_GetSourceFromDBStr (const char *SourceDBStr)
+  {
+   RubCri_Source_t Source;
+
+   for (Source  = (RubCri_Source_t) 0;
+	Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
+	Source++)
+      if (!strcmp (RubCri_GetDBStrFromSource (Source),SourceDBStr))
+	 return Source;
+
+   return RubCri_SOURCE_DEFAULT;
+  }
+
+/*****************************************************************************/
+/*********************** Get database string from source *********************/
+/*****************************************************************************/
+
+const char *RubCri_GetDBStrFromSource (RubCri_Source_t Source)
+  {
+   static const char *RubCri_SourceDB[RubCri_NUM_SOURCES] =
+     {
+      [RubCri_FROM_TEACHER       ] = "teacher",
+      [RubCri_FROM_ANOTHER_RUBRIC] = "rubric",
+      [RubCri_FROM_EXAM_PRINT    ] = "exam",
+      [RubCri_FROM_GAME_MATCH    ] = "game",
+     };
+
+   if (Source >= RubCri_NUM_SOURCES)
+      Source = RubCri_SOURCE_DEFAULT;
+
+   return RubCri_SourceDB[Source];
+  }
+
+/*****************************************************************************/
 /****************** Put table heading for rubric criteria ********************/
 /*****************************************************************************/
 
@@ -789,15 +818,17 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
      };
    RubCri_ValueRange_t ValueRange;
 
-   Criterion->RubCod   = -1L;
-   Criterion->CriCod   = -1L;
-   Criterion->CriInd   = 0;
-   Criterion->Title[0] = '\0';
+   Criterion->RubCod = -1L;
+   Criterion->CriCod = -1L;
+   Criterion->CriInd = 0;
+   Criterion->Source = RubCri_SOURCE_DEFAULT;
+   Criterion->Cod    = -1L;
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
       Criterion->Values[ValueRange] = RubCri_DefaultValues[ValueRange];
-   Criterion->Weight  = 1.0;
+   Criterion->Weight = 1.0;
+   Criterion->Title[0] = '\0';
   }
 
 /*****************************************************************************/

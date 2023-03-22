@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_rubric_database.h"
+#include "swad_rubric_criteria.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -356,13 +357,15 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
    CriCod =
    DB_QueryINSERTandReturnCode ("can not create new criterion",
 				"INSERT INTO rub_criteria"
-				" (RubCod,CriInd,%s,%s,Weight,Title)"
+				" (RubCod,CriInd,Source,Cod,%s,%s,Weight,Title)"
 				" VALUES"
-				" (%ld,%u,%.15lg,%.15lg,%.15lg,'%s')",
+				" (%ld,%u,'%s',%ld,%.15lg,%.15lg,%.15lg,'%s')",
 				RubCri_ValuesFields[RubCri_MIN],
 				RubCri_ValuesFields[RubCri_MAX],
 				Criterion->RubCod,
 				Criterion->CriInd,
+				RubCri_GetDBStrFromSource (Criterion->Source),
+				Criterion->Cod,
 				Criterion->Values[RubCri_MIN],
 				Criterion->Values[RubCri_MAX],
 				Criterion->Weight,
@@ -586,11 +589,14 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get criteria",
 		   "SELECT CriCod,"	// row[0]
-			  "CriInd,"	// row[1]
-			  "%s,"		// row[2]
-			  "%s,"		// row[3]
-                          "Weight,"	// row[4]
-			  "Title"	// row[5]
+			  "RubCod,"	// row[1]
+			  "CriInd,"	// row[2]
+                          "Source,"	// row[3]
+                          "Cod,"	// row[4]
+			  "%s,"		// row[5]
+			  "%s,"		// row[6]
+                          "Weight,"	// row[7]
+			  "Title"	// row[8]
 		    " FROM rub_criteria"
 		   " WHERE RubCod=%ld"
 		   " ORDER BY CriInd",
@@ -610,10 +616,12 @@ unsigned Rub_DB_GetDataOfCriterionByCod (MYSQL_RES **mysql_res,long CriCod)
 		   "SELECT CriCod,"	// row[0]
 			  "RubCod,"	// row[1]
 			  "CriInd,"	// row[2]
-			  "%s,"		// row[3]
-			  "%s,"		// row[4]
-                          "Weight,"	// row[5]
-			  "Title"	// row[6]
+                          "Source,"	// row[3]
+                          "Cod,"	// row[4]
+			  "%s,"		// row[5]
+			  "%s,"		// row[6]
+                          "Weight,"	// row[7]
+			  "Title"	// row[8]
 		    " FROM rub_criteria"
 		   " WHERE CriCod=%ld",
 		   RubCri_ValuesFields[RubCri_MIN],

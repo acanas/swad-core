@@ -733,7 +733,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    MYSQL_ROW row;
    Dat_StartEndTime_t StartEndTime;
 
-   /***** Get exam session data *****/
+   /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0]	SesCod
@@ -746,6 +746,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    row[7]	Title
    row[8]	ShowUsrResults
    */
+
    /***** Get session data *****/
    /* Code of the session (row[0]) */
    if ((Session->SesCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)

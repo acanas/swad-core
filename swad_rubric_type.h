@@ -44,13 +44,6 @@
 #define RubCri_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define RubCri_MAX_BYTES_TITLE	((RubCri_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define RubCri_NUM_VALUES 2
-typedef enum
-  {
-   RubCri_MIN = 0,
-   RubCri_MAX = 1,
-  } RubCri_ValueRange_t;
-
 struct Rub_Rubric
   {
    long RubCod;			// Rubric code
@@ -73,11 +66,30 @@ struct Rub_Rubrics
    long QstCod;			// Current question code
   };
 
+#define RubCri_NUM_VALUES 2
+typedef enum
+  {
+   RubCri_MIN = 0,
+   RubCri_MAX = 1,
+  } RubCri_ValueRange_t;
+
+#define RubCri_NUM_SOURCES 4
+typedef enum
+  {
+   RubCri_FROM_TEACHER,
+   RubCri_FROM_ANOTHER_RUBRIC,
+   RubCri_FROM_EXAM_PRINT,
+   RubCri_FROM_GAME_MATCH,
+  } RubCri_Source_t;
+#define RubCri_SOURCE_DEFAULT RubCri_FROM_TEACHER
+
 struct RubCri_Criterion
   {
    long RubCod;		// Rubric code
    long CriCod;		// Criterion code
    unsigned CriInd;	// Criterion index (position in the rubric)
+   RubCri_Source_t Source;
+   long Cod;
    double Values[RubCri_NUM_VALUES];
    double Weight;	// Relative weight (from 0.0 to 1.0)
    char Title[RubCri_MAX_BYTES_TITLE + 1];	// Title of the criterion

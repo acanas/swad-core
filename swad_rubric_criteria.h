@@ -44,6 +44,9 @@ void RubCri_ChangeWeightCriterion (void);
 void RubCri_ListCriteria (struct Rub_Rubrics *Rubrics,
 			  struct RubCri_Criterion *Criterion);
 
+RubCri_Source_t RubCri_GetSourceFromDBStr (const char *SourceDBStr);
+const char *RubCri_GetDBStrFromSource (RubCri_Source_t Source);
+
 void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion);
 
 void RubCri_ReqRemCriterion (void);
