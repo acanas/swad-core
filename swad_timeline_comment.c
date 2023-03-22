@@ -108,8 +108,8 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline);
 static void TmlCom_PutParsRemoveComm (void *Timeline);
 static void TmlCom_RemoveComm (void);
 
-static void TmlCom_GetDataOfCommFromRow (MYSQL_RES *mysql_res,
-                                         struct TmlCom_Comment *Com);
+static void TmlCom_GetCommDataFromRow (MYSQL_RES *mysql_res,
+                                       struct TmlCom_Comment *Com);
 
 static void TmlCom_ResetComm (struct TmlCom_Comment *Com);
 
@@ -443,7 +443,7 @@ static void TmlCom_WriteOneCommInList (const struct Tml_Timeline *Timeline,
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   TmlCom_GetDataOfCommFromRow (mysql_res,&Com);
+   TmlCom_GetCommDataFromRow (mysql_res,&Com);
 
    /***** Write comment *****/
    HTM_LI_Begin ("class=\"Tml_COM\"");
@@ -1054,7 +1054,7 @@ void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
 
    /***** Get data of comment from database *****/
    if (Tml_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
-      TmlCom_GetDataOfCommFromRow (mysql_res,Com);
+      TmlCom_GetCommDataFromRow (mysql_res,Com);
    else
       /* Reset fields of comment */
       TmlCom_ResetComm (Com);
@@ -1067,8 +1067,8 @@ void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void TmlCom_GetDataOfCommFromRow (MYSQL_RES *mysql_res,
-                                         struct TmlCom_Comment *Com)
+static void TmlCom_GetCommDataFromRow (MYSQL_RES *mysql_res,
+                                       struct TmlCom_Comment *Com)
   {
    MYSQL_ROW row;
 

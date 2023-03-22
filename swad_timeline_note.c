@@ -116,8 +116,8 @@ static void TmlNot_PutParsRemoveNote (void *Timeline);
 static void TmlNot_RemoveNote (void);
 static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
 
-static void TmlNot_GetDataOfNoteFromRow (MYSQL_RES *mysql_res,
-                                         struct TmlNot_Note *Not);
+static void TmlNot_GetNoteDataFromRow (MYSQL_RES *mysql_res,
+                                       struct TmlNot_Note *Not);
 
 static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str);
 
@@ -1196,8 +1196,8 @@ static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not)
 /************************ Get data of note from row **************************/
 /*****************************************************************************/
 
-static void TmlNot_GetDataOfNoteFromRow (MYSQL_RES *mysql_res,
-                                         struct TmlNot_Note *Not)
+static void TmlNot_GetNoteDataFromRow (MYSQL_RES *mysql_res,
+                                       struct TmlNot_Note *Not)
   {
    MYSQL_ROW row;
 
@@ -1286,7 +1286,7 @@ void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
 
    /***** Get data of note from database *****/
    if (Tml_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
-      TmlNot_GetDataOfNoteFromRow (mysql_res,Not);
+      TmlNot_GetNoteDataFromRow (mysql_res,Not);
    else
       /* Reset fields of note */
       TmlNot_ResetNote (Not);

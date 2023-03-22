@@ -100,7 +100,8 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status);
 
-static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row);
+static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Deg_Degree *Deg);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
 
@@ -973,7 +974,6 @@ void Deg_PutIconToViewDegrees (void)
 void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumDeg;
 
    /***** Get degrees admin by me from database *****/
@@ -987,11 +987,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
       for (NumDeg = 0;
 	   NumDeg < Degs->Num;
 	   NumDeg++)
-        {
-         /* Get next degree */
-         row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&(Degs->Lst[NumDeg]),row);
-        }
+         Deg_GetDegreeDataFromRow (mysql_res,&(Degs->Lst[NumDeg]));
      }
    else
       Degs->Lst = NULL;
@@ -1007,7 +1003,6 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
 void Deg_GetListDegsInCurrentCtr (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumDeg;
    struct Deg_Degree *Deg;
 
@@ -1026,13 +1021,7 @@ void Deg_GetListDegsInCurrentCtr (void)
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
-        {
-         Deg = &Gbl.Hierarchy.Degs.Lst[NumDeg];
-
-         /* Get next degree */
-         row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (Deg,row);
-        }
+         Deg_GetDegreeDataFromRow (mysql_res,&Gbl.Hierarchy.Degs.Lst[NumDeg]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1177,7 +1166,6 @@ void Deg_RemoveDegree (void)
 bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool DegFound = false;
 
    /***** Clear data *****/
@@ -1196,8 +1184,7 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
       if (Deg_DB_GetDataOfDegreeByCod (&mysql_res,Deg->DegCod)) // Degree found...
 	{
 	 /***** Get data of degree *****/
-	 row = mysql_fetch_row (mysql_res);
-	 Deg_GetDataOfDegreeFromRow (Deg,row);
+	 Deg_GetDegreeDataFromRow (mysql_res,Deg);
 
          /* Set return value */
 	 DegFound = true;
@@ -1214,8 +1201,14 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
 /********** Get data of a degree from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row)
+static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Deg_Degree *Deg)
   {
+   MYSQL_ROW row;
+
+   /**** Get row ****/
+   row = mysql_fetch_row (mysql_res);
+
    /***** Get degree code (row[0]) *****/
    if ((Deg->DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();

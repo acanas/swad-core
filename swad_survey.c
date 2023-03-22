@@ -128,9 +128,9 @@ static void Svy_FreeTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAn
 
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys);
-static void Svy_GetDataOfQstFromRow (MYSQL_RES *mysql_res,
-                                     struct Svy_Question *SvyQst,
-                                     char Stem[Cns_MAX_BYTES_TEXT + 1]);
+static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
+                                   struct Svy_Question *SvyQst,
+                                   char Stem[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_PutParsToEditQuestion (void *Surveys);
 static void Svy_PutIconToAddNewQuestion (void *Surveys);
 static void Svy_PutButtonToCreateNewQuestion (struct Svy_Surveys *Surveys);
@@ -2310,7 +2310,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
         {
          /***** Get question data from database *****/
          if (Svy_DB_GetQstDataByCod (&mysql_res,SvyQst->QstCod,Surveys->Svy.SvyCod))
-            Svy_GetDataOfQstFromRow (mysql_res,SvyQst,Stem);
+            Svy_GetQstDataFromRow (mysql_res,SvyQst,Stem);
          else
             Err_WrongQuestionExit ();
 
@@ -2761,7 +2761,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	    Svy_InitQst (&SvyQst);
 
 	    /* Get question data from row */
-	    Svy_GetDataOfQstFromRow (mysql_res,&SvyQst,Stem);
+	    Svy_GetQstDataFromRow (mysql_res,&SvyQst,Stem);
 
 	    HTM_TR_Begin (NULL);
 
@@ -2839,9 +2839,9 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 /************************* Get question data from row ************************/
 /*****************************************************************************/
 
-static void Svy_GetDataOfQstFromRow (MYSQL_RES *mysql_res,
-                                     struct Svy_Question *SvyQst,
-                                     char Stem[Cns_MAX_BYTES_TEXT + 1])
+static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
+                                   struct Svy_Question *SvyQst,
+                                   char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
    MYSQL_ROW row;
 

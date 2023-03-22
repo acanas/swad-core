@@ -84,9 +84,9 @@ static void Ctr_GetParCtrOrder (void);
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 
-static void Ctr_GetDataOfCenterFromRow (MYSQL_RES *mysql_res,
-				        struct Ctr_Center *Ctr,
-                                        bool GetNumUsrsWhoClaimToBelongToCtr);
+static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
+				      struct Ctr_Center *Ctr,
+                                      bool GetNumUsrsWhoClaimToBelongToCtr);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
@@ -535,7 +535,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetDataOfCenterFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
+         Ctr_GetCenterDataFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
                                      false);	// Don't get number of users who claim to belong to this center
      }
 
@@ -568,7 +568,7 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetDataOfCenterFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
+         Ctr_GetCenterDataFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
                                      true);	// Get number of users who claim to belong to this center
      }
 
@@ -602,7 +602,7 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
       if (Ctr_DB_GetDataOfCenterByCod (&mysql_res,Ctr->CtrCod)) // Center found...
         {
          /* Get center data */
-         Ctr_GetDataOfCenterFromRow (mysql_res,Ctr,
+         Ctr_GetCenterDataFromRow (mysql_res,Ctr,
                                      false);	// Don't get number of users who claim to belong to this center
 
          /* Set return value */
@@ -620,9 +620,9 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ctr_GetDataOfCenterFromRow (MYSQL_RES *mysql_res,
-				        struct Ctr_Center *Ctr,
-                                        bool GetNumUsrsWhoClaimToBelongToCtr)
+static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
+				      struct Ctr_Center *Ctr,
+                                      bool GetNumUsrsWhoClaimToBelongToCtr)
   {
    MYSQL_ROW row;
 

@@ -86,6 +86,9 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
                                 MYSQL_RES **mysql_res);
 static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 
+static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Ban_Banner *Ban);
+
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
@@ -270,9 +273,7 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
                                 MYSQL_RES **mysql_res)
   {
-   MYSQL_ROW row;
    unsigned NumBan;
-   struct Ban_Banner *Ban;
 
    /***** Get banners from database *****/
    if (Banners->Num) // Banners found...
@@ -285,26 +286,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
       for (NumBan = 0;
 	   NumBan < Banners->Num;
 	   NumBan++)
-	{
-	 Ban = &(Banners->Lst[NumBan]);
-
-	 /* Get next banner */
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get banner code (row[0]) */
-	 if ((Ban->BanCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Err_WrongBannerExit ();
-
-	 /* Get if banner is hidden (row[1]) */
-	 Ban->Hidden = (row[1][0] == 'Y');
-
-	 /* Get short name (row[2]), full name (row[3]),
-	    image (row[4]) and URL (row[5]) of the banner */
-	 Str_Copy (Ban->ShrtName,row[2],sizeof (Ban->ShrtName) - 1);
-	 Str_Copy (Ban->FullName,row[3],sizeof (Ban->FullName) - 1);
-	 Str_Copy (Ban->Img     ,row[4],sizeof (Ban->Img     ) - 1);
-	 Str_Copy (Ban->WWW     ,row[5],sizeof (Ban->WWW     ) - 1);
-	}
+	 Ban_GetBannerDataFromRow (*mysql_res,&(Banners->Lst[NumBan]));
      }
 
    /***** Free structure that stores the query result *****/
@@ -312,13 +294,12 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
   }
 
 /*****************************************************************************/
-/*************************** Get banner full name ****************************/
+/************************* Get banner data by code ***************************/
 /*****************************************************************************/
 
 void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Ban->Hidden = false;
@@ -329,20 +310,7 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
      {
       /***** Get data of a banner from database *****/
       if (Ban_DB_GetDataOfBannerByCod (&mysql_res,Ban->BanCod)) // Banner found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get if the banner is hidden (row[0]) */
-         Ban->Hidden = (row[0][0] == 'Y');
-
-	 /* Get short name (row[1]), full name (row[2]),
-	    image (row[3]) and URL (row[4]) of the banner */
-         Str_Copy (Ban->ShrtName,row[1],sizeof (Ban->ShrtName) - 1);
-         Str_Copy (Ban->FullName,row[2],sizeof (Ban->FullName) - 1);
-         Str_Copy (Ban->Img     ,row[3],sizeof (Ban->Img     ) - 1);
-         Str_Copy (Ban->WWW     ,row[4],sizeof (Ban->WWW     ) - 1);
-        }
+	 Ban_GetBannerDataFromRow (mysql_res,Ban);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -362,6 +330,33 @@ static void Ban_FreeListBanners (struct Ban_Banners *Banners)
       Banners->Lst = NULL;
       Banners->Num = 0;
      }
+  }
+
+/*****************************************************************************/
+/***************************** Get banner data *******************************/
+/*****************************************************************************/
+
+static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Ban_Banner *Ban)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get banner code (row[0]) *****/
+   if ((Ban->BanCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongBannerExit ();
+
+   /***** Get if the banner is hidden (row[1]) *****/
+   Ban->Hidden = (row[1][0] == 'Y');
+
+   /***** Get short name (row[2]), full name (row[3]),
+          image (row[4]) and URL (row[5]) of the banner *****/
+   Str_Copy (Ban->ShrtName,row[2],sizeof (Ban->ShrtName) - 1);
+   Str_Copy (Ban->FullName,row[3],sizeof (Ban->FullName) - 1);
+   Str_Copy (Ban->Img     ,row[4],sizeof (Ban->Img     ) - 1);
+   Str_Copy (Ban->WWW     ,row[5],sizeof (Ban->WWW     ) - 1);
   }
 
 /*****************************************************************************/

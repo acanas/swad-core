@@ -106,11 +106,12 @@ unsigned Ban_DB_GetDataOfBannerByCod (MYSQL_RES **mysql_res,long BanCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a banner",
-		   "SELECT Hidden,"	// row[0]
-			  "ShortName,"	// row[1]
-			  "FullName,"	// row[2]
-			  "Img,"	// row[3]
-			  "WWW"		// row[4]
+		   "SELECT BanCod,"	// row[0]
+			  "Hidden,"	// row[1]
+			  "ShortName,"	// row[2]
+			  "FullName,"	// row[3]
+			  "Img,"	// row[4]
+			  "WWW"		// row[5]
 		    " FROM ban_banners"
 		   " WHERE BanCod=%ld",
 		   BanCod);

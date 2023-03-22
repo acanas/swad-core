@@ -89,7 +89,7 @@ bool Att_CheckIfICanEditAttEvents (void);
 
 void Att_ReqCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
-void Att_GetAttendanceEventFromRow (MYSQL_ROW row,struct Att_Event *Event);
+void Att_GetAttendanceEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);

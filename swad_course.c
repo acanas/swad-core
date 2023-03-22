@@ -110,8 +110,8 @@ static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
 static void Crs_GetParsNewCourse (struct Crs_Course *Crs);
 
-static void Crs_GetDataOfCourseFromRow (MYSQL_RES *mysql_res,
-				        struct Crs_Course *Crs);
+static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
+				      struct Crs_Course *Crs);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -724,7 +724,7 @@ static void Crs_GetListCrssInCurrentDeg (void)
 	   NumCrs < NumCrss;
 	   NumCrs++)
          /* Get data of next course */
-         Crs_GetDataOfCourseFromRow (mysql_res,&Gbl.Hierarchy.Crss.Lst[NumCrs]);
+         Crs_GetCourseDataFromRow (mysql_res,&Gbl.Hierarchy.Crss.Lst[NumCrs]);
      }
 
    Gbl.Hierarchy.Crss.Num = NumCrss;
@@ -1630,7 +1630,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
       if (Crs_DB_GetDataOfCourseByCod (&mysql_res,Crs->CrsCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
-	 Crs_GetDataOfCourseFromRow (mysql_res,Crs);
+	 Crs_GetCourseDataFromRow (mysql_res,Crs);
 
          /* Set return value */
 	 CrsFound = true;
@@ -1647,8 +1647,8 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
 /********** Get data of a course from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Crs_GetDataOfCourseFromRow (MYSQL_RES *mysql_res,
-				        struct Crs_Course *Crs)
+static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
+				      struct Crs_Course *Crs)
   {
    MYSQL_ROW row;
 

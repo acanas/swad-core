@@ -297,8 +297,8 @@ static void Prj_UpdateProject (struct Prj_Project *Prj);
 
 static bool Prj_CheckIfICanConfigAllProjects (void);
 static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects);
-static void Prj_GetConfigFromRow (MYSQL_RES *mysql_res,
-				  struct Prj_Projects *Projects);
+static void Prj_GetConfigDataFromRow (MYSQL_RES *mysql_res,
+				      struct Prj_Projects *Projects);
 static bool Prj_GetEditableFromForm (void);
 static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects);
 
@@ -4225,7 +4225,7 @@ static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects)
 
    /***** Get configuration of projects for current course from database *****/
    if (Prj_DB_GetCrsPrjsConfig (&mysql_res))
-      Prj_GetConfigFromRow (mysql_res,Projects);
+      Prj_GetConfigDataFromRow (mysql_res,Projects);
    else
       Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
 
@@ -4237,8 +4237,8 @@ static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects)
 /************ Get configuration values from a database table row *************/
 /*****************************************************************************/
 
-static void Prj_GetConfigFromRow (MYSQL_RES *mysql_res,
-				  struct Prj_Projects *Projects)
+static void Prj_GetConfigDataFromRow (MYSQL_RES *mysql_res,
+				      struct Prj_Projects *Projects)
   {
    MYSQL_ROW row;
 

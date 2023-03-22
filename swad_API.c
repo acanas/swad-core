@@ -2307,7 +2307,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get attendance event (except Txt) */
-	 Att_GetAttendanceEventFromRow (row,&Event);
+	 Att_GetAttendanceEventDataFromRow (row,&Event);
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = Event.Hidden ? 1 :

@@ -747,7 +747,7 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get attendance event (except Txt) */
-	 Att_GetAttendanceEventFromRow (row,Event);
+	 Att_GetAttendanceEventDataFromRow (row,Event);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -782,7 +782,7 @@ static void Att_ResetAttendanceEvent (struct Att_Event *Event)
 /************************* Get attendance event data *************************/
 /*****************************************************************************/
 
-void Att_GetAttendanceEventFromRow (MYSQL_ROW row,struct Att_Event *Event)
+void Att_GetAttendanceEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
   {
    /***** Get code of attendance event (row[0]) and code of course (row[1]) *****/
    Event->AttCod = Str_ConvertStrCodToLongCod (row[0]);

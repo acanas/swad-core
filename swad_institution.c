@@ -86,9 +86,9 @@ static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToViewInstitutions (void);
 
-static void Ins_GetDataOfInstitFromRow (MYSQL_RES *mysql_res,
-                                        struct Ins_Instit *Ins,
-                                        bool GetNumUsrsWhoClaimToBelongToIns);
+static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Ins_Instit *Ins,
+                                      bool GetNumUsrsWhoClaimToBelongToIns);
 
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
@@ -622,8 +622,8 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetDataOfInstitFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
-                                     false);	// Don't get number of users who claim to belong to this institution
+         Ins_GetInstitDataFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+                                   false);	// Don't get number of users who claim to belong to this institution
      }
    else
       Gbl.Hierarchy.Inss.Lst = NULL;
@@ -655,8 +655,8 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetDataOfInstitFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
-                                     true);	// Get number of users who claim to belong to this institution
+         Ins_GetInstitDataFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+                                   true);	// Get number of users who claim to belong to this institution
      }
    else
       Gbl.Hierarchy.Inss.Lst = NULL;
@@ -708,8 +708,8 @@ bool Ins_GetDataOfInstitByCod (struct Ins_Instit *Ins)
       if (Ins_DB_GetDataOfInstitutionByCod (&mysql_res,Ins->InsCod))	// Institution found...
 	{
          /* Get institution data */
-         Ins_GetDataOfInstitFromRow (mysql_res,Ins,
-                                     false);	// Don't get number of users who claim to belong to this institution
+         Ins_GetInstitDataFromRow (mysql_res,Ins,
+                                   false);	// Don't get number of users who claim to belong to this institution
 
          /* Set return value */
 	 InsFound = true;
@@ -726,9 +726,9 @@ bool Ins_GetDataOfInstitByCod (struct Ins_Instit *Ins)
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ins_GetDataOfInstitFromRow (MYSQL_RES *mysql_res,
-                                        struct Ins_Instit *Ins,
-                                        bool GetNumUsrsWhoClaimToBelongToIns)
+static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Ins_Instit *Ins,
+                                      bool GetNumUsrsWhoClaimToBelongToIns)
   {
    MYSQL_ROW row;
 
