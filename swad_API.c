@@ -2248,10 +2248,8 @@ int swad__getAttendanceEvents (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumAttEvents;
    unsigned NumAttEvent;
-   long AttCod;
+   struct Att_Event Event;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
-   long StartTime;
-   long EndTime;
    size_t Length;
 
    /***** Initializations *****/
@@ -2308,16 +2306,13 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 /* Get next group */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get attendance event code (row[0]) */
-	 AttCod = Str_ConvertStrCodToLongCod (row[0]);
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) AttCod;
+	 /* Get attendance event (except Txt) */
+	 Att_GetAttendanceEventFromRow (row,&Event);
 
-         /* Get whether the attendance event is hidden or not (row[1]) */
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (row[1][0] == 'Y') ? 1 :
-										              0;
-
-	 /* Get user's code of the user who created the event (row[2]) */
-         Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = Event.Hidden ? 1 :
+										        0;
+         Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
@@ -2353,39 +2348,26 @@ int swad__getAttendanceEvents (struct soap *soap,
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto     = NULL;
            }
 
-	 /* Get event start time (row[3]) */
-         StartTime = 0L;
-         if (row[3])
-            sscanf (row[3],"%ld",&StartTime);
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = StartTime;
-
-	 /* Get event end time (row[4]) */
-         EndTime = 0L;
-         if (row[4])
-            sscanf (row[4],"%ld",&EndTime);
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime = EndTime;
-
-         /* Get whether teachers comments are visible ('Y') or hidden ('N') (row[5]) */
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = (row[5][0] == 'Y') ? 1 :
-                                                                                                               0;
-
-	 /* Get title of the event (row[6]) */
-         Length = strlen (row[6]);
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = (int) Event.TimeUTC[Dat_STR_TIME];
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime   = (int) Event.TimeUTC[Dat_END_TIME];
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = Event.Open ? 1 :
+                                                                                                       0;
+         Length = strlen (Event.Title);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title =
             soap_malloc (soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,
-                   row[6],Length);
+                   Event.Title,Length);
 
-	 /* Get Txt (row[7]) */
-         Length = strlen (row[7]);
+	 /* Get Txt (row[9]) */
+         Length = strlen (row[9]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text =
             soap_malloc (soap,Length + 1);
          Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,
-                   row[7],Length);
+                   row[9],Length);
 
 	 /* Get list of groups for this attendance event */
 	 API_GetListGrpsInAttendanceEventFromDB (soap,
-						 AttCod,
+						 Event.AttCod,
 						 &(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
 	}
      }

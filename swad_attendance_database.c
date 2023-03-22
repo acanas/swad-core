@@ -148,14 +148,16 @@ unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance events",
-		   "SELECT AttCod,"				// row[0]
-			  "Hidden,"				// row[1]
-			  "UsrCod,"				// row[2]
-			  "UNIX_TIMESTAMP(StartTime) AS ST,"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime) AS ET,"	// row[4]
-			  "CommentTchVisible,"			// row[5]
-			  "Title,"				// row[6]
-			  "Txt"					// row[7]
+		   "SELECT AttCod,"					// row[0]
+			  "CrsCod,"					// row[1]
+			  "Hidden,"					// row[2]
+			  "UsrCod,"					// row[3]
+			  "UNIX_TIMESTAMP(StartTime) AS ST,"		// row[4]
+			  "UNIX_TIMESTAMP(EndTime) AS ET,"		// row[5]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			  "CommentTchVisible,"				// row[7]
+			  "Title,"					// row[8]
+			  "Txt"						// row[9]
 		    " FROM att_events"
 		   " WHERE CrsCod=%d"
 		   " ORDER BY ST DESC,"

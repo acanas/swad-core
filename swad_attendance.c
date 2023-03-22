@@ -105,6 +105,7 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
                                   Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event);
 static void Att_ResetAttendanceEvent (struct Att_Event *Event);
+
 static void Att_FreeListAttEvents (struct Att_Events *Events);
 
 static void Att_PutParAttCod (void *Events);
@@ -745,28 +746,8 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get code of attendance event (row[0]) and code of course (row[1]) */
-	 Event->AttCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	 /* Get whether the attendance event is hidden or not (row[2]) */
-	 Event->Hidden = (row[2][0] == 'Y');
-
-	 /* Get author of the attendance event (row[3]) */
-	 Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
-
-	 /* Get start date (row[4]) and end date (row[5]) in UTC time */
-	 Event->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-	 Event->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
-
-	 /* Get whether the attendance event is open or closed (row(6)) */
-	 Event->Open = (row[6][0] == '1');
-
-	 /* Get whether the attendance event is visible or not (row[7]) */
-	 Event->CommentTchVisible = (row[7][0] == 'Y');
-
-	 /* Get the title of the attendance event (row[8]) */
-	 Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);
+	 /* Get attendance event (except Txt) */
+	 Att_GetAttendanceEventFromRow (row,Event);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -793,8 +774,38 @@ static void Att_ResetAttendanceEvent (struct Att_Event *Event)
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Event->Open = false;
-   Event->Title[0] = '\0';
    Event->CommentTchVisible = false;
+   Event->Title[0] = '\0';
+  }
+
+/*****************************************************************************/
+/************************* Get attendance event data *************************/
+/*****************************************************************************/
+
+void Att_GetAttendanceEventFromRow (MYSQL_ROW row,struct Att_Event *Event)
+  {
+   /***** Get code of attendance event (row[0]) and code of course (row[1]) *****/
+   Event->AttCod = Str_ConvertStrCodToLongCod (row[0]);
+   Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+
+   /***** Get whether the attendance event is hidden or not (row[2]) *****/
+   Event->Hidden = (row[2][0] == 'Y');
+
+   /***** Get author of the attendance event (row[3]) *****/
+   Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+   /***** Get start date (row[4]) and end date (row[5]) in UTC time *****/
+   Event->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+   Event->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
+
+   /***** Get whether the attendance event is open or closed (row(6)) *****/
+   Event->Open = (row[6][0] == '1');
+
+   /***** Get whether the attendance event is visible or not (row[7]) *****/
+   Event->CommentTchVisible = (row[7][0] == 'Y');
+
+   /***** Get the title of the attendance event (row[8]) *****/
+   Str_Copy (Event->Title,row[8],sizeof (Event->Title) - 1);
   }
 
 /*****************************************************************************/

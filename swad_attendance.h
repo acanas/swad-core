@@ -55,8 +55,8 @@ struct Att_Event
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
-   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;
+   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /* Field computed, not associated to the event in database */
    unsigned NumStdsTotal;	// Number total of students who have assisted to the event
@@ -89,6 +89,7 @@ bool Att_CheckIfICanEditAttEvents (void);
 
 void Att_ReqCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
+void Att_GetAttendanceEventFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
 void Att_AskRemAttEvent (void);
 void Att_GetAndRemAttEvent (void);
