@@ -321,7 +321,6 @@ static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumSets;
    unsigned NumSet;
    struct ExaSet_Set Set;
@@ -341,22 +340,7 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
       ExaSet_ResetSet (&Set);
 
       /***** Get set data *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] SetCod
-      row[1] SetInd
-      row[2] NumQstsToPrint
-      row[3] Title
-      */
-      /* Get set code (row[0]),
-	 set index (row[1]),
-	 and number of questions to print (row[2]) */
-      Set.SetCod         = Str_ConvertStrCodToLongCod (row[0]);
-      Set.SetInd         = Str_ConvertStrToUnsigned (row[1]);
-      Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
-
-      /* Get the title of the set (row[3]) */
-      Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
+      ExaSet_GetSetDataFromRow (mysql_res,&Set);
 
       /***** Questions in this set *****/
       NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstsInPrint);

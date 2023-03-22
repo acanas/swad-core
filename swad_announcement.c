@@ -52,9 +52,11 @@ extern struct Globals Gbl;
 
 static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args);
 static void Ann_PutButtonToAddNewAnnouncement (void);
-static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
-                                    const char *Subject,const char *Content,
-                                    unsigned Roles,
+
+static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
+                                            struct Ann_Announcement *Announcement);
+
+static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit);
 static void Ann_PutParAnnCod (void *AnnCod);
@@ -71,15 +73,9 @@ void Ann_ShowAllAnnouncements (void)
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
+   struct Ann_Announcement Announcement;
    unsigned NumAnnouncements;
    unsigned NumAnn;
-   long AnnCod;
-   unsigned Roles;
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-   char Content[Cns_MAX_BYTES_TEXT + 1];
-   unsigned UnsignedNum;
-   Ann_Status_t Status;
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** Get announcements from database *****/
@@ -107,30 +103,13 @@ void Ann_ShowAllAnnouncements (void)
 	   NumAnn < NumAnnouncements;
 	   NumAnn++)
 	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get announcement code (row[0]) */
-	 if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	    Err_WrongAnnouncementExit ();
-
-	 /* Get status of the announcement (row[1]) */
-	 Status = Ann_OBSOLETE_ANNOUNCEMENT;
-	 if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Ann_NUM_STATUS)
-	      Status = (Ann_Status_t) UnsignedNum;
-
-	 /* Get roles (row[2]) */
-	 if (sscanf (row[2],"%u",&Roles) != 1)
-	    Err_ShowErrorAndExit ("Error when reading roles of announcement.");
-
-	 /* Get the subject (row[3]), the content (row[4]), and insert links */
-	 Str_Copy (Subject,row[3],sizeof (Subject) - 1);
-	 Str_Copy (Content,row[4],sizeof (Content) - 1);
-	 ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	 /* Get announcement data */
+	 Ann_GetAnnouncementDataFromRow (mysql_res,&Announcement);
 
 	 /* Show the announcement */
-	 Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
-				 Roles,true,ICanEdit);
+	 Ann_DrawAnAnnouncement (&Announcement,
+	                         true,		// Show all announcements
+	                         ICanEdit);
 	}
 
       /***** Button to add new announcement *****/
@@ -173,12 +152,9 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
 void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumAnnouncements;
    unsigned NumAnn;
-   long AnnCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-   char Content[Cns_MAX_BYTES_TEXT + 1];
+   struct Ann_Announcement Announcement;
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);
@@ -193,33 +169,60 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	      NumAnn < NumAnnouncements;
 	      NumAnn++)
 	   {
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get announcement code (row[0]) */
-	    if (sscanf (row[0],"%ld",&AnnCod) != 1)
-	       Err_WrongAnnouncementExit ();
-
-	    /* Get the subject (row[1]), the content (row[2]), and insert links */
-	    Str_Copy (Subject,row[1],sizeof (Subject) - 1);
-	    Str_Copy (Content,row[2],sizeof (Content) - 1);
-	    ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	    /* Get announcement data */
+	    Ann_GetAnnouncementDataFromRow (mysql_res,&Announcement);
 
 	    /* Show the announcement */
-	    Ann_DrawAnAnnouncement (AnnCod,Ann_ACTIVE_ANNOUNCEMENT,Subject,Content,
-				    0,false,false);
+	    Ann_DrawAnAnnouncement (&Announcement,
+	                            false,	// Don't show all announcements
+	                            false);	// I can not edit
 	   }
 
       HTM_DIV_End ();
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************** Get announcement data from row ***********************/
+/*****************************************************************************/
+
+static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
+                                            struct Ann_Announcement *Announcement)
+  {
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get announcement code (row[0]) *****/
+   if (sscanf (row[0],"%ld",&Announcement->AnnCod) != 1)
+      Err_WrongAnnouncementExit ();
+
+   /***** Get status of the announcement (row[1]) *****/
+   Announcement->Status = Ann_OBSOLETE_ANNOUNCEMENT;
+   if (sscanf (row[1],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Ann_NUM_STATUS)
+	 Announcement->Status = (Ann_Status_t) UnsignedNum;
+
+   /***** Get roles (row[2]) *****/
+   if (sscanf (row[2],"%u",&Announcement->Roles) != 1)
+      Err_ShowErrorAndExit ("Error when reading roles of announcement.");
+
+   /***** Get the subject (row[3]), the content (row[4]), and insert links *****/
+   Str_Copy (Announcement->Subject,row[3],sizeof (Announcement->Subject) - 1);
+   Str_Copy (Announcement->Content,row[4],sizeof (Announcement->Content) - 1);
+   ALn_InsertLinks (Announcement->Content,Cns_MAX_BYTES_TEXT,50);
   }
 
 /*****************************************************************************/
 /****************** Draw an announcement as a yellow note ********************/
 /*****************************************************************************/
 
-static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
-                                    const char *Subject,const char *Content,
-                                    unsigned Roles,
+static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit)
   {
@@ -240,30 +243,30 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    bool SomeRolesAreSelected;
 
    /***** Begin yellow note *****/
-   HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Status]);
+   HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->Status]);
 
       if (ICanEdit)
 	{
 	 /***** Icon to remove announcement *****/
 	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
-					Ann_PutParAnnCod,&AnnCod);
+					Ann_PutParAnnCod,&Announcement->AnnCod);
 
 	 /***** Icon to hide/unhide the announcement *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
-					    Ann_PutParAnnCod,&AnnCod,
-					    Status == Ann_OBSOLETE_ANNOUNCEMENT);
+					    Ann_PutParAnnCod,&Announcement->AnnCod,
+					    Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT);
 	}
 
       /***** Write the subject of the announcement *****/
       HTM_DIV_Begin ("class=\"NOTICE_SUBJECT NOTICE_SUBJECT_%s\"",
                      The_GetSuffix ());
-	 HTM_Txt (Subject);
+	 HTM_Txt (Announcement->Subject);
       HTM_DIV_End ();
 
       /***** Write the content of the announcement *****/
       HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
                      The_GetSuffix ());
-	 HTM_Txt (Content);
+	 HTM_Txt (Announcement->Content);
       HTM_DIV_End ();
 
       /***** Write announcement foot *****/
@@ -277,7 +280,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    for (Role  = Rol_UNK, SomeRolesAreSelected = false;
 		 Role <= Rol_TCH;
 		 Role++)
-	       if (Roles & (1 << Role))
+	       if (Announcement->Roles & (1 << Role))
 		 {
 		  if (SomeRolesAreSelected)
 		     HTM_Comma ();
@@ -288,7 +291,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	 else
 	    /***** Put form to mark announcement as seen *****/
 	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-					   Ann_PutParAnnCod,&AnnCod,
+					   Ann_PutParAnnCod,&Announcement->AnnCod,
 					   "times.svg",Ico_BLACK,
 					   Txt_Do_not_show_again,NULL);
 

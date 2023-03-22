@@ -178,7 +178,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
       /* Get set code (row[0]) */
       Set->SetCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get exam code (row[0]) */
+      /* Get exam code (row[1]) */
       Set->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get set index (row[2]) */
@@ -649,7 +649,6 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
    struct ExaSet_Set Set;
-   MYSQL_ROW row;
    char *Anchor;
 
    /***** Trivial check *****/
@@ -669,27 +668,9 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	{
 	 /***** Create set of questions *****/
 	 ExaSet_ResetSet (&Set);
-	 Set.ExaCod = Exams->Exam.ExaCod;
 
 	 /***** Get set data *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] SetCod
-	 row[1] SetInd
-	 row[2] NumQstsToPrint
-	 row[3] Title
-	 */
-	 /* Get set code (row[0]) */
-	 Set.SetCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get set index (row[1]) */
-	 Set.SetInd = Str_ConvertStrToUnsigned (row[1]);
-
-	 /* Get number of questions to exam (row[2]) */
-	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
-
-	 /* Get the title of the set (row[3]) */
-	 Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
+	 ExaSet_GetSetDataFromRow (mysql_res,&Set);
 
 	 /* Initialize context */
 	 Exams->SetCod = Set.SetCod;
@@ -845,11 +826,44 @@ static void ExaSet_PutTableHeadingForSets (void)
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set)
   {
-   Set->ExaCod        = -1L;
-   Set->SetCod        = -1L;
-   Set->SetInd        = 0;
-   Set->Title[0]      = '\0';
+   Set->ExaCod         = -1L;
+   Set->SetCod         = -1L;
+   Set->SetInd         = 0;
+   Set->Title[0]       = '\0';
    Set->NumQstsToPrint = 0;
+  }
+
+/*****************************************************************************/
+/***************************** Get exam set data ****************************/
+/*****************************************************************************/
+
+void ExaSet_GetSetDataFromRow (MYSQL_RES *mysql_res,struct ExaSet_Set *Set)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+   /*
+   row[0] SetCod
+   row[1] ExaCod
+   row[2] SetInd
+   row[3] NumQstsToPrint
+   row[4] Title
+   */
+   /***** Get set code (row[0]) *****/
+   Set->SetCod = Str_ConvertStrCodToLongCod (row[0]);
+
+   /***** Get exam code (row[1]) *****/
+   Set->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
+
+   /***** Get set index (row[2]) *****/
+   Set->SetInd = Str_ConvertStrToUnsigned (row[2]);
+
+   /***** Get set index (row[3]) *****/
+   Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[3]);
+
+   /***** Get the title of the set (row[4]) *****/
+   Str_Copy (Set->Title,row[4],sizeof (Set->Title) - 1);
   }
 
 /*****************************************************************************/

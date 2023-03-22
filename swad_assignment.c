@@ -84,9 +84,9 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor);
 static void Asg_PutPars (void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
-static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
-                                     MYSQL_RES **mysql_res,
-				     unsigned NumAsgs);
+static void Asg_GetDataOfAssignmentFromRow (MYSQL_RES **mysql_res,
+                                            struct Asg_Assignment *Asg,
+                                            unsigned NumAsgs);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
@@ -835,7 +835,7 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
       NumAsgs = Asg_DB_GetDataOfAssignmentByCod (&mysql_res,Asg->AsgCod);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
+      Asg_GetDataOfAssignmentFromRow (&mysql_res,Asg,NumAsgs);
      }
    else
      {
@@ -860,7 +860,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
       NumAsgs = Asg_DB_GetDataOfAssignmentByFolder (&mysql_res,Asg->Folder);
 
       /***** Get data of assignment *****/
-      Asg_GetDataOfAssignment (Asg,&mysql_res,NumAsgs);
+      Asg_GetDataOfAssignmentFromRow (&mysql_res,Asg,NumAsgs);
      }
    else
      {
@@ -874,9 +874,9 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
 /************************* Get assignment data *******************************/
 /*****************************************************************************/
 
-static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
-                                     MYSQL_RES **mysql_res,
-				     unsigned NumAsgs)
+static void Asg_GetDataOfAssignmentFromRow (MYSQL_RES **mysql_res,
+                                            struct Asg_Assignment *Asg,
+                                            unsigned NumAsgs)
   {
    MYSQL_ROW row;
 

@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/*********************************** Headers *********************************/
+/*****************************************************************************/
+
+#include "swad_constant.h"
+
+/*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
@@ -33,6 +39,15 @@ typedef enum
    Ann_ACTIVE_ANNOUNCEMENT   = 0,	// Visible
    Ann_OBSOLETE_ANNOUNCEMENT = 1,	// Hidden
   } Ann_Status_t;	// Don't change these numbers because they are used in database
+
+struct Ann_Announcement
+  {
+   long AnnCod;
+   Ann_Status_t Status;
+   unsigned Roles;
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

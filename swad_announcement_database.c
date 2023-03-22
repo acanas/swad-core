@@ -108,8 +108,10 @@ unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get announcements",
 		   "SELECT AnnCod,"	// row[0]
-			  "Subject,"	// row[1]
-			  "Content"	// row[2]
+			  "Status,"	// row[1]
+			  "Roles,"	// row[2]
+			  "Subject,"	// row[3]
+			  "Content"	// row[4]
 		    " FROM ann_announcements"
 		   " WHERE Status=%u"
 		     " AND (Roles&%u)<>0 "	// All my roles in different courses

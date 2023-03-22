@@ -649,9 +649,10 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sets of questions",
 		   "SELECT SetCod,"		// row[0]
-			  "SetInd,"		// row[1]
-			  "NumQstsToPrint,"	// row[2]
-			  "Title"		// row[3]
+			  "ExaCod,"		// row[1]
+			  "SetInd,"		// row[2]
+			  "NumQstsToPrint,"	// row[3]
+			  "Title"		// row[4]
 		    " FROM exa_sets"
 		   " WHERE ExaCod=%ld"
 		   " ORDER BY SetInd",
