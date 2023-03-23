@@ -153,7 +153,6 @@ static void ExaSet_PutParsOneQst (void *Exams)
 void ExaSet_GetSetDataByCod (struct ExaSet_Set *Set)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Trivial check *****/
    if (Set->SetCod <= 0)
@@ -165,31 +164,7 @@ void ExaSet_GetSetDataByCod (struct ExaSet_Set *Set)
 
    /***** Get data of set of questions from database *****/
    if (Exa_DB_GetSetDataByCod (&mysql_res,Set->SetCod)) // Set found...
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] SetCod
-      row[1] ExaCod
-      row[2] SetInd
-      row[3] NumQstsToPrint
-      row[4] Title
-      */
-      /* Get set code (row[0]) */
-      Set->SetCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get exam code (row[1]) */
-      Set->ExaCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get set index (row[2]) */
-      Set->SetInd = Str_ConvertStrToUnsigned (row[2]);
-
-      /* Get set index (row[3]) */
-      Set->NumQstsToPrint = Str_ConvertStrToUnsigned (row[3]);
-
-      /* Get the title of the set (row[4]) */
-      Str_Copy (Set->Title,row[4],sizeof (Set->Title) - 1);
-     }
+      ExaSet_GetSetDataFromRow (mysql_res,Set);
    else
       /* Initialize to empty set */
       ExaSet_ResetSet (Set);
