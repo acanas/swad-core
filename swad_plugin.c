@@ -81,6 +81,10 @@ static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited.
 
 static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
+
+static void Plg_GetPluginDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Plg_Plugin *Plg);
+
 static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins);
 static void Plg_PutParPlgCod (void *PlgCod);
@@ -232,9 +236,7 @@ static void Plg_EditPluginsInternal (void)
 static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumPlg;
-   struct Plg_Plugin *Plg;
 
    /***** Get plugins from database *****/
    if ((Plugins->Num = Plg_DB_GetListPlugins (&mysql_res))) // Plugins found...
@@ -248,25 +250,7 @@ static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
       for (NumPlg = 0;
 	   NumPlg < Plugins->Num;
 	   NumPlg++)
-        {
-         Plg = &Plugins->Lst[NumPlg];
-
-         /* Get next plugin */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get plugin code (row[0]) */
-         if ((Plg->PlgCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongPluginExit ();
-
-         /* Get name (row[1]), description (row[2), logo (row[3]),
-          * application key (row[4]), URL (row[5]) and IP (row[6]) of the plugin */
-         Str_Copy (Plg->Name       ,row[1],sizeof (Plg->Name       ) - 1);
-         Str_Copy (Plg->Description,row[2],sizeof (Plg->Description) - 1);
-         Str_Copy (Plg->Logo       ,row[3],sizeof (Plg->Logo       ) - 1);
-         Str_Copy (Plg->AppKey     ,row[4],sizeof (Plg->AppKey     ) - 1);
-         Str_Copy (Plg->URL        ,row[5],sizeof (Plg->URL        ) - 1);
-         Str_Copy (Plg->IP         ,row[6],sizeof (Plg->IP         ) - 1);
-        }
+         Plg_GetPluginDataFromRow (mysql_res,&Plugins->Lst[NumPlg]);
      }
    else
       Plugins->Lst = NULL;
@@ -276,13 +260,12 @@ static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
   }
 
 /*****************************************************************************/
-/*************************** Get data of a plugin ****************************/
+/******************** Get data of a plugin using its code ********************/
 /*****************************************************************************/
 
 bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool PluginFound;
 
    /***** Clear data *****/
@@ -300,19 +283,8 @@ bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
    /***** Get data of a plugin from database *****/
    if (Plg_DB_GetPluginDataByCod (&mysql_res,Plg->PlgCod)) // Plugin found...
      {
+      Plg_GetPluginDataFromRow (mysql_res,Plg);
       PluginFound = true;
-
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get name (row[0]), description (row[1]), logo (row[2]),
-         application key (row[3]), URL (row[4]) and IP (row[5]) of the plugin */
-      Str_Copy (Plg->Name       ,row[0],sizeof (Plg->Name       ) - 1);
-      Str_Copy (Plg->Description,row[1],sizeof (Plg->Description) - 1);
-      Str_Copy (Plg->Logo       ,row[2],sizeof (Plg->Logo       ) - 1);
-      Str_Copy (Plg->AppKey     ,row[3],sizeof (Plg->AppKey     ) - 1);
-      Str_Copy (Plg->URL        ,row[4],sizeof (Plg->URL        ) - 1);
-      Str_Copy (Plg->IP         ,row[5],sizeof (Plg->IP         ) - 1);
      }
    else
       PluginFound = false;
@@ -321,6 +293,33 @@ bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
    DB_FreeMySQLResult (&mysql_res);
 
    return PluginFound;
+  }
+
+/*****************************************************************************/
+/****************** Get data of a plugin from database row *******************/
+/*****************************************************************************/
+
+static void Plg_GetPluginDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Plg_Plugin *Plg)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get plugin code (row[0]) *****/
+   if ((Plg->PlgCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongPluginExit ();
+
+   /***** Get name (row[1]), description (row[2), logo (row[3]),
+          application key (row[4]), URL (row[5])
+          and IP (row[6]) of the plugin *****/
+   Str_Copy (Plg->Name       ,row[1],sizeof (Plg->Name       ) - 1);
+   Str_Copy (Plg->Description,row[2],sizeof (Plg->Description) - 1);
+   Str_Copy (Plg->Logo       ,row[3],sizeof (Plg->Logo       ) - 1);
+   Str_Copy (Plg->AppKey     ,row[4],sizeof (Plg->AppKey     ) - 1);
+   Str_Copy (Plg->URL        ,row[5],sizeof (Plg->URL        ) - 1);
+   Str_Copy (Plg->IP         ,row[6],sizeof (Plg->IP         ) - 1);
   }
 
 /*****************************************************************************/
