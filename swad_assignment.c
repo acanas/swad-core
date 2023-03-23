@@ -886,7 +886,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
    /***** Get data of assignment from database *****/
    if (NumAsgs) // Assignment found...
      {
-      /* Get row */
+      /* Get next row from result */
       row = mysql_fetch_row (*mysql_res);
       /*
       row[0]	AsgCod

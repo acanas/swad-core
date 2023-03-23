@@ -108,7 +108,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get summary and content from post from database *****/
    if (Tml_DB_GetPubDataByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
       /* Get data of publication from row */
-      TmlPub_GetPubDataFromNextRow (mysql_res,&Pub);
+      TmlPub_GetPubDataFromRow (mysql_res,&Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

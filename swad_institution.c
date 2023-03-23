@@ -732,7 +732,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0]: InsCod

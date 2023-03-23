@@ -733,7 +733,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
    MYSQL_ROW row;
    Dat_StartEndTime_t StartEndTime;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0]	SesCod

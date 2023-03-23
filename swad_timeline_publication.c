@@ -361,7 +361,7 @@ static struct TmlPub_Publication *TmlPub_SelectTheMostRecentPub (const struct Tm
          Err_NotEnoughMemoryExit ();
 
       /* Get data of publication */
-      TmlPub_GetPubDataFromNextRow (mysql_res,Pub);
+      TmlPub_GetPubDataFromRow (mysql_res,Pub);
       Pub->Next = NULL;
      }
    else
@@ -510,8 +510,8 @@ void TmlPub_PutLinkToViewOldPubs (void)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-void TmlPub_GetPubDataFromNextRow (MYSQL_RES *mysql_res,
-                                     struct TmlPub_Publication *Pub)
+void TmlPub_GetPubDataFromRow (MYSQL_RES *mysql_res,
+                               struct TmlPub_Publication *Pub)
   {
    MYSQL_ROW row;
 

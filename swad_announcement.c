@@ -195,7 +195,7 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
    MYSQL_ROW row;
    unsigned UnsignedNum;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get announcement code (row[0]) *****/

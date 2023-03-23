@@ -419,7 +419,7 @@ static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get place code (row[0]) *****/

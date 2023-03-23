@@ -338,7 +338,7 @@ static void TstCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res)
    long LongNum;
    TstCfg_Pluggable_t Pluggable;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get whether test are visible via plugins or not *****/

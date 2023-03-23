@@ -573,13 +573,9 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the rubric (row[0]) */
+      /* Get code of the rubric (row[0]), course (row[1] and author (row[2]) */
       Rubric->RubCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get code of the course (row[1]) */
       Rubric->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get author of the rubric (row[2]) */
       Rubric->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the title of the rubric (row[3]) */

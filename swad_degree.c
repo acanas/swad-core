@@ -1205,7 +1205,7 @@ static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /**** Get row ****/
+   /**** Get next row from result ****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get degree code (row[0]) *****/

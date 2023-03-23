@@ -341,7 +341,7 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get banner code (row[0]) *****/

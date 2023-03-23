@@ -816,7 +816,7 @@ void ExaSet_GetSetDataFromRow (MYSQL_RES *mysql_res,struct ExaSet_Set *Set)
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0] SetCod

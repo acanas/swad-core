@@ -360,7 +360,7 @@ static void Lnk_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0]	LnkCod

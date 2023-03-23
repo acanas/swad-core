@@ -115,8 +115,8 @@ Tml_TopMessage_t TmlPub_GetTopMessage (TmlPub_Type_t PubType);
 void TmlPub_PutLinkToViewNewPubs (void);
 void TmlPub_PutLinkToViewOldPubs (void);
 
-void TmlPub_GetPubDataFromNextRow (MYSQL_RES *mysql_res,
-                                     struct TmlPub_Publication *Pub);
+void TmlPub_GetPubDataFromRow (MYSQL_RES *mysql_res,
+                               struct TmlPub_Publication *Pub);
 
 void TmlPub_PublishPubInTimeline (struct TmlPub_Publication *Pub);
 

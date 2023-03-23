@@ -743,7 +743,7 @@ bool Att_GetEventDataByCod (struct Att_Event *Event)
       /***** Get data of attendance event from database *****/
       if ((Found = (NumAttEvents != 0))) // Attendance event found...
 	{
-	 /* Get row */
+         /* Get next row from result */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get attendance event (except Txt) */

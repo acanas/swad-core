@@ -164,6 +164,10 @@ static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
 
 static void Tml_PutHiddenList (const char *Id);
 
+static void Tml_GetNumNotesAndUsrsFromRow (MYSQL_RES *mysql_res,
+                                           unsigned *NumNotes,
+                                           unsigned *NumUsrs);
+
 /*****************************************************************************/
 /************************ Initialize global timeline *************************/
 /*****************************************************************************/
@@ -588,24 +592,9 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	{
 	 /***** Get number of timeline notes and users for this type *****/
 	 if (Tml_DB_GetNumNotesAndUsrsByType (&mysql_res,NoteType))
-	   {
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get number of timeline notes */
-	    if (row[0])
-	       if (sscanf (row[0],"%u",&NumNotes) != 1)
-		  NumNotes = 0;
-
-	    /* Get number of users */
-	    if (row[1])
-	       if (sscanf (row[1],"%u",&NumUsrs) != 1)
-		  NumUsrs = 0;
-	   }
+	    Tml_GetNumNotesAndUsrsFromRow (mysql_res,&NumNotes,&NumUsrs);
 	 else
-	   {
-	    NumNotes = 0;
-	    NumUsrs = 0;
-	   }
+	    NumNotes = NumUsrs = 0;
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -642,25 +631,9 @@ void Tml_GetAndShowTimelineActivityStats (void)
 
       /***** Get and write totals *****/
       if (Tml_DB_GetNumNotesAndUsrsTotal (&mysql_res))
-	{
-	 /* Get number of social notes and number of users */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get number of social notes */
-	 if (row[0])
-	    if (sscanf (row[0],"%u",&NumNotes) != 1)
-	       NumNotes = 0;
-
-	 /* Get number of users */
-	 if (row[1])
-	    if (sscanf (row[1],"%u",&NumUsrs) != 1)
-	       NumUsrs = 0;
-	}
+	 Tml_GetNumNotesAndUsrsFromRow (mysql_res,&NumNotes,&NumUsrs);
       else
-	{
-	 NumNotes = 0;
-	 NumUsrs = 0;
-	}
+	 NumNotes = NumUsrs = 0;
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
@@ -700,4 +673,28 @@ void Tml_GetAndShowTimelineActivityStats (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/************** Get number of notes and users from database row **************/
+/*****************************************************************************/
+
+static void Tml_GetNumNotesAndUsrsFromRow (MYSQL_RES *mysql_res,
+                                           unsigned *NumNotes,
+                                           unsigned *NumUsrs)
+  {
+   MYSQL_ROW row;
+
+   /***** Get next row from result *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get number of notes *****/
+   if (row[0])
+      if (sscanf (row[0],"%u",NumNotes) != 1)
+	 *NumNotes = 0;
+
+   /***** Get number of users *****/
+   if (row[1])
+      if (sscanf (row[1],"%u",NumUsrs) != 1)
+	 *NumUsrs = 0;
   }

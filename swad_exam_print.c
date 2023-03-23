@@ -275,6 +275,7 @@ static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
 
    if (NumPrints)
      {
+      /* Get next row from result */
       row = mysql_fetch_row (*mysql_res);
 
       /* Get print code (row[0]) */

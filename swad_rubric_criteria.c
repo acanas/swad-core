@@ -701,7 +701,7 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    MYSQL_ROW row;
    RubCri_ValueRange_t ValueRange;
 
-   /* Get row */
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
    /*
    row[0] CriCod
@@ -714,29 +714,27 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    row[7] Weight
    row[8] Title
    */
-   /* Get criterion code (row[0]) */
+   /***** Get criterion code (row[0]) and rubric code (row[1]) *****/
    Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0]);
-
-   /* Get rubric code (row[0]) */
    Criterion->RubCod = Str_ConvertStrCodToLongCod (row[1]);
 
-   /* Get criterion index (row[2]) */
+   /***** Get criterion index (row[2]) *****/
    Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
 
-   /* Get source (row[3]) and code (row[4]) */
+   /***** Get source (row[3]) and code (row[4]) *****/
    Criterion->Source = RubCri_GetSourceFromDBStr (row[3]);
    Criterion->Cod    = Str_ConvertStrCodToLongCod (row[4]);
 
-   /* Get criterion minimum and maximum values (row[5], row[6]) */
+   /***** Get criterion minimum and maximum values (row[5], row[6]) *****/
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
       Criterion->Values[ValueRange] = Str_GetDoubleFromStr (row[5 + ValueRange]);
 
-   /* Get criterion weight (row[7]) */
+   /***** Get criterion weight (row[7]) *****/
    Criterion->Weight = Str_GetDoubleFromStr (row[5 + RubCri_NUM_VALUES]);
 
-   /* Get the title of the criterion (row[8]) */
+   /***** Get the title of the criterion (row[8]) *****/
    Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],sizeof (Criterion->Title) - 1);
   }
 

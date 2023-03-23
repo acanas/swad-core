@@ -536,7 +536,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 	   NumCtr++)
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
-                                     false);	// Don't get number of users who claim to belong to this center
+                                   false);	// Don't get number of users who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -626,7 +626,7 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /***** Get row *****/
+   /***** Get next row from result *****/
    row = mysql_fetch_row (mysql_res);
 
    /***** Get center code (row[0]) *****/
