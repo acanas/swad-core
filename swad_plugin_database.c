@@ -160,7 +160,7 @@ unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res)
 /*************************** Get data of a plugin ****************************/
 /*****************************************************************************/
 
-unsigned Plg_DB_GetDataOfPluginByCod (MYSQL_RES **mysql_res,long PlgCod)
+unsigned Plg_DB_GetPluginDataByCod (MYSQL_RES **mysql_res,long PlgCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a plugin",

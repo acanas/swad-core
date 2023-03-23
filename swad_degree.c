@@ -156,7 +156,7 @@ void Deg_SeeDegWithPendingCrss (void)
 								 The_GetColorRows ();
 
 	    /* Get data of degree */
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Deg_GetDegreeDataByCod (&Deg);
 
 	    /* Begin table row */
 	    HTM_TR_Begin (NULL);
@@ -806,7 +806,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
-   if (!DegTyp_GetDataOfDegreeTypeByCod (&DegTyp))
+   if (!DegTyp_GetDegreeTypeDataByCod (&DegTyp))
       Err_WrongDegTypExit ();
 
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
@@ -1004,7 +1004,6 @@ void Deg_GetListDegsInCurrentCtr (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDeg;
-   struct Deg_Degree *Deg;
 
    /***** Get degrees of the current center from database *****/
    Gbl.Hierarchy.Degs.Num = Deg_DB_GetDegsOfCurrentCtrFull (&mysql_res);
@@ -1138,7 +1137,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDeg->DegCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
    if (Crs_GetNumCrssInDeg (Deg_EditingDeg->DegCod))	// Degree has courses ==> don't remove
@@ -1163,7 +1162,7 @@ void Deg_RemoveDegree (void)
 /*****************************************************************************/
 // Returns true if degree found
 
-bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
+bool Deg_GetDegreeDataByCod (struct Deg_Degree *Deg)
   {
    MYSQL_RES *mysql_res;
    bool DegFound = false;
@@ -1181,7 +1180,7 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get data of a degree from database *****/
-      if (Deg_DB_GetDataOfDegreeByCod (&mysql_res,Deg->DegCod)) // Degree found...
+      if (Deg_DB_GetDegreeDataByCod (&mysql_res,Deg->DegCod)) // Degree found...
 	{
 	 /***** Get data of degree *****/
 	 Deg_GetDegreeDataFromRow (mysql_res,Deg);
@@ -1348,7 +1347,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
    Par_GetParText (ParName,NewDegName,MaxBytes);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg);
+   Deg_GetDegreeDataByCod (Deg);
 
    /***** Check if new name is empty *****/
    if (NewDegName[0])
@@ -1404,7 +1403,7 @@ void Deg_ChangeDegreeType (void)
    NewDegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Update the table of degrees changing old type by new type *****/
    Deg_DB_UpdateDegTyp (Deg_EditingDeg->DegCod,NewDegTypCod);
@@ -1437,7 +1436,7 @@ void Deg_ChangeDegWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1476,7 +1475,7 @@ void Deg_ChangeDegStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+   Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Update status *****/
    Deg_DB_UpdateDegStatus (Deg_EditingDeg->DegCod,Status);
@@ -1758,7 +1757,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	    Deg.DegCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of degree */
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Deg_GetDegreeDataByCod (&Deg);
 
 	    /* Write data of this degree */
 	    Deg_ListOneDegreeForSeeing (&Deg,NumDeg);

@@ -174,7 +174,7 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 /************************* Get holiday data by code **************************/
 /*****************************************************************************/
 
-unsigned Hld_DB_GetDataOfHolidayByCod (MYSQL_RES **mysql_res,long HldCod)
+unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a holiday",

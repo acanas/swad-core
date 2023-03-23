@@ -150,7 +150,7 @@ static void ExaSet_PutParsOneQst (void *Exams)
 /*********************** Get set data using its code *************************/
 /*****************************************************************************/
 
-void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
+void ExaSet_GetSetDataByCod (struct ExaSet_Set *Set)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -164,7 +164,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
      }
 
    /***** Get data of set of questions from database *****/
-   if (Exa_DB_GetDataOfSetByCod (&mysql_res,Set->SetCod)) // Set found...
+   if (Exa_DB_GetSetDataByCod (&mysql_res,Set->SetCod)) // Set found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -284,7 +284,7 @@ void ExaSet_ReceiveFormSet (void)
    Set.ExaCod = Exams.Exam.ExaCod;
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Check if exam is editable *****/
    if (!Exa_CheckIfEditable (&Exams.Exam))
@@ -482,7 +482,7 @@ void ExaSet_ReqCreatOrEditSet (void)
    ItsANewSet = (Set.SetCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
    Exa_DB_GetExamTxt (Exams.Exam.ExaCod,Txt);
 
    /***** Get set data *****/
@@ -492,7 +492,7 @@ void ExaSet_ReqCreatOrEditSet (void)
    else
      {
       /* Get set data from database */
-      ExaSet_GetDataOfSetByCod (&Set);
+      ExaSet_GetSetDataByCod (&Set);
       Exams.SetCod = Set.SetCod;
      }
 
@@ -544,7 +544,7 @@ void ExaSet_ListQstsToAddToSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
+   ExaSet_GetSetDataByCod (&Set);
    Exams.SetCod = Set.SetCod;
 
    /***** List several test questions for selection *****/
@@ -1187,7 +1187,7 @@ void ExaSet_AddQstsToSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (&Set);
+   ExaSet_GetSetDataByCod (&Set);
    Exams.SetCod = Set.SetCod;
 
    /***** Get selected questions *****/
@@ -1279,8 +1279,8 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
       QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
 
       /***** Get the answers from the database *****/
-      Question.Answer.NumOptions = Qst_DB_GetDataOfAnswers (&mysql_res,Question.QstCod,
-			                                    false);	// Don't shuffle
+      Question.Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question.QstCod,
+			                                  false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer
@@ -1657,12 +1657,12 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
    Set->SetCod = ParCod_GetAndCheckPar (ParCod_Set);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams->Exam);
+   Exa_GetExamDataByCod (&Exams->Exam);
    if (Exams->Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/
-   ExaSet_GetDataOfSetByCod (Set);
+   ExaSet_GetSetDataByCod (Set);
    if (Set->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SetCod = Set->SetCod;

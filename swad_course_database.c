@@ -126,7 +126,7 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetDataOfCourseByCod (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a course",

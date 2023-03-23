@@ -104,7 +104,7 @@ void Tml_DB_UpdateWho (Usr_Who_t Who)
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: note code should be > 0 *****/
    if (NotCod <= 0)
@@ -712,7 +712,7 @@ unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)
@@ -944,7 +944,7 @@ unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
+unsigned Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
   {
    /***** Trivial check: publication code should be > 0 *****/
    if (PubCod <= 0)

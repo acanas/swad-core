@@ -298,11 +298,11 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
                                      const char *FileName);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
 
-static void API_GetDataOfLocation (struct soap *soap,
-                                   struct swad__location *location,
-                                   time_t *CheckInTime,
-                                   MYSQL_RES **mysql_res,
-				   unsigned NumLocs);
+static void API_GetLocationData (struct soap *soap,
+                                 struct swad__location *location,
+                                 time_t *CheckInTime,
+                                 MYSQL_RES **mysql_res,
+				 unsigned NumLocs);
 static void API_ResetLocation (struct soap *soap,
                                struct swad__location *location);
 
@@ -914,7 +914,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get course (row[2]) *****/
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[2]);
-      Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs);
+      Crs_GetCourseDataByCod (&Gbl.Hierarchy.Crs);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Crs.FullName,
                 Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
@@ -925,7 +925,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-      Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg);
+      Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Deg);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Deg.FullName,
                 Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
@@ -2286,7 +2286,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance events *****/
-   NumAttEvents = Att_DB_GetDataOfAllAttEvents (&mysql_res,courseCode);
+   NumAttEvents = Att_DB_GetAllEventsData (&mysql_res,courseCode);
 
    getAttendanceEventsOut->eventsArray.__size =
    getAttendanceEventsOut->numEvents          = (int) NumAttEvents;
@@ -2307,7 +2307,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get attendance event (except Txt) */
-	 Att_GetAttendanceEventDataFromRow (row,&Event);
+	 Att_GetEventDataFromRow (row,&Event);
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = Event.Hidden ? 1 :
@@ -2472,7 +2472,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    /* Course code */
    if (Event.AttCod > 0)	// The event already exists
      {
-      Att_GetDataOfAttEventByCod (&Event);
+      Att_GetEventDataByCod (&Event);
       if (Event.CrsCod != (long) courseCode)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
@@ -2512,9 +2512,9 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /***** Create or update attendance event *****/
    if (ItsANewAttEvent)
-      Att_CreateAttEvent (&Event,text);	// Add new attendance event to database
+      Att_CreateEvent (&Event,text);	// Add new attendance event to database
    else
-      Att_UpdateAttEvent (&Event,text);	// Modify existing attendance event
+      Att_UpdateEvent (&Event,text);	// Modify existing attendance event
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -2555,7 +2555,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    /* Course code */
    if (Event.AttCod > 0)	// The event already exists
      {
-      Att_GetDataOfAttEventByCod (&Event);
+      Att_GetEventDataByCod (&Event);
       Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
      }
    else
@@ -2584,7 +2584,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Remove the attendance event from database *****/
-   Att_RemoveAttEventFromDB (Event.AttCod);
+   Att_RemoveEventFromDB (Event.AttCod);
 
    removeAttendanceEventOut->attendanceEventCode = Event.AttCod;
 
@@ -2663,7 +2663,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
-   Att_GetDataOfAttEventByCod (&Event);
+   Att_GetEventDataByCod (&Event);
    Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
 
    /***** Get some of my data *****/
@@ -2685,7 +2685,7 @@ int swad__getAttendanceUsers (struct soap *soap,
                                                                "AttCod",
                                                                Event.AttCod);
 
-   NumUsrs = Att_DB_GetListUsrsInAttEvent (&mysql_res,Event.AttCod,AttEventIsAsociatedToGrps);
+   NumUsrs = Att_DB_GetListUsrsInEvent (&mysql_res,Event.AttCod,AttEventIsAsociatedToGrps);
 
    getAttendanceUsersOut->numUsers          =
    getAttendanceUsersOut->usersArray.__size = (int) NumUsrs;
@@ -2810,7 +2810,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
-   if (!Att_GetDataOfAttEventByCod (&Event))
+   if (!Att_GetEventDataByCod (&Event))
       return SOAP_OK;	// return with success = 0
    Gbl.Hierarchy.Crs.CrsCod = Event.CrsCod;
 
@@ -2833,7 +2833,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 
    /***** Purge absent users without comments from table *****/
    if (setOthersAsAbsent)
-      Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
+      Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (Event.AttCod);
 
    sendAttendanceUsersOut->success = 1;
 
@@ -2931,7 +2931,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get course (row[7]) */
          Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetDataOfCourseByCod (&Hie.Crs);
+         Crs_GetCourseDataByCod (&Hie.Crs);
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -2979,15 +2979,15 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get institution (row[4]) */
          Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetDataOfInstitByCod (&Hie.Ins);
+         Ins_GetInstitDataByCod (&Hie.Ins);
 
          /* Get center (row[5]) */
          Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+         Ctr_GetCenterDataByCod (&Hie.Ctr);
 
          /* Get degree (row[6]) */
          Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDataOfDegreeByCod (&Hie.Deg);
+         Deg_GetDegreeDataByCod (&Hie.Deg);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);
@@ -3952,7 +3952,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (QstCod > 0)
      {
       /***** Get answer from database *****/
-      NumAnss = Qst_DB_GetDataOfAnswers (&mysql_res,QstCod,
+      NumAnss = Qst_DB_GetAnswersData (&mysql_res,QstCod,
 	                                 false);	// Don't shuffle
 
       getTrivialQuestionOut->answersArray.__size = (int) NumAnss;
@@ -4209,7 +4209,7 @@ int swad__getMatches (struct soap *soap,
       return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetGameDataByCod (&Game);
 
    /***** Get some of my data *****/
    if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.CrsCod))
@@ -4370,14 +4370,14 @@ int swad__getMatchStatus (struct soap *soap,
       return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetGameDataByCod (&Game);
 
    /***** Get match data from database *****/
    if (Match.MchCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad match code",
 	                        "Match code must be a integer greater than 0");
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /* Check that match belongs to game */
    if (Match.GamCod != Game.GamCod)
@@ -4492,14 +4492,14 @@ int swad__answerMatchQuestion (struct soap *soap,
       return soap_sender_fault (soap,
 	                        "Bad game code",
 	                        "Game code must be a integer greater than 0");
-   Gam_GetDataOfGameByCod (&Game);
+   Gam_GetGameDataByCod (&Game);
 
    /***** Get match data from database *****/
    if (Match.MchCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad match code",
 	                        "Match code must be a integer greater than 0");
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Check that match belongs to game *****/
    if (Match.GamCod != Game.GamCod)
@@ -5184,7 +5184,7 @@ int swad__getLocation (struct soap *soap,
    /***** Get location *****/
    NumLocs = Roo_DB_GetLocationByMAC (&mysql_res,MACnum);
 
-   API_GetDataOfLocation (soap,
+   API_GetLocationData (soap,
                           &(getLocationOut->location),
                           NULL,	// Don't get check in time
                           &mysql_res,NumLocs);
@@ -5271,7 +5271,7 @@ int swad__getLastLocation (struct soap *soap,
      {
       /***** Get list of locations *****/
       NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
-      API_GetDataOfLocation (soap,
+      API_GetLocationData (soap,
 			     &(getLastLocationOut->location),
 			     &(getLastLocationOut->checkinTime),	// Get check in time
 			     &mysql_res,NumLocs);
@@ -5290,11 +5290,11 @@ int swad__getLastLocation (struct soap *soap,
 /************************* Get assignment data *******************************/
 /*****************************************************************************/
 
-static void API_GetDataOfLocation (struct soap *soap,
-                                   struct swad__location *location,
-                                   time_t *CheckInTime,
-                                   MYSQL_RES **mysql_res,
-				   unsigned NumLocs)
+static void API_GetLocationData (struct soap *soap,
+                                 struct swad__location *location,
+                                 time_t *CheckInTime,
+                                 MYSQL_RES **mysql_res,
+				 unsigned NumLocs)
   {
    MYSQL_ROW row;
    size_t Length;

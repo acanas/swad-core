@@ -920,7 +920,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
    /***** Get data of institution of this degree *****/
    Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
-   Ins_GetDataOfInstitByCod (&Ins);
+   Ins_GetInstitDataByCod (&Ins);
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -1616,15 +1616,15 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
 
    /***** Get data of course *****/
    Hie.Crs.CrsCod = CallsForExams->CallForExam.CrsCod;
-   Crs_GetDataOfCourseByCod (&Hie.Crs);
+   Crs_GetCourseDataByCod (&Hie.Crs);
 
    /***** Get data of degree *****/
    Hie.Deg.DegCod = Hie.Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Hie.Deg);
+   Deg_GetDegreeDataByCod (&Hie.Deg);
 
    /***** Get data of institution *****/
    Hie.Ins.InsCod = Deg_DB_GetInsCodOfDegreeByCod (Hie.Deg.DegCod);
-   Ins_GetDataOfInstitByCod (&Hie.Ins);
+   Ins_GetInstitDataByCod (&Hie.Ins);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);

@@ -2238,7 +2238,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /***** Write rest of main user's data *****/
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
@@ -2288,7 +2288,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 
       /***** Write rest of guest's main data *****/
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2299,7 +2299,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCenterByCod (&Ctr);
+	 Ctr_GetCenterDataByCod (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -2308,7 +2308,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       if (UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
-	 Dpt_GetDataOfDepartmentByCod (&Dpt);
+	 Dpt_GetDepartmentDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
@@ -2384,7 +2384,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 
       /***** Write rest of main student's data *****/
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2493,7 +2493,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 
       /***** Write rest of main teacher's data *****/
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2504,7 +2504,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       if (ShowData && UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCenterByCod (&Ctr);
+	 Ctr_GetCenterDataByCod (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
@@ -2513,7 +2513,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       if (ShowData && UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
-	 Dpt_GetDataOfDepartmentByCod (&Dpt);
+	 Dpt_GetDepartmentDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
@@ -2577,7 +2577,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
 
       /***** Write rest of main administrator's data *****/
       Ins.InsCod = UsrDat->InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());

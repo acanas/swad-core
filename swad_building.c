@@ -67,6 +67,10 @@ static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
 
 static void Bld_EditBuildingsInternal (void);
 
+static void Bld_GetBuildingDataFromRow (MYSQL_RES *mysql_res,
+                                        struct Bld_Building *Building,
+                                        Bld_WhichData_t WhichData);
+
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
 static void Bld_PutParBldCod (void *BldCod);
 
@@ -301,51 +305,33 @@ void Bld_PutIconToViewBuildings (void)
   }
 
 /*****************************************************************************/
-/***************************** List all buildings ***************************/
+/***************************** List all buildings ****************************/
 /*****************************************************************************/
 
 void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
                            Bld_WhichData_t WhichData)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumBuilding;
-   struct Bld_Building *Building;
 
    /***** Get buildings from database *****/
-   Buildings->Num = Bld_DB_GetListBuildings (&mysql_res,WhichData,Buildings->SelectedOrder);
+   Buildings->Num = Bld_DB_GetListBuildings (&mysql_res,WhichData,
+                                             Buildings->SelectedOrder);
 
    /***** Count number of rows in result *****/
    if (Buildings->Num) // Buildings found...
      {
-      /***** Create list with courses in center *****/
-      if ((Buildings->Lst = calloc ((size_t) Buildings->Num,sizeof (*Buildings->Lst))) == NULL)
+      /***** Create list with buldings in center *****/
+      if ((Buildings->Lst = calloc ((size_t) Buildings->Num,
+                                    sizeof (*Buildings->Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the buildings *****/
       for (NumBuilding = 0;
 	   NumBuilding < Buildings->Num;
 	   NumBuilding++)
-        {
-         Building = &Buildings->Lst[NumBuilding];
-
-         /* Get next building */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get building code (row[0]) */
-         if ((Building->BldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongBuildingExit ();
-
-         /* Get the short name of the building (row[1]) */
-         Str_Copy (Building->ShrtName,row[1],sizeof (Building->ShrtName) - 1);
-
-         if (WhichData == Bld_ALL_DATA)
-           {
-	    /* Get full name (row[2]) and location (row[3]) of the building */
-	    Str_Copy (Building->FullName,row[2],sizeof (Building->FullName) - 1);
-	    Str_Copy (Building->Location,row[3],sizeof (Building->Location) - 1);
-           }
-        }
+	 Bld_GetBuildingDataFromRow (mysql_res,&Buildings->Lst[NumBuilding],
+	                             WhichData);
      }
 
    /***** Free structure that stores the query result *****/
@@ -353,13 +339,12 @@ void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
   }
 
 /*****************************************************************************/
-/*************************** Get building full name **************************/
+/********************** Get building data using its code *********************/
 /*****************************************************************************/
 
-void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
+void Bld_GetBuildingDataByCod (struct Bld_Building *Building)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Building->ShrtName[0] = '\0';
@@ -370,20 +355,40 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
    if (Building->BldCod > 0)
      {
       /***** Get data of a building from database *****/
-      if (Bld_DB_GetDataOfBuildingByCod (&mysql_res,Building->BldCod)) // Building found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get short name (row[0]), full name (row[1])
-            and location (row[2]) of the building */
-         Str_Copy (Building->ShrtName,row[0],sizeof (Building->ShrtName) - 1);
-         Str_Copy (Building->FullName,row[1],sizeof (Building->FullName) - 1);
-         Str_Copy (Building->Location,row[2],sizeof (Building->Location) - 1);
-        }
+      if (Bld_DB_GetBuildingDataByCod (&mysql_res,Building->BldCod)) // Building found...
+         Bld_GetBuildingDataFromRow (mysql_res,Building,Bld_ALL_DATA);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Get building data from database row ********************/
+/*****************************************************************************/
+
+static void Bld_GetBuildingDataFromRow (MYSQL_RES *mysql_res,
+                                        struct Bld_Building *Building,
+                                        Bld_WhichData_t WhichData)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get building code (row[0]) *****/
+   if ((Building->BldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongBuildingExit ();
+
+   /***** Get the short name of the building (row[1]) *****/
+   Str_Copy (Building->ShrtName,row[1],sizeof (Building->ShrtName) - 1);
+
+   if (WhichData == Bld_ALL_DATA)
+     {
+      /***** Get full name (row[2])
+             and location (row[3]) of the building *****/
+      Str_Copy (Building->FullName,row[2],sizeof (Building->FullName) - 1);
+      Str_Copy (Building->Location,row[3],sizeof (Building->Location) - 1);
      }
   }
 
@@ -508,7 +513,7 @@ void Bld_RemoveBuilding (void)
    Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /***** Get data of the building from database *****/
-   Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
+   Bld_GetBuildingDataByCod (Bld_EditingBuilding);
 
    /***** Update rooms assigned to this building *****/
    Roo_DB_RemoveBuildingFromRooms (Bld_EditingBuilding->BldCod);
@@ -587,7 +592,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the building *****/
-   Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
+   Bld_GetBuildingDataByCod (Bld_EditingBuilding);
 
    /***** Check if new name is empty *****/
    if (NewClaName[0])
@@ -644,7 +649,7 @@ void Bld_ChangeBuildingLocation (void)
    Par_GetParText ("Location",NewLocation,Bld_MAX_BYTES_LOCATION);
 
    /***** Get from the database the old location of the building *****/
-   Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
+   Bld_GetBuildingDataByCod (Bld_EditingBuilding);
 
    /***** Check if old and new locations are the same
 	  (this happens when return is pressed without changes) *****/

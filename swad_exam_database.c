@@ -183,7 +183,7 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
 /********************** Get exam data using its code *************************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetDataOfExamByCod (MYSQL_RES **mysql_res,long ExaCod)
+unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get exam data",
@@ -663,7 +663,7 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
 /*********************** Get set data using its code *************************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetDataOfSetByCod (MYSQL_RES **mysql_res,long SetCod)
+unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get set data",
@@ -1461,7 +1461,7 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
 /******************* Get exam session data using its code ********************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetDataOfSessionByCod (MYSQL_RES **mysql_res,long SesCod)
+unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sessions",
@@ -1788,7 +1788,7 @@ void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
 /**************** Get data of an exam print using print code *****************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetDataOfPrintByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
+unsigned Exa_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an exam print",
@@ -1810,8 +1810,8 @@ unsigned Exa_DB_GetDataOfPrintByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
 /******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetDataOfPrintBySesCodAndUsrCod (MYSQL_RES **mysql_res,
-                                                 long SesCod,long UsrCod)
+unsigned Exa_DB_GetPrintDataBySesCodAndUsrCod (MYSQL_RES **mysql_res,
+                                               long SesCod,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an exam print",

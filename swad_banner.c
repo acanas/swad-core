@@ -297,7 +297,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
 /************************* Get banner data by code ***************************/
 /*****************************************************************************/
 
-void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
+void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
   {
    MYSQL_RES *mysql_res;
 
@@ -309,7 +309,7 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      if (Ban_DB_GetDataOfBannerByCod (&mysql_res,Ban->BanCod)) // Banner found...
+      if (Ban_DB_GetBannerDataByCod (&mysql_res,Ban->BanCod)) // Banner found...
 	 Ban_GetBannerDataFromRow (mysql_res,Ban);
 
       /***** Free structure that stores the query result *****/
@@ -523,7 +523,7 @@ void Ban_RemoveBanner (void)
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   Ban_GetBannerDataByCod (Ban);
 
    /***** Remove banner *****/
    Ban_DB_RemoveBanner (Ban->BanCod);
@@ -574,7 +574,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   Ban_GetBannerDataByCod (Ban);
 
    /***** Mark file as hidden/visible in database *****/
    if (Ban->Hidden != Hide)
@@ -651,7 +651,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    Par_GetParText (ParName,NewBanName,MaxBytes);
 
    /***** Get banner data from the database *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   Ban_GetBannerDataByCod (Ban);
 
    /***** Check if new name is empty *****/
    if (!NewBanName[0])
@@ -709,7 +709,7 @@ void Ban_ChangeBannerImg (void)
    Par_GetParText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
 
    /***** Get banner data from the database *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   Ban_GetBannerDataByCod (Ban);
 
    /***** Check if new image is empty *****/
    if (NewImg[0])
@@ -751,7 +751,7 @@ void Ban_ChangeBannerWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get banner data from the database *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   Ban_GetBannerDataByCod (Ban);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1008,7 +1008,7 @@ void Ban_ClickOnBanner (void)
    Ban.BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetBannerDataByCod (&Ban);
 
    /***** Set banner clicked in order to log it *****/
    Ban_SetBanCodClicked (Ban.BanCod);

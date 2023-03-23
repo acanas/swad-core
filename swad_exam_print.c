@@ -62,9 +62,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
-                                   MYSQL_RES **mysql_res,
-				   unsigned NumPrints);
+static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
+                                        struct ExaPrn_Print *Print,
+                                        unsigned NumPrints);
 
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
@@ -185,7 +185,7 @@ void ExaPrn_ShowExamPrint (void)
       Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
       /***** Get exam print data from database *****/
-      ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
       if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
 	{
@@ -210,7 +210,7 @@ void ExaPrn_ShowExamPrint (void)
       else			// Exam print exists
         {
          /***** Get exam print data from database *****/
-	 ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+	 ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
          /***** Get questions and current user's answers from database *****/
 	 ExaPrn_GetPrintQuestionsFromDB (&Print);
@@ -233,43 +233,43 @@ void ExaPrn_ShowExamPrint (void)
 /**************** Get data of an exam print using print code *****************/
 /*****************************************************************************/
 
-void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetPrintDataByPrnCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
 
    /***** Make database query *****/
-   NumPrints = Exa_DB_GetDataOfPrintByPrnCod (&mysql_res,Print->PrnCod);
+   NumPrints = Exa_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
+   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,NumPrints);
   }
 
 /*****************************************************************************/
 /******** Get data of an exam print using session code and user code *********/
 /*****************************************************************************/
 
-void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
+void ExaPrn_GetPrintDataBySesCodAndUsrCod (struct ExaPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
 
    /***** Make database query *****/
-   NumPrints = Exa_DB_GetDataOfPrintBySesCodAndUsrCod (&mysql_res,
-                                                       Print->SesCod,
-                                                       Print->UsrCod);
+   NumPrints = Exa_DB_GetPrintDataBySesCodAndUsrCod (&mysql_res,
+                                                     Print->SesCod,
+                                                     Print->UsrCod);
 
    /***** Get data of print *****/
-   ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
+   ExaPrn_GetPrintDataFromRow (&mysql_res,Print,NumPrints);
   }
 
 /*****************************************************************************/
 /************************* Get assignment data *******************************/
 /*****************************************************************************/
 
-static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
-                                   MYSQL_RES **mysql_res,
-				   unsigned NumPrints)
+static void ExaPrn_GetPrintDataFromRow (MYSQL_RES **mysql_res,
+                                        struct ExaPrn_Print *Print,
+                                        unsigned NumPrints)
   {
    MYSQL_ROW row;
 
@@ -691,7 +691,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
      {
       /***** Get data of this set *****/
       CurrentSet.SetCod = Print->PrintedQuestions[QstInd].SetCod;
-      ExaSet_GetDataOfSetByCod (&CurrentSet);
+      ExaSet_GetSetDataByCod (&CurrentSet);
 
       /***** Title for this set *****/
       HTM_TR_Begin (NULL);
@@ -960,20 +960,20 @@ void ExaPrn_ReceivePrintAnswer (void)
 
    /***** Get print data *****/
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
    if (Print.PrnCod <= 0)
       Err_WrongExamExit ();
 
    /***** Get session data *****/
    Session.SesCod = Print.SesCod;
-   ExaSes_GetDataOfSessionByCod (&Session);
+   ExaSes_GetSessionDataByCod (&Session);
    if (Session.SesCod <= 0)
       Err_WrongExamExit ();
    Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
    Exams.Exam.ExaCod = Session.ExaCod;
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
    if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)

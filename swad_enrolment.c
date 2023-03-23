@@ -2222,9 +2222,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     /***** Link to course *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 
-			Crs_GetDataOfCourseByCod (&Crs);
+			Crs_GetCourseDataByCod (&Crs);
 			Deg.DegCod = Crs.DegCod;
-			Deg_GetDataOfDegreeByCod (&Deg);
+			Deg_GetDegreeDataByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   ParCod_PutPar (ParCod_Crs,Crs.CrsCod);
@@ -3104,7 +3104,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       /***** Remove user from all attendance events in course *****/
-      Att_DB_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
+      Att_DB_RemoveUsrFromCrsEvents (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from all groups in course *****/
       Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->CrsCod);

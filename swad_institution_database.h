@@ -43,9 +43,9 @@ void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status);
 void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewInsName);
 void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
-unsigned Ins_DB_GetDataOfInstitutionByCod (MYSQL_RES **mysql_res,long InsCod);
-void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
-unsigned Ins_DB_GetShrtNameAndCtyOfIns (MYSQL_RES **mysql_res,long InsCod);
+unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod);
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod);
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
 				       long InsCod,

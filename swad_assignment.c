@@ -493,7 +493,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this assignment *****/
-   Asg_GetDataOfAssignmentByCod (&Assignments->Asg);
+   Asg_GetAssignmentDataByCod (&Assignments->Asg);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Assignments->Asg.AsgCod,&Anchor);
@@ -824,7 +824,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
+void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
    unsigned NumAsgs;
@@ -832,7 +832,7 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
    if (Asg->AsgCod > 0)
      {
       /***** Build query *****/
-      NumAsgs = Asg_DB_GetDataOfAssignmentByCod (&mysql_res,Asg->AsgCod);
+      NumAsgs = Asg_DB_GetAssignmentDataByCod (&mysql_res,Asg->AsgCod);
 
       /***** Get data of assignment *****/
       Asg_GetAssignmentDataFromRow (&mysql_res,Asg,NumAsgs);
@@ -849,7 +849,7 @@ void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg)
 /*************** Get assignment data using its folder name *******************/
 /*****************************************************************************/
 
-void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
+void Asg_GetAssignmentDataByFolder (struct Asg_Assignment *Asg)
   {
    MYSQL_RES *mysql_res;
    unsigned NumAsgs;
@@ -857,7 +857,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg)
    if (Asg->Folder[0])
      {
       /***** Query database *****/
-      NumAsgs = Asg_DB_GetDataOfAssignmentByFolder (&mysql_res,Asg->Folder);
+      NumAsgs = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Asg->Folder);
 
       /***** Get data of assignment *****/
       Asg_GetAssignmentDataFromRow (&mysql_res,Asg,NumAsgs);
@@ -1025,7 +1025,7 @@ void Asg_ReqRemAssignment (void)
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Show question and button to remove the assignment *****/
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
@@ -1059,7 +1059,7 @@ void Asg_RemoveAssignment (void)
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetDataOfAssignmentByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
 
    /***** Remove all folders associated to this assignment *****/
    if (Assignments.Asg.Folder[0])
@@ -1102,7 +1102,7 @@ void Asg_HideAssignment (void)
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Hide assignment *****/
    Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,true);
@@ -1131,7 +1131,7 @@ void Asg_UnhideAssignment (void)
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Unhide assignment *****/
    Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,false);
@@ -1197,7 +1197,7 @@ void Asg_ReqCreatOrEditAsg (void)
    else
      {
       /* Get data of the assignment from database */
-      Asg_GetDataOfAssignmentByCod (&Assignments.Asg);
+      Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
       /* Get text of the assignment from database */
       Asg_DB_GetAssignmentTxtByCod (Assignments.Asg.AsgCod,Txt);
@@ -1411,7 +1411,7 @@ void Asg_ReceiveFormAssignment (void)
      {
       /***** Get data of the old (current) assignment from database *****/
       OldAsg.AsgCod = Assignments.Asg.AsgCod;
-      Asg_GetDataOfAssignmentByCod (&OldAsg);
+      Asg_GetAssignmentDataByCod (&OldAsg);
      }
 
    /***** Get start/end date-times *****/

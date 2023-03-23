@@ -190,7 +190,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 	      {
 	       /* Get data of this rubric */
 	       Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric - 1];
-	       Rub_GetDataOfRubricByCod (&Rubrics->Rubric);
+	       Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
 	       /* Show a pair of rows with the main data of this rubric */
 	       Rub_ShowRubricMainData (Rubrics,
@@ -317,7 +317,7 @@ void Rub_SeeOneRubric (void)
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Show rubric *****/
    Rub_ShowOnlyOneRubric (&Rubrics,
@@ -562,13 +562,13 @@ void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics)
 /********************* Get rubric data using its code ************************/
 /*****************************************************************************/
 
-void Rub_GetDataOfRubricByCod (struct Rub_Rubric *Rubric)
+void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get data of rubric from database *****/
-   if (Rub_DB_GetDataOfRubricByCod (&mysql_res,Rubric->RubCod)) // Rubric found...
+   if (Rub_DB_GetRubricDataByCod (&mysql_res,Rubric->RubCod)) // Rubric found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -632,7 +632,7 @@ void Rub_AskRemRubric (void)
    Rub_GetPars (&Rubrics,true);
 
    /***** Get data of the rubric from database *****/
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
@@ -666,7 +666,7 @@ void Rub_RemoveRubric (void)
    Rubrics.Rubric.RubCod = ParCod_GetAndCheckPar (ParCod_Rub);
 
    /***** Get data of the rubric from database *****/
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
@@ -726,7 +726,7 @@ void Rub_ListRubric (void)
    Rub_GetPars (&Rubrics,true);
 
    /***** Get rubric data *****/
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
    Rub_DB_GetRubricTxt (Rubrics.Rubric.RubCod,Txt);
 
    /***** Show rubric *****/
@@ -763,7 +763,7 @@ void Rub_ReqCreatOrEditRubric (void)
       Rub_ResetRubric (&Rubrics.Rubric);
    else
       /* Get rubric data from database */
-      Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Put form to create/edit a rubric and show criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,ItsANewRubric);
@@ -904,7 +904,7 @@ void Rub_ReceiveFormRubric (void)
    // Some data, not received from form,
    // are necessary to show rubric and criteria again
    if (!ItsANewRubric)
-      Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Overwrite some rubric data with the data received from form *****/
    Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric,Txt);

@@ -558,7 +558,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		 {
 		  /* Get project data */
 		  ((struct Prj_Projects *) Projects)->Prj.PrjCod = ((struct Prj_Projects *) Projects)->LstPrjCods[NumPrj - 1];
-		  Prj_GetDataOfProjectByCod (&((struct Prj_Projects *) Projects)->Prj);
+		  Prj_GetProjectDataByCod (&((struct Prj_Projects *) Projects)->Prj);
 
 		  /* Number of index */
 		  switch (((struct Prj_Projects *) Projects)->SelectedOrder)
@@ -1348,7 +1348,7 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
    Prj_AllocMemProject (&Projects->Prj);
 
    /***** Get project data *****/
-   Prj_GetDataOfProjectByCod (&Projects->Prj);
+   Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Projects->Prj.Title,
@@ -1415,7 +1415,7 @@ void Prj_PrintOneProject (void)
 
    /***** Get project data *****/
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
@@ -1657,7 +1657,7 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
 
    /***** Get data of department *****/
    Dpt.DptCod = Projects->Prj.DptCod;
-   Dpt_GetDataOfDepartmentByCod (&Dpt);
+   Dpt_GetDepartmentDataByCod (&Dpt);
 
    /***** Show department *****/
    PutLink = (Dpt.WWW[0] &&
@@ -2521,7 +2521,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    char *Id;
 
    /***** Get data of this project *****/
-   Prj_GetDataOfProjectByCod (Prj);
+   Prj_GetProjectDataByCod (Prj);
 
    /***** Set CSS classes *****/
    ClassDate = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
@@ -2622,7 +2622,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
 
    /***** Get data of department *****/
    Dpt.DptCod = Prj->DptCod;
-   Dpt_GetDataOfDepartmentByCod (&Dpt);
+   Dpt_GetDepartmentDataByCod (&Dpt);
 
    /***** Show department *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
@@ -3036,7 +3036,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects->Prj);
+   Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -3115,7 +3115,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -3344,7 +3344,7 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 /********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
-void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
+void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
   {
    extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
    extern const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS];
@@ -3359,7 +3359,7 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
       Prj_ResetProject (Prj);
 
       /***** Get data of project *****/
-      if (Prj_DB_GetDataOfProjectByCod (&mysql_res,Prj->PrjCod))	// Project found...
+      if (Prj_DB_GetProjectDataByCod (&mysql_res,Prj->PrjCod))	// Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -3499,7 +3499,7 @@ void Prj_ReqRemProject (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
       /***** Show question and button to remove the project *****/
@@ -3539,7 +3539,7 @@ void Prj_RemoveProject (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
+   Prj_GetProjectDataByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
 
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
      {
@@ -3594,7 +3594,7 @@ void Prj_HideProject (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Hide project *****/
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
@@ -3628,7 +3628,7 @@ void Prj_UnhideProject (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Unhide project *****/
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
@@ -3695,7 +3695,7 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
      }
    else
       /* Get data of the project from database */
-      Prj_GetDataOfProjectByCod (&Projects->Prj);
+      Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Put form to edit project *****/
    Prj_PutFormProject (Projects,ItsANewProject);
@@ -4031,7 +4031,7 @@ void Prj_ReceiveFormProject (void)
    else
      {
       /* Get data of the project from database */
-      Prj_GetDataOfProjectByCod (&Projects.Prj);
+      Prj_GetProjectDataByCod (&Projects.Prj);
 
       ICanEditProject = Prj_CheckIfICanEditProject (&Projects.Prj);
      }
@@ -4531,7 +4531,7 @@ void Prj_LockProjectEdition (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
      {
@@ -4568,7 +4568,7 @@ void Prj_UnloProjectEdition (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    if (Prj_CheckIfICanEditProject (&Projects.Prj))
      {
@@ -4605,7 +4605,7 @@ void Prj_ChangeReviewStatus (void)
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
-   Prj_GetDataOfProjectByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Hide project *****/
    if (Prj_CheckIfICanReviewProjects ())

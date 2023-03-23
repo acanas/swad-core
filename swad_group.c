@@ -130,7 +130,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
 static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
-static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
+static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps);
@@ -170,13 +170,13 @@ void Grp_WriteNamesOfSelectedGrps (void)
       if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
         {
          GrpDat.GrpCod = GrpCod;
-         Grp_GetDataOfGroupByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat);
          HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
          Gbl.Crs.Grps.GrpTyp.GrpTypCod = -GrpCod;
-         Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+         Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
          HTM_TxtF ("%s&nbsp;(%s)",Gbl.Crs.Grps.GrpTyp.GrpTypName,
                                   Txt_users_with_no_group);
         }
@@ -2887,13 +2887,13 @@ void Grp_FreeListGrpTypesAndGrps (void)
 /*****************************************************************************/
 // GrpTyp->GrpTypCod must have the code of the type of group
 
-static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
+static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get data of a type of group from database *****/
-   if (Grp_DB_GetDataOfGroupTypeByCod (&mysql_res,GrpTyp->GrpTypCod) != 1)
+   if (Grp_DB_GetGroupTypeDataByCod (&mysql_res,GrpTyp->GrpTypCod) != 1)
       Err_WrongGrpTypExit ();
 
    /***** Get some data of group type *****/
@@ -2936,7 +2936,7 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 
-void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
+void Grp_GetGroupDataByCod (struct GroupData *GrpDat)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2957,7 +2957,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    if (GrpDat->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
-      if (Grp_DB_GetDataOfGroupByCod (&mysql_res,GrpDat->GrpCod) == 1)
+      if (Grp_DB_GetGroupDataByCod (&mysql_res,GrpDat->GrpCod) == 1)
 	{
 	 /***** Get data of group *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -3393,7 +3393,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    extern const char *Txt_Remove_type_of_group;
 
    /***** Get data of the group type from database *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Begin section to edit group types *****/
    Grp_ReqEditGroupsInternal0 ();
@@ -3432,7 +3432,7 @@ static void Grp_AskConfirmRemGrp (void)
 
    /***** Get name of the group from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Count number of students in group *****/
    NumStds = Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod);
@@ -3501,7 +3501,7 @@ static void Grp_RemoveGroupTypeCompletely (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get name and type of the group from database *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Remove file zones of all groups of this type *****/
    Brw_RemoveZonesOfGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
@@ -3554,7 +3554,7 @@ static void Grp_RemoveGroupCompletely (void)
 
    /***** Get name and type of the group from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Remove file zones of this group *****/
    Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpDat.GrpCod);
@@ -3607,7 +3607,7 @@ void Grp_OpenGroup (void)
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
    Grp_DB_OpenGrp (GrpDat.GrpCod);
@@ -3637,7 +3637,7 @@ void Grp_CloseGroup (void)
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
    Grp_DB_CloseGrp (Gbl.Crs.Grps.GrpCod);
@@ -3667,7 +3667,7 @@ void Grp_EnableFileZonesGrp (void)
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
    Grp_DB_EnableFileZonesGrp (Gbl.Crs.Grps.GrpCod);
@@ -3698,7 +3698,7 @@ void Grp_DisableFileZonesGrp (void)
 
    /***** Get group data from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
    Grp_DB_DisableFileZonesGrp (GrpDat.GrpCod);
@@ -3736,7 +3736,7 @@ void Grp_ChangeGroupType (void)
 
    /* Get from the database the type and the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** If group was in database... *****/
    if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,GrpDat.GrpName,-1L))
@@ -3785,7 +3785,7 @@ void Grp_ChangeGroupRoom (void)
 
    /* Get from the database the name of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Update the table of groups changing old room by new room *****/
    Grp_DB_ChangeRoomOfGrp (Gbl.Crs.Grps.GrpCod,NewRooCod);
@@ -3823,7 +3823,7 @@ void Grp_ChangeMandatGrpTyp (void)
    NewMandatoryEnrolment = Par_GetParBool ("MandatoryEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if the old type of enrolment match the new
           (this happens when return is pressed without changes) *****/
@@ -3876,7 +3876,7 @@ void Grp_ChangeMultiGrpTyp (void)
    NewMultipleEnrolment = Par_GetParBool ("MultipleEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if the old type of enrolment match the new one
    	  (this happends when return is pressed without changes) *****/
@@ -3919,7 +3919,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Get from the database the data of this type of group *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Get open time *****/
    Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
@@ -3966,7 +3966,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /* Get from the database the type, name, and old maximum of students of the group */
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Check if the old maximum of students equals the new one
              (this happens when return is pressed without changes) *****/
@@ -4049,7 +4049,7 @@ void Grp_RenameGroupType (void)
    Par_GetParText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
+   Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if new name is empty *****/
    if (NewNameGrpTyp[0])
@@ -4122,7 +4122,7 @@ void Grp_RenameGroup (void)
 
    /***** Get from the database the type and the old name of the group *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
-   Grp_GetDataOfGroupByCod (&GrpDat);
+   Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Check if new name is empty *****/
    if (!NewNameGrp[0])

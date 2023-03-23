@@ -420,19 +420,19 @@ void Ntf_ShowMyNotifications (void)
 
 	       /* Get institution code (row[2]) */
 	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-	       Ins_GetDataOfInstitByCod (&Hie.Ins);
+	       Ins_GetInstitDataByCod (&Hie.Ins);
 
 		/* Get center code (row[3]) */
 	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	       Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+	       Ctr_GetCenterDataByCod (&Hie.Ctr);
 
 	       /* Get degree code (row[4]) */
 	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-	       Deg_GetDataOfDegreeByCod (&Hie.Deg);
+	       Deg_GetDegreeDataByCod (&Hie.Deg);
 
 	       /* Get course code (row[5]) */
 	       Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-	       Crs_GetDataOfCourseByCod (&Hie.Crs);
+	       Crs_GetCourseDataByCod (&Hie.Crs);
 
 	       /* Get message/post/... code (row[6]) */
 	       Cod = Str_ConvertStrCodToLongCod (row[6]);
@@ -1345,10 +1345,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	    Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
 
 	    /* Get data of institution, center, degree and course */
-	    Ins_GetDataOfInstitByCod (&Hie.Ins);
-	    Ctr_GetDataOfCenterByCod (&Hie.Ctr);
-	    Deg_GetDataOfDegreeByCod (&Hie.Deg);
-	    Crs_GetDataOfCourseByCod (&Hie.Crs);
+	    Ins_GetInstitDataByCod (&Hie.Ins);
+	    Ctr_GetCenterDataByCod (&Hie.Ctr);
+	    Deg_GetDegreeDataByCod (&Hie.Deg);
+	    Crs_GetCourseDataByCod (&Hie.Crs);
 
 	    /* Get message/post/... code (row[6]) */
 	    Cod = Str_ConvertStrCodToLongCod (row[6]);

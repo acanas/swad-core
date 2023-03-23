@@ -93,7 +93,7 @@ unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res)
 /**************************** Get link full name *****************************/
 /*****************************************************************************/
 
-unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod)
+unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an institutional link",

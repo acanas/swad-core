@@ -977,7 +977,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    Prj_RemoveUsrFromProjects (UsrDat->UsrCod);
 
    /***** Remove user from all attendance events *****/
-   Att_DB_RemoveUsrFromAllAttEvents (UsrDat->UsrCod);
+   Att_DB_RemoveUsrFromAllEvents (UsrDat->UsrCod);
 
    /***** Remove user from all groups of all courses *****/
    Grp_RemUsrFromAllGrps (UsrDat->UsrCod);

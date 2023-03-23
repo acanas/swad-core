@@ -198,7 +198,7 @@ void ExaRes_ShowMyResultsInExa (void)
    Exa_GetPars (&Exams,true);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Session,
@@ -245,8 +245,8 @@ void ExaRes_ShowMyResultsInSes (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
    Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
-   Exa_GetDataOfExamByCod (&Exams.Exam);
-   ExaSes_GetDataOfSessionByCod (&Session);
+   Exa_GetExamDataByCod (&Exams.Exam);
+   ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Session,
@@ -390,7 +390,7 @@ void ExaRes_ShowAllResultsInExa (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,true);
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Session,
@@ -461,8 +461,8 @@ void ExaRes_ShowAllResultsInSes (void)
    Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
-   ExaSes_GetDataOfSessionByCod (&Session);
+   Exa_GetExamDataByCod (&Exams.Exam);
+   ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,&Session,
@@ -598,7 +598,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	      {
 	       /* Get data of this exam */
 	       Exams->Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
-	       Exa_GetDataOfExamByCod (&Exams->Exam);
+	       Exa_GetExamDataByCod (&Exams->Exam);
 
 	       /* Write a row for this session */
 	       HTM_TR_Begin (NULL);
@@ -806,13 +806,13 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       Err_WrongExamExit ();
 
 	    /* Get print data */
-	    ExaPrn_GetDataOfPrintByPrnCod (&Print);
+	    ExaPrn_GetPrintDataByPrnCod (&Print);
 
 	    /* Get data of session and exam */
 	    Session.SesCod = Print.SesCod;
-	    ExaSes_GetDataOfSessionByCod (&Session);
+	    ExaSes_GetSessionDataByCod (&Session);
 	    Exam.ExaCod = Session.ExaCod;
-	    Exa_GetDataOfExamByCod (&Exam);
+	    Exa_GetExamDataByCod (&Exam);
 
 	    /* Check if I can view this print result and its score */
 	    ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrDat->UsrCod,&ICanView);
@@ -1249,7 +1249,7 @@ void ExaRes_ShowExaResultAfterFinish (void)
    /***** Get exam print data *****/
    Print.SesCod = Session.SesCod;
    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
    /***** Set log action and print code *****/
    // The user has clicked on the "I have finished" button in an exam print
@@ -1304,7 +1304,7 @@ void ExaRes_ShowOneExaResult (void)
    /***** Get exam print data *****/
    Print.SesCod = Session.SesCod;
    Print.UsrCod = UsrDat->UsrCod;
-   ExaPrn_GetDataOfPrintBySesCodAndUsrCod (&Print);
+   ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
    /***** Get questions and user's answers of exam print from database *****/
    ExaPrn_GetPrintQuestionsFromDB (&Print);

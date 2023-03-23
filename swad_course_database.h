@@ -40,7 +40,7 @@ void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status);
 unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod);
 unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
-unsigned Crs_DB_GetDataOfCourseByCod (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod);
 long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void);
 void Crs_DB_GetShortNamesByCod (long CrsCod,
                                 char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],

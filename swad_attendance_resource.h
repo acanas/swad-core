@@ -34,8 +34,8 @@
 /*****************************************************************************/
 
 void AttRsc_GetLinkToEvent (void);
-void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle);
+void AttRsc_WriteEventInCrsProgram (long AttCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle);
 void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

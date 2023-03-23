@@ -42,9 +42,9 @@ unsigned Asg_DB_GetListAssignmentsMyGrps (MYSQL_RES **mysql_res,
 unsigned Asg_DB_GetListAssignmentsAllGrps (MYSQL_RES **mysql_res,
                                            Dat_StartEndTime_t SelectedOrder);
 
-unsigned Asg_DB_GetDataOfAssignmentByCod (MYSQL_RES **mysql_res,long AsgCod);
-unsigned Asg_DB_GetDataOfAssignmentByFolder (MYSQL_RES **mysql_res,
-                                             const char Folder[Brw_MAX_BYTES_FOLDER + 1]);
+unsigned Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod);
+unsigned Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
+                                           const char Folder[Brw_MAX_BYTES_FOLDER + 1]);
 unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod);
 void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1]);
 void Asg_DB_GetAssignmentTxtByCod (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);

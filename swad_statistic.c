@@ -2740,7 +2740,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 	 if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
 	    Err_WrongPluginExit ();
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
-	    if (Plg_GetDataOfPluginByCod (&Plg))
+	    if (Plg_GetPluginDataByCod (&Plg))
 	       HTM_Txt (Plg.Name);
 	    else
 	       HTM_Txt ("?");
@@ -2857,7 +2857,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 	 /* Write the banner */
 	 if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
 	    Err_WrongBannerExit ();
-	 Ban_GetDataOfBannerByCod (&Ban);
+	 Ban_GetBannerDataByCod (&Ban);
 	 HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 		         " class=\"DAT_%s\"",
@@ -2951,7 +2951,7 @@ static void Sta_WriteCountry (long CtyCod)
 	{
 	 /***** Get data of country *****/
 	 Cty.CtyCod = CtyCod;
-	 Cty_GetDataOfCountryByCod (&Cty);
+	 Cty_GetCountryDataByCod (&Cty);
 
 	 /***** Form to go to country *****/
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
@@ -3037,7 +3037,7 @@ static void Sta_WriteInstit (long InsCod)
      {
       /***** Get data of institution *****/
       Ins.InsCod = InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3128,7 +3128,7 @@ static void Sta_WriteCenter (long CtrCod)
      {
       /***** Get data of center *****/
       Ctr.CtrCod = CtrCod;
-      Ctr_GetDataOfCenterByCod (&Ctr);
+      Ctr_GetCenterDataByCod (&Ctr);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3219,7 +3219,7 @@ static void Sta_WriteDegree (long DegCod)
      {
       /***** Get data of degree *****/
       Deg.DegCod = DegCod;
-      Deg_GetDataOfDegreeByCod (&Deg);
+      Deg_GetDegreeDataByCod (&Deg);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3285,7 +3285,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
       Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
-      CrsOK = Crs_GetDataOfCourseByCod (&Crs);
+      CrsOK = Crs_GetCourseDataByCod (&Crs);
 
       HTM_TR_Begin (NULL);
 

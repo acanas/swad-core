@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion);
+void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion);
 
 void RubCri_ReceiveFormCriterion (void);
 void RubCri_ChangeCriterionTitle (void);

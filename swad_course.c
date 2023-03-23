@@ -210,7 +210,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	    /***** Get data of this institution *****/
 	    Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Cty_GetDataOfCountryByCod (&Hie.Cty))
+	    if (!Cty_GetCountryDataByCod (&Hie.Cty))
 	       Err_WrongCountrExit ();
 
 	    /***** Write link to country *****/
@@ -244,7 +244,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	       /***** Get data of this institution *****/
 	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
+	       if (!Ins_GetInstitDataByCod (&Hie.Ins))
 		  Err_WrongInstitExit ();
 
 	       /***** Write link to institution *****/
@@ -278,7 +278,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		  /***** Get data of this center *****/
 		  Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-		  if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+		  if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 		     Err_WrongCenterExit ();
 
 		  /***** Write link to center *****/
@@ -312,7 +312,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		     /***** Get data of this degree *****/
 		     Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-		     if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
+		     if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 			Err_WrongDegreeExit ();
 
 		     /***** Write link to degree *****/
@@ -346,7 +346,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 			/***** Get data of this course *****/
 			Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-			if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
+			if (!Crs_GetCourseDataByCod (&Hie.Crs))
 			   Err_WrongCourseExit ();
 
 			/***** Write link to course *****/
@@ -1579,7 +1579,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the course from database *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetCourseDataByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -1610,7 +1610,7 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
+bool Crs_GetCourseDataByCod (struct Crs_Course *Crs)
   {
    MYSQL_RES *mysql_res;
    bool CrsFound = false;
@@ -1627,7 +1627,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
    if (Crs->CrsCod > 0)
      {
       /***** Get data of a course from database *****/
-      if (Crs_DB_GetDataOfCourseByCod (&mysql_res,Crs->CrsCod)) // Course found...
+      if (Crs_DB_GetCourseDataByCod (&mysql_res,Crs->CrsCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 Crs_GetCourseDataFromRow (mysql_res,Crs);
@@ -1714,7 +1714,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
      {
       /***** Get course data *****/
       Crs.CrsCod = CrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
+      Crs_GetCourseDataByCod (&Crs);
 
       /***** Remove all students in the course *****/
       Enr_RemAllStdsInCrs (&Crs);
@@ -1754,7 +1754,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Prj_RemoveCrsProjects (CrsCod);
 
       /***** Remove attendance events of the course *****/
-      Att_RemoveCrsAttEvents (CrsCod);
+      Att_RemoveCrsEvents (CrsCod);
 
       /***** Remove notices in the course *****/
       Not_DB_RemoveCrsNotices (CrsCod);
@@ -1821,7 +1821,7 @@ void Crs_ChangeInsCrsCod (void)
    Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetCourseDataByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -1867,7 +1867,7 @@ void Crs_ChangeCrsYear (void)
    Par_GetParText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetCourseDataByCod (Crs_EditingCrs);
 
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
@@ -1994,7 +1994,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
    Par_GetParText (ParName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
-   Crs_GetDataOfCourseByCod (Crs);
+   Crs_GetCourseDataByCod (Crs);
 
    if (Crs_CheckIfICanEdit (Crs))
      {
@@ -2056,7 +2056,7 @@ void Crs_ChangeCrsStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of course *****/
-   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
+   Crs_GetCourseDataByCod (Crs_EditingCrs);
 
    /***** Update status *****/
    Crs_DB_UpdateCrsStatus (Crs_EditingCrs->CrsCod,Status);
@@ -2400,7 +2400,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Get degree code (row[0]) *****/
    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();
-   if (!Deg_GetDataOfDegreeByCod (&Deg))
+   if (!Deg_GetDegreeDataByCod (&Deg))
       Err_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/

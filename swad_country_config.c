@@ -289,11 +289,11 @@ static void CtyCfg_Map (void)
 	 Ctr.CtrCod = DB_GetNextCode (mysql_res);
 
 	 /* Get data of center */
-	 Ctr_GetDataOfCenterByCod (&Ctr);
+	 Ctr_GetCenterDataByCod (&Ctr);
 
 	 /* Get data of institution */
 	 Ins.InsCod = Ctr.InsCod;
-	 Ins_GetDataOfInstitByCod (&Ins);
+	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */
 	 Map_AddMarker (&Ctr.Coord);

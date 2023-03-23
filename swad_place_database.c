@@ -115,7 +115,7 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 /********************* Get data of a place from database *********************/
 /*****************************************************************************/
 
-unsigned Plc_DB_GetDataOfPlaceByCod (MYSQL_RES **mysql_res,long PlcCod)
+unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a place",

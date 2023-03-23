@@ -214,7 +214,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetDataOfCenterByCod (MYSQL_RES **mysql_res,long CtrCod)
+unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a center",

@@ -96,7 +96,7 @@ void Mch_ResetMatch (struct Mch_Match *Match);
 
 void Mch_ListMatches (struct Gam_Games *Games,
                       bool PutFormNewMatch);
-void Mch_GetDataOfMatchByCod (struct Mch_Match *Match);
+void Mch_GetMatchDataByCod (struct Mch_Match *Match);
 void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match);
 void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned UniqueId);
 void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match);

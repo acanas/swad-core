@@ -52,8 +52,8 @@ unsigned (*Att_DB_GetListAttEvents[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res
 							   Dat_StartEndTime_t SelectedOrder,
 							   Att_OrderNewestOldest_t OrderNewestOldest) =
  {
-  [Grp_MY_GROUPS ] = Att_DB_GetListAttEventsMyGrps,
-  [Grp_ALL_GROUPS] = Att_DB_GetListAttEventsAllGrps,
+  [Grp_MY_GROUPS ] = Att_DB_GetListEventsMyGrps,
+  [Grp_ALL_GROUPS] = Att_DB_GetListEventsAllGrps,
  };
 
 /*****************************************************************************/
@@ -73,6 +73,7 @@ static const char *Att_DB_HiddenSubQuery[Rol_NUM_ROLES] =
    [Rol_INS_ADM] = " AND Hidden='N'",
    [Rol_SYS_ADM] = "",
   };
+
 static const char *Att_DB_OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS_NEWEST_OLDEST] =
   {
    [Dat_STR_TIME][Att_NEWEST_FIRST] = "StartTime DESC,"
@@ -81,22 +82,21 @@ static const char *Att_DB_OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS
    [Dat_STR_TIME][Att_OLDEST_FIRST] = "StartTime,"
 	                              "EndTime,"
 	                              "Title",
-
    [Dat_END_TIME][Att_NEWEST_FIRST] = "EndTime DESC,"
-	                                "StartTime DESC,"
-	                                "Title DESC",
+	                              "StartTime DESC,"
+	                              "Title DESC",
    [Dat_END_TIME][Att_OLDEST_FIRST] = "EndTime,"
-	                                "StartTime,"
-	                                "Title",
+	                              "StartTime,"
+	                              "Title",
   };
 
 /*****************************************************************************/
 /**************** Get list of attendance events in my groups *****************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetListAttEventsMyGrps (MYSQL_RES **mysql_res,
-                                        Dat_StartEndTime_t SelectedOrder,
-                                        Att_OrderNewestOldest_t OrderNewestOldest)
+unsigned Att_DB_GetListEventsMyGrps (MYSQL_RES **mysql_res,
+                                     Dat_StartEndTime_t SelectedOrder,
+                                     Att_OrderNewestOldest_t OrderNewestOldest)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance events",
@@ -125,9 +125,9 @@ unsigned Att_DB_GetListAttEventsMyGrps (MYSQL_RES **mysql_res,
 /********************* Get list of all attendance events *********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetListAttEventsAllGrps (MYSQL_RES **mysql_res,
-                                         Dat_StartEndTime_t SelectedOrder,
-                                         Att_OrderNewestOldest_t OrderNewestOldest)
+unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
+                                      Dat_StartEndTime_t SelectedOrder,
+                                      Att_OrderNewestOldest_t OrderNewestOldest)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance events",
@@ -144,7 +144,7 @@ unsigned Att_DB_GetListAttEventsAllGrps (MYSQL_RES **mysql_res,
 /********************* Get list of all attendance events *********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance events",
@@ -170,7 +170,7 @@ unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod)
 /**************** Get attendance event data using its code *******************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetDataOfAttEventByCod (MYSQL_RES **mysql_res,long AttCod)
+unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get attendance event data",
@@ -192,8 +192,8 @@ unsigned Att_DB_GetDataOfAttEventByCod (MYSQL_RES **mysql_res,long AttCod)
 /***************** Get attendance event title from database ******************/
 /*****************************************************************************/
 
-void Att_DB_GetAttEventTitle (long AttCod,
-                              char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1])
+void Att_DB_GetEventTitle (long AttCod,
+                           char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1])
   {
    DB_QuerySELECTString (Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE,
                          "can not get attendance event title",
@@ -209,7 +209,7 @@ void Att_DB_GetAttEventTitle (long AttCod,
 /***************** Get attendance event text from database *******************/
 /*****************************************************************************/
 
-void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
+void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
   {
    DB_QuerySELECTString (Description,Cns_MAX_BYTES_TEXT,"can not get attendance event text",
 		         "SELECT Txt"	// row[0]
@@ -224,7 +224,7 @@ void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_T
 /***** Check if the title or the folder of an attendance event exists ********/
 /*****************************************************************************/
 
-bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
+bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod)
   {
    return
    DB_QueryEXISTS ("can not check similar attendance events",
@@ -243,7 +243,7 @@ bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,lo
 /********************* Create a new attendance event *************************/
 /*****************************************************************************/
 
-long Att_DB_CreateAttEvent (const struct Att_Event *Event,const char *Description)
+long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new attendance event",
@@ -271,7 +271,7 @@ long Att_DB_CreateAttEvent (const struct Att_Event *Event,const char *Descriptio
 /****************** Update the data of an attendance event *******************/
 /*****************************************************************************/
 
-void Att_DB_UpdateAttEvent (const struct Att_Event *Event,const char *Description)
+void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
   {
    DB_QueryUPDATE ("can not update attendance event",
 		   "UPDATE att_events"
@@ -299,7 +299,7 @@ void Att_DB_UpdateAttEvent (const struct Att_Event *Event,const char *Descriptio
 /********************** Hide/unhide an attendance event **********************/
 /*****************************************************************************/
 
-void Att_DB_HideOrUnhideAttEvent (long AttCod,bool Hide)
+void Att_DB_HideOrUnhideEvent (long AttCod,bool Hide)
   {
    DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE att_events"
@@ -400,7 +400,7 @@ void Att_DB_RemoveGroupsOfType (long GrpTypCod)
 /****************** Remove groups of an attendance event *********************/
 /*****************************************************************************/
 
-void Att_DB_RemoveGrpsAssociatedToAnAttEvent (long AttCod)
+void Att_DB_RemoveGrpsAssociatedToAnEvent (long AttCod)
   {
    DB_QueryDELETE ("can not remove the groups"
 		   " associated to an attendance event",
@@ -413,7 +413,7 @@ void Att_DB_RemoveGrpsAssociatedToAnAttEvent (long AttCod)
 /******* Get number of students from a list who attended to an event *********/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumStdsTotalWhoAreInAttEvent (long AttCod)
+unsigned Att_DB_GetNumStdsTotalWhoAreInEvent (long AttCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of students registered in an event",
@@ -428,7 +428,7 @@ unsigned Att_DB_GetNumStdsTotalWhoAreInAttEvent (long AttCod)
 /********** Get number of users from a list in an attendance event ***********/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumStdsFromListWhoAreInAttEvent (long AttCod,const char *SubQueryUsrs)
+unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQueryUsrs)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of students from a list"
@@ -491,8 +491,8 @@ unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long Us
 /*********** Return a list with the users in an attendance event *************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetListUsrsInAttEvent (MYSQL_RES **mysql_res,
-                                       long AttCod,bool AttEventIsAsociatedToGrps)
+unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
+                                    long AttCod,bool AttEventIsAsociatedToGrps)
   {
    char *SubQuery;
    unsigned NumUsrs;
@@ -576,10 +576,10 @@ unsigned Att_DB_GetListUsrsInAttEvent (MYSQL_RES **mysql_res,
 /********* Register a user in an attendance event changing comments **********/
 /*****************************************************************************/
 
-void Att_DB_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,
-                                              bool Present,
-                                              const char *CommentStd,
-                                              const char *CommentTch)
+void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
+                                           bool Present,
+                                           const char *CommentStd,
+                                           const char *CommentTch)
   {
    /***** Register user as assistant to an event in database *****/
    DB_QueryREPLACE ("can not register user in an event",
@@ -667,7 +667,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 		     Att_DB_SetUsrAsPresent (AttCod,UsrDat.UsrCod);
 		 }
 	       else									// User is not in table att_users
-		  Att_DB_RegUsrInAttEventChangingComments (AttCod,UsrDat.UsrCod,true,"","");
+		  Att_DB_RegUsrInEventChangingComments (AttCod,UsrDat.UsrCod,true,"","");
 
 	       /* Add this user to query used to mark not present users as absent */
 	       if (SetOthersAsAbsent)
@@ -713,7 +713,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 /********************** Remove a user from an event **************************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
+void Att_DB_RemoveUsrFromEvent (long AttCod,long UsrCod)
   {
    DB_QueryDELETE ("can not remove student from an event",
 		   "DELETE FROM att_users"
@@ -726,7 +726,7 @@ void Att_DB_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
 /************ Remove users absent without comments from an event *************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
+void Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (long AttCod)
   {
    /***** Clean table att_users *****/
    DB_QueryDELETE ("can not remove users absent"
@@ -743,7 +743,7 @@ void Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 /*********** Remove all users registered in an attendance event **************/
 /*****************************************************************************/
 
-void Att_DB_RemoveAllUsrsFromAnAttEvent (long AttCod)
+void Att_DB_RemoveAllUsrsFromAnEvent (long AttCod)
   {
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_users"
@@ -755,7 +755,7 @@ void Att_DB_RemoveAllUsrsFromAnAttEvent (long AttCod)
 /*** Remove one user from all attendance events where he/she is registered ***/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
+void Att_DB_RemoveUsrFromAllEvents (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user from all attendance events",
 		   "DELETE FROM att_users"
@@ -767,7 +767,7 @@ void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
 /************* Remove one student from all attendance events *****************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
+void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod)
   {
    DB_QueryDELETE ("can not remove user from attendance events of a course",
 		   "DELETE FROM att_users"
@@ -783,7 +783,7 @@ void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
 /*********************** Remove an attendance event **************************/
 /*****************************************************************************/
 
-void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod)
+void Att_DB_RemoveEventFromCurrentCrs (long AttCod)
   {
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_events"
@@ -795,7 +795,7 @@ void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod)
 /************* Remove users in all attendance events of a course *************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrsFromCrsAttEvents (long CrsCod)
+void Att_DB_RemoveUsrsFromCrsEvents (long CrsCod)
   {
    DB_QueryDELETE ("can not remove users registered"
 		   " in attendance events of a course",
@@ -811,7 +811,7 @@ void Att_DB_RemoveUsrsFromCrsAttEvents (long CrsCod)
 /************ Remove groups in all attendance events of a course *************/
 /*****************************************************************************/
 
-void Att_DB_RemoveGrpsAssociatedToCrsAttEvents (long CrsCod)
+void Att_DB_RemoveGrpsAssociatedToCrsEvents (long CrsCod)
   {
    DB_QueryDELETE ("can not remove all groups associated"
 		   " to attendance events of a course",
@@ -827,7 +827,7 @@ void Att_DB_RemoveGrpsAssociatedToCrsAttEvents (long CrsCod)
 /***************** Remove all attendance events of a course ******************/
 /*****************************************************************************/
 
-void Att_DB_RemoveCrsAttEvents (long CrsCod)
+void Att_DB_RemoveCrsEvents (long CrsCod)
   {
    DB_QueryDELETE ("can not remove all attendance events of a course",
 		   "DELETE FROM att_events"
@@ -839,7 +839,7 @@ void Att_DB_RemoveCrsAttEvents (long CrsCod)
 /*************** Get number of attendance events in a course *****************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
+unsigned Att_DB_GetNumEventsInCrs (long CrsCod)
   {
    /***** Get number of attendance events in a course from database *****/
    return (unsigned)
@@ -856,7 +856,7 @@ unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_DB_GetNumCoursesWithAttEvents (HieLvl_Level_t Scope)
+unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Scope)
   {
    switch (Scope)
      {
@@ -911,7 +911,7 @@ unsigned Att_DB_GetNumCoursesWithAttEvents (HieLvl_Level_t Scope)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
+unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
   {
    switch (Scope)
      {

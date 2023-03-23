@@ -1476,15 +1476,15 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of institution *****/
    Hie.Ins.InsCod = InsCod;
-   Ins_GetDataOfInstitByCod (&Hie.Ins);
+   Ins_GetInstitDataByCod (&Hie.Ins);
 
    /***** Get data of degree *****/
    Hie.Deg.DegCod = DegCod;
-   Deg_GetDataOfDegreeByCod (&Hie.Deg);
+   Deg_GetDegreeDataByCod (&Hie.Deg);
 
    /***** Get data of course *****/
    Hie.Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Hie.Crs);
+   Crs_GetCourseDataByCod (&Hie.Crs);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);

@@ -164,7 +164,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
@@ -215,8 +215,8 @@ void MchRes_ShowMyMchResultsInMch (void)
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Match.MchCod = ParCod_GetAndCheckPar (ParCod_Mch);
-   Gam_GetDataOfGameByCod (&Games.Game);
-   Mch_GetDataOfMatchByCod (&Match);
+   Gam_GetGameDataByCod (&Games.Game);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
@@ -368,7 +368,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
@@ -441,8 +441,8 @@ void MchRes_ShowAllMchResultsInMch (void)
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Match.MchCod = ParCod_GetAndCheckPar (ParCod_Mch);
-   Gam_GetDataOfGameByCod (&Games.Game);
-   Mch_GetDataOfMatchByCod (&Match);
+   Gam_GetGameDataByCod (&Games.Game);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
@@ -571,7 +571,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	      {
 	       /* Get data of this game */
 	       Games->Game.GamCod = Games->Lst[NumGame].GamCod;
-	       Gam_GetDataOfGameByCod (&Games->Game);
+	       Gam_GetGameDataByCod (&Games->Game);
 
 	       /* Write a row for this event */
 	       HTM_TR_Begin (NULL);
@@ -765,9 +765,9 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Get data of match and game */
 	 Match.MchCod = Print.MchCod;
-	 Mch_GetDataOfMatchByCod (&Match);
+	 Mch_GetMatchDataByCod (&Match);
 	 Games->Game.GamCod = Match.GamCod;
-	 Gam_GetDataOfGameByCod (&Games->Game);
+	 Gam_GetGameDataByCod (&Games->Game);
 
 	 /* Check if I can view this match result and score */
 	 MchRes_CheckIfICanSeeMatchResult (&Games->Game,&Match,UsrDat->UsrCod,&ICanView);

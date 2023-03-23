@@ -383,7 +383,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 /****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
-void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
+void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
   {
    extern const char *Txt_Another_department;
    MYSQL_RES *mysql_res;
@@ -403,7 +403,7 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      if (Dpt_DB_GetDataOfDepartmentByCod (&mysql_res,Dpt->DptCod)) // Department found...
+      if (Dpt_DB_GetDepartmentDataByCod (&mysql_res,Dpt->DptCod)) // Department found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -468,7 +468,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 	 /* Get data of institution of this department */
 	 Ins.InsCod = Dpt->InsCod;
-	 Ins_GetDataOfInstitByCod (&Ins);
+	 Ins_GetInstitDataByCod (&Ins);
 
 	 HTM_TR_Begin (NULL);
 
@@ -577,7 +577,7 @@ void Dpt_RemoveDepartment (void)
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
+   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
 
    /***** Check if this department has teachers *****/
    if (Dpt_EditingDpt->NumTchs)	// Department has teachers ==> don't remove
@@ -615,7 +615,7 @@ void Dpt_ChangeDepartIns (void)
    NewInsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
+   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
 
    /***** Update institution in table of departments *****/
    Dpt_DB_UpdateDptIns (Dpt_EditingDpt->DptCod,NewInsCod);
@@ -690,7 +690,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewDptName,MaxBytes);
 
    /***** Get from the database the old names of the department *****/
-   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
+   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
 
    /***** Check if new name is empty *****/
    if (NewDptName[0])
@@ -746,7 +746,7 @@ void Dpt_ChangeDptWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
+   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

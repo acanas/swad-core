@@ -72,6 +72,6 @@ void TmlCom_RemoveComGbl (void);
 
 void TmlCom_RemoveCommMediaAndDBEntries (long PubCod);
 
-void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com);
+void TmlCom_GetCommDataByCod (struct TmlCom_Comment *Com);
 
 #endif

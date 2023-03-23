@@ -170,7 +170,7 @@ void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults)
 /********************** Get match data using its code ************************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod)
+unsigned Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get matches",

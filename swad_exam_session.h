@@ -53,7 +53,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session);
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
 		          struct ExaSes_Session *Session,
                           bool PutFormSession);
-void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session);
+void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session);
 
 void ExaSes_ToggleVisResultsSesUsr (void);
 

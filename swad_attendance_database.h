@@ -37,58 +37,58 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetListAttEventsMyGrps (MYSQL_RES **mysql_res,
-                                        Dat_StartEndTime_t SelectedOrder,
-                                        Att_OrderNewestOldest_t OrderNewestOldest);
-unsigned Att_DB_GetListAttEventsAllGrps (MYSQL_RES **mysql_res,
-                                         Dat_StartEndTime_t SelectedOrder,
-                                         Att_OrderNewestOldest_t OrderNewestOldest);
-unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Att_DB_GetDataOfAttEventByCod (MYSQL_RES **mysql_res,long AttCod);
-void Att_DB_GetAttEventTitle (long AttCod,
-                              char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1]);
-void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
+unsigned Att_DB_GetListEventsMyGrps (MYSQL_RES **mysql_res,
+                                     Dat_StartEndTime_t SelectedOrder,
+                                     Att_OrderNewestOldest_t OrderNewestOldest);
+unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
+                                      Dat_StartEndTime_t SelectedOrder,
+                                      Att_OrderNewestOldest_t OrderNewestOldest);
+unsigned Att_DB_GetAllEventsData (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod);
+void Att_DB_GetEventTitle (long AttCod,
+                           char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1]);
+void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 
-bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
+bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long AttCod);
 
-long Att_DB_CreateAttEvent (const struct Att_Event *Event,const char *Description);
-void Att_DB_UpdateAttEvent (const struct Att_Event *Event,const char *Description);
-void Att_DB_HideOrUnhideAttEvent (long AttCod,bool Hide);
+long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description);
+void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description);
+void Att_DB_HideOrUnhideEvent (long AttCod,bool Hide);
 
 void Att_DB_CreateGroup (long AttCod,long GrpCod);
 unsigned Att_DB_GetGrpCodsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod);
 unsigned Att_DB_GetGroupsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod);
 void Att_DB_RemoveGroup (long GrpCod);
 void Att_DB_RemoveGroupsOfType (long GrpTypCod);
-void Att_DB_RemoveGrpsAssociatedToAnAttEvent (long AttCod);
+void Att_DB_RemoveGrpsAssociatedToAnEvent (long AttCod);
 
-unsigned Att_DB_GetNumStdsTotalWhoAreInAttEvent (long AttCod);
-unsigned Att_DB_GetNumStdsFromListWhoAreInAttEvent (long AttCod,const char *SubQueryUsrs);
+unsigned Att_DB_GetNumStdsTotalWhoAreInEvent (long AttCod);
+unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQueryUsrs);
 bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
 unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long UsrCod);
-unsigned Att_DB_GetListUsrsInAttEvent (MYSQL_RES **mysql_res,
-                                       long AttCod,bool AttEventIsAsociatedToGrps);
-void Att_DB_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,
-                                              bool Present,
-                                              const char *CommentStd,
-                                              const char *CommentTch);
+unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
+                                    long AttCod,bool AttEventIsAsociatedToGrps);
+void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
+                                           bool Present,
+                                           const char *CommentStd,
+                                           const char *CommentTch);
 void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod);
 void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent);
-void Att_DB_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
-void Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
+void Att_DB_RemoveUsrFromEvent (long AttCod,long UsrCod);
+void Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (long AttCod);
 
-void Att_DB_RemoveAllUsrsFromAnAttEvent (long AttCod);
-void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod);
-void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod);
-void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod);
+void Att_DB_RemoveAllUsrsFromAnEvent (long AttCod);
+void Att_DB_RemoveUsrFromAllEvents (long UsrCod);
+void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod);
+void Att_DB_RemoveEventFromCurrentCrs (long AttCod);
 
-void Att_DB_RemoveUsrsFromCrsAttEvents (long CrsCod);
-void Att_DB_RemoveGrpsAssociatedToCrsAttEvents (long CrsCod);
-void Att_DB_RemoveCrsAttEvents (long CrsCod);
+void Att_DB_RemoveUsrsFromCrsEvents (long CrsCod);
+void Att_DB_RemoveGrpsAssociatedToCrsEvents (long CrsCod);
+void Att_DB_RemoveCrsEvents (long CrsCod);
 
-unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod);
-unsigned Att_DB_GetNumCoursesWithAttEvents (HieLvl_Level_t Scope);
+unsigned Att_DB_GetNumEventsInCrs (long CrsCod);
+unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Scope);
 
-unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope);
+unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope);
 
 #endif

@@ -441,7 +441,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this survey *****/
-   Svy_GetDataOfSurveyByCod (&Surveys->Svy);
+   Svy_GetSurveyDataByCod (&Surveys->Svy);
 
    /***** Begin box *****/
    if (ShowOnlyThisSvyComplete)
@@ -1157,13 +1157,13 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 /********************* Get survey data using its code ************************/
 /*****************************************************************************/
 
-void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
+void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get data of survey from database *****/
-   if (Svy_DB_GetDataOfSurveyByCod (&mysql_res,Svy->SvyCod)) // Survey found...
+   if (Svy_DB_GetSurveyDataByCod (&mysql_res,Svy->SvyCod)) // Survey found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1426,7 +1426,7 @@ void Svy_AskRemSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1462,7 +1462,7 @@ void Svy_RemoveSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1514,7 +1514,7 @@ void Svy_AskResetSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1550,7 +1550,7 @@ void Svy_ResetSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1588,7 +1588,7 @@ void Svy_HideSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1619,7 +1619,7 @@ void Svy_UnhideSurvey (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
    if (!Surveys.Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
@@ -1694,7 +1694,7 @@ void Svy_ReqCreatOrEditSvy (void)
    else
      {
       /* Get data of the survey from database */
-      Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+      Svy_GetSurveyDataByCod (&Surveys.Svy);
       if (!Surveys.Svy.Status.ICanEdit)
          Err_NoPermissionExit ();
 
@@ -1986,7 +1986,7 @@ void Svy_ReceiveFormSurvey (void)
      {
       /* Get data of the old (current) survey from database */
       OldSvy.SvyCod = NewSvy.SvyCod;
-      Svy_GetDataOfSurveyByCod (&OldSvy);
+      Svy_GetSurveyDataByCod (&OldSvy);
       if (!OldSvy.Status.ICanEdit)
          Err_NoPermissionExit ();
       NewSvy.Scope = OldSvy.Scope;
@@ -3199,7 +3199,7 @@ void Svy_ReceiveSurveyAnswers (void)
    Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
 
    /***** Get data of the survey from database *****/
-   Svy_GetDataOfSurveyByCod (&Surveys.Svy);
+   Svy_GetSurveyDataByCod (&Surveys.Svy);
 
    /***** Check if I have no answered this survey formerly *****/
    if (Surveys.Svy.Status.IHaveAnswered)

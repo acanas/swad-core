@@ -94,8 +94,8 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
 void Svy_SeeOneSurvey (void);
 void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_ReqCreatOrEditSvy (void);
-void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy);
-void Svy_GetDataOfSurveyByFolder (struct Svy_Survey *Svy);
+void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy);
+void Svy_GetSurveyDataByFolder (struct Svy_Survey *Svy);
 void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,

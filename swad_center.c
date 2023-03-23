@@ -155,7 +155,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 								 The_GetColorRows ();
 
 	    /* Get data of center */
-	    Ctr_GetDataOfCenterByCod (&Ctr);
+	    Ctr_GetCenterDataByCod (&Ctr);
 
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
@@ -345,7 +345,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    /***** Get data of place of this center *****/
    Plc.PlcCod = Ctr->PlcCod;
-   Plc_GetDataOfPlaceByCod (&Plc);
+   Plc_GetPlaceDataByCod (&Plc);
 
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
@@ -580,7 +580,7 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
+bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
   {
    MYSQL_RES *mysql_res;
    bool CtrFound = false;
@@ -599,7 +599,7 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a center from database *****/
-      if (Ctr_DB_GetDataOfCenterByCod (&mysql_res,Ctr->CtrCod)) // Center found...
+      if (Ctr_DB_GetCenterDataByCod (&mysql_res,Ctr->CtrCod)) // Center found...
         {
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,Ctr,
@@ -965,7 +965,7 @@ void Ctr_RemoveCenter (void)
    Ctr_EditingCtr->CtrCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the center from database *****/
-   Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
+   Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Check if this center has teachers *****/
    if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->CtrCod))			// Center has degrees
@@ -1040,7 +1040,7 @@ void Ctr_ChangeCtrPlc (void)
    NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Get data of center from database *****/
-   Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
+   Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Ctr_EditingCtr->CtrCod,NewPlcCod);
@@ -1112,7 +1112,7 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
    Par_GetParText (ParName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the center *****/
-   Ctr_GetDataOfCenterByCod (Ctr);
+   Ctr_GetCenterDataByCod (Ctr);
 
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
@@ -1167,7 +1167,7 @@ void Ctr_ChangeCtrWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of center *****/
-   Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
+   Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1206,7 +1206,7 @@ void Ctr_ChangeCtrStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of center *****/
-   Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
+   Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Update status *****/
    Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,Status);
@@ -1831,7 +1831,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	    Ctr.CtrCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of center */
-	    Ctr_GetDataOfCenterByCod (&Ctr);
+	    Ctr_GetCenterDataByCod (&Ctr);
 
 	    /* Write data of this center */
 	    Ctr_ListOneCenterForSeeing (&Ctr,NumCtr);

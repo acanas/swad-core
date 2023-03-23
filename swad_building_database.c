@@ -99,13 +99,14 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 /**************** Get building data giving the building code *****************/
 /*****************************************************************************/
 
-unsigned Bld_DB_GetDataOfBuildingByCod (MYSQL_RES **mysql_res,long BldCod)
+unsigned Bld_DB_GetBuildingDataByCod (MYSQL_RES **mysql_res,long BldCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a building",
-		   "SELECT ShortName,"	// row[0]
-			  "FullName,"	// row[1]
-			  "Location"	// row[2]
+		   "SELECT BldCod,"		// row[0]
+			  "ShortName,"		// row[1]
+			  "FullName,"		// row[2]
+			  "Location"		// row[3]
 		    " FROM bld_buildings"
 		   " WHERE BldCod=%ld",
 		   BldCod);

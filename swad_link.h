@@ -52,7 +52,7 @@ void Lnk_EditLinks (void);
 
 void Lnk_PutIconToViewLinks (void);
 
-void Lnk_GetDataOfLinkByCod (struct Lnk_Link *Lnk);
+void Lnk_GetLinkDataByCod (struct Lnk_Link *Lnk);
 void Lnk_RemoveLink (void);
 void Lnk_RenameLinkShort (void);
 void Lnk_RenameLinkFull (void);

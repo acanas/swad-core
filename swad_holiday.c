@@ -65,7 +65,7 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
-static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld);
+static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld);
 
 static Hld_HolidayType_t Hld_GetParHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
@@ -387,7 +387,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 /************************* Get holiday data by code **************************/
 /*****************************************************************************/
 
-static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
+static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -405,7 +405,7 @@ static void Hld_GetDataOfHolidayByCod (struct Hld_Holiday *Hld)
       Err_WrongHolidayExit ();
 
    /***** Get data of holiday from database *****/
-   if (Hld_DB_GetDataOfHolidayByCod (&mysql_res,Hld->HldCod)) // Holiday found...
+   if (Hld_DB_GetHolidayDataByCod (&mysql_res,Hld->HldCod)) // Holiday found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -650,7 +650,7 @@ void Hld_RemoveHoliday (void)
    Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get data of the holiday from database *****/
-   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
+   Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Remove holiday *****/
    Hld_DB_RemoveHoliday (Hld_EditingHld->HldCod);
@@ -682,10 +682,10 @@ void Hld_ChangeHolidayPlace (void)
    NewPlace.PlcCod = ParCod_GetPar (ParCod_Plc);
 
    /***** Get from the database the data of the place *****/
-   Plc_GetDataOfPlaceByCod (&NewPlace);
+   Plc_GetPlaceDataByCod (&NewPlace);
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
+   Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Update the place in database *****/
    Hld_DB_ChangePlace (Hld_EditingHld->HldCod,NewPlace.PlcCod);
@@ -714,7 +714,7 @@ void Hld_ChangeHolidayType (void)
    Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
+   Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Get the new type for the holiday *****/
    Hld_EditingHld->HldTyp = Hld_GetParHldType ();
@@ -766,7 +766,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Hld_EditingHld->HldCod = ParCod_GetAndCheckPar (ParCod_Hld);
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
+   Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Get the new date for the holiday *****/
    switch (StartOrEndDate)
@@ -833,7 +833,7 @@ void Hld_RenameHoliday (void)
    Par_GetParText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Get from the database the old names of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
+   Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Check if new name is empty *****/
    if (NewHldName[0])

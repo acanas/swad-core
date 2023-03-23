@@ -479,7 +479,7 @@ void CrsCfg_ChangeCrsDeg (void)
    if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)
      {
       /***** Get data of new degree *****/
-      Deg_GetDataOfDegreeByCod (&NewDeg);
+      Deg_GetDegreeDataByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,

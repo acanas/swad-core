@@ -109,7 +109,7 @@ static void RubCri_PutParsOneCriterion (void *Rubrics)
 /******************** Get criterion data using its code **********************/
 /*****************************************************************************/
 
-void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
+void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
   {
    MYSQL_RES *mysql_res;
 
@@ -122,7 +122,7 @@ void RubCri_GetDataOfCriterionByCod (struct RubCri_Criterion *Criterion)
      }
 
    /***** Get data of rubric criterion from database *****/
-   if (Rub_DB_GetDataOfCriterionByCod (&mysql_res,Criterion->CriCod)) // Criterion found...
+   if (Rub_DB_GetCriterionDataByCod (&mysql_res,Criterion->CriCod)) // Criterion found...
       RubCri_GetCriterionDataFromRow (mysql_res,Criterion);
    else
       /* Initialize to empty criterion */
@@ -228,7 +228,7 @@ void RubCri_ReceiveFormCriterion (void)
    Criterion.RubCod = Rubrics.Rubric.RubCod;
 
    /***** Get rubric data from database *****/
-   Rub_GetDataOfRubricByCod (&Rubrics.Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable (&Rubrics.Rubric))
@@ -1014,12 +1014,12 @@ static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
    Criterion->CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
    /***** Get rubric data from database *****/
-   Rub_GetDataOfRubricByCod (&Rubrics->Rubric);
+   Rub_GetRubricDataByCod (&Rubrics->Rubric);
    if (Rubrics->Rubric.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongRubricExit ();
 
    /***** Get criterion data from database *****/
-   RubCri_GetDataOfCriterionByCod (Criterion);
+   RubCri_GetCriterionDataByCod (Criterion);
    if (Criterion->RubCod != Rubrics->Rubric.RubCod)
       Err_WrongCriterionExit ();
    Rubrics->CriCod = Criterion->CriCod;

@@ -70,7 +70,7 @@ void TmlFav_ShowAllFaversNoteGbl (void)
 
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (&Not);
+   TmlNot_GetNoteDataByCod (&Not);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
@@ -132,7 +132,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
 
    /***** Get data of note *****/
    Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (Not);
+   TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
@@ -162,7 +162,7 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
 
    /***** Get data of note *****/
    Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (Not);
+   TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
@@ -205,7 +205,7 @@ void TmlFav_ShowAllFaversComGbl (void)
    /***** Get data of comment *****/
    Med_MediaConstructor (&Com.Content.Media);
    Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
-   TmlCom_GetDataOfCommByCod (&Com);
+   TmlCom_GetCommDataByCod (&Com);
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
@@ -269,7 +269,7 @@ static void TmlFav_FavComm (struct TmlCom_Comment *Com)
 
    /***** Get data of comment *****/
    Com->PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
-   TmlCom_GetDataOfCommByCod (Com);
+   TmlCom_GetCommDataByCod (Com);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod))
@@ -308,7 +308,7 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
 
    /***** Get data of comment *****/
    Com->PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
-   TmlCom_GetDataOfCommByCod (Com);
+   TmlCom_GetCommDataByCod (Com);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod))

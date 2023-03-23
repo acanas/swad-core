@@ -307,7 +307,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 	      {
 	       /* Get data of this game */
 	       Games->Game.GamCod = Games->Lst[NumGame - 1].GamCod;
-	       Gam_GetDataOfGameByCod (&Games->Game);
+	       Gam_GetGameDataByCod (&Games->Game);
 
 	       /* Show a pair of rows with the main data of this game */
 	       Gam_ShowGameMainData (Games,
@@ -457,7 +457,7 @@ void Gam_SeeOneGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
@@ -944,13 +944,13 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
 /********************** Get game data using its code *************************/
 /*****************************************************************************/
 
-void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
+void Gam_GetGameDataByCod (struct Gam_Game *Game)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get data of game from database *****/
-   if (Gam_DB_GetDataOfGameByCod (&mysql_res,Game->GamCod)) // Game found...
+   if (Gam_DB_GetGameDataByCod (&mysql_res,Game->GamCod)) // Game found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1055,7 +1055,7 @@ void Gam_AskRemGame (void)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
@@ -1089,7 +1089,7 @@ void Gam_RemoveGame (void)
    Games.Game.GamCod = ParCod_GetAndCheckPar (ParCod_Gam);
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
@@ -1155,7 +1155,7 @@ void Gam_HideGame (void)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
@@ -1185,7 +1185,7 @@ void Gam_UnhideGame (void)
       Err_WrongGameExit ();
 
    /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
@@ -1220,7 +1220,7 @@ void Gam_ListGame (void)
       Err_WrongGameExit ();
 
    /***** Get game data *****/
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
    Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
 
    /***** Show game *****/
@@ -1262,7 +1262,7 @@ void Gam_ReqCreatOrEditGame (void)
    else
      {
       /* Get game data from database */
-      Gam_GetDataOfGameByCod (&Games.Game);
+      Gam_GetGameDataByCod (&Games.Game);
       Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
      }
 
@@ -1542,7 +1542,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -1574,7 +1574,7 @@ void Gam_ListQstsToAddToGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -1823,7 +1823,7 @@ void Gam_AddQstsToGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -1928,7 +1928,7 @@ void Gam_ReqRemQstFromGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -1970,7 +1970,7 @@ void Gam_RemoveQstFromGame (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -2019,7 +2019,7 @@ void Gam_MoveUpQst (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -2069,7 +2069,7 @@ void Gam_MoveDownQst (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
    if (!Gam_CheckIfEditable (&Games.Game))
@@ -2193,7 +2193,7 @@ void Gam_ReqNewMatch (void)
    /***** Get parameters *****/
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
-   Gam_GetDataOfGameByCod (&Games.Game);
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,

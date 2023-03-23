@@ -1310,7 +1310,7 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
+unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
   {
    unsigned NumOptions;
 

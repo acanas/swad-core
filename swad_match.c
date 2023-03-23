@@ -322,12 +322,12 @@ void Mch_ListMatches (struct Gam_Games *Games,
 /********************** Get match data using its code ************************/
 /*****************************************************************************/
 
-void Mch_GetDataOfMatchByCod (struct Mch_Match *Match)
+void Mch_GetMatchDataByCod (struct Mch_Match *Match)
   {
    MYSQL_RES *mysql_res;
 
    /***** Get data of match from database *****/
-   if (Mch_DB_GetDataOfMatchByCod (&mysql_res,Match->MchCod)) // Match found...
+   if (Mch_DB_GetMatchDataByCod (&mysql_res,Match->MchCod)) // Match found...
       /* Get match data from row */
       Mch_GetMatchDataFromRow (mysql_res,Match);
    else
@@ -1146,11 +1146,11 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    if ((Games->Game.GamCod = Gam_GetPars (Games)) <= 0)
       Err_WrongGameExit ();
    Grp_GetParWhichGroups ();
-   Gam_GetDataOfGameByCod (&Games->Game);
+   Gam_GetGameDataByCod (&Games->Game);
 
    /* Get match code */
    Match->MchCod = ParCod_GetAndCheckPar (ParCod_Mch);
-   Mch_GetDataOfMatchByCod (Match);
+   Mch_GetMatchDataByCod (Match);
 
    /***** Ensure parameters are correct *****/
    if (Games->Game.GamCod != Match->GamCod)
@@ -1447,7 +1447,7 @@ void Mch_ResumeMatch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Check if I have permission to resume match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
@@ -1746,7 +1746,7 @@ void Mch_PlayPauseMatch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
    if (Match.Status.Playing)	// Match is being played             ==> pause it
@@ -1783,7 +1783,7 @@ void Mch_ChangeNumColsMch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Get number of columns *****/
    Match.Status.NumCols = (unsigned)
@@ -1819,7 +1819,7 @@ void Mch_ToggleVisResultsMchQst (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
    Match.Status.ShowQstResults = !Match.Status.ShowQstResults;	// Toggle display
@@ -1854,7 +1854,7 @@ void Mch_BackMatch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
    Mch_SetMatchStatusToPrev (&Match);
@@ -1886,7 +1886,7 @@ void Mch_ForwardMatch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Update status *****/
    Mch_SetMatchStatusToNext (&Match);
@@ -3359,7 +3359,7 @@ void Mch_JoinMatchAsStd (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
@@ -3381,7 +3381,7 @@ void Mch_RemMyQstAnsAndShowMchStatus (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Get question index from form *****/
    QstInd = Gam_GetParQstInd ();
@@ -3437,7 +3437,7 @@ void Mch_StartCountdown (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Start countdown *****/
    Match.Status.Countdown = NewCountdown;
@@ -3471,7 +3471,7 @@ void Mch_RefreshMatchTch (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Update countdown *****/
    // If current countdown is < 0 ==> no countdown in progress
@@ -3526,7 +3526,7 @@ void Mch_RefreshMatchStd (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Show current match status *****/
    Mch_ShowMatchStatusForStd (&Match,Mch_REFRESH_STATUS_BY_SERVER);
@@ -3579,7 +3579,7 @@ void Mch_ReceiveQuestionAnswer (void)
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
-   Mch_GetDataOfMatchByCod (&Match);
+   Mch_GetMatchDataByCod (&Match);
 
    /***** Get question index from form *****/
    QstInd = Gam_GetParQstInd ();

@@ -38,7 +38,7 @@
 unsigned Ban_DB_GetAllBanners (MYSQL_RES **mysql_res);
 unsigned Ban_DB_GetVisibleBanners (MYSQL_RES **mysql_res);
 unsigned Ban_DB_GetRandomBanners (MYSQL_RES **mysql_res);
-unsigned Ban_DB_GetDataOfBannerByCod (MYSQL_RES **mysql_res,long BanCod);
+unsigned Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod);
 bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long BanCod);
 
 void Ban_DB_CreateBanner (const struct Ban_Banner *Ban);

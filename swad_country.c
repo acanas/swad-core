@@ -150,7 +150,7 @@ void Cty_SeeCtyWithPendingInss (void)
 								 The_GetColorRows ();
 
 	    /* Get data of country */
-	    Cty_GetDataOfCountryByCod (&Cty);
+	    Cty_GetCountryDataByCod (&Cty);
 
 	    /* Begin row for this country */
 	    HTM_TR_Begin (NULL);
@@ -935,7 +935,7 @@ void Cty_WriteCountryName (long CtyCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
+bool Cty_GetCountryDataByCod (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
@@ -973,7 +973,7 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   CtyFound = (Cty_DB_GetDataOfCountryByCod (&mysql_res,Cty->CtyCod) != 0);
+   CtyFound = (Cty_DB_GetCountryDataByCod (&mysql_res,Cty->CtyCod) != 0);
    if (CtyFound) // Country found...
      {
       /* Get row */
@@ -1191,7 +1191,7 @@ void Cty_RemoveCountry (void)
    Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get data of the country from database *****/
-   Cty_GetDataOfCountryByCod (Cty_EditingCty);
+   Cty_GetCountryDataByCod (Cty_EditingCty);
 
    /***** Check if this country has users *****/
    if (Ins_GetNumInssInCty (Cty_EditingCty->CtyCod))			// Country has institutions ==> don't remove
@@ -1258,7 +1258,7 @@ void Cty_RenameCountry (void)
    Par_GetParText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty_EditingCty);
+   Cty_GetCountryDataByCod (Cty_EditingCty);
 
    /***** Check if new name is empty *****/
    if (NewCtyName[0])
@@ -1337,7 +1337,7 @@ void Cty_ChangeCtyWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty_EditingCty);
+   Cty_GetCountryDataByCod (Cty_EditingCty);
 
    /***** Update the table changing old WWW by new WWW *****/
    snprintf (FldName,sizeof (FldName),"Name_%s",
@@ -1811,7 +1811,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	    Cty.CtyCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of country */
-	    Cty_GetDataOfCountryByCod (&Cty);
+	    Cty_GetCountryDataByCod (&Cty);
 
 	    /* Write data of this country */
 	    Cty_ListOneCountryForSeeing (&Cty,NumCty);

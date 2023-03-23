@@ -394,7 +394,7 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t Selecte
 /**************************** Get mail domain data ***************************/
 /*****************************************************************************/
 
-unsigned Mai_DB_GetDataOfMailDomainByCod (MYSQL_RES **mysql_res,long MaiCod)
+unsigned Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a mail domain",

@@ -136,7 +136,7 @@ unsigned Asg_DB_GetListAssignmentsAllGrps (MYSQL_RES **mysql_res,
 /******************* Get assignment data using its code **********************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetDataOfAssignmentByCod (MYSQL_RES **mysql_res,long AsgCod)
+unsigned Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get assignment data",
@@ -159,8 +159,8 @@ unsigned Asg_DB_GetDataOfAssignmentByCod (MYSQL_RES **mysql_res,long AsgCod)
 /**************** Get assignment data using its folder name ******************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetDataOfAssignmentByFolder (MYSQL_RES **mysql_res,
-                                             const char Folder[Brw_MAX_BYTES_FOLDER + 1])
+unsigned Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
+                                           const char Folder[Brw_MAX_BYTES_FOLDER + 1])
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get assignment data",

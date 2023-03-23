@@ -267,7 +267,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 /********************* Get survey data using its code ************************/
 /*****************************************************************************/
 
-unsigned Svy_DB_GetDataOfSurveyByCod (MYSQL_RES **mysql_res,long SvyCod)
+unsigned Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get survey data",

@@ -105,7 +105,7 @@ void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
 /******************* Get data of a group type from its code ******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetDataOfGroupTypeByCod (MYSQL_RES **mysql_res,long GrpTypCod)
+unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get type of group",
@@ -139,7 +139,7 @@ unsigned Grp_DB_GetMultipleEnrolmentOfAGroupType (MYSQL_RES **mysql_res,long Grp
 /********************** Get data of a group from its code ********************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetDataOfGroupByCod (MYSQL_RES **mysql_res,long GrpCod)
+unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a group",

@@ -498,7 +498,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
    Not_Status_t Status;
 
    /***** Get notice data from database *****/
-   if (Not_DB_GetDataOfNotice (&mysql_res,NotCod))
+   if (Not_DB_GetNoticeData (&mysql_res,NotCod))
      {
       row = mysql_fetch_row (mysql_res);
 

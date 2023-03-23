@@ -395,7 +395,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 /**************************** Get place full name ****************************/
 /*****************************************************************************/
 
-void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
+void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
   {
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
@@ -421,7 +421,7 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      if (Plc_DB_GetDataOfPlaceByCod (&mysql_res,Plc->PlcCod)) // Place found...
+      if (Plc_DB_GetPlaceDataByCod (&mysql_res,Plc->PlcCod)) // Place found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -553,7 +553,7 @@ void Plc_RemovePlace (void)
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /***** Get data of the place from database *****/
-   Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
+   Plc_GetPlaceDataByCod (Plc_EditingPlc);
 
    /***** Check if this place has centers *****/
    if (Plc_EditingPlc->NumCtrs)	// Place has centers ==> don't remove
@@ -636,7 +636,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewPlcName,MaxBytes);
 
    /***** Get from the database the old names of the place *****/
-   Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
+   Plc_GetPlaceDataByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/
    if (NewPlcName[0])

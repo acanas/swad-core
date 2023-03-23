@@ -252,7 +252,7 @@ void Prj_ReqEditPrj (void);
 void Prj_AllocMemProject (struct Prj_Project *Prj);
 void Prj_FreeMemProject (struct Prj_Project *Prj);
 
-void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
+void Prj_GetProjectDataByCod (struct Prj_Project *Prj);
 void Prj_FreeListProjects (struct Prj_Projects *Projects);
 
 void Prj_ReqRemProject (void);

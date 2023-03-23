@@ -284,7 +284,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 	      {
 	       /* Get data of this exam */
 	       Exams->Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
-	       Exa_GetDataOfExamByCod (&Exams->Exam);
+	       Exa_GetExamDataByCod (&Exams->Exam);
 
 	       /* Show exam */
 	       Exa_ShowOneExam (Exams,
@@ -417,7 +417,7 @@ void Exa_SeeOneExam (void)
    Exa_GetPars (&Exams,true);
 
    /***** Get exam data *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Session,
@@ -875,7 +875,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 /********************** Get exam data using its code *************************/
 /*****************************************************************************/
 
-void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
+void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -889,7 +889,7 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
      }
 
    /***** Get exam data from database *****/
-   if (Exa_DB_GetDataOfExamByCod (&mysql_res,Exam->ExaCod)) // Exam found...
+   if (Exa_DB_GetExamDataByCod (&mysql_res,Exam->ExaCod)) // Exam found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -994,7 +994,7 @@ void Exa_AskRemExam (void)
    Exa_GetPars (&Exams,true);
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show question and button to remove exam *****/
    Ale_ShowAlertAndButton (ActRemExa,NULL,NULL,
@@ -1028,7 +1028,7 @@ void Exa_RemoveExam (void)
    Exams.Exam.ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Remove exam from all tables *****/
    Exa_RemoveExamFromAllTables (Exams.Exam.ExaCod);
@@ -1216,7 +1216,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exa_GetPars (&Exams,true);
 
    /***** Get data of the exam from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Unhide exam *****/
    Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,Hide);
@@ -1254,7 +1254,7 @@ void Exa_ReqCreatOrEditExam (void)
       Exa_ResetExam (&Exams.Exam);
    else
       /* Get exam data from database */
-      Exa_GetDataOfExamByCod (&Exams.Exam);
+      Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Put form to create/edit an exam and show sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,ItsANewExam);
@@ -1425,7 +1425,7 @@ void Exa_ReceiveFormExam (void)
    // Some data, not received from form,
    // are necessary to show exam and sets of questions again
    if (!ItsANewExam)
-      Exa_GetDataOfExamByCod (&Exams.Exam);
+      Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);

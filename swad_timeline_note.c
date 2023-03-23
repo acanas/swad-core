@@ -149,7 +149,7 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
    NotifyEvent = Ntf_GetParNotifyEvent ();
 
    /***** Get data of the note *****/
-   TmlNot_GetDataOfNoteByCod (Not);
+   TmlNot_GetNoteDataByCod (Not);
 
    /***** Show the note highlighted *****/
    /* Begin box */
@@ -438,19 +438,19 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_INS_SHA_PUB_FILE:
 	 /* Get institution data */
 	 Hie->Ins.InsCod = Not->HieCod;
-	 Ins_GetDataOfInstitByCod (&Hie->Ins);
+	 Ins_GetInstitDataByCod (&Hie->Ins);
 	 break;
       case TmlNot_CTR_DOC_PUB_FILE:
       case TmlNot_CTR_SHA_PUB_FILE:
 	 /* Get center data */
 	 Hie->Ctr.CtrCod = Not->HieCod;
-	 Ctr_GetDataOfCenterByCod (&Hie->Ctr);
+	 Ctr_GetCenterDataByCod (&Hie->Ctr);
 	 break;
       case TmlNot_DEG_DOC_PUB_FILE:
       case TmlNot_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
 	 Hie->Deg.DegCod = Not->HieCod;
-	 Deg_GetDataOfDegreeByCod (&Hie->Deg);
+	 Deg_GetDegreeDataByCod (&Hie->Deg);
 	 break;
       case TmlNot_CRS_DOC_PUB_FILE:
       case TmlNot_CRS_SHA_PUB_FILE:
@@ -458,7 +458,7 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_NOTICE:
 	 /* Get course data */
 	 Hie->Crs.CrsCod = Not->HieCod;
-	 Crs_GetDataOfCourseByCod (&Hie->Crs);
+	 Crs_GetCourseDataByCod (&Hie->Crs);
 	 break;
       case TmlNot_FORUM_POST:
 	 /* Get forum type of the post */
@@ -1011,7 +1011,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
 
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (&Not);
+   TmlNot_GetNoteDataByCod (&Not);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod))
@@ -1106,7 +1106,7 @@ static void TmlNot_RemoveNote (void)
 
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (&Not);
+   TmlNot_GetNoteDataByCod (&Not);
 
    /***** Trivial check 1: note code should be > 0 *****/
    if (Not.NotCod <= 0)
@@ -1272,7 +1272,7 @@ static void TmlNot_ResetNote (struct TmlNot_Note *Not)
 /******************** Get data of note using its code ************************/
 /*****************************************************************************/
 
-void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
+void TmlNot_GetNoteDataByCod (struct TmlNot_Note *Not)
   {
    MYSQL_RES *mysql_res;
 
@@ -1285,7 +1285,7 @@ void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
      }
 
    /***** Get data of note from database *****/
-   if (Tml_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
+   if (Tml_DB_GetNoteDataByCod (Not->NotCod,&mysql_res))
       TmlNot_GetNoteDataFromRow (mysql_res,Not);
    else
       /* Reset fields of note */

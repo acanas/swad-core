@@ -1981,7 +1981,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
-      Deg_GetDataOfDegreeByCod (&Deg);
+      Deg_GetDegreeDataByCod (&Deg);
 
       /***** Contextual menu *****/
       HTM_DIV_Begin ("class=\"UPD\"");
@@ -2115,7 +2115,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Deg_GetDegreeDataByCod (&Deg);
 
 	    /* Get number of students and number of students with photo in this degree */
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
@@ -2209,7 +2209,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Deg_GetDataOfDegreeByCod (&Deg);
+	    Deg_GetDegreeDataByCod (&Deg);
 
 	    HTM_TR_Begin (NULL);
 

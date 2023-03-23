@@ -1813,13 +1813,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
 	 Hie.Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
+	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie.Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
+	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ins.ShrtName,
@@ -1828,13 +1828,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_CENTER_USRS:
 	 Hie.Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 	    Err_WrongCenterExit ();
          Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
 	 Hie.Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCenterByCod (&Hie.Ctr))
+	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ctr.ShrtName,
@@ -1843,13 +1843,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_DEGREE_USRS:
 	 Hie.Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
+	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 	    Err_WrongDegreeExit ();
          Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Hie.Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Hie.Deg))
+	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Deg.ShrtName,
@@ -1858,13 +1858,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
 	 Hie.Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
+	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
 	    Err_WrongCourseExit ();
          Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Hie.Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Hie.Crs))
+	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
 	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Crs.ShrtName,

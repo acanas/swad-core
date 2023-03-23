@@ -90,7 +90,7 @@ void Ctr_PutIconToViewCenters (void);
 
 void Ctr_GetBasicListOfCenters (long InsCod);
 void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder);
-bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr);
+bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr);
 void Ctr_FreeListCenters (void);
 void Ctr_WriteSelectorOfCenter (void);
 void Ctr_RemoveCenter (void);

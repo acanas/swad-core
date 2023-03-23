@@ -44,7 +44,7 @@ unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res);
 void Tml_DB_UpdateWho (Usr_Who_t Who);
 
 /*********************************** Notes ***********************************/
-unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res);
+unsigned Tml_DB_GetNoteDataByCod (long NotCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetPubCodOfOriginalNote (long NotCod);
 long Tml_DB_CreateNewNote (TmlNot_Type_t NoteType,long Cod,
                            long PublisherCod,long HieCod);
@@ -82,7 +82,7 @@ unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
 				 MYSQL_RES **mysql_res);
 unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 			       MYSQL_RES **mysql_res);
-unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res);
+unsigned Tml_DB_GetCommDataByCod (long PubCod,MYSQL_RES **mysql_res);
 void Tml_DB_InsertCommContent (long PubCod,
 			       const struct TmlPst_Content *Content);
 long Tml_DB_GetMedCodFromComm (long PubCod);
@@ -100,7 +100,7 @@ void Tml_DB_CreateSubQueryRange (TmlPub_Range_t Range,long PubCod,
                                  char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1]);
 unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
                                         const struct TmlPub_SubQueries *SubQueries);
-unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);
+unsigned Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetNotCodFromPubCod (long PubCod);
 long Tml_DB_GetPubCodFromSession (TmlPub_FirstLast_t FirstLast);
 unsigned Tml_DB_GetNumPubsUsr (long UsrCod);

@@ -79,7 +79,7 @@ static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
 static void Lnk_GetListLinks (struct Lnk_Links *Links);
-static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
+static void Lnk_GetLinkData (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
 
 static void Lnk_FreeListLinks (struct Lnk_Links *Links);
 
@@ -320,7 +320,7 @@ static void Lnk_GetListLinks (struct Lnk_Links *Links)
 	      NumLnk < Links->Num;
 	      NumLnk++)
 	    /* Get next link */
-	    Lnk_GetDataOfLink (mysql_res,&Links->Lst[NumLnk]);
+	    Lnk_GetLinkData (mysql_res,&Links->Lst[NumLnk]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -332,7 +332,7 @@ static void Lnk_GetListLinks (struct Lnk_Links *Links)
 /**************************** Get link full name *****************************/
 /*****************************************************************************/
 
-void Lnk_GetDataOfLinkByCod (struct Lnk_Link *Lnk)
+void Lnk_GetLinkDataByCod (struct Lnk_Link *Lnk)
   {
    MYSQL_RES *mysql_res;
 
@@ -345,8 +345,8 @@ void Lnk_GetDataOfLinkByCod (struct Lnk_Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      if (Lnk_DB_GetDataOfLinkByCod (&mysql_res,Lnk->LnkCod)) // Link found...
-	 Lnk_GetDataOfLink (mysql_res,Lnk);
+      if (Lnk_DB_GetLinkDataByCod (&mysql_res,Lnk->LnkCod)) // Link found...
+	 Lnk_GetLinkData (mysql_res,Lnk);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -357,7 +357,7 @@ void Lnk_GetDataOfLinkByCod (struct Lnk_Link *Lnk)
 /**************************** Get data of link *******************************/
 /*****************************************************************************/
 
-static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
+static void Lnk_GetLinkData (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
   {
    MYSQL_ROW row;
 
@@ -498,7 +498,7 @@ void Lnk_RemoveLink (void)
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /***** Get data of the link from database *****/
-   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
+   Lnk_GetLinkDataByCod (Lnk_EditingLnk);
 
    /***** Remove link *****/
    Lnk_DB_RemoveLink (Lnk_EditingLnk->LnkCod);
@@ -574,7 +574,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewLnkName,MaxBytes);
 
    /***** Get link data from the database *****/
-   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
+   Lnk_GetLinkDataByCod (Lnk_EditingLnk);
 
    /***** Check if new name is empty *****/
    if (NewLnkName[0])
@@ -630,7 +630,7 @@ void Lnk_ChangeLinkWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get link data from the database *****/
-   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
+   Lnk_GetLinkDataByCod (Lnk_EditingLnk);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

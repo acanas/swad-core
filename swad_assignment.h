@@ -91,8 +91,8 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
 Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 
 void Asg_ReqCreatOrEditAsg (void);
-void Asg_GetDataOfAssignmentByCod (struct Asg_Assignment *Asg);
-void Asg_GetDataOfAssignmentByFolder (struct Asg_Assignment *Asg);
+void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg);
+void Asg_GetAssignmentDataByFolder (struct Asg_Assignment *Asg);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,

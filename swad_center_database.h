@@ -45,7 +45,7 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod);
 unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
                                    long InsCod,Ctr_Order_t SelectedOrder);
 unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
-unsigned Ctr_DB_GetDataOfCenterByCod (MYSQL_RES **mysql_res,long CtrCod);
+unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);

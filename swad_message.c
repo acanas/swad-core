@@ -1112,7 +1112,7 @@ static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
      {
       /* Get data of course */
       Crs.CrsCod = Messages->FilterCrsCod;
-      Crs_GetDataOfCourseByCod (&Crs);
+      Crs_GetCourseDataByCod (&Crs);
      }
 
    Str_Copy (Messages->FilterCrsShrtName,Messages->FilterCrsCod > 0 ? Crs.ShrtName :
@@ -2373,7 +2373,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
       Crs.CrsCod = CrsCod;
 
       /* Get data of current degree */
-      if (Crs_GetDataOfCourseByCod (&Crs))
+      if (Crs_GetCourseDataByCod (&Crs))
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course

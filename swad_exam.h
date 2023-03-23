@@ -56,8 +56,8 @@ void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod);
 
 void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder);
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams);
-void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam);
-void Exa_GetDataOfExamByFolder (struct Exa_Exam *Exam);
+void Exa_GetExamDataByCod (struct Exa_Exam *Exam);
+void Exa_GetExamDataByFolder (struct Exa_Exam *Exam);
 void Exa_FreeListExams (struct Exa_Exams *Exams);
 
 void Exa_AskRemExam (void);

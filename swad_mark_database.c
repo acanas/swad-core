@@ -90,7 +90,7 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigne
 /*********************** Get marks data from database ************************/
 /*****************************************************************************/
 
-unsigned Mrk_DB_GetDataOfMarksByCod (MYSQL_RES **mysql_res,long MrkCod)
+unsigned Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the number of rows"

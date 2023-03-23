@@ -227,7 +227,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetDataOfCountryByCod (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Cty_DB_GetCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 

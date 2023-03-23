@@ -361,7 +361,7 @@ static struct TmlPub_Publication *TmlPub_SelectTheMostRecentPub (const struct Tm
          Err_NotEnoughMemoryExit ();
 
       /* Get data of publication */
-      TmlPub_GetDataOfPubFromNextRow (mysql_res,Pub);
+      TmlPub_GetPubDataFromNextRow (mysql_res,Pub);
       Pub->Next = NULL;
      }
    else
@@ -390,7 +390,7 @@ void TmlPub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Pub->NotCod;
-      TmlNot_GetDataOfNoteByCod (&Not);
+      TmlNot_GetNoteDataByCod (&Not);
 
       /* Write note */
       HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP Tml_NEW_PUB_%s\""
@@ -421,7 +421,7 @@ void TmlPub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
      {
       /* Get data of note */
       Not.NotCod = Pub->NotCod;
-      TmlNot_GetDataOfNoteByCod (&Not);
+      TmlNot_GetNoteDataByCod (&Not);
 
       /* Write note */
       HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP\"");
@@ -510,7 +510,7 @@ void TmlPub_PutLinkToViewOldPubs (void)
 /***************** Get data of publication using its code ********************/
 /*****************************************************************************/
 
-void TmlPub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+void TmlPub_GetPubDataFromNextRow (MYSQL_RES *mysql_res,
                                      struct TmlPub_Publication *Pub)
   {
    MYSQL_ROW row;

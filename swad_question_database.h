@@ -65,7 +65,7 @@ unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
                                           const struct Qst_Question *Question);
 
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
-unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
+unsigned Qst_DB_GetAnswersData (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
 unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,

@@ -102,7 +102,7 @@ static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
 static void Roo_PutIconToEditRooms (void);
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
 
-static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room);
+static void Roo_GetRoomDataByCod (struct Roo_Room *Room);
 static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFromDB);
 static Roo_RoomType_t Roo_GetTypeFromString (const char *Str);
 
@@ -356,7 +356,7 @@ void Roo_ChangeMAC (void)
    NewMACnum = MAC_GetMACnumFromForm ("NewMAC");
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the new MAC is different from the old MAC *****/
    if (OldMACnum)
@@ -556,7 +556,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
 /************* Get room data from database using the room code ***************/
 /*****************************************************************************/
 
-static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
+static void Roo_GetRoomDataByCod (struct Roo_Room *Room)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -566,7 +566,7 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
       return;
 
    /***** Get data of a room from database *****/
-   if (Roo_DB_GetDataOfRoomByCod (&mysql_res,Room->RooCod)) // Room found...
+   if (Roo_DB_GetRoomDataByCod (&mysql_res,Room->RooCod)) // Room found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -891,7 +891,7 @@ void Roo_RemoveRoom (void)
    Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Update groups assigned to this room *****/
    Grp_DB_ResetRoomInGrps (Roo_EditingRoom->RooCod);
@@ -926,7 +926,7 @@ void Roo_ChangeBuilding (void)
    NewBldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the old building equals the new one
           (this happens when return is pressed without changes) *****/
@@ -943,7 +943,7 @@ void Roo_ChangeBuilding (void)
       Roo_DB_UpdateRoomBuilding (Roo_EditingRoom->RooCod,NewBldCod);
 
       /***** Get updated data of the room from database *****/
-      Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+      Roo_GetRoomDataByCod (Roo_EditingRoom);
 
       /***** Message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -973,7 +973,7 @@ void Roo_ChangeFloor (void)
    NewFloor = Roo_GetParFloor ();
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the old floor equals the new one
           (this happens when return is pressed without changes) *****/
@@ -988,7 +988,7 @@ void Roo_ChangeFloor (void)
       Roo_DB_UpdateRoomFloor (Roo_EditingRoom->RooCod,NewFloor);
 
       /***** Get updated data of the room from database *****/
-      Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+      Roo_GetRoomDataByCod (Roo_EditingRoom);
 
       /***** Message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1019,7 +1019,7 @@ void Roo_ChangeType (void)
    NewType = Roo_GetParType ();
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the old type equals the new one
           (this happens when return is pressed without changes) *****/
@@ -1036,7 +1036,7 @@ void Roo_ChangeType (void)
       Roo_DB_UpdateRoomType (Roo_EditingRoom->RooCod,NewType);
 
       /***** Get updated data of the room from database *****/
-      Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+      Roo_GetRoomDataByCod (Roo_EditingRoom);
 
       /***** Message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1110,7 +1110,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the room *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if new name is empty *****/
    if (NewClaName[0])
@@ -1174,7 +1174,7 @@ void Roo_ChangeCapacity (void)
                                             Roo_UNLIMITED_CAPACITY);
 
    /***** Get data of the room from database *****/
-   Roo_GetDataOfRoomByCod (Roo_EditingRoom);
+   Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if the old capacity equals the new one
           (this happens when return is pressed without changes) *****/

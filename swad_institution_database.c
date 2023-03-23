@@ -127,7 +127,7 @@ void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetDataOfInstitutionByCod (MYSQL_RES **mysql_res,long InsCod)
+unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an institution",
@@ -148,7 +148,7 @@ unsigned Ins_DB_GetDataOfInstitutionByCod (MYSQL_RES **mysql_res,long InsCod)
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: institution code should be > 0 *****/
    if (InsCod <= 0)
@@ -170,7 +170,7 @@ void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_M
 /******** Get short name and country of an institution from its code *********/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetShrtNameAndCtyOfIns (MYSQL_RES **mysql_res,long InsCod)
+unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 

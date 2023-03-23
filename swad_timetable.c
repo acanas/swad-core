@@ -1433,7 +1433,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	   ClassType == Tmt_PRACTICAL))
 	{
 	 Crs.CrsCod = CrsCod;
-	 Crs_GetDataOfCourseByCod (&Crs);
+	 Crs_GetCourseDataByCod (&Crs);
 	 HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
 				    Txt_unknown_removed_course);
 	 HTM_BR ();
@@ -1451,7 +1451,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	  GrpCod > 0)
 	{
 	 GrpDat.GrpCod = GrpCod;
-         Grp_GetDataOfGroupByCod (&GrpDat);
+         Grp_GetGroupDataByCod (&GrpDat);
 	 HTM_BR ();
 	 HTM_Txt (GrpDat.GrpTypName);
 	 HTM_BR ();

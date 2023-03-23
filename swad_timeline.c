@@ -487,7 +487,7 @@ static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
 	{
 	 /* Get data of note */
 	 Not.NotCod = Pub->NotCod;
-	 TmlNot_GetDataOfNoteByCod (&Not);
+	 TmlNot_GetNoteDataByCod (&Not);
 
 	 /* Write list item (note) */
 	 if (Not.NotCod == NotCodToHighlight)

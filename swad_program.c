@@ -157,10 +157,10 @@ static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 
-static void Prg_GetDataOfItemByCod (struct Prg_Item *Item);
-static void Prg_GetDataOfItem (struct Prg_Item *Item,
-                               MYSQL_RES **mysql_res,
-			       unsigned NumRows);
+static void Prg_GetItemDataByCod (struct Prg_Item *Item);
+static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
+                                    struct Prg_Item *Item,
+                                    unsigned NumRows);
 
 static void Prg_HideOrUnhideItem (bool Hide);
 
@@ -306,7 +306,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	   {
 	    /* Get data of this program item */
 	    Item.Hierarchy.ItmCod = Prg_GetItmCodFromNumItem (NumItem);
-	    Prg_GetDataOfItemByCod (&Item);
+	    Prg_GetItemDataByCod (&Item);
 
 	    /* Begin range to highlight? */
 	    if (Item.Hierarchy.ItmInd == ToHighlight.Begin)	// Begin of the highlighted range
@@ -1142,14 +1142,14 @@ void Prg_GetPars (struct Prg_Item *Item)
    Item->Resource.Hierarchy.RscCod = ParCod_GetPar (ParCod_Rsc);
 
    /***** Get data of the program item from database *****/
-   PrgRsc_GetDataOfResourceByCod (Item);
+   PrgRsc_GetResourceDataByCod (Item);
 
    if (Item->Hierarchy.ItmCod <= 0)	// No resource specified
       /***** Try to get data of the program item from database *****/
       Item->Hierarchy.ItmCod = ParCod_GetPar (ParCod_Itm);
 
    /***** Get data of the program item from database *****/
-   Prg_GetDataOfItemByCod (Item);
+   Prg_GetItemDataByCod (Item);
   }
 
 /*****************************************************************************/
@@ -1205,7 +1205,7 @@ void Prg_GetListItems (void)
 /****************** Get program item data using its code *********************/
 /*****************************************************************************/
 
-static void Prg_GetDataOfItemByCod (struct Prg_Item *Item)
+static void Prg_GetItemDataByCod (struct Prg_Item *Item)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -1213,10 +1213,10 @@ static void Prg_GetDataOfItemByCod (struct Prg_Item *Item)
    if (Item->Hierarchy.ItmCod > 0)
      {
       /***** Build query *****/
-      NumRows = Prg_DB_GetDataOfItemByCod (&mysql_res,Item->Hierarchy.ItmCod);
+      NumRows = Prg_DB_GetItemDataByCod (&mysql_res,Item->Hierarchy.ItmCod);
 
       /***** Get data of program item *****/
-      Prg_GetDataOfItem (Item,&mysql_res,NumRows);
+      Prg_GetItemDataFromRow (&mysql_res,Item,NumRows);
      }
    else
       /***** Clear all program item data *****/
@@ -1227,9 +1227,9 @@ static void Prg_GetDataOfItemByCod (struct Prg_Item *Item)
 /************************* Get program item data *****************************/
 /*****************************************************************************/
 
-static void Prg_GetDataOfItem (struct Prg_Item *Item,
-                               MYSQL_RES **mysql_res,
-			       unsigned NumRows)
+static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
+                                    struct Prg_Item *Item,
+                                    unsigned NumRows)
   {
    MYSQL_ROW row;
 
@@ -1955,7 +1955,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Get data of the parent program item from database *****/
    ParentItem.Hierarchy.ItmCod = ParentItmCod;
-   Prg_GetDataOfItemByCod (&ParentItem);
+   Prg_GetItemDataByCod (&ParentItem);
 
    /***** Initialize to empty program item *****/
    Prg_ResetItem (&Item);
@@ -2004,7 +2004,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
 
    /***** Get data of the program item from database *****/
    Item.Hierarchy.ItmCod = ItmCod;
-   Prg_GetDataOfItemByCod (&Item);
+   Prg_GetItemDataByCod (&Item);
    Prg_DB_GetItemTxt (Item.Hierarchy.ItmCod,Txt);
 
    /***** Begin form *****/

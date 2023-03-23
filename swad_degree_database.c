@@ -280,7 +280,7 @@ void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp)
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod)
+unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a degree",

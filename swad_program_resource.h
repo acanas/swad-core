@@ -41,7 +41,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
                                long SelectedItmCod,
                                long SelectedRscCod);
 
-void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item);
+void PrgRsc_GetResourceDataByCod (struct Prg_Item *Item);
 
 void PrgRsc_CreateResource (void);
 

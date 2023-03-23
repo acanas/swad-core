@@ -58,15 +58,15 @@ void AttRsc_GetLinkToEvent (void)
    		  Title);
 
    /***** Show attendance events again *****/
-   Att_SeeAttEvents ();
+   Att_SeeEvents ();
   }
 
 /*****************************************************************************/
 /**************** Write attendance event in course program *******************/
 /*****************************************************************************/
 
-void AttRsc_WriteAttEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                       const char *Icon,const char *IconTitle)
+void AttRsc_WriteEventInCrsProgram (long AttCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -120,7 +120,7 @@ void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
    if (AttCod > 0)
      {
       /***** Get attendance event title *****/
-      Att_DB_GetAttEventTitle (AttCod,TitleFromDB);
+      Att_DB_GetEventTitle (AttCod,TitleFromDB);
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else

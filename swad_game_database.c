@@ -202,7 +202,7 @@ unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
 /********************** Get game data using its code *************************/
 /*****************************************************************************/
 
-unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod)
+unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get game data",

@@ -565,7 +565,7 @@ unsigned Prj_DB_GetCrsPrjsConfig (MYSQL_RES **mysql_res)
 /********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetDataOfProjectByCod (MYSQL_RES **mysql_res,long PrjCod)
+unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get project data",

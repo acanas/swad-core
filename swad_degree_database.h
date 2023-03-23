@@ -44,7 +44,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope);
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
                                 HieLvl_Level_t Scope,DegTyp_Order_t Order);
 void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp);
-unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod);
+unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
 void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);

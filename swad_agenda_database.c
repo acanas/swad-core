@@ -172,8 +172,8 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-unsigned Agd_DB_GetDataOfEventByCod (MYSQL_RES **mysql_res,
-                                     const struct Agd_Event *AgdEvent)
+unsigned Agd_DB_GetEventDataByCod (MYSQL_RES **mysql_res,
+                                   const struct Agd_Event *AgdEvent)
   {
    /***** Get data of event from database *****/
    return (unsigned)

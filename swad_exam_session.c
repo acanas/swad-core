@@ -206,7 +206,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 /******************* Get exam session data using its code ********************/
 /*****************************************************************************/
 
-void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
+void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session)
   {
    MYSQL_RES *mysql_res;
 
@@ -219,7 +219,7 @@ void ExaSes_GetDataOfSessionByCod (struct ExaSes_Session *Session)
      }
 
    /***** Get exam data session from database *****/
-   if (Exa_DB_GetDataOfSessionByCod (&mysql_res,Session->SesCod)) // Session found...
+   if (Exa_DB_GetSessionDataByCod (&mysql_res,Session->SesCod)) // Session found...
       /* Get exam session data from row */
       ExaSes_GetSessionDataFromRow (mysql_res,Session);
    else
@@ -853,7 +853,7 @@ void ExaSes_RemoveSession (void)
 		  Session.Title);
 
    /***** Get exam data again to update it after changes in session *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Session,
@@ -944,12 +944,12 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
    Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams->Exam);
+   Exa_GetExamDataByCod (&Exams->Exam);
    if (Exams->Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/
-   ExaSes_GetDataOfSessionByCod (Session);
+   ExaSes_GetSessionDataByCod (Session);
    if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
    Exams->SesCod = Session->SesCod;
@@ -1127,7 +1127,7 @@ void ExaSes_ReqCreatOrEditSes (void)
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
 
@@ -1138,7 +1138,7 @@ void ExaSes_ReqCreatOrEditSes (void)
    else
      {
       /* Get session data from database */
-      ExaSes_GetDataOfSessionByCod (&Session);
+      ExaSes_GetSessionDataByCod (&Session);
       if (Exams.Exam.ExaCod != Session.ExaCod)
 	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
@@ -1173,7 +1173,7 @@ void ExaSes_ReceiveFormSession (void)
    ItsANewSession = (Session.SesCod <= 0);
 
    /***** Get exam data from database *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Err_WrongExamExit ();
 
@@ -1187,7 +1187,7 @@ void ExaSes_ReceiveFormSession (void)
    else
      {
       /* Get session data from database */
-      ExaSes_GetDataOfSessionByCod (&Session);
+      ExaSes_GetSessionDataByCod (&Session);
       if (Session.ExaCod != Exams.Exam.ExaCod)
 	 Err_WrongExamExit ();
       Exams.SesCod = Session.SesCod;
@@ -1225,7 +1225,7 @@ void ExaSes_ReceiveFormSession (void)
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 
    /***** Get exam data again to update it after changes in session *****/
-   Exa_GetDataOfExamByCod (&Exams.Exam);
+   Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Session,

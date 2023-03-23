@@ -511,7 +511,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** User's institution *****/
    Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
-   Ins_GetDataOfInstitByCod (&Ins);
+   Ins_GetInstitDataByCod (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_Institution,
             Ins.FullName);
@@ -1041,11 +1041,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Get course data *****/
    Crs.CrsCod = CrsCod;
-   Crs_GetDataOfCourseByCod (&Crs);
+   Crs_GetCourseDataByCod (&Crs);
 
    /***** Get degree data *****/
    Deg.DegCod = Crs.DegCod;
-   Deg_GetDataOfDegreeByCod (&Deg);
+   Deg_GetDegreeDataByCod (&Deg);
 
    /***** Begin row *****/
    fprintf (Rep_File,"<li>");

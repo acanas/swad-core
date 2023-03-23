@@ -235,7 +235,7 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res)
 /****************** Get program item data using its code *********************/
 /*****************************************************************************/
 
-unsigned Prg_DB_GetDataOfItemByCod (MYSQL_RES **mysql_res,long ItmCod)
+unsigned Prg_DB_GetItemDataByCod (MYSQL_RES **mysql_res,long ItmCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get program item data",
@@ -528,7 +528,7 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
 /****************** Get item resource data using its code ********************/
 /*****************************************************************************/
 
-unsigned Prg_DB_GetDataOfResourceByCod (MYSQL_RES **mysql_res,long RscCod)
+unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get item resource data",

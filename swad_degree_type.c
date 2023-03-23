@@ -704,7 +704,7 @@ void DegTyp_RemoveDegreeType (void)
    DegTyp_EditingDegTyp->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of the degree type from database *****/
-   if (!DegTyp_GetDataOfDegreeTypeByCod (DegTyp_EditingDegTyp))
+   if (!DegTyp_GetDegreeTypeDataByCod (DegTyp_EditingDegTyp))
       Err_WrongDegTypExit ();
 
    /***** Check if this degree type has degrees *****/
@@ -737,7 +737,7 @@ static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
 /****************** Get data of a degree type from its code ******************/
 /*****************************************************************************/
 
-bool DegTyp_GetDataOfDegreeTypeByCod (struct DegTyp_DegreeType *DegTyp)
+bool DegTyp_GetDegreeTypeDataByCod (struct DegTyp_DegreeType *DegTyp)
   {
    /***** Trivial check: code of degree type should be >= 0 *****/
    if (DegTyp->DegTypCod <= 0)
@@ -817,7 +817,7 @@ void DegTyp_RenameDegreeType (void)
    Par_GetParText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
-   if (!DegTyp_GetDataOfDegreeTypeByCod (DegTyp_EditingDegTyp))
+   if (!DegTyp_GetDegreeTypeDataByCod (DegTyp_EditingDegTyp))
       Err_WrongDegTypExit ();
 
    /***** Check if new name is empty *****/

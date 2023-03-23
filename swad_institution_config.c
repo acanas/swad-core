@@ -284,7 +284,7 @@ static void InsCfg_Map (void)
       Ctr.CtrCod = DB_GetNextCode (mysql_res);
 
       /* Get data of center */
-      Ctr_GetDataOfCenterByCod (&Ctr);
+      Ctr_GetCenterDataByCod (&Ctr);
 
       /* Add marker */
       Map_AddMarker (&Ctr.Coord);
@@ -546,7 +546,7 @@ void InsCfg_ChangeInsCty (void)
    if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)
      {
       /***** Get data of the country from database *****/
-      Cty_GetDataOfCountryByCod (&NewCty);
+      Cty_GetCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))

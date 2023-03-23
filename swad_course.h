@@ -107,7 +107,7 @@ void Crs_ReceiveFormReqCrs (void);
 void Crs_ReceiveFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
-bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs);
+bool Crs_GetCourseDataByCod (struct Crs_Course *Crs);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);

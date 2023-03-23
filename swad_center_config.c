@@ -643,7 +643,7 @@ static void CtrCfg_Place (bool PutForm)
 
    /***** Get data of place *****/
    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
-   Plc_GetDataOfPlaceByCod (&Plc);
+   Plc_GetPlaceDataByCod (&Plc);
 
    /***** Place *****/
    HTM_TR_Begin (NULL);
@@ -1014,7 +1014,7 @@ void CtrCfg_ChangeCtrIns (void)
    if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)
      {
       /***** Get data of new institution *****/
-      Ins_GetDataOfInstitByCod (&NewIns);
+      Ins_GetInstitDataByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
       if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",

@@ -558,7 +558,7 @@ void Hie_InitHierarchy (void)
    /***** If course code is available, get course data *****/
    if (Gbl.Hierarchy.Crs.CrsCod > 0)
      {
-      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs))	// Course found
+      if (Crs_GetCourseDataByCod (&Gbl.Hierarchy.Crs))	// Course found
          Gbl.Hierarchy.Deg.DegCod = Gbl.Hierarchy.Crs.DegCod;
       else
          Hie_ResetHierarchy ();
@@ -567,7 +567,7 @@ void Hie_InitHierarchy (void)
    /***** If degree code is available, get degree data *****/
    if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
-      if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg))	// Degree found
+      if (Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Deg))	// Degree found
 	{
 	 Gbl.Hierarchy.Ctr.CtrCod = Gbl.Hierarchy.Deg.CtrCod;
          Gbl.Hierarchy.Ins.InsCod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
@@ -579,7 +579,7 @@ void Hie_InitHierarchy (void)
    /***** If center code is available, get center data *****/
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      if (Ctr_GetDataOfCenterByCod (&Gbl.Hierarchy.Ctr))	// Center found
+      if (Ctr_GetCenterDataByCod (&Gbl.Hierarchy.Ctr))	// Center found
          Gbl.Hierarchy.Ins.InsCod = Gbl.Hierarchy.Ctr.InsCod;
       else
          Hie_ResetHierarchy ();
@@ -588,7 +588,7 @@ void Hie_InitHierarchy (void)
    /***** If institution code is available, get institution data *****/
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
-      if (Ins_GetDataOfInstitByCod (&Gbl.Hierarchy.Ins))	// Institution found
+      if (Ins_GetInstitDataByCod (&Gbl.Hierarchy.Ins))	// Institution found
 	 Gbl.Hierarchy.Cty.CtyCod = Gbl.Hierarchy.Ins.CtyCod;
       else
          Hie_ResetHierarchy ();
@@ -596,7 +596,7 @@ void Hie_InitHierarchy (void)
 
    /***** If country code is available, get country data *****/
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
-      if (!Cty_GetDataOfCountryByCod (&Gbl.Hierarchy.Cty))		// Country not found
+      if (!Cty_GetCountryDataByCod (&Gbl.Hierarchy.Cty))		// Country not found
          Hie_ResetHierarchy ();
 
    /***** Set current hierarchy level and code
@@ -734,7 +734,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of institution */
-		     Ins_GetDataOfInstitByCod (&Hie.Ins);
+		     Ins_GetInstitDataByCod (&Hie.Ins);
 
 		     /* Write institution logo and name */
 		     Ins_DrawInstitLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,"LT");
@@ -744,7 +744,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of center */
-		     Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+		     Ctr_GetCenterDataByCod (&Hie.Ctr);
 
 		     /* Write center logo and name */
 		     Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,"LT");
@@ -754,7 +754,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of degree */
-		     Deg_GetDataOfDegreeByCod (&Hie.Deg);
+		     Deg_GetDegreeDataByCod (&Hie.Deg);
 
 		     /* Write degree logo and name */
 		     Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,"LT");

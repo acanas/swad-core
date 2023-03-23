@@ -109,7 +109,7 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 /****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
+unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a department",

@@ -2546,7 +2546,7 @@ bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      Question->Answer.NumOptions = Qst_DB_GetDataOfAnswers (&mysql_res,Question->QstCod,
+      Question->Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question->QstCod,
 			                                     false);	// Don't shuffle
       /*
       row[0] AnsInd

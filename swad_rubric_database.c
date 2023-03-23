@@ -109,7 +109,7 @@ unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
 /********************* Get rubric data using its code ************************/
 /*****************************************************************************/
 
-unsigned Rub_DB_GetDataOfRubricByCod (MYSQL_RES **mysql_res,long RubCod)
+unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get rubric data",
@@ -609,7 +609,7 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
 /***************** Get rubric criterion data using its code ******************/
 /*****************************************************************************/
 
-unsigned Rub_DB_GetDataOfCriterionByCod (MYSQL_RES **mysql_res,long CriCod)
+unsigned Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get criterion data",

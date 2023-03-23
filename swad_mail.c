@@ -388,7 +388,7 @@ void Mai_WriteWarningEmailNotifications (void)
 /**************************** Get mail domain data ***************************/
 /*****************************************************************************/
 
-void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
+void Mai_GetMailDomainDataByCod (struct Mail *Mai)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -400,7 +400,7 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      if (Mai_DB_GetDataOfMailDomainByCod (&mysql_res,Mai->MaiCod)) // Mail found...
+      if (Mai_DB_GetMailDomainDataByCod (&mysql_res,Mai->MaiCod)) // Mail found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -527,7 +527,7 @@ void Mai_RemoveMailDomain (void)
    Mai_EditingMai->MaiCod = ParCod_GetAndCheckPar (ParCod_Mai);
 
    /***** Get data of the mail domain rom database *****/
-   Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
+   Mai_GetMailDomainDataByCod (Mai_EditingMai);
 
    /***** Remove mail domain *****/
    Mai_DB_RemoveMailDomain (Mai_EditingMai->MaiCod);
@@ -603,7 +603,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    Par_GetParText (ParName,NewMaiName,MaxBytes);
 
    /***** Get from the database the old names of the mail *****/
-   Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
+   Mai_GetMailDomainDataByCod (Mai_EditingMai);
 
    /***** Check if new name is empty *****/
    if (NewMaiName[0])

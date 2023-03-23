@@ -65,7 +65,7 @@ struct Dpt_Departments
 void Dpt_SeeDepts (void);
 void Dpt_EditDepartments (void);
 void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
-void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt);
+void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt);
 void Dpt_RemoveDepartment (void);
 void Dpt_ChangeDepartIns (void);
 void Dpt_RenameDepartShort (void);

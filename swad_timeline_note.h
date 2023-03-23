@@ -111,6 +111,6 @@ void TmlNot_ReqRemNoteGbl (void);
 void TmlNot_RemoveNoteUsr (void);
 void TmlNot_RemoveNoteGbl (void);
 
-void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not);
+void TmlNot_GetNoteDataByCod (struct TmlNot_Note *Not);
 
 #endif

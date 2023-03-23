@@ -107,8 +107,8 @@ static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
 static void PrgRsc_PutIconsViewResources (void *ItmCod);
 static void PrgRsc_PutIconsEditResources (void *ItmCod);
 
-static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
-                                      MYSQL_RES **mysql_res);
+static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
+                                           struct Prg_Item *Item);
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item);
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
@@ -133,8 +133,8 @@ static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
                                                __attribute__((unused)) bool PutFormToGo,
                                                const char *Icon,const char *IconTitle);
 static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item);
-static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
-                                               MYSQL_RES **mysql_res);
+static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
+                                       struct Prg_Link *Link);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -281,7 +281,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 		 NumRsc++, The_ChangeRowColor1 (1))
 	      {
 	       /* Get data of this item resource */
-	       PrgRsc_GetDataOfResource (Item,&mysql_res);
+	       PrgRsc_GetResourceDataFromRow (mysql_res,Item);
 
 	       /* Show item */
 	       if (EditingResourcesOfThisItem)
@@ -345,15 +345,15 @@ static void PrgRsc_PutIconsEditResources (void *ItmCod)
 /****************** Get item resource data using its code ********************/
 /*****************************************************************************/
 
-void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item)
+void PrgRsc_GetResourceDataByCod (struct Prg_Item *Item)
   {
    MYSQL_RES *mysql_res;
 
    if (Item->Resource.Hierarchy.RscCod > 0)
      {
       /***** Get data of item resource *****/
-      if (Prg_DB_GetDataOfResourceByCod (&mysql_res,Item->Resource.Hierarchy.RscCod))
-         PrgRsc_GetDataOfResource (Item,&mysql_res);
+      if (Prg_DB_GetResourceDataByCod (&mysql_res,Item->Resource.Hierarchy.RscCod))
+         PrgRsc_GetResourceDataFromRow (mysql_res,Item);
       else
          Prg_ResetItem (Item);
 
@@ -369,14 +369,14 @@ void PrgRsc_GetDataOfResourceByCod (struct Prg_Item *Item)
 /************************* Get item resource data ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_GetDataOfResource (struct Prg_Item *Item,
-                                      MYSQL_RES **mysql_res)
+static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
+                                           struct Prg_Item *Item)
   {
    MYSQL_ROW row;
 
    /***** Get data of item resource from database *****/
    /* Get row */
-   row = mysql_fetch_row (*mysql_res);
+   row = mysql_fetch_row (mysql_res);
    /*
    ItmCod	row[0]
    RscCod	row[1]
@@ -939,7 +939,7 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 	      NumLink <= NumLinks;
 	      NumLink++)
 	   {
-	    PrgRsc_GetDataOfLinkFromClipboard (&Link,&mysql_res);
+	    PrgRsc_GetLinkDataFromRow (mysql_res,&Link);
 	    PrgRsc_WriteRowClipboard (true,&Link);
 	   }
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1000,7 +1000,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
       [PrgRsc_SURVEY          ] = SvyRsc_WriteSurveyInCrsProgram,
       [PrgRsc_DOCUMENT        ] = BrwRsc_WriteDocFileNameInCrsProgram,
       [PrgRsc_MARKS           ] = BrwRsc_WriteMrkFileNameInCrsProgram,
-      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_WriteAttEventInCrsProgram,
+      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_WriteEventInCrsProgram,
       [PrgRsc_FORUM_THREAD    ] = ForRsc_WriteThreadInCrsProgram,
      };
 
@@ -1117,14 +1117,14 @@ void PrgRsc_ChangeLink (void)
 /********************** Get resource data from clipboard *********************/
 /*****************************************************************************/
 
-static void PrgRsc_GetDataOfLinkFromClipboard (struct Prg_Link *Link,
-                                               MYSQL_RES **mysql_res)
+static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
+                                       struct Prg_Link *Link)
   {
    MYSQL_ROW row;
 
    /***** Get data of item resource from database *****/
    /* Get row */
-   row = mysql_fetch_row (*mysql_res);
+   row = mysql_fetch_row (mysql_res);
    /*
    Type	row[0]
    Cod	row[1]

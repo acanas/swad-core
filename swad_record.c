@@ -2098,7 +2098,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
 
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -3398,7 +3398,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 	    if (UsrDat->Tch.CtrCod > 0)
 	      {
 	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	       Ctr_GetDataOfCenterByCod (&Ctr);
+	       Ctr_GetCenterDataByCod (&Ctr);
 	       if (Ctr.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
@@ -3436,7 +3436,7 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
 	    if (UsrDat->Tch.DptCod > 0)
 	      {
 	       Dpt.DptCod = UsrDat->Tch.DptCod;
-	       Dpt_GetDataOfDepartmentByCod (&Dpt);
+	       Dpt_GetDepartmentDataByCod (&Dpt);
 	       if (Dpt.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
@@ -4012,7 +4012,7 @@ void Rec_UpdateMyInstitution (void)
    /* Get country of institution */
    if (Ins.InsCod > 0)
      {
-      Ins_GetDataOfInstitByCod (&Ins);
+      Ins_GetInstitDataByCod (&Ins);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
      }
@@ -4048,7 +4048,7 @@ void Rec_UpdateMyCenter (void)
    /* Get institution of center */
    if (Ctr.CtrCod > 0)
      {
-      Ctr_GetDataOfCenterByCod (&Ctr);
+      Ctr_GetCenterDataByCod (&Ctr);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
 	{
 	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
@@ -4081,7 +4081,7 @@ void Rec_UpdateMyDepartment (void)
    /* Get institution of department */
    if (Dpt.DptCod > 0)
      {
-      Dpt_GetDataOfDepartmentByCod (&Dpt);
+      Dpt_GetDepartmentDataByCod (&Dpt);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Dpt.InsCod)
 	{
 	 Gbl.Usrs.Me.UsrDat.InsCod = Dpt.InsCod;

@@ -764,7 +764,7 @@ static long TmlCom_ReceiveComm (void)
 
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (&Not);
+   TmlNot_GetNoteDataByCod (&Not);
 
    /***** Trivial check: note code *****/
    if (Not.NotCod <= 0)
@@ -870,7 +870,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
 
    /***** Get data of comment *****/
    Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
-   TmlCom_GetDataOfCommByCod (&Com);
+   TmlCom_GetCommDataByCod (&Com);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanRemove (Com.PubCod,Com.UsrCod))
@@ -980,7 +980,7 @@ static void TmlCom_RemoveComm (void)
 
    /***** Get data of comment *****/
    Com.PubCod = ParCod_GetAndCheckPar (ParCod_Pub);
-   TmlCom_GetDataOfCommByCod (&Com);
+   TmlCom_GetCommDataByCod (&Com);
 
    /***** Trivial check 1: publication code *****/
    if (Com.PubCod <= 0)
@@ -1040,7 +1040,7 @@ void TmlCom_RemoveCommMediaAndDBEntries (long PubCod)
 /******************* Get data of comment using its code **********************/
 /*****************************************************************************/
 
-void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
+void TmlCom_GetCommDataByCod (struct TmlCom_Comment *Com)
   {
    MYSQL_RES *mysql_res;
 
@@ -1053,7 +1053,7 @@ void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
      }
 
    /***** Get data of comment from database *****/
-   if (Tml_DB_GetDataOfCommByCod (Com->PubCod,&mysql_res))
+   if (Tml_DB_GetCommDataByCod (Com->PubCod,&mysql_res))
       TmlCom_GetCommDataFromRow (mysql_res,Com);
    else
       /* Reset fields of comment */

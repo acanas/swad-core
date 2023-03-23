@@ -67,7 +67,7 @@ void TmlSha_ShowAllSharersNoteGbl (void)
 
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (&Not);
+   TmlNot_GetNoteDataByCod (&Not);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
    TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
@@ -108,7 +108,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
 
    /***** Get data of note *****/
    Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (Not);
+   TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))
@@ -166,7 +166,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not)
 
    /***** Get data of note *****/
    Not->NotCod = ParCod_GetAndCheckPar (ParCod_Not);
-   TmlNot_GetDataOfNoteByCod (Not);
+   TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
    if (!TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod))

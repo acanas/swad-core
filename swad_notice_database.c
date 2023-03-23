@@ -112,7 +112,7 @@ void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
 /**************************** Get data of a notice ***************************/
 /*****************************************************************************/
 
-unsigned Not_DB_GetDataOfNotice (MYSQL_RES **mysql_res,long NotCod)
+unsigned Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get notice from database",

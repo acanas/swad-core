@@ -279,7 +279,7 @@ static void Plg_GetListPlugins (struct Plg_Plugins *Plugins)
 /*************************** Get data of a plugin ****************************/
 /*****************************************************************************/
 
-bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg)
+bool Plg_GetPluginDataByCod (struct Plg_Plugin *Plg)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -298,7 +298,7 @@ bool Plg_GetDataOfPluginByCod (struct Plg_Plugin *Plg)
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   if (Plg_DB_GetDataOfPluginByCod (&mysql_res,Plg->PlgCod)) // Plugin found...
+   if (Plg_DB_GetPluginDataByCod (&mysql_res,Plg->PlgCod)) // Plugin found...
      {
       PluginFound = true;
 
@@ -481,7 +481,7 @@ void Plg_RemovePlugin (void)
    Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /***** Get data of the plugin from database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Remove plugin *****/
    Plg_DB_RemovePlugin (Plg_EditingPlg->PlgCod);
@@ -514,7 +514,7 @@ void Plg_RenamePlugin (void)
    Par_GetParText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new name is empty *****/
    if (NewPlgName[0])
@@ -570,7 +570,7 @@ void Plg_ChangePlgDescription (void)
    Par_GetParText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new description is empty *****/
    if (NewDescription[0])
@@ -611,7 +611,7 @@ void Plg_ChangePlgLogo (void)
    Par_GetParText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewLogo[0])
@@ -652,7 +652,7 @@ void Plg_ChangePlgAppKey (void)
    Par_GetParText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewAppKey[0])
@@ -693,7 +693,7 @@ void Plg_ChangePlgURL (void)
    Par_GetParText ("URL",NewURL,Cns_MAX_BYTES_WWW);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new URL is empty *****/
    if (NewURL[0])
@@ -734,7 +734,7 @@ void Plg_ChangePlgIP (void)
    Par_GetParText ("IP",NewIP,Cns_MAX_BYTES_IP);
 
    /***** Get plugin data from the database *****/
-   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
+   Plg_GetPluginDataByCod (Plg_EditingPlg);
 
    /***** Check if new IP is empty *****/
    if (NewIP[0])

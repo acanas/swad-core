@@ -283,7 +283,7 @@ bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
 /************* Get room data from database using the room code ***************/
 /*****************************************************************************/
 
-unsigned Roo_DB_GetDataOfRoomByCod (MYSQL_RES **mysql_res,long RooCod)
+unsigned Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a room",

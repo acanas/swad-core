@@ -257,7 +257,7 @@ void Log_GetAndShowLastClicks (void)
 	 Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
 	 Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
 	 Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
-	 Ins_DB_GetShortNameOfInstitution (Hie.Ins.InsCod,Hie.Ins.ShrtName);
+	 Ins_DB_GetInsShrtName (Hie.Ins.InsCod,Hie.Ins.ShrtName);
 	 Ctr_DB_GetShortNameOfCenterByCod (Hie.Ctr.CtrCod,Hie.Ctr.ShrtName);
 	 Deg_DB_GetShortNameOfDegreeByCod (Hie.Deg.DegCod,Hie.Deg.ShrtName);
 

@@ -115,7 +115,7 @@ static void Agd_GetPars (struct Agd_Agenda *Agenda,
 
 static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType);
-static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent);
+static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent);
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda);
 
@@ -789,7 +789,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
          break;
      }
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
@@ -1079,13 +1079,13 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
+static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get data of event from database *****/
-   if (Agd_DB_GetDataOfEventByCod (&mysql_res,AgdEvent))	// Event found...
+   if (Agd_DB_GetEventDataByCod (&mysql_res,AgdEvent))	// Event found...
      {
       /* Get row:
       row[0] AgdCod
@@ -1176,7 +1176,7 @@ void Agd_AskRemEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Show question and button to remove event *****/
    Agenda.AgdCodToEdit = AgdEvent.AgdCod;
@@ -1211,7 +1211,7 @@ void Agd_RemoveEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Remove event *****/
    Agd_DB_RemoveEvent (&AgdEvent);
@@ -1244,7 +1244,7 @@ void Agd_HideEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Hide event *****/
    Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,true);
@@ -1273,7 +1273,7 @@ void Agd_UnhideEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Unhide event *****/
    Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,false);
@@ -1303,7 +1303,7 @@ void Agd_MakeEventPrivate (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Make event private *****/
    Agd_DB_MakeEventPrivate (&AgdEvent);
@@ -1337,7 +1337,7 @@ void Agd_MakeEventPublic (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);
+   Agd_GetventDataByCod (&AgdEvent);
 
    /***** Make event public *****/
    Agd_DB_MakeEventPublic (&AgdEvent);
@@ -1399,7 +1399,7 @@ void Agd_ReqCreatOrEditEvent (void)
    else
      {
       /* Get data of the event from database */
-      Agd_GetDataOfEventByCod (&AgdEvent);
+      Agd_GetventDataByCod (&AgdEvent);
 
       /* Get text of the event from database */
       Agd_DB_GetEventTxt (&AgdEvent,Txt);

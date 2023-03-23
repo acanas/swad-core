@@ -83,34 +83,34 @@ struct Att_Events
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Att_SeeAttEvents (void);
+void Att_SeeEvents (void);
 
-bool Att_CheckIfICanEditAttEvents (void);
+bool Att_CheckIfICanEditEvents (void);
 
-void Att_ReqCreatOrEditAttEvent (void);
-bool Att_GetDataOfAttEventByCod (struct Att_Event *Event);
-void Att_GetAttendanceEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
+void Att_ReqCreatOrEditEvent (void);
+bool Att_GetEventDataByCod (struct Att_Event *Event);
+void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
-void Att_AskRemAttEvent (void);
-void Att_GetAndRemAttEvent (void);
-void Att_RemoveAttEventFromDB (long AttCod);
+void Att_AskRemEvent (void);
+void Att_GetAndRemEvent (void);
+void Att_RemoveEventFromDB (long AttCod);
 
-void Att_HideAttEvent (void);
-void Att_UnhideAttEvent (void);
-void Att_ReceiveFormAttEvent (void);
-void Att_CreateAttEvent (struct Att_Event *Event,const char *Description);
-void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
+void Att_HideEvent (void);
+void Att_UnhideEvent (void);
+void Att_ReceiveFormEvent (void);
+void Att_CreateEvent (struct Att_Event *Event,const char *Description);
+void Att_UpdateEvent (struct Att_Event *Event,const char *Description);
 
-void Att_RemoveCrsAttEvents (long CrsCod);
+void Att_RemoveCrsEvents (long CrsCod);
 
-unsigned Att_GetNumAttEvents (HieLvl_Level_t Scope,unsigned *NumNotif);
+unsigned Att_GetNumEvents (HieLvl_Level_t Scope,unsigned *NumNotif);
 
-void Att_SeeOneAttEvent (void);
+void Att_SeeOneEvent (void);
 
 void Att_PutParsCodGrps (long AttCod);
 
-void Att_RegisterMeAsStdInAttEvent (void);
-void Att_RegisterStudentsInAttEvent (void);
+void Att_RegisterMeAsStdInEvent (void);
+void Att_RegisterStudentsInEvent (void);
 
 void Att_ReqListUsrsAttendanceCrs (void);
 void Att_ListMyAttendanceCrs (void);

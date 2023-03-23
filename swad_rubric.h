@@ -59,8 +59,8 @@ void Rub_PutPars (void *Rubrics);
 void Rub_GetPars (struct Rub_Rubrics *Rubrics,bool CheckRubCod);
 
 void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics);
-void Rub_GetDataOfRubricByCod (struct Rub_Rubric *Rubric);
-void Rub_GetDataOfRubricByFolder (struct Rub_Rubric *Rubric);
+void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric);
+void Rub_GetRubricDataByFolder (struct Rub_Rubric *Rubric);
 void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics);
 
 void Rub_AskRemRubric (void);
