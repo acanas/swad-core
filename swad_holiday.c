@@ -333,7 +333,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	 for (NumHld = 0;
 	      NumHld < Holidays->Num;
 	      NumHld++)
-	    Hld_GetHolidayDataFromRow (mysql_res,&(Holidays->Lst[NumHld]));
+	    Hld_GetHolidayDataFromRow (mysql_res,&Holidays->Lst[NumHld]);
 	}
 
       /***** Free structure that stores the query result *****/

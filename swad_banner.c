@@ -286,7 +286,7 @@ static void Ban_GetListBanners (struct Ban_Banners *Banners,
       for (NumBan = 0;
 	   NumBan < Banners->Num;
 	   NumBan++)
-	 Ban_GetBannerDataFromRow (*mysql_res,&(Banners->Lst[NumBan]));
+	 Ban_GetBannerDataFromRow (*mysql_res,&Banners->Lst[NumBan]);
      }
 
    /***** Free structure that stores the query result *****/

@@ -535,7 +535,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
+         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.Ctrs.Lst[NumCtr],
                                    false);	// Don't get number of users who claim to belong to this center
      }
 
@@ -568,8 +568,8 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),
-                                     true);	// Get number of users who claim to belong to this center
+         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.Ctrs.Lst[NumCtr],
+                                   true);	// Get number of users who claim to belong to this center
      }
 
    /***** Free structure that stores the query result *****/
@@ -603,7 +603,7 @@ bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
         {
          /* Get center data */
          Ctr_GetCenterDataFromRow (mysql_res,Ctr,
-                                     false);	// Don't get number of users who claim to belong to this center
+                                   false);	// Don't get number of users who claim to belong to this center
 
          /* Set return value */
          CtrFound = true;

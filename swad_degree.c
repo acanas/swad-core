@@ -987,7 +987,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
       for (NumDeg = 0;
 	   NumDeg < Degs->Num;
 	   NumDeg++)
-         Deg_GetDegreeDataFromRow (mysql_res,&(Degs->Lst[NumDeg]));
+         Deg_GetDegreeDataFromRow (mysql_res,&Degs->Lst[NumDeg]);
      }
    else
       Degs->Lst = NULL;

@@ -44937,6 +44937,29 @@ const char *Txt_Sort_degrees_by =
 	"Sort degrees by";		// Çeviri lazim!
 #endif
 
+const char *Txt_Source =
+#if   L==1	// ca
+	"Font";
+#elif L==2	// de
+	"Quelle";
+#elif L==3	// en
+	"Source";
+#elif L==4	// es
+	"Fuente";
+#elif L==5	// fr
+	"Source";
+#elif L==6	// gn
+	"Fuente";	// Okoteve traducción
+#elif L==7	// it
+	"Fonte";
+#elif L==8	// pl
+	"&Zacute;r&oacute;d&lstrok;o";
+#elif L==9	// pt
+	"Fonte";
+#elif L==10	// tr
+	"Source";	// Çeviri lazim!
+#endif
+
 const char *Txt_Source_of_information =
 #if   L==1	// ca
 	"Font d'informaci&oacute;";

@@ -349,7 +349,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	 for (NumDpt = 0;
 	      NumDpt < Departments->Num;
 	      NumDpt++)
-	    Dpt_GetDepartmentDataFromRow (mysql_res,&(Departments->Lst[NumDpt]));
+	    Dpt_GetDepartmentDataFromRow (mysql_res,&Departments->Lst[NumDpt]);
 	}
 
       /***** Free structure that stores the query result *****/

@@ -292,7 +292,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
       for (NumMai = 0;
 	   NumMai < Mails->Num;
 	   NumMai++)
-         Mai_GetMailDomainDataFromRow (mysql_res,&(Mails->Lst[NumMai]),
+         Mai_GetMailDomainDataFromRow (mysql_res,&Mails->Lst[NumMai],
 	                               true);	// Get number of users
      }
 

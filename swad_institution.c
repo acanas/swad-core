@@ -622,7 +622,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.Inss.Lst[NumIns],
                                    false);	// Don't get number of users who claim to belong to this institution
      }
    else
@@ -655,7 +655,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.Inss.Lst[NumIns],
                                    true);	// Get number of users who claim to belong to this institution
      }
    else

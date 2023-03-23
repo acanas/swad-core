@@ -178,6 +178,16 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
+	    /***** Source *****/
+	    HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"deg\" name=\"Source\" class=\"INPUT_%s\"",
+				 The_GetSuffix ());
+		  HTM_OPTION (HTM_Type_STRING,"Y",true,false,
+			      "%s","Fuente");
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
+
 	    /***** Minimum and maximum values of the criterion *****/
 	    for (ValueRange  = (RubCri_ValueRange_t) 0;
 		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
@@ -186,16 +196,16 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	       HTM_TD_Begin ("class=\"RM\"");
 		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
 		                   Criterion->Values[ValueRange],false,
-				   " class=\"INPUT_%s\" required=\"required\"",
+				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();
 	      }
 
-	    /***** Weight of the criterion *****/
+	    /***** Weight *****/
 	    HTM_TD_Begin ("class=\"RM\"");
 	       HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
 				Criterion->Weight,false,
-				" class=\"INPUT_%s\" required=\"required\"",
+				" class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -623,6 +633,16 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_ARTICLE_End ();
 	    HTM_TD_End ();
 
+	    /***** Source *****/
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "id=\"deg\" name=\"Source\" class=\"INPUT_%s\"",
+				 The_GetSuffix ());
+		  HTM_OPTION (HTM_Type_STRING,"Y",true,false,
+			      "%s","Fuente");
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
+
 	    /***** Minimum and maximum values of criterion *****/
 	    for (ValueRange  = (RubCri_ValueRange_t) 0;
 		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
@@ -635,7 +655,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 			RubCri_PutParsOneCriterion (Rubrics);
 			HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
 			                 Criterion.Values[ValueRange],false,
-					 " class=\"INPUT_%s\" required=\"required\"",
+					 " class=\"INPUT_FLOAT INPUT_%s\""
+					 " required=\"required\"",
 					 The_GetSuffix ());
 		     Frm_EndForm ();
 		    }
@@ -656,7 +677,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
 				      Criterion.Weight,false,
-				      " class=\"INPUT_%s\" required=\"required\"",
+				      " class=\"INPUT_FLOAT INPUT_%s\""
+				      " required=\"required\"",
 				      The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
@@ -675,8 +697,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Questions *****/
-	    HTM_TD_Begin ("colspan=\"3\" class=\"LT %s\"",
+	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",
 	                  The_GetColorRows ());
+
+	       // Description here
 
 	    HTM_TD_End ();
 
@@ -735,7 +759,8 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    Criterion->Weight = Str_GetDoubleFromStr (row[5 + RubCri_NUM_VALUES]);
 
    /***** Get the title of the criterion (row[8]) *****/
-   Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],sizeof (Criterion->Title) - 1);
+   Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],
+             sizeof (Criterion->Title) - 1);
   }
 
 /*****************************************************************************/
@@ -783,6 +808,7 @@ static void RubCri_PutTableHeadingForCriteria (void)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Criterion;
+   extern const char *Txt_Source;
    extern const char *Txt_Minimum;
    extern const char *Txt_Maximum;
    extern const char *Txt_Weight;
@@ -794,6 +820,7 @@ static void RubCri_PutTableHeadingForCriteria (void)
       HTM_TH_Empty (1);
       HTM_TH (Txt_No_INDEX ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Criterion,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Source   ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Minimum  ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Maximum  ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Weight   ,HTM_HEAD_RIGHT);

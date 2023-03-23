@@ -367,7 +367,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
       for (NumPlc = 0;
 	   NumPlc < Places->Num;
 	   NumPlc++)
-         Plc_GetPlaceDataFromRow (mysql_res,&(Places->Lst[NumPlc]));
+         Plc_GetPlaceDataFromRow (mysql_res,&Places->Lst[NumPlc]);
      }
 
    /***** Free structure that stores the query result *****/

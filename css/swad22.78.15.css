@@ -50,13 +50,6 @@ textarea
 	font-size:13pt;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	}
-.INPUT_WHITE,
-.INPUT_GREY,
-.INPUT_PURPLE,
-.INPUT_BLUE,
-.INPUT_YELLOW,
-.INPUT_PINK	{}
-.INPUT_DARK	{border-color:#505050;background-color:#1f1f1f;color:white;}
 
 table
 	{
@@ -4976,6 +4969,11 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	box-sizing:border-box;
 	width:60px;
 	}
+.INPUT_FLOAT
+	{
+	box-sizing:border-box;
+	width:90px;
+	}
 .INPUT_WWW_NARROW
 	{
 	box-sizing:border-box;
@@ -5001,6 +4999,13 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	box-sizing:border-box;
 	width:90px;
 	}
+.INPUT_WHITE,
+.INPUT_GREY,
+.INPUT_PURPLE,
+.INPUT_BLUE,
+.INPUT_YELLOW,
+.INPUT_PINK	{}
+.INPUT_DARK	{border-color:#505050;background-color:#1f1f1f;color:white;}
 
 /******************************** Last clicks ********************************/
 .LC_CLK	{text-align:right; vertical-align:top; min-width:60px;}
