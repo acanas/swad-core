@@ -1183,6 +1183,10 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
                                               const char *FileNameToShow);
 static bool Brw_GetParPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
+
+static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata);
+static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
+                                        struct Brw_FileMetadata *FileMetadata);
 static void Brw_GetFileViewsFromLoggedUsrs (struct Brw_FileMetadata *FileMetadata);
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
 
@@ -8412,118 +8416,15 @@ static Brw_License_t Brw_GetParLicense (void)
 void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
    if (Brw_DB_GetFileMetadataByPath (&mysql_res,Gbl.FileBrowser.FilFolLnk.Full))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get file code (row[0]) */
-      FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get file browser type in database (row[1]) */
-      FileMetadata->FileBrowser = Brw_UNKNOWN;
-      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
-            FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
-
-      /* Get institution/center/degree/course/group code (row[2]) */
-      FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get the user's code of the owner of a zone of files (row[3]) */
-      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /* Get publisher's code (row[4]) */
-      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /* Get file type (row[5]) */
-      FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
-      if (sscanf (row[5],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
-	    FileMetadata->FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
-
-      /* Get path (row[6]) */
-      Str_Copy (FileMetadata->FilFolLnk.Full,row[6],
-                sizeof (FileMetadata->FilFolLnk.Full) - 1);
-      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
-					    FileMetadata->FilFolLnk.Path,
-					    FileMetadata->FilFolLnk.Name);
-
-      /* File is hidden? (row[7]) */
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_SHOW_DOC_INS:
-         case Brw_ADMI_DOC_INS:
-         case Brw_SHOW_DOC_CTR:
-         case Brw_ADMI_DOC_CTR:
-         case Brw_SHOW_DOC_DEG:
-         case Brw_ADMI_DOC_DEG:
-         case Brw_SHOW_DOC_CRS:
-         case Brw_ADMI_DOC_CRS:
-            FileMetadata->IsHidden = (row[7][0] == 'Y');
-            break;
-         default:
-            FileMetadata->IsHidden = false;
-            break;
-        }
-
-      /* Is a public file? (row[8]) */
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_SHOW_DOC_INS:
-         case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
-         case Brw_SHOW_DOC_CTR:
-         case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
-         case Brw_SHOW_DOC_DEG:
-         case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
-         case Brw_SHOW_DOC_CRS:
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_SHR_CRS:
-            FileMetadata->IsPublic = (row[8][0] == 'Y');
-            break;
-         default:
-            FileMetadata->IsPublic = false;
-            break;
-        }
-
-      /* Get license (row[9]) */
-      FileMetadata->License = Brw_LICENSE_UNKNOWN;
-      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < Brw_NUM_LICENSES)
-            FileMetadata->License = (Brw_License_t) UnsignedNum;
+      Brw_ResetFileMetadata (FileMetadata);
+      Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
      }
    else
-     {
-      FileMetadata->FilCod            = -1L;
-      FileMetadata->FileBrowser       = Brw_UNKNOWN;
-      FileMetadata->Cod               = -1L;
-      FileMetadata->ZoneUsrCod        = -1L;
-      FileMetadata->PublisherUsrCod   = -1L;
-      FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
-      FileMetadata->FilFolLnk.Full[0] = '\0';
-      FileMetadata->FilFolLnk.Path[0] = '\0';
-      FileMetadata->FilFolLnk.Name[0] = '\0';
-      FileMetadata->IsHidden          = false;
-      FileMetadata->IsPublic          = false;
-      FileMetadata->License           = Brw_LICENSE_DEFAULT;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Fill some values with 0 (unused at this moment) *****/
-   FileMetadata->Size = (off_t) 0;
-   FileMetadata->Time = (time_t) 0;
-   FileMetadata->NumMyViews             =
-   FileMetadata->NumPublicViews         =
-   FileMetadata->NumViewsFromLoggedUsrs =
-   FileMetadata->NumLoggedUsrs          = 0;
+      Brw_ResetFileMetadata (FileMetadata);
   }
 
 /*****************************************************************************/
@@ -8536,118 +8437,135 @@ void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata)
 void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
    if (Brw_DB_GetFileMetadataByCod (&mysql_res,FileMetadata->FilCod))
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get file code (row[0]) */
-      FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get file browser type in database (row[1]) */
-      FileMetadata->FileBrowser = Brw_UNKNOWN;
-      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
-            FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
-
-      /* Get institution/center/degree/course/group code (row[2]) */
-      FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get the user's code of the owner of a zone of files (row[3]) */
-      FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /* Get publisher's code (row[4]) */
-      FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /* Get file type (row[5]) */
-      FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
-      if (sscanf (row[5],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
-	    FileMetadata->FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
-
-      /* Get path (row[6]) */
-      Str_Copy (FileMetadata->FilFolLnk.Full,row[6],
-                sizeof (FileMetadata->FilFolLnk.Full) - 1);
-      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
-					    FileMetadata->FilFolLnk.Path,
-					    FileMetadata->FilFolLnk.Name);
-
-      /* Is a hidden file? (row[7]) */
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_SHOW_DOC_INS:
-         case Brw_ADMI_DOC_INS:
-         case Brw_SHOW_DOC_CTR:
-         case Brw_ADMI_DOC_CTR:
-         case Brw_SHOW_DOC_DEG:
-         case Brw_ADMI_DOC_DEG:
-         case Brw_SHOW_DOC_CRS:
-         case Brw_ADMI_DOC_CRS:
-            FileMetadata->IsHidden = (row[7][0] == 'Y');
-            break;
-         default:
-            FileMetadata->IsHidden = false;
-            break;
-        }
-
-      /* Is a public file? (row[8]) */
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_SHOW_DOC_INS:
-         case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
-         case Brw_SHOW_DOC_CTR:
-         case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
-         case Brw_SHOW_DOC_DEG:
-         case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
-         case Brw_SHOW_DOC_CRS:
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_SHR_CRS:
-            FileMetadata->IsPublic = (row[8][0] == 'Y');
-            break;
-         default:
-            FileMetadata->IsPublic = false;
-            break;
-        }
-
-      /* Get license (row[9]) */
-      FileMetadata->License = Brw_LICENSE_UNKNOWN;
-      if (sscanf (row[9],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < Brw_NUM_LICENSES)
-            FileMetadata->License = (Brw_License_t) UnsignedNum;
+      Brw_ResetFileMetadata (FileMetadata);
+      Brw_GetFileMetadataFromRow (mysql_res,FileMetadata);
      }
    else
-     {
-      FileMetadata->FilCod            = -1L;
-      FileMetadata->FileBrowser       = Brw_UNKNOWN;
-      FileMetadata->Cod               = -1L;
-      FileMetadata->ZoneUsrCod        = -1L;
-      FileMetadata->PublisherUsrCod   = -1L;
-      FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
-      FileMetadata->FilFolLnk.Full[0] = '\0';
-      FileMetadata->FilFolLnk.Path[0] = '\0';
-      FileMetadata->FilFolLnk.Name[0] = '\0';
-      FileMetadata->IsHidden          = false;
-      FileMetadata->IsPublic          = false;
-      FileMetadata->License           = Brw_LICENSE_DEFAULT;
-     }
+      Brw_ResetFileMetadata (FileMetadata);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
 
-   /***** Fill some values with 0 (unused at this moment) *****/
-   FileMetadata->Size = (off_t) 0;
-   FileMetadata->Time = (time_t) 0;
+/*****************************************************************************/
+/*************************** Reset file metadata *****************************/
+/*****************************************************************************/
+
+static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata)
+  {
+   FileMetadata->FilCod            = -1L;
+   FileMetadata->FileBrowser       = Brw_UNKNOWN;
+   FileMetadata->Cod               = -1L;
+   FileMetadata->ZoneUsrCod        = -1L;
+   FileMetadata->PublisherUsrCod   = -1L;
+   FileMetadata->FilFolLnk.Type    = Brw_IS_UNKNOWN;
+   FileMetadata->FilFolLnk.Full[0] = '\0';
+   FileMetadata->FilFolLnk.Path[0] = '\0';
+   FileMetadata->FilFolLnk.Name[0] = '\0';
+   FileMetadata->IsHidden          = false;
+   FileMetadata->IsPublic          = false;
+   FileMetadata->License           = Brw_LICENSE_DEFAULT;
+   FileMetadata->Size              = (off_t) 0;
+   FileMetadata->Time              = (time_t) 0;
    FileMetadata->NumMyViews             =
    FileMetadata->NumPublicViews         =
    FileMetadata->NumViewsFromLoggedUsrs =
    FileMetadata->NumLoggedUsrs          = 0;
+  }
+
+/*****************************************************************************/
+/********************* Get file metadata using its code **********************/
+/*****************************************************************************/
+
+static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
+                                        struct Brw_FileMetadata *FileMetadata)
+  {
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get file code (row[0]) *****/
+   FileMetadata->FilCod = Str_ConvertStrCodToLongCod (row[0]);
+
+   /***** Get file browser type in database (row[1]) *****/
+   FileMetadata->FileBrowser = Brw_UNKNOWN;
+   if (sscanf (row[1],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Brw_NUM_TYPES_FILE_BROWSER)
+	 FileMetadata->FileBrowser = (Brw_FileBrowser_t) UnsignedNum;
+
+   /***** Get institution/center/degree/course/group code (row[2]) *****/
+   FileMetadata->Cod = Str_ConvertStrCodToLongCod (row[2]);
+
+   /***** Get the user's code of the owner of a zone of files (row[3]) *****/
+   FileMetadata->ZoneUsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+   /***** Get publisher's code (row[4]) *****/
+   FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
+
+   /***** Get file type (row[5]) *****/
+   FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
+   if (sscanf (row[5],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Brw_NUM_FILE_TYPES)
+	 FileMetadata->FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
+
+   /***** Get path (row[6]) *****/
+   Str_Copy (FileMetadata->FilFolLnk.Full,row[6],
+	     sizeof (FileMetadata->FilFolLnk.Full) - 1);
+   Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
+					 FileMetadata->FilFolLnk.Path,
+					 FileMetadata->FilFolLnk.Name);
+
+   /***** File is hidden? (row[7]) *****/
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_SHOW_DOC_INS:
+      case Brw_ADMI_DOC_INS:
+      case Brw_SHOW_DOC_CTR:
+      case Brw_ADMI_DOC_CTR:
+      case Brw_SHOW_DOC_DEG:
+      case Brw_ADMI_DOC_DEG:
+      case Brw_SHOW_DOC_CRS:
+      case Brw_ADMI_DOC_CRS:
+	 FileMetadata->IsHidden = (row[7][0] == 'Y');
+	 break;
+      default:
+	 FileMetadata->IsHidden = false;
+	 break;
+     }
+
+   /***** Is a public file? (row[8]) *****/
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_SHOW_DOC_INS:
+      case Brw_ADMI_DOC_INS:
+      case Brw_ADMI_SHR_INS:
+      case Brw_SHOW_DOC_CTR:
+      case Brw_ADMI_DOC_CTR:
+      case Brw_ADMI_SHR_CTR:
+      case Brw_SHOW_DOC_DEG:
+      case Brw_ADMI_DOC_DEG:
+      case Brw_ADMI_SHR_DEG:
+      case Brw_SHOW_DOC_CRS:
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_SHR_CRS:
+	 FileMetadata->IsPublic = (row[8][0] == 'Y');
+	 break;
+      default:
+	 FileMetadata->IsPublic = false;
+	 break;
+     }
+
+   /***** Get license (row[9]) *****/
+   FileMetadata->License = Brw_LICENSE_UNKNOWN;
+   if (sscanf (row[9],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Brw_NUM_LICENSES)
+	 FileMetadata->License = (Brw_License_t) UnsignedNum;
   }
 
 /*****************************************************************************/

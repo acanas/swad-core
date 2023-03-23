@@ -302,7 +302,6 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 /*****************************************************************************/
 /********************* Get file metadata using its code **********************/
 /*****************************************************************************/
-
 // This function only gets metadata stored in table files,
 // does not get size, time, numviews...
 
