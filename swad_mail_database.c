@@ -397,9 +397,10 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res,Mai_DomainsOrder_t Selecte
 unsigned Mai_DB_GetMailDomainDataByCod (MYSQL_RES **mysql_res,long MaiCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get data of a mail domain",
-		   "SELECT Domain,"	// row[0]
-			  "Info"		// row[1]
+   DB_QuerySELECT (mysql_res,"can not get mail domain",
+		   "SELECT MaiCod,"	// row[0]
+			  "Domain,"	// row[1]
+			  "Info"	// row[2]
 		    " FROM ntf_mail_domains"
 		   " WHERE MaiCod=%ld",
 		   MaiCod);

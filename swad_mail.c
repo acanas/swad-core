@@ -83,6 +83,9 @@ static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails);
 static void Mai_GetMailDomain (const char *Email,
                                char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
+                                          struct Mail *Mai,
+                                          bool GetNumUsrs);
 static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
@@ -266,9 +269,7 @@ static void Mai_EditMailDomainsInternal (void)
 static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumMai;
-   struct Mail *Mai;
 
    // Query uses temporary tables for speed
    // Query uses two identical temporary tables...
@@ -291,24 +292,8 @@ static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails)
       for (NumMai = 0;
 	   NumMai < Mails->Num;
 	   NumMai++)
-        {
-         Mai = &(Mails->Lst[NumMai]);
-
-         /* Get next mail */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get mail code (row[0]) */
-         if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongMailDomainExit ();
-
-         /* Get the mail domain (row[1]) and the mail domain info (row[2]) */
-         Str_Copy (Mai->Domain,row[1],sizeof (Mai->Domain) - 1);
-         Str_Copy (Mai->Info  ,row[2],sizeof (Mai->Info  ) - 1);
-
-         /* Get number of users (row[3]) */
-         if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
-            Mai->NumUsrs = 0;
-        }
+         Mai_GetMailDomainDataFromRow (mysql_res,&(Mails->Lst[NumMai]),
+	                               true);	// Get number of users
      }
 
    /***** Free structure that stores the query result *****/
@@ -385,13 +370,12 @@ void Mai_WriteWarningEmailNotifications (void)
   }
 
 /*****************************************************************************/
-/**************************** Get mail domain data ***************************/
+/******************* Get mail domain data using its code *********************/
 /*****************************************************************************/
 
 void Mai_GetMailDomainDataByCod (struct Mail *Mai)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Mai->Domain[0] = Mai->Info[0] = '\0';
@@ -401,18 +385,43 @@ void Mai_GetMailDomainDataByCod (struct Mail *Mai)
      {
       /***** Get data of a mail domain from database *****/
       if (Mai_DB_GetMailDomainDataByCod (&mysql_res,Mai->MaiCod)) // Mail found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get the short & full name of the mail (row[0], row[1]) */
-         Str_Copy (Mai->Domain,row[0],sizeof (Mai->Domain) - 1);
-         Str_Copy (Mai->Info  ,row[1],sizeof (Mai->Info  ) - 1);
-        }
+	 Mai_GetMailDomainDataFromRow (mysql_res,Mai,
+	                               false);	// Don't get number of users
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+  }
+
+/*****************************************************************************/
+/****************** Get mail domain data from database row *******************/
+/*****************************************************************************/
+
+static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
+                                          struct Mail *Mai,
+                                          bool GetNumUsrs)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get mail code (row[0]) *****/
+   if ((Mai->MaiCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongMailDomainExit ();
+
+   /***** Get the mail domain (row[1]) and the mail domain info (row[2]) *****/
+   Str_Copy (Mai->Domain,row[1],sizeof (Mai->Domain) - 1);
+   Str_Copy (Mai->Info  ,row[2],sizeof (Mai->Info  ) - 1);
+
+   /***** Get number of users (row[3]) *****/
+   if (GetNumUsrs)
+     {
+      if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
+	 Mai->NumUsrs = 0;
+     }
+   else
+      Mai->NumUsrs = 0;
   }
 
 /*****************************************************************************/

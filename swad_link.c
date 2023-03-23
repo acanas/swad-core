@@ -79,7 +79,7 @@ static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
 static void Lnk_GetListLinks (struct Lnk_Links *Links);
-static void Lnk_GetLinkData (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
+static void Lnk_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
 
 static void Lnk_FreeListLinks (struct Lnk_Links *Links);
 
@@ -319,8 +319,7 @@ static void Lnk_GetListLinks (struct Lnk_Links *Links)
 	 for (NumLnk = 0;
 	      NumLnk < Links->Num;
 	      NumLnk++)
-	    /* Get next link */
-	    Lnk_GetLinkData (mysql_res,&Links->Lst[NumLnk]);
+	    Lnk_GetLinkDataFromRow (mysql_res,&Links->Lst[NumLnk]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -346,7 +345,7 @@ void Lnk_GetLinkDataByCod (struct Lnk_Link *Lnk)
      {
       /***** Get data of an institutional link from database *****/
       if (Lnk_DB_GetLinkDataByCod (&mysql_res,Lnk->LnkCod)) // Link found...
-	 Lnk_GetLinkData (mysql_res,Lnk);
+	 Lnk_GetLinkDataFromRow (mysql_res,Lnk);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -357,7 +356,7 @@ void Lnk_GetLinkDataByCod (struct Lnk_Link *Lnk)
 /**************************** Get data of link *******************************/
 /*****************************************************************************/
 
-static void Lnk_GetLinkData (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
+static void Lnk_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
   {
    MYSQL_ROW row;
 
@@ -369,7 +368,6 @@ static void Lnk_GetLinkData (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
    row[2]	FullName
    row[3]	WWW
    */
-
    /***** Get plugin code (row[0]) *****/
    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongLinkExit ();
