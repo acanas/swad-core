@@ -53,6 +53,7 @@ struct Not_Notice
    long UsrCod;
    time_t CreatTime;
    Not_Status_t Status;
+   // TODO: char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_TEXT + 1];
   };
 

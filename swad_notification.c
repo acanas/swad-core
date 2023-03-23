@@ -1318,14 +1318,15 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	   {
 	    /* Get next event */
 	    row = mysql_fetch_row (mysql_res);
-	    /* row[0]: NotifyEvent
-	       row[1]: FromUsrCod
-	       row[2]: InsCod
-	       row[3]: CtrCod
-	       row[4]: DegCod
-	       row[5]: CrsCod
-	       row[6]: Cod */
-
+	    /*
+	    row[0]: NotifyEvent
+	    row[1]: FromUsrCod
+	    row[2]: InsCod
+	    row[3]: CtrCod
+	    row[4]: DegCod
+	    row[5]: CrsCod
+	    row[6]: Cod
+	    */
 	    /* Get event type (row[0]) */
 	    NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
 

@@ -68,6 +68,8 @@ static void Plc_PutIconToEditPlaces (void);
 static void Plc_EditPlacesInternal (void);
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
 
+static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc);
+
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
 static void Plc_PutParPlcCod (void *PlcCod);
 
@@ -351,9 +353,7 @@ void Plc_PutIconToViewPlaces (void)
 void Plc_GetListPlaces (struct Plc_Places *Places)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumPlc;
-   struct Plc_Place *Plc;
 
    /***** Get places from database *****/
    if ((Places->Num = Plc_DB_GetListPlaces (&mysql_res,Places->SelectedOrder))) // Places found...
@@ -367,24 +367,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
       for (NumPlc = 0;
 	   NumPlc < Places->Num;
 	   NumPlc++)
-        {
-         Plc = &(Places->Lst[NumPlc]);
-
-         /* Get next place */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get place code (row[0]) */
-         if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongPlaceExit ();
-
-         /* Get the short (row[1]) and full (row[2]) names of the place */
-         Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
-         Str_Copy (Plc->FullName,row[2],sizeof (Plc->FullName) - 1);
-
-         /* Get number of centers in this place (row[3]) */
-         if (sscanf (row[3],"%u",&Plc->NumCtrs) != 1)
-            Plc->NumCtrs = 0;
-        }
+         Plc_GetPlaceDataFromRow (mysql_res,&(Places->Lst[NumPlc]));
      }
 
    /***** Free structure that stores the query result *****/
@@ -392,7 +375,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
   }
 
 /*****************************************************************************/
-/**************************** Get place full name ****************************/
+/************************ Get place data using its code **********************/
 /*****************************************************************************/
 
 void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
@@ -400,7 +383,6 @@ void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Plc->ShrtName[0] = '\0';
@@ -422,22 +404,35 @@ void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
      {
       /***** Get data of a place from database *****/
       if (Plc_DB_GetPlaceDataByCod (&mysql_res,Plc->PlcCod)) // Place found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get the short (row[0]) and full (row[1]) names of the place */
-         Str_Copy (Plc->ShrtName,row[0],sizeof (Plc->ShrtName) - 1);
-         Str_Copy (Plc->FullName,row[1],sizeof (Plc->FullName) - 1);
-
-         /* Get number of centers in this place (row[2]) */
-         if (sscanf (row[2],"%u",&Plc->NumCtrs) != 1)
-            Plc->NumCtrs = 0;
-        }
+         Plc_GetPlaceDataFromRow (mysql_res,Plc);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+  }
+
+/*****************************************************************************/
+/********************** Get place data from database row *********************/
+/*****************************************************************************/
+
+static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get place code (row[0]) *****/
+   if ((Plc->PlcCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongPlaceExit ();
+
+   /***** Get the short (row[1]) and full (row[2]) names of the place *****/
+   Str_Copy (Plc->ShrtName,row[1],sizeof (Plc->ShrtName) - 1);
+   Str_Copy (Plc->FullName,row[2],sizeof (Plc->FullName) - 1);
+
+   /***** Get number of centers in this place (row[3]) *****/
+   if (sscanf (row[3],"%u",&Plc->NumCtrs) != 1)
+      Plc->NumCtrs = 0;
   }
 
 /*****************************************************************************/

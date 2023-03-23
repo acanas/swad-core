@@ -2374,6 +2374,8 @@ mysql> DESCRIBE not_notices;
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"UsrCod INT NOT NULL,"
 			"CreatTime DATETIME NOT NULL,"
+			// TODO: "Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
+			// TODO: "Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 			"Content TEXT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"NumNotif INT NOT NULL DEFAULT 0,"

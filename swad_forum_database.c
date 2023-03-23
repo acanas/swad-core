@@ -283,7 +283,7 @@ unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get subject and content",
 		   "SELECT Subject,"	// row[0]
-			  "Content"		// row[1]
+			  "Content"	// row[1]
 		    " FROM for_posts"
 		   " WHERE PstCod=%ld",
 		   PstCod);

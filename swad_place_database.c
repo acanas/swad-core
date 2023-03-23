@@ -119,9 +119,10 @@ unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a place",
-		   "(SELECT plc_places.ShortName,"	// row[0]
-			   "plc_places.FullName,"	// row[1]
-			   "COUNT(*)"			// row[2]
+		   "(SELECT plc_places.PlcCod,"		// row[0]
+			   "plc_places.ShortName,"	// row[1]
+			   "plc_places.FullName,"	// row[2]
+			   "COUNT(*)"			// row[3]
 		     " FROM plc_places,"
 			   "ctr_centers"
 		    " WHERE plc_places.PlcCod=%ld"
@@ -129,9 +130,10 @@ unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
 		      " AND ctr_centers.PlcCod=%ld"
 		 " GROUP BY plc_places.PlcCod)"
 		    " UNION "
-		   "(SELECT ShortName,"			// row[0]
-			   "FullName,"			// row[1]
-			   "0"				// row[2]
+		   "(SELECT PlcCod,"			// row[0]
+			   "ShortName,"			// row[1]
+			   "FullName,"			// row[2]
+			   "0"				// row[3]
 		     " FROM plc_places"
 		    " WHERE PlcCod=%ld"
 		      " AND PlcCod NOT IN"
