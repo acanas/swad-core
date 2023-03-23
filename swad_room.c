@@ -103,6 +103,9 @@ static void Roo_PutIconToEditRooms (void);
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
 
 static void Roo_GetRoomDataByCod (struct Roo_Room *Room);
+static void Roo_GetRoomDataFromRow (MYSQL_RES *mysql_res,
+                                    struct Roo_Room *Room,
+                                    Roo_WhichData_t WhichData);
 static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFromDB);
 static Roo_RoomType_t Roo_GetTypeFromString (const char *Str);
 
@@ -489,9 +492,7 @@ void Roo_PutIconToViewRooms (void)
 void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumRoom;
-   struct Roo_Room *Room;
 
    /***** Get rooms from database *****/
    if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hierarchy.Ctr.CtrCod,
@@ -506,46 +507,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
       for (NumRoom = 0;
 	   NumRoom < Rooms->Num;
 	   NumRoom++)
-        {
-         Room = &Rooms->Lst[NumRoom];
-
-         /* Get next room */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get room code (row[0]) */
-         if ((Room->RooCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongRoomExit ();
-
-	 switch (WhichData)
-	   {
-	    case Roo_ALL_DATA:
-	       /* Get building code (row[1]) */
-	       Room->BldCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	       /* Get the short name of the building (row[2]) */
-	       Roo_GetBldShrtName (Room,row[2]);
-
-	       /* Get floor (row[3]) */
-	       Room->Floor = Str_ConvertStrCodToLongCod (row[3]);
-
-	       /* Get type (row[4]) */
-	       Room->Type = Roo_GetTypeFromString (row[4]);
-
-	       /* Get the short (row[5]) and full (row[6]) names of the room  */
-	       Str_Copy (Room->ShrtName,row[5],sizeof (Room->ShrtName) - 1);
-	       Str_Copy (Room->FullName,row[6],sizeof (Room->FullName) - 1);
-
-	       /* Get seating capacity in this room (row[7]) */
-	       if (sscanf (row[7],"%u",&Room->Capacity) != 1)
-		  Room->Capacity = Roo_UNLIMITED_CAPACITY;
-	       break;
-	    case Roo_ONLY_SHRT_NAME:
-	    default:
-	       /* Get the short name of the room (row[1]) */
-	       Str_Copy (Room->ShrtName,row[1],sizeof (Room->ShrtName) - 1);
-	       break;
-           }
-        }
+         Roo_GetRoomDataFromRow (mysql_res,&Rooms->Lst[NumRoom],WhichData);
      }
 
    /***** Free structure that stores the query result *****/
@@ -559,7 +521,6 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
 static void Roo_GetRoomDataByCod (struct Roo_Room *Room)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Trivial check *****/
    if (Room->RooCod <= 0)
@@ -567,33 +528,58 @@ static void Roo_GetRoomDataByCod (struct Roo_Room *Room)
 
    /***** Get data of a room from database *****/
    if (Roo_DB_GetRoomDataByCod (&mysql_res,Room->RooCod)) // Room found...
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get building code (row[0]) */
-      Room->BldCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get the short name of the building (row[1]) */
-      Roo_GetBldShrtName (Room,row[1]);
-
-      /* Get floor (row[2]) */
-      Room->Floor = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get type (row[3]) */
-      Room->Type = Roo_GetTypeFromString (row[3]);
-
-      /* Get the short (row[4]) and full (row[5]) names of the room  */
-      Str_Copy (Room->ShrtName,row[4],sizeof (Room->ShrtName) - 1);
-      Str_Copy (Room->FullName,row[5],sizeof (Room->FullName) - 1);
-
-      /* Get seating capacity in this room (row[6]) */
-      if (sscanf (row[6],"%u",&Room->Capacity) != 1)
-	 Room->Capacity = Roo_UNLIMITED_CAPACITY;
-     }
+      Roo_GetRoomDataFromRow (mysql_res,Room,Roo_ALL_DATA);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Get room data from database row ***********************/
+/*****************************************************************************/
+
+static void Roo_GetRoomDataFromRow (MYSQL_RES *mysql_res,
+                                    struct Roo_Room *Room,
+                                    Roo_WhichData_t WhichData)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get room code (row[0]) *****/
+   if ((Room->RooCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongRoomExit ();
+
+   switch (WhichData)
+     {
+      case Roo_ALL_DATA:
+	 /***** Get building code (row[1]) *****/
+	 Room->BldCod = Str_ConvertStrCodToLongCod (row[1]);
+
+	 /***** Get the short name of the building (row[2]) *****/
+	 Roo_GetBldShrtName (Room,row[2]);
+
+	 /***** Get floor (row[3]) *****/
+	 Room->Floor = Str_ConvertStrCodToLongCod (row[3]);
+
+	 /***** Get type (row[4]) *****/
+	 Room->Type = Roo_GetTypeFromString (row[4]);
+
+	 /***** Get the short (row[5]) and full (row[6]) names of the room *****/
+	 Str_Copy (Room->ShrtName,row[5],sizeof (Room->ShrtName) - 1);
+	 Str_Copy (Room->FullName,row[6],sizeof (Room->FullName) - 1);
+
+	 /***** Get seating capacity in this room (row[7]) *****/
+	 if (sscanf (row[7],"%u",&Room->Capacity) != 1)
+	    Room->Capacity = Roo_UNLIMITED_CAPACITY;
+	 break;
+      case Roo_ONLY_SHRT_NAME:
+      default:
+	 /***** Get the short name of the room (row[1]) *****/
+	 Str_Copy (Room->ShrtName,row[1],sizeof (Room->ShrtName) - 1);
+	 break;
+     }
   }
 
 /*****************************************************************************/

@@ -1220,7 +1220,7 @@ unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-unsigned Qst_DB_GetQstData (MYSQL_RES **mysql_res,long QstCod)
+unsigned Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get a question",

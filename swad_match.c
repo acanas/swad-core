@@ -2789,7 +2789,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
      }
 
    /***** Get data of question from database *****/
-   if (Qst_GetQstDataFromDB (&Question))
+   if (Qst_GetQstDataByCod (&Question))
      {
       /***** Show question *****/
       /* Check answer type */

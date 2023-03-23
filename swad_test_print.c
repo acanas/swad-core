@@ -243,7 +243,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
 	       /* Show question */
-	       if (!Qst_GetQstDataFromDB (&Question))	// Question exists
+	       if (!Qst_GetQstDataByCod (&Question))	// Question exists
 		  Err_WrongQuestionExit ();
 
 	       /* Write question and answers */
@@ -551,7 +551,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
 	 /***** Get question data *****/
-	 QuestionExists = Qst_GetQstDataFromDB (&Question);
+	 QuestionExists = Qst_GetQstDataByCod (&Question);
 
 	 /***** Write question and answers *****/
 	 TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
@@ -2484,7 +2484,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
       Question.QstCod = PrintedQuestions[QstInd].QstCod;
 
       /***** Get question data *****/
-      QuestionExists = Qst_GetQstDataFromDB (&Question);
+      QuestionExists = Qst_GetQstDataByCod (&Question);
 
       /***** Write questions and answers *****/
       TstPrn_WriteQstAndAnsExam (UsrDat,

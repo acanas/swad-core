@@ -1756,7 +1756,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    HTM_TD_End ();
 
 	    /***** Question *****/
-	    QuestionExists = Qst_GetQstDataFromDB (&Question);
+	    QuestionExists = Qst_GetQstDataByCod (&Question);
 	    Qst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
 
 	 /***** End row *****/

@@ -952,7 +952,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
    char *Id;
 
    /***** Get and show question data *****/
-   if (Qst_GetQstDataFromDB (&Questions->Question))
+   if (Qst_GetQstDataByCod (&Questions->Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -1267,7 +1267,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
    char *Id;
 
    /***** Get and show questvoidion data *****/
-   if (Qst_GetQstDataFromDB (Question))
+   if (Qst_GetQstDataByCod (Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -1810,7 +1810,7 @@ void Qst_ShowFormEditOneQst (void)
    if (Question.QstCod <= 0)	// New question
       PutFormToEditQuestion = true;
    else
-      PutFormToEditQuestion = Qst_GetQstDataFromDB (&Question);
+      PutFormToEditQuestion = Qst_GetQstDataByCod (&Question);
 
    /***** Put form to edit question *****/
    if (PutFormToEditQuestion)
@@ -2471,10 +2471,10 @@ void Qst_FreeMediaOfQuestion (struct Qst_Question *Question)
   }
 
 /*****************************************************************************/
-/****************** Get data of a question from database *********************/
+/********************* Get question data using its code **********************/
 /*****************************************************************************/
 
-bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
+bool Qst_GetQstDataByCod (struct Qst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2484,7 +2484,7 @@ bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   if ((QuestionExists = (Qst_DB_GetQstData (&mysql_res,Question->QstCod) != 0)))
+   if ((QuestionExists = (Qst_DB_GetQstDataByCod (&mysql_res,Question->QstCod) != 0)))
      {
       row = mysql_fetch_row (mysql_res);
 

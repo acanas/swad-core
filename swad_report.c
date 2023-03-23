@@ -739,7 +739,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    mysql_data_seek (mysql_res,0);
 
    /***** Write rows *****/
-   for (NumHit = 1, NumClicks = 0;
+   for (NumHit  = 1, NumClicks = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {

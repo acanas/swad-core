@@ -236,7 +236,7 @@ void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
 void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
-bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
+bool Qst_GetQstDataByCod (struct Qst_Question *Question);
 long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                          struct Med_Media *Media);

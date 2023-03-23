@@ -225,7 +225,7 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res)
 			  "Hidden"	// row[3]
 		    " FROM prg_items"
 		   " WHERE CrsCod=%ld"
-		     "%s"
+		       "%s"
 		   " ORDER BY ItmInd",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);

@@ -374,8 +374,7 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /***** Get data of item resource from database *****/
-   /* Get row */
+   /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
    ItmCod	row[0]
@@ -386,21 +385,21 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Cod		row[5]
    Title	row[6]
    */
-   /* Get code of the program item (row[0]) */
+   /***** Get code of the program item (row[0]) *****/
    Item->Hierarchy.ItmCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /* Get code and index of the item resource (row[1], row[2]) */
+   /***** Get code and index of the item resource (row[1], row[2]) *****/
    Item->Resource.Hierarchy.RscCod = Str_ConvertStrCodToLongCod (row[1]);
    Item->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
-   /* Get whether the program item is hidden (row(3)) */
+   /***** Get whether the program item is hidden (row(3)) *****/
    Item->Resource.Hierarchy.Hidden = (row[3][0] == 'Y');
 
-   /* Get link type and code (row[4], row[5]) */
+   /***** Get link type and code (row[4], row[5]) *****/
    Item->Resource.Link.Type = PrgRsc_GetTypeFromString (row[4]);
    Item->Resource.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
 
-   /* Get the title of the item resource (row[6]) */
+   /***** Get the title of the item resource (row[6]) *****/
    Str_Copy (Item->Resource.Title,row[6],sizeof (Item->Resource.Title) - 1);
   }
 
@@ -1122,17 +1121,16 @@ static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
 
-   /***** Get data of item resource from database *****/
-   /* Get row */
+   /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
    Type	row[0]
    Cod	row[1]
    */
-   /* Get type (row[0]) */
+   /***** Get type (row[0]) *****/
    Link->Type = PrgRsc_GetTypeFromString (row[0]);
 
-   /* Get code (row[1]) */
+   /***** Get code (row[1]) *****/
    Link->Cod = Str_ConvertStrCodToLongCod (row[1]);
   }
 

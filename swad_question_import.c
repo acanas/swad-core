@@ -234,7 +234,7 @@ static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
 
-   if (Qst_GetQstDataFromDB (Question))
+   if (Qst_GetQstDataByCod (Question))
      {
       /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",

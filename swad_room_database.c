@@ -287,13 +287,14 @@ unsigned Roo_DB_GetRoomDataByCod (MYSQL_RES **mysql_res,long RooCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a room",
-		   "SELECT roo_rooms.BldCod,"		// row[0]
-			  "bld_buildings.ShortName,"	// row[1]
-			  "roo_rooms.Floor,"		// row[2]
-			  "roo_rooms.Type,"		// row[3]
-			  "roo_rooms.ShortName,"	// row[4]
-			  "roo_rooms.FullName,"		// row[5]
-			  "roo_rooms.Capacity"		// row[6]
+		   "SELECT roo_rooms.RooCod,"		// row[0]
+			  "roo_rooms.BldCod,"		// row[1]
+			  "bld_buildings.ShortName,"	// row[2]
+			  "roo_rooms.Floor,"		// row[3]
+			  "roo_rooms.Type,"		// row[4]
+			  "roo_rooms.ShortName,"	// row[5]
+			  "roo_rooms.FullName,"		// row[6]
+			  "roo_rooms.Capacity"		// row[7]
 		    " FROM roo_rooms LEFT JOIN bld_buildings"
 		      " ON roo_rooms.BldCod=bld_buildings.BldCod"
 		   " WHERE roo_rooms.RooCod=%ld",

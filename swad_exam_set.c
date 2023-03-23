@@ -1245,7 +1245,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
    Question.QstCod = QstCod;
 
    /***** Get data of question from database *****/
-   if (Qst_GetQstDataFromDB (&Question))
+   if (Qst_GetQstDataByCod (&Question))
      {
       /***** Clone media *****/
       CloneMedCod = Med_CloneMedia (&Question.Media);
