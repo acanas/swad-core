@@ -562,7 +562,6 @@ void Tml_GetAndShowTimelineActivityStats (void)
    extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    TmlNot_Type_t NoteType;
    unsigned NumNotes;
    unsigned NumUsrs;
