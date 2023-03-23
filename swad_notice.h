@@ -47,6 +47,15 @@ typedef enum
    Not_OBSOLETE_NOTICE = 1,
   } Not_Status_t;	// Don't change these numbers because they are used in database
 
+struct Not_Notice
+  {
+   long NotCod;
+   long UsrCod;
+   time_t CreatTime;
+   Not_Status_t Status;
+   char Content[Cns_MAX_BYTES_TEXT + 1];
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

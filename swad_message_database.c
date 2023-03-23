@@ -736,8 +736,8 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
    if (DB_QuerySELECT (&mysql_res,"can not get if a received message"
 				  " has been replied/expanded",
 		       "SELECT Open,"		// row[0]
-			      "Replied,"		// row[1]
-			      "Expanded"		// row[2]
+			      "Replied,"	// row[1]
+			      "Expanded"	// row[2]
 			" FROM msg_rcv"
 		       " WHERE MsgCod=%ld"
 			 " AND UsrCod=%ld",

@@ -116,10 +116,11 @@ unsigned Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get notice from database",
-		   "SELECT UNIX_TIMESTAMP(CreatTime) AS F,"	// row[0]
-			  "UsrCod,"				// row[1]
-			  "Content,"				// row[2]
-			  "Status"				// row[3]
+		   "SELECT NotCod,"				// row[0]
+			  "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
+			  "UsrCod,"				// row[2]
+			  "Content,"				// row[3]
+			  "Status"				// row[4]
 		    " FROM not_notices"
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check

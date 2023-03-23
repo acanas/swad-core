@@ -86,12 +86,12 @@ static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
+static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Not_Notice *Notice,
+                                      Not_Listing_t TypeNoticesListing);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
-                             long NotCod,bool Highlight,
-                             time_t TimeUTC,
-                             const char *Content,
-                             long UsrCod,
-                             Not_Status_t Status);
+                             struct Not_Notice *Notice,
+                             bool Highlight);
 
 static void Not_PutParNotCod (void *NotCod);
 
@@ -315,17 +315,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char PathRelRSSFile[PATH_MAX + 1];
-   long NotCod;
+   struct Not_Notice Notice;
    unsigned NumNot;
    unsigned NumNotices = 0;	// Initialized to avoid warning
-   char Content[Cns_MAX_BYTES_TEXT + 1];
-   time_t TimeUTC;
-   long UsrCod;
-   unsigned UnsignedNum;
-   Not_Status_t Status;
    char RSSLink[Cns_MAX_BYTES_WWW + 1];
 
    /***** Trivial check *****/
@@ -360,45 +354,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	NumNot < NumNotices;
 	NumNot++)
      {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get notice code (row[0]) */
-      if (sscanf (row[0],"%ld",&NotCod) != 1)
-	 Err_WrongNoticeExit ();
-
-      /* Get creation time (row[1] holds the UTC date-time) */
-      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-
-      /* Get user code (row[2]) */
-      UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get the content (row[3]) and insert links */
-      Str_Copy (Content,row[3],sizeof (Content) - 1);
-
-      /* Inserting links is incompatible with limiting the length
-	 ==> don't insert links when limiting length */
-      switch (TypeNoticesListing)
-        {
-	 case Not_LIST_BRIEF_NOTICES:
-	    Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
-	    break;
-	 case Not_LIST_FULL_NOTICES:
-	    ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-			     Not_MaxCharsURLOnScreen[TypeNoticesListing]);
-	    break;
-        }
-
-      /* Get status of the notice (row[4]) */
-      Status = Not_OBSOLETE_NOTICE;
-      if (sscanf (row[4],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Not_NUM_STATUS)
-	   Status = (Not_Status_t) UnsignedNum;
+      Not_GetNoticeDataFromRow (mysql_res,&Notice,TypeNoticesListing);
 
       /* Draw the notice */
-      Not_DrawANotice (TypeNoticesListing,
-		       NotCod,
-		       (NotCod == HighlightNotCod),	// Highlighted?
-		       TimeUTC,Content,UsrCod,Status);
+      Not_DrawANotice (TypeNoticesListing,&Notice,
+		       (Notice.NotCod == HighlightNotCod));	// Highlighted?
      }
 
    switch (TypeNoticesListing)
@@ -490,40 +450,16 @@ static void Not_PutButtonToAddNewNotice (void)
 static void Not_GetDataAndShowNotice (long NotCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   char Content[Cns_MAX_BYTES_TEXT + 1];
-   time_t TimeUTC;
-   long UsrCod;
-   unsigned UnsignedNum;
-   Not_Status_t Status;
+   struct Not_Notice Notice;
 
    /***** Get notice data from database *****/
    if (Not_DB_GetNoticeData (&mysql_res,NotCod))
      {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get creation time (row[0] holds the UTC date-time) */
-      TimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
-
-      /* Get user code (row[1]) */
-      UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get the content (row[2]) and insert links*/
-      Str_Copy (Content,row[2],sizeof (Content) - 1);
-      ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-		       Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
-
-      /* Get status of the notice (row[3]) */
-      Status = Not_OBSOLETE_NOTICE;
-      if (sscanf (row[3],"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Not_NUM_STATUS)
-	   Status = (Not_Status_t) UnsignedNum;
+      Not_GetNoticeDataFromRow (mysql_res,&Notice,Not_LIST_FULL_NOTICES);
 
       /***** Draw the notice *****/
-      Not_DrawANotice (Not_LIST_FULL_NOTICES,
-		       NotCod,
-		       false,	// Not highlighted
-		       TimeUTC,Content,UsrCod,Status);
+      Not_DrawANotice (Not_LIST_FULL_NOTICES,&Notice,
+		       false);	// Not highlighted
      }
 
    /***** Free structure that stores the query result *****/
@@ -531,15 +467,59 @@ static void Not_GetDataAndShowNotice (long NotCod)
   }
 
 /*****************************************************************************/
+/******************* Get notice data from database row ***********************/
+/*****************************************************************************/
+
+static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
+                                      struct Not_Notice *Notice,
+                                      Not_Listing_t TypeNoticesListing)
+  {
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get notice code (row[0]) *****/
+   if (sscanf (row[0],"%ld",&Notice->NotCod) != 1)
+      Err_WrongNoticeExit ();
+
+   /***** Get creation time (row[1] holds the UTC date-time) *****/
+   Notice->CreatTime = Dat_GetUNIXTimeFromStr (row[1]);
+
+   /***** Get user code (row[2]) *****/
+   Notice->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+   /***** Get the content (row[3]) and insert links *****/
+   Str_Copy (Notice->Content,row[3],sizeof (Notice->Content) - 1);
+
+   /* Inserting links is incompatible with limiting the length
+      ==> don't insert links when limiting length */
+   switch (TypeNoticesListing)
+     {
+      case Not_LIST_BRIEF_NOTICES:
+	 Str_LimitLengthHTMLStr (Notice->Content,Not_MAX_CHARS_ON_NOTICE);
+	 break;
+      case Not_LIST_FULL_NOTICES:
+	 ALn_InsertLinks (Notice->Content,Cns_MAX_BYTES_TEXT,
+			  Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
+	 break;
+     }
+
+   /***** Get status of the notice (row[4]) *****/
+   Notice->Status = Not_OBSOLETE_NOTICE;
+   if (sscanf (row[4],"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Not_NUM_STATUS)
+	Notice->Status = (Not_Status_t) UnsignedNum;
+  }
+
+/*****************************************************************************/
 /********************* Draw a notice as a yellow note ************************/
 /*****************************************************************************/
 
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
-                             long NotCod,bool Highlight,
-                             time_t TimeUTC,
-                             const char *Content,
-                             long UsrCod,
-                             Not_Status_t Status)
+                             struct Not_Notice *Notice,
+                             bool Highlight)
   {
    extern const char *Txt_See_full_notice;
    static Act_Action_t ActionHideUnhide[2] =
@@ -563,7 +543,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    char *Anchor = NULL;
 
    /***** Build anchor string *****/
-   Frm_SetAnchorStr (NotCod,&Anchor);
+   Frm_SetAnchorStr (Notice->NotCod,&Anchor);
 
    /***** Begin article for this notice *****/
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
@@ -576,7 +556,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"%s %s\"",
-	          ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
+	          ContainerClass[Notice->Status],ContainerWidthClass[TypeNoticesListing]);
 
       /***** Write the date in the top part of the yellow note *****/
       /* Write symbol to indicate if notice is obsolete or active */
@@ -585,12 +565,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /***** Icon to remove announcement *****/
 	    Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
-					   Not_PutParNotCod,&NotCod);
+					   Not_PutParNotCod,&Notice->NotCod);
 
 	    /***** Icon to change the status of the notice *****/
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
-				               Not_PutParNotCod,&NotCod,
-				               Status == Not_OBSOLETE_NOTICE);
+				               Not_PutParNotCod,&Notice->NotCod,
+				               Notice->Status == Not_OBSOLETE_NOTICE);
 	   }
 
       /* Write the date */
@@ -601,7 +581,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
-	       ParCod_PutPar (ParCod_Not,NotCod);
+	       ParCod_PutPar (ParCod_Not,Notice->NotCod);
 	       HTM_BUTTON_Submit_Begin (Txt_See_full_notice,
 	                                "class=\"RT BT_LINK\"");
 	   }
@@ -614,7 +594,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
-	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+	 Dat_WriteLocalDateHMSFromUTC (Id,Notice->CreatTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,false,0x6);
 	 free (Id);
@@ -625,13 +605,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	{
 	 HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF NOTICE_TEXT_%s\"",
                         The_GetSuffix ());
-	    HTM_Txt (Content);
+	    HTM_Txt (Notice->Content);
 	 HTM_DIV_End ();
 
 	 /* Put form to view full notice */
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
-					   Not_PutParNotCod,&NotCod,
+					   Not_PutParNotCod,&Notice->NotCod,
 					   "ellipsis-h.svg",Ico_BLACK);
 	 HTM_DIV_End ();
 	}
@@ -639,7 +619,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	{
          HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
                         The_GetSuffix ());
-            HTM_Txt (Content);
+            HTM_Txt (Notice->Content);
 	 HTM_DIV_End ();
 	}
 
@@ -647,7 +627,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       HTM_DIV_Begin ("class=\"NOTICE_AUTHOR NOTICE_AUTHOR_%s\"",	// Limited width
                      The_GetSuffix ());
 	 Usr_UsrDataConstructor (&UsrDat);
-	 UsrDat.UsrCod = UsrCod;
+	 UsrDat.UsrCod = Notice->UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
 						      Usr_DONT_GET_PREFS,
 						      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))

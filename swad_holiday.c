@@ -383,24 +383,26 @@ static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[0]:	PlcCod
-   row[1]:	Place
-   row[2]:	HldTyp
-   row[3]:	StartDate
-   row[4]:	EndDate
-   row[5]:	Name
+   row[0]:	HldCod
+   row[1]:	PlcCod
+   row[2]:	Place
+   row[3]:	HldTyp
+   row[4]:	StartDate
+   row[5]:	EndDate
+   row[6]:	Name
    */
-   /***** Get place code (row[0]) *****/
-   Hld->PlcCod = Str_ConvertStrCodToLongCod (row[0]);
+   /***** Get holiday code (row[0]) and place code (row[1]) *****/
+   Hld->HldCod = Str_ConvertStrCodToLongCod (row[0]);
+   Hld->PlcCod = Str_ConvertStrCodToLongCod (row[1]);
 
-   /***** Get the full name of the place (row[1]) *****/
-   Str_Copy (Hld->PlaceFullName,row[1],sizeof (Hld->PlaceFullName) - 1);
+   /***** Get the full name of the place (row[2]) *****/
+   Str_Copy (Hld->PlaceFullName,row[2],sizeof (Hld->PlaceFullName) - 1);
 
-   /***** Get type (row[2]) *****/
-   Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
+   /***** Get type (row[3]) *****/
+   Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
 
-   /***** Get start date (row[3] holds the date in YYYYMMDD format) *****/
-   if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[3])))
+   /***** Get start date (row[4] holds the date in YYYYMMDD format) *****/
+   if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4])))
       Err_WrongDateExit ();
 
    /***** Set / get end date *****/
@@ -411,14 +413,14 @@ static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
 	 Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
 	 break;
       case Hld_NON_SCHOOL_PERIOD:	// One or more days
-	 /* Get end date (row[4] holds the date in YYYYMMDD format) */
-	 if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
+	 /* Get end date (row[5] holds the date in YYYYMMDD format) */
+	 if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
 	    Err_WrongDateExit ();
 	 break;
      }
 
-   /***** Get the name of the holiday/non school period (row[5]) *****/
-   Str_Copy (Hld->Name,row[5],sizeof (Hld->Name) - 1);
+   /***** Get the name of the holiday/non school period (row[6]) *****/
+   Str_Copy (Hld->Name,row[6],sizeof (Hld->Name) - 1);
   }
 
 /*****************************************************************************/
