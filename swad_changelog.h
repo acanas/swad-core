@@ -629,11 +629,12 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.78.5 (2023-03-23)"
+#define Log_PLATFORM_VERSION	"SWAD 22.78.6 (2023-03-23)"
 #define CSS_FILE		"swad22.57.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 22.78.5:  Mar 22, 2023  Code refactoring in banners. (337696 lines)
+	Version 22.78.6:  Mar 22, 2023  Code refactoring in departments. (337691 lines)
+	Version 22.78.5:  Mar 22, 2023  Code refactoring in buildings. (337696 lines)
 	Version 22.78.4:  Mar 22, 2023  Code refactoring in file browser. (337693 lines)
 	Version 22.78.3:  Mar 22, 2023  Code refactoring. (337767 lines)
 	Version 22.78.2:  Mar 22, 2023  Code refactoring in attendance. (337779 lines)

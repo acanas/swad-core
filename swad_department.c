@@ -73,6 +73,9 @@ static void Dpt_EditDepartmentsInternal (void);
 
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
 
+static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
+                                          struct Dpt_Department *Dpt);
+
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
 static void Dpt_PutParDptCod (void *DptCod);
 
@@ -325,9 +328,7 @@ static void Dpt_EditDepartmentsInternal (void)
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumDpt;
-   struct Dpt_Department *Dpt;
 
    /***** Free list of departments *****/
    Dpt_FreeListDepartments (Departments);	// List is initialized to empty
@@ -348,30 +349,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
 	 for (NumDpt = 0;
 	      NumDpt < Departments->Num;
 	      NumDpt++)
-	   {
-	    Dpt = &(Departments->Lst[NumDpt]);
-
-	    /* Get next department */
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get department code (row[0]) */
-	    if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongDepartmentExit ();
-
-	    /* Get institution code (row[1]) */
-	    if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	       Err_WrongInstitExit ();
-
-	    /* Get short name (row[2]), full name (row[3])
-	       and URL (row[4]) of the department  */
-	    Str_Copy (Dpt->ShrtName,row[2],sizeof (Dpt->ShrtName) - 1);
-	    Str_Copy (Dpt->FullName,row[3],sizeof (Dpt->FullName) - 1);
-	    Str_Copy (Dpt->WWW     ,row[4],sizeof (Dpt->WWW     ) - 1);
-
-	    /* Get number of non-editing teachers and teachers in this department (row[5]) */
-	    if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
-	       Dpt->NumTchs = 0;
-	   }
+	    Dpt_GetDepartmentDataFromRow (mysql_res,&(Departments->Lst[NumDpt]));
 	}
 
       /***** Free structure that stores the query result *****/
@@ -387,7 +365,6 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
   {
    extern const char *Txt_Another_department;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Dpt->InsCod = -1L;
@@ -404,23 +381,7 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
      {
       /***** Get data of a department from database *****/
       if (Dpt_DB_GetDepartmentDataByCod (&mysql_res,Dpt->DptCod)) // Department found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get the code of the institution (row[0]) */
-         Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get short name (row[1]), full name (row[2])
-	    and URL (row[3]) of the department  */
-         Str_Copy (Dpt->ShrtName,row[1],sizeof (Dpt->ShrtName) - 1);
-         Str_Copy (Dpt->FullName,row[2],sizeof (Dpt->FullName) - 1);
-         Str_Copy (Dpt->WWW     ,row[3],sizeof (Dpt->WWW     ) - 1);
-
-         /* Get number of teachers in this department (row[4]) */
-         if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)
-            Dpt->NumTchs = 0;
-        }
+	 Dpt_GetDepartmentDataFromRow (mysql_res,Dpt);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -439,6 +400,38 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 
    Departments->Lst = NULL;
    Departments->Num = 0;
+  }
+
+/*****************************************************************************/
+/****************** Get data of department from database row *****************/
+/*****************************************************************************/
+
+static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
+                                          struct Dpt_Department *Dpt)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get department code (row[0]) *****/
+   if ((Dpt->DptCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongDepartmentExit ();
+
+   /***** Get institution code (row[1]) *****/
+   if ((Dpt->InsCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+      Err_WrongInstitExit ();
+
+   /***** Get short name (row[2]), full name (row[3])
+      and URL (row[4]) of the department  *****/
+   Str_Copy (Dpt->ShrtName,row[2],sizeof (Dpt->ShrtName) - 1);
+   Str_Copy (Dpt->FullName,row[3],sizeof (Dpt->FullName) - 1);
+   Str_Copy (Dpt->WWW     ,row[4],sizeof (Dpt->WWW     ) - 1);
+
+   /***** Get number of non-editing teachers and teachers
+          in this department (row[5]) *****/
+   if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
+      Dpt->NumTchs = 0;
   }
 
 /*****************************************************************************/

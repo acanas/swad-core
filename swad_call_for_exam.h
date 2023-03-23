@@ -119,8 +119,8 @@ void Cfe_HideCallForExam (void);
 void Cfe_UnhideCallForExam (void);
 
 void Cfe_FreeListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
-void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
-                                   long ExaCod);
+void Cfe_GetCallForExamDataByCod (struct Cfe_CallsForExams *CallsForExams,
+                                  long ExaCod);
 void Cfe_ListCallsForExamsSee (void);
 void Cfe_ListCallsForExamsEdit (void);
 

@@ -150,7 +150,7 @@ void Cfe_PutFrmEditACallForExam (void)
 
    if (ExaCod > 0)	// -1 indicates that this is a new call for exam
       /***** Read call for exam from the database *****/
-      Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+      Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Show call for exam *****/
    Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_FORM_VIEW,
@@ -382,7 +382,7 @@ void Cfe_PrintCallForExam (void)
    ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
 
    /***** Read call for exam from the database *****/
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+   Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Show call for exam *****/
    Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_PRINT_VIEW,
@@ -414,7 +414,7 @@ void Cfe_ReqRemCallForExam (void)
 
       /* Show call for exam */
       Cfe_AllocMemCallForExam (&CallsForExams);
-      Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+      Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
       Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_NORMAL_VIEW,
 			   false);	// Don't highlight
       Cfe_FreeMemCallForExam (&CallsForExams);
@@ -640,7 +640,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 	    Cfe_AllocMemCallForExam (CallsForExams);
 
 	    /***** Read the data of the call for exam *****/
-	    Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
+	    Cfe_GetCallForExamDataByCod (CallsForExams,ExaCod);
 
 	    /***** Show call for exam *****/
 	    HighLight = false;
@@ -775,8 +775,8 @@ void Cfe_FreeListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 /*********** Read the data of a call for exam from the database **************/
 /*****************************************************************************/
 
-void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
-                                   long ExaCod)
+void Cfe_GetCallForExamDataByCod (struct Cfe_CallsForExams *CallsForExams,
+                                  long ExaCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -786,7 +786,7 @@ void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
    unsigned Second;
 
    /***** Get data of a call for exam from database *****/
-   if (Cfe_DB_GetDataCallForExam (&mysql_res,ExaCod) != 1)
+   if (Cfe_DB_GetCallForExamDataByCod (&mysql_res,ExaCod) != 1)
       Err_WrongCallForExamExit ();
 
    /***** Get the data of the call for exam *****/
@@ -1572,7 +1572,7 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
    Cfe_AllocMemCallForExam (&CallsForExams);
 
    /***** Get data of a call for exam from database *****/
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+   Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Content *****/
    if (GetContent)

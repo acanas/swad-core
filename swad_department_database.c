@@ -113,11 +113,12 @@ unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a department",
-		   "(SELECT dpt_departments.InsCod,"			// row[0]
-			   "dpt_departments.ShortName,"			// row[1]
-			   "dpt_departments.FullName,"			// row[2]
-			   "dpt_departments.WWW,"			// row[3]
-			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
+		   "(SELECT dpt_departments.DptCod,"			// row[0]
+                           "dpt_departments.InsCod,"			// row[1]
+			   "dpt_departments.ShortName,"			// row[2]
+			   "dpt_departments.FullName,"			// row[3]
+			   "dpt_departments.WWW,"			// row[4]
+			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
 		     " FROM dpt_departments,"
 			   "usr_data,"
 			   "crs_users"

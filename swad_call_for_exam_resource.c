@@ -138,7 +138,7 @@ void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
 
       /***** Get data of call for exam *****/
       Cfe_AllocMemCallForExam (&CallsForExams);
-      Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+      Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
       /***** Session and date of the exam *****/
       Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);

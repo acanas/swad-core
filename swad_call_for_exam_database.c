@@ -154,7 +154,7 @@ unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 /***************** Get data of a call for exam from database *****************/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetDataCallForExam (MYSQL_RES **mysql_res,long ExaCod)
+unsigned Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a call for exam",
