@@ -66,6 +66,8 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
 static void Hld_EditHolidaysInternal (void);
 
 static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld);
+static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
+                                       struct Hld_Holiday *Hld);
 
 static Hld_HolidayType_t Hld_GetParHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
@@ -312,9 +314,7 @@ static void Hld_EditHolidaysInternal (void)
 void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumHld;
-   struct Hld_Holiday *Hld;
 
    if (DB_CheckIfDatabaseIsOpen ())
      {
@@ -333,47 +333,7 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 	 for (NumHld = 0;
 	      NumHld < Holidays->Num;
 	      NumHld++)
-	   {
-	    Hld = &(Holidays->Lst[NumHld]);
-
-	    /* Get next holiday */
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get holiday code (row[0]) */
-	    if ((Hld->HldCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongHolidayExit ();
-
-	    /* Get place code (row[1]) */
-	    Hld->PlcCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	    /* Get the full name of the place (row[2]) */
-	    Str_Copy (Hld->PlaceFullName,row[2],
-	              sizeof (Hld->PlaceFullName) - 1);
-
-	    /* Get type (row[3]) */
-	    Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
-
-	    /* Get start date (row[4] holds the start date in YYYYMMDD format) */
-	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4])))
-	       Err_WrongDateExit ();
-
-	    /* Set / get end date */
-	    switch (Hld->HldTyp)
-	      {
-	       case Hld_HOLIDAY:		// Only one day
-		  /* Set end date = start date */
-		  Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-		  break;
-	       case Hld_NON_SCHOOL_PERIOD:	// One or more days
-	          /* Get end date (row[5] holds the end date in YYYYMMDD format) */
-		  if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
-	             Err_WrongDateExit ();
-		  break;
-	      }
-
-	    /* Get the name of the holiday/non school period (row[6]) */
-	    Str_Copy (Hld->Name,row[6],sizeof (Hld->Name) - 1);
-	   }
+	    Hld_GetHolidayDataFromRow (mysql_res,&(Holidays->Lst[NumHld]));
 	}
 
       /***** Free structure that stores the query result *****/
@@ -390,7 +350,6 @@ void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
 static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
    Hld->PlcCod = -1L;
@@ -406,50 +365,60 @@ static void Hld_GetHolidayDataByCod (struct Hld_Holiday *Hld)
 
    /***** Get data of holiday from database *****/
    if (Hld_DB_GetHolidayDataByCod (&mysql_res,Hld->HldCod)) // Holiday found...
+      Hld_GetHolidayDataFromRow (mysql_res,Hld);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Get holiday data from database row *********************/
+/*****************************************************************************/
+
+static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
+                                       struct Hld_Holiday *Hld)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+   /*
+   row[0]:	PlcCod
+   row[1]:	Place
+   row[2]:	HldTyp
+   row[3]:	StartDate
+   row[4]:	EndDate
+   row[5]:	Name
+   */
+   /***** Get place code (row[0]) *****/
+   Hld->PlcCod = Str_ConvertStrCodToLongCod (row[0]);
+
+   /***** Get the full name of the place (row[1]) *****/
+   Str_Copy (Hld->PlaceFullName,row[1],sizeof (Hld->PlaceFullName) - 1);
+
+   /***** Get type (row[2]) *****/
+   Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
+
+   /***** Get start date (row[3] holds the date in YYYYMMDD format) *****/
+   if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[3])))
+      Err_WrongDateExit ();
+
+   /***** Set / get end date *****/
+   switch (Hld->HldTyp)
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0]:	PlcCod
-      row[1]:	Place
-      row[2]:	HldTyp
-      row[3]:	StartDate
-      row[4]:	EndDate
-      row[5]:	Name
-      */
-      /* Get place code (row[0]) */
-      Hld->PlcCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get the full name of the place (row[1]) */
-      Str_Copy (Hld->PlaceFullName,row[1],sizeof (Hld->PlaceFullName) - 1);
-
-      /* Get type (row[2]) */
-      Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
-
-      /* Get start date (row[3] holds the start date in YYYYMMDD format) */
-      if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[3])))
-	 Err_WrongDateExit ();
-
-      /* Set / get end date */
-      switch (Hld->HldTyp)
-	{
-	 case Hld_HOLIDAY:		// Only one day
-	    /* Assign end date = start date */
-	    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-	    break;
-	 case Hld_NON_SCHOOL_PERIOD:	// One or more days
-	    /* Get end date (row[4] holds the end date in YYYYMMDD format) */
-	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
-	       Err_WrongDateExit ();
-	    break;
-	}
-
-      /* Get the name of the holiday/non school period (row[5]) */
-      Str_Copy (Hld->Name,row[5],sizeof (Hld->Name) - 1);
+      case Hld_HOLIDAY:		// Only one day
+	 /* Assign end date = start date */
+	 Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+	 break;
+      case Hld_NON_SCHOOL_PERIOD:	// One or more days
+	 /* Get end date (row[4] holds the date in YYYYMMDD format) */
+	 if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
+	    Err_WrongDateExit ();
+	 break;
      }
 
-  /***** Free structure that stores the query result *****/
-  DB_FreeMySQLResult (&mysql_res);
+   /***** Get the name of the holiday/non school period (row[5]) *****/
+   Str_Copy (Hld->Name,row[5],sizeof (Hld->Name) - 1);
   }
 
 /*****************************************************************************/

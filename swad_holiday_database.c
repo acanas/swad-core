@@ -152,7 +152,7 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 			   "PlcCod,"								// row[1]
 			   "'' as Place,"							// row[2]
 			   "HldTyp,"								// row[3]
-			   "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"		// row[4]
+			   "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"			// row[4]
 			   "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,"			// row[5]
 			   "Name"								// row[6]
 		     " FROM hld_holidays"
@@ -178,12 +178,13 @@ unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a holiday",
-		   "(SELECT hld_holidays.PlcCod,"				// row[0]
-			   "plc_places.FullName as Place,"			// row[1]
-			   "hld_holidays.HldTyp,"				// row[2]
-			   "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d'),"	// row[3]
-			   "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d'),"	// row[4]
-			   "hld_holidays.Name"					// row[5]
+		   "(SELECT hld_holidays.HldCod,"				// row[0]
+                           "hld_holidays.PlcCod,"				// row[1]
+			   "plc_places.FullName as Place,"			// row[2]
+			   "hld_holidays.HldTyp,"				// row[3]
+			   "DATE_FORMAT(hld_holidays.StartDate,'%%Y%%m%%d'),"	// row[4]
+			   "DATE_FORMAT(hld_holidays.EndDate,'%%Y%%m%%d'),"	// row[5]
+			   "hld_holidays.Name"					// row[6]
 		     " FROM hld_holidays,"
 			   "plc_places"
 		    " WHERE hld_holidays.HldCod=%ld"
@@ -191,12 +192,13 @@ unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
 		      " AND hld_holidays.PlcCod=plc_places.PlcCod"
 		      " AND plc_places.InsCod=%ld)"
 		    " UNION "
-		   "(SELECT PlcCod,"
-			   "'' as Place,"
-			   "HldTyp,"
-			   "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
-			   "DATE_FORMAT(EndDate,'%%Y%%m%%d'),"
-			   "Name"
+		   "(SELECT HldCod,"						// row[0]
+		           "PlcCod,"						// row[1]
+			   "'' as Place,"					// row[2]
+			   "HldTyp,"						// row[3]
+			   "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"		// row[4]
+			   "DATE_FORMAT(EndDate,'%%Y%%m%%d'),"			// row[5]
+			   "Name"						// row[6]
 		     " FROM hld_holidays"
 		    " WHERE HldCod=%ld"
 		      " AND InsCod=%ld"
