@@ -849,10 +849,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemRubCri	] = {1961,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_RemoveCriterion		,NULL},
    [ActUp_RubCri	] = {1962,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveUpCriterion		,NULL},
    [ActDwnRubCri	] = {1963,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveDownCriterion	,NULL},
-   [ActChgTitRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeCriterionTitle	,NULL},
-   [ActChgMinRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValueCriterion	,NULL},
-   [ActChgMaxRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValueCriterion	,NULL},
-   [ActChgWeiRubCri	] = {1967,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeWeightCriterion	,NULL},
+   [ActChgTitRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeTitle		,NULL},
+   [ActChgSrcRubCri	] = {1968,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeSource		,NULL},
+   [ActChgMinRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValue		,NULL},
+   [ActChgMaxRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValue		,NULL},
+   [ActChgWeiRubCri	] = {1967,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeWeight		,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -3852,4 +3853,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMinRubCri,	// #1965
 	ActChgMaxRubCri,	// #1966
 	ActChgWeiRubCri,	// #1967
+	ActChgSrcRubCri,	// #1968
   };

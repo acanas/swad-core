@@ -70,6 +70,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion);
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
                                                         const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
+static RubCri_Source_t RubCri_GetParSource (void);
 
 static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange);
 
@@ -141,7 +142,10 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd)
   {
    extern const char *Txt_New_criterion;
+   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
    extern const char *Txt_Create_criterion;
+   RubCri_Source_t Source;
+   unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
 
    /***** Begin form *****/
@@ -181,10 +185,17 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	    /***** Source *****/
 	    HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"deg\" name=\"Source\" class=\"INPUT_%s\"",
+				 "name=\"Source\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"Y",true,false,
-			      "%s","Fuente");
+                  for (Source  = (RubCri_Source_t) 0;
+		       Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
+		       Source++)
+		    {
+		     SourceUnsigned = (unsigned) Source;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
+				 Source == Criterion->Source,false,
+				 "%s",Txt_RUBRIC_CRITERION_SOURCES[Source]);
+		    }
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
@@ -264,6 +275,9 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
    /***** Get criterion title *****/
    Par_GetParText ("Title",Criterion->Title,RubCri_MAX_BYTES_TITLE);
 
+   /***** Get criterion source *****/
+   Criterion->Source = RubCri_GetParSource ();
+
    /***** Get minimum and maximum values of criterion *****/
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
@@ -311,10 +325,23 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
   }
 
 /*****************************************************************************/
+/****************** Get parameter with criterion source **********************/
+/*****************************************************************************/
+
+static RubCri_Source_t RubCri_GetParSource (void)
+  {
+   return (RubCri_Source_t)
+	  Par_GetParUnsignedLong ("Source",
+                                  0,
+                                  RubCri_NUM_SOURCES - 1,
+                                  (unsigned long) RubCri_SOURCE_DEFAULT);
+  }
+
+/*****************************************************************************/
 /************* Receive form to change title of rubric criterion **************/
 /*****************************************************************************/
 
-void RubCri_ChangeCriterionTitle (void)
+void RubCri_ChangeTitle (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
@@ -342,12 +369,52 @@ void RubCri_ChangeCriterionTitle (void)
    /***** Check if title should be changed *****/
    if (RubCri_CheckCriterionTitleReceivedFromForm (&Criterion,NewTitle))
      {
-      /* Update the table changing old title by new title */
-      Rub_DB_UpdateCriterionTitle (Criterion.CriCod,Criterion.RubCod,NewTitle);
-
-      /* Update title */
+      /* Update title and database table */
       Str_Copy (Criterion.Title,NewTitle,sizeof (Criterion.Title) - 1);
+      Rub_DB_UpdateCriterionTitle (&Criterion);
      }
+
+   /***** Show current rubric and its criteria *****/
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
+                          false);	// It's not a new rubric
+  }
+
+/*****************************************************************************/
+/****************** Receive form to change criterion source ******************/
+/*****************************************************************************/
+
+void RubCri_ChangeSource (void)
+  {
+   struct Rub_Rubrics Rubrics;
+   struct RubCri_Criterion Criterion;
+
+   /***** Check if I can edit rubrics *****/
+   if (!Rub_CheckIfICanEditRubrics ())
+      Err_NoPermissionExit ();
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+   Rub_ResetRubric (&Rubrics.Rubric);
+   RubCri_ResetCriterion (&Criterion);
+
+   /***** Get parameters *****/
+   Rub_GetPars (&Rubrics,true);
+   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.CriCod = Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+
+   /***** Get and check parameters *****/
+   RubCri_GetAndCheckPars (&Rubrics,&Criterion);
+
+   /***** Check if rubric is editable *****/
+   if (!Rub_CheckIfEditable (&Rubrics.Rubric))
+      Err_NoPermissionExit ();
+
+   /***** Receive new source from form *****/
+   Criterion.Source = RubCri_GetParSource ();
+
+   /***** Change source *****/
+   /* Update the table changing old source by new source */
+   Rub_DB_UpdateCriterionSource (&Criterion);
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
@@ -358,12 +425,12 @@ void RubCri_ChangeCriterionTitle (void)
 /********* Receive form to change minimum/maximum value of criterion *********/
 /*****************************************************************************/
 
-void RubCri_ChangeMinValueCriterion (void)
+void RubCri_ChangeMinValue (void)
   {
    RubCri_ChangeValueCriterion (RubCri_MIN);
   }
 
-void RubCri_ChangeMaxValueCriterion (void)
+void RubCri_ChangeMaxValue (void)
   {
    RubCri_ChangeValueCriterion (RubCri_MAX);
   }
@@ -401,8 +468,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Change value *****/
    /* Update the table changing old value by new value */
-   Rub_DB_UpdateCriterionValue (Criterion.CriCod,Criterion.RubCod,
-                                ValueRange,Criterion.Values[ValueRange]);
+   Rub_DB_UpdateCriterionValue (&Criterion,ValueRange);
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
@@ -410,10 +476,10 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
   }
 
 /*****************************************************************************/
-/********* Receive form to change minimum/maximum value of criterion *********/
+/****************** Receive form to change criterion weight ******************/
 /*****************************************************************************/
 
-void RubCri_ChangeWeightCriterion (void)
+void RubCri_ChangeWeight (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
@@ -440,14 +506,13 @@ void RubCri_ChangeWeightCriterion (void)
    if (!Rub_CheckIfEditable (&Rubrics.Rubric))
       Err_NoPermissionExit ();
 
-   /***** Receive new value from form *****/
+   /***** Receive new weight from form *****/
    Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
    Criterion.Weight = Str_GetDoubleFromStr (WeightStr);
 
    /***** Change value *****/
-   /* Update the table changing old value by new value */
-   Rub_DB_UpdateCriterionWeight (Criterion.CriCod,Criterion.RubCod,
-                                 Criterion.Weight);
+   /* Update the table changing old weight by new weight */
+   Rub_DB_UpdateCriterionWeight (&Criterion);
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
@@ -530,6 +595,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
    // Actions to change minimum/maximum criterion values
    static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
@@ -539,6 +605,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
    char *Anchor;
+   RubCri_Source_t Source;
+   unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
 
    /***** Trivial check *****/
@@ -635,12 +703,22 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	    /***** Source *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "id=\"deg\" name=\"Source\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"Y",true,false,
-			      "%s","Fuente");
-	       HTM_SELECT_End ();
+	       Frm_BeginFormAnchor (ActChgSrcRubCri,Anchor);
+		  RubCri_PutParsOneCriterion (Rubrics);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "name=\"Source\" class=\"INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (Source  = (RubCri_Source_t) 0;
+			  Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
+			  Source++)
+		       {
+			SourceUnsigned = (unsigned) Source;
+			HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
+				    Source == Criterion.Source,false,
+				    "%s",Txt_RUBRIC_CRITERION_SOURCES[Source]);
+		       }
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /***** Minimum and maximum values of criterion *****/

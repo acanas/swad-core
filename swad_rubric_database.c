@@ -379,25 +379,40 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
 /********************* Update criterion title in database ********************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionTitle (long CriCod,long RubCod,
-                                  const char NewTitle[RubCri_MAX_BYTES_TITLE + 1])
+void Rub_DB_UpdateCriterionTitle (const struct RubCri_Criterion *Criterion)
   {
    DB_QueryUPDATE ("can not update the title of a criterion",
 		   "UPDATE rub_criteria"
 		     " SET Title='%s'"
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
-	           NewTitle,
-	           CriCod,
-	           RubCod);
+	           Criterion->Title,
+	           Criterion->CriCod,
+	           Criterion->RubCod);
+  }
+
+/*****************************************************************************/
+/********************* Update criterion source in database *******************/
+/*****************************************************************************/
+
+void Rub_DB_UpdateCriterionSource (const struct RubCri_Criterion *Criterion)
+  {
+   DB_QueryUPDATE ("can not update the value of a criterion",
+		   "UPDATE rub_criteria"
+		     " SET Source='%s'"
+		   " WHERE CriCod=%ld"
+		     " AND RubCod=%ld",	// Extra check
+		   RubCri_GetDBStrFromSource (Criterion->Source),
+	           Criterion->CriCod,
+	           Criterion->RubCod);
   }
 
 /*****************************************************************************/
 /********************* Update criterion value in database ********************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
-                                  RubCri_ValueRange_t ValueRange,double Value)
+void Rub_DB_UpdateCriterionValue (const struct RubCri_Criterion *Criterion,
+                                  RubCri_ValueRange_t ValueRange)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update the value of a criterion",
@@ -405,9 +420,9 @@ void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
 		     " SET %s=%.15lg"
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
-	           RubCri_ValuesFields[ValueRange],Value,
-	           CriCod,
-	           RubCod);
+	           RubCri_ValuesFields[ValueRange],Criterion->Values[ValueRange],
+	           Criterion->CriCod,
+	           Criterion->RubCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -415,7 +430,7 @@ void Rub_DB_UpdateCriterionValue (long CriCod,long RubCod,
 /********************* Update criterion weight in database *******************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionWeight (long CriCod,long RubCod,double Weight)
+void Rub_DB_UpdateCriterionWeight (const struct RubCri_Criterion *Criterion)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryUPDATE ("can not update the value of a criterion",
@@ -423,9 +438,9 @@ void Rub_DB_UpdateCriterionWeight (long CriCod,long RubCod,double Weight)
 		     " SET Weight=%.15lg"
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
-	           Weight,
-	           CriCod,
-	           RubCod);
+	           Criterion->Weight,
+	           Criterion->CriCod,
+	           Criterion->RubCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

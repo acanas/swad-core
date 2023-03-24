@@ -14184,6 +14184,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rubric criterion title"				// Çeviri lazim!
 #endif
 	,
+	[ActChgSrcRubCri] =
+#if   L==1	// ca
+	"Change source of rubric criterion"		// Necessita traducció
+#elif L==2	// de
+	"Change source of rubric criterion"		// Need Übersetzung
+#elif L==3	// en
+	"Change source of rubric criterion"
+#elif L==4	// es
+	"Cambiar fuente de criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Change source of rubric criterion"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar fuente de criterio de r&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Change source of rubric criterion"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change source of rubric criterion"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change source of rubric criterion"		// Precisa de tradução
+#elif L==10	// tr
+	"Change source of rubric criterion"		// Çeviri lazim!
+#endif
+	,
 	[ActChgMinRubCri] =
 #if   L==1	// ca
 	"Change minimum value of rubric criterion"			// Necessita traducció

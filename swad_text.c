@@ -87,6 +87,7 @@
 #include "swad_record.h"
 #include "swad_role.h"
 #include "swad_room.h"
+#include "swad_rubric_type.h"
 #include "swad_setting.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
@@ -15911,7 +15912,7 @@ const char *Txt_Game =
 #elif L==5	// fr
 	"Jeu";
 #elif L==6	// gn
-	"Juego";	// Okoteve traducción
+	"&Ntilde;eha'a";
 #elif L==7	// it
 	"Gioco";
 #elif L==8	// pl
@@ -37722,7 +37723,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a"
 #elif L==10	// tr
-	"Teacher"	// Çeviri lazim!
+	"&Ouml;&gbreve;retmen"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -37745,7 +37746,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professora"
 #elif L==10	// tr
-	"Teacher"	// Çeviri lazim!
+	"&Ouml;&gbreve;retmen"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -37768,7 +37769,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor"
 #elif L==10	// tr
-	"Teacher"	// Çeviri lazim!
+	"&Ouml;&gbreve;retmen"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -37791,7 +37792,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"Professor/a"
 #elif L==10	// tr
-	"Teacher"	// Çeviri lazim!
+	"&Ouml;&gbreve;retmen"
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =
@@ -42811,6 +42812,101 @@ const char *Txt_Rubric_X_removed =	// Warning: it is very important to include %
 #elif L==10	// tr
 	"De&gbreve;erlendirme listesi <strong>%s</strong> kald&inodot;r&inodot;ld&inodot;.";
 #endif
+
+const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES] =
+	{
+	[RubCri_FROM_TEACHER] =
+#if   L==1	// ca
+	"Professor/a"
+#elif L==2	// de
+	"Lehrkraft"
+#elif L==3	// en
+	"Teacher"
+#elif L==4	// es
+	"Profesor/a"
+#elif L==5	// fr
+	"Enseignant/e"
+#elif L==6	// gn
+	"Mbo'eh&aacute;ra"
+#elif L==7	// it
+	"Professore/ssa"
+#elif L==8	// pl
+	"Nauczyciel"
+#elif L==9	// pt
+	"Professor/a"
+#elif L==10	// tr
+	"&Ouml;&gbreve;retmen"
+#endif
+	,
+	[RubCri_FROM_ANOTHER_RUBRIC] =
+#if   L==1	// ca
+	"R&uacute;brica"
+#elif L==2	// de
+	"Rubrik"
+#elif L==3	// en
+	"Rubric"
+#elif L==4	// es
+	"R&uacute;brica"
+#elif L==5	// fr
+	"Rubrique"
+#elif L==6	// gn
+	"R&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche"
+#elif L==8	// pl
+	"Rubryki"
+#elif L==9	// pt
+	"Rubrica"
+#elif L==10	// tr
+	"De&gbreve;erlendirme"
+#endif
+	,
+	[RubCri_FROM_EXAM_PRINT] =
+#if   L==1	// ca
+	"Ex&agrave;men"
+#elif L==2	// de
+	"Pr&uuml;fung"
+#elif L==3	// en
+	"Exam"
+#elif L==4	// es
+	"Examen"
+#elif L==5	// fr
+	"Examen"
+#elif L==6	// gn
+	"Aranduchauka"
+#elif L==7	// it
+	"Esame"
+#elif L==8	// pl
+	"Egzamin"
+#elif L==9	// pt
+	"Exame"
+#elif L==10	// tr
+	"S&inodot;nav"
+#endif
+	,
+	[RubCri_FROM_GAME_MATCH] =
+#if   L==1	// ca
+	"Joc"
+#elif L==2	// de
+	"Spiel"
+#elif L==3	// en
+	"Game"
+#elif L==4	// es
+	"Juego"
+#elif L==5	// fr
+	"Jeu"
+#elif L==6	// gn
+	"&Ntilde;eha'a"
+#elif L==7	// it
+	"Gioco"
+#elif L==8	// pl
+	"Gra"
+#elif L==9	// pt
+	"Jogo"
+#elif L==10	// tr
+	"Oyun"
+#endif
+	};
 
 const char *Txt_Rubrics =
 #if   L==1	// ca
