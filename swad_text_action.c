@@ -14048,232 +14048,232 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewRubCri] =
 #if   L==1	// ca
-	"Create new rubric criterion"			// Necessita traducció
+	"Crear nou criteri de r&uacute;brica"
 #elif L==2	// de
-	"Create new rubric criterion"			// Need Übersetzung
+	"Erstellen Sie neue Rubrikkriterien"
 #elif L==3	// en
 	"Create new rubric criterion"
 #elif L==4	// es
 	"Crear nuevo criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Create new rubric criterion"			// Besoin de traduction
+	"Cr&eacute;er nouveau crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Crear nuevo criterio de r&uacute;brica"	// Okoteve traducción
+	"Ojapo criterio pyahu rubrica rehegua"
 #elif L==7	// it
-	"Create new rubric criterion"			// Bisogno di traduzione
+	"Creare nuovo criterio di rubrica"
 #elif L==8	// pl
-	"Create new rubric criterion"			// Potrzebujesz tlumaczenie
+	"Utworzy&cacute; nowe kryteria rubryk"
 #elif L==9	// pt
-	"Create new rubric criterion"			// Precisa de tradução
+	"Criar novo crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Create new rubric criterion"			// Çeviri lazim!
+	"Yeni bir dereceli puanlama anahtar&inodot; kriteri olu&scedil;turmak i&ccedil;in"
 #endif
 	,
 	[ActReqRemRubCri] =
 #if   L==1	// ca
-	"Request rubric criterion removal"				// Necessita traducció
+	"Sol&middot;licitar eliminaci&oacute; de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Request rubric criterion removal"				// Need Übersetzung
+	"Entfernen von Bewertungskriterien beantragen"
 #elif L==3	// en
 	"Request rubric criterion removal"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Request rubric criterion removal"				// Besoin de traduction
+	"Demander la suppression des crit&egrave;res de la rubrique"
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de criterio de r&uacute;brica"	// Okoteve traducción
+	"Ojerure ojeipe'a hagu&atilde; criterio r&uacute;brico rehegua"
 #elif L==7	// it
-	"Request rubric criterion removal"				// Bisogno di traduzione
+	"Richiedere la rimozione dei criteri di rubrica"
 #elif L==8	// pl
-	"Request rubric criterion removal"				// Potrzebujesz tlumaczenie
+	"Popro&sacute; o usuni&eogon;cie kryteri&oacute;w rubryk"
 #elif L==9	// pt
-	"Request rubric criterion removal"				// Precisa de tradução
+	"Solicitar a remo&ccedil;&atilde;o dos crit&eacute;rios de rubrica"
 #elif L==10	// tr
-	"Request rubric criterion removal"				// Çeviri lazim!
+	"Dereceli puanlama anahtar&inodot; kriterlerinin kald&inodot;r&inodot;lmas&inodot;n&inodot; talep edin"
 #endif
 	,
 	[ActRemRubCri] =
 #if   L==1	// ca
-	"Remove rubric criterion"		// Necessita traducció
+	"Eliminar criteri de r&uacute;brica"
 #elif L==2	// de
-	"Remove rubric criterion"		// Need Übersetzung
+	"Rubrikkriterien entfernen"
 #elif L==3	// en
 	"Remove rubric criterion"
 #elif L==4	// es
 	"Eliminar criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Remove rubric criterion"		// Besoin de traduction
+	"Supprimer crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Eliminar criterio de r&uacute;brica"	// Okoteve traducción
+	"Ojepe'a pete&itilde; criterio r&uacute;brica rehegua"
 #elif L==7	// it
-	"Remove rubric criterion"		// Bisogno di traduzione
+	"Rimuovere criterio di rubrica"
 #elif L==8	// pl
-	"Remove rubric criterion"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; kryterium rubryki"
 #elif L==9	// pt
-	"Remove rubric criterion"		// Precisa de tradução
+	"Remover crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Remove rubric criterion"		// Çeviri lazim!
+	"Dereceli puanlama anahtar&inodot; &ouml;l&ccedil;&uuml;t&uuml;n&uuml; kald&inodot;rma"
 #endif
 	,
 	[ActUp_RubCri] =
 #if   L==1	// ca
-	"Move up rubric criterion"			// Necessita traducció
+	"Moure cap amunt criteri de r&uacute;brica"
 #elif L==2	// de
-	"Move up rubric criterion"			// Need Übersetzung
+	"Rubrikkriterien nach oben verschieben"
 #elif L==3	// en
 	"Move up rubric criterion"
 #elif L==4	// es
 	"Mover hacia arriba criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Move up rubric criterion"			// Besoin de traduction
+	"Monter crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Mover hacia arriba criterio de r&uacute;brica"	// Okoteve traducción
+	"Oñemotenonde criterio r&uacute;brico yvate gotyo"
 #elif L==7	// it
-	"Move up rubric criterion"			// Bisogno di traduzione
+	"Spostare verso l'alto criterio di rubrica"
 #elif L==8	// pl
-	"Move up rubric criterion"			// Potrzebujesz tlumaczenie
+	"Przenie&sacute; kryteria rubryk w g&oacute;r&eogon;"
 #elif L==9	// pt
-	"Move up rubric criterion"			// Precisa de tradução
+	"Subir crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Move up rubric criterion"			// Çeviri lazim!
+	"Dereceli puanlama anahtar&inodot; &ouml;l&ccedil;&uuml;tlerini yukar&inodot; ta&scedil;&inodot;"
 #endif
 	,
 	[ActDwnRubCri] =
 #if   L==1	// ca
-	"Move down rubric criterion"			// Necessita traducció
+	"Moure cap avall criteri de r&uacute;brica"
 #elif L==2	// de
-	"Move down rubric criterion"			// Need Übersetzung
+	"Rubrikkriterien nach unten verschieben"
 #elif L==3	// en
 	"Move down rubric criterion"
 #elif L==4	// es
 	"Mover hacia abajo criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Move down rubric criterion"			// Besoin de traduction
+	"D&eacute;placer vers le bas crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Mover hacia abajo criterio de r&uacute;brica"	// Okoteve traducción
+	"Oñemotenonde criterio r&uacute;brico yvate gotyo"
 #elif L==7	// it
-	"Move down rubric criterion"			// Bisogno di traduzione
+	"Spostare verso il basso criterio di rubrica"
 #elif L==8	// pl
-	"Move down rubric criterion"			// Potrzebujesz tlumaczenie
+	"Przesu&nacute; w d&oacute;&lstrok; kryteria rubryk"
 #elif L==9	// pt
-	"Move down rubric criterion"			// Precisa de tradução
+	"Mover para baixo crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Move down rubric criterion"			// Çeviri lazim!
+	"Dereceli puanlama anahtar&inodot; &ouml;l&ccedil;&uuml;tlerini a&scedil;a&gbreve;&inodot; ta&scedil;&inodot;"
 #endif
 	,
 	[ActChgTitRubCri] =
 #if   L==1	// ca
-	"Change rubric criterion title"				// Necessita traducció
+	"Canviar t&iacute;tol de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Change rubric criterion title"				// Need Übersetzung
+	"Rubrikkriterientitel &auml;ndern"
 #elif L==3	// en
 	"Change rubric criterion title"
 #elif L==4	// es
 	"Cambiar t&iacute;tulo de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Change rubric criterion title"				// Besoin de traduction
+	"Modifier titre de crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Cambiar t&iacute;tulo de criterio de r&uacute;brica"	// Okoteve traducción
+	"Omoambue criterio r&uacute;brica t&iacute;tulo rehegua"
 #elif L==7	// it
-	"Change rubric criterion title"				// Bisogno di traduzione
+	"Cambiare titolo di criterio di rubrica"
 #elif L==8	// pl
-	"Change rubric criterion title"				// Potrzebujesz tlumaczenie
+	"Zmie&nacute; tytu&lstrok; kryterium rubryki"
 #elif L==9	// pt
-	"Change rubric criterion title"				// Precisa de tradução
+	"Alterar t&iacute;tulo do crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Change rubric criterion title"				// Çeviri lazim!
+	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t ba&scedil;l&inodot;&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tir"				// Çeviri lazim!
 #endif
 	,
 	[ActChgSrcRubCri] =
 #if   L==1	// ca
-	"Change source of rubric criterion"		// Necessita traducció
+	"Canviar font de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Change source of rubric criterion"		// Need Übersetzung
+	"Schriftart der Rubrikkriterien &auml;ndern"
 #elif L==3	// en
-	"Change source of rubric criterion"
+	"Change rubric criterion source"
 #elif L==4	// es
 	"Cambiar fuente de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Change source of rubric criterion"		// Besoin de traduction
+	"Modifier source de crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Cambiar fuente de criterio de r&uacute;brica"	// Okoteve traducción
+	"Omoambue criterio r&uacute;brica fuente"
 #elif L==7	// it
-	"Change source of rubric criterion"		// Bisogno di traduzione
+	"Cambiare fonte di criterio di rubrica"
 #elif L==8	// pl
-	"Change source of rubric criterion"		// Potrzebujesz tlumaczenie
+	"Zmie&nacute; &zacute;r&oacute;d&lstrok;o kryterium rubryki"
 #elif L==9	// pt
-	"Change source of rubric criterion"		// Precisa de tradução
+	"Alterar origem do crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Change source of rubric criterion"		// Çeviri lazim!
+	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t yaz&inodot; tipini de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActChgMinRubCri] =
 #if   L==1	// ca
-	"Change minimum value of rubric criterion"			// Necessita traducció
+	"Canviar valor m&iacute;nim de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Change minimum value of rubric criterion"			// Need Übersetzung
+	"Mindestwert des Rubrikkriteriums &auml;ndern"
 #elif L==3	// en
-	"Change minimum value of rubric criterion"
+	"Change rubric criterion minimum value"
 #elif L==4	// es
 	"Cambiar valor m&iacute;nimo de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Change minimum value of rubric criterion"			// Besoin de traduction
+	"Modifier valeur minimale de crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Cambiar valor m&iacute;nimo de criterio de r&uacute;brica"	// Okoteve traducción
+	"Omoambue criterio r&uacute;brica valor m&iacute;nimo rehegua"
 #elif L==7	// it
-	"Change minimum value of rubric criterion"			// Bisogno di traduzione
+	"Cambiare valore minimo di criterio di rubrica"
 #elif L==8	// pl
-	"Change minimum value of rubric criterion"			// Potrzebujesz tlumaczenie
+	"Zmie&nacute; minimaln&aogon; warto&sacute;&cacute; kryteri&oacute;w rubryki"
 #elif L==9	// pt
-	"Change minimum value of rubric criterion"			// Precisa de tradução
+	"Alterar valor m&iacute;nimo do crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Change minimum value of rubric criterion"			// Çeviri lazim!
+	"Dereceli puanlama anahtar&inodot; &ouml;l&ccedil;&uuml;t&uuml; minimum de&gbreve;erini de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActChgMaxRubCri] =
 #if   L==1	// ca
-	"Change maximum value of rubric criterion"			// Necessita traducció
+	"Canviar valor m&agrave;xim de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Change maximum value of rubric criterion"			// Need Übersetzung
+	"Maximalwert des Rubrikkriteriums &auml;ndern"
 #elif L==3	// en
-	"Change maximum value of rubric criterion"
+	"Change rubric criterion maximum value"
 #elif L==4	// es
 	"Cambiar valor m&aacute;ximo de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Change maximum value of rubric criterion"			// Besoin de traduction
+	"Modifier valeur maximale de crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Cambiar valor m&aacute;ximo de criterio de r&uacute;brica"	// Okoteve traducción
+	"Omoambue criterio r&uacute;brica valor m&iacute;nimo rehegua"
 #elif L==7	// it
-	"Change maximum value of rubric criterion"			// Bisogno di traduzione
+	"Cambiare valore massimo di criterio di rubrica"
 #elif L==8	// pl
-	"Change maximum value of rubric criterion"			// Potrzebujesz tlumaczenie
+	"Zmie&nacute; maksymaln&aogon; warto&sacute;&cacute; kryteri&oacute;w rubryki"
 #elif L==9	// pt
-	"Change maximum value of rubric criterion"			// Precisa de tradução
+	"Alterar valor m&aacute;ximo do crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Change maximum value of rubric criterion"			// Çeviri lazim!
+	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t&uuml; maksimum de&gbreve;erini de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActChgWeiRubCri] =
 #if   L==1	// ca
-	"Change weight of rubric criterion"		// Necessita traducció
+	"Canviar pes de criteri de r&uacute;brica"
 #elif L==2	// de
-	"Change weight of rubric criterion"		// Need Übersetzung
+	"Gewichtung der Rubrikkriterien &auml;ndern"
 #elif L==3	// en
-	"Change weight of rubric criterion"
+	"Change rubric criterion weight"
 #elif L==4	// es
 	"Cambiar peso de criterio de r&uacute;brica"
 #elif L==5	// fr
-	"Change weight of rubric criterion"		// Besoin de traduction
+	"Modifier poids de crit&egrave;re de rubrique"
 #elif L==6	// gn
-	"Cambiar peso de criterio de r&uacute;brica"	// Okoteve traducción
+	"Omoambue criterio r&uacute;brica peso rehegua"
 #elif L==7	// it
-	"Change weight of rubric criterion"		// Bisogno di traduzione
+	"Cambiare peso di criterio di rubrica"
 #elif L==8	// pl
-	"Change weight of rubric criterion"		// Potrzebujesz tlumaczenie
+	"Zmie&nacute; wag&eogon; kryterium rubryki"
 #elif L==9	// pt
-	"Change weight of rubric criterion"		// Precisa de tradução
+	"Alterar peso do crit&eacute;rio de rubrica"
 #elif L==10	// tr
-	"Change weight of rubric criterion"		// Çeviri lazim!
+	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t a&gbreve;&inodot;rl&inodot;&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActSeeAdmDocIns] =
