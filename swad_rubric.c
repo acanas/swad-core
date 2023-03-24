@@ -738,7 +738,7 @@ void Rub_ReqCreatOrEditRubric (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
-   bool ItsANewRubric;
+   Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
    if (!Rub_CheckIfICanEditRubrics ())
@@ -751,18 +751,24 @@ void Rub_ReqCreatOrEditRubric (void)
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);	// Don't check rubric code
-   ItsANewRubric = (Rubrics.Rubric.RubCod <= 0);
+   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
+						     Rub_NEW_RUBRIC;
 
    /***** Get rubric data *****/
-   if (ItsANewRubric)
-      /* Initialize to empty rubric */
-      Rub_ResetRubric (&Rubrics.Rubric);
-   else
-      /* Get rubric data from database */
-      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+   switch (ExistingNewRubric)
+     {
+      case Rub_EXISTING_RUBRIC:
+         /* Get rubric data from database */
+         Rub_GetRubricDataByCod (&Rubrics.Rubric);
+         break;
+      case Rub_NEW_RUBRIC:
+         /* Initialize to empty rubric */
+         Rub_ResetRubric (&Rubrics.Rubric);
+         break;
+     }
 
    /***** Put form to create/edit a rubric and show criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ItsANewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
   }
 
 /*****************************************************************************/
@@ -771,26 +777,36 @@ void Rub_ReqCreatOrEditRubric (void)
 
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 			    struct RubCri_Criterion *Criterion,
-			    bool ItsANewRubric)
+			    Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize text / get text from database *****/
-   if (ItsANewRubric)
-      Txt[0] = '\0';
-   else
-      Rub_DB_GetRubricTxt (Rubrics->Rubric.RubCod,Txt);
+   switch (ExistingNewRubric)
+     {
+      case Rub_EXISTING_RUBRIC:
+         Rub_DB_GetRubricTxt (Rubrics->Rubric.RubCod,Txt);
+         break;
+      case Rub_NEW_RUBRIC:
+         Txt[0] = '\0';
+         break;
+     }
 
    /***** Put form to create/edit an exam *****/
-   Rub_PutFormEditionRubric (Rubrics,Txt,ItsANewRubric);
+   Rub_PutFormEditionRubric (Rubrics,Txt,ExistingNewRubric);
 
    /***** Show other lists *****/
-   if (ItsANewRubric)
-      /* Show rubrics again */
-      Rub_ListAllRubrics (Rubrics);
-   else
-      /* Show list of criteria */
-      RubCri_ListCriteria (Rubrics,Criterion);
+   switch (ExistingNewRubric)
+     {
+      case Rub_EXISTING_RUBRIC:
+	 /* Show list of criteria */
+	 RubCri_ListCriteria (Rubrics,Criterion);
+         break;
+      case Rub_NEW_RUBRIC:
+	 /* Show rubrics again */
+	 Rub_ListAllRubrics (Rubrics);
+         break;
+     }
   }
 
 /*****************************************************************************/
@@ -799,7 +815,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 
 void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 			       char Txt[Cns_MAX_BYTES_TEXT + 1],
-			       bool ItsANewRubric)
+			       Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
@@ -809,64 +825,81 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Description;
    extern const char *Txt_Create_rubric;
    extern const char *Txt_Save_changes;
+   static Act_Action_t NextAction[] =
+     {
+      [Rub_EXISTING_RUBRIC] = ActChgRub,
+      [Rub_NEW_RUBRIC     ] = ActNewRub,
+     };
+   static Btn_Button_t Button[] =
+     {
+      [Rub_EXISTING_RUBRIC] = Btn_CONFIRM_BUTTON,
+      [Rub_NEW_RUBRIC     ] = Btn_CREATE_BUTTON,
+     };
+   const char *Title[] =
+     {
+      [Rub_EXISTING_RUBRIC] = Txt_Edit_rubric,
+      [Rub_NEW_RUBRIC     ] = Txt_New_rubric,
+     };
+   const char *HelpLink[] =
+     {
+      [Rub_EXISTING_RUBRIC] = Hlp_ASSESSMENT_Rubrics_edit_rubric,
+      [Rub_NEW_RUBRIC     ] = Hlp_ASSESSMENT_Rubrics_new_rubric,
+     };
+   const char *TxtButton[] =
+     {
+      [Rub_EXISTING_RUBRIC] = Txt_Save_changes,
+      [Rub_NEW_RUBRIC     ] = Txt_Create_rubric,
+     };
 
    /***** Begin form *****/
-   Frm_BeginForm (ItsANewRubric ? ActNewRub :
-				  ActChgRub);
+   Frm_BeginForm (NextAction[ExistingNewRubric]);
       Rub_PutPars (Rubrics);
 
       /***** Begin box and table *****/
-      if (ItsANewRubric)
-	 Box_BoxTableBegin (NULL,Txt_New_rubric,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Rubrics_new_rubric,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
-					               Txt_Edit_rubric,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Rubrics_edit_rubric,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+						    Title[ExistingNewRubric],
+			 NULL,NULL,
+			 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE,2);
 
-      /***** Rubric title *****/
-      HTM_TR_Begin (NULL);
+	 /***** Rubric title *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Rubric text *****/
-      HTM_TR_Begin (NULL);
+	 /***** Rubric text *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_GetSuffix ());
-	       HTM_Txt (Txt);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  HTM_Txt (Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
-      if (ItsANewRubric)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_rubric);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      Box_BoxTableWithButtonEnd (Button[ExistingNewRubric],
+                                 TxtButton[ExistingNewRubric]);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -880,7 +913,7 @@ void Rub_ReceiveFormRubric (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
-   bool ItsANewRubric;
+   Rub_ExistingNewRubric_t ExistingNewRubric;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if I can edit rubrics *****/
@@ -894,31 +927,40 @@ void Rub_ReceiveFormRubric (void)
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);
-   ItsANewRubric = (Rubrics.Rubric.RubCod <= 0);
+   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
+						     Rub_NEW_RUBRIC;
 
    /***** Get all current rubric data from database *****/
    // Some data, not received from form,
    // are necessary to show rubric and criteria again
-   if (!ItsANewRubric)
-      Rub_GetRubricDataByCod (&Rubrics.Rubric);
+   switch (ExistingNewRubric)
+     {
+      case Rub_EXISTING_RUBRIC:
+         Rub_GetRubricDataByCod (&Rubrics.Rubric);
+         break;
+      case Rub_NEW_RUBRIC:
+         break;
+     }
 
    /***** Overwrite some rubric data with the data received from form *****/
    Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric,Txt);
    if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
      {
       /***** Create a new rubric or update an existing one *****/
-      if (ItsANewRubric)
+      switch (ExistingNewRubric)
 	{
-	 Rub_CreateRubric (&Rubrics.Rubric,Txt);	// Add new rubric to database
-	 ItsANewRubric = false;
+	 case Rub_EXISTING_RUBRIC:
+	    Rub_UpdateRubric (&Rubrics.Rubric,Txt);	// Update rubric data in database
+	    break;
+	 case Rub_NEW_RUBRIC:
+	    Rub_CreateRubric (&Rubrics.Rubric,Txt);	// Add new rubric to database
+	    ExistingNewRubric = Rub_EXISTING_RUBRIC;
+	    break;
 	}
-      else
-	 Rub_UpdateRubric (&Rubrics.Rubric,Txt);	// Update rubric data in database
      }
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-			  ItsANewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
   }
 
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric,

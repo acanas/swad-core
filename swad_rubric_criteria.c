@@ -263,7 +263,7 @@ void RubCri_ReceiveFormCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion)
@@ -376,7 +376,7 @@ void RubCri_ChangeTitle (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -418,7 +418,7 @@ void RubCri_ChangeSource (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -472,7 +472,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -516,7 +516,7 @@ void RubCri_ChangeWeight (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -966,7 +966,7 @@ void RubCri_ReqRemCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -1006,7 +1006,7 @@ void RubCri_RemoveCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -1052,7 +1052,7 @@ void RubCri_MoveUpCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }
 
 /*****************************************************************************/
@@ -1102,7 +1102,7 @@ void RubCri_MoveDownCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          false);	// It's not a new trubric
+                          Rub_EXISTING_RUBRIC);	// It's not a new trubric
   }
 
 /*****************************************************************************/

@@ -13887,163 +13887,163 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeRub] =
 #if   L==1	// ca
-	"See rubric"		// Necessita traducció
+	"Veure r&uacute;brica"
 #elif L==2	// de
-	"See rubric"		// Need Übersetzung
+	"Siehe Rubrik"
 #elif L==3	// en
 	"See rubric"
 #elif L==4	// es
 	"Ver r&uacute;brica"
 #elif L==5	// fr
-	"See rubric"		// Besoin de traduction
+	"Voir rubrique"
 #elif L==6	// gn
-	"Ver r&uacute;brica"	// Okoteve traducción
+	"Ehecha r&uacute;brica"
 #elif L==7	// it
-	"See rubric"		// Bisogno di traduzione
+	"Vedi rubrica"
 #elif L==8	// pl
-	"See rubric"		// Potrzebujesz tlumaczenie
+	"Zobacz rubryk&eogon;"
 #elif L==9	// pt
-	"See rubric"		// Precisa de tradução
+	"Ver rubrica"
 #elif L==10	// tr
-	"See rubric"		// Çeviri lazim!
+	"De&gbreve;erlendirme tablosuna bak&inodot;n"
 #endif
 	,
 	[ActFrmNewRub] =
 #if   L==1	// ca
-	"Edit new rubric"		// Necessita traducció
+	"Editar nova r&uacute;brica"
 #elif L==2	// de
-	"Edit new rubric"		// Need Übersetzung
+	"Neue Rubrik bearbeiten"
 #elif L==3	// en
 	"Edit new rubric"
 #elif L==4	// es
 	"Editar nueva r&uacute;brica"
 #elif L==5	// fr
-	"Edit new rubric"		// Besoin de traduction
+	"Modifier nouvelle rubrique"
 #elif L==6	// gn
-	"Editar nueva r&uacute;brica"	// Okoteve traducción
+	"Emohenda r&uacute;brica pyahu"
 #elif L==7	// it
-	"Edit new rubric"		// Bisogno di traduzione
+	"Modificare nuova rubrica"
 #elif L==8	// pl
-	"Edit new rubric"		// Potrzebujesz tlumaczenie
+	"Edytuj now&aogon; rubryk&eogon;"
 #elif L==9	// pt
-	"Edit new rubric"		// Precisa de tradução
+	"Editar nova rubrica"
 #elif L==10	// tr
-	"Edit new rubric"		// Çeviri lazim!
+	"Yeni puan anahtar&inodot;n&inodot; d&uacute;zenle"
 #endif
 	,
 	[ActEdiOneRub] =
 #if   L==1	// ca
-	"Edit rubric"		// Necessita traducció
+	"Editar r&uacute;brica"
 #elif L==2	// de
-	"Edit rubric"		// Need Übersetzung
+	"Rubrik bearbeiten"
 #elif L==3	// en
 	"Edit rubric"
 #elif L==4	// es
 	"Editar r&uacute;brica"
 #elif L==5	// fr
-	"Edit rubric"		// Besoin de traduction
+	"Modifier rubrique"
 #elif L==6	// gn
-	"Editar r&uacute;brica"	// Okoteve traducción
+	"Editar r&uacute;brica rehegua"
 #elif L==7	// it
-	"Edit rubric"		// Bisogno di traduzione
+	"Modificare rubrica"
 #elif L==8	// pl
-	"Edit rubric"		// Potrzebujesz tlumaczenie
+	"Edytuj rubryk&eogon;"
 #elif L==9	// pt
-	"Edit rubric"		// Precisa de tradução
+	"Editar rubrica"
 #elif L==10	// tr
-	"Edit rubric"		// Çeviri lazim!
+	"Puan anahtar&inodot;n&inodot; d&uacute;zenle"
 #endif
 	,
 	[ActNewRub] =
 #if   L==1	// ca
-	"Create new rubric"		// Necessita traducció
+	"Crear nova r&uacute;brica"
 #elif L==2	// de
-	"Create new rubric"		// Need Übersetzung
+	"Neue Rubrik erstellen"
 #elif L==3	// en
 	"Create new rubric"
 #elif L==4	// es
 	"Crear nueva r&uacute;brica"
 #elif L==5	// fr
-	"Create new rubric"		// Besoin de traduction
+	"Cr&eacute;er nouvelle rubrique"
 #elif L==6	// gn
-	"Crear nueva r&uacute;brica"	// Okoteve traducción
+	"Ojapo r&uacute;brica pyahu"
 #elif L==7	// it
-	"Create new rubric"		// Bisogno di traduzione
+	"Creare nuova rubrica"
 #elif L==8	// pl
-	"Create new rubric"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz now&aogon; rubryk&eogon;"
 #elif L==9	// pt
-	"Create new rubric"		// Precisa de tradução
+	"Criar nova rubrica"
 #elif L==10	// tr
-	"Create new rubric"		// Çeviri lazim!
+	"Yeni de&gbreve;erlendirme listesi olu&scedil;tur"
 #endif
 	,
 	[ActChgRub] =
 #if   L==1	// ca
-	"Change rubric"			// Necessita traducció
+	"Canviar r&uacute;brica"
 #elif L==2	// de
-	"Change rubric"			// Need Übersetzung
+	"Rubrik wechseln"
 #elif L==3	// en
 	"Change rubric"
 #elif L==4	// es
 	"Cambiar r&uacute;brica"
 #elif L==5	// fr
-	"Change rubric"			// Besoin de traduction
+	"Changer rubrique"
 #elif L==6	// gn
-	"Cambiar r&uacute;brica"	// Okoteve traducción
+	"Omoambue r&uacute;brica"
 #elif L==7	// it
-	"Change rubric"			// Bisogno di traduzione
+	"Cambiare rubrica"
 #elif L==8	// pl
-	"Change rubric"			// Potrzebujesz tlumaczenie
+	"Zmieni&cacute; rubryk&eogon;"
 #elif L==9	// pt
-	"Change rubric"			// Precisa de tradução
+	"Mudar rubrica"
 #elif L==10	// tr
-	"Change rubric"			// Çeviri lazim!
+	"Puan anahtar&inodot;n&inodot; de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActReqRemRub] =
 #if   L==1	// ca
-	"Request removal of rubric"				// Necessita traducció
+	"Sol&middot;licitar eliminaci&oacute; de r&uacute;brica"
 #elif L==2	// de
-	"Request removal of rubric"				// Need Übersetzung
+	"Entfernung der Rubrik beantragen"
 #elif L==3	// en
 	"Request removal of rubric"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de r&uacute;brica"
 #elif L==5	// fr
-	"Request removal of rubric"				// Besoin de traduction
+	"Demander suppression de rubrique"
 #elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de r&uacute;brica"	// Okoteve traducción
+	"Ojerure ojeipe'a hagu&atilde; r&uacute;brica"
 #elif L==7	// it
-	"Request removal of rubric"				// Bisogno di traduzione
+	"Richiesta rimozione di rubrica"
 #elif L==8	// pl
-	"Request removal of rubric"				// Potrzebujesz tlumaczenie
+	"Popro&sacute; o usuni&eogon;cie rubryki"
 #elif L==9	// pt
-	"Request removal of rubric"				// Precisa de tradução
+	"Solicitar remo&ccedil;&atilde;o de rubrica"
 #elif L==10	// tr
-	"Request removal of rubric"				// Çeviri lazim!
+	"Puan anahtar&inodot;n&inodot;n kald&inodot;r&inodot;lmas&inodot;n&inodot; talep etme"
 #endif
 	,
 	[ActRemRub] =
 #if   L==1	// ca
-	"Remove rubric"			// Necessita traducció
+	"Eliminar r&uacute;brica"
 #elif L==2	// de
-	"Remove rubric"			// Need Übersetzung
+	"Rubrik entfernen"
 #elif L==3	// en
 	"Remove rubric"
 #elif L==4	// es
 	"Eliminar r&uacute;brica"
 #elif L==5	// fr
-	"Remove rubric"			// Besoin de traduction
+	"Supprimer rubrique"
 #elif L==6	// gn
-	"Eliminar r&uacute;brica"	// Okoteve traducción
+	"Ojepe'a pe r&uacute;brica"
 #elif L==7	// it
-	"Remove rubric"			// Bisogno di traduzione
+	"Rimuovere rubrica"
 #elif L==8	// pl
-	"Remove rubric"			// Potrzebujesz tlumaczenie
+	"Usu&nacute; rubryk&eogon;"
 #elif L==9	// pt
-	"Remove rubric"			// Precisa de tradução
+	"Remover rubrica"
 #elif L==10	// tr
-	"Remove rubric"			// Çeviri lazim!
+	"Puan anahtar&inodot;n&inodot; kald&inodot;r"
 #endif
 	,
 	[ActNewRubCri] =

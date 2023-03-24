@@ -65,6 +65,12 @@ struct Rub_Rubrics
    long QstCod;			// Current question code
   };
 
+typedef enum
+  {
+   Rub_EXISTING_RUBRIC,
+   Rub_NEW_RUBRIC,
+  } Rub_ExistingNewRubric_t;
+
 #define RubCri_NUM_VALUES 2
 typedef enum
   {
