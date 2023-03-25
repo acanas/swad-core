@@ -36675,7 +36675,7 @@ const char *Txt_Resources_of_X =	// Warning: it is very important to include %s 
 #elif L==5	// fr
 	"Ressources de %s";
 #elif L==6	// gn
-	"Recursos de %s";	// Okoteve traducción
+	"%s recursos rehegua";
 #elif L==7	// it
 	"Risorse di %s";
 #elif L==8	// pl

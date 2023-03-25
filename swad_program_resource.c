@@ -126,15 +126,15 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
                                       const struct Prg_ResourceHierarchy *Rsc2);
 
 static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
-static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link);
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
+static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct PrgRsc_Link *Link);
+static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link,bool PutFormToGo,
                                   const char *Icon,const char *IconTitle);
 static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
                                                __attribute__((unused)) bool PutFormToGo,
                                                const char *Icon,const char *IconTitle);
 static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item);
 static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct Prg_Link *Link);
+                                       struct PrgRsc_Link *Link);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -907,8 +907,8 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
-   struct Prg_Link Link;
-   static const struct Prg_Link EmptyLink =
+   struct PrgRsc_Link Link;
+   static const struct PrgRsc_Link EmptyLink =
      {
       .Type = PrgRsc_NONE,
       .Cod  = -1L,
@@ -954,7 +954,7 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 /************************ Show one link from clipboard ***********************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *Link)
+static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct PrgRsc_Link *Link)
   {
    extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
@@ -983,7 +983,7 @@ static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct Prg_Link *
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
+static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link,bool PutFormToGo,
                                   const char *Icon,const char *IconTitle)
   {
    static void (*WriteLinkName[PrgRsc_NUM_TYPES]) (long Cod,bool PutFormToGo,
@@ -1011,7 +1011,7 @@ static void PrgRsc_WriteLinkName (const struct Prg_Link *Link,bool PutFormToGo,
   }
 
 /*****************************************************************************/
-/********************** Write survey in course program ***********************/
+/******************** Write empty link in course program *********************/
 /*****************************************************************************/
 
 static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
@@ -1023,7 +1023,7 @@ static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
    /***** Icon depending on type ******/
    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write Name of the course and date of exam *****/
+   /***** Write text *****/
    HTM_Txt (Txt_RESOURCE_TYPES[PrgRsc_NONE]);
   }
 
@@ -1117,7 +1117,7 @@ void PrgRsc_ChangeLink (void)
 /*****************************************************************************/
 
 static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct Prg_Link *Link)
+                                       struct PrgRsc_Link *Link)
   {
    MYSQL_ROW row;
 

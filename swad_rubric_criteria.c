@@ -30,13 +30,18 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_assignment_resource.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
+#include "swad_exam_resource.h"
 #include "swad_form.h"
+#include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_program_database.h"
+#include "swad_program_resource.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
 #include "swad_rubric_database.h"
@@ -56,6 +61,26 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
   {
    [RubCri_MIN] = "MinVal",
    [RubCri_MAX] = "MaxVal",
+  };
+
+static const char *RubCri_SourceDB[RubCri_NUM_SOURCES] =
+  {
+   [RubCri_FROM_TEACHER       ] = "teacher",
+   [RubCri_FROM_ANOTHER_RUBRIC] = "rubric",
+   [RubCri_FROM_EXAM_PRINT    ] = "exam",
+   [RubCri_FROM_GAME_MATCH    ] = "game",
+  };
+
+/*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+const char *RubCri_SourceIcons[RubCri_NUM_SOURCES] =
+  {
+   [RubCri_FROM_TEACHER       ] = "user-tie.svg",
+   [RubCri_FROM_ANOTHER_RUBRIC] = "tasks.svg",
+   [RubCri_FROM_EXAM_PRINT    ] = "file-signature.svg",
+   [RubCri_FROM_GAME_MATCH    ] = "gamepad.svg",
   };
 
 /*****************************************************************************/
@@ -92,6 +117,18 @@ static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
 
 static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
+
+static void RubCri_ShowResource (struct RubCri_Criterion *Criterion,
+                                 bool Editing,const char *Anchor);
+static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char *Anchor);
+static void RubCri_GetLinkDataFromRow (MYSQL_RES *mysql_res,
+                                       struct RubCri_Criterion *Criterion);
+static void RubCri_WriteRowClipboard (bool SubmitOnClick,
+                                      const struct RubCri_Criterion *Criterion);
+static void RubCri_WriteLinkName (const struct RubCri_Criterion *Criterion,bool PutFormToGo);
+static void RubCri_WriteEmptyLinkInRubricCriterion (__attribute__((unused)) long Cod,
+                                                    __attribute__((unused)) bool PutFormToGo,
+                                                    const char *Icon,const char *IconTitle);
 
 /*****************************************************************************/
 /*************** Put parameter to edit one rubric criterion ******************/
@@ -703,6 +740,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	    /***** Source *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	       /* Type of source selector */
 	       Frm_BeginFormAnchor (ActChgSrcRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -719,6 +757,12 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
+
+	       HTM_BR ();
+
+	       /* Resource */
+	       RubCri_ShowResource (&Criterion,
+	                            true,Anchor);	// Editing
 	    HTM_TD_End ();
 
 	    /***** Minimum and maximum values of criterion *****/
@@ -864,14 +908,6 @@ RubCri_Source_t RubCri_GetSourceFromDBStr (const char *SourceDBStr)
 
 const char *RubCri_GetDBStrFromSource (RubCri_Source_t Source)
   {
-   static const char *RubCri_SourceDB[RubCri_NUM_SOURCES] =
-     {
-      [RubCri_FROM_TEACHER       ] = "teacher",
-      [RubCri_FROM_ANOTHER_RUBRIC] = "rubric",
-      [RubCri_FROM_EXAM_PRINT    ] = "exam",
-      [RubCri_FROM_GAME_MATCH    ] = "game",
-     };
-
    if (Source >= RubCri_NUM_SOURCES)
       Source = RubCri_SOURCE_DEFAULT;
 
@@ -1171,4 +1207,172 @@ static void RubCri_ExchangeCriteria (long RubCod,
 
    /***** Unlock table *****/
    DB_UnlockTables ();
+  }
+
+/*****************************************************************************/
+/************************** Show criterion resource **************************/
+/*****************************************************************************/
+
+static void RubCri_ShowResource (struct RubCri_Criterion *Criterion,
+                                 bool Editing,const char *Anchor)
+  {
+   return;	// TODO: Provisional. Remove!
+
+   // TODO
+   if (Editing)
+      RubCri_ShowClipboard (Criterion,Anchor);
+   else
+      RubCri_WriteLinkName (Criterion,
+			    true);	// Put form
+  }
+
+/*****************************************************************************/
+/***************** Show clipboard to change resource link ********************/
+/*****************************************************************************/
+
+static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char *Anchor)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   // struct PrgRsc_Link Link;
+   struct RubCri_Criterion Cri;
+   /*
+   static const struct PrgRsc_Link EmptyLink =
+     {
+      .Type = PrgRsc_NONE,
+      .Cod  = -1L,
+     }; */
+
+   /***** Begin form *****/
+   Frm_BeginFormAnchor (ActChgLnkPrgRsc,Anchor);
+      /*
+      if (Item->Resource.Hierarchy.RscCod > 0)
+         ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
+      else
+	 * No resource selected, so it's a new resource at the end of the item *
+         ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
+      */
+
+      /***** Begin list *****/
+      HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+
+	 /***** Current link (empty or not) *****/
+	 RubCri_WriteRowClipboard (false,Criterion);
+
+         /***** Row with empty link to remove the current link *****/
+	 /*
+	 if (Criterion->Source != RubCri_FROM_TEACHER)
+	    RubCri_WriteRowClipboard (true,&EmptyLink); */
+
+	 /***** Get links in clipboard from database and write them *****/
+	 NumLinks = Prg_DB_GetClipboard (&mysql_res);
+	 for (NumLink  = 1;
+	      NumLink <= NumLinks;
+	      NumLink++)
+	   {
+	    RubCri_GetLinkDataFromRow (mysql_res,&Cri);
+            /*
+	    Cri.Source = Link->Type;
+	    Cri.Cod = Link->Cod;
+            */
+	    RubCri_WriteRowClipboard (true,&Cri);
+	   }
+	 DB_FreeMySQLResult (&mysql_res);
+
+      /***** End list *****/
+      HTM_UL_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/********************** Get resource data from clipboard *********************/
+/*****************************************************************************/
+
+static void RubCri_GetLinkDataFromRow (MYSQL_RES *mysql_res,
+                                       struct RubCri_Criterion *Criterion)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+   /*
+   Type	row[0]
+   Cod	row[1]
+   */
+   /***** Get type (row[0]) *****/
+   Criterion->Source = (RubCri_Source_t) PrgRsc_GetTypeFromString (row[0]); // TODO
+
+   /***** Get code (row[1]) *****/
+   Criterion->Cod = Str_ConvertStrCodToLongCod (row[1]);
+  }
+
+/*****************************************************************************/
+/************************ Show one link from clipboard ***********************/
+/*****************************************************************************/
+
+static void RubCri_WriteRowClipboard (bool SubmitOnClick,
+                                      const struct RubCri_Criterion *Criterion)
+  {
+   HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
+      HTM_LABEL_Begin (NULL);
+
+         /***** Radio selector *****/
+	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
+			  "value=\"%s_%ld\"%s",
+			  RubCri_SourceDB[Criterion->Source],Criterion->Cod,
+			  SubmitOnClick ? "" :
+					  " checked=\"checked\"");
+
+	 /***** Name *****/
+         RubCri_WriteLinkName (Criterion,
+                               false);	// Don't put form
+
+      HTM_LABEL_End ();
+   HTM_LI_End ();
+  }
+
+/*****************************************************************************/
+/************* Write link name (filename, assignment title...) ***************/
+/*****************************************************************************/
+
+static void RubCri_WriteLinkName (const struct RubCri_Criterion *Criterion,bool PutFormToGo)
+  {
+   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
+   static void (*WriteLinkName[RubCri_NUM_SOURCES]) (long Cod,bool PutFormToGo,
+						     const char *Icon,
+						     const char *IconTitle) =
+     {
+      [RubCri_FROM_TEACHER       ] = RubCri_WriteEmptyLinkInRubricCriterion,
+      [RubCri_FROM_ANOTHER_RUBRIC] = AsgRsc_WriteAssignmentInCrsProgram,
+      [RubCri_FROM_EXAM_PRINT    ] = ExaRsc_WriteExamInCrsProgram,
+      [RubCri_FROM_GAME_MATCH    ] = GamRsc_WriteGameInCrsProgram,
+     };
+
+   /***** Write link name *****/
+   if (WriteLinkName[Criterion->Source])
+      WriteLinkName[Criterion->Source] (Criterion->Cod,PutFormToGo,
+					RubCri_SourceIcons[Criterion->Source],
+					Txt_RUBRIC_CRITERION_SOURCES[Criterion->Source]);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+  }
+
+/*****************************************************************************/
+/******************** Write empty link in course program *********************/
+/*****************************************************************************/
+
+static void RubCri_WriteEmptyLinkInRubricCriterion (__attribute__((unused)) long Cod,
+                                                    __attribute__((unused)) bool PutFormToGo,
+                                                    const char *Icon,const char *IconTitle)
+  {
+   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
+
+   /***** Icon depending on type ******/
+   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+
+   /***** Write text *****/
+   HTM_Txt (Txt_RUBRIC_CRITERION_SOURCES[RubCri_FROM_TEACHER]);
   }

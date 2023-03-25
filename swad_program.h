@@ -70,7 +70,7 @@ typedef enum
   PrgRsc_FORUM_THREAD,
   } PrgRsc_Type_t;
 
-struct Prg_Link
+struct PrgRsc_Link
   {
    PrgRsc_Type_t Type;
    long Cod;
@@ -98,7 +98,7 @@ struct Prg_Item
    struct
      {
       struct Prg_ResourceHierarchy Hierarchy;
-      struct Prg_Link Link;
+      struct PrgRsc_Link Link;
       char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
      } Resource;
   };

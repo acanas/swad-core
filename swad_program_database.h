@@ -79,7 +79,7 @@ void Prg_DB_UpdateRscLink (const struct Prg_Item *Item);
 
 void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
 unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
-void Prg_DB_RemoveLinkFromClipboard (struct Prg_Link *Link);
+void Prg_DB_RemoveLinkFromClipboard (struct PrgRsc_Link *Link);
 
 void Prg_DB_InsertItemInExpandedItems (long ItmCod);
 bool Prg_DB_GetIfExpandedItem (long ItmCod);

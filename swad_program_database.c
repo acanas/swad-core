@@ -707,7 +707,7 @@ unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
 /*************************** Remove link from clipboard **********************/
 /*****************************************************************************/
 
-void Prg_DB_RemoveLinkFromClipboard (struct Prg_Link *Link)
+void Prg_DB_RemoveLinkFromClipboard (struct PrgRsc_Link *Link)
   {
    DB_QueryDELETE ("can not remove link from clipboard",
 		   "DELETE FROM prg_clipboards"
