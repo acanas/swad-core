@@ -34,8 +34,8 @@
 /*****************************************************************************/
 
 void PrjRsc_GetLinkToProject (void);
-void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
-                                      const char *Icon,const char *IconTitle);
+void PrjRsc_WriteResourceProject (long PrjCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle);
 void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize);
 
 #endif

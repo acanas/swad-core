@@ -57,10 +57,7 @@ void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ShowClipboardToChgLink (void);
+
 void PrgRsc_ChangeLink (void);
-
-PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str);
-
-bool PrgRsc_CheckIfICanGetLink (void);
 
 #endif

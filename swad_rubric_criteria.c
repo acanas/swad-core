@@ -63,26 +63,6 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
    [RubCri_MAX] = "MaxVal",
   };
 
-static const char *RubCri_SourceDB[RubCri_NUM_SOURCES] =
-  {
-   [RubCri_FROM_TEACHER       ] = "teacher",
-   [RubCri_FROM_ANOTHER_RUBRIC] = "rubric",
-   [RubCri_FROM_EXAM_PRINT    ] = "exam",
-   [RubCri_FROM_GAME_MATCH    ] = "game",
-  };
-
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-const char *RubCri_SourceIcons[RubCri_NUM_SOURCES] =
-  {
-   [RubCri_FROM_TEACHER       ] = "user-tie.svg",
-   [RubCri_FROM_ANOTHER_RUBRIC] = "tasks.svg",
-   [RubCri_FROM_EXAM_PRINT    ] = "file-signature.svg",
-   [RubCri_FROM_GAME_MATCH    ] = "gamepad.svg",
-  };
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -95,7 +75,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion);
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
                                                         const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
-static RubCri_Source_t RubCri_GetParSource (void);
+static Rsc_Type_t RubCri_GetParType (void);
 
 static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange);
 
@@ -118,17 +98,9 @@ static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
 static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
 
-static void RubCri_ShowResource (struct RubCri_Criterion *Criterion,
+static void RubCri_ShowResource (const struct RubCri_Criterion *Criterion,
                                  bool Editing,const char *Anchor);
-static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char *Anchor);
-static void RubCri_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct RubCri_Criterion *Criterion);
-static void RubCri_WriteRowClipboard (bool SubmitOnClick,
-                                      const struct RubCri_Criterion *Criterion);
-static void RubCri_WriteLinkName (const struct RubCri_Criterion *Criterion,bool PutFormToGo);
-static void RubCri_WriteEmptyLinkInRubricCriterion (__attribute__((unused)) long Cod,
-                                                    __attribute__((unused)) bool PutFormToGo,
-                                                    const char *Icon,const char *IconTitle);
+static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const char *Anchor);
 
 /*****************************************************************************/
 /*************** Put parameter to edit one rubric criterion ******************/
@@ -179,9 +151,9 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd)
   {
    extern const char *Txt_New_criterion;
-   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
    extern const char *Txt_Create_criterion;
-   RubCri_Source_t Source;
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
+   Rsc_Type_t Type;
    unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
 
@@ -224,14 +196,14 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				 "name=\"Source\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
-                  for (Source  = (RubCri_Source_t) 0;
-		       Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
-		       Source++)
+                  for (Type  = (Rsc_Type_t) 0;
+		       Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
+		       Type++)
 		    {
-		     SourceUnsigned = (unsigned) Source;
+		     SourceUnsigned = (unsigned) Type;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
-				 Source == Criterion->Source,false,
-				 "%s",Txt_RUBRIC_CRITERION_SOURCES[Source]);
+				 Type == Criterion->Link.Type,false,
+				 "%s",Txt_RESOURCE_TYPES[Type]);
 		    }
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -313,7 +285,7 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
    Par_GetParText ("Title",Criterion->Title,RubCri_MAX_BYTES_TITLE);
 
    /***** Get criterion source *****/
-   Criterion->Source = RubCri_GetParSource ();
+   Criterion->Link.Type = RubCri_GetParType ();
 
    /***** Get minimum and maximum values of criterion *****/
    for (ValueRange  = (RubCri_ValueRange_t) 0;
@@ -365,13 +337,13 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
 /****************** Get parameter with criterion source **********************/
 /*****************************************************************************/
 
-static RubCri_Source_t RubCri_GetParSource (void)
+static Rsc_Type_t RubCri_GetParType (void)
   {
-   return (RubCri_Source_t)
-	  Par_GetParUnsignedLong ("Source",
+   return (Rsc_Type_t)
+	  Par_GetParUnsignedLong ("Type",
                                   0,
-                                  RubCri_NUM_SOURCES - 1,
-                                  (unsigned long) RubCri_SOURCE_DEFAULT);
+                                  Rsc_NUM_TYPES - 1,
+                                  (unsigned long) Rsc_NONE);
   }
 
 /*****************************************************************************/
@@ -417,10 +389,10 @@ void RubCri_ChangeTitle (void)
   }
 
 /*****************************************************************************/
-/****************** Receive form to change criterion source ******************/
+/******************* Receive form to change criterion type *******************/
 /*****************************************************************************/
 
-void RubCri_ChangeSource (void)
+void RubCri_ChangeType (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
@@ -446,12 +418,12 @@ void RubCri_ChangeSource (void)
    if (!Rub_CheckIfEditable (&Rubrics.Rubric))
       Err_NoPermissionExit ();
 
-   /***** Receive new source from form *****/
-   Criterion.Source = RubCri_GetParSource ();
+   /***** Receive new type from form *****/
+   Criterion.Link.Type = RubCri_GetParType ();
 
-   /***** Change source *****/
-   /* Update the table changing old source by new source */
-   Rub_DB_UpdateCriterionSource (&Criterion);
+   /***** Change type *****/
+   /* Update the table changing old type by new type */
+   Rub_DB_UpdateCriterionType (&Criterion);
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Criterion,
@@ -632,7 +604,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    // Actions to change minimum/maximum criterion values
    static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
@@ -642,7 +614,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
    char *Anchor;
-   RubCri_Source_t Source;
+   Rsc_Type_t Type;
    unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
 
@@ -746,14 +718,14 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"Source\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
-		     for (Source  = (RubCri_Source_t) 0;
-			  Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
-			  Source++)
+		     for (Type  = (Rsc_Type_t) 0;
+			  Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
+			  Type++)
 		       {
-			SourceUnsigned = (unsigned) Source;
+			SourceUnsigned = (unsigned) Type;
 			HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
-				    Source == Criterion.Source,false,
-				    "%s",Txt_RUBRIC_CRITERION_SOURCES[Source]);
+				    Type == Criterion.Link.Type,false,
+				    "%s",Txt_RESOURCE_TYPES[Type]);
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -867,9 +839,9 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    /***** Get criterion index (row[2]) *****/
    Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
 
-   /***** Get source (row[3]) and code (row[4]) *****/
-   Criterion->Source = RubCri_GetSourceFromDBStr (row[3]);
-   Criterion->Cod    = Str_ConvertStrCodToLongCod (row[4]);
+   /***** Get type (row[3]) and code (row[4]) *****/
+   Criterion->Link.Type = Rsc_GetTypeFromString (row[3]);
+   Criterion->Link.Cod  = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get criterion minimum and maximum values (row[5], row[6]) *****/
    for (ValueRange  = (RubCri_ValueRange_t) 0;
@@ -883,35 +855,6 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    /***** Get the title of the criterion (row[8]) *****/
    Str_Copy (Criterion->Title,row[5 + RubCri_NUM_VALUES + 1],
              sizeof (Criterion->Title) - 1);
-  }
-
-/*****************************************************************************/
-/*********************** Get source from database string *********************/
-/*****************************************************************************/
-
-RubCri_Source_t RubCri_GetSourceFromDBStr (const char *SourceDBStr)
-  {
-   RubCri_Source_t Source;
-
-   for (Source  = (RubCri_Source_t) 0;
-	Source <= (RubCri_Source_t) (RubCri_NUM_SOURCES - 1);
-	Source++)
-      if (!strcmp (RubCri_GetDBStrFromSource (Source),SourceDBStr))
-	 return Source;
-
-   return RubCri_SOURCE_DEFAULT;
-  }
-
-/*****************************************************************************/
-/*********************** Get database string from source *********************/
-/*****************************************************************************/
-
-const char *RubCri_GetDBStrFromSource (RubCri_Source_t Source)
-  {
-   if (Source >= RubCri_NUM_SOURCES)
-      Source = RubCri_SOURCE_DEFAULT;
-
-   return RubCri_SourceDB[Source];
   }
 
 /*****************************************************************************/
@@ -960,8 +903,8 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
    Criterion->RubCod = -1L;
    Criterion->CriCod = -1L;
    Criterion->CriInd = 0;
-   Criterion->Source = RubCri_SOURCE_DEFAULT;
-   Criterion->Cod    = -1L;
+   Criterion->Link.Type = Rsc_NONE;
+   Criterion->Link.Cod  = -1L;
    for (ValueRange  = (RubCri_ValueRange_t) 0;
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
@@ -1213,30 +1156,34 @@ static void RubCri_ExchangeCriteria (long RubCod,
 /************************** Show criterion resource **************************/
 /*****************************************************************************/
 
-static void RubCri_ShowResource (struct RubCri_Criterion *Criterion,
+static void RubCri_ShowResource (const struct RubCri_Criterion *Criterion,
                                  bool Editing,const char *Anchor)
   {
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
+
    return;	// TODO: Provisional. Remove!
 
    // TODO
    if (Editing)
       RubCri_ShowClipboard (Criterion,Anchor);
    else
-      RubCri_WriteLinkName (Criterion,
-			    true);	// Put form
+      Rsc_WriteLinkName (&Criterion->Link,
+			 true,	// Put form
+                         Rsc_ResourceTypesIcons[Criterion->Link.Type],
+	                 Txt_RESOURCE_TYPES[Criterion->Link.Type]);
   }
 
 /*****************************************************************************/
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
-static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char *Anchor)
+static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const char *Anchor)
   {
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
-   // struct PrgRsc_Link Link;
-   struct RubCri_Criterion Cri;
+   struct Rsc_Link Link;
    /*
    static const struct PrgRsc_Link EmptyLink =
      {
@@ -1258,7 +1205,7 @@ static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char 
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
-	 RubCri_WriteRowClipboard (false,Criterion);
+	 Rsc_WriteRowClipboard (false,&Criterion->Link);
 
          /***** Row with empty link to remove the current link *****/
 	 /*
@@ -1271,12 +1218,8 @@ static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char 
 	      NumLink <= NumLinks;
 	      NumLink++)
 	   {
-	    RubCri_GetLinkDataFromRow (mysql_res,&Cri);
-            /*
-	    Cri.Source = Link->Type;
-	    Cri.Cod = Link->Cod;
-            */
-	    RubCri_WriteRowClipboard (true,&Cri);
+	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	    Rsc_WriteRowClipboard (true,&Link);
 	   }
 	 DB_FreeMySQLResult (&mysql_res);
 
@@ -1285,94 +1228,4 @@ static void RubCri_ShowClipboard (struct RubCri_Criterion *Criterion,const char 
 
    /***** End form *****/
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/********************** Get resource data from clipboard *********************/
-/*****************************************************************************/
-
-static void RubCri_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct RubCri_Criterion *Criterion)
-  {
-   MYSQL_ROW row;
-
-   /***** Get row *****/
-   row = mysql_fetch_row (mysql_res);
-   /*
-   Type	row[0]
-   Cod	row[1]
-   */
-   /***** Get type (row[0]) *****/
-   Criterion->Source = (RubCri_Source_t) PrgRsc_GetTypeFromString (row[0]); // TODO
-
-   /***** Get code (row[1]) *****/
-   Criterion->Cod = Str_ConvertStrCodToLongCod (row[1]);
-  }
-
-/*****************************************************************************/
-/************************ Show one link from clipboard ***********************/
-/*****************************************************************************/
-
-static void RubCri_WriteRowClipboard (bool SubmitOnClick,
-                                      const struct RubCri_Criterion *Criterion)
-  {
-   HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
-      HTM_LABEL_Begin (NULL);
-
-         /***** Radio selector *****/
-	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
-			  "value=\"%s_%ld\"%s",
-			  RubCri_SourceDB[Criterion->Source],Criterion->Cod,
-			  SubmitOnClick ? "" :
-					  " checked=\"checked\"");
-
-	 /***** Name *****/
-         RubCri_WriteLinkName (Criterion,
-                               false);	// Don't put form
-
-      HTM_LABEL_End ();
-   HTM_LI_End ();
-  }
-
-/*****************************************************************************/
-/************* Write link name (filename, assignment title...) ***************/
-/*****************************************************************************/
-
-static void RubCri_WriteLinkName (const struct RubCri_Criterion *Criterion,bool PutFormToGo)
-  {
-   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
-   static void (*WriteLinkName[RubCri_NUM_SOURCES]) (long Cod,bool PutFormToGo,
-						     const char *Icon,
-						     const char *IconTitle) =
-     {
-      [RubCri_FROM_TEACHER       ] = RubCri_WriteEmptyLinkInRubricCriterion,
-      [RubCri_FROM_ANOTHER_RUBRIC] = AsgRsc_WriteAssignmentInCrsProgram,
-      [RubCri_FROM_EXAM_PRINT    ] = ExaRsc_WriteExamInCrsProgram,
-      [RubCri_FROM_GAME_MATCH    ] = GamRsc_WriteGameInCrsProgram,
-     };
-
-   /***** Write link name *****/
-   if (WriteLinkName[Criterion->Source])
-      WriteLinkName[Criterion->Source] (Criterion->Cod,PutFormToGo,
-					RubCri_SourceIcons[Criterion->Source],
-					Txt_RUBRIC_CRITERION_SOURCES[Criterion->Source]);
-   else
-      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-  }
-
-/*****************************************************************************/
-/******************** Write empty link in course program *********************/
-/*****************************************************************************/
-
-static void RubCri_WriteEmptyLinkInRubricCriterion (__attribute__((unused)) long Cod,
-                                                    __attribute__((unused)) bool PutFormToGo,
-                                                    const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES];
-
-   /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write text *****/
-   HTM_Txt (Txt_RUBRIC_CRITERION_SOURCES[RubCri_FROM_TEACHER]);
   }

@@ -52,7 +52,7 @@ void BrwRsc_GetLinkToFile (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    long FilCod;
    char Title[NAME_MAX + 1];	// File or link name
-   PrgRsc_Type_t Type;
+   Rsc_Type_t Type;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -65,16 +65,16 @@ void BrwRsc_GetLinkToFile (void)
      {
       case ActReqLnkSeeDocCrs:
       case ActReqLnkAdmDocCrs:
-	 Type = PrgRsc_DOCUMENT;
-         BrwRsc_GetDocTitleFromFilCod (FilCod,Title,sizeof (Title) - 1);
+	 Type = Rsc_DOCUMENT;
+         BrwRsc_GetTitleFromDocFilCod (FilCod,Title,sizeof (Title) - 1);
 	 break;
       case ActReqLnkSeeMrkCrs:
       case ActReqLnkAdmMrkCrs:
-	 Type = PrgRsc_MARKS;
-         BrwRsc_GetMrkTitleFromFilCod (FilCod,Title,sizeof (Title) - 1);
+	 Type = Rsc_MARKS;
+         BrwRsc_GetTitleFromMrkFilCod (FilCod,Title,sizeof (Title) - 1);
 	 break;
       default:
-	 Type = PrgRsc_NONE;	// Initialized to avoid warning
+	 Type = Rsc_NONE;	// Initialized to avoid warning
 	 Err_WrongTypeExit ();
 	 break;
      }
@@ -91,11 +91,11 @@ void BrwRsc_GetLinkToFile (void)
   }
 
 /*****************************************************************************/
-/******************** Write file name in course program **********************/
+/************************ Write document as resource *************************/
 /*****************************************************************************/
 
-void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
+void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
+                                   const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Documents;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -166,17 +166,16 @@ void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
    if (PutFormToGo)
      {
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }
 
 /*****************************************************************************/
-/******************** Write file name in course program **********************/
+/************************ Write marks file as resource ***********************/
 /*****************************************************************************/
 
-void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
+void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Marks_area;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -227,7 +226,6 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
    if (PutFormToGo)
      {
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }
@@ -237,7 +235,7 @@ void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
+void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Documents;
    struct Brw_FileMetadata FileMetadata;
@@ -261,7 +259,7 @@ void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void BrwRsc_GetMrkTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
+void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Marks_area;
    struct Brw_FileMetadata FileMetadata;

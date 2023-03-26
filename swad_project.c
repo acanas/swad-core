@@ -1265,7 +1265,7 @@ static void Prj_PutIconsListProjects (void *Projects)
 	                                   NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 					 Prj_PutCurrentPars,Projects);
 
@@ -3213,7 +3213,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
       Prj_PutIconOffLockedUnlocked (&Projects->Prj);
 
    /***** Link to get resource link *****/
-   if (PrgRsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 				      Prj_PutCurrentPars,Projects);
   }

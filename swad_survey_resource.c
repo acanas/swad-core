@@ -55,7 +55,7 @@ void SvyRsc_GetLinkToSurvey (void)
    SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to survey into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_SURVEY,Surveys.Svy.SvyCod);
+   Prg_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -66,11 +66,11 @@ void SvyRsc_GetLinkToSurvey (void)
   }
 
 /*****************************************************************************/
-/********************** Write survey in course program ***********************/
+/************************* Write survey as resource **************************/
 /*****************************************************************************/
 
-void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle)
+void SvyRsc_WriteResourceSurvey (long SvyCod,bool PutFormToGo,
+                                 const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -103,9 +103,7 @@ void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
    /***** End form to download file *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

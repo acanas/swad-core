@@ -34,8 +34,8 @@
 /*****************************************************************************/
 
 void ExaRsc_GetLinkToExam (void);
-void ExaRsc_WriteExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle);
+void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
+                               const char *Icon,const char *IconTitle);
 void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

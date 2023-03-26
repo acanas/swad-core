@@ -236,7 +236,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 	    HTM_TR_Begin (NULL);
 
 	       if (Surveys->Svy.Status.ICanEdit ||
-		   PrgRsc_CheckIfICanGetLink ())
+		   Rsc_CheckIfICanGetLink ())
                   HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Dat_StartEndTime_t) 0;
@@ -328,7 +328,7 @@ static void Svy_PutIconsListSurveys (void *Surveys)
       Svy_PutIconToCreateNewSvy ((struct Svy_Surveys *) Surveys);
 
    /***** Put icon to get resource link *****/
-   if (PrgRsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
 				      Svy_PutPars,Surveys);
 
@@ -465,7 +465,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
 	    if (Surveys->Svy.Status.ICanEdit ||
-		PrgRsc_CheckIfICanGetLink ())
+		Rsc_CheckIfICanGetLink ())
 	       Svy_PutFormsToRemEditOneSvy (Surveys,Anchor);
 	 HTM_TD_End ();
 	}
@@ -919,7 +919,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
      }
 
    /***** Icon to get resource link *****/
-   if (PrgRsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
 				      Svy_PutPars,Surveys);
   }

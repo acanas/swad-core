@@ -1322,7 +1322,7 @@ void Prg_ResetResource (struct Prg_Item *Item)
    Item->Resource.Hierarchy.RscCod = -1L;
    Item->Resource.Hierarchy.RscInd = 0;
    Item->Resource.Hierarchy.Hidden = false;
-   Item->Resource.Link.Type = PrgRsc_NONE;
+   Item->Resource.Link.Type = Rsc_NONE;
    Item->Resource.Link.Cod  = -1L;
    Item->Resource.Title[0] = '\0';
    Item->Resource.Title[0] = '\0';

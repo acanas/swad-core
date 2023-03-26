@@ -51,7 +51,7 @@ void AttRsc_GetLinkToEvent (void)
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to attendance event into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_ATTENDANCE_EVENT,AttCod);
+   Prg_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,AttCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -62,11 +62,11 @@ void AttRsc_GetLinkToEvent (void)
   }
 
 /*****************************************************************************/
-/**************** Write attendance event in course program *******************/
+/****************** Write attendance event as resource ***********************/
 /*****************************************************************************/
 
-void AttRsc_WriteEventInCrsProgram (long AttCod,bool PutFormToGo,
-                                    const char *Icon,const char *IconTitle)
+void AttRsc_WriteResourceEvent (long AttCod,bool PutFormToGo,
+                                const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -100,9 +100,7 @@ void AttRsc_WriteEventInCrsProgram (long AttCod,bool PutFormToGo,
    /***** End form to download file *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

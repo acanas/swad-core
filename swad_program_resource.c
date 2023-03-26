@@ -26,60 +26,24 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <mysql/mysql.h>	// To access MySQL databases
 #include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For free
-#include <string.h>		// For string functions
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
-#include "swad_assignment_resource.h"
-#include "swad_attendance_resource.h"
 #include "swad_box.h"
-#include "swad_browser_resource.h"
-#include "swad_call_for_exam_resource.h"
+#include "swad_button.h"
 #include "swad_error.h"
-#include "swad_exam_resource.h"
 #include "swad_form.h"
-#include "swad_forum_resource.h"
-#include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
-#include "swad_program_resource.h"
-#include "swad_project_resource.h"
-#include "swad_survey_resource.h"
-
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-const char *Prg_ResourceTypesIcons[PrgRsc_NUM_TYPES] =
-  {
-   [PrgRsc_NONE            ] = "link-slash.svg",
-   // gui TEACHING_GUIDE	// Link to teaching guide
-   // bib BIBLIOGRAPHY		// Link to bibliography
-   // faq FAQ			// Link to FAQ
-   // lnk LINKS			// Link to links
-   // tmt TIMETABLE		// Link to timetable
-   [PrgRsc_ASSIGNMENT      ] = "edit.svg",
-   [PrgRsc_PROJECT         ] = "file-invoice.svg",
-   [PrgRsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
-   // tst TEST			// User selects tags, teacher should select
-   [PrgRsc_EXAM            ] = "file-signature.svg",
-   [PrgRsc_GAME            ] = "gamepad.svg",
-   [PrgRsc_SURVEY          ] = "poll.svg",
-   [PrgRsc_DOCUMENT        ] = "folder-open.svg",
-   [PrgRsc_MARKS           ] = "list-alt.svg",
-   // grp GROUPS		// ??? User select groups
-   [PrgRsc_ATTENDANCE_EVENT] = "calendar-check.svg",
-   [PrgRsc_FORUM_THREAD    ] = "comments.svg",
-  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
-/*****************************************************************************/
+/****************************************************************************/
 
 extern struct Globals Gbl;
 
@@ -126,15 +90,6 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
                                       const struct Prg_ResourceHierarchy *Rsc2);
 
 static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
-static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct PrgRsc_Link *Link);
-static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link,bool PutFormToGo,
-                                  const char *Icon,const char *IconTitle);
-static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
-                                               __attribute__((unused)) bool PutFormToGo,
-                                               const char *Icon,const char *IconTitle);
-static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item);
-static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct PrgRsc_Link *Link);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -396,7 +351,7 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Item->Resource.Hierarchy.Hidden = (row[3][0] == 'Y');
 
    /***** Get link type and code (row[4], row[5]) *****/
-   Item->Resource.Link.Type = PrgRsc_GetTypeFromString (row[4]);
+   Item->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);
    Item->Resource.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get the title of the item resource (row[6]) *****/
@@ -410,7 +365,8 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item)
   {
-   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -426,9 +382,9 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
-	 PrgRsc_WriteLinkName (&Item->Resource.Link,
+	 Rsc_WriteLinkName (&Item->Resource.Link,
 			       true,	// Put form
-			       Prg_ResourceTypesIcons[Item->Resource.Link.Type],
+			       Rsc_ResourceTypesIcons[Item->Resource.Link.Type],
 			       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
       HTM_TD_End ();
 
@@ -443,7 +399,8 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,bool EditLink)
   {
-   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -466,7 +423,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
-	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,Item->Resource.Title,
+	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Item->Resource.Title,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
@@ -480,10 +437,10 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	    PrgRsc_ShowClipboard (Item);
 	 else
 	    /* Show current link */
-	    PrgRsc_WriteLinkName (&Item->Resource.Link,
-	                          true,	// Put form
-				  Prg_ResourceTypesIcons[Item->Resource.Link.Type],
-	                          Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
+	    Rsc_WriteLinkName (&Item->Resource.Link,
+	                       true,	// Put form
+			       Rsc_ResourceTypesIcons[Item->Resource.Link.Type],
+	                       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
 
       HTM_TD_End ();
 
@@ -520,7 +477,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
          /* Title */
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
-	    HTM_INPUT_TEXT ("Title",PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE,"",
+	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
 			    HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
 			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
@@ -636,7 +593,7 @@ void PrgRsc_CreateResource (void)
    Prg_GetPars (&Item);
 
    /* Get the new title for the new resource */
-   Par_GetParText ("Title",Item.Resource.Title,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+   Par_GetParText ("Title",Item.Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
 
    /***** Create resource *****/
    Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
@@ -655,7 +612,7 @@ void PrgRsc_CreateResource (void)
 void PrgRsc_RenameResource (void)
   {
    struct Prg_Item Item;
-   char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
+   char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -667,7 +624,7 @@ void PrgRsc_RenameResource (void)
 
    /***** Rename resource *****/
    /* Get the new title for the resource */
-   Par_GetParText ("Title",NewTitle,PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE);
+   Par_GetParText ("Title",NewTitle,Rsc_MAX_BYTES_RESOURCE_TITLE);
 
    /* Update database changing old title by new title */
    Prg_DB_UpdateResourceTitle (Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod,NewTitle);
@@ -907,10 +864,10 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
-   struct PrgRsc_Link Link;
-   static const struct PrgRsc_Link EmptyLink =
+   struct Rsc_Link Link;
+   static const struct Rsc_Link EmptyLink =
      {
-      .Type = PrgRsc_NONE,
+      .Type = Rsc_NONE,
       .Cod  = -1L,
      };
 
@@ -926,11 +883,11 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
-	 PrgRsc_WriteRowClipboard (false,&Item->Resource.Link);
+	 Rsc_WriteRowClipboard (false,&Item->Resource.Link);
 
          /***** Row with empty link to remove the current link *****/
-	 if (Item->Resource.Link.Type != PrgRsc_NONE)
-	    PrgRsc_WriteRowClipboard (true,&EmptyLink);
+	 if (Item->Resource.Link.Type != Rsc_NONE)
+	    Rsc_WriteRowClipboard (true,&EmptyLink);
 
 	 /***** Get links in clipboard from database and write them *****/
 	 NumLinks = Prg_DB_GetClipboard (&mysql_res);
@@ -938,8 +895,8 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 	      NumLink <= NumLinks;
 	      NumLink++)
 	   {
-	    PrgRsc_GetLinkDataFromRow (mysql_res,&Link);
-	    PrgRsc_WriteRowClipboard (true,&Link);
+	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	    Rsc_WriteRowClipboard (true,&Link);
 	   }
 	 DB_FreeMySQLResult (&mysql_res);
 
@@ -948,116 +905,6 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 
    /***** End form *****/
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************************ Show one link from clipboard ***********************/
-/*****************************************************************************/
-
-static void PrgRsc_WriteRowClipboard (bool SubmitOnClick,const struct PrgRsc_Link *Link)
-  {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
-   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
-
-   HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
-      HTM_LABEL_Begin (NULL);
-
-         /***** Radio selector *****/
-	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
-			  "value=\"%s_%ld\"%s",
-			  Prg_ResourceTypesDB[Link->Type],Link->Cod,
-			  SubmitOnClick ? "" :
-					  " checked=\"checked\"");
-
-	 /***** Name *****/
-         PrgRsc_WriteLinkName (Link,
-                               false,	// Don't put form
-			       Prg_ResourceTypesIcons[Link->Type],
-	                       Txt_RESOURCE_TYPES[Link->Type]);
-
-      HTM_LABEL_End ();
-   HTM_LI_End ();
-  }
-
-/*****************************************************************************/
-/************* Write link name (filename, assignment title...) ***************/
-/*****************************************************************************/
-
-static void PrgRsc_WriteLinkName (const struct PrgRsc_Link *Link,bool PutFormToGo,
-                                  const char *Icon,const char *IconTitle)
-  {
-   static void (*WriteLinkName[PrgRsc_NUM_TYPES]) (long Cod,bool PutFormToGo,
-						   const char *Icon,
-						   const char *IconTitle) =
-     {
-      [PrgRsc_NONE            ] = PrgRsc_WriteEmptyLinkInCrsProgram,
-      [PrgRsc_ASSIGNMENT      ] = AsgRsc_WriteAssignmentInCrsProgram,
-      [PrgRsc_PROJECT         ] = PrjRsc_WriteProjectInCrsProgram,
-      [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_WriteCallForExamInCrsProgram,
-      [PrgRsc_EXAM            ] = ExaRsc_WriteExamInCrsProgram,
-      [PrgRsc_GAME            ] = GamRsc_WriteGameInCrsProgram,
-      [PrgRsc_SURVEY          ] = SvyRsc_WriteSurveyInCrsProgram,
-      [PrgRsc_DOCUMENT        ] = BrwRsc_WriteDocFileNameInCrsProgram,
-      [PrgRsc_MARKS           ] = BrwRsc_WriteMrkFileNameInCrsProgram,
-      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_WriteEventInCrsProgram,
-      [PrgRsc_FORUM_THREAD    ] = ForRsc_WriteThreadInCrsProgram,
-     };
-
-   /***** Write link name *****/
-   if (WriteLinkName[Link->Type])
-      WriteLinkName[Link->Type] (Link->Cod,PutFormToGo,Icon,IconTitle);
-   else
-      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-  }
-
-/*****************************************************************************/
-/******************** Write empty link in course program *********************/
-/*****************************************************************************/
-
-static void PrgRsc_WriteEmptyLinkInCrsProgram (__attribute__((unused)) long Cod,
-                                               __attribute__((unused)) bool PutFormToGo,
-                                               const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES];
-
-   /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write text *****/
-   HTM_Txt (Txt_RESOURCE_TYPES[PrgRsc_NONE]);
-  }
-
-/*****************************************************************************/
-/************* Get the title for a new resource from link title **************/
-/*****************************************************************************/
-
-static void PrgRsc_GetResourceTitleFromLink (struct Prg_Item *Item)
-  {
-   static void (*GetTitle[PrgRsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
-     {
-      [PrgRsc_NONE            ] = NULL,
-      [PrgRsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
-      [PrgRsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
-      [PrgRsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
-      [PrgRsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
-      [PrgRsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [PrgRsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
-      [PrgRsc_DOCUMENT        ] = BrwRsc_GetDocTitleFromFilCod,
-      [PrgRsc_MARKS           ] = BrwRsc_GetMrkTitleFromFilCod,
-      [PrgRsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
-      [PrgRsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
-     };
-
-   /***** Reset title *****/
-   Item->Resource.Title[0] = '\0';
-
-   /***** Get title *****/
-   if (GetTitle[Item->Resource.Link.Type])
-      GetTitle[Item->Resource.Link.Type] (Item->Resource.Link.Cod,
-					  Item->Resource.Title,
-					  sizeof (Item->Resource.Title) - 1);
-   else
-      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
   }
 
 /*****************************************************************************/
@@ -1084,7 +931,7 @@ void PrgRsc_ChangeLink (void)
    Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
    if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
      {
-      Item.Resource.Link.Type = PrgRsc_GetTypeFromString (TypeStr);
+      Item.Resource.Link.Type = Rsc_GetTypeFromString (TypeStr);
       Item.Resource.Link.Cod  = Cod;
 
       /***** Is it an existing resource? *****/
@@ -1092,7 +939,8 @@ void PrgRsc_ChangeLink (void)
 	{
 	 /* No resource selected, so it's a new resource at the end of the item */
 	 /* Get the new title for the new resource from link title */
-	 PrgRsc_GetResourceTitleFromLink (&Item);
+	 Rsc_GetResourceTitleFromLink (&Item.Resource.Link,
+	                               Item.Resource.Title);
 
 	 /***** Create resource *****/
 	 Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
@@ -1110,60 +958,4 @@ void PrgRsc_ChangeLink (void)
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/********************** Get resource data from clipboard *********************/
-/*****************************************************************************/
-
-static void PrgRsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,
-                                       struct PrgRsc_Link *Link)
-  {
-   MYSQL_ROW row;
-
-   /***** Get row *****/
-   row = mysql_fetch_row (mysql_res);
-   /*
-   Type	row[0]
-   Cod	row[1]
-   */
-   /***** Get type (row[0]) *****/
-   Link->Type = PrgRsc_GetTypeFromString (row[0]);
-
-   /***** Get code (row[1]) *****/
-   Link->Cod = Str_ConvertStrCodToLongCod (row[1]);
-  }
-
-/*****************************************************************************/
-/********************** Convert from string to type **************************/
-/*****************************************************************************/
-
-PrgRsc_Type_t PrgRsc_GetTypeFromString (const char *Str)
-  {
-   extern const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES];
-   PrgRsc_Type_t Type;
-
-   /***** Compare string with all string types *****/
-   for (Type  = (PrgRsc_Type_t) 0;
-	Type <= (PrgRsc_Type_t) (PrgRsc_NUM_TYPES - 1);
-	Type++)
-      if (!strcmp (Prg_ResourceTypesDB[Type],Str))
-	 return Type;
-
-   return PrgRsc_NONE;
-  }
-
-/*****************************************************************************/
-/************************** Check if I can get link **************************/
-/*****************************************************************************/
-
-bool PrgRsc_CheckIfICanGetLink (void)
-  {
-   static const bool ICanGetLink[Rol_NUM_ROLES] =
-     {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
-     };
-
-   return ICanGetLink[Gbl.Usrs.Me.Role.Logged];
   }

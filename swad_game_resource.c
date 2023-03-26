@@ -56,7 +56,7 @@ void GamRsc_GetLinkToGame (void)
    GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to game into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_GAME,GamCod);
+   Prg_DB_CopyToClipboard (Rsc_GAME,GamCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -67,11 +67,11 @@ void GamRsc_GetLinkToGame (void)
   }
 
 /*****************************************************************************/
-/*********************** Write game in course program ************************/
+/************************** Write game as resource ***************************/
 /*****************************************************************************/
 
-void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
-                                   const char *Icon,const char *IconTitle)
+void GamRsc_WriteResourceGame (long GamCod,bool PutFormToGo,
+                               const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -104,9 +104,7 @@ void GamRsc_WriteGameInCrsProgram (long GamCod,bool PutFormToGo,
    /***** End form to go to game *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

@@ -392,7 +392,7 @@ static void Gam_PutIconsListGames (void *Games)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
 					 Gam_PutPars,Games);
 
@@ -757,7 +757,7 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  Gam_PutPars,Games);
 
    /***** Link to get resource link *****/
-   if (PrgRsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
 				      Gam_PutPars,Games);
 

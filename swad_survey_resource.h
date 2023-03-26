@@ -34,8 +34,8 @@
 /*****************************************************************************/
 
 void SvyRsc_GetLinkToSurvey (void);
-void SvyRsc_WriteSurveyInCrsProgram (long SvyCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle);
+void SvyRsc_WriteResourceSurvey (long SvyCod,bool PutFormToGo,
+                                 const char *Icon,const char *IconTitle);
 void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize);
 
 #endif

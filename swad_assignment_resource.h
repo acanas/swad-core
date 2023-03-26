@@ -35,8 +35,8 @@
 /*****************************************************************************/
 
 void AsgRsc_GetLinkToAssignment (void);
-void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                         const char *Icon,const char *IconTitle);
+void AsgRsc_WriteResourceAssignment (long AsgCod,bool PutFormToGo,
+                                     const char *Icon,const char *IconTitle);
 void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
 
 #endif

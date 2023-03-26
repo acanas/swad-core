@@ -831,7 +831,7 @@ static void For_PutIconsOneThread (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          PrgRsc_CheckIfICanGetLink ())
+          Rsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutParsNewPost,Forums);
      }
@@ -2112,7 +2112,7 @@ static void For_PutIconsThreads (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          PrgRsc_CheckIfICanGetLink ())
+          Rsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutParsNewPost,Forums);
      }

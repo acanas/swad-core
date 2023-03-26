@@ -59,7 +59,7 @@ void Prg_DB_RemoveCrsItems (long CrsCod);
 long Prg_DB_CreateResource (const struct Prg_Item *Item);
 
 void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
-                                 const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1]);
+                                 const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);
 
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
                                   bool ShowHiddenResources);
@@ -77,9 +77,9 @@ void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 void Prg_DB_UpdateRscLink (const struct Prg_Item *Item);
 
-void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod);
+void Prg_DB_CopyToClipboard (Rsc_Type_t Type,long Cod);
 unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
-void Prg_DB_RemoveLinkFromClipboard (struct PrgRsc_Link *Link);
+void Prg_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
 
 void Prg_DB_InsertItemInExpandedItems (long ItmCod);
 bool Prg_DB_GetIfExpandedItem (long ItmCod);

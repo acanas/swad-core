@@ -2593,7 +2593,7 @@ mysql> DESCRIBE prg_resources;
 			"'mrk',"
 			"'att',"
 			"'for') NOT NULL DEFAULT 'non',"
-			"Title VARCHAR(2047) NOT NULL,"		// PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE
+			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
 		   "UNIQUE INDEX(RscCod),"
 		   "UNIQUE INDEX(ItmCod,RscInd))");
 

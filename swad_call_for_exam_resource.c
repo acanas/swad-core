@@ -52,7 +52,7 @@ void Cfe_GetLinkToCallForExam (void)
    CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to call for exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_CALL_FOR_EXAM,ExaCod);
+   Prg_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -67,11 +67,11 @@ void Cfe_GetLinkToCallForExam (void)
   }
 
 /*****************************************************************************/
-/******************* Write call for exam in course program *******************/
+/********************** Write call for exam as resource **********************/
 /*****************************************************************************/
 
-void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle)
+void CfeRsc_WriteResourceCallForExam (long ExaCod,bool PutFormToGo,
+                                      const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -112,9 +112,7 @@ void CfeRsc_WriteCallForExamInCrsProgram (long ExaCod,bool PutFormToGo,
    /***** End form to download file *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

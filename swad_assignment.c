@@ -50,7 +50,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
-#include "swad_program_resource.h"
+#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -302,7 +302,7 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
       /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink ())
 	{
          ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
@@ -748,7 +748,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	                              Asg_PutPars,Assignments);
 
 	 /***** Link to get resource link *****/
-	 if (PrgRsc_CheckIfICanGetLink ())
+	 if (Rsc_CheckIfICanGetLink ())
 	    Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
 					    Asg_PutPars,Assignments);
 	 /* falls through */

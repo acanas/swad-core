@@ -34,8 +34,8 @@
 /*****************************************************************************/
 
 void ForRsc_GetLinkToThread (void);
-void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle);
+void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
+                                 const char *Icon,const char *IconTitle);
 void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize);
 
 #endif

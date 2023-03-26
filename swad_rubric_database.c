@@ -351,6 +351,7 @@ void Rub_DB_RemoveCrsRubrics (long CrsCod)
 
 long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
   {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
    long CriCod;
 
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
@@ -364,8 +365,8 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
 				RubCri_ValuesFields[RubCri_MAX],
 				Criterion->RubCod,
 				Criterion->CriInd,
-				RubCri_GetDBStrFromSource (Criterion->Source),
-				Criterion->Cod,
+				Rsc_ResourceTypesDB[Criterion->Link.Type],
+				Criterion->Link.Cod,
 				Criterion->Values[RubCri_MIN],
 				Criterion->Values[RubCri_MAX],
 				Criterion->Weight,
@@ -392,17 +393,19 @@ void Rub_DB_UpdateCriterionTitle (const struct RubCri_Criterion *Criterion)
   }
 
 /*****************************************************************************/
-/********************* Update criterion source in database *******************/
+/********************** Update criterion type in database ********************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionSource (const struct RubCri_Criterion *Criterion)
+void Rub_DB_UpdateCriterionType (const struct RubCri_Criterion *Criterion)
   {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
    DB_QueryUPDATE ("can not update the value of a criterion",
 		   "UPDATE rub_criteria"
 		     " SET Source='%s'"
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
-		   RubCri_GetDBStrFromSource (Criterion->Source),
+		   Rsc_ResourceTypesDB[Criterion->Link.Type],
 	           Criterion->CriCod,
 	           Criterion->RubCod);
   }

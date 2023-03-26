@@ -59,7 +59,7 @@ void ForRsc_GetLinkToThread (void)
    ForRsc_GetTitleFromThrCod (Forums.Thread.Current,Subject,sizeof (Subject) - 1);
 
    /***** Copy link to thread into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_FORUM_THREAD,Forums.Thread.Current);
+   Prg_DB_CopyToClipboard (Rsc_FORUM_THREAD,Forums.Thread.Current);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -76,11 +76,11 @@ void ForRsc_GetLinkToThread (void)
   }
 
 /*****************************************************************************/
-/***************** Write thread subject in course program ********************/
+/************************ Write thread as resource ***************************/
 /*****************************************************************************/
 
-void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
-                                     const char *Icon,const char *IconTitle)
+void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
+                                 const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -123,9 +123,7 @@ void ForRsc_WriteThreadInCrsProgram (long ThrCod,bool PutFormToGo,
    /***** End form to download file *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

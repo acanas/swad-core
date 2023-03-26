@@ -56,7 +56,7 @@ void PrjRsc_GetLinkToProject (void)
    PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to PROJECT into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_PROJECT,Projects.Prj.PrjCod);
+   Prg_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -70,11 +70,11 @@ void PrjRsc_GetLinkToProject (void)
   }
 
 /*****************************************************************************/
-/*********************** Write game in course program ************************/
+/*********************** Write project as resource ************************/
 /*****************************************************************************/
 
-void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
-                                      const char *Icon,const char *IconTitle)
+void PrjRsc_WriteResourceProject (long PrjCod,bool PutFormToGo,
+                                  const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -101,15 +101,13 @@ void PrjRsc_WriteProjectInCrsProgram (long PrjCod,bool PutFormToGo,
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write project title of exam *****/
+   /***** Write project title *****/
    HTM_Txt (Title);
 
    /***** End form to go to project *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

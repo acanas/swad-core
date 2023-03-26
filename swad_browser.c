@@ -68,9 +68,9 @@
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
-#include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
+#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
@@ -3297,7 +3297,7 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
 
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
-       PrgRsc_CheckIfICanGetLink ())
+       Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
 				      NULL,NULL);
 
@@ -7558,7 +7558,7 @@ void Brw_ShowFileMetadata (void)
 	 if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
 	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
-	     PrgRsc_CheckIfICanGetLink ())
+	     Rsc_CheckIfICanGetLink ())
 	    Box_BoxShadowBegin (NULL,NULL,
 				Brw_PutIconToGetLinkToFile,&FileMetadata,
 				NULL);

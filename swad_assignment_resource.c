@@ -61,7 +61,7 @@ void AsgRsc_GetLinkToAssignment (void)
    AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to assignment into resource clipboard *****/
-   Prg_DB_CopyToClipboard (PrgRsc_ASSIGNMENT,Assignments.Asg.AsgCod);
+   Prg_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -76,11 +76,11 @@ void AsgRsc_GetLinkToAssignment (void)
   }
 
 /*****************************************************************************/
-/********************* Write assignment in course program ********************/
+/************************ Write assignment as resource ***********************/
 /*****************************************************************************/
 
-void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
-                                         const char *Icon,const char *IconTitle)
+void AsgRsc_WriteResourceAssignment (long AsgCod,bool PutFormToGo,
+                                     const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
@@ -115,9 +115,7 @@ void AsgRsc_WriteAssignmentInCrsProgram (long AsgCod,bool PutFormToGo,
    /***** End form to download file *****/
    if (PutFormToGo)
      {
-      /* End form */
          HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

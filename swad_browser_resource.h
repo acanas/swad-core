@@ -34,11 +34,11 @@
 /*****************************************************************************/
 
 void BrwRsc_GetLinkToFile (void);
-void BrwRsc_WriteDocFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle);
-void BrwRsc_WriteMrkFileNameInCrsProgram (long FilCod,bool PutFormToGo,
-                                          const char *Icon,const char *IconTitle);
-void BrwRsc_GetDocTitleFromFilCod (long FilCod,char *Title,size_t TitleSize);
-void BrwRsc_GetMrkTitleFromFilCod (long FilCod,char *Title,size_t TitleSize);
+void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
+                                   const char *Icon,const char *IconTitle);
+void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
+                                    const char *Icon,const char *IconTitle);
+void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize);
+void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize);
 
 #endif

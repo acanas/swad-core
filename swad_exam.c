@@ -353,7 +353,7 @@ static void Exa_PutIconsListExams (void *Exams)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (PrgRsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink ())
 	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
 					 Exa_PutPars,Exams);
 
@@ -702,7 +702,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  Exa_PutPars,Exams);
 
    /***** Link to get resource link *****/
-   if (PrgRsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
 				      Exa_PutPars,Exams);
   }

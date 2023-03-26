@@ -34,26 +34,26 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-const char *Prg_ResourceTypesDB[PrgRsc_NUM_TYPES] =
+const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
   {
-   [PrgRsc_NONE            ] = "non",
+   [Rsc_NONE            ] = "non",
    // gui TEACHING_GUIDE	// Link to teaching guide
    // bib BIBLIOGRAPHY		// Link to bibliography
    // faq FAQ			// Link to FAQ
    // lnk LINKS			// Link to links
    // tmt TIMETABLE		// Link to timetable
-   [PrgRsc_ASSIGNMENT      ] = "asg",
-   [PrgRsc_PROJECT         ] = "prj",
-   [PrgRsc_CALL_FOR_EXAM   ] = "cfe",
+   [Rsc_ASSIGNMENT      ] = "asg",
+   [Rsc_PROJECT         ] = "prj",
+   [Rsc_CALL_FOR_EXAM   ] = "cfe",
    // tst TEST			// User selects tags, teacher should select
-   [PrgRsc_EXAM            ] = "exa",
-   [PrgRsc_GAME            ] = "gam",
-   [PrgRsc_SURVEY          ] = "svy",
-   [PrgRsc_DOCUMENT        ] = "doc",
-   [PrgRsc_MARKS           ] = "mrk",
+   [Rsc_EXAM            ] = "exa",
+   [Rsc_GAME            ] = "gam",
+   [Rsc_SURVEY          ] = "svy",
+   [Rsc_DOCUMENT        ] = "doc",
+   [Rsc_MARKS           ] = "mrk",
    // grp GROUPS		// ??? User select groups
-   [PrgRsc_ATTENDANCE_EVENT] = "att",
-   [PrgRsc_FORUM_THREAD    ] = "for",
+   [Rsc_ATTENDANCE_EVENT] = "att",
+   [Rsc_FORUM_THREAD    ] = "for",
   };
 
 /*****************************************************************************/
@@ -474,7 +474,7 @@ long Prg_DB_CreateResource (const struct Prg_Item *Item)
 /*****************************************************************************/
 
 void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
-                                 const char NewTitle[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1])
+                                 const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
    DB_QueryUPDATE ("can not update the title of a resource",
 		   "UPDATE prg_resources,"
@@ -663,7 +663,7 @@ void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
 		     " SET Type='%s',"
 		          "Cod=%ld"
 		   " WHERE RscCod=%ld",
-		   Prg_ResourceTypesDB[Item->Resource.Link.Type],
+		   Rsc_ResourceTypesDB[Item->Resource.Link.Type],
 		   Item->Resource.Link.Cod,
 		   Item->Resource.Hierarchy.RscCod);
   }
@@ -672,7 +672,7 @@ void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
 /********************** Copy link to resource into clipboard *****************/
 /*****************************************************************************/
 
-void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
+void Prg_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
   {
    DB_QueryREPLACE ("can not copy link to resource clipboard",
 		    "REPLACE INTO prg_clipboards"
@@ -681,7 +681,7 @@ void Prg_DB_CopyToClipboard (PrgRsc_Type_t Type,long Cod)
 		    " (%ld,%ld,'%s',%ld,NOW())",
 		    Gbl.Usrs.Me.UsrDat.UsrCod,
 		    Gbl.Hierarchy.Crs.CrsCod,
-		    Prg_ResourceTypesDB[Type],
+		    Rsc_ResourceTypesDB[Type],
 		    Cod);
   }
 
@@ -707,7 +707,7 @@ unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
 /*************************** Remove link from clipboard **********************/
 /*****************************************************************************/
 
-void Prg_DB_RemoveLinkFromClipboard (struct PrgRsc_Link *Link)
+void Prg_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
   {
    DB_QueryDELETE ("can not remove link from clipboard",
 		   "DELETE FROM prg_clipboards"
@@ -717,7 +717,7 @@ void Prg_DB_RemoveLinkFromClipboard (struct PrgRsc_Link *Link)
 		     " AND Cod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
                    Gbl.Hierarchy.Crs.CrsCod,
-		   Prg_ResourceTypesDB[Link->Type],
+		   Rsc_ResourceTypesDB[Link->Type],
 		   Link->Cod);
   }
 

@@ -32,48 +32,17 @@
 
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_resource.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE	(128 - 1)	// 127
-#define PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE	((PrgRsc_MAX_CHARS_PROGRAM_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Prg_ResourceHierarchy
   {
    long RscCod;
    unsigned RscInd;	// 1, 2, 3...
    bool Hidden;
-  };
-
-#define PrgRsc_NUM_TYPES 11
-typedef enum
-  {
-  PrgRsc_NONE,
-  // gui TEACHING_GUIDE	// Link to teaching guide
-  // bib BIBLIOGRAPHY	// Link to bibliography
-  // faq FAQ		// Link to FAQ
-  // lnk LINKS		// Link to links
-  // tmt TIMETABLE	// Link to timetable
-  PrgRsc_ASSIGNMENT,
-  PrgRsc_PROJECT,	// A project is only for some students
-  PrgRsc_CALL_FOR_EXAM,
-  // tst TEST		// User selects tags, teacher should select
-  PrgRsc_EXAM,
-  PrgRsc_GAME,
-  PrgRsc_SURVEY,
-  PrgRsc_DOCUMENT,
-  PrgRsc_MARKS,
-  // grp GROUPS		// ??? User select groups
-  PrgRsc_ATTENDANCE_EVENT,
-  PrgRsc_FORUM_THREAD,
-  } PrgRsc_Type_t;
-
-struct PrgRsc_Link
-  {
-   PrgRsc_Type_t Type;
-   long Cod;
   };
 
 #define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
@@ -98,8 +67,8 @@ struct Prg_Item
    struct
      {
       struct Prg_ResourceHierarchy Hierarchy;
-      struct PrgRsc_Link Link;
-      char Title[PrgRsc_MAX_BYTES_PROGRAM_RESOURCE_TITLE + 1];
+      struct Rsc_Link Link;
+      char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
      } Resource;
   };
 

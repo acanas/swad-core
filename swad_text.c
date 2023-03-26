@@ -36407,9 +36407,9 @@ const char *Txt_Resource_X_removed =	// Warning: it is very important to include
 	"Kaynak <strong>s</strong> kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
-const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
+const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	{
-	[PrgRsc_NONE] =
+	[Rsc_NONE] =
 #if   L==1	// ca
 	"Sense enlla&ccedil;"
 #elif L==2	// de
@@ -36432,7 +36432,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Ba&gbreve;lant&inodot; yok"
 #endif
 	,
-	[PrgRsc_ASSIGNMENT] =
+	[Rsc_ASSIGNMENT] =
 #if   L==1	// ca
 	"Activitat"
 #elif L==2	// de
@@ -36455,7 +36455,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Atama"
 #endif
 	,
-	[PrgRsc_PROJECT] =
+	[Rsc_PROJECT] =
 #if   L==1	// ca
 	"Projecte"
 #elif L==2	// de
@@ -36478,7 +36478,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Projesi"
 #endif
 	,
-	[PrgRsc_CALL_FOR_EXAM] =
+	[Rsc_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
@@ -36501,7 +36501,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"S&inodot;nav i&ccedil;in aray&inodot;n"
 #endif
 	,
-	[PrgRsc_EXAM] =
+	[Rsc_EXAM] =
 #if   L==1	// ca
 	"Ex&agrave;men"
 #elif L==2	// de
@@ -36524,7 +36524,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"S&inodot;nav"
 #endif
 	,
-	[PrgRsc_GAME] =
+	[Rsc_GAME] =
 #if   L==1	// ca
 	"Joc"
 #elif L==2	// de
@@ -36547,7 +36547,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Oyun"
 #endif
 	,
-	[PrgRsc_SURVEY] =
+	[Rsc_SURVEY] =
 #if   L==1	// ca
 	"Enquesta"
 #elif L==2	// de
@@ -36570,7 +36570,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Anket"
 #endif
 	,
-	[PrgRsc_DOCUMENT] =
+	[Rsc_DOCUMENT] =
 #if   L==1	// ca
 	"Document"
 #elif L==2	// de
@@ -36593,7 +36593,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Belge"
 #endif
 	,
-	[PrgRsc_MARKS] =
+	[Rsc_MARKS] =
 #if   L==1	// ca
 	"Qualificacions"	// Necessita traducció
 #elif L==2	// de
@@ -36616,7 +36616,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Marks"			// Çeviri lazim!
 #endif
 	,
-	[PrgRsc_ATTENDANCE_EVENT] =
+	[Rsc_ATTENDANCE_EVENT] =
 #if   L==1	// ca
 	"Assist&egrave;ncia"
 #elif L==2	// de
@@ -36639,7 +36639,7 @@ const char *Txt_RESOURCE_TYPES[PrgRsc_NUM_TYPES] =
 	"Kat&inodot;l&inodot;m"
 #endif
 	,
-	[PrgRsc_FORUM_THREAD] =
+	[Rsc_FORUM_THREAD] =
 #if   L==1	// ca
 	"Discussi&oacute; de f&ograve;rum"
 #elif L==2	// de
@@ -42812,101 +42812,6 @@ const char *Txt_Rubric_X_removed =	// Warning: it is very important to include %
 #elif L==10	// tr
 	"De&gbreve;erlendirme listesi <strong>%s</strong> kald&inodot;r&inodot;ld&inodot;.";
 #endif
-
-const char *Txt_RUBRIC_CRITERION_SOURCES[RubCri_NUM_SOURCES] =
-	{
-	[RubCri_FROM_TEACHER] =
-#if   L==1	// ca
-	"Professor/a"
-#elif L==2	// de
-	"Lehrkraft"
-#elif L==3	// en
-	"Teacher"
-#elif L==4	// es
-	"Profesor/a"
-#elif L==5	// fr
-	"Enseignant/e"
-#elif L==6	// gn
-	"Mbo'eh&aacute;ra"
-#elif L==7	// it
-	"Professore/ssa"
-#elif L==8	// pl
-	"Nauczyciel"
-#elif L==9	// pt
-	"Professor/a"
-#elif L==10	// tr
-	"&Ouml;&gbreve;retmen"
-#endif
-	,
-	[RubCri_FROM_ANOTHER_RUBRIC] =
-#if   L==1	// ca
-	"R&uacute;brica"
-#elif L==2	// de
-	"Rubrik"
-#elif L==3	// en
-	"Rubric"
-#elif L==4	// es
-	"R&uacute;brica"
-#elif L==5	// fr
-	"Rubrique"
-#elif L==6	// gn
-	"R&uacute;brica"	// Okoteve traducción
-#elif L==7	// it
-	"Rubriche"
-#elif L==8	// pl
-	"Rubryki"
-#elif L==9	// pt
-	"Rubrica"
-#elif L==10	// tr
-	"De&gbreve;erlendirme"
-#endif
-	,
-	[RubCri_FROM_EXAM_PRINT] =
-#if   L==1	// ca
-	"Ex&agrave;men"
-#elif L==2	// de
-	"Pr&uuml;fung"
-#elif L==3	// en
-	"Exam"
-#elif L==4	// es
-	"Examen"
-#elif L==5	// fr
-	"Examen"
-#elif L==6	// gn
-	"Aranduchauka"
-#elif L==7	// it
-	"Esame"
-#elif L==8	// pl
-	"Egzamin"
-#elif L==9	// pt
-	"Exame"
-#elif L==10	// tr
-	"S&inodot;nav"
-#endif
-	,
-	[RubCri_FROM_GAME_MATCH] =
-#if   L==1	// ca
-	"Joc"
-#elif L==2	// de
-	"Spiel"
-#elif L==3	// en
-	"Game"
-#elif L==4	// es
-	"Juego"
-#elif L==5	// fr
-	"Jeu"
-#elif L==6	// gn
-	"&Ntilde;eha'a"
-#elif L==7	// it
-	"Gioco"
-#elif L==8	// pl
-	"Gra"
-#elif L==9	// pt
-	"Jogo"
-#elif L==10	// tr
-	"Oyun"
-#endif
-	};
 
 const char *Txt_Rubrics =
 #if   L==1	// ca
