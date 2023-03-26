@@ -38,7 +38,7 @@
 #define Rsc_MAX_CHARS_RESOURCE_TITLE	(128 - 1)	// 127
 #define Rsc_MAX_BYTES_RESOURCE_TITLE	((Rsc_MAX_CHARS_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Rsc_NUM_TYPES 11
+#define Rsc_NUM_TYPES 14
 typedef enum
   {
   Rsc_NONE,
@@ -52,13 +52,16 @@ typedef enum
   Rsc_CALL_FOR_EXAM,
   // tst TEST		// User selects tags, teacher should select
   Rsc_EXAM,
+  Rsc_EXAM_SESSION,
   Rsc_GAME,
-  Rsc_SURVEY,
+  Rsc_GAME_MATCH,
+  Rsc_RUBRIC,
   Rsc_DOCUMENT,
   Rsc_MARKS,
   // grp GROUPS		// ??? User select groups
   Rsc_ATTENDANCE_EVENT,
   Rsc_FORUM_THREAD,
+  Rsc_SURVEY,
   } Rsc_Type_t;
 
 struct Rsc_Link

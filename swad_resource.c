@@ -48,6 +48,31 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
+  {
+   [Rsc_NONE            ] = "non",
+   // gui TEACHING_GUIDE	// Link to teaching guide
+   // bib BIBLIOGRAPHY		// Link to bibliography
+   // faq FAQ			// Link to FAQ
+   // lnk LINKS			// Link to links
+   // tmt TIMETABLE		// Link to timetable
+   [Rsc_ASSIGNMENT      ] = "asg",
+   [Rsc_PROJECT         ] = "prj",
+   [Rsc_CALL_FOR_EXAM   ] = "cfe",
+   // tst TEST			// User selects tags, teacher should select
+   [Rsc_EXAM            ] = "exa",
+   [Rsc_EXAM_SESSION    ] = "ses",
+   [Rsc_GAME            ] = "gam",
+   [Rsc_GAME_MATCH      ] = "mch",
+   [Rsc_RUBRIC          ] = "rub",
+   [Rsc_DOCUMENT        ] = "doc",
+   [Rsc_MARKS           ] = "mrk",
+   // grp GROUPS		// ??? User select groups
+   [Rsc_ATTENDANCE_EVENT] = "att",
+   [Rsc_FORUM_THREAD    ] = "for",
+   [Rsc_SURVEY          ] = "svy",
+  };
+
 const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
   {
    [Rsc_NONE            ] = "link-slash.svg",
@@ -61,13 +86,16 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
    [Rsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
    // tst TEST			// User selects tags, teacher should select
    [Rsc_EXAM            ] = "file-signature.svg",
+   [Rsc_EXAM_SESSION    ] = "file-signature.svg",
    [Rsc_GAME            ] = "gamepad.svg",
-   [Rsc_SURVEY          ] = "poll.svg",
+   [Rsc_GAME_MATCH      ] = "gamepad.svg",
+   [Rsc_RUBRIC          ] = "tasks.svg",
    [Rsc_DOCUMENT        ] = "folder-open.svg",
    [Rsc_MARKS           ] = "list-alt.svg",
    // grp GROUPS		// ??? User select groups
    [Rsc_ATTENDANCE_EVENT] = "calendar-check.svg",
    [Rsc_FORUM_THREAD    ] = "comments.svg",
+   [Rsc_SURVEY          ] = "poll.svg",
   };
 
 /*****************************************************************************/
@@ -82,7 +110,6 @@ extern struct Globals Gbl;
 
 void Rsc_WriteRowClipboard (bool SubmitOnClick,const struct Rsc_Link *Link)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
@@ -121,12 +148,15 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
       [Rsc_PROJECT         ] = PrjRsc_WriteResourceProject,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_WriteResourceCallForExam,
       [Rsc_EXAM            ] = ExaRsc_WriteResourceExam,
+      [Rsc_EXAM_SESSION    ] = ExaRsc_WriteResourceExam,	// TODO
       [Rsc_GAME            ] = GamRsc_WriteResourceGame,
-      [Rsc_SURVEY          ] = SvyRsc_WriteResourceSurvey,
+      [Rsc_GAME_MATCH      ] = GamRsc_WriteResourceGame,	// TODO
+      [Rsc_RUBRIC          ] = Rsc_WriteResourceEmpty,		// TODO
       [Rsc_DOCUMENT        ] = BrwRsc_WriteResourceDocument,
       [Rsc_MARKS           ] = BrwRsc_WriteResourceMarksFile,
       [Rsc_ATTENDANCE_EVENT] = AttRsc_WriteResourceEvent,
       [Rsc_FORUM_THREAD    ] = ForRsc_WriteResourceThread,
+      [Rsc_SURVEY          ] = SvyRsc_WriteResourceSurvey,
      };
 
    /***** Write link name *****/
@@ -167,12 +197,15 @@ void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
       [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
       [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
+      [Rsc_EXAM_SESSION    ] = ExaRsc_GetTitleFromExaCod,	// TODO
       [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [Rsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
+      [Rsc_GAME_MATCH      ] = GamRsc_GetTitleFromGamCod,	// TODO
+      [Rsc_RUBRIC          ] = NULL,				// TODO
       [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
       [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,
       [Rsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
       [Rsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
+      [Rsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
      };
 
    /***** Reset title *****/
@@ -212,7 +245,6 @@ void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link)
 
 Rsc_Type_t Rsc_GetTypeFromString (const char *Str)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
    Rsc_Type_t Type;
 
    /***** Compare string with all string types *****/

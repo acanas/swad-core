@@ -20692,7 +20692,7 @@ const char *Txt_Match =		// of a game
 #elif L==5	// fr
 	"Match";
 #elif L==6	// gn
-	"Partida";	// Okoteve traducción
+	"&Ntilde;es&etilde;ha";
 #elif L==7	// it
 	"Partita";
 #elif L==8	// pl
@@ -20700,7 +20700,7 @@ const char *Txt_Match =		// of a game
 #elif L==9	// pt
 	"Jogo";
 #elif L==10	// tr
-	"Match";	// Çeviri lazim!
+	"Ma&ccedil;";
 #endif
 
 const char *Txt_MATCH_End =
@@ -36524,6 +36524,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"S&inodot;nav"
 #endif
 	,
+	[Rsc_EXAM_SESSION] =
+#if   L==1	// ca
+	"Sessi&oacute; d'examen"
+#elif L==2	// de
+	"Pr&uuml;fungssitzung"
+#elif L==3	// en
+	"Exam session"
+#elif L==4	// es
+	"Sesi&oacute;n de examen"
+#elif L==5	// fr
+	"Session d'examen"
+#elif L==6	// gn
+	"Sesi&oacute;n de examen"	// Okoteve traducción
+#elif L==7	// it
+	"Sessione d'esame"
+#elif L==8	// pl
+	"Sesja egzaminacyjna"
+#elif L==9	// pt
+	"Sess&atilde;o de exame"
+#elif L==10	// tr
+	"S&inodot;nav oturumu"
+#endif
+	,
 	[Rsc_GAME] =
 #if   L==1	// ca
 	"Joc"
@@ -36547,27 +36570,50 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Oyun"
 #endif
 	,
-	[Rsc_SURVEY] =
+	[Rsc_GAME_MATCH] =
 #if   L==1	// ca
-	"Enquesta"
+	"Partida"
 #elif L==2	// de
-	"Umfrage"
+	"Spiel"
 #elif L==3	// en
-	"Survey"
+	"Match"
 #elif L==4	// es
-	"Encuesta"
+	"Partida"
 #elif L==5	// fr
-	"Sondage"
+	"Match"
 #elif L==6	// gn
-	"Encuesta"	// Okoteve traducción
+	"&Ntilde;es&etilde;ha"
 #elif L==7	// it
-	"Sondaggio"
+	"Partita"
 #elif L==8	// pl
-	"Ankieta"
+	"Mecz"
 #elif L==9	// pt
-	"Inqu&eacute;rito"
+	"Jogo"
 #elif L==10	// tr
-	"Anket"
+	"Ma&ccedil;"
+#endif
+	,
+	[Rsc_RUBRIC] =
+#if   L==1	// ca
+	"R&uacute;brica"
+#elif L==2	// de
+	"Rubrik"
+#elif L==3	// en
+	"Rubric"
+#elif L==4	// es
+	"R&uacute;brica"
+#elif L==5	// fr
+	"Rubrique"
+#elif L==6	// gn
+	"R&uacute;brica"	// Okoteve traducción
+#elif L==7	// it
+	"Rubriche"
+#elif L==8	// pl
+	"Rubryki"
+#elif L==9	// pt
+	"Rubrica"
+#elif L==10	// tr
+	"De&gbreve;erlendirme"
 #endif
 	,
 	[Rsc_DOCUMENT] =
@@ -36660,6 +36706,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"T&oacute;pico do f&oacute;rum"
 #elif L==10	// tr
 	"Forum ba&scedil;l&inodot;&gbreve;&inodot;"
+#endif
+	,
+	[Rsc_SURVEY] =
+#if   L==1	// ca
+	"Enquesta"
+#elif L==2	// de
+	"Umfrage"
+#elif L==3	// en
+	"Survey"
+#elif L==4	// es
+	"Encuesta"
+#elif L==5	// fr
+	"Sondage"
+#elif L==6	// gn
+	"Encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Sondaggio"
+#elif L==8	// pl
+	"Ankieta"
+#elif L==9	// pt
+	"Inqu&eacute;rito"
+#elif L==10	// tr
+	"Anket"
 #endif
 	};
 

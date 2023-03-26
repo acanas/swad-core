@@ -31,32 +31,6 @@
 #include "swad_program_resource.h"
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
-  {
-   [Rsc_NONE            ] = "non",
-   // gui TEACHING_GUIDE	// Link to teaching guide
-   // bib BIBLIOGRAPHY		// Link to bibliography
-   // faq FAQ			// Link to FAQ
-   // lnk LINKS			// Link to links
-   // tmt TIMETABLE		// Link to timetable
-   [Rsc_ASSIGNMENT      ] = "asg",
-   [Rsc_PROJECT         ] = "prj",
-   [Rsc_CALL_FOR_EXAM   ] = "cfe",
-   // tst TEST			// User selects tags, teacher should select
-   [Rsc_EXAM            ] = "exa",
-   [Rsc_GAME            ] = "gam",
-   [Rsc_SURVEY          ] = "svy",
-   [Rsc_DOCUMENT        ] = "doc",
-   [Rsc_MARKS           ] = "mrk",
-   // grp GROUPS		// ??? User select groups
-   [Rsc_ATTENDANCE_EVENT] = "att",
-   [Rsc_FORUM_THREAD    ] = "for",
-  };
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -658,6 +632,8 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
 
 void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
   {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE prg_resources"
 		     " SET Type='%s',"
@@ -674,6 +650,8 @@ void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
 
 void Prg_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
   {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
    DB_QueryREPLACE ("can not copy link to resource clipboard",
 		    "REPLACE INTO prg_clipboards"
 		    " (UsrCod,CrsCod,Type,Cod,CopyTime)"
@@ -709,6 +687,8 @@ unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
 
 void Prg_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
   {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
    DB_QueryDELETE ("can not remove link from clipboard",
 		   "DELETE FROM prg_clipboards"
 		   " WHERE UsrCod=%ld"
