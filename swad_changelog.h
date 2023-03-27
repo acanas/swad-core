@@ -629,15 +629,16 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.81.1 (2023-03-26)"
+#define Log_PLATFORM_VERSION	"SWAD 22.81.2 (2023-03-26)"
 #define CSS_FILE		"swad22.78.15.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.81.2:  Mar 27, 2023  Changes in resources. (337974 lines)
 	Version 22.81.1:  Mar 26, 2023  Changes in resources. (338012 lines)
 					5 changes necessary in database:
-ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','ses','gam','mch','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
-ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','ses','gam','mch','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
-ALTER TABLE rub_criteria ADD COLUMN Type ENUM('non','asg','prj','cfe','exa','ses','gam','mch','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non' AFTER CriInd;
+ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_criteria ADD COLUMN Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non' AFTER CriInd;
 ALTER TABLE rub_criteria DROP INDEX Source;
 ALTER TABLE rub_criteria DROP COLUMN Source;
 

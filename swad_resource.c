@@ -61,9 +61,7 @@ const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
    [Rsc_CALL_FOR_EXAM   ] = "cfe",
    // tst TEST			// User selects tags, teacher should select
    [Rsc_EXAM            ] = "exa",
-   [Rsc_EXAM_SESSION    ] = "ses",
    [Rsc_GAME            ] = "gam",
-   [Rsc_GAME_MATCH      ] = "mch",
    [Rsc_RUBRIC          ] = "rub",
    [Rsc_DOCUMENT        ] = "doc",
    [Rsc_MARKS           ] = "mrk",
@@ -86,9 +84,7 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
    [Rsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
    // tst TEST			// User selects tags, teacher should select
    [Rsc_EXAM            ] = "file-signature.svg",
-   [Rsc_EXAM_SESSION    ] = "file-signature.svg",
    [Rsc_GAME            ] = "gamepad.svg",
-   [Rsc_GAME_MATCH      ] = "gamepad.svg",
    [Rsc_RUBRIC          ] = "tasks.svg",
    [Rsc_DOCUMENT        ] = "folder-open.svg",
    [Rsc_MARKS           ] = "list-alt.svg",
@@ -148,9 +144,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
       [Rsc_PROJECT         ] = PrjRsc_WriteResourceProject,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_WriteResourceCallForExam,
       [Rsc_EXAM            ] = ExaRsc_WriteResourceExam,
-      [Rsc_EXAM_SESSION    ] = ExaRsc_WriteResourceExam,	// TODO
       [Rsc_GAME            ] = GamRsc_WriteResourceGame,
-      [Rsc_GAME_MATCH      ] = GamRsc_WriteResourceGame,	// TODO
       [Rsc_RUBRIC          ] = Rsc_WriteResourceEmpty,		// TODO
       [Rsc_DOCUMENT        ] = BrwRsc_WriteResourceDocument,
       [Rsc_MARKS           ] = BrwRsc_WriteResourceMarksFile,
@@ -197,9 +191,7 @@ void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
       [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
       [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
-      [Rsc_EXAM_SESSION    ] = ExaRsc_GetTitleFromExaCod,	// TODO
       [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [Rsc_GAME_MATCH      ] = GamRsc_GetTitleFromGamCod,	// TODO
       [Rsc_RUBRIC          ] = NULL,				// TODO
       [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
       [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,

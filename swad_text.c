@@ -36524,29 +36524,6 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"S&inodot;nav"
 #endif
 	,
-	[Rsc_EXAM_SESSION] =
-#if   L==1	// ca
-	"Sessi&oacute; d'examen"
-#elif L==2	// de
-	"Pr&uuml;fungssitzung"
-#elif L==3	// en
-	"Exam session"
-#elif L==4	// es
-	"Sesi&oacute;n de examen"
-#elif L==5	// fr
-	"Session d'examen"
-#elif L==6	// gn
-	"Sesi&oacute;n de examen"	// Okoteve traducción
-#elif L==7	// it
-	"Sessione d'esame"
-#elif L==8	// pl
-	"Sesja egzaminacyjna"
-#elif L==9	// pt
-	"Sess&atilde;o de exame"
-#elif L==10	// tr
-	"S&inodot;nav oturumu"
-#endif
-	,
 	[Rsc_GAME] =
 #if   L==1	// ca
 	"Joc"
@@ -36568,29 +36545,6 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Jogo"
 #elif L==10	// tr
 	"Oyun"
-#endif
-	,
-	[Rsc_GAME_MATCH] =
-#if   L==1	// ca
-	"Partida"
-#elif L==2	// de
-	"Spiel"
-#elif L==3	// en
-	"Match"
-#elif L==4	// es
-	"Partida"
-#elif L==5	// fr
-	"Match"
-#elif L==6	// gn
-	"&Ntilde;es&etilde;ha"
-#elif L==7	// it
-	"Partita"
-#elif L==8	// pl
-	"Mecz"
-#elif L==9	// pt
-	"Jogo"
-#elif L==10	// tr
-	"Ma&ccedil;"
 #endif
 	,
 	[Rsc_RUBRIC] =

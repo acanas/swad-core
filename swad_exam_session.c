@@ -936,7 +936,7 @@ void ExaSes_PutParsEdit (void *Exams)
 /*****************************************************************************/
 
 void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
-                                   struct ExaSes_Session *Session)
+                             struct ExaSes_Session *Session)
   {
    /***** Get parameters *****/
    Exa_GetPars (Exams,true);

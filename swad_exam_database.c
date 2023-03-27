@@ -1485,6 +1485,24 @@ unsigned Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
   }
 
 /*****************************************************************************/
+/******************* Get exam session title from database ********************/
+/*****************************************************************************/
+
+void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1])
+  {
+   DB_QuerySELECTString (Title,Exa_MAX_BYTES_TITLE,"can not get session title",
+		         "SELECT Title"		// row[0]
+			  " FROM exa_sessions"
+		         " WHERE SesCod=%ld"
+			   " AND ExaCod IN"	// Extra check
+			       " (SELECT ExaCod"
+				  " FROM exa_exams"
+				 " WHERE CrsCod=%ld)",
+			 SesCod,
+			 Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /***************** Toggle visibility of exam session results *****************/
 /*****************************************************************************/
 
