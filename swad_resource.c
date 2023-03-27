@@ -38,6 +38,7 @@
 #include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_parameter.h"
 #include "swad_project_resource.h"
 #include "swad_resource.h"
 #include "swad_role.h"
@@ -105,7 +106,8 @@ extern struct Globals Gbl;
 /************************ Show one link from clipboard ***********************/
 /*****************************************************************************/
 
-void Rsc_WriteRowClipboard (bool SubmitOnClick,const struct Rsc_Link *Link)
+void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
+                            bool SubmitOnClick,bool Checked)
   {
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
@@ -116,14 +118,14 @@ void Rsc_WriteRowClipboard (bool SubmitOnClick,const struct Rsc_Link *Link)
 	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
 			  "value=\"%s_%ld\"%s",
 			  Rsc_ResourceTypesDB[Link->Type],Link->Cod,
-			  SubmitOnClick ? "" :
-					  " checked=\"checked\"");
+			  Checked ? " checked=\"checked\"" :
+				    "");
 
 	 /***** Name *****/
          Rsc_WriteLinkName (Link,
-                               false,	// Don't put form
-			       Rsc_ResourceTypesIcons[Link->Type],
-	                       Txt_RESOURCE_TYPES[Link->Type]);
+                            false,	// Don't put form to go
+			    Rsc_ResourceTypesIcons[Link->Type],
+	                    Txt_RESOURCE_TYPES[Link->Type]);
 
       HTM_LABEL_End ();
    HTM_LI_End ();
@@ -248,6 +250,32 @@ Rsc_Type_t Rsc_GetTypeFromString (const char *Str)
 	 return Type;
 
    return Rsc_NONE;
+  }
+
+/*****************************************************************************/
+/********************** Get resource data from clipboard *********************/
+/*****************************************************************************/
+
+bool Rsc_GetParLink (struct Rsc_Link *Link)
+  {
+   char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char TypeStr[3 + 1];
+   long Cod;
+
+   /***** Get link type and code *****/
+   Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
+   if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
+     {
+      /* Correct link found */
+      Link->Type = Rsc_GetTypeFromString (TypeStr);
+      Link->Cod  = Cod;
+      return true;
+     }
+
+   /* No link found */
+   Link->Type = Rsc_NONE;
+   Link->Cod  = -1L;
+   return false;
   }
 
 /*****************************************************************************/

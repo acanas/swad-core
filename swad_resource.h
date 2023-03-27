@@ -72,7 +72,8 @@ struct Rsc_Link
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Rsc_WriteRowClipboard (bool SubmitOnClick,const struct Rsc_Link *Link);
+void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
+                            bool SubmitOnClick,bool Checked);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
                         const char *Icon,const char *IconTitle);
 void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,
@@ -84,6 +85,8 @@ void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
 
 void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link);
 Rsc_Type_t Rsc_GetTypeFromString (const char *Str);
+
+bool Rsc_GetParLink (struct Rsc_Link *Link);
 
 bool Rsc_CheckIfICanGetLink (void);
 

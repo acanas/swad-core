@@ -74,7 +74,6 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion);
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
                                                         const char NewTitle[RubCri_MAX_BYTES_TITLE + 1]);
-static Rsc_Type_t RubCri_GetParType (void);
 
 static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange);
 
@@ -154,10 +153,16 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_New_criterion;
    extern const char *Txt_Create_criterion;
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-   Rsc_Type_t Type;
-   unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   struct Rsc_Link Link;
+   static const struct Rsc_Link EmptyLink =
+     {
+      .Type = Rsc_NONE,
+      .Cod  = -1L,
+     };
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewRubCri);
@@ -175,16 +180,16 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Empty column for buttons *****/
-	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_Begin ("class=\"BT\"");
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RM\"");
+	    HTM_TD_Begin ("class=\"RT\"");
 	       Lay_WriteIndex (MaxCriInd + 1,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Criterion->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
@@ -193,21 +198,33 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
-	    /***** Source *****/
-	    HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Type\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-                  for (Type  = (Rsc_Type_t) 0;
-		       Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
-		       Type++)
+	    /***** Link *****/
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+
+	       /***** Begin list *****/
+	       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+
+		  /***** Row with empty link *****/
+		  Rsc_WriteRowClipboard (&EmptyLink,
+	                                 false,	// Don't submit on click
+	                                 true);	// Checked
+
+		  /***** Get links in clipboard from database and write them *****/
+		  NumLinks = Rsc_DB_GetClipboard (&mysql_res);
+		  for (NumLink  = 1;
+		       NumLink <= NumLinks;
+		       NumLink++)
 		    {
-		     SourceUnsigned = (unsigned) Type;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
-				 Type == Criterion->Link.Type,false,
-				 "%s",Txt_RESOURCE_TYPES[Type]);
+		     Rsc_GetLinkDataFromRow (mysql_res,&Link);
+		     Rsc_WriteRowClipboard (&Link,
+	                                    false,	// Don't submit on click
+	                                    false);	// Not checked
 		    }
-	       HTM_SELECT_End ();
+		  DB_FreeMySQLResult (&mysql_res);
+
+	       /***** End list *****/
+	       HTM_UL_End ();
+
 	    HTM_TD_End ();
 
 	    /***** Minimum and maximum values of the criterion *****/
@@ -286,8 +303,10 @@ static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Crit
    /***** Get criterion title *****/
    Par_GetParText ("Title",Criterion->Title,RubCri_MAX_BYTES_TITLE);
 
-   /***** Get criterion source *****/
-   Criterion->Link.Type = RubCri_GetParType ();
+   /***** Get criterion link to resource *****/
+   if (Rsc_GetParLink (&Criterion->Link))
+      /***** Remove link from clipboard *****/
+      Rsc_DB_RemoveLinkFromClipboard (&Criterion->Link);
 
    /***** Get minimum and maximum values of criterion *****/
    for (ValueRange  = (RubCri_ValueRange_t) 0;
@@ -333,19 +352,6 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
      }
 
    return NewTitleIsCorrect;
-  }
-
-/*****************************************************************************/
-/****************** Get parameter with criterion source **********************/
-/*****************************************************************************/
-
-static Rsc_Type_t RubCri_GetParType (void)
-  {
-   return (Rsc_Type_t)
-	  Par_GetParUnsignedLong ("Type",
-                                  0,
-                                  Rsc_NUM_TYPES - 1,
-                                  (unsigned long) Rsc_NONE);
   }
 
 /*****************************************************************************/
@@ -564,7 +570,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    // Actions to change minimum/maximum criterion values
    static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
@@ -1106,7 +1111,7 @@ static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
       RubCri_ShowClipboard (Rubrics,Criterion,Anchor);
    else
       Rsc_WriteLinkName (&Criterion->Link,
-			 true,	// Put form
+			 true,	// Put form to go
                          Rsc_ResourceTypesIcons[Criterion->Link.Type],
 	                 Txt_RESOURCE_TYPES[Criterion->Link.Type]);
   }
@@ -1137,11 +1142,16 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
-	 Rsc_WriteRowClipboard (false,&Criterion->Link);
+	 Rsc_WriteRowClipboard (&Criterion->Link,
+	                        false,	// Don't submit on click
+	                        true);	// Checked
 
          /***** Row with empty link to remove the current link *****/
 	 if (Criterion->Link.Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (true,&EmptyLink);
+	    Rsc_WriteRowClipboard (&EmptyLink,
+	 	                   true,	// Don't submit on click
+	                           false);	// Checked
+
 
 	 /***** Get links in clipboard from database and write them *****/
 	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
@@ -1150,7 +1160,9 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
 	      NumLink++)
 	   {
 	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	    Rsc_WriteRowClipboard (true,&Link);
+	    Rsc_WriteRowClipboard (&Link,
+	 	                   true,	// Don't submit on click
+	                           false);	// Checked
 	   }
 	 DB_FreeMySQLResult (&mysql_res);
 
@@ -1169,9 +1181,6 @@ void RubCri_ChangeLink (void)
   {
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
-   char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   char TypeStr[3 + 1];
-   long Cod;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
@@ -1186,12 +1195,8 @@ void RubCri_ChangeLink (void)
       Err_NoPermissionExit ();
 
    /***** Get link type and code *****/
-   Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
-   if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
+   if (Rsc_GetParLink (&Criterion.Link))
      {
-      Criterion.Link.Type = Rsc_GetTypeFromString (TypeStr);
-      Criterion.Link.Cod  = Cod;
-
       /***** Update link to resource in criterion *****/
       Rub_DB_UpdateCriterionLink (&Criterion);
 

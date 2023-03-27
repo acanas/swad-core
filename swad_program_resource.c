@@ -884,11 +884,15 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
-	 Rsc_WriteRowClipboard (false,&Item->Resource.Link);
+	 Rsc_WriteRowClipboard (&Item->Resource.Link,
+	                        false,	// Don't submit on click
+	                        true);	// Checked
 
          /***** Row with empty link to remove the current link *****/
 	 if (Item->Resource.Link.Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (true,&EmptyLink);
+	    Rsc_WriteRowClipboard (&EmptyLink,
+	                           true,	// Submit on click
+	                           false);	// Not checked
 
 	 /***** Get links in clipboard from database and write them *****/
 	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
@@ -897,7 +901,9 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 	      NumLink++)
 	   {
 	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	    Rsc_WriteRowClipboard (true,&Link);
+	    Rsc_WriteRowClipboard (&Link,
+	                           true,	// Submit on click
+	                           false);	// Not checked
 	   }
 	 DB_FreeMySQLResult (&mysql_res);
 
@@ -915,9 +921,6 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 void PrgRsc_ChangeLink (void)
   {
    struct Prg_Item Item;
-   char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   char TypeStr[3 + 1];
-   long Cod;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -929,12 +932,8 @@ void PrgRsc_ChangeLink (void)
       Err_WrongResourceExit ();
 
    /* Get link type and code */
-   Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
-   if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
+   if (Rsc_GetParLink (&Item.Resource.Link))
      {
-      Item.Resource.Link.Type = Rsc_GetTypeFromString (TypeStr);
-      Item.Resource.Link.Cod  = Cod;
-
       /***** Is it an existing resource? *****/
       if (Item.Resource.Hierarchy.RscCod <= 0)
 	{
