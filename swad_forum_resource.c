@@ -31,7 +31,7 @@
 #include "swad_forum_database.h"
 #include "swad_forum_resource.h"
 #include "swad_global.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -59,7 +59,7 @@ void ForRsc_GetLinkToThread (void)
    ForRsc_GetTitleFromThrCod (Forums.Thread.Current,Subject,sizeof (Subject) - 1);
 
    /***** Copy link to thread into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_FORUM_THREAD,Forums.Thread.Current);
+   Rsc_DB_CopyToClipboard (Rsc_FORUM_THREAD,Forums.Thread.Current);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

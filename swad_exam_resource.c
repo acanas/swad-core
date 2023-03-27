@@ -33,7 +33,7 @@
 #include "swad_exam_resource.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /***************************** Get link to exam ******************************/
@@ -55,7 +55,7 @@ void ExaRsc_GetLinkToExam (void)
    ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_EXAM,Exams.Exam.ExaCod);
+   Rsc_DB_CopyToClipboard (Rsc_EXAM,Exams.Exam.ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

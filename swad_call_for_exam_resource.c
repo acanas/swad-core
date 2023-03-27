@@ -32,7 +32,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /************************ Get link to call for exam **************************/
@@ -52,7 +52,7 @@ void Cfe_GetLinkToCallForExam (void)
    CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to call for exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,ExaCod);
+   Rsc_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

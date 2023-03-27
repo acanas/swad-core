@@ -34,6 +34,7 @@
 #include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_project_resource.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /***************************** Get link to game ******************************/
@@ -56,7 +57,7 @@ void PrjRsc_GetLinkToProject (void)
    PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to PROJECT into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
+   Rsc_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

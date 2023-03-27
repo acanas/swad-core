@@ -40,6 +40,7 @@
 #include "swad_parameter_code.h"
 #include "swad_program.h"
 #include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -890,7 +891,7 @@ static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
 	    Rsc_WriteRowClipboard (true,&EmptyLink);
 
 	 /***** Get links in clipboard from database and write them *****/
-	 NumLinks = Prg_DB_GetClipboard (&mysql_res);
+	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
 	 for (NumLink  = 1;
 	      NumLink <= NumLinks;
 	      NumLink++)
@@ -950,7 +951,7 @@ void PrgRsc_ChangeLink (void)
       Prg_DB_UpdateRscLink (&Item);
 
       /***** Remove link from clipboard *****/
-      Prg_DB_RemoveLinkFromClipboard (&Item.Resource.Link);
+      Rsc_DB_RemoveLinkFromClipboard (&Item.Resource.Link);
      }
 
    /***** Show current program items, if any *****/

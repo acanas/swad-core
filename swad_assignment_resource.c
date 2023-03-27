@@ -34,7 +34,7 @@
 #include "swad_form.h"
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /************************** Get link to assignment ***************************/
@@ -61,7 +61,7 @@ void AsgRsc_GetLinkToAssignment (void)
    AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to assignment into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
+   Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

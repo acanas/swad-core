@@ -32,7 +32,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /************************ Get link to attendance event ***********************/
@@ -51,7 +51,7 @@ void AttRsc_GetLinkToEvent (void)
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to attendance event into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,AttCod);
+   Rsc_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,AttCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

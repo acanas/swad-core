@@ -40,8 +40,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
-#include "swad_program_resource.h"
+#include "swad_resource_database.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
 #include "swad_rubric_database.h"
@@ -1213,7 +1212,7 @@ static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const
 	    RubCri_WriteRowClipboard (true,&EmptyLink); */
 
 	 /***** Get links in clipboard from database and write them *****/
-	 NumLinks = Prg_DB_GetClipboard (&mysql_res);
+	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
 	 for (NumLink  = 1;
 	      NumLink <= NumLinks;
 	      NumLink++)

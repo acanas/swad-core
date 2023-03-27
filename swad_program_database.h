@@ -77,10 +77,6 @@ void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 void Prg_DB_UpdateRscLink (const struct Prg_Item *Item);
 
-void Prg_DB_CopyToClipboard (Rsc_Type_t Type,long Cod);
-unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res);
-void Prg_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link);
-
 void Prg_DB_InsertItemInExpandedItems (long ItmCod);
 bool Prg_DB_GetIfExpandedItem (long ItmCod);
 void Prg_DB_RemoveItemFromExpandedItems (long ItmCod);

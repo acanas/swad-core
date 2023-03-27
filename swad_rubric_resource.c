@@ -30,7 +30,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 #include "swad_rubric.h"
 #include "swad_rubric_database.h"
 #include "swad_rubric_resource.h"
@@ -55,7 +55,7 @@ void RubRsc_GetLinkToRubric (void)
    RubRsc_GetTitleFromRubCod (Rubrics.Rubric.RubCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to rubric into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
+   Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

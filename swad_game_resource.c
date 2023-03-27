@@ -33,7 +33,8 @@
 #include "swad_game_database.h"
 #include "swad_game_resource.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
+#include "swad_theme.h"
 
 /*****************************************************************************/
 /***************************** Get link to game ******************************/
@@ -56,7 +57,7 @@ void GamRsc_GetLinkToGame (void)
    GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to game into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_GAME,GamCod);
+   Rsc_DB_CopyToClipboard (Rsc_GAME,GamCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

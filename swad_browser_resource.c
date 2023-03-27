@@ -33,9 +33,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter_code.h"
-#include "swad_program.h"
-#include "swad_program_database.h"
-#include "swad_program_resource.h"
+#include "swad_resource_database.h"
 
 /*****************************************************************************/
 /******************** Global variables from other modules ********************/
@@ -80,7 +78,7 @@ void BrwRsc_GetLinkToFile (void)
      }
 
    /***** Copy link to file into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Type,FilCod);
+   Rsc_DB_CopyToClipboard (Type,FilCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

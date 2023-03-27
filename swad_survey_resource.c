@@ -30,7 +30,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
+#include "swad_resource_database.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"
 #include "swad_survey_resource.h"
@@ -55,7 +55,7 @@ void SvyRsc_GetLinkToSurvey (void)
    SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to survey into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
+   Rsc_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

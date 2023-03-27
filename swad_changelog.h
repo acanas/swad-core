@@ -629,10 +629,14 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.82 (2023-03-27)"
+#define Log_PLATFORM_VERSION	"SWAD 22.83 (2023-03-27)"
 #define CSS_FILE		"swad22.78.15.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.83:    Mar 27, 2023  New module swad_resource_database. (338208 lines)
+					1 change necessary in database:
+RENAME TABLE prg_clipboards TO rsc_clipboards;
+
 	Version 22.82:    Mar 27, 2023  New module swad_rubric_resource. (338149 lines)
 	Version 22.81.2:  Mar 27, 2023  Changes in resources. (337974 lines)
 	Version 22.81.1:  Mar 26, 2023  Changes in resources. (338012 lines)

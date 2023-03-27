@@ -2471,30 +2471,6 @@ mysql> DESCRIBE plg_plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
-   /***** Table prg_clipboards *****/
-/*
-mysql> DESCRIBE prg_clipboards;
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                                          | Null | Key | Default | Extra |
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                           | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                           | NO   | PRI | NULL    |       |
-| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
-| Cod      | int                                                                           | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                                     | YES  | MUL | NULL    |       |
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_clipboards ("
-			"UsrCod INT NOT NULL,"
-			"CrsCod INT NOT NULL,"
-			"Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',"
-			"Cod INT NOT NULL DEFAULT -1,"
-			"CopyTime TIMESTAMP,"
-		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
-		   "INDEX(CrsCod,Type,Cod),"
-		   "INDEX(CopyTime))");
-
    /***** Table prg_expanded *****/
 /*
 mysql> DESCRIBE prg_expanded;
@@ -2775,6 +2751,30 @@ mysql> DESCRIBE roo_check_in;
 		   "UNIQUE INDEX(ChkCod),"
 		   "INDEX(UsrCod,CheckInTime),"
 		   "INDEX(CheckInTime))");
+
+   /***** Table rsc_clipboards *****/
+/*
+mysql> DESCRIBE rsc_clipboards;
++----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                                          | Null | Key | Default | Extra |
++----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                                           | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                                           | NO   | PRI | NULL    |       |
+| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
+| Cod      | int                                                                           | NO   | PRI | -1      |       |
+| CopyTime | timestamp                                                                     | YES  | MUL | NULL    |       |
++----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+5 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rsc_clipboards ("
+			"UsrCod INT NOT NULL,"
+			"CrsCod INT NOT NULL,"
+			"Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"CopyTime TIMESTAMP,"
+		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
+		   "INDEX(CrsCod,Type,Cod),"
+		   "INDEX(CopyTime))");
 
    /***** Table rub_criteria *****/
 /*

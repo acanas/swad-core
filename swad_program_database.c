@@ -645,63 +645,6 @@ void Prg_DB_UpdateRscLink (const struct Prg_Item *Item)
   }
 
 /*****************************************************************************/
-/********************** Copy link to resource into clipboard *****************/
-/*****************************************************************************/
-
-void Prg_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
-  {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
-
-   DB_QueryREPLACE ("can not copy link to resource clipboard",
-		    "REPLACE INTO prg_clipboards"
-		    " (UsrCod,CrsCod,Type,Cod,CopyTime)"
-		    " VALUES"
-		    " (%ld,%ld,'%s',%ld,NOW())",
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Gbl.Hierarchy.Crs.CrsCod,
-		    Rsc_ResourceTypesDB[Type],
-		    Cod);
-  }
-
-/*****************************************************************************/
-/**************** Get resources in the current course clipboard **************/
-/*****************************************************************************/
-
-unsigned Prg_DB_GetClipboard (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get clipboard",
-		   "SELECT Type,"	// row[0]
-			  "Cod"		// row[1]
-		    " FROM prg_clipboards"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld"
-		   " ORDER BY CopyTime",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/*************************** Remove link from clipboard **********************/
-/*****************************************************************************/
-
-void Prg_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
-  {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
-
-   DB_QueryDELETE ("can not remove link from clipboard",
-		   "DELETE FROM prg_clipboards"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld"
-		     " AND Type='%s'"
-		     " AND Cod=%ld",
- 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Crs.CrsCod,
-		   Rsc_ResourceTypesDB[Link->Type],
-		   Link->Cod);
-  }
-
-/*****************************************************************************/
 /************************ Insert item in expanded items **********************/
 /*****************************************************************************/
 
