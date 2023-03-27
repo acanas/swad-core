@@ -14207,29 +14207,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t ba&scedil;l&inodot;&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tir"				// Çeviri lazim!
 #endif
 	,
-	[ActChgTypRubCri] =
-#if   L==1	// ca
-	"Canviar font de criteri de r&uacute;brica"
-#elif L==2	// de
-	"Schriftart der Rubrikkriterien &auml;ndern"
-#elif L==3	// en
-	"Change rubric criterion source"
-#elif L==4	// es
-	"Cambiar fuente de criterio de r&uacute;brica"
-#elif L==5	// fr
-	"Modifier source de crit&egrave;re de rubrique"
-#elif L==6	// gn
-	"Omoambue criterio r&uacute;brica fuente"
-#elif L==7	// it
-	"Cambiare fonte di criterio di rubrica"
-#elif L==8	// pl
-	"Zmie&nacute; &zacute;r&oacute;d&lstrok;o kryterium rubryki"
-#elif L==9	// pt
-	"Alterar origem do crit&eacute;rio de rubrica"
-#elif L==10	// tr
-	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t yaz&inodot; tipini de&gbreve;i&scedil;tir"
-#endif
-	,
 	[ActChgLnkRubCri] =
 #if   L==1	// ca
 	"Canviar enlla&ccedil; a recurs des de r&uacute;brica"

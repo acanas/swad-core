@@ -56,13 +56,12 @@ void Rub_DB_RemoveCrsRubrics (long CrsCod);
 //--------------------------- Rubric criteria -------------------------------
 long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriterionTitle (const struct RubCri_Criterion *Criterion);
-void Rub_DB_UpdateCriterionType (const struct RubCri_Criterion *Criterion);
+void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriterionValue (const struct RubCri_Criterion *Criterion,
                                   RubCri_ValueRange_t ValueRange);
 void Rub_DB_UpdateCriterionWeight (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
 void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
-void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion);
 void Rub_DB_LockTable (void);
 
 unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod);

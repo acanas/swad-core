@@ -393,21 +393,21 @@ void Rub_DB_UpdateCriterionTitle (const struct RubCri_Criterion *Criterion)
   }
 
 /*****************************************************************************/
-/********************** Update criterion type in database ********************/
+/******** Update the link to a resource in a criterion given its code ********/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriterionType (const struct RubCri_Criterion *Criterion)
+void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion)
   {
    extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
 
-   DB_QueryUPDATE ("can not update the value of a criterion",
+   DB_QueryUPDATE ("can not update link of criterion",
 		   "UPDATE rub_criteria"
-		     " SET Type='%s'"
-		   " WHERE CriCod=%ld"
-		     " AND RubCod=%ld",	// Extra check
+		     " SET Type='%s',"
+		          "Cod=%ld"
+		   " WHERE CriCod=%ld",
 		   Rsc_ResourceTypesDB[Criterion->Link.Type],
-	           Criterion->CriCod,
-	           Criterion->RubCod);
+		   Criterion->Link.Cod,
+		   Criterion->CriCod);
   }
 
 /*****************************************************************************/
@@ -476,24 +476,6 @@ void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod)
 		   CriInd,
 		   CriCod,
 		   RubCod);
-  }
-
-/*****************************************************************************/
-/******** Update the link to a resource in a criterion given its code ********/
-/*****************************************************************************/
-
-void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion)
-  {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
-
-   DB_QueryUPDATE ("can not update link of criterion",
-		   "UPDATE rub_criteria"
-		     " SET Type='%s',"
-		          "Cod=%ld"
-		   " WHERE CriCod=%ld",
-		   Rsc_ResourceTypesDB[Criterion->Link.Type],
-		   Criterion->Link.Cod,
-		   Criterion->CriCod);
   }
 
 /*****************************************************************************/

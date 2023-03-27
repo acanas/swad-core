@@ -391,48 +391,6 @@ void RubCri_ChangeTitle (void)
   }
 
 /*****************************************************************************/
-/******************* Receive form to change criterion type *******************/
-/*****************************************************************************/
-
-void RubCri_ChangeType (void)
-  {
-   struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
-
-   /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
-      Err_NoPermissionExit ();
-
-   /***** Reset rubrics context *****/
-   Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
-
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
-   Rubrics.CriCod = Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
-
-   /***** Get and check parameters *****/
-   RubCri_GetAndCheckPars (&Rubrics,&Criterion);
-
-   /***** Check if rubric is editable *****/
-   if (!Rub_CheckIfEditable (&Rubrics.Rubric))
-      Err_NoPermissionExit ();
-
-   /***** Receive new type from form *****/
-   Criterion.Link.Type = RubCri_GetParType ();
-
-   /***** Change type *****/
-   /* Update the table changing old type by new type */
-   Rub_DB_UpdateCriterionType (&Criterion);
-
-   /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
-  }
-
-/*****************************************************************************/
 /********* Receive form to change minimum/maximum value of criterion *********/
 /*****************************************************************************/
 
@@ -616,8 +574,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
    char *Anchor;
-   Rsc_Type_t Type;
-   unsigned SourceUnsigned;
    RubCri_ValueRange_t ValueRange;
 
    /***** Trivial check *****/
@@ -712,29 +668,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_ARTICLE_End ();
 	    HTM_TD_End ();
 
-	    /***** Source *****/
+	    /***** Link to resource *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	       /* Type of source selector */
-	       Frm_BeginFormAnchor (ActChgTypRubCri,Anchor);
-		  RubCri_PutParsOneCriterion (Rubrics);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"Type\" class=\"INPUT_%s\"",
-				    The_GetSuffix ());
-		     for (Type  = (Rsc_Type_t) 0;
-			  Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
-			  Type++)
-		       {
-			SourceUnsigned = (unsigned) Type;
-			HTM_OPTION (HTM_Type_UNSIGNED,&SourceUnsigned,
-				    Type == Criterion.Link.Type,false,
-				    "%s",Txt_RESOURCE_TYPES[Type]);
-		       }
-		  HTM_SELECT_End ();
-	       Frm_EndForm ();
-
-	       HTM_BR ();
-
-	       /* Resource */
 	       RubCri_ShowResource (Rubrics,&Criterion,
 	                            true,Anchor);	// Editing
 	    HTM_TD_End ();
@@ -835,8 +770,10 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
    row[8] Title
    */
    /***** Get criterion code (row[0]) and rubric code (row[1]) *****/
-   Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0]);
-   Criterion->RubCod = Str_ConvertStrCodToLongCod (row[1]);
+   if ((Criterion->CriCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Err_WrongCriterionExit ();
+   if ((Criterion->RubCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+      Err_WrongRubricExit ();
 
    /***** Get criterion index (row[2]) *****/
    Criterion->CriInd = Str_ConvertStrToUnsigned (row[2]);
@@ -1195,11 +1132,6 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
       RubCri_PutParsOneCriterion (Rubrics);
-      if (Criterion->CriCod > 0)
-         ParCod_PutPar (ParCod_Cri,Criterion->CriCod);
-      // else
-	 /* No resource selected, so it's a new resource at the end of the item */
-         // ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
@@ -1259,18 +1191,6 @@ void RubCri_ChangeLink (void)
      {
       Criterion.Link.Type = Rsc_GetTypeFromString (TypeStr);
       Criterion.Link.Cod  = Cod;
-
-      /***** Is it an existing resource? *****/
-      // if (Criterion.CriCod <= 0)
-	//{
-	 /* No resource selected, so it's a new resource at the end of the item */
-	 /* Get the new title for the new resource from link title */
-	 //Rsc_GetResourceTitleFromLink (&Item.Resource.Link,
-	   //                            Item.Resource.Title);
-
-	 /***** Create resource *****/
-	// Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
-	//}
 
       /***** Update link to resource in criterion *****/
       Rub_DB_UpdateCriterionLink (&Criterion);
