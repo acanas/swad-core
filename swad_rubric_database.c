@@ -358,7 +358,7 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
    CriCod =
    DB_QueryINSERTandReturnCode ("can not create new criterion",
 				"INSERT INTO rub_criteria"
-				" (RubCod,CriInd,Source,Cod,%s,%s,Weight,Title)"
+				" (RubCod,CriInd,Type,Cod,%s,%s,Weight,Title)"
 				" VALUES"
 				" (%ld,%u,'%s',%ld,%.15lg,%.15lg,%.15lg,'%s')",
 				RubCri_ValuesFields[RubCri_MIN],
@@ -402,7 +402,7 @@ void Rub_DB_UpdateCriterionType (const struct RubCri_Criterion *Criterion)
 
    DB_QueryUPDATE ("can not update the value of a criterion",
 		   "UPDATE rub_criteria"
-		     " SET Source='%s'"
+		     " SET Type='%s'"
 		   " WHERE CriCod=%ld"
 		     " AND RubCod=%ld",	// Extra check
 		   Rsc_ResourceTypesDB[Criterion->Link.Type],
@@ -476,6 +476,24 @@ void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod)
 		   CriInd,
 		   CriCod,
 		   RubCod);
+  }
+
+/*****************************************************************************/
+/******** Update the link to a resource in a criterion given its code ********/
+/*****************************************************************************/
+
+void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion)
+  {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
+   DB_QueryUPDATE ("can not update link of criterion",
+		   "UPDATE rub_criteria"
+		     " SET Type='%s',"
+		          "Cod=%ld"
+		   " WHERE CriCod=%ld",
+		   Rsc_ResourceTypesDB[Criterion->Link.Type],
+		   Criterion->Link.Cod,
+		   Criterion->CriCod);
   }
 
 /*****************************************************************************/
@@ -609,7 +627,7 @@ unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod)
 		   "SELECT CriCod,"	// row[0]
 			  "RubCod,"	// row[1]
 			  "CriInd,"	// row[2]
-                          "Source,"	// row[3]
+                          "Type,"	// row[3]
                           "Cod,"	// row[4]
 			  "%s,"		// row[5]
 			  "%s,"		// row[6]
@@ -634,7 +652,7 @@ unsigned Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod)
 		   "SELECT CriCod,"	// row[0]
 			  "RubCod,"	// row[1]
 			  "CriInd,"	// row[2]
-                          "Source,"	// row[3]
+                          "Type,"	// row[3]
                           "Cod,"	// row[4]
 			  "%s,"		// row[5]
 			  "%s,"		// row[6]

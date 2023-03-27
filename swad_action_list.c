@@ -852,7 +852,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUp_RubCri	] = {1962,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveUpCriterion		,NULL},
    [ActDwnRubCri	] = {1963,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_MoveDownCriterion	,NULL},
    [ActChgTitRubCri	] = {1964,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeTitle		,NULL},
-   [ActChgSrcRubCri	] = {1968,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeType		,NULL},
+   [ActChgTypRubCri	] = {1968,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeType		,NULL},
+   [ActChgLnkRubCri	] = {1970,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeLink		,NULL},
    [ActChgMinRubCri	] = {1965,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMinValue		,NULL},
    [ActChgMaxRubCri	] = {1966,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeMaxValue		,NULL},
    [ActChgWeiRubCri	] = {1967,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ChangeWeight		,NULL},
@@ -3855,6 +3856,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMinRubCri,	// #1965
 	ActChgMaxRubCri,	// #1966
 	ActChgWeiRubCri,	// #1967
-	ActChgSrcRubCri,	// #1968
+	ActChgTypRubCri,	// #1968
 	ActReqLnkRub,		// #1969
+	ActChgLnkRubCri,	// #1970
   };

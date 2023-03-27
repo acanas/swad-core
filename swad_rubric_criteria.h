@@ -53,4 +53,6 @@ void RubCri_RemoveCriterion (void);
 void RubCri_MoveUpCriterion (void);
 void RubCri_MoveDownCriterion (void);
 
+void RubCri_ChangeLink (void);
+
 #endif

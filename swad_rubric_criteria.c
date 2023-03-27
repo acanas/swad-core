@@ -97,9 +97,12 @@ static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
 static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
 
-static void RubCri_ShowResource (const struct RubCri_Criterion *Criterion,
+static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
+                                 const struct RubCri_Criterion *Criterion,
                                  bool Editing,const char *Anchor);
-static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const char *Anchor);
+static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
+                                  const struct RubCri_Criterion *Criterion,
+                                  const char *Anchor);
 
 /*****************************************************************************/
 /*************** Put parameter to edit one rubric criterion ******************/
@@ -193,7 +196,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	    /***** Source *****/
 	    HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Source\" class=\"INPUT_%s\"",
+				 "name=\"Type\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
                   for (Type  = (Rsc_Type_t) 0;
 		       Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
@@ -592,7 +595,7 @@ void RubCri_ListCriteria (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/********************** List rubric criteria for edition **********************/
+/********************** List rubric criteria for edition *********************/
 /*****************************************************************************/
 
 static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
@@ -712,10 +715,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    /***** Source *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	       /* Type of source selector */
-	       Frm_BeginFormAnchor (ActChgSrcRubCri,Anchor);
+	       Frm_BeginFormAnchor (ActChgTypRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"Source\" class=\"INPUT_%s\"",
+				    "name=\"Type\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Type  = (Rsc_Type_t) 0;
 			  Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
@@ -732,7 +735,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_BR ();
 
 	       /* Resource */
-	       RubCri_ShowResource (&Criterion,
+	       RubCri_ShowResource (Rubrics,&Criterion,
 	                            true,Anchor);	// Editing
 	    HTM_TD_End ();
 
@@ -1155,17 +1158,15 @@ static void RubCri_ExchangeCriteria (long RubCod,
 /************************** Show criterion resource **************************/
 /*****************************************************************************/
 
-static void RubCri_ShowResource (const struct RubCri_Criterion *Criterion,
+static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
+                                 const struct RubCri_Criterion *Criterion,
                                  bool Editing,const char *Anchor)
   {
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
-   return;	// TODO: Provisional. Remove!
-
-   // TODO
    if (Editing)
-      RubCri_ShowClipboard (Criterion,Anchor);
+      RubCri_ShowClipboard (Rubrics,Criterion,Anchor);
    else
       Rsc_WriteLinkName (&Criterion->Link,
 			 true,	// Put form
@@ -1177,28 +1178,28 @@ static void RubCri_ShowResource (const struct RubCri_Criterion *Criterion,
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
-static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const char *Anchor)
+static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
+                                  const struct RubCri_Criterion *Criterion,
+                                  const char *Anchor)
   {
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
    struct Rsc_Link Link;
-   /*
-   static const struct PrgRsc_Link EmptyLink =
+   static const struct Rsc_Link EmptyLink =
      {
-      .Type = PrgRsc_NONE,
+      .Type = Rsc_NONE,
       .Cod  = -1L,
-     }; */
+     };
 
    /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgLnkPrgRsc,Anchor);
-      /*
-      if (Item->Resource.Hierarchy.RscCod > 0)
-         ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
-      else
-	 * No resource selected, so it's a new resource at the end of the item *
-         ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
-      */
+   Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
+      RubCri_PutParsOneCriterion (Rubrics);
+      if (Criterion->CriCod > 0)
+         ParCod_PutPar (ParCod_Cri,Criterion->CriCod);
+      // else
+	 /* No resource selected, so it's a new resource at the end of the item */
+         // ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
@@ -1207,9 +1208,8 @@ static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const
 	 Rsc_WriteRowClipboard (false,&Criterion->Link);
 
          /***** Row with empty link to remove the current link *****/
-	 /*
-	 if (Criterion->Source != RubCri_FROM_TEACHER)
-	    RubCri_WriteRowClipboard (true,&EmptyLink); */
+	 if (Criterion->Link.Type != Rsc_NONE)
+	    Rsc_WriteRowClipboard (true,&EmptyLink);
 
 	 /***** Get links in clipboard from database and write them *****/
 	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
@@ -1227,4 +1227,59 @@ static void RubCri_ShowClipboard (const struct RubCri_Criterion *Criterion,const
 
    /***** End form *****/
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/***************** Show clipboard to change resource link ********************/
+/*****************************************************************************/
+
+void RubCri_ChangeLink (void)
+  {
+   struct Rub_Rubrics Rubrics;
+   struct RubCri_Criterion Criterion;
+   char TypeCod[3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char TypeStr[3 + 1];
+   long Cod;
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+   Rub_ResetRubric (&Rubrics.Rubric);
+   RubCri_ResetCriterion (&Criterion);
+
+   /***** Get and check parameters *****/
+   RubCri_GetAndCheckPars (&Rubrics,&Criterion);
+
+   /***** Check if rubric is editable *****/
+   if (!Rub_CheckIfEditable (&Rubrics.Rubric))
+      Err_NoPermissionExit ();
+
+   /***** Get link type and code *****/
+   Par_GetParText ("Link",TypeCod,sizeof (TypeCod) - 1);
+   if (sscanf (TypeCod,"%3s_%ld",TypeStr,&Cod) == 2)
+     {
+      Criterion.Link.Type = Rsc_GetTypeFromString (TypeStr);
+      Criterion.Link.Cod  = Cod;
+
+      /***** Is it an existing resource? *****/
+      // if (Criterion.CriCod <= 0)
+	//{
+	 /* No resource selected, so it's a new resource at the end of the item */
+	 /* Get the new title for the new resource from link title */
+	 //Rsc_GetResourceTitleFromLink (&Item.Resource.Link,
+	   //                            Item.Resource.Title);
+
+	 /***** Create resource *****/
+	// Item.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Item);
+	//}
+
+      /***** Update link to resource in criterion *****/
+      Rub_DB_UpdateCriterionLink (&Criterion);
+
+      /***** Remove link from clipboard *****/
+      Rsc_DB_RemoveLinkFromClipboard (&Criterion.Link);
+     }
+
+   /***** Show current rubric and its criteria *****/
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
+                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
   }

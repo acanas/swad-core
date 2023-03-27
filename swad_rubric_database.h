@@ -62,6 +62,7 @@ void Rub_DB_UpdateCriterionValue (const struct RubCri_Criterion *Criterion,
 void Rub_DB_UpdateCriterionWeight (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
 void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
+void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion);
 void Rub_DB_LockTable (void);
 
 unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod);

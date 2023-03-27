@@ -6412,25 +6412,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActChgLnkPrgRsc] =
 #if   L==1	// ca
-	"Change resource link"		// Necessita traducció
+	"Canviar enlla&ccedil; a recurs des del programa"
 #elif L==2	// de
-	"Change resource link"		// Need Übersetzung
+	"&Auml;ndern Sie den Link zur Ressource aus dem Programm"
 #elif L==3	// en
-	"Change resource link"
+	"Change link to resource from the program"
 #elif L==4	// es
-	"Cambiar enlace de recurso"
+	"Cambiar enlace a recurso desde el programa"
 #elif L==5	// fr
-	"Change resource link"		// Besoin de traduction
+	"Modifier le lien vers la ressource du programme"
 #elif L==6	// gn
-	"Cambiar enlace de recurso"	// Okoteve traducción
+	"Emoambue enlace recurso-pe programa-gui"
 #elif L==7	// it
-	"Change resource link"		// Bisogno di traduzione
+	"Modificare il collegamento alla risorsa dal programma"
 #elif L==8	// pl
-	"Change resource link"		// Potrzebujesz tlumaczenie
+	"Zmie&nacute; link do zasobu z programu"
 #elif L==9	// pt
-	"Change resource link"		// Precisa de tradução
+	"Alterar link para recurso do programa"
 #elif L==10	// tr
-	"Change resource link"		// Çeviri lazim!
+	"Programdan kayna&gbreve;a ba&gbreve;lant&inodot;y&inodot; de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActEdiTchGui] =
@@ -14207,7 +14207,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t ba&scedil;l&inodot;&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tir"				// Çeviri lazim!
 #endif
 	,
-	[ActChgSrcRubCri] =
+	[ActChgTypRubCri] =
 #if   L==1	// ca
 	"Canviar font de criteri de r&uacute;brica"
 #elif L==2	// de
@@ -14228,6 +14228,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Alterar origem do crit&eacute;rio de rubrica"
 #elif L==10	// tr
 	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t yaz&inodot; tipini de&gbreve;i&scedil;tir"
+#endif
+	,
+	[ActChgLnkRubCri] =
+#if   L==1	// ca
+	"Canviar enlla&ccedil; a recurs des de r&uacute;brica"
+#elif L==2	// de
+	"Link zu Ressource aus Rubrik &auml;ndern"
+#elif L==3	// en
+	"Change link to resource from rubric"
+#elif L==4	// es
+	"Cambiar enlace a recurso desde r&uacute;brica"
+#elif L==5	// fr
+	"Modifier lien vers ressource &agrave; partir de rubrique"
+#elif L==6	// gn
+	"Omoambue enlace recurso-pe r&uacute;brica-gui"
+#elif L==7	// it
+	"Modificare il collegamento alla risorsa dalla rubrica"
+#elif L==8	// pl
+	"Zmie&nacute; link do zasobu z rubryki"
+#elif L==9	// pt
+	"Alterar link para recurso da rubrica"
+#elif L==10	// tr
+	"Puan anahtar&inodot;ndan kayna&gbreve;a ba&gbreve;lant&inodot;y&inodot; de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActChgMinRubCri] =

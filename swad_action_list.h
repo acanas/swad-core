@@ -774,10 +774,11 @@
 #define ActUp_RubCri		(ActChgCrsTT1stDay + 231)
 #define ActDwnRubCri		(ActChgCrsTT1stDay + 232)
 #define ActChgTitRubCri		(ActChgCrsTT1stDay + 233)
-#define ActChgSrcRubCri		(ActChgCrsTT1stDay + 234)
-#define ActChgMinRubCri		(ActChgCrsTT1stDay + 235)
-#define ActChgMaxRubCri		(ActChgCrsTT1stDay + 236)
-#define ActChgWeiRubCri		(ActChgCrsTT1stDay + 237)
+#define ActChgTypRubCri		(ActChgCrsTT1stDay + 234)
+#define ActChgLnkRubCri		(ActChgCrsTT1stDay + 235)
+#define ActChgMinRubCri		(ActChgCrsTT1stDay + 236)
+#define ActChgMaxRubCri		(ActChgCrsTT1stDay + 237)
+#define ActChgWeiRubCri		(ActChgCrsTT1stDay + 238)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
@@ -1770,7 +1771,7 @@
 
 #define ActLst_NUM_ACTIONS		(ActChgMyTT1stDay + 1)
 
-#define ActLst_MAX_ACTION_COD		1969
+#define ActLst_MAX_ACTION_COD		1970
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 
