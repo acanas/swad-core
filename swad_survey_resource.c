@@ -97,7 +97,7 @@ void SvyRsc_WriteResourceSurvey (long SvyCod,bool PutFormToGo,
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write Name of the course and date of exam *****/
+   /***** Write title of survey *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/

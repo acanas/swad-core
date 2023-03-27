@@ -14046,6 +14046,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Puan anahtar&inodot;n&inodot; kald&inodot;r"
 #endif
 	,
+	[ActReqLnkRub] =
+#if   L==1	// ca
+	"Copiar enlla&ccedil; a r&uacute;brica"
+#elif L==2	// de
+	"Link zur Rubrik kopieren"
+#elif L==3	// en
+	"Copy link to rubric"
+#elif L==4	// es
+	"Copiar enlace a r&uacute;brica"
+#elif L==5	// fr
+	"Copier le lien vers la rubrique"
+#elif L==6	// gn
+	"Ekopia enlace rubrica-pe"
+#elif L==7	// it
+	"Copiare il link alla rubrica"
+#elif L==8	// pl
+	"Skopiuj link do rubryki"
+#elif L==9	// pt
+	"Copiar link para rubrica"
+#elif L==10	// tr
+	"Ba&gbreve;lant&inodot;y&inodot; puan anahtar&inodot;na kopyala"
+#endif
+	,
 	[ActNewRubCri] =
 #if   L==1	// ca
 	"Crear nou criteri de r&uacute;brica"

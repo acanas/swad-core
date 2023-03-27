@@ -41,6 +41,7 @@
 #include "swad_project_resource.h"
 #include "swad_resource.h"
 #include "swad_role.h"
+#include "swad_rubric_resource.h"
 #include "swad_survey_resource.h"
 #include "swad_theme.h"
 
@@ -145,7 +146,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_WriteResourceCallForExam,
       [Rsc_EXAM            ] = ExaRsc_WriteResourceExam,
       [Rsc_GAME            ] = GamRsc_WriteResourceGame,
-      [Rsc_RUBRIC          ] = Rsc_WriteResourceEmpty,		// TODO
+      [Rsc_RUBRIC          ] = RubRsc_WriteResourceRubric,
       [Rsc_DOCUMENT        ] = BrwRsc_WriteResourceDocument,
       [Rsc_MARKS           ] = BrwRsc_WriteResourceMarksFile,
       [Rsc_ATTENDANCE_EVENT] = AttRsc_WriteResourceEvent,
@@ -192,7 +193,7 @@ void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
       [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
       [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [Rsc_RUBRIC          ] = NULL,				// TODO
+      [Rsc_RUBRIC          ] = RubRsc_GetTitleFromRubCod,
       [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
       [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,
       [Rsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,

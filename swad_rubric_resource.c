@@ -1,4 +1,4 @@
-// swad_exam_resource.c: links to exams as program resources
+// swad_rubric_resource.c: links to rubrics as resources
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -28,64 +28,64 @@
 #include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_error.h"
-#include "swad_exam.h"
-#include "swad_exam_database.h"
-#include "swad_exam_resource.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_program_database.h"
+#include "swad_rubric.h"
+#include "swad_rubric_database.h"
+#include "swad_rubric_resource.h"
 
 /*****************************************************************************/
-/***************************** Get link to exam ******************************/
+/**************************** Get link to rubric *****************************/
 /*****************************************************************************/
 
-void ExaRsc_GetLinkToExam (void)
+void RubRsc_GetLinkToRubric (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   struct Exa_Exams Exams;
-   char Title[Exa_MAX_BYTES_TITLE + 1];
+   struct Rub_Rubrics Rubrics;
+   char Title[Rub_MAX_BYTES_TITLE + 1];
 
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Rub_GetPars (&Rubrics,true);
 
-   /***** Get exam title *****/
-   ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);
+   /***** Get rubric title *****/
+   RubRsc_GetTitleFromRubCod (Rubrics.Rubric.RubCod,Title,sizeof (Title) - 1);
 
-   /***** Copy link to exam into resource clipboard *****/
-   Prg_DB_CopyToClipboard (Rsc_EXAM,Exams.Exam.ExaCod);
+   /***** Copy link to rubric into resource clipboard *****/
+   Prg_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Title);
 
-   /***** Show exams again *****/
-   Exa_ListAllExams (&Exams);
+   /***** Show rubrics again *****/
+   Rub_ListAllRubrics (&Rubrics);
   }
 
 /*****************************************************************************/
-/**************************** Write exam as resource *************************/
+/*************************** Write rubric as resource ************************/
 /*****************************************************************************/
 
-void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
-                               const char *Icon,const char *IconTitle)
+void RubRsc_WriteResourceRubric (long RubCod,bool PutFormToGo,
+                                 const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
-   char Title[Exa_MAX_BYTES_TITLE + 1];
+   char Title[Rub_MAX_BYTES_TITLE + 1];
 
-   /***** Get exam title *****/
-   ExaRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
+   /***** Get rubric title *****/
+   RubRsc_GetTitleFromRubCod (RubCod,Title,sizeof (Title) - 1);
 
-   /***** Begin form to go to exam *****/
+   /***** Begin form to go to rubric *****/
    if (PutFormToGo)
      {
-      NextAction = (ExaCod > 0)	? ActSeeExa :	// Exam specified
-				  ActSeeAllExa;	// All exams
+      NextAction = (RubCod > 0)	? ActSeeRub :	// Rubric specified
+				  ActSeeAllRub;	// All rubrics
       Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Exa,ExaCod);
+         ParCod_PutPar (ParCod_Rub,RubCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());
@@ -97,7 +97,7 @@ void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write title of exam *****/
+   /***** Write title of rubric *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/
@@ -109,22 +109,22 @@ void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
   }
 
 /*****************************************************************************/
-/*********************** Get exam title from exam code ***********************/
+/********************* Get rubric title from rubric code *********************/
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize)
   {
-   extern const char *Txt_Exams;
-   char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
+   extern const char *Txt_Rubrics;
+   char TitleFromDB[Rub_MAX_BYTES_TITLE + 1];
 
-   if (ExaCod > 0)
+   if (RubCod > 0)
      {
-      /***** Get exam title *****/
-      Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
+      /***** Get rubric title *****/
+      Rub_DB_GetRubricTitle (RubCod,TitleFromDB);
       Str_Copy (Title,TitleFromDB,TitleSize);
      }
    else
-      /***** Generic title for all exams *****/
-      Str_Copy (Title,Txt_Exams,TitleSize);
+      /***** Generic title for all rubrics *****/
+      Str_Copy (Title,Txt_Rubrics,TitleSize);
   }

@@ -260,6 +260,11 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
       if (Rub_CheckIfICanEditRubrics ())
 	 Rub_PutIconToCreateNewRubric ((struct Rub_Rubrics *) Rubrics);
 
+      /***** Link to get resource link *****/
+      if (Rsc_CheckIfICanGetLink ())
+	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
+					 Rub_PutPars,Rubrics);
+
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_RUBRICS);
      }
@@ -483,6 +488,11 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
       /***** Icon to edit rubric *****/
       Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,
 				   Rub_PutPars,Rubrics);
+
+      /***** Link to get resource link *****/
+      if (Rsc_CheckIfICanGetLink ())
+	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
+					 Rub_PutPars,Rubrics);
      }
   }
 

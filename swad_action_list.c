@@ -101,6 +101,7 @@
 #include "swad_role.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
+#include "swad_rubric_resource.h"
 #include "swad_search.h"
 #include "swad_session.h"
 #include "swad_setting.h"
@@ -843,6 +844,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgRub		] = {1956,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReceiveFormRubric		,NULL},
    [ActReqRemRub	] = {1957,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_AskRemRubric		,NULL},
    [ActRemRub		] = {1958,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_RemoveRubric		,NULL},
+   [ActReqLnkRub	] = {1969,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubRsc_GetLinkToRubric		,NULL},
 
    [ActNewRubCri	] = {1959,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReceiveFormCriterion	,NULL},
    [ActReqRemRubCri	] = {1960,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,RubCri_ReqRemCriterion		,NULL},
@@ -3854,4 +3856,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMaxRubCri,	// #1966
 	ActChgWeiRubCri,	// #1967
 	ActChgSrcRubCri,	// #1968
+	ActReqLnkRub,		// #1969
   };

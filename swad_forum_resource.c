@@ -117,7 +117,7 @@ void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
    else
       Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
 
-   /***** Write Name of the course and date of exam *****/
+   /***** Write title of forum *****/
    HTM_Txt (Subject);
 
    /***** End form to download file *****/
