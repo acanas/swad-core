@@ -128,11 +128,12 @@ unsigned Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
 		      " AND crs_users.Role=%u"
 		 " GROUP BY dpt_departments.DptCod)"
 		   " UNION "
-		   "(SELECT InsCod,"					// row[0]
-			   "ShortName,"					// row[1]
-			   "FullName,"					// row[2]
-			   "WWW,"					// row[3]
-			   "0"						// row[4]
+		   "(SELECT DptCod,"					// row[0]
+		           "InsCod,"					// row[1]
+			   "ShortName,"					// row[2]
+			   "FullName,"					// row[3]
+			   "WWW,"					// row[4]
+			   "0"						// row[5]
 		     " FROM dpt_departments"
 		    " WHERE DptCod=%ld"
 		      " AND DptCod NOT IN"

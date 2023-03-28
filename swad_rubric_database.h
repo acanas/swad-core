@@ -60,7 +60,7 @@ void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriterionValue (const struct RubCri_Criterion *Criterion,
                                   RubCri_ValueRange_t ValueRange);
 void Rub_DB_UpdateCriterionWeight (const struct RubCri_Criterion *Criterion);
-void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd);
+void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (const struct RubCri_Criterion *Criterion);
 void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
 void Rub_DB_LockTable (void);
 
@@ -77,7 +77,7 @@ bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criter
 
 double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope);
 
-void Rub_DB_RemoveCriterionFromRubric (long CriCod,long RubCod);
+void Rub_DB_RemoveCriterionFromRubric (const struct RubCri_Criterion *Criterion);
 void Rub_DB_RemoveRubricCriteria (long RubCod);
 void Rub_DB_RemoveCrsRubricCriteria (long CrsCod);
 

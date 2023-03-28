@@ -67,12 +67,12 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetSetDataByCod (MYSQL_RES **mysql_res,long SetCod);
 bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
                                      const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
-unsigned Exa_DB_GetSetIndFromSetCod (long ExaCod,long SetCod);
+unsigned Exa_DB_GetSetIndFromSetCod (const struct ExaSet_Set *Set);
 long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);
 unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
-void Exa_DB_RemoveSetFromExam (long SetCod,long ExaCod);
+void Exa_DB_RemoveSetFromExam (const struct ExaSet_Set *Set);
 void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
 
@@ -91,7 +91,7 @@ unsigned Exa_DB_GetMediaFromStemOfQst (MYSQL_RES **mysql_res,long QstCod,long Se
 unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
 void Exa_DB_RemoveSetQuestion (long QstCod,long SetCod);
-void Exa_DB_RemoveAllSetQuestionsFromSet (long SetCod,long ExaCod);
+void Exa_DB_RemoveAllSetQuestionsFromSet (const struct ExaSet_Set *Set);
 void Exa_DB_RemoveAllSetQuestionsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod);
 

@@ -1354,10 +1354,10 @@ void ExaSet_RemoveSet (void)
 
    /***** Remove the set from all tables *****/
    /* Remove questions associated to set */
-   Exa_DB_RemoveAllSetQuestionsFromSet (Set.SetCod,Set.ExaCod);
+   Exa_DB_RemoveAllSetQuestionsFromSet (&Set);
 
    /* Remove the set itself */
-   Exa_DB_RemoveSetFromExam (Set.SetCod,Set.ExaCod);
+   Exa_DB_RemoveSetFromExam (&Set);
 
    /* Change indexes of sets greater than this */
    Exa_DB_UpdateSetIndexesInExamGreaterThan (Set.ExaCod,Set.SetInd);
@@ -1395,7 +1395,7 @@ void ExaSet_MoveUpSet (void)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndBottom = Exa_DB_GetSetIndFromSetCod (Exams.Exam.ExaCod,Set.SetCod);
+   SetIndBottom = Exa_DB_GetSetIndFromSetCod (&Set);
 
    /***** Move up set *****/
    if (SetIndBottom > 1)
@@ -1442,7 +1442,7 @@ void ExaSet_MoveDownSet (void)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndTop = Exa_DB_GetSetIndFromSetCod (Exams.Exam.ExaCod,Set.SetCod);
+   SetIndTop = Exa_DB_GetSetIndFromSetCod (&Set);
 
    /***** Get maximum set index *****/
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exams.Exam.ExaCod);

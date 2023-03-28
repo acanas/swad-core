@@ -704,14 +704,15 @@ bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
 /****************** Get set index given exam and set code ********************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetSetIndFromSetCod (long ExaCod,long SetCod)
+unsigned Exa_DB_GetSetIndFromSetCod (const struct ExaSet_Set *Set)
   {
    return DB_QuerySELECTUnsigned ("can not get set index",
 				  "SELECT SetInd"	// row[0]
 				   " FROM exa_sets"
 				  " WHERE SetCod=%u"
 				    " AND ExaCod=%ld",	// Extra check
-				  SetCod,ExaCod);
+				  Set->SetCod,
+				  Set->ExaCod);
   }
 
 /*****************************************************************************/
@@ -795,14 +796,14 @@ unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
 /******************* Remove a set of questions from an exam ******************/
 /*****************************************************************************/
 
-void Exa_DB_RemoveSetFromExam (long SetCod,long ExaCod)
+void Exa_DB_RemoveSetFromExam (const struct ExaSet_Set *Set)
   {
    DB_QueryDELETE ("can not remove set",
 		   "DELETE FROM exa_sets"
 		   " WHERE SetCod=%ld"
                      " AND ExaCod=%ld",		// Extra check
-		   SetCod,
-		   ExaCod);
+		   Set->SetCod,
+		   Set->ExaCod);
   }
 
 /*****************************************************************************/
@@ -1060,7 +1061,7 @@ void Exa_DB_RemoveSetQuestion (long QstCod,long SetCod)
 /*************** Remove the questions in a set of questions ******************/
 /*****************************************************************************/
 
-void Exa_DB_RemoveAllSetQuestionsFromSet (long SetCod,long ExaCod)
+void Exa_DB_RemoveAllSetQuestionsFromSet (const struct ExaSet_Set *Set)
   {
    DB_QueryDELETE ("can not remove questions associated to set",
 		   "DELETE FROM exa_set_questions"
@@ -1069,8 +1070,8 @@ void Exa_DB_RemoveAllSetQuestionsFromSet (long SetCod,long ExaCod)
 		   " WHERE exa_set_questions.SetCod=%ld"
                      " AND exa_set_questions.SetCod=exa_sets.SetCod"
 		     " AND exa_sets.ExaCod=%ld",	// Extra check
-		   SetCod,
-		   ExaCod);
+		   Set->SetCod,
+		   Set->ExaCod);
   }
 
 /*****************************************************************************/

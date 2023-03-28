@@ -839,8 +839,8 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
    // Default values minimum/maximum criterion values
    static double RubCri_DefaultValues[RubCri_NUM_VALUES] =
      {
-      [RubCri_MIN] = 0.0,
-      [RubCri_MAX] = 0.1,
+      [RubCri_MIN] =  0.0,
+      [RubCri_MAX] = 10.0,
      };
    RubCri_ValueRange_t ValueRange;
 
@@ -919,10 +919,10 @@ void RubCri_RemoveCriterion (void)
    // Exa_DB_RemoveAllSetQuestionsFromSet (Criterion.CriCod,Criterion.RubCod);
 
    /* Remove the criterion itself */
-   Rub_DB_RemoveCriterionFromRubric (Criterion.CriCod,Criterion.RubCod);
+   Rub_DB_RemoveCriterionFromRubric (&Criterion);
 
    /* Change indexes of criteria greater than this */
-   Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (Criterion.RubCod,Criterion.CriInd);
+   Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (&Criterion);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Criterion_removed);

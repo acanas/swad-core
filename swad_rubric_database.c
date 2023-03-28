@@ -451,15 +451,15 @@ void Rub_DB_UpdateCriterionWeight (const struct RubCri_Criterion *Criterion)
 /************ Update indexes of criteria greater than a given one ************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (long RubCod,unsigned CriInd)
+void Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (const struct RubCri_Criterion *Criterion)
   {
    DB_QueryUPDATE ("can not update indexes of criteria",
 		   "UPDATE rub_criteria"
 		     " SET CriInd=CriInd-1"
 		   " WHERE RubCod=%ld"
 		     " AND CriInd>%u",
-		   RubCod,
-		   CriInd);
+		   Criterion->RubCod,
+		   Criterion->CriInd);
   }
 
 /*****************************************************************************/
@@ -773,14 +773,14 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 /*********************** Remove criterion from a rubric **********************/
 /*****************************************************************************/
 
-void Rub_DB_RemoveCriterionFromRubric (long CriCod,long RubCod)
+void Rub_DB_RemoveCriterionFromRubric (const struct RubCri_Criterion *Criterion)
   {
    DB_QueryDELETE ("can not remove rubric criterion",
 		   "DELETE FROM rub_criteria"
 		   " WHERE CriCod=%ld"
-                     " AND RubCod=%ld",
-		   CriCod,
-		   RubCod);
+                     " AND RubCod=%ld",	// Extra check
+		   Criterion->CriCod,
+		   Criterion->RubCod);
   }
 
 /*****************************************************************************/
