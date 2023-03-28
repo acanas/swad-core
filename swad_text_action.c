@@ -5400,25 +5400,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeePrg] =
 #if   L==1	// ca
-	"See educational schedule of course"				// Necessita traducció
+	"Veure programaci&oacute; did&agrave;ctica de l'assignatura"
 #elif L==2	// de
-	"See educational schedule of course"				// Need Übersetzung
+	"Siehe Ausbildungsplan des Kurses"
 #elif L==3	// en
-	"See educational schedule of course"
+	"See educational schedule of the course"
 #elif L==4	// es
 	"Ver programaci&oacute;n did&aacute;ctica de la asignatura"
 #elif L==5	// fr
-	"See educational schedule of course"				// Besoin de traduction
+	"Voir programme didactique de la mati&egrave;re"
 #elif L==6	// gn
-	"Ver programaci&oacute;n did&aacute;ctica de la asignatura"	// Okoteve traducción
+	"Ehecha programa did&aacute;ctico upe materia rehegua"
 #elif L==7	// it
-	"See educational schedule of course"				// Bisogno di traduzione
+	"Vedi programma didattico della materia"
 #elif L==8	// pl
-	"See educational schedule of course"				// Potrzebujesz tlumaczenie
+	"Zobacz program edukacyjny kursu"
 #elif L==9	// pt
-	"See educational schedule of course"				// Precisa de tradução
+	"Ver programa did&aacute;tico da disciplina"
 #elif L==10	// tr
-	"See educational schedule of course"				// Çeviri lazim!
+	"Konunun didaktik program&inodot;na bak&inodot;n"
 #endif
 	,
 	[ActSeeTchGui] =
@@ -6157,6 +6157,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract program item when editing"		// Çeviri lazim!
 #endif
 	,
+	[ActSeePrgRscCli] =
+#if   L==1	// ca
+	"Veure el porta-retalls de recursos"
+#elif L==2	// de
+	"Ressourcen-Zwischenablage anzeigen"
+#elif L==3	// en
+	"See resource clipboard"
+#elif L==4	// es
+	"Ver portapapeles de recursos"
+#elif L==5	// fr
+	"Afficher le presse-papiers des ressources"
+#elif L==6	// gn
+	"Ojehechakuaa recurso portapapeles rehegua"
+#elif L==7	// it
+	"Visualizza gli appunti delle risorse"
+#elif L==8	// pl
+	"Wy&sacute;wietl schowek zasob&oacute;w"
+#elif L==9	// pt
+	"Exibir &aacute;rea de transfer&ecirc;ncia de recursos"
+#elif L==10	// tr
+	"Kaynak panosunu g&ouml;r&uuml;nt&uuml;le"
+#endif
+	,
 	[ActFrmSeePrgRsc] =
 #if   L==1	// ca
 	"Veure recursos"
@@ -6169,7 +6192,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Voir ressources"
 #elif L==6	// gn
-	"Editar recursos"	// Okoteve traducción
+	"Ehecha umi recurso"
 #elif L==7	// it
 	"Vedi risorse"
 #elif L==8	// pl
@@ -6387,7 +6410,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Move down resource"	// Çeviri lazim!
 #endif
 	,
-	[ActSeeCliPrgRsc] =
+	[ActFrmChgLnkPrgRsc] =
 #if   L==1	// ca
 	"Edit resource link"		// Necessita traducció
 #elif L==2	// de

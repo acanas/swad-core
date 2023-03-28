@@ -5373,7 +5373,7 @@ const char *Txt_Configure_projects =
 #elif L==5	// fr
 	"Configurer projets";
 #elif L==6	// gn
-	"Configurar proyectos";	// Okoteve traducción
+	"Omohenda umi proyecto";
 #elif L==7	// it
 	"Configurare progetti";
 #elif L==8	// pl
@@ -5381,7 +5381,7 @@ const char *Txt_Configure_projects =
 #elif L==9	// pt
 	"Configurar projetos";
 #elif L==10	// tr
-	"Configure projects";	// Çeviri lazim!
+	"Projeleri yap&inodot;land&inodot;r";
 #endif
 
 const char *Txt_Configure_tests =
@@ -36382,6 +36382,29 @@ const char *Txt_Reset_survey =
 	"Reiniciar inqu&eacute;rito";
 #elif L==10	// tr
 	"Reset survey";			// Çeviri lazim!
+#endif
+
+const char *Txt_Resource_clipboard =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Portapapers de recursos";
+#elif L==2	// de
+	"Ressourcen-Zwischenablage";
+#elif L==3	// en
+	"Resource clipboard";
+#elif L==4	// es
+	"Portapapeles de recursos";
+#elif L==5	// fr
+	"Presse-papiers de ressources";
+#elif L==6	// gn
+	"Recurso portapapeles rehegua";
+#elif L==7	// it
+	"Appunti delle risorse";
+#elif L==8	// pl
+	"Schowek zasob&oacute;w";
+#elif L==9	// pt
+	"&Aacute;rea de transfer&ecirc;ncia de recursos";
+#elif L==10	// tr
+	"Kaynak panosu";
 #endif
 
 const char *Txt_Resource_X_removed =	// Warning: it is very important to include %s in the following sentences

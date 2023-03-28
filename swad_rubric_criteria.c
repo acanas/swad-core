@@ -62,6 +62,10 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
    [RubCri_MAX] = "MaxVal",
   };
 
+#define RubCri_WEIGHT_MIN	0.0
+#define RubCri_WEIGHT_MAX	1.0
+#define RubCri_WEIGHT_STEP	0.000001
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -242,7 +246,10 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 
 	    /***** Weight *****/
 	    HTM_TD_Begin ("class=\"RM\"");
-	       HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
+	       HTM_INPUT_FLOAT ("Weight",
+	                        RubCri_WEIGHT_MIN,
+	                        RubCri_WEIGHT_MAX,
+	                        RubCri_WEIGHT_STEP,
 				Criterion->Weight,false,
 				" class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				The_GetSuffix ());
@@ -711,7 +718,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		 {
 		  Frm_BeginFormAnchor (ActChgWeiRubCri,Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
-		     HTM_INPUT_FLOAT ("Weight",0.0,1.0,0.01,
+		     HTM_INPUT_FLOAT ("Weight",
+		                      RubCri_WEIGHT_MIN,
+		                      RubCri_WEIGHT_MAX,
+		                      RubCri_WEIGHT_STEP,
 				      Criterion.Weight,false,
 				      " class=\"INPUT_FLOAT INPUT_%s\""
 				      " required=\"required\"",
@@ -822,9 +832,9 @@ static void RubCri_PutTableHeadingForCriteria (void)
       HTM_TH (Txt_No_INDEX ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Criterion,HTM_HEAD_LEFT );
       HTM_TH (Txt_Source   ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_Minimum  ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Maximum  ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Weight   ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Minimum  ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Maximum  ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Weight   ,HTM_HEAD_LEFT );
 
    /***** End row *****/
    HTM_TR_End ();
@@ -853,7 +863,7 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
       Criterion->Values[ValueRange] = RubCri_DefaultValues[ValueRange];
-   Criterion->Weight = 1.0;
+   Criterion->Weight = RubCri_WEIGHT_MAX;;
    Criterion->Title[0] = '\0';
   }
 

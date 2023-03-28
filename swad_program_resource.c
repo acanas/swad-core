@@ -90,7 +90,8 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
 static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
                                       const struct Prg_ResourceHierarchy *Rsc2);
 
-static void PrgRsc_ShowClipboard (struct Prg_Item *Item);
+static void PrgRsc_ShowClipboard (void);
+static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -435,7 +436,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	 /* Edit link showing clipboard / Show current link */
 	 if (EditLink)
 	    /* Show clipboard to change resource link */
-	    PrgRsc_ShowClipboard (Item);
+	    PrgRsc_ShowClipboardToChangeLink (Item);
 	 else
 	    /* Show current link */
 	    Rsc_WriteLinkName (&Item->Resource.Link,
@@ -492,7 +493,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
             HTM_BR ();
 
 	    /* Show clipboard to change resource link */
-	    PrgRsc_ShowClipboard (Item);
+	    PrgRsc_ShowClipboardToChangeLink (Item);
 	   }
 
       HTM_TD_End ();
@@ -538,10 +539,10 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 
 	 /***** Put icon to edit the item resource *****/
 	 if (NumRsc < NumResources)
-	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActFrmChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod);
 	 else
-	    Ico_PutContextualIconToEdit (ActSeeCliPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActFrmChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to move up the item resource *****/
@@ -837,7 +838,20 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
-void PrgRsc_ShowClipboardToChgLink (void)
+void PrgRsc_ViewResourceClipboard (void)
+  {
+   /***** View resource clipboard *****/
+   PrgRsc_ShowClipboard ();
+
+   /***** Edit course program *****/
+   Prg_EditCourseProgram ();
+  }
+
+/*****************************************************************************/
+/********** Edit program showing clipboard to change resource link ***********/
+/*****************************************************************************/
+
+void PrgRsc_EditProgramWithClipboard (void)
   {
    struct Prg_Item Item;
 
@@ -857,10 +871,55 @@ void PrgRsc_ShowClipboardToChgLink (void)
   }
 
 /*****************************************************************************/
+/************************* Show resources clipboard **************************/
+/*****************************************************************************/
+
+static void PrgRsc_ShowClipboard (void)
+  {
+   extern const char *Hlp_COURSE_Program;
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_Resource_clipboard;
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   struct Rsc_Link Link;
+
+   Box_BoxBegin (NULL,Txt_Resource_clipboard,
+		 // PrgRsc_PutIconsClipboard,NULL, // TODO: Icon to remove!!!!!!!!!!!!!
+                 NULL,NULL,
+		 Hlp_COURSE_Program,Box_CLOSABLE);
+
+      /***** Begin list *****/
+      HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+
+	 /***** Get links in clipboard from database and write them *****/
+	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
+	 for (NumLink  = 1;
+	      NumLink <= NumLinks;
+	      NumLink++)
+	   {
+	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
+	       Rsc_WriteLinkName (&Link,
+				  true,	// Put form to go
+				  Rsc_ResourceTypesIcons[Link.Type],
+				  Txt_RESOURCE_TYPES[Link.Type]);
+	    HTM_LI_End ();
+	   }
+	 DB_FreeMySQLResult (&mysql_res);
+
+      /***** End list *****/
+      HTM_UL_End ();
+
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
 /***************** Show clipboard to change resource link ********************/
 /*****************************************************************************/
 
-static void PrgRsc_ShowClipboard (struct Prg_Item *Item)
+static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item)
   {
    MYSQL_RES *mysql_res;
    unsigned NumLink;

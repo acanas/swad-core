@@ -56,7 +56,9 @@ void PrgRsc_UnhideResource (void);
 void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
-void PrgRsc_ShowClipboardToChgLink (void);
+void PrgRsc_ViewResourceClipboard (void);
+
+void PrgRsc_EditProgramWithClipboard (void);
 
 void PrgRsc_ChangeLink (void);
 

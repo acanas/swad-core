@@ -116,6 +116,7 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args);
 static void Prg_PutIconToEditProgram (void);
 static void Prg_PutIconToViewProgram (void);
 static void Prg_PutIconToCreateNewItem (void);
+static void Prg_PutIconToViewResourceClipboard (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
@@ -410,9 +411,14 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
    /***** Put icon to view program *****/
    Prg_PutIconToViewProgram ();
 
-   /***** Put icon to create a new program item *****/
    if (Prg_CheckIfICanEditProgram ())
+     {
+      /***** Put icon to create a new program item *****/
       Prg_PutIconToCreateNewItem ();
+
+      /***** Put icon to vew resource clipboard *****/
+      Prg_PutIconToViewResourceClipboard ();
+     }
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_COURSE_PROGRAMS);
@@ -448,6 +454,16 @@ static void Prg_PutIconToCreateNewItem (void)
 
    Ico_PutContextualIconToAdd (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID,
                                Prg_PutParItmCod,&ItmCod);
+  }
+
+/*****************************************************************************/
+/****************** Put icon to create a new program item ********************/
+/*****************************************************************************/
+
+static void Prg_PutIconToViewResourceClipboard (void)
+  {
+   Ico_PutContextualIconToViewClipboard (ActSeePrgRscCli,NULL,
+                                         NULL,NULL);
   }
 
 /*****************************************************************************/

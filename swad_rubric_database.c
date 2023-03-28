@@ -660,12 +660,13 @@ bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criter
 		   "(SELECT *"
 		     " FROM rub_criteria,"
 			   "rub_rubrics"
-		    " WHERE rub_criteria.ExaCod=%ld"
+		    " WHERE rub_criteria.RubCod=%ld"
 		      " AND rub_criteria.Title='%s'"
-		      " AND rub_criteria.SetCod<>%ld"
-		      " AND rub_criteria.ExaCod=rub_rubrics.ExaCod"
+		      " AND rub_criteria.CriCod<>%ld"
+		      " AND rub_criteria.RubCod=rub_rubrics.RubCod"
 		      " AND rub_rubrics.CrsCod=%ld)",	// Extra check
-		   Criterion->RubCod,Title,
+		   Criterion->RubCod,
+		   Title,
 		   Criterion->CriCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }

@@ -336,6 +336,9 @@ void Prj_ResetProjects (struct Prj_Projects *Projects)
 	                       Prj_FILTER_VISIBL_DEFAULT;
    Projects->Filter.Faulti   = Prj_FILTER_FAULTY_DEFAULT |
 	                       Prj_FILTER_FAULTLESS_DEFAULT;
+   Projects->Filter.Review   = Prj_FILTER_UNREVIEWED_DEFAULT |
+                               Prj_FILTER_UNAPPROVED_DEFAULT |
+                               Prj_FILTER_APPROVED_DEFAULT;
    Projects->Filter.DptCod   = Prj_FILTER_DPT_DEFAULT;
    Projects->LstIsRead       = false;	// List is not read
    Projects->Num             = 0;
@@ -913,9 +916,9 @@ static void Prj_PutCurrentPars (void *Projects)
   {
    if (Projects)
       Prj_PutPars (&((struct Prj_Projects *) Projects)->Filter,
-		      ((struct Prj_Projects *) Projects)->SelectedOrder,
-		      ((struct Prj_Projects *) Projects)->CurrentPage,
-		      ((struct Prj_Projects *) Projects)->Prj.PrjCod);
+		    ((struct Prj_Projects *) Projects)->SelectedOrder,
+		    ((struct Prj_Projects *) Projects)->CurrentPage,
+		    ((struct Prj_Projects *) Projects)->Prj.PrjCod);
   }
 
 /* The following function is called

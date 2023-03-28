@@ -49,7 +49,7 @@ void RubRsc_GetLinkToRubric (void)
    Rub_ResetRubrics (&Rubrics);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,false);
 
    /***** Get rubric title *****/
    RubRsc_GetTitleFromRubCod (Rubrics.Rubric.RubCod,Title,sizeof (Title) - 1);
