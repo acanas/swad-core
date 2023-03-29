@@ -55,7 +55,7 @@ void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
   }
 
 /*****************************************************************************/
-/**************** Get resources in the current course clipboard **************/
+/****************** Get all resources from resource clipboard ****************/
 /*****************************************************************************/
 
 unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res)
@@ -70,6 +70,20 @@ unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res)
 		   " ORDER BY CopyTime",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/**************** Remove all resources from resource clipboard ***************/
+/*****************************************************************************/
+
+void Rsc_DB_RemoveClipboard (void)
+  {
+   DB_QueryDELETE ("can not remove clipboard",
+		   "DELETE FROM rsc_clipboards"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+ 		   Gbl.Usrs.Me.UsrDat.UsrCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

@@ -453,7 +453,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActConSeePrgItm	] = {1945,-1,TabUnk,ActSeePrg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ContractItem		,NULL},
    [ActConEdiPrgItm	] = {1947,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prg_ContractItem		,NULL},
 
-   [ActSeePrgRscCli	] = {1970,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourceClipboard	,NULL},
+   [ActSeeRscCli_InPrg	] = {1970,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourceClipboard	,NULL},
+   [ActRemRscCli_InPrg	] = {1971,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_RemoveResourceClipboard	,NULL},
    [ActFrmSeePrgRsc	] = {1925,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_ViewResourcesAfterEdit	,NULL},
    [ActFrmEdiPrgRsc	] = {1918,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_EditResources		,NULL},
    [ActNewPrgRsc	] = {1929,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrgRsc_CreateResource		,NULL},
@@ -3858,5 +3859,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgWeiRubCri,	// #1967
 	ActChgLnkRubCri,	// #1968
 	ActReqLnkRub,		// #1969
-	ActSeePrgRscCli,	// #1970
+	ActSeeRscCli_InPrg,	// #1970
+	ActRemRscCli_InPrg,	// #1971
   };

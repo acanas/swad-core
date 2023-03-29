@@ -462,7 +462,7 @@ static void Prg_PutIconToCreateNewItem (void)
 
 static void Prg_PutIconToViewResourceClipboard (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeePrgRscCli,NULL,
+   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InPrg,NULL,
                                          NULL,NULL);
   }
 
@@ -2259,7 +2259,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 /********************** Show stats about schedule items **********************/
 /*****************************************************************************/
 
-void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
+void Prg_GetAndShowCourseProgramStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];

@@ -57,6 +57,7 @@ void PrgRsc_MoveUpResource (void);
 void PrgRsc_MoveDownResource (void);
 
 void PrgRsc_ViewResourceClipboard (void);
+void PrgRsc_RemoveResourceClipboard (void);
 
 void PrgRsc_EditProgramWithClipboard (void);
 

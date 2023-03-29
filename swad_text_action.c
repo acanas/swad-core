@@ -6157,27 +6157,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract program item when editing"		// Çeviri lazim!
 #endif
 	,
-	[ActSeePrgRscCli] =
+	[ActSeeRscCli_InPrg] =
 #if   L==1	// ca
-	"Veure el porta-retalls de recursos"
+	"Veure portapapers de recursos en programa"
 #elif L==2	// de
-	"Ressourcen-Zwischenablage anzeigen"
+	"Siehe Ressourcen-Zwischenablage im Programm"
 #elif L==3	// en
-	"See resource clipboard"
+	"See resource clipboard in program"
 #elif L==4	// es
-	"Ver portapapeles de recursos"
+	"Ver portapapeles de recursos en programa"
 #elif L==5	// fr
-	"Afficher le presse-papiers des ressources"
+	"Voir le presse-papiers des ressources dans le programme"
 #elif L==6	// gn
-	"Ojehechakuaa recurso portapapeles rehegua"
+	"Ehecha portapapeles umi recurso o&itilde;va programa-pe"
 #elif L==7	// it
-	"Visualizza gli appunti delle risorse"
+	"Visualizza gli appunti delle risorse nel programma"
 #elif L==8	// pl
-	"Wy&sacute;wietl schowek zasob&oacute;w"
+	"Zobacz schowek zasob&oacute;w w programie"
 #elif L==9	// pt
-	"Exibir &aacute;rea de transfer&ecirc;ncia de recursos"
+	"Ver &aacute;rea de transfer&ecirc;ncia de recursos no programa"
 #elif L==10	// tr
-	"Kaynak panosunu g&ouml;r&uuml;nt&uuml;le"
+	"Programdaki kaynak panosuna bak&inodot;n"
+#endif
+	,
+	[ActRemRscCli_InPrg] =
+#if   L==1	// ca
+	"Eliminar portapapers de recursos en programa"
+#elif L==2	// de
+	"Entfernen Sie die Ressourcen-Zwischenablage im Programm"
+#elif L==3	// en
+	"Remove resource clipboard in program"
+#elif L==4	// es
+	"Eliminar portapapeles de recursos en programa"
+#elif L==5	// fr
+	"Supprimer le presse-papiers des ressources dans le programme"
+#elif L==6	// gn
+	"Embogue recurso portapapeles programa-pe"
+#elif L==7	// it
+	"Elimina gli appunti delle risorse nel programma"
+#elif L==8	// pl
+	"Usu&nacute; schowek zasob&oacute;w w programie"
+#elif L==9	// pt
+	"Remover &aacute;rea de transfer&ecirc;ncia de recursos no programa"
+#elif L==10	// tr
+	"Programdaki kaynak panosunu kald&inodot;r"
 #endif
 	,
 	[ActFrmSeePrgRsc] =

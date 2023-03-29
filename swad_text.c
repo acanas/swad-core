@@ -36384,7 +36384,7 @@ const char *Txt_Reset_survey =
 	"Reset survey";			// Çeviri lazim!
 #endif
 
-const char *Txt_Resource_clipboard =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Resource_clipboard =
 #if   L==1	// ca
 	"Portapapers de recursos";
 #elif L==2	// de
@@ -36405,6 +36405,29 @@ const char *Txt_Resource_clipboard =	// Warning: it is very important to include
 	"&Aacute;rea de transfer&ecirc;ncia de recursos";
 #elif L==10	// tr
 	"Kaynak panosu";
+#endif
+
+const char *Txt_Resource_clipboard_removed =
+#if   L==1	// ca
+	"Portapapers de recursos eliminat.";
+#elif L==2	// de
+	"Ressourcen-Zwischenablage entfernt.";
+#elif L==3	// en
+	"Resource clipboard removed.";
+#elif L==4	// es
+	"Portapapeles de recursos eliminado.";
+#elif L==5	// fr
+	"Presse-papiers de ressources supprim&eacute;.";
+#elif L==6	// gn
+	"Recurso portapapeles ojeipe'a.";
+#elif L==7	// it
+	"Appunti delle risorse rimossi.";
+#elif L==8	// pl
+	"Usuni&eogon;to schowek zasob&oacute;w.";
+#elif L==9	// pt
+	"&Aacute;rea de transfer&ecirc;ncia de recursos removida.";
+#elif L==10	// tr
+	"Kaynak panosu kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_Resource_X_removed =	// Warning: it is very important to include %s in the following sentences

@@ -248,6 +248,14 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
 				  "trash.svg",Ico_RED);
   }
 
+void Ico_PutContextualIconToReset (Act_Action_t NextAction,const char *Anchor,
+                                   void (*FuncPars) (void *Args),void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncPars,Args,
+				  "recycle.svg",Ico_RED);
+  }
+
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 				  void (*FuncPars) (void *Args),void *Args)
   {

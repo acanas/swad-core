@@ -91,6 +91,7 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
                                       const struct Prg_ResourceHierarchy *Rsc2);
 
 static void PrgRsc_ShowClipboard (void);
+static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item);
 
 /*****************************************************************************/
@@ -835,13 +836,29 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
   }
 
 /*****************************************************************************/
-/***************** Show clipboard to change resource link ********************/
+/******************** Show clipboard on top of program ***********************/
 /*****************************************************************************/
 
 void PrgRsc_ViewResourceClipboard (void)
   {
    /***** View resource clipboard *****/
    PrgRsc_ShowClipboard ();
+
+   /***** Edit course program *****/
+   Prg_EditCourseProgram ();
+  }
+
+/*****************************************************************************/
+/******************* Remove clipboard and show program ***********************/
+/*****************************************************************************/
+
+void PrgRsc_RemoveResourceClipboard (void)
+  {
+   extern const char *Txt_Resource_clipboard_removed;
+
+   /***** Remove resource clipboard *****/
+   Rsc_DB_RemoveClipboard ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Resource_clipboard_removed);
 
    /***** Edit course program *****/
    Prg_EditCourseProgram ();
@@ -886,8 +903,7 @@ static void PrgRsc_ShowClipboard (void)
    struct Rsc_Link Link;
 
    Box_BoxBegin (NULL,Txt_Resource_clipboard,
-		 // PrgRsc_PutIconsClipboard,NULL, // TODO: Icon to remove!!!!!!!!!!!!!
-                 NULL,NULL,
+		 PrgRsc_PutIconsClipboard,NULL,
 		 Hlp_COURSE_Program,Box_CLOSABLE);
 
       /***** Begin list *****/
@@ -913,6 +929,18 @@ static void PrgRsc_ShowClipboard (void)
       HTM_UL_End ();
 
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/****** Put contextual icons when showing resource clipboard in program ******/
+/*****************************************************************************/
+
+static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to remove resource clipboard in program *****/
+   if (Prg_CheckIfICanEditProgram ())
+      Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
+				     NULL,NULL);
   }
 
 /*****************************************************************************/
