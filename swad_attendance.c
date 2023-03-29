@@ -2777,15 +2777,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 
       /***** Put button to refresh *****/
       if (NormalView)
-	{
-	 HTM_DIV_Begin ("class=\"UPD\"");
-	    HTM_BUTTON_Submit_Begin (Txt_Update_attendance,
-				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
-				     The_GetSuffix ());
-	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_attendance);
-	    HTM_BUTTON_End ();
-	 HTM_DIV_End ();
-	}
+	 Lay_WriteLinkToUpdate (Txt_Update_attendance);
 
       /***** End form *****/
       if (NormalView)

@@ -403,15 +403,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
       Grp_FreeListGrpTypesAndGrps ();
 
       /***** Submit button *****/
-      HTM_DIV_Begin ("class=\"UPD\"");
-	 HTM_BUTTON_Submit_Begin (Txt_Update_users,
-				  "class=\"BT_LINK FORM_IN_%s BOLD\"%s",
-				  The_GetSuffix (),
-				  Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
-								   "");
-	    Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_users);
-	 HTM_BUTTON_End ();
-      HTM_DIV_End ();
+      Lay_WriteLinkToUpdate (Txt_Update_users);
 
    /***** End form *****/
    Frm_EndForm ();

@@ -1512,13 +1512,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	    Msg_ShowFormToFilterMsgs (Messages);
 
 	    /***** Put button to refresh *****/
-	    HTM_DIV_Begin ("class=\"UPD\"");
-	       HTM_BUTTON_Submit_Begin (Txt_Update_messages,
-					  "class=\"BT_LINK FORM_IN_%s BOLD\"",
-					  The_GetSuffix ());
-		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_messages);
-	       HTM_BUTTON_End ();
-	    HTM_DIV_End ();
+	    Lay_WriteLinkToUpdate (Txt_Update_messages);
 
 	 Frm_EndForm ();
 

@@ -634,13 +634,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	    HTM_TABLE_End ();
 
 	    /***** Put link to refresh *****/
-	    HTM_DIV_Begin ("class=\"UPD\"");
-	       HTM_BUTTON_Submit_Begin (Txt_Update_results,
-					"class=\"BT_LINK FORM_IN_%s BOLD\"",
-					The_GetSuffix ());
-		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_results);
-	       HTM_BUTTON_End ();
-	    HTM_DIV_End ();
+	    Lay_WriteLinkToUpdate (Txt_Update_results);
 
       /***** End form *****/
       Frm_EndForm ();

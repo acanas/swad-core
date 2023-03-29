@@ -779,11 +779,11 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
    Frm_BeginForm (ActCalFig);
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
 
-      /***** Put button to refresh *****/
+      /***** Put icon to refresh *****/
       HTM_BUTTON_Submit_Begin (Txt_Calculate,
 			       "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 			       The_GetSuffix ());
-	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate);
+	 Ico_PutIconTextUpdate (Txt_Calculate);
       HTM_BUTTON_End ();
 
    Frm_EndForm ();

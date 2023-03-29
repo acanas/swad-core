@@ -256,6 +256,14 @@ void Ico_PutContextualIconToReset (Act_Action_t NextAction,const char *Anchor,
 				  "recycle.svg",Ico_RED);
   }
 
+void Ico_PutContextualIconToUpdate (Act_Action_t NextAction,const char *Anchor,
+                                    void (*FuncPars) (void *Args),void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
+                                  FuncPars,Args,
+				  "recycle.svg",Ico_BLACK);
+  }
+
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 				  void (*FuncPars) (void *Args),void *Args)
   {
@@ -424,6 +432,15 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
 		       "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
 		       Ico_GetPreffix (Color),The_GetSuffix ());
+  }
+
+/*****************************************************************************/
+/******************** Show an icon and a text to update **********************/
+/*****************************************************************************/
+
+void Ico_PutIconTextUpdate (const char *Text)
+  {
+   Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Text);
   }
 
 /*****************************************************************************/

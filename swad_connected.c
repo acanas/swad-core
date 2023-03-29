@@ -135,9 +135,8 @@ void Con_ShowConnectedUsrs (void)
 
 static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (ActLstCon,NULL,
-                                  Con_PutParScope,NULL,
-				  "recycle.svg",Ico_BLACK);
+   Ico_PutContextualIconToUpdate (ActLstCon,NULL,
+                                  Con_PutParScope,NULL);
   }
 
 static void Con_PutParScope (__attribute__((unused)) void *Args)

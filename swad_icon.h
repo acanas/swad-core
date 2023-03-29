@@ -70,6 +70,8 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToReset (Act_Action_t NextAction,const char *Anchor,
                                    void (*FuncPars) (void *Args),void *Args);
+void Ico_PutContextualIconToUpdate (Act_Action_t NextAction,const char *Anchor,
+                                    void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 				  void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
@@ -108,6 +110,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 void Ico_PutDivIcon (const char *DivClass,
                      const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction);
+void Ico_PutIconTextUpdate (const char *Text);
 void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text);
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title);

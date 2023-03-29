@@ -80,6 +80,7 @@ void Lay_HelpRichEditor (void);
 void Lay_BeginHTMLFile (FILE *File,const char *Title);
 
 void Lay_WriteIndex (unsigned Index,const char *Class);
+void Lay_WriteLinkToUpdate (const char *Txt);
 
 //-------------------------------- Figures ------------------------------------
 void Lay_GetAndShowNumUsrsPerSideColumns (void);

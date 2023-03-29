@@ -493,13 +493,12 @@ void TmlPub_PutLinkToViewOldPubs (void)
    HTM_DIV_Begin ("id=\"view_old_pubs_container\""
 	          " class=\"Tml_WIDTH Tml_SEP BG_HIGHLIGHT\"");
 
-
       /***** Put button to refresh *****/
       HTM_BUTTON_Begin (Txt_See_more,
 			"class=\"BT_LINK FORM_IN_%s BOLD\""
 			" onclick=\"refreshOldTimeline();return false;\"",
 			The_GetSuffix ());
-	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_See_more);
+	 Ico_PutIconTextUpdate (Txt_See_more);
       HTM_BUTTON_End ();
 
    /***** End container *****/

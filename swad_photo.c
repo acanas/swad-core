@@ -1997,7 +1997,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    HTM_BUTTON_Submit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 				     "class=\"BT_LINK FORM_IN_%s BOLD\"",
 				     The_GetSuffix ());
-	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate_average_photo_of_THE_DEGREE_X);
+	       Ico_PutIconTextUpdate (Txt_Calculate_average_photo_of_THE_DEGREE_X);
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */

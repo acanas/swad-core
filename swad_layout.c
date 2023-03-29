@@ -1699,6 +1699,23 @@ void Lay_WriteIndex (unsigned Index,const char *Class)
   }
 
 /*****************************************************************************/
+/*************************** Write a link to update **************************/
+/*****************************************************************************/
+
+void Lay_WriteLinkToUpdate (const char *Txt)
+  {
+   HTM_DIV_Begin ("class=\"UPD\"");
+      HTM_BUTTON_Submit_Begin (Txt,
+			       "class=\"BT_LINK FORM_IN_%s BOLD\"%s",
+			       The_GetSuffix (),
+			       Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
+								"");
+	 Ico_PutIconTextUpdate (Txt);
+      HTM_BUTTON_End ();
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
 /***** Get and show number of users who have chosen a layout of columns ******/
 /*****************************************************************************/
 
