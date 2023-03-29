@@ -55,6 +55,22 @@ void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
   }
 
 /*****************************************************************************/
+/******************** Get number of resources in clipboard *******************/
+/*****************************************************************************/
+
+unsigned Rsc_DB_GetNumResourcesInClipboard (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get resources",
+		  "SELECT COUNT(*)"
+		   " FROM rsc_clipboards"
+		  " WHERE UsrCod=%ld"
+		    " AND CrsCod=%ld",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /****************** Get all resources from resource clipboard ****************/
 /*****************************************************************************/
 

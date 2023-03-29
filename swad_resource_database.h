@@ -34,6 +34,8 @@
 /*****************************************************************************/
 
 void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod);
+
+unsigned Rsc_DB_GetNumResourcesInClipboard (void);
 unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res);
 
 void Rsc_DB_RemoveClipboard (void);

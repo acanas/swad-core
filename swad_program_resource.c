@@ -872,8 +872,9 @@ static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
   {
    /***** Put icon to remove resource clipboard in program *****/
    if (Prg_CheckIfICanEditProgram ())
-      Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
-				     NULL,NULL);
+      if (Rsc_DB_GetNumResourcesInClipboard ())	// Only if there are resources
+	 Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
+					NULL,NULL);
   }
 
 /*****************************************************************************/
