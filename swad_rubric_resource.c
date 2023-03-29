@@ -27,6 +27,7 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_parameter_code.h"
@@ -34,6 +35,14 @@
 #include "swad_rubric.h"
 #include "swad_rubric_database.h"
 #include "swad_rubric_resource.h"
+
+/*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void RubRsc_ShowClipboard (void);
+
+static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /**************************** Get link to rubric *****************************/
@@ -127,4 +136,61 @@ void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize)
    else
       /***** Generic title for all rubrics *****/
       Str_Copy (Title,Txt_Rubrics,TitleSize);
+  }
+
+/*****************************************************************************/
+/******************** Show clipboard on top of rubrics ***********************/
+/*****************************************************************************/
+
+void RubRsc_ViewResourceClipboard (void)
+  {
+   /***** View resource clipboard *****/
+   RubRsc_ShowClipboard ();
+
+   /***** Show all rubrics *****/
+   Rub_SeeAllRubrics ();
+  }
+
+/*****************************************************************************/
+/************************* Show resources clipboard **************************/
+/*****************************************************************************/
+
+static void RubRsc_ShowClipboard (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Rubrics;
+   extern const char *Txt_Resource_clipboard;
+
+   Box_BoxBegin (NULL,Txt_Resource_clipboard,
+		 RubRsc_PutIconsClipboard,NULL,
+		 Hlp_ASSESSMENT_Rubrics,Box_CLOSABLE);
+      Rsc_ShowClipboard ();
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/****** Put contextual icons when showing resource clipboard in rubrics ******/
+/*****************************************************************************/
+
+static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to remove resource clipboard in rubrics *****/
+   if (Rub_CheckIfICanEditRubrics ())
+      Ico_PutContextualIconToRemove (ActRemRscCli_InRub,NULL,
+				     NULL,NULL);
+  }
+
+/*****************************************************************************/
+/******************* Remove clipboard and show program ***********************/
+/*****************************************************************************/
+
+void RubRsc_RemoveResourceClipboard (void)
+  {
+   extern const char *Txt_Resource_clipboard_removed;
+
+   /***** Remove resource clipboard *****/
+   Rsc_DB_RemoveClipboard ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Resource_clipboard_removed);
+
+   /***** View resource clipboard again *****/
+   RubRsc_ViewResourceClipboard ();
   }

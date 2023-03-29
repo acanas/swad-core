@@ -38,4 +38,7 @@ void RubRsc_WriteResourceRubric (long RubCod,bool PutFormToGo,
                                  const char *Icon,const char *IconTitle);
 void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize);
 
+void RubRsc_ViewResourceClipboard (void);
+void RubRsc_RemoveResourceClipboard (void);
+
 #endif

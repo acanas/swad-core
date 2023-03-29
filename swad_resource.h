@@ -72,6 +72,7 @@ struct Rsc_Link
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Rsc_ShowClipboard (void);
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                             bool SubmitOnClick,bool Checked);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,

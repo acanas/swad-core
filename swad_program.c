@@ -416,7 +416,7 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
       /***** Put icon to create a new program item *****/
       Prg_PutIconToCreateNewItem ();
 
-      /***** Put icon to vew resource clipboard *****/
+      /***** Put icon to view resource clipboard *****/
       Prg_PutIconToViewResourceClipboard ();
      }
 
@@ -457,7 +457,7 @@ static void Prg_PutIconToCreateNewItem (void)
   }
 
 /*****************************************************************************/
-/****************** Put icon to create a new program item ********************/
+/******************* Put icon to view resource clipboard *********************/
 /*****************************************************************************/
 
 static void Prg_PutIconToViewResourceClipboard (void)

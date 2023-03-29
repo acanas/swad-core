@@ -1850,8 +1850,8 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_LNK_PINK		{color:#4d88a1; font-size:13pt;}
 .PRG_LNK_DARK		{color:#afc4cc; font-size:13pt;}
 
-/************************* Program resource clipboard ************************/
-.PRG_CLIPBOARD
+/***************************** Resource clipboard ****************************/
+.SRC_CLIPBOARD
 	{
 	box-sizing:border-box;
 	list-style-type:none;

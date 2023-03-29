@@ -849,6 +849,34 @@ void PrgRsc_ViewResourceClipboard (void)
   }
 
 /*****************************************************************************/
+/************************* Show resources clipboard **************************/
+/*****************************************************************************/
+
+static void PrgRsc_ShowClipboard (void)
+  {
+   extern const char *Hlp_COURSE_Program;
+   extern const char *Txt_Resource_clipboard;
+
+   Box_BoxBegin (NULL,Txt_Resource_clipboard,
+		 PrgRsc_PutIconsClipboard,NULL,
+		 Hlp_COURSE_Program,Box_CLOSABLE);
+      Rsc_ShowClipboard ();
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/****** Put contextual icons when showing resource clipboard in program ******/
+/*****************************************************************************/
+
+static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to remove resource clipboard in program *****/
+   if (Prg_CheckIfICanEditProgram ())
+      Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
+				     NULL,NULL);
+  }
+
+/*****************************************************************************/
 /******************* Remove clipboard and show program ***********************/
 /*****************************************************************************/
 
@@ -860,8 +888,8 @@ void PrgRsc_RemoveResourceClipboard (void)
    Rsc_DB_RemoveClipboard ();
    Ale_ShowAlert (Ale_SUCCESS,Txt_Resource_clipboard_removed);
 
-   /***** Edit course program *****/
-   Prg_EditCourseProgram ();
+   /***** View resource clipboard again *****/
+   PrgRsc_ViewResourceClipboard ();
   }
 
 /*****************************************************************************/
@@ -885,62 +913,6 @@ void PrgRsc_EditProgramWithClipboard (void)
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/************************* Show resources clipboard **************************/
-/*****************************************************************************/
-
-static void PrgRsc_ShowClipboard (void)
-  {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_Resource_clipboard;
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-   MYSQL_RES *mysql_res;
-   unsigned NumLink;
-   unsigned NumLinks;
-   struct Rsc_Link Link;
-
-   Box_BoxBegin (NULL,Txt_Resource_clipboard,
-		 PrgRsc_PutIconsClipboard,NULL,
-		 Hlp_COURSE_Program,Box_CLOSABLE);
-
-      /***** Begin list *****/
-      HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
-
-	 /***** Get links in clipboard from database and write them *****/
-	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
-	 for (NumLink  = 1;
-	      NumLink <= NumLinks;
-	      NumLink++)
-	   {
-	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
-	       Rsc_WriteLinkName (&Link,
-				  true,	// Put form to go
-				  Rsc_ResourceTypesIcons[Link.Type],
-				  Txt_RESOURCE_TYPES[Link.Type]);
-	    HTM_LI_End ();
-	   }
-	 DB_FreeMySQLResult (&mysql_res);
-
-      /***** End list *****/
-      HTM_UL_End ();
-
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/****** Put contextual icons when showing resource clipboard in program ******/
-/*****************************************************************************/
-
-static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
-  {
-   /***** Put icon to remove resource clipboard in program *****/
-   if (Prg_CheckIfICanEditProgram ())
-      Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
-				     NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -968,7 +940,7 @@ static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item)
          ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 
       /***** Begin list *****/
-      HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+      HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
 	 Rsc_WriteRowClipboard (&Item->Resource.Link,

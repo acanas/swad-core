@@ -206,7 +206,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
 	       /***** Begin list *****/
-	       HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+	       HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
 
 		  /***** Row with empty link *****/
 		  Rsc_WriteRowClipboard (&EmptyLink,
@@ -1149,7 +1149,7 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
       RubCri_PutParsOneCriterion (Rubrics);
 
       /***** Begin list *****/
-      HTM_UL_Begin ("class=\"PRG_CLIPBOARD\"");
+      HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
 
 	 /***** Current link (empty or not) *****/
 	 Rsc_WriteRowClipboard (&Criterion->Link,

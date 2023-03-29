@@ -33,6 +33,7 @@
 #include "swad_attendance_resource.h"
 #include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
+#include "swad_database.h"
 #include "swad_exam_resource.h"
 #include "swad_forum_resource.h"
 #include "swad_game_resource.h"
@@ -41,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_project_resource.h"
 #include "swad_resource.h"
+#include "swad_resource_database.h"
 #include "swad_role.h"
 #include "swad_rubric_resource.h"
 #include "swad_survey_resource.h"
@@ -103,6 +105,42 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/************************* Show resources clipboard **************************/
+/*****************************************************************************/
+
+void Rsc_ShowClipboard (void)
+  {
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   struct Rsc_Link Link;
+
+   /***** Begin list *****/
+   HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
+
+      /***** Get links in clipboard from database and write them *****/
+      NumLinks = Rsc_DB_GetClipboard (&mysql_res);
+      for (NumLink  = 1;
+	   NumLink <= NumLinks;
+	   NumLink++)
+	{
+	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	 HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
+	    Rsc_WriteLinkName (&Link,
+			       true,	// Put form to go
+			       Rsc_ResourceTypesIcons[Link.Type],
+			       Txt_RESOURCE_TYPES[Link.Type]);
+	 HTM_LI_End ();
+	}
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End list *****/
+   HTM_UL_End ();
+  }
+
+/*****************************************************************************/
 /************************ Show one link from clipboard ***********************/
 /*****************************************************************************/
 
@@ -111,6 +149,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
   {
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
+   /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
 
@@ -128,6 +167,8 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 	                    Txt_RESOURCE_TYPES[Link->Type]);
 
       HTM_LABEL_End ();
+
+   /***** End list row *****/
    HTM_LI_End ();
   }
 

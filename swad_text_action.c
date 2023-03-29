@@ -14115,6 +14115,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Ba&gbreve;lant&inodot;y&inodot; puan anahtar&inodot;na kopyala"
 #endif
 	,
+	[ActSeeRscCli_InRub] =
+#if   L==1	// ca
+	"Veure portapapers de recursos en r&uacute;briques"
+#elif L==2	// de
+	"Siehe Ressourcen-Zwischenablage im Rubriken"
+#elif L==3	// en
+	"See resource clipboard in rubrics"
+#elif L==4	// es
+	"Ver portapapeles de recursos en r&uacute;bricas"
+#elif L==5	// fr
+	"Voir le presse-papiers des ressources dans les rubriques"
+#elif L==6	// gn
+	"Ehecha recurso portapapeles umi rubrica-pe"
+#elif L==7	// it
+	"Visualizza gli appunti delle risorse nelle rubriche"
+#elif L==8	// pl
+	"Zobacz schowek zasob&oacute;w w rubrykach"
+#elif L==9	// pt
+	"Ver &aacute;rea de transfer&ecirc;ncia de recursos nas rubricas"
+#elif L==10	// tr
+	"De&gbreve;erlendirme listelerinde kaynak panosuna bak&inodot;n"
+#endif
+	,
+	[ActRemRscCli_InRub] =
+#if   L==1	// ca
+	"Eliminar portapapers de recursos en r&uacute;briques"
+#elif L==2	// de
+	"Entfernen Sie die Ressourcen-Zwischenablage im Rubriken"
+#elif L==3	// en
+	"Remove resource clipboard in rubrics"
+#elif L==4	// es
+	"Eliminar portapapeles de recursos en r&uacute;bricas"
+#elif L==5	// fr
+	"Supprimer le presse-papiers des ressources dans les rubriques"
+#elif L==6	// gn
+	"Embogue recurso portapapeles umi rubrica-pe"
+#elif L==7	// it
+	"Elimina gli appunti delle risorse nelle rubriche"
+#elif L==8	// pl
+	"Usu&nacute; schowek zasob&oacute;w w rubrykach"
+#elif L==9	// pt
+	"Remover &aacute;rea de transfer&ecirc;ncia de recursos nas rubricas"
+#elif L==10	// tr
+	"De&gbreve;erlendirme listelerinde kaynak panosunu kald&inodot;r"
+#endif
+	,
 	[ActNewRubCri] =
 #if   L==1	// ca
 	"Crear nou criteri de r&uacute;brica"
