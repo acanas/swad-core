@@ -56,6 +56,12 @@ typedef enum
   } Exa_Order_t;
 #define Exa_ORDER_DEFAULT Exa_ORDER_BY_START_DATE
 
+typedef enum
+  {
+   Exa_DONT_CHECK_EXA_COD,
+   Exa_CHECK_EXA_COD,
+  } Exa_CheckExaCod_t;
+
 struct Exa_ExamSelected
   {
    long ExaCod;		// Exam code

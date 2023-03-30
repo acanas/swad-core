@@ -195,7 +195,7 @@ void ExaRes_ShowMyResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -243,7 +243,7 @@ void ExaRes_ShowMyResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
@@ -389,7 +389,7 @@ void ExaRes_ShowAllResultsInExa (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
@@ -457,7 +457,7 @@ void ExaRes_ShowAllResultsInSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/

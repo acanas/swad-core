@@ -55,7 +55,7 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);
 
    /***** Get assignment title *****/
    AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);

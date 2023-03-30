@@ -45,7 +45,7 @@ void AttRsc_GetLinkToEvent (void)
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    /***** Get attendance event code *****/
-   AttCod = ParCod_GetAndCheckPar (ParCod_Att);
+   AttCod = ParCod_GetPar (ParCod_Att);
 
    /***** Get attendance event title *****/
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);

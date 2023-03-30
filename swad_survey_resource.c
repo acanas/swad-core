@@ -49,7 +49,7 @@ void SvyRsc_GetLinkToSurvey (void)
    Svy_ResetSurveys (&Surveys);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
+   Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy);
 
    /***** Get survey title *****/
    SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);

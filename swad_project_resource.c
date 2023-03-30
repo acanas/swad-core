@@ -51,7 +51,7 @@ void PrjRsc_GetLinkToProject (void)
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
+   Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj);
 
    /***** Get project title *****/
    PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);

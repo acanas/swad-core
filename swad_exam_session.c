@@ -939,7 +939,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
                              struct ExaSes_Session *Session)
   {
    /***** Get parameters *****/
-   Exa_GetPars (Exams,true);
+   Exa_GetPars (Exams,Exa_CHECK_EXA_COD);
    Grp_GetParWhichGroups ();
    Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
@@ -1121,7 +1121,7 @@ void ExaSes_ReqCreatOrEditSes (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParWhichGroups ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);
@@ -1167,7 +1167,7 @@ void ExaSes_ReceiveFormSession (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get main parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Grp_GetParWhichGroups ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);

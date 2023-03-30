@@ -52,7 +52,7 @@ void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);
 void Exa_PutPars (void *Exams);
-void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod);
+void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod);
 
 void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder);
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams);

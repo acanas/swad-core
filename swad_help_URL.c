@@ -1032,6 +1032,29 @@ const char *Hlp_COURSE_Program_edit_item =
 	"COURSE.Program.en#edit-item";
 #endif
 
+const char *Hlp_COURSE_Program_resource_clipboard =
+#if   L==1
+	"COURSE.Program.en#resource-clipboard";
+#elif L==2
+	"COURSE.Program.en#resource-clipboard";
+#elif L==3
+	"COURSE.Program.en#resource-clipboard";
+#elif L==4
+	"COURSE.Program.es#portapapeles-de-recursos";
+#elif L==5
+	"COURSE.Program.en#resource-clipboard";
+#elif L==6
+	"COURSE.Program.es#portapapeles-de-recursos";
+#elif L==7
+	"COURSE.Program.en#resource-clipboard";
+#elif L==8
+	"COURSE.Program.en#resource-clipboard";
+#elif L==9
+	"COURSE.Program.en#resource-clipboard";
+#elif L==10	// tr
+	"COURSE.Program.en#resource-clipboard";
+#endif
+
 const char *Hlp_COURSE_Guide =
 #if   L==1
 	"COURSE.Guide.es";
@@ -2114,6 +2137,29 @@ const char *Hlp_ASSESSMENT_Rubrics_criteria =
 	"ASSESSMENT.Rubrics.en#criteria";
 #elif L==10	// tr
 	"ASSESSMENT.Rubrics.en#criteria";
+#endif
+
+const char *Hlp_ASSESSMENT_Rubrics_resource_clipboard =
+#if   L==1
+	"ASSESSMENT.Rubrics.es#resource-clipboard";
+#elif L==2
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==3
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==4
+	"ASSESSMENT.Rubrics.es#portapapeles-de-recursos";
+#elif L==5
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==6
+	"ASSESSMENT.Rubrics.es#portapapeles-de-recursos";
+#elif L==7
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==8
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==9
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
+#elif L==10	// tr
+	"ASSESSMENT.Rubrics.en#resource-clipboard";
 #endif
 
 /***** FILES tab *****/

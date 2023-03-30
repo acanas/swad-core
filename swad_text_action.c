@@ -11817,25 +11817,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeExa] =
 #if   L==1	// ca
-	"See exams"		// Necessita traducció
+	"Veure examen"
 #elif L==2	// de
-	"See exams"		// Need Übersetzung
+	"Siehe Pr&uuml;fung"
 #elif L==3	// en
-	"See exams"
+	"See exam"
 #elif L==4	// es
-	"Ver ex&aacute;menes"
+	"Ver examen"
 #elif L==5	// fr
-	"See exams"		// Besoin de traduction
+	"Voir examen"
 #elif L==6	// gn
-	"Ver ex&aacute;menes"	// Okoteve traducción
+	"Ehecha examen"
 #elif L==7	// it
-	"See exams"		// Bisogno di traduzione
+	"Vedi esame"
 #elif L==8	// pl
-	"See exams"		// Potrzebujesz tlumaczenie
+	"Zobacz egzamin"
 #elif L==9	// pt
-	"See exams"		// Precisa de tradução
+	"Ver exame"
 #elif L==10	// tr
-	"See exams"		// Çeviri lazim!
+	"S&inodot;nava bak&inodot;n"
 #endif
 	,
 	[ActFrmNewExa] =

@@ -629,15 +629,26 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.86.1 (2023-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 22.86.2 (2023-03-30)"
 #define CSS_FILE		"swad22.86.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.86.2:  Mar 30, 2023  New links to manual about resource clipboard.
+					Fixed bugs in links to resources. (338655 lines)
 	Version 22.86.1:  Mar 29, 2023  Icon to remove resource clipboard only if there are resources. (338596 lines)
 	Version 22.86:    Mar 29, 2023  New actions to see and remove the resource clipboard in rubrics. (338578 lines)
 	Version 22.85.1:  Mar 29, 2023  Code refactoring in links to update sections. (338447 lines)
 	Version 22.85:    Mar 29, 2023  New action to remove the resource clipboard in program. (338449 lines)
 	Version 22.84:    Mar 29, 2023  New action to see the resource clipboard in program. (338356 lines)
+Copy the following icons to icon public directory:
+sudo cp -a icon/clipboard-user.svg /var/www/html/swad/icon/
+sudo cp -a icon/clipboard.svg /var/www/html/swad/icon/
+sudo cp -a icon/clipboard-check.svg /var/www/html/swad/icon/
+sudo cp -a icon/clipboard-question.svg /var/www/html/swad/icon/
+sudo cp -a icon/clipboard-list.svg /var/www/html/swad/icon/
+sudo cp -a icon/paste.svg /var/www/html/swad/icon/
+sudo cp -a icon/iconset/awesome/clipboard-list.svg /var/www/html/swad/icon/iconset/awesome/
+
 	Version 22.83.5:  Mar 28, 2023  Fixed bugs in rubrics and exams. (338235 lines)
 	Version 22.83.4:  Mar 28, 2023  Code refactoring in rubrics and exams. (338221 lines)
 	Version 22.83.3:  Mar 27, 2023  Changes in rubric criteria. (338218 lines)

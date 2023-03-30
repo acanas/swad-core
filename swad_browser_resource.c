@@ -56,7 +56,7 @@ void BrwRsc_GetLinkToFile (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file code *****/
-   FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
+   FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file title *****/
    switch (Gbl.Action.Act)

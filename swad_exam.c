@@ -199,7 +199,7 @@ void Exa_SeeAllExams (void)
    Exa_ResetExams (&Exams);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,false); // Don't check exam code
+   Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
 
    /***** Show all exams *****/
    Exa_ListAllExams (&Exams);
@@ -414,7 +414,7 @@ void Exa_SeeOneExam (void)
    ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
 
    /***** Get exam data *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -729,12 +729,12 @@ void Exa_PutPars (void *Exams)
 /******************* Get parameters used to edit an exam **********************/
 /*****************************************************************************/
 
-void Exa_GetPars (struct Exa_Exams *Exams,bool CheckExaCod)
+void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod)
   {
    long (*GetExaCo[2]) (ParCod_Param_t ParCode) =
      {
-      [false] = ParCod_GetPar,
-      [true ] = ParCod_GetAndCheckPar,
+      [Exa_DONT_CHECK_EXA_COD] = ParCod_GetPar,
+      [Exa_CHECK_EXA_COD     ] = ParCod_GetAndCheckPar,
      };
 
    /***** Get other parameters *****/
@@ -991,7 +991,7 @@ void Exa_AskRemExam (void)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1213,7 +1213,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exa_ResetExam (&Exams.Exam);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,true);
+   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1245,7 +1245,7 @@ void Exa_ReqCreatOrEditExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,false);	// Don't check exam code
+   Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get exam data *****/
@@ -1418,7 +1418,7 @@ void Exa_ReceiveFormExam (void)
    ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
-   Exa_GetPars (&Exams,false);	// Don't check exam code
+   Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
    ItsANewExam = (Exams.Exam.ExaCod <= 0);
 
    /***** Get all current exam data from database *****/

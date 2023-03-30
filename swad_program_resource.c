@@ -854,12 +854,12 @@ void PrgRsc_ViewResourceClipboard (void)
 
 static void PrgRsc_ShowClipboard (void)
   {
-   extern const char *Hlp_COURSE_Program;
+   extern const char *Hlp_COURSE_Program_resource_clipboard;
    extern const char *Txt_Resource_clipboard;
 
    Box_BoxBegin (NULL,Txt_Resource_clipboard,
 		 PrgRsc_PutIconsClipboard,NULL,
-		 Hlp_COURSE_Program,Box_CLOSABLE);
+		 Hlp_COURSE_Program_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();
   }
