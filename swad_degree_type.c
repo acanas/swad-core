@@ -111,7 +111,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
 		     " class=\"INPUT_%s\"",
 		     The_GetSuffix ());

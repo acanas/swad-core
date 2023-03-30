@@ -632,11 +632,11 @@ void Crs_WriteSelectorOfCourse (void)
 
       /***** Begin selector of course *****/
       if (Gbl.Hierarchy.Deg.DegCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
       else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
@@ -770,7 +770,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
                                                ActReqSch);
 
       /***** Begin selector of courses *****/
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"id=\"my_courses\" name=\"crs\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -1200,7 +1200,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
 		  ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthCrsYear\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
@@ -1344,7 +1344,7 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthCrsYear\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -2548,7 +2548,7 @@ void Crs_AskRemoveOldCrss (void)
       /***** Form to request number of months without clicks *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"Months\" class=\"INPUT_%s\"",
 			   The_GetSuffix ());
 	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;

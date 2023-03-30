@@ -1868,6 +1868,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    char StrTagTxt[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrInteger[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char *Title;
+   char *FuncOnChange;
 
    /***** Begin box *****/
    if (Question->QstCod > 0)	// The question already has assigned a code
@@ -1918,13 +1919,14 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 			/***** Write the tags already existing in a selector *****/
 			HTM_TD_Begin ("class=\"LM\"");
-			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   if (asprintf (&FuncOnChange,"changeTxtTag('%u');",IndTag) < 0)
+			      Err_NotEnoughMemoryExit ();
+			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 					     "id=\"SelTag%u\" name=\"SelTag%u\""
-					     " class=\"TAG_SEL INPUT_%s\""
-					     " onchange=\"changeTxtTag('%u')\"",
+					     " class=\"TAG_SEL INPUT_%s\"",
 					     IndTag,IndTag,
-					     The_GetSuffix (),
-					     IndTag);
+					     The_GetSuffix ());
+			   free (FuncOnChange);
 			      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
 			      mysql_data_seek (mysql_res,0);
 			      TagFound = false;

@@ -360,7 +360,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 			                    The_GetSuffix ());
 			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
-			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
 						" class=\"INPUT_%s\"",
 						The_GetSuffix ());
@@ -398,7 +398,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 			                    The_GetSuffix ());
 			      HTM_TxtF ("(%s: ",Txt_results_per_page);
-			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 						"id=\"RowsPage\" name=\"RowsPage\"%s",
 						Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
 													 " disabled=\"disabled\"");
@@ -507,7 +507,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"Role\" name=\"Role\""
 				 " class=\"STAT_SEL INPUT_%s\"",
 				 The_GetSuffix ());
@@ -568,7 +568,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		      Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
 		     Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"GroupedBy\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (ClicksGroupedBy  = Sta_CLICKS_GBL_PER_DAY;
@@ -648,7 +648,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    unsigned StatCountTypeUnsigned;
 
    /**** Count type *****/
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"CountType\" name=\"CountType\" class=\"INPUT_%s\"",
 		     The_GetSuffix ());
       for (StatCountType  = (Sta_CountType_t) 0;
@@ -683,7 +683,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
       Frm_LabelColumn ("RT","StatAct",Txt_Action);
 
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"StatAct\" name=\"StatAct\""
 			   " class=\"STAT_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -1604,7 +1604,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"ColorType\"");
 		  for (ColorType  = (Sta_ColorType_t) 0;
 		       ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);

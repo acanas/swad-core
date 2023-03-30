@@ -29,6 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_HTML.h"
 #include "swad_string.h"
 
 /*****************************************************************************/

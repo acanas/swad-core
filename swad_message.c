@@ -1816,7 +1816,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 

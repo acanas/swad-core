@@ -483,7 +483,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptIns);
 		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
@@ -810,7 +810,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	    /***** Institution *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"OthInsCod\""
 				 " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				 The_GetSuffix ());
@@ -998,7 +998,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Begin selector */
-   HTM_SELECT_Begin (SubmitOnChange,
+   HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     ParName,ParName,SelectClass);
 

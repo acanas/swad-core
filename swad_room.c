@@ -783,7 +783,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
    unsigned NumBld;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (SubmitOnChange,
+   HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "name=\"BldCod\" class=\"BLD_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 
@@ -820,7 +820,7 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
    Roo_RoomType_t Type;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (SubmitOnChange,
+   HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "name=\"Type\" class=\"ROOM_TYPE_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 

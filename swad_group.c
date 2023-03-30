@@ -1259,7 +1259,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MandatoryEnrolment\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
 		                    The_GetSuffix ());
@@ -1277,7 +1277,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
@@ -1471,7 +1471,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"GrpTypCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
 				       The_GetSuffix ());
@@ -1508,7 +1508,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"RooCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
 				       The_GetSuffix ());
@@ -2432,7 +2432,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 	       /***** Is it mandatory to register in any groups of this type? *****/
 	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MandatoryEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
@@ -2447,7 +2447,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 	       /***** Is it possible to register in multiple groups of this type? *****/
 	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
@@ -2557,7 +2557,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       /***** Group type *****/
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"GrpTypCod\""
 				    " class=\"INPUT_%s\" style=\"width:100px;\"",
 				    The_GetSuffix ());
@@ -2587,7 +2587,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       /***** Room *****/
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"RooCod\""
 				    " class=\"INPUT_%s\" style=\"width:100px;\"",
 				    The_GetSuffix ());

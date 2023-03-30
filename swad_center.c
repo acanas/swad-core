@@ -697,11 +697,11 @@ void Ctr_WriteSelectorOfCenter (void)
 
       /***** Begin selector *****/
       if (Gbl.Hierarchy.Ins.InsCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
       else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
@@ -814,7 +814,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->CtrCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"PlcCod\""
 				       " class=\"PLC_SEL INPUT_%s\"",
 				       The_GetSuffix ());
@@ -1302,7 +1302,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
       /***** Place *****/
       HTM_TD_Begin ("class=\"LM\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",

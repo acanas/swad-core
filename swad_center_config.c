@@ -561,7 +561,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 
 	    /* Put form to select institution */
 	    Frm_BeginForm (ActChgCtrInsCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"OthInsCod\" name=\"OthInsCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
@@ -663,7 +663,7 @@ static void CtrCfg_Place (bool PutForm)
 
 	    /* Put form to select place */
 	    Frm_BeginForm (ActChgCtrPlcCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"PlcCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());

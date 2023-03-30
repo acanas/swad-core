@@ -232,11 +232,11 @@ void Deg_WriteSelectorOfDegree (void)
 
       /***** Begin selector of degree *****/
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
       else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
@@ -405,7 +405,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
 		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				       The_GetSuffix ());
@@ -565,7 +565,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthDegTypCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());

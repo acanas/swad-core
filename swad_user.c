@@ -6217,7 +6217,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 

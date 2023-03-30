@@ -1047,7 +1047,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"Year\" name=\"Year\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Year  = 0;
@@ -1133,7 +1133,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"ExamHour\" name=\"ExamHour\""
 				    " class=\"INPUT_%s\"",
 				    The_GetSuffix ());
@@ -1148,7 +1148,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"ExamMinute\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Minute  = 0;
@@ -1180,7 +1180,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"DurationHour\" name=\"DurationHour\""
 				    " class=\"INPUT_%s\"",
 				    The_GetSuffix ());
@@ -1192,7 +1192,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"DurationMinute\""
 				    " class=\"INPUT_%s\"",
 				    The_GetSuffix ());

@@ -180,6 +180,7 @@ void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 
 void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
+                       const char *FuncsOnChange,
 		       const char *fmt,...);
 void HTM_SELECT_End (void);
 void HTM_OPTGROUP_Begin (const char *Label);
@@ -204,9 +205,11 @@ void HTM_BR (void);
 void HTM_TxtF (const char *fmt,...);
 void HTM_Txt (const char *Txt);
 void HTM_TxtColon (const char *Txt);
+void HTM_TxtSemicolon (const char *Txt);
 void HTM_TxtColonNBSP (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Colon (void);
+void HTM_Semicolon (void);
 void HTM_Comma (void);
 void HTM_Hyphen (void);
 void HTM_Asterisk (void);

@@ -227,7 +227,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 
 	    /* Put form to select center */
 	    Frm_BeginForm (ActChgDegCtrCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());

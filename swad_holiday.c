@@ -519,7 +519,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldPlc);
 		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
@@ -538,7 +538,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldTyp);
 		  ParCod_PutPar (ParCod_Hld,Hld->HldCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"HldTyp\" class=\"INPUT_%s\""
 				    " style=\"width:62px;\"",	// TODO: Use a CSS class
 				    The_GetSuffix ());
@@ -891,7 +891,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	    /***** Holiday place *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"-1",Hld_EditingHld->PlcCod <= 0,false,
@@ -907,7 +907,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	    /***** Holiday type *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"HldTyp\" class=\"INPUT_%s\""
 				 " style=\"width:62px;\"",	// TODO: Use a CSS class
 				 The_GetSuffix ());

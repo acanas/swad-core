@@ -1603,6 +1603,7 @@ void HTM_TEXTAREA_End (void)
 /*****************************************************************************/
 
 void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
+                       const char *FuncsOnChange,	// if not null ==> must include ending ";"
 		       const char *fmt,...)
   {
    va_list ap;
@@ -1630,8 +1631,18 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
    else
       HTM_SELECT_BeginWithoutAttr ();
 
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE || FuncsOnChange)
+     {
+      HTM_Txt (" onchange=\"");
+      // 1. List of functions
+      if (FuncsOnChange)
+         if (FuncsOnChange[0])
+            HTM_Txt (FuncsOnChange);
+      // 2. submit
+      if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
+         HTM_Txt ("this.form.submit();");
+      HTM_Txt ("return false;\"");
+     }
 
    HTM_Txt (" />");
    HTM_SELECT_NestingLevel++;
@@ -1880,6 +1891,12 @@ void HTM_TxtColon (const char *Txt)
    HTM_Colon ();
   }
 
+void HTM_TxtSemicolon (const char *Txt)
+  {
+   HTM_Txt (Txt);
+   HTM_Semicolon ();
+  }
+
 void HTM_TxtColonNBSP (const char *Txt)
   {
    HTM_Txt (Txt);
@@ -1895,6 +1912,11 @@ void HTM_NBSP (void)
 void HTM_Colon (void)
   {
    HTM_Txt (":");
+  }
+
+void HTM_Semicolon (void)
+  {
+   HTM_Txt (";");
   }
 
 void HTM_Comma (void)

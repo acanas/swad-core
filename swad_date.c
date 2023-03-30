@@ -740,181 +740,96 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       [Dat_HMS_TO_235959 ] = "setHMSTo235959('%s');",	// Set HH:MM:SS form selectors to 23:59:59
      };
    char *IdTimeUTC;
+   char *FuncsOnChange;
+   char *FuncOnChange;
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("DATE_RANGE");
       HTM_TR_Begin (NULL);
 
+	 if (asprintf (&FuncsOnChange,"adjustDateForm('%s');"
+				      "setUTCFromLocalDateTimeForm('%s');",
+		       Id,Id) < 0)
+	    Err_NotEnoughMemoryExit ();
+
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"RM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sYear\" name=\"%sYear\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\""
-				    "adjustDateForm('%s');"
-				    "setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id,Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sYear\" name=\"%sYear\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\""
-				    "adjustDateForm('%s');"
-				    "setUTCFromLocalDateTimeForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id,Id);
-		  break;
-	      }
-
-	    for (Year  = FirstYear;
-		 Year <= LastYear;
-		 Year++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Year,false,false,
-			   "%u",Year);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncsOnChange,
+			      "id=\"%sYear\" name=\"%sYear\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Year  = FirstYear;
+		    Year <= LastYear;
+		    Year++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,false,false,
+			      "%u",Year);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
 	 /***** Month *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMonth\" name=\"%sMonth\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\""
-				    "adjustDateForm('%s');"
-				    "setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id,Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMonth\" name=\"%sMonth\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\""
-				    "adjustDateForm('%s');"
-				    "setUTCFromLocalDateTimeForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id,Id);
-	          break;
-	      }
-
-	    for (Month = 1;
-		 Month <= 12;
-		 Month++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Month,false,false,
-			   "%s",Txt_MONTHS_SMALL[Month - 1]);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncsOnChange,
+			      "id=\"%sMonth\" name=\"%sMonth\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Month = 1;
+		    Month <= 12;
+		    Month++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,false,false,
+			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
+	 free (FuncsOnChange);
+
+	 if (asprintf (&FuncOnChange,"setUTCFromLocalDateTimeForm('%s');",
+		       Id) < 0)
+	    Err_NotEnoughMemoryExit ();
+
 	 /***** Day *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sDay\" name=\"%sDay\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sDay\" name=\"%sDay\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-		  break;
-	      }
-
-	    for (Day  = 1;
-		 Day <= 31;
-		 Day++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Day,false,false,
-			   "%u",Day);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			      "id=\"%sDay\" name=\"%sDay\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Day  = 1;
+		    Day <= 31;
+		    Day++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,false,false,
+			      "%u",Day);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
 	 /***** Hour *****/
 	 HTM_TD_Begin ("class=\"RM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sHour\" name=\"%sHour\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sHour\" name=\"%sHour\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-	          break;
-	      }
-
-	    for (Hour  = 0;
-		 Hour <= 23;
-		 Hour++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Hour,false,false,
-			   "%02u h",Hour);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			      "id=\"%sHour\" name=\"%sHour\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Hour  = 0;
+		    Hour <= 23;
+		    Hour++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Hour,false,false,
+			      "%02u h",Hour);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
 	 /***** Minute *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMinute\" name=\"%sMinute\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMinute\" name=\"%sMinute\""
-				    " class=\"INPUT_%s\""
-				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Dat_ParName[StartEndTime],
-				    The_GetSuffix (),
-				    Id);
-	          break;
-	      }
-
-	    for (Minute = 0;
-		 Minute < 60;
-		 Minute += MinutesIInterval[FormSeconds])
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
-			   "%02u &prime;",Minute);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			      "id=\"%sMinute\" name=\"%sMinute\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Minute = 0;
+		    Minute < 60;
+		    Minute += MinutesIInterval[FormSeconds])
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
+			      "%02u &prime;",Minute);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
@@ -922,37 +837,21 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	 if (FormSeconds == Dat_FORM_SECONDS_ON)
 	   {
 	    HTM_TD_Begin ("class=\"LM\"");
-	       switch (SubmitOnChange)
-		 {
-		  case HTM_DONT_SUBMIT_ON_CHANGE:
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"%sSecond\" name=\"%sSecond\""
-				       " class=\"INPUT_%s\""
-				       " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-				       Id,Dat_ParName[StartEndTime],
-				       The_GetSuffix (),
-				       Id);
-		     break;
-		  case HTM_SUBMIT_ON_CHANGE:
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"%sSecond\" name=\"%sSecond\""
-				       " class=\"INPUT_%s\""
-				       " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-				       "this.form.submit();return false;\"",
-				       Id,Dat_ParName[StartEndTime],
-				       The_GetSuffix (),
-				       Id);
-		     break;
-		 }
-
-	       for (Second  = 0;
-		    Second <= 59;
-		    Second++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
-			      "%02u &Prime;",Second);
+	       HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+				 "id=\"%sSecond\" name=\"%sSecond\""
+				 " class=\"INPUT_%s\"",
+				 Id,Dat_ParName[StartEndTime],
+				 The_GetSuffix ());
+		  for (Second  = 0;
+		       Second <= 59;
+		       Second++)
+		     HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
+				 "%02u &Prime;",Second);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 	   }
+
+	 free (FuncOnChange);
 
       /***** End table *****/
       HTM_TR_End ();
@@ -1087,6 +986,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
                         HTM_SubmitOnChange_t SubmitOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
+   char *FuncOnChange;
    unsigned Year;
    unsigned Month;
    unsigned Day;
@@ -1096,104 +996,71 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    HTM_TABLE_Begin (NULL);
       HTM_TR_Begin (NULL);
 
+	 if (asprintf (&FuncOnChange,"adjustDateForm('%s');",Id) < 0)
+	    Err_NotEnoughMemoryExit ();
+
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-	       	  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sYear\" name=\"%sYear\""
-				    " class=\"INPUT_%s\""
-				    "%s"
-				    " onchange=\"adjustDateForm('%s');\"",
-				    Id,Id,
-				    The_GetSuffix (),
-				    Disabled ? " disabled=\"disabled\"" : "",
-				    Id);
-	          break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sYear\" name=\"%sYear\""
-				    " class=\"INPUT_%s\""
-				    "%s"
-				    " onchange=\"adjustDateForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Id,
-				    The_GetSuffix (),
-				    Disabled ? " disabled=\"disabled\"" : "",
-				    Id);
-	          break;
-	      }
-	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
-			"-");
-	    for (Year  = FirstYear;
-		 Year <= LastYear;
-		 Year++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			   Year == DateSelected->Year,false,
-			   "%u",Year);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			      "id=\"%sYear\" name=\"%sYear\""
+			      " class=\"INPUT_%s\"%s",
+			      Id,Id,
+			      The_GetSuffix (),
+			      Disabled ? " disabled=\"disabled\"" :
+				         "");
+	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			   "-");
+	       for (Year  = FirstYear;
+		    Year <= LastYear;
+		    Year++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+			      Year == DateSelected->Year,false,
+			      "%u",Year);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
 	 /***** Month *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    switch (SubmitOnChange)
-	      {
-	       case HTM_DONT_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMonth\" name=\"%sMonth\""
-				    " class=\"INPUT_%s\""
-				    "%s"
-				    " onchange=\"adjustDateForm('%s');\"",
-				    Id,Id,
-				    The_GetSuffix (),
-				    Disabled ? " disabled=\"disabled\"" : "",
-				    Id);
-		  break;
-	       case HTM_SUBMIT_ON_CHANGE:
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"%sMonth\" name=\"%sMonth\""
-				    " class=\"INPUT_%s\""
-				    "%s"
-				    " onchange=\"adjustDateForm('%s');"
-				    "this.form.submit();return false;\"",
-				    Id,Id,
-				    The_GetSuffix (),
-				    Disabled ? " disabled=\"disabled\"" : "",
-				    Id);
-	          break;
-	      }
-	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
-			"-");
-	    for (Month  =  1;
-		 Month <= 12;
-		 Month++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-			   Month == DateSelected->Month,false,
-			   "%s",Txt_MONTHS_SMALL[Month - 1]);
+	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			      "id=\"%sMonth\" name=\"%sMonth\""
+			      " class=\"INPUT_%s\"%s",
+			      Id,Id,
+			      The_GetSuffix (),
+			      Disabled ? " disabled=\"disabled\"" :
+				         "");
+	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			   "-");
+	       for (Month  =  1;
+		    Month <= 12;
+		    Month++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
+			      Month == DateSelected->Month,false,
+			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
+	 free (FuncOnChange);
+
 	 /***** Day *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,NULL,
 			      "id=\"%sDay\" name=\"%sDay\""
-	                      " class=\"INPUT_%s\""
-	                      "%s",
+	                      " class=\"INPUT_%s\"%s",
 			      Id,Id,
 			      The_GetSuffix (),
-			      Disabled ? " disabled=\"disabled\"" : "");
-	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
-			   "-");
-	       NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-								   ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-												 Dat_NumDaysMonth[DateSelected->Month]);
-	       for (Day  = 1;
-		    Day <= NumDaysSelectedMonth;
-		    Day++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-			      Day == DateSelected->Day,false,
-			      "%u",Day);
+			      Disabled ? " disabled=\"disabled\"" :
+				         "");
+		  HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			      "-");
+		  NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+								      ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+												    Dat_NumDaysMonth[DateSelected->Month]);
+		  for (Day  = 1;
+		       Day <= NumDaysSelectedMonth;
+		       Day++)
+		     HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+				 Day == DateSelected->Day,false,
+				 "%u",Day);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 

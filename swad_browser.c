@@ -7688,7 +7688,7 @@ void Brw_ShowFileMetadata (void)
 			     The_GetSuffix ());
 		  if (ICanChangePublic)	// I can change file to public
 		    {
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
 			HTM_OPTION (HTM_Type_STRING,"N",
 				    !FileMetadata.IsPublic,false,
@@ -7718,7 +7718,7 @@ void Brw_ShowFileMetadata (void)
 			     The_GetSuffix ());
 		  if (ICanEdit)	// I can edit file properties
 		    {
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "id=\"License\" name=\"License\" class=\"LICENSE\"");
 			for (License  = (Brw_License_t) 0;
 			     License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
@@ -9747,7 +9747,7 @@ void Brw_AskRemoveOldFiles (void)
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;

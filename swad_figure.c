@@ -115,7 +115,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	 /***** Type of statistic *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Statistic);
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"FigureType\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (FigType  = (Fig_FigureType_t) 0;

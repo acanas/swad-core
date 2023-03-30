@@ -1060,7 +1060,7 @@ void Att_ReqCreatOrEditEvent (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"ComTchVisible\" name=\"ComTchVisible\""
 			      " class=\"INPUT_%s\"",
 			      The_GetSuffix ());

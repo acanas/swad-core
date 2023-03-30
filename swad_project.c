@@ -1841,13 +1841,16 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    Prj_ReviewStatus_t ReviewStatus;
    unsigned ReviewStatusUnsigned;
+   char *FuncOnChange;
 
    /* Selector for review status */
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+   if (asprintf (&FuncOnChange,"unhideElement('prj_rev_%ld');",Projects->Prj.PrjCod) < 0)
+      Err_NotEnoughMemoryExit ();
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
-		     " class=\"INPUT_%s\""
-		     " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
-		     The_GetSuffix (),Projects->Prj.PrjCod);
+		     " class=\"INPUT_%s\"",
+		     The_GetSuffix ());
+   free (FuncOnChange);
       for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	   ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	   ReviewStatus++)
@@ -3828,7 +3831,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"Assigned\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"Y",Projects->Prj.Assigned == Prj_ASSIGNED,false,
@@ -3864,7 +3867,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"Proposal\""
 				 " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 				 The_GetSuffix ());

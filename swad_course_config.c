@@ -232,7 +232,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 
 	    /* Put form to select degree */
 	    Frm_BeginForm (ActChgCrsDegCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"OthDegCod\" name=\"OthDegCod\""
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
@@ -318,7 +318,7 @@ static void CrsCfg_Year (bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgCrsYeaCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"OthCrsYear\" name=\"OthCrsYear\""
 				 " class=\"INPUT_%s\"",
 				 The_GetSuffix ());

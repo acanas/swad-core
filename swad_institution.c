@@ -868,11 +868,11 @@ void Ins_WriteSelectorOfInstitution (void)
 
       /***** Begin selector *****/
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
       else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\""
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());

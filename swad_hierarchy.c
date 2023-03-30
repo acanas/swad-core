@@ -806,7 +806,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 	    ParCod_PutPar (ParCod_OthHie,HieCod);
 
 	    /* Selector */
-	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_PENDING);

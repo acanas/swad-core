@@ -876,7 +876,7 @@ void Cty_WriteSelectorOfCountry (void)
    Frm_BeginFormGoTo (ActSeeIns);
 
       /***** Begin selector of country *****/
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"id=\"cty\" name=\"cty\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 

@@ -394,7 +394,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
    /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
