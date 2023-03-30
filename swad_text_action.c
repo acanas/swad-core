@@ -49,7 +49,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"N'importe quelle action"
 #elif L==6	// gn
-	"Cualquier acci&oacute;n"	// Okoteve traducción
+	"Oimera&etilde;va tembiapo"
 #elif L==7	// it
 	"Qualsiasi azione"
 #elif L==8	// pl
@@ -57,7 +57,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Qualquer a&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Any action"			// Çeviri lazim!
+	"Herhangi bir eylem"
 #endif
 	,
 	[ActUnk] =
@@ -72,7 +72,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Action inconnue"
 #elif L==6	// gn
-	"Acci&oacute;n desconocida"	// Okoteve traducción
+	"Tembiapo ndojekua&aacute;iva"
 #elif L==7	// it
 	"Azione sconosciuta"
 #elif L==8	// pl
@@ -80,7 +80,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"A&ccedil;&atilde;o desconhecida"
 #elif L==10	// tr
-	"Unknown action"		// Çeviri lazim!
+	"Bilinmeyen eylem"
 #endif
 	,
 	[ActMnu] =
@@ -95,7 +95,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Afficher le menu"
 #elif L==6	// gn
-	"Mostrar men&uacute;"	// Okoteve traducción
+	"Ohechauka men&uacute;"
 #elif L==7	// it
 	"Mostra menu"
 #elif L==8	// pl
@@ -103,7 +103,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar menu"
 #elif L==10	// tr
-	"Show menu"		// Çeviri lazim!
+	"Men&uuml;y&uuml; g&ouml;ster"
 #endif
 	,
 	[ActRefCon] =
@@ -118,7 +118,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Actualiser les notifications et connect&eacute;s"
 #elif L==6	// gn
-	"Refrescar notificaciones y conectados"	// Okoteve traducción
+	"Ombopyahu momarandu ha o&ntilde;embojoaj&uacute;va"
 #elif L==7	// it
 	"Aggiornare le notifiche e gli connessi"
 #elif L==8	// pl
@@ -126,7 +126,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Atualizar notifica&ccedil;&otilde;es e conectados"
 #elif L==10	// tr
-	"Refresh notifications and connected"	// Çeviri lazim!
+	"Bildirimleri yenile ve ba&gbreve;lan"
 #endif
 	,
 	[ActWebSvc] =
@@ -141,7 +141,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Service Web (fonction API)"
 #elif L==6	// gn
-	"Servicio web (funci&oacute;n API)"	// Okoteve traducción
+	"Servicio web (API rembiapor&atilde;)"
 #elif L==7	// it
 	"Servizio Web (funzione API)"
 #elif L==8	// pl
@@ -149,7 +149,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Servi&ccedil;o da Web (fun&ccedil;&atilde;o de API)"
 #elif L==10	// tr
-	"Web service (API function)"		// Çeviri lazim!
+	"Web hizmeti (API i&scedil;levi)"
 #endif
 	,
 	[ActFrmLogIn] =
@@ -164,7 +164,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Page initiale"
 #elif L==6	// gn
-	"P&aacute;gina de inicio"	// Okoteve traducción
+	"P&aacute;gina principal"
 #elif L==7	// it
 	"Landing page"
 #elif L==8	// pl
@@ -172,7 +172,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Landing page"
 #elif L==10	// tr
-	"Landing page"			// Çeviri lazim!
+	"Anasayfa"
 #endif
 	,
 	[ActReqSch] =
@@ -187,7 +187,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Demander une recherche"
 #elif L==6	// gn
-	"Solicitar b&uacute;squeda"	// Okoteve traducción
+	"Mba'ejerure jeheka"
 #elif L==7	// it
 	"Richiedere la ricerca"
 #elif L==8	// pl
@@ -195,7 +195,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Solicitar pesquisa"
 #elif L==10	// tr
-	"Request search"		// Çeviri lazim!
+	"Arama iste"
 #endif
 	,
 	[ActSeeGblTL] =
@@ -210,7 +210,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Afficher chronologie globale"
 #elif L==6	// gn
-	"Mostrar timeline global"	// Okoteve traducción
+	"Ohechauka l&iacute;nea de tiempo global"
 #elif L==7	// it
 	"Mostra timeline globale"
 #elif L==8	// pl
@@ -218,7 +218,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar timeline global"
 #elif L==10	// tr
-	"Show global timeline"		// Çeviri lazim!
+	"K&uuml;resel zaman &ccedil;izelgesini g&ouml;ster"
 #endif
 	,
 	[ActSeeSocPrf] =
@@ -233,7 +233,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Sugg&eacute;rer liste d'utilisateurs &agrave; suivre"
 #elif L==6	// gn
-	"Sugerir lista de usuarios a seguir"	// Okoteve traducción
+	"Epropone lista de usuarios ojesegui ha&gtilde;ua"
 #elif L==7	// it
 	"Suggerisci elenco di utenti da seguire"
 #elif L==8	// pl
@@ -241,7 +241,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Sugerir lista de usu&aacute;rios a seguir"
 #elif L==10	// tr
-	"Suggest list of users to follow"	// Çeviri lazim!
+	"Takip edilecek kullan&inodot;c&inodot;lar&inodot;n listesini &ouml;ner"
 #endif
 	,
 	[ActSeeCal] =
@@ -256,7 +256,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Afficher le calendrier"
 #elif L==6	// gn
-	"Mostrar calendario"	// Okoteve traducción
+	"Ohechauka calendario"
 #elif L==7	// it
 	"Mostra il calendario"
 #elif L==8	// pl
@@ -264,7 +264,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar calend&aacute;rio"
 #elif L==10	// tr
-	"Show calendar"		// Çeviri lazim!
+	"Takvimi g&ouml;ster"
 #endif
 	,
 	[ActSeeNtf] =
@@ -279,7 +279,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Afficher les notifications"
 #elif L==6	// gn
-	"Mostrar notificaciones"	// Okoteve traducción
+	"Ohechauka marandu"
 #elif L==7	// it
 	"Mostra notifiche"
 #elif L==8	// pl
@@ -287,7 +287,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Mostrar notifica&ccedil;&otilde;es"
 #elif L==10	// tr
-	"Show notifications"		// Çeviri lazim!
+	"Bildirimleri g&ouml;ster"
 #endif
 	,
 	[ActLogIn] =
@@ -302,7 +302,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Authentifier l'utilisateur"
 #elif L==6	// gn
-	"Autenticar usuario"	// Okoteve traducción
+	"Omoa&ntilde;ete puruh&aacute;ra"
 #elif L==7	// it
 	"Autenticare l'utente"
 #elif L==8	// pl
@@ -310,76 +310,76 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Autenticar usu&aacute;rio"
 #elif L==10	// tr
-	"Authenticate user"	// Çeviri lazim!
+	"Kullan&inodot;c&inodot;y&inodot; do&gbreve;rula"
 #endif
 	,
 	[ActLogInNew] =
 #if   L==1	// ca
-	"Authenticate user in empty account"		// Necessita traducció
+	"Autenticar usuari en compte buit"
 #elif L==2	// de
-	"Authenticate user in empty account"		// Need Übersetzung
+	"Benutzer in leerem Konto authentifizieren"
 #elif L==3	// en
 	"Authenticate user in empty account"
 #elif L==4	// es
 	"Autenticar usuario en cuenta vac&iacute;a"
 #elif L==5	// fr
-	"Authenticate user in empty account"		// Besoin de traduction
+	"Authentifier l'utilisateur dans un compte vide"
 #elif L==6	// gn
-	"Autenticar usuario en cuenta vac&iacute;a"	// Okoteve traducción
+	"Omoa&ntilde;ete puruh&aacute;ra cuenta nandi-pe"
 #elif L==7	// it
-	"Authenticate user in empty account"		// Bisogno di traduzione
+	"Autenticare l'utente in un account vuoto"
 #elif L==8	// pl
-	"Authenticate user in empty account"		// Potrzebujesz tlumaczenie
+	"Uwierzytelnij u&zdot;ytkownika na pustym koncie"
 #elif L==9	// pt
-	"Authenticate user in empty account"		// Precisa de tradução
+	"Autenticar usu&aacute;rio em conta vazia"
 #elif L==10	// tr
-	"Authenticate user in empty account"		// Çeviri lazim!
+	"Kullan&inodot;c&inodot;n&inodot;n kimli&gbreve;ini bo&scedil; hesapta do&gbreve;rulay&inodot;n"
 #endif
 	,
 	[ActLogInLan] =
 #if   L==1	// ca
-	"Change language after authentication"	// Necessita traducció
+	"Canviar idioma despr&eacute;s d'autenticar"
 #elif L==2	// de
-	"Change language after authentication"	// Need Übersetzung
+	"Sprache nach Authentifizierung &auml;ndern"
 #elif L==3	// en
 	"Change language after authentication"
 #elif L==4	// es
 	"Cambiar idioma tras autenticar"
 #elif L==5	// fr
-	"Change language after authentication"	// Besoin de traduction
+	"Changer de langue apr&egrave;s authentification"
 #elif L==6	// gn
-	"Cambiar idioma tras autenticar"	// Okoteve traducción
+	"Emoambue &ntilde;e'&etilde; emoa&ntilde;ete rire"
 #elif L==7	// it
-	"Change language after authentication"	// Bisogno di traduzione
+	"Cambia lingua dopo l'autenticazione"
 #elif L==8	// pl
-	"Change language after authentication"	// Potrzebujesz tlumaczenie
+	"Zmie&nacute; j&eogon;zyk po uwierzytelnieniu"
 #elif L==9	// pt
-	"Change language after authentication"	// Precisa de tradução
+	"Alterar idioma ap&oacute;s autentica&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Change language after authentication"	// Çeviri lazim!
+	"Kimlik do&gbreve;rulamas&inodot;ndan sonra dili de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActAnnSee] =
 #if   L==1	// ca
-	"Mark announcement as seen"	// Necessita traducció
+	"Marcar anunci com a vist"
 #elif L==2	// de
-	"Mark announcement as seen"	// Need Übersetzung
+	"Ank&uuml;ndigung als gesehen markieren"
 #elif L==3	// en
 	"Mark announcement as seen"
 #elif L==4	// es
 	"Marcar anuncio como visto"
 #elif L==5	// fr
-	"Mark announcement as seen"	// Besoin de traduction
+	"Marquer l'annonce comme vue"
 #elif L==6	// gn
-	"Marcar anuncio como visto"	// Okoteve traducción
+	"Marca anuncio ojehechah&aacute;icha"
 #elif L==7	// it
-	"Mark announcement as seen"	// Bisogno di traduzione
+	"Segna l'annuncio come visto"
 #elif L==8	// pl
-	"Mark announcement as seen"	// Potrzebujesz tlumaczenie
+	"Oznacz og&lstrok;oszenie tak, jak wida&cacute;"
 #elif L==9	// pt
-	"Mark announcement as seen"	// Precisa de tradução
+	"Marcar an&uacute;ncio como visto"
 #elif L==10	// tr
-	"Mark announcement as seen"	// Çeviri lazim!
+	"Duyuruyu g&ouml;r&uuml;ld&uuml;&gbreve;&uuml; gibi i&scedil;aretle"
 #endif
 	,
 	[ActReqSndNewPwd] =
@@ -9057,48 +9057,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeAllExa] =
 #if   L==1	// ca
-	"See all exams"			// Necessita traducció
+	"See exams"			// Necessita traducció
 #elif L==2	// de
-	"See all exams"			// Need Übersetzung
+	"See exams"			// Need Übersetzung
 #elif L==3	// en
-	"See all exams"
+	"See exams"
 #elif L==4	// es
-	"Ver todos los ex&aacute;menes"
+	"Ver ex&aacute;menes"
 #elif L==5	// fr
-	"See all exams"			// Besoin de traduction
+	"See exams"			// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los ex&aacute;menes"	// Okoteve traducción
+	"Ver ex&aacute;menes"		// Okoteve traducción
 #elif L==7	// it
-	"See all exams"			// Bisogno di traduzione
+	"See exams"			// Bisogno di traduzione
 #elif L==8	// pl
-	"See all exams"			// Potrzebujesz tlumaczenie
+	"See exams"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all exams"			// Precisa de tradução
+	"See exams"			// Precisa de tradução
 #elif L==10	// tr
-	"See all exams"			// Çeviri lazim!
+	"See exams"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllGam] =
 #if   L==1	// ca
-	"See all games"		// Necessita traducció
+	"See games"		// Necessita traducció
 #elif L==2	// de
-	"See all games"		// Need Übersetzung
+	"See games"		// Need Übersetzung
 #elif L==3	// en
-	"See all games"
+	"See games"
 #elif L==4	// es
-	"Ver todos los juegos"
+	"Ver juegos"
 #elif L==5	// fr
-	"See all games"		// Besoin de traduction
+	"See games"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los juegos"	// Okoteve traducción
+	"Ver juegos"		// Okoteve traducción
 #elif L==7	// it
-	"See all games"		// Bisogno di traduzione
+	"See games"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See all games"		// Potrzebujesz tlumaczenie
+	"See games"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all games"		// Precisa de tradução
+	"See games"		// Precisa de tradução
 #elif L==10	// tr
-	"See all games"		// Çeviri lazim!
+	"See games"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllRub] =
@@ -28630,25 +28630,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeAllNot] =
 #if   L==1	// ca
-	"See all notices"	// Necessita traducció
+	"See notices"	// Necessita traducció
 #elif L==2	// de
-	"See all notices"	// Need Übersetzung
+	"See notices"	// Need Übersetzung
 #elif L==3	// en
-	"See all notices"
+	"See notices"
 #elif L==4	// es
-	"Ver todos los avisos"
+	"Ver avisos"
 #elif L==5	// fr
-	"See all notices"	// Besoin de traduction
+	"See notices"	// Besoin de traduction
 #elif L==6	// gn
-	"Ver todos los avisos"	// Okoteve traducción
+	"Ver avisos"	// Okoteve traducción
 #elif L==7	// it
-	"See all notices"	// Bisogno di traduzione
+	"See notices"	// Bisogno di traduzione
 #elif L==8	// pl
-	"See all notices"	// Potrzebujesz tlumaczenie
+	"See notices"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See all notices"	// Precisa de tradução
+	"See notices"	// Precisa de tradução
 #elif L==10	// tr
-	"See all notices"	// Çeviri lazim!
+	"See notices"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeFor] =

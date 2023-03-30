@@ -739,22 +739,26 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       [Dat_HMS_TO_000000 ] = "setHMSTo000000('%s');",	// Set HH:MM:SS form selectors to 00:00:00
       [Dat_HMS_TO_235959 ] = "setHMSTo235959('%s');",	// Set HH:MM:SS form selectors to 23:59:59
      };
+   char *FuncsYearMonth;
+   char *FuncDayHMS;
    char *IdTimeUTC;
-   char *FuncsOnChange;
-   char *FuncOnChange;
+
+   /***** Build strings for onchange functions *****/
+   if (asprintf (&FuncsYearMonth,"adjustDateForm('%s');"
+				 "setUTCFromLocalDateTimeForm('%s');",
+		 Id,Id) < 0)
+      Err_NotEnoughMemoryExit ();
+   if (asprintf (&FuncDayHMS,"setUTCFromLocalDateTimeForm('%s');",
+		 Id) < 0)
+      Err_NotEnoughMemoryExit ();
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("DATE_RANGE");
       HTM_TR_Begin (NULL);
 
-	 if (asprintf (&FuncsOnChange,"adjustDateForm('%s');"
-				      "setUTCFromLocalDateTimeForm('%s');",
-		       Id,Id) < 0)
-	    Err_NotEnoughMemoryExit ();
-
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"RM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncsOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
 			      "id=\"%sYear\" name=\"%sYear\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],
@@ -769,7 +773,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 	 /***** Month *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncsOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
 			      "id=\"%sMonth\" name=\"%sMonth\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],
@@ -782,15 +786,9 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
-	 free (FuncsOnChange);
-
-	 if (asprintf (&FuncOnChange,"setUTCFromLocalDateTimeForm('%s');",
-		       Id) < 0)
-	    Err_NotEnoughMemoryExit ();
-
 	 /***** Day *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
 			      "id=\"%sDay\" name=\"%sDay\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],
@@ -805,7 +803,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 	 /***** Hour *****/
 	 HTM_TD_Begin ("class=\"RM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
 			      "id=\"%sHour\" name=\"%sHour\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],
@@ -820,7 +818,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 	 /***** Minute *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
 			      "id=\"%sMinute\" name=\"%sMinute\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],
@@ -837,7 +835,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	 if (FormSeconds == Dat_FORM_SECONDS_ON)
 	   {
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+	       HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
 				 "id=\"%sSecond\" name=\"%sSecond\""
 				 " class=\"INPUT_%s\"",
 				 Id,Dat_ParName[StartEndTime],
@@ -851,11 +849,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	    HTM_TD_End ();
 	   }
 
-	 free (FuncOnChange);
-
       /***** End table *****/
       HTM_TR_End ();
    HTM_TABLE_End ();
+
+   /***** Free strings for onchange functions *****/
+   free (FuncsYearMonth);
+   free (FuncDayHMS);
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    if (asprintf (&IdTimeUTC,"%sTimeUTC",Id) < 0)
