@@ -2394,7 +2394,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		    AnsType++)
 		 {
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO ("AnswerType",false,
+		     HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\"%s",
 				      (unsigned) AnsType,
 				      AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
@@ -2978,7 +2978,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		  snprintf (StrAns,sizeof (StrAns),"Ans%010u",
 			    (unsigned) SvyQst->QstCod);
 		  if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-		     HTM_INPUT_RADIO (StrAns,false,
+		     HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
 				      "id=\"Ans%010u_%010u\" value=\"%u\""
 				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
 				      (unsigned) SvyQst->QstCod,NumAns,NumAns,

@@ -1407,7 +1407,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
+void HTM_INPUT_RADIO (const char *Name,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...)
   {
    va_list ap;
@@ -1433,7 +1433,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 	}
      }
 
-   if (SubmitOnClick)
+   if (SubmitOnClick == HTM_SUBMIT_ON_CLICK)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
    HTM_Txt (" />");
   }

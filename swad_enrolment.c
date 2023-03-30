@@ -811,7 +811,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",false,
+	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\" checked=\"checked\"",
 				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
 	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
@@ -820,7 +820,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",false,
+	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
 	       HTM_Txt (Txt_Remove_the_users_indicated_in_step_1);
@@ -829,7 +829,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",false,
+	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
 	       HTM_Txt (Txt_Remove_the_users_not_indicated_in_step_1);
@@ -838,7 +838,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",false,
+	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_UPDATE_USRS_IN_CRS);
 	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
@@ -851,7 +851,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",false,
+	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
 	       HTM_Txt (Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
@@ -1598,7 +1598,7 @@ static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
   {
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("RegRemAction",false,
+	 HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"%s",
 			  (unsigned) RegRemOneUsrAction,
 			  *OptionChecked ? "" : " checked=\"checked\"");

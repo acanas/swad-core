@@ -945,13 +945,13 @@ static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item)
 
 	 /***** Current link (empty or not) *****/
 	 Rsc_WriteRowClipboard (&Item->Resource.Link,
-	                        false,	// Don't submit on click
+	                        HTM_DONT_SUBMIT_ON_CLICK,
 	                        true);	// Checked
 
          /***** Row with empty link to remove the current link *****/
 	 if (Item->Resource.Link.Type != Rsc_NONE)
 	    Rsc_WriteRowClipboard (&EmptyLink,
-	                           true,	// Submit on click
+	                           HTM_SUBMIT_ON_CLICK,
 	                           false);	// Not checked
 
 	 /***** Get links in clipboard from database and write them *****/
@@ -962,7 +962,7 @@ static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item)
 	   {
 	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	    Rsc_WriteRowClipboard (&Link,
-	                           true,	// Submit on click
+	                           HTM_SUBMIT_ON_CLICK,
 	                           false);	// Not checked
 	   }
 	 DB_FreeMySQLResult (&mysql_res);

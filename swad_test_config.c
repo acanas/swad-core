@@ -187,7 +187,7 @@ static void TstCfg_ShowFormConfig (void)
 		    {
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
 		                      The_GetSuffix ());
-			HTM_INPUT_RADIO ("Pluggable",false,
+			HTM_INPUT_RADIO ("Pluggable",HTM_DONT_SUBMIT_ON_CLICK,
 					 "value=\"%u\"%s",
 					 (unsigned) Pluggable,
 					 Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :

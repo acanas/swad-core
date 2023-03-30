@@ -644,7 +644,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"%s",
 			     (unsigned) Med_ACTION_NO_MEDIA,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
@@ -654,7 +654,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 
 	 /***** Choice 2: Current media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"%s checked=\"checked\"",
 			     (unsigned) Med_ACTION_KEEP_MEDIA,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
@@ -667,7 +667,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,false,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
 			     "id=\"chg_img_%u\" value=\"%u\"%s",
 			     UniqueId,
 			     (unsigned) Med_ACTION_NEW_MEDIA,
@@ -2030,7 +2030,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		 AnsType++)
 	      {
 	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("AnswerType",false,
+		  HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
 				   "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
 				   (unsigned) AnsType,
 				   AnsType == Question->Answer.Type ? " checked=\"checked\"" :
@@ -2137,7 +2137,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		                   The_GetColorRows ());
 
 			/* Radio selector for unique choice answers */
-			HTM_INPUT_RADIO ("AnsUni",false,
+			HTM_INPUT_RADIO ("AnsUni",HTM_DONT_SUBMIT_ON_CLICK,
 					 "value=\"%u\"%s%s%s onclick=\"enableDisableAns(this.form);\"",
 					 NumOpt,
 					 Question->Answer.Options[NumOpt].Correct ? " checked=\"checked\"" :
@@ -2290,7 +2290,7 @@ void Qst_PutTFInputField (const struct Qst_Question *Question,
                           const char *Label,char Value)
   {
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_RADIO ("AnsTF",false,
+      HTM_INPUT_RADIO ("AnsTF",HTM_DONT_SUBMIT_ON_CLICK,
 		       "value=\"%c\"%s%s required=\"required\"",
 		       Value,
 		       Question->Answer.TF == Value ? " checked=\"checked\"" :

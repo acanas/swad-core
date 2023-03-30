@@ -1318,7 +1318,7 @@ static void Grp_ListGroupTypesForEdition (void)
 									CurrentYear + 1,
 									Dat_FORM_SECONDS_ON,
 									Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
-									true);			// Submit on change
+									HTM_SUBMIT_ON_CHANGE);
 			HTM_TD_End ();
 
 		     HTM_TR_End ();
@@ -1955,7 +1955,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	      {
 	       /* Put a radio item */
 	       if (GrpTyp->MandatoryEnrolment)
-		  HTM_INPUT_RADIO (StrGrpCod,false,
+		  HTM_INPUT_RADIO (StrGrpCod,HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
 				   Grp->GrpCod,Grp->GrpCod,
 				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
@@ -1963,7 +1963,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											  " disabled=\"disabled\"");	// I can not register
 	       else	// If the enrolment is not mandatory, I can select no groups
-		  HTM_INPUT_RADIO (StrGrpCod,false,
+		  HTM_INPUT_RADIO (StrGrpCod,HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s"
 				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
@@ -2482,7 +2482,7 @@ static void Grp_PutFormToCreateGroupType (void)
 									CurrentYear + 1,
 									Dat_FORM_SECONDS_ON,
 									Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
-									false);			// Don't submit on change
+									HTM_DONT_SUBMIT_ON_CHANGE);
 			HTM_TD_End ();
 
 		     HTM_TR_End ();

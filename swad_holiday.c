@@ -563,7 +563,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 				     CurrentYear + 1,
 				     "Start",
 				     &(Holidays->Lst[NumHld].StartDate),
-				     true,false);
+				     HTM_SUBMIT_ON_CHANGE,
+				     false);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -575,7 +576,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 				     CurrentYear + 1,
 				     "End",
 				     &(Holidays->Lst[NumHld].EndDate),
-				     true,(Hld->HldTyp == Hld_HOLIDAY));
+				     HTM_SUBMIT_ON_CHANGE,
+				     (Hld->HldTyp == Hld_HOLIDAY));
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -927,7 +929,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 				  CurrentYear + 1,
 				  "Start",
 				  &Hld_EditingHld->StartDate,
-				  false,false);
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  false);
 	    HTM_TD_End ();
 
 	    /***** Non school period end date *****/
@@ -936,7 +939,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 				  CurrentYear + 1,
 				  "End",
 				  &Hld_EditingHld->EndDate,
-				  false,false);
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  false);
 	    HTM_TD_End ();
 
 	    /***** Holiday name *****/

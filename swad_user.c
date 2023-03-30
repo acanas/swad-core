@@ -5609,7 +5609,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
   {
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("ListUsrsAction",false,
+	 HTM_INPUT_RADIO ("ListUsrsAction",HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"%s",
 			  (unsigned) ListUsrsAction,
 			  ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" :

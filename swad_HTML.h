@@ -46,6 +46,12 @@ typedef enum
    HTM_SUBMIT_ON_CHANGE,
   } HTM_SubmitOnChange_t;
 
+typedef enum
+  {
+   HTM_DONT_SUBMIT_ON_CLICK,
+   HTM_SUBMIT_ON_CLICK,
+  } HTM_SubmitOnClick_t;
+
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
   {
@@ -161,7 +167,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 	             const char *fmt,...);
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,double Step,double Value,bool Disabled,
 	              const char *fmt,...);
-void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
+void HTM_INPUT_RADIO (const char *Name,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...);

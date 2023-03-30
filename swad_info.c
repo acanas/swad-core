@@ -942,7 +942,8 @@ void Inf_FormsToSelSendInfo (void)
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 		  HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
 					     (InfoSrc == Inf_NONE ||
-					      InfoAvailable[InfoSrc]),	// Info available for this source
+					      InfoAvailable[InfoSrc]) ? HTM_SUBMIT_ON_CLICK :
+						                        HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"InfoSrc%u\" value=\"%u\"%s",
 				   (unsigned) InfoSrc,(unsigned) InfoSrc,
 				   InfoSrc == FromDB.Src ? " checked=\"checked\"" :

@@ -2982,7 +2982,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 	      {
 	       HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",
 	                        The_GetSuffix ());
-		  HTM_INPUT_RADIO ("Sex",false,
+		  HTM_INPUT_RADIO ("Sex",HTM_DONT_SUBMIT_ON_CLICK,
 				   "value=\"%u\"%s  required=\"required\"",
 				   (unsigned) Sex,
 				   Sex == Gbl.Usrs.Me.UsrDat.Sex ? " checked=\"checked\"" : "");
@@ -3210,7 +3210,8 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutF
 				  CurrentYear - Rec_USR_MIN_AGE,
 				  "Birth",
 				  &(UsrDat->Birthday),
-				  false,false);
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  false);
 	    else if (UsrDat->StrBirthday[0])
 	       HTM_Txt (UsrDat->StrBirthday);
 	   }
@@ -3907,7 +3908,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 						  SelectClass,				// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected
-						  true);				// Submit on change
+						  HTM_SUBMIT_ON_CHANGE);
 		     free (SelectClass);
 		  Frm_EndForm ();
 	       HTM_TD_End ();

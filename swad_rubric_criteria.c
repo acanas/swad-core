@@ -210,7 +210,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 
 		  /***** Row with empty link *****/
 		  Rsc_WriteRowClipboard (&EmptyLink,
-	                                 false,	// Don't submit on click
+	                                 HTM_DONT_SUBMIT_ON_CLICK,
 	                                 true);	// Checked
 
 		  /***** Get links in clipboard from database and write them *****/
@@ -221,7 +221,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 		    {
 		     Rsc_GetLinkDataFromRow (mysql_res,&Link);
 		     Rsc_WriteRowClipboard (&Link,
-	                                    false,	// Don't submit on click
+	                                    HTM_DONT_SUBMIT_ON_CLICK,
 	                                    false);	// Not checked
 		    }
 		  DB_FreeMySQLResult (&mysql_res);
@@ -1153,13 +1153,13 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
 
 	 /***** Current link (empty or not) *****/
 	 Rsc_WriteRowClipboard (&Criterion->Link,
-	                        false,	// Don't submit on click
+	                        HTM_DONT_SUBMIT_ON_CLICK,
 	                        true);	// Checked
 
          /***** Row with empty link to remove the current link *****/
 	 if (Criterion->Link.Type != Rsc_NONE)
 	    Rsc_WriteRowClipboard (&EmptyLink,
-	 	                   true,	// Don't submit on click
+	 	                   HTM_SUBMIT_ON_CLICK,
 	                           false);	// Checked
 
 
@@ -1171,7 +1171,7 @@ static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
 	   {
 	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	    Rsc_WriteRowClipboard (&Link,
-	 	                   true,	// Don't submit on click
+	 	                   HTM_SUBMIT_ON_CLICK,
 	                           false);	// Checked
 	   }
 	 DB_FreeMySQLResult (&mysql_res);

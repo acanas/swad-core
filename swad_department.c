@@ -983,7 +983,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,
-                                  bool SubmitFormOnChange)
+                                  HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_Another_department;
    struct Dpt_Departments Departments;
@@ -998,7 +998,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Begin selector */
-   HTM_SELECT_Begin (SubmitFormOnChange,
+   HTM_SELECT_Begin (SubmitOnChange,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     ParName,ParName,SelectClass);
 

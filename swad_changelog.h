@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.86.2 (2023-03-30)"
+#define Log_PLATFORM_VERSION	"SWAD 22.86.3 (2023-03-30)"
 #define CSS_FILE		"swad22.86.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.86.3:  Mar 30, 2023  Code refactoring in forms. (338710 lines)
 	Version 22.86.2:  Mar 30, 2023  New links to manual about resource clipboard.
 					Fixed bugs in links to resources. (338655 lines)
 	Version 22.86.1:  Mar 29, 2023  Icon to remove resource clipboard only if there are resources. (338596 lines)

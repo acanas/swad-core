@@ -2853,7 +2853,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
 						     "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],true,
+	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"%s",
 				IsCourseZone ? " checked=\"checked\"" : "");
 	       HTM_Txt (Gbl.Hierarchy.Crs.FullName);
@@ -2882,7 +2882,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   NULL,
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],true,
+		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"%s",
 				      GrpDat.GrpCod,
 				      (IsGroupZone &&

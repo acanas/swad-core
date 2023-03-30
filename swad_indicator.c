@@ -174,7 +174,7 @@ void Ind_ReqIndicatorsCourses (void)
 					       SelectClass,			// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected
-					       true);				// Submit on change
+					       HTM_SUBMIT_ON_CHANGE);
 		  free (SelectClass);
 	       HTM_TD_End ();
 

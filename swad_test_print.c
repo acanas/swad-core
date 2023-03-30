@@ -444,7 +444,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 
 	       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
 	       if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
-		  HTM_INPUT_RADIO (StrAns,false,
+		  HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Ans%010u_%u\" value=\"%u\"%s"
 				   " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
 				   QstInd,NumOpt,

@@ -1104,7 +1104,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 											      CurrentYear,
 				     CurrentYear + 1,"Exam",
 				     &(CallsForExams->CallForExam.ExamDate),
-				     false,false);
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     false);
 	       HTM_TD_End ();
 	      }
 	    else

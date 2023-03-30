@@ -174,7 +174,7 @@ static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 	   {
 	    HTM_LI_Begin (NULL);
 	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("WhichSyllabus",true,
+		  HTM_INPUT_RADIO ("WhichSyllabus",HTM_SUBMIT_ON_CLICK,
 				   "value=\"%u\"%s",
 				   (unsigned) WhichSyl,
 				   WhichSyl == SyllabusSelected ? " checked=\"checked\"" :

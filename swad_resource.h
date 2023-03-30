@@ -74,7 +74,7 @@ struct Rsc_Link
 
 void Rsc_ShowClipboard (void);
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
-                            bool SubmitOnClick,bool Checked);
+                            HTM_SubmitOnClick_t SubmitOnClick,bool Checked);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
                         const char *Icon,const char *IconTitle);
 void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,

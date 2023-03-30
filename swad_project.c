@@ -840,7 +840,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 				      SelectClass,			// Selector class
 				      -1L,				// First option
 				      Txt_Any_department,		// Text when no department selected
-				      true);				// Submit on change
+				      HTM_SUBMIT_ON_CHANGE);
 	 free (SelectClass);
 
       /***** End form *****/
@@ -3814,7 +3814,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 					    SelectClass,		// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
-					    false);			// Don't submit on change
+					    HTM_DONT_SUBMIT_ON_CHANGE);
 	       free (SelectClass);
 	    HTM_TD_End ();
 

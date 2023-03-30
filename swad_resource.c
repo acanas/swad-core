@@ -145,7 +145,7 @@ void Rsc_ShowClipboard (void)
 /*****************************************************************************/
 
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
-                            bool SubmitOnClick,bool Checked)
+                            HTM_SubmitOnClick_t SubmitOnClick,bool Checked)
   {
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 

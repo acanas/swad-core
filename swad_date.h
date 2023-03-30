@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include "swad_constant.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -176,7 +177,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   unsigned LastYear,
                                                   Dat_FormSeconds FormSeconds,
                                                   Dat_SetHMS SetHMS,
-                                                  bool SubmitFormOnChange);
+                                                  HTM_SubmitOnChange_t SubmitOnChange);
 time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime);
 
 void Dat_PutParBrowserTZDiff (void);
@@ -185,7 +186,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
-                        bool SubmitFormOnChange,bool Disabled);
+                        HTM_SubmitOnChange_t SubmitOnChange,bool Disabled);
 void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const char *ParNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 
