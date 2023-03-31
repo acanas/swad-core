@@ -118,7 +118,7 @@ void Rsc_ShowClipboard (void)
    struct Rsc_Link Link;
 
    /***** Begin list *****/
-   HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
+   HTM_UL_Begin ("class=\"RSC_CLIPBOARD\"");
 
       /***** Get links in clipboard from database and write them *****/
       NumLinks = Rsc_DB_GetClipboard (&mysql_res);
@@ -133,6 +133,61 @@ void Rsc_ShowClipboard (void)
 			       Rsc_ResourceTypesIcons[Link.Type],
 			       Txt_RESOURCE_TYPES[Link.Type]);
 	 HTM_LI_End ();
+	}
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End list *****/
+   HTM_UL_End ();
+  }
+
+/*****************************************************************************/
+/***************** Show clipboard to change resource link ********************/
+/*****************************************************************************/
+
+void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumLink;
+   unsigned NumLinks;
+   struct Rsc_Link Link;
+   static const struct Rsc_Link EmptyLink =
+     {
+      .Type = Rsc_NONE,
+      .Cod  = -1L,
+     };
+
+   /***** Begin list *****/
+   HTM_UL_Begin ("class=\"RSC_CLIPBOARD\"");
+
+      if (CurrentLink)	// Editing an existing element
+	{
+         /***** Current link (empty or not) *****/
+	 Rsc_WriteRowClipboard (CurrentLink,
+				HTM_DONT_SUBMIT_ON_CLICK,
+				true);	// Checked
+
+	 /***** Row with empty link to remove the current link *****/
+	 if (CurrentLink->Type != Rsc_NONE)
+	    Rsc_WriteRowClipboard (&EmptyLink,
+				   HTM_SUBMIT_ON_CLICK,
+				   false);	// Not checked
+	}
+      else		// Inside form to create a new element
+	 /***** Row with empty link *****/
+	 Rsc_WriteRowClipboard (&EmptyLink,
+				HTM_DONT_SUBMIT_ON_CLICK,
+				true);	// Checked
+
+      /***** Get links in clipboard from database and write them *****/
+      NumLinks = Rsc_DB_GetClipboard (&mysql_res);
+      for (NumLink  = 1;
+	   NumLink <= NumLinks;
+	   NumLink++)
+	{
+	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	 Rsc_WriteRowClipboard (&Link,
+				HTM_SUBMIT_ON_CLICK,
+				false);	// Checked
 	}
       DB_FreeMySQLResult (&mysql_res);
 

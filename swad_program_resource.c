@@ -92,7 +92,6 @@ static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
 
 static void PrgRsc_ShowClipboard (void);
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
-static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item);
 
 /*****************************************************************************/
 /****************************** View resources *******************************/
@@ -436,8 +435,13 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
 	 /* Edit link showing clipboard / Show current link */
 	 if (EditLink)
+	   {
 	    /* Show clipboard to change resource link */
-	    PrgRsc_ShowClipboardToChangeLink (Item);
+            Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
+               ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
+               Rsc_ShowClipboardToChangeLink (&Item->Resource.Link);
+	    Frm_EndForm ();
+           }
 	 else
 	    /* Show current link */
 	    Rsc_WriteLinkName (&Item->Resource.Link,
@@ -494,7 +498,10 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
             HTM_BR ();
 
 	    /* Show clipboard to change resource link */
-	    PrgRsc_ShowClipboardToChangeLink (Item);
+            Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
+               ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
+               Rsc_ShowClipboardToChangeLink (&Item->Resource.Link);
+	    Frm_EndForm ();
 	   }
 
       HTM_TD_End ();
@@ -914,64 +921,6 @@ void PrgRsc_EditProgramWithClipboard (void)
 
    /***** Free list of program items *****/
    Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/***************** Show clipboard to change resource link ********************/
-/*****************************************************************************/
-
-static void PrgRsc_ShowClipboardToChangeLink (struct Prg_Item *Item)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumLink;
-   unsigned NumLinks;
-   struct Rsc_Link Link;
-   static const struct Rsc_Link EmptyLink =
-     {
-      .Type = Rsc_NONE,
-      .Cod  = -1L,
-     };
-
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
-      if (Item->Resource.Hierarchy.RscCod > 0)
-         ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
-      else
-	 /* No resource selected, so it's a new resource at the end of the item */
-         ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
-
-      /***** Begin list *****/
-      HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
-
-	 /***** Current link (empty or not) *****/
-	 Rsc_WriteRowClipboard (&Item->Resource.Link,
-	                        HTM_DONT_SUBMIT_ON_CLICK,
-	                        true);	// Checked
-
-         /***** Row with empty link to remove the current link *****/
-	 if (Item->Resource.Link.Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (&EmptyLink,
-	                           HTM_SUBMIT_ON_CLICK,
-	                           false);	// Not checked
-
-	 /***** Get links in clipboard from database and write them *****/
-	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
-	 for (NumLink  = 1;
-	      NumLink <= NumLinks;
-	      NumLink++)
-	   {
-	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	    Rsc_WriteRowClipboard (&Link,
-	                           HTM_SUBMIT_ON_CLICK,
-	                           false);	// Not checked
-	   }
-	 DB_FreeMySQLResult (&mysql_res);
-
-      /***** End list *****/
-      HTM_UL_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

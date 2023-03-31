@@ -384,48 +384,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqSndNewPwd] =
 #if   L==1	// ca
-	"Request to send a new password"			// Necessita traducció
+	"Sol&middot;licitar enviament de nova contrasenya"
 #elif L==2	// de
-	"Request to send a new password"			// Need Übersetzung
+	"Fordern Sie das Senden eines neuen Passworts an"
 #elif L==3	// en
 	"Request to send a new password"
 #elif L==4	// es
 	"Solicitar env&iacute;o de nueva contrase&ntilde;a"
 #elif L==5	// fr
-	"Request to send a new password"			// Besoin de traduction
+	"Demander l'envoi d'un nouveau mot de passe"
 #elif L==6	// gn
-	"Solicitar env&iacute;o de nueva contrase&ntilde;a"	// Okoteve traducción
+	"Ejerure emondo hag&gbreve;ua pete&itilde; &ntilde;e'&etilde;&ntilde;emi pyahu"
 #elif L==7	// it
-	"Request to send a new password"			// Bisogno di traduzione
+	"Richiedi l'invio di una nuova password"
 #elif L==8	// pl
-	"Request to send a new password"			// Potrzebujesz tlumaczenie
+	"Pro&sacute;ba o przes&lstrok;anie nowego has&lstrok;a"
 #elif L==9	// pt
-	"Request to send a new password"			// Precisa de tradução
+	"Solicitar o envio de uma nova senha"
 #elif L==10	// tr
-	"Request to send a new password"			// Çeviri lazim!
+	"Yeni bir &scedil;ifre g&ouml;nderme iste&gbreve;i"
 #endif
 	,
 	[ActSndNewPwd] =
 #if   L==1	// ca
-	"Send new password"			// Necessita traducció
+	"Enviar nova contrasenya"
 #elif L==2	// de
-	"Send new password"			// Need Übersetzung
+	"Neues Passwort senden"
 #elif L==3	// en
 	"Send new password"
 #elif L==4	// es
 	"Enviar nueva contrase&ntilde;a"
 #elif L==5	// fr
-	"Send new password"			// Besoin de traduction
+	"Envoyer un nouveau mot de passe"
 #elif L==6	// gn
-	"Enviar nueva contrase&ntilde;a"	// Okoteve traducción
+	"Emondo &ntilde;e'&etilde;&ntilde;emi pyahu"
 #elif L==7	// it
-	"Send new password"			// Bisogno di traduzione
+	"Invia nuova password"
 #elif L==8	// pl
-	"Send new password"			// Potrzebujesz tlumaczenie
+	"Wy&sacute;lij nowe has&lstrok;o"
 #elif L==9	// pt
-	"Send new password"			// Precisa de tradução
+	"Enviar nova senha"
 #elif L==10	// tr
-	"Send new password"			// Çeviri lazim!
+	"Yeni &scedil;ifre g&ouml;nder"
 #endif
 	,
 	[ActLogOut] =
@@ -448,30 +448,30 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Fechar sess&atilde;o"
 #elif L==10	// tr
-	"Log out"	// Çeviri lazim!
+	"&Ccedil;&inodot;k&inodot;&scedil; yap"
 #endif
 	,
 	[ActSch] =
 #if   L==1	// ca
-	"Search"	// Necessita traducció
+	"Cercar"
 #elif L==2	// de
-	"Search"	// Need Übersetzung
+	"Suche"
 #elif L==3	// en
 	"Search"
 #elif L==4	// es
 	"Buscar"
 #elif L==5	// fr
-	"Search"	// Besoin de traduction
+	"Chercher"
 #elif L==6	// gn
-	"Buscar"	// Okoteve traducción
+	"Heka"
 #elif L==7	// it
-	"Search"	// Bisogno di traduzione
+	"Cercare"
 #elif L==8	// pl
-	"Search"	// Potrzebujesz tlumaczenie
+	"Szuka&cacute;"
 #elif L==9	// pt
-	"Search"	// Precisa de tradução
+	"Procurar"
 #elif L==10	// tr
-	"Search"	// Çeviri lazim!
+	"Aramak"
 #endif
 	,
 	[ActRefNewPubGblTL] =

@@ -100,13 +100,6 @@ static void RubCri_GetAndCheckPars (struct Rub_Rubrics *Rubrics,
 static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
 
-static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
-                                 const struct RubCri_Criterion *Criterion,
-                                 bool Editing,const char *Anchor);
-static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
-                                  const struct RubCri_Criterion *Criterion,
-                                  const char *Anchor);
-
 /*****************************************************************************/
 /*************** Put parameter to edit one rubric criterion ******************/
 /*****************************************************************************/
@@ -158,15 +151,6 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_New_criterion;
    extern const char *Txt_Create_criterion;
    RubCri_ValueRange_t ValueRange;
-   MYSQL_RES *mysql_res;
-   unsigned NumLink;
-   unsigned NumLinks;
-   struct Rsc_Link Link;
-   static const struct Rsc_Link EmptyLink =
-     {
-      .Type = Rsc_NONE,
-      .Cod  = -1L,
-     };
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewRubCri);
@@ -203,32 +187,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_End ();
 
 	    /***** Link *****/
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-
-	       /***** Begin list *****/
-	       HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
-
-		  /***** Row with empty link *****/
-		  Rsc_WriteRowClipboard (&EmptyLink,
-	                                 HTM_DONT_SUBMIT_ON_CLICK,
-	                                 true);	// Checked
-
-		  /***** Get links in clipboard from database and write them *****/
-		  NumLinks = Rsc_DB_GetClipboard (&mysql_res);
-		  for (NumLink  = 1;
-		       NumLink <= NumLinks;
-		       NumLink++)
-		    {
-		     Rsc_GetLinkDataFromRow (mysql_res,&Link);
-		     Rsc_WriteRowClipboard (&Link,
-	                                    HTM_DONT_SUBMIT_ON_CLICK,
-	                                    false);	// Not checked
-		    }
-		  DB_FreeMySQLResult (&mysql_res);
-
-	       /***** End list *****/
-	       HTM_UL_End ();
-
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Rsc_ShowClipboardToChangeLink (NULL);
 	    HTM_TD_End ();
 
 	    /***** Minimum and maximum values of the criterion *****/
@@ -682,8 +642,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	    /***** Link to resource *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	       RubCri_ShowResource (Rubrics,&Criterion,
-	                            true,Anchor);	// Editing
+	       Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
+		  RubCri_PutParsOneCriterion (Rubrics);
+		  Rsc_ShowClipboardToChangeLink (&Criterion.Link);
+	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /***** Minimum and maximum values of criterion *****/
@@ -1109,7 +1071,7 @@ static void RubCri_ExchangeCriteria (long RubCod,
 /*****************************************************************************/
 /************************** Show criterion resource **************************/
 /*****************************************************************************/
-
+/*
 static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
                                  const struct RubCri_Criterion *Criterion,
                                  bool Editing,const char *Anchor)
@@ -1117,71 +1079,12 @@ static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
 
-   if (Editing)
-      RubCri_ShowClipboard (Rubrics,Criterion,Anchor);
-   else
-      Rsc_WriteLinkName (&Criterion->Link,
-			 true,	// Put form to go
-                         Rsc_ResourceTypesIcons[Criterion->Link.Type],
-	                 Txt_RESOURCE_TYPES[Criterion->Link.Type]);
+   Rsc_WriteLinkName (&Criterion->Link,
+		      true,	// Put form to go
+                      Rsc_ResourceTypesIcons[Criterion->Link.Type],
+	              Txt_RESOURCE_TYPES[Criterion->Link.Type]);
   }
-
-/*****************************************************************************/
-/***************** Show clipboard to change resource link ********************/
-/*****************************************************************************/
-
-static void RubCri_ShowClipboard (struct Rub_Rubrics *Rubrics,
-                                  const struct RubCri_Criterion *Criterion,
-                                  const char *Anchor)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumLink;
-   unsigned NumLinks;
-   struct Rsc_Link Link;
-   static const struct Rsc_Link EmptyLink =
-     {
-      .Type = Rsc_NONE,
-      .Cod  = -1L,
-     };
-
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
-      RubCri_PutParsOneCriterion (Rubrics);
-
-      /***** Begin list *****/
-      HTM_UL_Begin ("class=\"SRC_CLIPBOARD\"");
-
-	 /***** Current link (empty or not) *****/
-	 Rsc_WriteRowClipboard (&Criterion->Link,
-	                        HTM_DONT_SUBMIT_ON_CLICK,
-	                        true);	// Checked
-
-         /***** Row with empty link to remove the current link *****/
-	 if (Criterion->Link.Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (&EmptyLink,
-	 	                   HTM_SUBMIT_ON_CLICK,
-	                           false);	// Checked
-
-
-	 /***** Get links in clipboard from database and write them *****/
-	 NumLinks = Rsc_DB_GetClipboard (&mysql_res);
-	 for (NumLink  = 1;
-	      NumLink <= NumLinks;
-	      NumLink++)
-	   {
-	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	    Rsc_WriteRowClipboard (&Link,
-	 	                   HTM_SUBMIT_ON_CLICK,
-	                           false);	// Checked
-	   }
-	 DB_FreeMySQLResult (&mysql_res);
-
-      /***** End list *****/
-      HTM_UL_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
-  }
+*/
 
 /*****************************************************************************/
 /***************** Show clipboard to change resource link ********************/

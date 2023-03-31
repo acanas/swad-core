@@ -14663,7 +14663,7 @@ const char *Txt_folder =
 #elif L==5	// fr
 	"r&eacute;pertoire";
 #elif L==6	// gn
-	"carpeta";	// Okoteve traducción
+	"carpeta";
 #elif L==7	// it
 	"cartella";
 #elif L==8	// pl
@@ -14671,7 +14671,7 @@ const char *Txt_folder =
 #elif L==9	// pt
 	"diret&oacute;rio";
 #elif L==10	// tr
-	"folder";	// Çeviri lazim!
+	"dosya";
 #endif
 
 const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very important to include %s in the following sentences
@@ -14717,7 +14717,7 @@ const char *Txt_Folder_X_removed =	// Warning: it is very important to include %
 #elif L==9	// pt
 	"Diret&oacute;rio <strong>%s</strong> removido.";
 #elif L==10	// tr
-	"Folder <strong>%s</strong> removed.";	// Çeviri lazim!
+	"Folder <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
 const char *Txt_Folders =
@@ -14732,7 +14732,7 @@ const char *Txt_Folders =
 #elif L==5	// fr
 	"R&eacute;pertoires";
 #elif L==6	// gn
-	"Carpetas";	// Okoteve traducción
+	"Umi carpeta";
 #elif L==7	// it
 	"Cartelle";
 #elif L==8	// pl
@@ -14740,7 +14740,7 @@ const char *Txt_Folders =
 #elif L==9	// pt
 	"Diret&oacute;rios";
 #elif L==10	// tr
-	"Folders";	// Çeviri lazim!
+	"Klas&ouml;rler";
 #endif
 
 const char *Txt_folders =
@@ -14755,7 +14755,7 @@ const char *Txt_folders =
 #elif L==5	// fr
 	"r&eacute;pertoires";
 #elif L==6	// gn
-	"carpetas";	// Okoteve traducción
+	"umi carpeta";
 #elif L==7	// it
 	"cartelle";
 #elif L==8	// pl
@@ -14763,7 +14763,7 @@ const char *Txt_folders =
 #elif L==9	// pt
 	"diret&oacute;rios";
 #elif L==10	// tr
-	"folders";	// Çeviri lazim!
+	"klas&ouml;rler";
 #endif
 
 const char *Txt_Folders_copied =
@@ -21167,7 +21167,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #if   L==1	// ca
 	"Cercar"
 #elif L==2	// de
-	"Suchen"
+	"Suche"
 #elif L==3	// en
 	"Search"
 #elif L==4	// es
@@ -21179,11 +21179,11 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==7	// it
 	"Cercare"
 #elif L==8	// pl
-	"Szukaj"
+	"Szuka&cacute;"
 #elif L==9	// pt
 	"Procurar"
 #elif L==10	// tr
-	"Arama"
+	"Aramak"
 #endif
 	,
 	//  2: ActSeeTmlGbl
@@ -43024,7 +43024,7 @@ const char *Txt_Search =
 #if   L==1	// ca
 	"Cercar";
 #elif L==2	// de
-	"Suchen";
+	"Suche";
 #elif L==3	// en
 	"Search";
 #elif L==4	// es
@@ -43036,11 +43036,11 @@ const char *Txt_Search =
 #elif L==7	// it
 	"Cercare";
 #elif L==8	// pl
-	"Szukaj";
+	"Szuka&cacute;";
 #elif L==9	// pt
 	"Procurar";
 #elif L==10	// tr
-	"Arama";
+	"Aramak";
 #endif
 
 const char *Txt_See_full_notice =
