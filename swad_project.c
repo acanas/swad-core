@@ -52,6 +52,7 @@
 #include "swad_photo.h"
 #include "swad_program_resource.h"
 #include "swad_project.h"
+#include "swad_project_config.h"
 #include "swad_project_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
@@ -196,7 +197,6 @@ static Usr_Who_t Prj_GetParWho (void);
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
 static bool Prj_CheckIfICanCreateProjects (void);
-static void Prj_PutIconsListProjects (void *Projects);
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
@@ -295,11 +295,6 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 static void Prj_CreateProject (struct Prj_Project *Prj);
 static void Prj_UpdateProject (struct Prj_Project *Prj);
 
-static bool Prj_CheckIfICanConfigAllProjects (void);
-static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects);
-static void Prj_GetConfigDataFromRow (MYSQL_RES *mysql_res,
-				      struct Prj_Projects *Projects);
-static bool Prj_GetEditableFromForm (void);
 static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects);
 
 static void Prj_FormLockUnlock (const struct Prj_Project *Prj);
@@ -328,7 +323,7 @@ long Prj_GetPrjCod (void)
 
 void Prj_ResetProjects (struct Prj_Projects *Projects)
   {
-   Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
+   Projects->Config.Editable = PrjCfg_EDITABLE_DEFAULT;
    Projects->Filter.Who      = Prj_FILTER_WHO_DEFAULT;
    Projects->Filter.Assign   = Prj_FILTER_ASSIGNED_DEFAULT |
 	                       Prj_FILTER_NONASSIG_DEFAULT;
@@ -1239,13 +1234,13 @@ static bool Prj_CheckIfICanCreateProjects (void)
 /***************** Put contextual icons in list of projects ******************/
 /*****************************************************************************/
 
-static void Prj_PutIconsListProjects (void *Projects)
+void Prj_PutIconsListProjects (void *Projects)
   {
    bool ICanConfigAllProjects;
 
    if (Projects)
      {
-      ICanConfigAllProjects = Prj_CheckIfICanConfigAllProjects ();
+      ICanConfigAllProjects = PrjCfg_CheckIfICanConfig ();
 
       /***** Put icon to create a new project *****/
       if (Prj_CheckIfICanCreateProjects ())
@@ -3206,7 +3201,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                  Prj_PutCurrentPars,Projects);
 
    /***** Locked/unlocked project edition *****/
-   if (Prj_CheckIfICanConfigAllProjects ())
+   if (PrjCfg_CheckIfICanConfig ())
      {
       /* Icon to lock/unlock project edition */
       HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",
@@ -4151,145 +4146,6 @@ static void Prj_UpdateProject (struct Prj_Project *Prj)
   }
 
 /*****************************************************************************/
-/************************ Can I configure all projects? **********************/
-/*****************************************************************************/
-
-static bool Prj_CheckIfICanConfigAllProjects (void)
-  {
-   static const bool ICanConfigAllProjects[Rol_NUM_ROLES] =
-     {
-      [Rol_TCH	  ] = true,
-      [Rol_SYS_ADM] = true,
-     };
-
-   return ICanConfigAllProjects[Gbl.Usrs.Me.Role.Logged];
-  }
-
-/*****************************************************************************/
-/********************** Configuration of all projects ************************/
-/*****************************************************************************/
-
-void Prj_ShowFormConfig (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Projects;
-   extern const char *Txt_Configure_projects;
-   extern const char *Txt_Editable;
-   extern const char *Txt_Editable_by_non_editing_teachers;
-   extern const char *Txt_Save_changes;
-   struct Prj_Projects Projects;
-
-   /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
-
-   /***** Read projects configuration from database *****/
-   Prj_GetCrsPrjsConfig (&Projects);
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Configure_projects,
-                 Prj_PutIconsListProjects,&Projects,
-                 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
-
-      /***** Begin form *****/
-      Frm_BeginForm (ActRcvCfgPrj);
-
-	 /***** Projects are editable by non-editing teachers? *****/
-	 HTM_TABLE_BeginCenterPadding (2);
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT","Editable",Txt_Editable);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "id=\"Editable\" value=\"Y\"%s",
-				      Projects.Config.Editable ? " checked=\"checked\"" :
-								 "");
-		  HTM_Txt (Txt_Editable_by_non_editing_teachers);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-	 HTM_TABLE_End ();
-
-	 /***** Send button *****/
-	 Btn_PutConfirmButton (Txt_Save_changes);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/************** Get configuration of projects for current course *************/
-/*****************************************************************************/
-
-static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects)
-  {
-   MYSQL_RES *mysql_res;
-
-   /***** Get configuration of projects for current course from database *****/
-   if (Prj_DB_GetCrsPrjsConfig (&mysql_res))
-      Prj_GetConfigDataFromRow (mysql_res,Projects);
-   else
-      Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************ Get configuration values from a database table row *************/
-/*****************************************************************************/
-
-static void Prj_GetConfigDataFromRow (MYSQL_RES *mysql_res,
-				      struct Prj_Projects *Projects)
-  {
-   MYSQL_ROW row;
-
-   /***** Get row *****/
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Get whether project are visible via plugins or not *****/
-   Projects->Config.Editable = (row[0][0] == 'Y');
-  }
-
-/*****************************************************************************/
-/************ Receive configuration of projects for current course ***********/
-/*****************************************************************************/
-
-void Prj_ReceiveConfigPrj (void)
-  {
-   extern const char *Txt_The_configuration_of_the_projects_has_been_updated;
-   struct Prj_Projects Projects;
-
-   /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
-
-   /***** Get whether projects are editable by non-editing teachers or not *****/
-   Projects.Config.Editable = Prj_GetEditableFromForm ();
-
-   /***** Update database *****/
-   Prj_DB_UpdateCrsPrjsConfig (Projects.Config.Editable);
-
-   /***** Show confirmation message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
-
-   /***** Show again the form to configure projects *****/
-   Prj_ShowFormConfig ();
-  }
-
-/*****************************************************************************/
-/****** Get if projects are editable by non-editing teachers from form *******/
-/*****************************************************************************/
-
-static bool Prj_GetEditableFromForm (void)
-  {
-   return Par_GetParBool ("Editable");
-  }
-
-/*****************************************************************************/
 /****** Put icons to request locking/unlocking edition of all projects *******/
 /*****************************************************************************/
 
@@ -4324,7 +4180,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    Prj_GetPars (&Projects);
 
    /***** Show question and button to lock all selected projects *****/
-   if (Prj_CheckIfICanConfigAllProjects ())
+   if (PrjCfg_CheckIfICanConfig ())
      {
       /* Get list of projects */
       Prj_GetListProjects (&Projects);
@@ -4363,7 +4219,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    Prj_GetPars (&Projects);
 
    /***** Show question and button to unlock all selected projects *****/
-   if (Prj_CheckIfICanConfigAllProjects ())
+   if (PrjCfg_CheckIfICanConfig ())
      {
       /* Get list of projects */
       Prj_GetListProjects (&Projects);
@@ -4405,7 +4261,7 @@ void Prj_LockSelectedPrjsEdition (void)
    Prj_GetPars (&Projects);
 
    /***** Lock all selected projects *****/
-   if (Prj_CheckIfICanConfigAllProjects ())
+   if (PrjCfg_CheckIfICanConfig ())
      {
       /* Get list of projects */
       Prj_GetListProjects (&Projects);
@@ -4442,7 +4298,7 @@ void Prj_UnloSelectedPrjsEdition (void)
    Prj_GetPars (&Projects);
 
    /***** Unlock all selected projects *****/
-   if (Prj_CheckIfICanConfigAllProjects ())
+   if (PrjCfg_CheckIfICanConfig ())
      {
       /* Get list of projects */
       Prj_GetListProjects (&Projects);

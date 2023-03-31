@@ -34,6 +34,7 @@
 /*****************************************************************************/
 
 void Prj_DB_UpdateCrsPrjsConfig (bool Editable);
+
 void Prj_DB_LockProjectEdition (long PrjCod);
 void Prj_DB_UnlockProjectEdition (long PrjCod);
 long Prj_DB_CreateProject (const struct Prj_Project *Prj);

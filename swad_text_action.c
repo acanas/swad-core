@@ -9377,27 +9377,73 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to assignment"	// Çeviri lazim!
 #endif
 	,
+	[ActCfgPrj] =
+#if   L==1	// ca
+	"Configurar tots els projectes"
+#elif L==2	// de
+	"Konfigurieren Sie alle Projekte"
+#elif L==3	// en
+	"Configure all projects"
+#elif L==4	// es
+	"Configurar todos los proyectos"
+#elif L==5	// fr
+	"Configurer tous les projets"
+#elif L==6	// gn
+	"Emohenda opaite tembiapor&atilde;"
+#elif L==7	// it
+	"Configurare tutti i progetti"
+#elif L==8	// pl
+	"Skonfigurowa&cacute; wszystkie projekty"
+#elif L==9	// pt
+	"Configurar todos os projetos"
+#elif L==10	// tr
+	"T&uuml;m projeleri yap&inodot;land&inodot;r&inodot;n"
+#endif
+	,
+	[ActRcvCfgPrj] =
+#if   L==1	// ca
+	"Canviar configuraci&oacute; de tots els projectes"
+#elif L==2	// de
+	"&Auml;ndern Sie die Einstellungen f&uuml;r alle Projekte"
+#elif L==3	// en
+	"Change configuration of all projects"
+#elif L==4	// es
+	"Cambiar configuraci&oacute;n de todos los proyectos"
+#elif L==5	// fr
+	"Modifier la configuration de tous les projets"
+#elif L==6	// gn
+	"Emoambue &ntilde;emboheko opaite tembiapor&atilde;me &gtilde;uar&atilde;"
+#elif L==7	// it
+	"Modificare la configurazione di tutti i progetti"
+#elif L==8	// pl
+	"Zmie&nacute; konfiguracj&eogon; wszystkich projekt&oacute;w"
+#elif L==9	// pt
+	"Alterar a configura&ccedil;&atilde;o de todos os projetos"
+#elif L==10	// tr
+	"T&uuml;m projelerin konfig&uuml;rasyonunu de&gbreve;i&scedil;tir"
+#endif
+	,
 	[ActReqUsrPrj] =
 #if   L==1	// ca
-	"Select users to list their projects"			// Necessita traducció
+	"Seleccionar usuaris per llistar els projectes"
 #elif L==2	// de
-	"Select users to list their projects"			// Need Übersetzung
+	"W&auml;hlen Sie Benutzer aus, um ihre Projekte aufzulisten"
 #elif L==3	// en
 	"Select users to list their projects"
 #elif L==4	// es
 	"Seleccionar usuarios para listar sus proyectos"
 #elif L==5	// fr
-	"Select users to list their projects"			// Besoin de traduction
+	"S&eacute;lectionner les utilisateurs pour lister leurs projets"
 #elif L==6	// gn
-	"Seleccionar usuarios para listar sus proyectos"	// Okoteve traducción
+	"Eiporavo puruh&aacute;ra emo&itilde; ha&gtilde;ua iproyectoku&eacute;ra"
 #elif L==7	// it
-	"Select users to list their projects"			// Bisogno di traduzione
+	"Seleziona gli utenti per elencare i loro progetti"
 #elif L==8	// pl
-	"Select users to list their projects"			// Potrzebujesz tlumaczenie
+	"Wybierz u&zdot;ytkownik&oacute;w, aby wy&sacute;wietli&cacute; list&eogon; ich projekt&oacute;w"
 #elif L==9	// pt
-	"Select users to list their projects"			// Precisa de tradução
+	"Selecionar usu&aacute;rios para listar seus projetos"
 #elif L==10	// tr
-	"Select users to list their projects"			// Çeviri lazim!
+	"Projelerini listelemek i&ccedil;in kullan&inodot;c&inodot;lar&inodot; se&ccedil;in"
 #endif
 	,
 	[ActSeeTblAllPrj] =
@@ -9421,52 +9467,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show all projects in a table"			// Precisa de tradução
 #elif L==10	// tr
 	"Show all projects in a table"			// Çeviri lazim!
-#endif
-	,
-	[ActCfgPrj] =
-#if   L==1	// ca
-	"Configure all projects"		// Necessita traducció
-#elif L==2	// de
-	"Configure all projects"		// Need Übersetzung
-#elif L==3	// en
-	"Configure all projects"
-#elif L==4	// es
-	"Configurar todos los proyectos"
-#elif L==5	// fr
-	"Configure all projects"		// Besoin de traduction
-#elif L==6	// gn
-	"Configurar todos los proyectos"	// Okoteve traducción
-#elif L==7	// it
-	"Configure all projects"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Configure all projects"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Configure all projects"		// Precisa de tradução
-#elif L==10	// tr
-	"Configure all projects"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvCfgPrj] =
-#if   L==1	// ca
-	"Change configuration of all projects"			// Necessita traducció
-#elif L==2	// de
-	"Change configuration of all projects"			// Need Übersetzung
-#elif L==3	// en
-	"Change configuration of all projects"
-#elif L==4	// es
-	"Cambiar configuraci&oacute;n de todos los proyectos"
-#elif L==5	// fr
-	"Change configuration of all projects"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar configuraci&oacute;n de todos los proyectos"	// Okoteve traducción
-#elif L==7	// it
-	"Change configuration of all projects"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change configuration of all projects"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change configuration of all projects"			// Precisa de tradução
-#elif L==10	// tr
-	"Change configuration of all projects"			// Çeviri lazim!
 #endif
 	,
 	[ActReqLckAllPrj] =

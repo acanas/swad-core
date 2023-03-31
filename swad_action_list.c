@@ -613,10 +613,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUnhAsg		] = { 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_UnhideAssignment		,NULL},
    [ActReqLnkAsg	] = {1943,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AsgRsc_GetLinkToAssignment	,NULL},
 
+   [ActCfgPrj		] = {1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ShowFormConfig		,NULL},
+   [ActRcvCfgPrj	] = {1804,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ReceiveConfig		,NULL},
    [ActReqUsrPrj	] = {1805,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ListUsrsToSelect		,NULL},
    [ActSeeTblAllPrj	] = {1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableSelectedPrjs	,NULL},
-   [ActCfgPrj		] = {1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowFormConfig		,NULL},
-   [ActRcvCfgPrj	] = {1804,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveConfigPrj		,NULL},
    [ActReqLckAllPrj	] = {1775,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockSelectedPrjsEdition	,NULL},
    [ActReqUnlAllPrj	] = {1776,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnloSelectedPrjsEdition	,NULL},
    [ActLckAllPrj	] = {1777,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockSelectedPrjsEdition	,NULL},

@@ -37,7 +37,7 @@
 /*****************************************************************************/
 
 /***** Configuration *****/
-#define Prj_EDITABLE_DEFAULT true
+#define PrjCfg_EDITABLE_DEFAULT true
 
 /***** Filters to list projects *****/
 /* Whose projects */
@@ -222,6 +222,8 @@ void Prj_PutPars (struct Prj_Filter *Filter,
                     long PrjCod);
 void Prj_GetPars (struct Prj_Projects *Projects);
 
+void Prj_PutIconsListProjects (void *Projects);
+
 void Prj_ShowOneProject (void);
 void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects);
 
@@ -262,8 +264,8 @@ void Prj_UnhideProject (void);
 
 void Prj_ReceiveFormProject (void);
 
-void Prj_ShowFormConfig (void);
-void Prj_ReceiveConfigPrj (void);
+void PrjCfg_ShowFormConfig (void);
+void PrjCfg_ReceiveConfig (void);
 void Prj_ReqLockSelectedPrjsEdition (void);
 void Prj_ReqUnloSelectedPrjsEdition (void);
 void Prj_LockSelectedPrjsEdition (void);
