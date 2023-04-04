@@ -4716,7 +4716,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
 			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
-			     true);	// Put link to view metadata
+			     Frm_PUT_FORM_TO_GO);	// Put link to view metadata
 	 else
 	    /*
 	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"up-right-from-square.svg",Txt_Link,
@@ -4738,7 +4738,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 /*****************************************************************************/
 
 void Brw_PutIconFile (const char *FileName,
-		      const char *Class,bool PutLinkToViewMetadata)
+		      const char *Class,Frm_PutFormToGo_t PutFormToGo)
   {
    extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
    extern const char *Ext_FileExtensionsAllowed[];
@@ -4773,10 +4773,15 @@ void Brw_PutIconFile (const char *FileName,
 	 Err_NotEnoughMemoryExit ();
      }
 
-   if (PutLinkToViewMetadata)
-      HTM_INPUT_IMAGE (URL,Icon,Title,"class=\"%s\"",Class);
-   else
-      HTM_IMG (URL,Icon,Title,"class=\"%s\"",Class);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+	 HTM_IMG (URL,Icon,Title,"class=\"%s\"",Class);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+         HTM_INPUT_IMAGE (URL,Icon,Title,"class=\"%s\"",Class);
+	 break;
+     }
    free (Title);
    free (Icon);
    free (URL);
@@ -8184,7 +8189,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
 				"ICO40x40",
-				false);	// Don't put link to view metadata
+				Frm_DONT_PUT_FORM_TO_GO);	// Don't put link to view metadata
 	    else
 	       Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 
@@ -8209,7 +8214,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
 			     "ICO40x40",
-			     false);	// Don't put link to view metadata
+			     Frm_DONT_PUT_FORM_TO_GO);	// Don't put link to view metadata
 	 else
 	    Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 	 HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
@@ -9681,7 +9686,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 		  case Brw_IS_FILE:
 		     Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
 				      "CONTEXT_ICO16x16",
-				      false);	// Don't put link to view metadata
+				      Frm_DONT_PUT_FORM_TO_GO);	// Don't put link to view metadata
 		     break;
 		  case Brw_IS_FOLDER:
 		     Ico_PutIcon ("folder-yellow.png",Ico_UNCHANGED,

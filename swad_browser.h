@@ -30,6 +30,7 @@
 #include <linux/limits.h>	// For PATH_MAX
 
 #include "swad_course.h"
+#include "swad_form.h"
 #include "swad_group.h"
 #include "swad_notification.h"
 
@@ -246,7 +247,7 @@ void Brw_DB_RemoveExpiredExpandedFolders (void);
 void Brw_SetFullPathInTree (void);
 
 void Brw_PutIconFile (const char *FileName,
-		      const char *Class,bool PutLinkToViewMetadata);
+		      const char *Class,Frm_PutFormToGo_t PutFormToGo);
 
 //-----------------------------------------------------------------------------
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,

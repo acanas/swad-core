@@ -231,10 +231,10 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
+void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToGo,
                         const char *Icon,const char *IconTitle)
   {
-   static void (*WriteLinkName[Rsc_NUM_TYPES]) (long Cod,bool PutFormToGo,
+   static void (*WriteLinkName[Rsc_NUM_TYPES]) (long Cod,Frm_PutFormToGo_t PutFormToGo,
 						const char *Icon,
 						const char *IconTitle) =
      {
@@ -264,7 +264,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,bool PutFormToGo,
 /*****************************************************************************/
 
 void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,
-                             __attribute__((unused)) bool PutFormToGo,
+                             __attribute__((unused)) Frm_PutFormToGo_t PutFormToGo,
                              const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];

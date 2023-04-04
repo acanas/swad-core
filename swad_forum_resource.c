@@ -79,7 +79,7 @@ void ForRsc_GetLinkToThread (void)
 /************************ Write thread as resource ***************************/
 /*****************************************************************************/
 
-void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
+void ForRsc_WriteResourceThread (long ThrCod,Frm_PutFormToGo_t PutFormToGo,
                                  const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -91,7 +91,7 @@ void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
    ForRsc_GetTitleFromThrCod (ThrCod,Subject,sizeof (Subject) - 1);
 
    /***** Begin form to go to survey *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       /***** Set forum and thread *****/
       For_ResetForums (&Forums);
@@ -112,16 +112,21 @@ void ForRsc_WriteResourceThread (long ThrCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	 break;
+     }
 
    /***** Write title of forum *****/
    HTM_Txt (Subject);
 
    /***** End form to download file *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();

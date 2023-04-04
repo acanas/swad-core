@@ -69,7 +69,7 @@ void ExaRsc_GetLinkToExam (void)
 /**************************** Write exam as resource *************************/
 /*****************************************************************************/
 
-void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
+void ExaRsc_WriteResourceExam (long ExaCod,Frm_PutFormToGo_t PutFormToGo,
                                const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -80,7 +80,7 @@ void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
    ExaRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to exam *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       NextAction = (ExaCod > 0)	? ActSeeExa :	// Exam specified
 				  ActSeeAllExa;	// All exams
@@ -92,16 +92,21 @@ void ExaRsc_WriteResourceExam (long ExaCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	 break;
+     }
 
    /***** Write title of exam *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 void RubRsc_GetLinkToRubric (void);
-void RubRsc_WriteResourceRubric (long RubCod,bool PutFormToGo,
+void RubRsc_WriteResourceRubric (long RubCod,Frm_PutFormToGo_t PutFormToGo,
                                  const char *Icon,const char *IconTitle);
 void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize);
 

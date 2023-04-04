@@ -92,7 +92,7 @@ void BrwRsc_GetLinkToFile (void)
 /************************ Write document as resource *************************/
 /*****************************************************************************/
 
-void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteResourceDocument (long FilCod,Frm_PutFormToGo_t PutFormToGo,
                                    const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Documents;
@@ -116,7 +116,7 @@ void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
       Str_Copy (Title,Txt_Documents,sizeof (Title) - 1);
 
    /***** Begin form to go to file data *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeDocCrs :	// Document specified
 					       ActSeeAdmDocCrsGrp;	// All documents
@@ -138,30 +138,39 @@ void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
 	 case Brw_IS_FILE:
 	    Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
 			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
-			     PutFormToGo);	// Put link to view metadata
+			     PutFormToGo);	// Put link to view metadata?
 	    break;
 	 case Brw_IS_LINK:
-	    if (PutFormToGo)
-	       Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,NextAction);
-	    else
-	       Ico_PutIconOn ("up-right-from-square.svg",Ico_BLACK,IconTitle);
+	    switch (PutFormToGo)
+	      {
+	       case Frm_DONT_PUT_FORM_TO_GO:
+		  Ico_PutIconOn ("up-right-from-square.svg",Ico_BLACK,IconTitle);
+		  break;
+	       case Frm_PUT_FORM_TO_GO:
+		  Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,NextAction);
+		  break;
+	      }
+
 	    break;
 	 default:
 	    break;
 	}
    else	// Documents zone
-     {
-      if (PutFormToGo)
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-      else
-	 Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-     }
+      switch (PutFormToGo)
+	{
+	 case Frm_DONT_PUT_FORM_TO_GO:
+	    Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	    break;
+	 case Frm_PUT_FORM_TO_GO:
+	    Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	    break;
+        }
 
    /***** Write title *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -172,7 +181,7 @@ void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
 /************************ Write marks file as resource ***********************/
 /*****************************************************************************/
 
-void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteResourceMarksFile (long FilCod,Frm_PutFormToGo_t PutFormToGo,
                                     const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Marks_area;
@@ -196,7 +205,7 @@ void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
       Str_Copy (Title,Txt_Marks_area,sizeof (Title) - 1);
 
    /***** Begin form to go to file data *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       NextAction = (FileMetadata.FilCod > 0) ? ActReqDatSeeMrkCrs :	// Marks file specified
 					       ActSeeAdmMrk;		// All marks files
@@ -212,16 +221,21 @@ void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	 break;
+     }
 
    /***** Write filename *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();

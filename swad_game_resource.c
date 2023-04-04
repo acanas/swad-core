@@ -71,7 +71,7 @@ void GamRsc_GetLinkToGame (void)
 /************************** Write game as resource ***************************/
 /*****************************************************************************/
 
-void GamRsc_WriteResourceGame (long GamCod,bool PutFormToGo,
+void GamRsc_WriteResourceGame (long GamCod,Frm_PutFormToGo_t PutFormToGo,
                                const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -82,7 +82,7 @@ void GamRsc_WriteResourceGame (long GamCod,bool PutFormToGo,
    GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to game *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       NextAction = (GamCod > 0)	? ActSeeGam :	// Game specified
 				  ActSeeAllGam;	// All games
@@ -94,16 +94,21 @@ void GamRsc_WriteResourceGame (long GamCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	 break;
+     }
 
    /***** Write game title of exam *****/
    HTM_Txt (Title);
 
    /***** End form to go to game *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();

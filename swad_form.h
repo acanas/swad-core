@@ -32,7 +32,7 @@
 #include "swad_cryptography.h"
 
 /*****************************************************************************/
-/****************************** Public constants *****************************/
+/************************** Public constants and types ***********************/
 /*****************************************************************************/
 
 #define Frm_MAX_BYTES_ID (32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10)
@@ -41,6 +41,12 @@
 #define Frm_MAX_BYTES_PARAM_SESSION	(256 + Cns_BYTES_SESSION_ID)
 #define Frm_MAX_BYTES_PARAM_LOCATION	256
 #define Frm_MAX_BYTES_PARAMS_STR	(Frm_MAX_BYTES_PARAM_ACTION + Frm_MAX_BYTES_PARAM_SESSION + Frm_MAX_BYTES_PARAM_LOCATION)
+
+typedef enum
+  {
+   Frm_DONT_PUT_FORM_TO_GO,
+   Frm_PUT_FORM_TO_GO,
+  } Frm_PutFormToGo_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

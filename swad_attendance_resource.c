@@ -65,7 +65,7 @@ void AttRsc_GetLinkToEvent (void)
 /****************** Write attendance event as resource ***********************/
 /*****************************************************************************/
 
-void AttRsc_WriteResourceEvent (long AttCod,bool PutFormToGo,
+void AttRsc_WriteResourceEvent (long AttCod,Frm_PutFormToGo_t PutFormToGo,
                                 const char *Icon,const char *IconTitle)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -76,7 +76,7 @@ void AttRsc_WriteResourceEvent (long AttCod,bool PutFormToGo,
    AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
 
    /***** Begin form to go to game *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       NextAction = (AttCod > 0)	? ActSeeOneAtt :	// Attendance events specified
 				  ActSeeAtt;		// All attendance events
@@ -89,16 +89,21 @@ void AttRsc_WriteResourceEvent (long AttCod,bool PutFormToGo,
      }
 
    /***** Icon depending on type ******/
-   if (PutFormToGo)
-      Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-   else
-      Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+   switch (PutFormToGo)
+     {
+      case Frm_DONT_PUT_FORM_TO_GO:
+         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+         Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
+	 break;
+     }
 
    /***** Write attendance event title *****/
    HTM_Txt (Title);
 
    /***** End form to download file *****/
-   if (PutFormToGo)
+   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
          HTM_BUTTON_End ();
       Frm_EndForm ();

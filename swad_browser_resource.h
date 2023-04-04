@@ -34,9 +34,9 @@
 /*****************************************************************************/
 
 void BrwRsc_GetLinkToFile (void);
-void BrwRsc_WriteResourceDocument (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteResourceDocument (long FilCod,Frm_PutFormToGo_t PutFormToGo,
                                    const char *Icon,const char *IconTitle);
-void BrwRsc_WriteResourceMarksFile (long FilCod,bool PutFormToGo,
+void BrwRsc_WriteResourceMarksFile (long FilCod,Frm_PutFormToGo_t PutFormToGo,
                                     const char *Icon,const char *IconTitle);
 void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize);
 void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize);

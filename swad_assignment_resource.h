@@ -30,12 +30,14 @@
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For size_t
 
+#include "swad_form.h"
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void AsgRsc_GetLinkToAssignment (void);
-void AsgRsc_WriteResourceAssignment (long AsgCod,bool PutFormToGo,
+void AsgRsc_WriteResourceAssignment (long AsgCod,Frm_PutFormToGo_t PutFormToGo,
                                      const char *Icon,const char *IconTitle);
 void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
 
