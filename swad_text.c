@@ -12020,7 +12020,7 @@ const char *Txt_Editable =
 #elif L==5	// fr
 	"&Eacute;ditables";
 #elif L==6	// gn
-	"Editables";	// Okoteve traducción
+	"Ojeedit&aacute;kuaa";
 #elif L==7	// it
 	"Modificabili";
 #elif L==8	// pl
@@ -12028,7 +12028,7 @@ const char *Txt_Editable =
 #elif L==9	// pt
 	"Edit&aacute;veis";
 #elif L==10	// tr
-	"Editable";	// Çeviri lazim!
+	"D&uuml;zenlenebilir";
 #endif
 
 const char *Txt_Editable_by_non_editing_teachers =
@@ -12043,7 +12043,7 @@ const char *Txt_Editable_by_non_editing_teachers =
 #elif L==5	// fr
 	"&Eacute;ditables par des enseignants non-&eacute;diteurs";
 #elif L==6	// gn
-	"Editables por profesores no editores";		// Okoteve traducción
+	"Omohendakuaa mbo'eh&aacute;ra ndaha'&eacute;iva edici&oacute;n";
 #elif L==7	// it
 	"Modificabili da professori non-editing";
 #elif L==8	// pl
@@ -12051,53 +12051,53 @@ const char *Txt_Editable_by_non_editing_teachers =
 #elif L==9	// pt
 	"Edit&aacute;veis por professores n&atilde;o editores";
 #elif L==10	// tr
-	"Editable by non-editing teachers";		// Çeviri lazim!
+	"D&uuml;zenleme yapmayan &ouml;&gbreve;retmenler taraf&inodot;ndan d&uuml;zenlenebilir";
 #endif
 
 const char *Txt_eg_A_B =
 #if   L==1	// ca
-	"per ex.: A, B,&hellip;";
+	"per ex.: A, B&hellip;";
 #elif L==2	// de
-	"z. B.: A, B,&hellip;";
+	"z. B.: A, B&hellip;";
 #elif L==3	// en
-	"e.g., A, B,&hellip;";
+	"e.g., A, B&hellip;";
 #elif L==4	// es
-	"por ej.: A, B,&hellip;";
+	"por ej.: A, B&hellip;";
 #elif L==5	// fr
-	"par exemple: A, B,&hellip;";
+	"par exemple: A, B&hellip;";
 #elif L==6	// gn
-	"por ej.: A, B,&hellip;";	// Okoteve traducción
+	"techapyr&atilde; ramo: A, B&hellip;";
 #elif L==7	// it
-	"ad esempio: A, B,&hellip;";
+	"ad esempio: A, B&hellip;";
 #elif L==8	// pl
-	"np. A, B, &hellip;";
+	"np. A, B&hellip;";
 #elif L==9	// pt
-	"ex.: A, B,&hellip;";
+	"ex.: A, B&hellip;";
 #elif L==10	// tr
-	"e.g., A, B,&hellip;";		// Çeviri lazim!
+	"&ouml;rne&gbreve;in: A, B&hellip;";
 #endif
 
 const char *Txt_eg_Lectures_Practicals =
 #if   L==1	// ca
-	"per ex.: Teoria, Pr&agrave;ctiques,&hellip;";
+	"per ex.: Teoria, Pr&agrave;ctiques&hellip;";
 #elif L==2	// de
-	"z. B.: Vorlesung, &Uuml;bung,&hellip;";
+	"z. B.: Vorlesung, &Uuml;bung&hellip;";
 #elif L==3	// en
-	"e.g., Lectures, Practicals,&hellip;";
+	"e.g., Lectures, Practicals&hellip;";
 #elif L==4	// es
-	"por ej.: Teor&iacute;a, Pr&aacute;cticas,&hellip;";
+	"por ej.: Teor&iacute;a, Pr&aacute;cticas&hellip;";
 #elif L==5	// fr
-	"par exemple: Th&eacute;orie, Pratique,&hellip;";
+	"par exemple: Th&eacute;orie, Pratique&hellip;";
 #elif L==6	// gn
-	"por ej.: Teor&iacute;a, Pr&aacute;cticas,&hellip;";	// Okoteve traducción
+	"techapyr&atilde; ramo: Teor&iacute;a, Pr&aacute;cticas rehegua&hellip;";	// Okoteve traducción
 #elif L==7	// it
-	"ad esempio: Teoria, Pratica,&hellip;";
+	"ad esempio: Teoria, Pratica&hellip;";
 #elif L==8	// pl
 	"np. Wyklady, Praktyki &hellip;";
 #elif L==9	// pt
-	"ex.: Teoria, Pr&aacute;tica,&hellip;";
+	"ex.: Teoria, Pr&aacute;tica&hellip;";
 #elif L==10	// tr
-	"e.g., Lectures, Practicals,&hellip;";			// Çeviri lazim!
+	"&ouml;rne&gbreve;in: Teori, Uygulamalar&hellip;";
 #endif
 
 const char *Txt_ELAPSED_TIME =
@@ -12112,7 +12112,7 @@ const char *Txt_ELAPSED_TIME =
 #elif L==5	// fr
 	"Y a";
 #elif L==6	// gn
-	"Hace";	// Okoteve traducción
+	"Ojapo";
 #elif L==7	// it
 	"Fa";
 #elif L==8	// pl
@@ -12120,7 +12120,7 @@ const char *Txt_ELAPSED_TIME =
 #elif L==9	// pt
 	"Atr&aacute;s";
 #elif L==10	// tr
-	"Ago";	// Çeviri lazim!
+	"&Ouml;nce";
 #endif
 
 const char *Txt_Eliminate =
@@ -12135,7 +12135,7 @@ const char *Txt_Eliminate =
 #elif L==5	// fr
 	"&Eacute;liminer";
 #elif L==6	// gn
-	"Mbogue";
+	"Pe'a";
 #elif L==7	// it
 	"Rimuovere";
 #elif L==8	// pl
@@ -12143,7 +12143,7 @@ const char *Txt_Eliminate =
 #elif L==9	// pt
 	"Eliminar";
 #elif L==10	// tr
-	"Eliminate";	// Çeviri lazim!
+	"Elemek";
 #endif
 
 const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2 =

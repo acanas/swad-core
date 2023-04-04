@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.89 (2023-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 22.89.1 (2023-04-04)"
 #define CSS_FILE		"swad22.88.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.89.1:  Apr 04, 2023  Code refactoring in projects configuration. (338622 lines)
 	Version 22.89:    Apr 01, 2023  New module swad_project_config for projects configuration. (338613 lines)
 	Version 22.88:    Mar 31, 2023  Code refactoring in resources. (338538 lines)
 	Version 22.87.1:  Mar 31, 2023  Some messages translated. (338610 lines)

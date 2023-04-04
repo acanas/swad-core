@@ -47,6 +47,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void PrjCfg_ShowFormConfigEditableByNET (const struct Prj_Projects *Projects);
+
 static void PrjCfg_GetCrsPrjsConfig (struct Prj_Projects *Projects);
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct Prj_Projects *Projects);
@@ -75,8 +77,6 @@ void PrjCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Configure_projects;
-   extern const char *Txt_Editable;
-   extern const char *Txt_Editable_by_non_editing_teachers;
    extern const char *Txt_Save_changes;
    struct Prj_Projects Projects;
 
@@ -94,23 +94,11 @@ void PrjCfg_ShowFormConfig (void)
       /***** Begin form *****/
       Frm_BeginForm (ActRcvCfgPrj);
 
-	 /***** Projects are editable by non-editing teachers? *****/
 	 HTM_TABLE_BeginCenterPadding (2);
-	    HTM_TR_Begin (NULL);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Editable",Txt_Editable);
+	    /***** Projects are editable by non-editing teachers? *****/
+	    PrjCfg_ShowFormConfigEditableByNET (&Projects);
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "id=\"Editable\" value=\"Y\"%s",
-				      Projects.Config.Editable ? " checked=\"checked\"" :
-								 "");
-		  HTM_Txt (Txt_Editable_by_non_editing_teachers);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
@@ -121,6 +109,32 @@ void PrjCfg_ShowFormConfig (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************** Projects are editable by non-editing teachers? ***************/
+/*****************************************************************************/
+
+static void PrjCfg_ShowFormConfigEditableByNET (const struct Prj_Projects *Projects)
+  {
+   extern const char *Txt_Editable;
+   extern const char *Txt_Editable_by_non_editing_teachers;
+
+   HTM_TR_Begin (NULL);
+
+      /***** Label *****/
+      Frm_LabelColumn ("RT","Editable",Txt_Editable);
+
+      /***** Data *****/
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Editable\" value=\"Y\"%s",
+			     Projects->Config.Editable ? " checked=\"checked\"" :
+							 "");
+	 HTM_Txt (Txt_Editable_by_non_editing_teachers);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
