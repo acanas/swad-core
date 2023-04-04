@@ -99,14 +99,14 @@ static void Mai_PutHeadMailDomains (void);
 static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args);
 static void Mai_ListEmails (__attribute__((unused)) void *Args);
 
-static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
+static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 				        bool IMustFillInEmail,
 				        bool IShouldConfirmEmail);
 static void Mai_PutParsRemoveMyEmail (void *Email);
 static void Mai_PutParsRemoveOtherEmail (void *Email);
 
 static void Mai_RemoveEmail (struct Usr_Data *UsrDat);
-static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe);
+static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
@@ -1032,7 +1032,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change email *****/
-	 Mai_ShowFormChangeUsrEmail (true,	// ItsMe
+	 Mai_ShowFormChangeUsrEmail (Usr_ME,
 				     IMustFillInEmail,
 				     IShouldConfirmEmail);
 
@@ -1063,7 +1063,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change email *****/
-	 Mai_ShowFormChangeUsrEmail (false,	// ItsMe
+	 Mai_ShowFormChangeUsrEmail (Usr_OTHER,
 				     false,	// IMustFillInEmail
 				     false);	// IShouldConfirmEmail
 
@@ -1078,7 +1078,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 /********************** Show form to change user's email *********************/
 /*****************************************************************************/
 
-static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
+static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 				        bool IMustFillInEmail,
 				        bool IShouldConfirmEmail)
   {
@@ -1102,22 +1102,41 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    static const struct
      {
       Act_Action_t Remove;
-      Act_Action_t New;
+      Act_Action_t Change;
      } NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_GST	  ] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_USR    ] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_STD	  ] = {ActRemMaiStd,ActNewMaiStd},
-      [Rol_NET	  ] = {ActRemMaiTch,ActNewMaiTch},
-      [Rol_TCH	  ] = {ActRemMaiTch,ActNewMaiTch},
-      [Rol_DEG_ADM] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_CTR_ADM] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_INS_ADM] = {ActRemMaiOth,ActNewMaiOth},
-      [Rol_SYS_ADM] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_UNK	  ] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_GST	  ] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_USR    ] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_STD	  ] = {ActRemMaiStd,ActChgMaiStd},
+      [Rol_NET	  ] = {ActRemMaiTch,ActChgMaiTch},
+      [Rol_TCH	  ] = {ActRemMaiTch,ActChgMaiTch},
+      [Rol_DEG_ADM] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_CTR_ADM] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_INS_ADM] = {ActRemMaiOth,ActChgMaiOth},
+      [Rol_SYS_ADM] = {ActRemMaiOth,ActChgMaiOth},
      };
-   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
-	                                   &Gbl.Usrs.Other.UsrDat);
+   static const struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
+     };
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+     {
+      [Usr_ME   ] = Mai_PutParsRemoveMyEmail,
+      [Usr_OTHER] = Mai_PutParsRemoveOtherEmail
+     };
+   struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t Change;
+     } ActMail[Rol_NUM_ROLES] =
+     {
+      [Usr_ME   ] = {.Remove = ActRemMyMai,
+	             .Change = ActChgMyMai},
+      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
+	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
+     };
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (Mai_EMAIL_SECTION_ID);
@@ -1129,7 +1148,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   NumEmails = Mai_DB_GetMyEmails (&mysql_res,UsrDat->UsrCod);
+   NumEmails = Mai_DB_GetMyEmails (&mysql_res,UsrDat[MeOrOther]->UsrCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -1167,12 +1186,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	   }
 
 	 /* Form to remove email */
-	 if (ItsMe)
-	    Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
-					   Mai_PutParsRemoveMyEmail,row[0]);
-	 else
-	    Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Mai_EMAIL_SECTION_ID,
-					   Mai_PutParsRemoveOtherEmail,row[0]);
+	 Ico_PutContextualIconToRemove (ActMail[MeOrOther].Remove,Mai_EMAIL_SECTION_ID,
+					FuncParsRemove[MeOrOther],row[0]);
 
 	 /* Email */
 	 HTM_Txt (row[0]);
@@ -1187,19 +1202,15 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	   }
 
 	 /* Form to change user's email */
-	 if (NumEmail > 1 || (ItsMe && !Confirmed))
+	 if (NumEmail > 1 || (MeOrOther == Usr_ME && !Confirmed))
 	   {
 	    HTM_BR ();
-	    if (ItsMe)
-	       Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
-	    else
-	      {
-	       Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-		  Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	      }
+	    Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
+               if (MeOrOther == Usr_OTHER)
+	          Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       Par_PutParString (NULL,"NewEmail",row[0]);
-	       Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
-								      Txt_Use_this_email);
+	       Btn_PutConfirmButtonInline ((MeOrOther == Usr_ME && NumEmail == 1) ? Txt_Confirm_email :
+								                    Txt_Use_this_email);
 	    Frm_EndForm ();
 	   }
 
@@ -1224,19 +1235,15 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
                     The_GetSuffix ());
-	 if (ItsMe)
-	    Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
-	 else
-	   {
-	    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	   }
-	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
+	 Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
+            if (MeOrOther == Usr_OTHER)
+	       Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
 			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"18\"",
 			     The_GetSuffix ());
 	    HTM_BR ();
 	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
-						   Txt_Save_changes);		// User has no email address yet
+						   Txt_Save_changes);	// User has no email address yet
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1334,7 +1341,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 void May_NewMyUsrEmail (void)
   {
    /***** Remove user's email *****/
-   Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,
+   Mai_ChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,
 		    true);	// It's me
 
    /***** Show my account again *****/
@@ -1342,19 +1349,19 @@ void May_NewMyUsrEmail (void)
   }
 
 /*****************************************************************************/
-/********************* New user's email for another user *********************/
+/************************ Change another user's email ************************/
 /*****************************************************************************/
 
-void Mai_NewOtherUsrEmail (void)
+void Mai_ChangeOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** New user's ID *****/
-	 Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,
-	                  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+	 /***** Change user's ID *****/
+	 Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
+	                     Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	 /***** Show form again *****/
 	 Acc_ShowFormChgOtherUsrAccount ();
@@ -1367,10 +1374,10 @@ void Mai_NewOtherUsrEmail (void)
   }
 
 /*****************************************************************************/
-/************************* Update my email address ***************************/
+/*************************** Change email address ****************************/
 /*****************************************************************************/
 
-static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe)
+static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_The_email_address_X_matches_one_previously_registered;
    extern const char *Txt_The_email_address_X_has_been_registered_successfully;
@@ -1405,7 +1412,7 @@ static void Mai_NewUsrEmail (struct Usr_Data *UsrDat,bool ItsMe)
 
 	       /***** Send message via email
 		      to confirm the new email address *****/
-	       if (ItsMe)
+	       if (MeOrOther == Usr_ME)
 		  Mai_SendMailMsgToConfirmEmail ();
 	      }
 	    else
@@ -1656,7 +1663,7 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
   {
    /***** I can see my email *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** Check if I have permission to see another user's email *****/

@@ -110,8 +110,8 @@ void Pho_RemoveUsrPhoto (void);
 
 void Pho_UpdateMyPhoto1 (void);
 void Pho_UpdateMyPhoto2 (void);
-void Pho_UpdateUsrPhoto1 (void);
-void Pho_UpdateUsrPhoto2 (void);
+void Pho_ChangeUsrPhoto1 (void);
+void Pho_ChangeUsrPhoto2 (void);
 
 unsigned Pho_UpdateMyClicksWithoutPhoto (void);
 

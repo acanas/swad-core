@@ -340,7 +340,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 	    UsrDat.Nickname[Nickname.Length] = '\0';
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
-	       if (!Usr_ItsMe (UsrDat.UsrCod))	// Not me
+	       if (Usr_ItsMe (UsrDat.UsrCod) == Usr_OTHER)	// Not me
 		 {
 		  /* Get user's data */
 		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,

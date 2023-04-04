@@ -615,6 +615,11 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
+   const char *Title[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_My_public_profile,
+      [Usr_OTHER] = Txt_Another_user_s_profile,
+     };
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
@@ -622,8 +627,7 @@ static void TmlCom_WriteAuthorName (const struct Usr_Data *UsrDat)	// Author
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							    Txt_Another_user_s_profile,
+      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
 			       "class=\"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK DAT_%s BOLD\"",
                                The_GetSuffix ());
 	 HTM_Txt (UsrDat->FullName);
@@ -678,7 +682,7 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 
       /***** Foot column 2: icon to remove this comment *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
-	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// I am the author
 	    TmlCom_PutFormToRemoveComm (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
@@ -990,8 +994,8 @@ static void TmlCom_RemoveComm (void)
       return;
      }
 
-   /***** Trivial check 2: only if I am the author of this comment *****/
-   if (!Usr_ItsMe (Com.UsrCod))
+   /***** Trivial check 2: only if I am the author of this comment? *****/
+   if (Usr_ItsMe (Com.UsrCod) == Usr_OTHER)
      {
       Med_MediaDestructor (&Com.Content.Media);
       Err_NoPermission ();

@@ -292,10 +292,16 @@ void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
    HTM_DIV_Begin ("class=\"Tml_ICO\"");
 
       /* Icon to fav/unfav or share/unshare this note/comment */
-      if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav or share/unshare
-         TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
-      else			// I am not the author
-	 TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
+      switch (Usr_ItsMe (UsrCod))
+        {
+	 case Usr_ME:		// I am the author ==> I can not fav/unfav or share/unshare
+	    TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
+	    break;
+	 case Usr_OTHER:	// I am not the author
+	 default:
+	    TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
+	    break;
+        }
 
    /* End container */
    HTM_DIV_End ();
@@ -385,7 +391,7 @@ bool TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
 
    /***** Trivial check 2: I must be logged
 			   I can not fav/share my own notes/comments *****/
-   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod))
+   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod) == Usr_ME)
      {
       Err_NoPermission ();
       return false;
@@ -411,7 +417,7 @@ bool TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
 
    /***** Trivial check 2: I must be logged
 			   I can only remove my own notes/comments *****/
-   if (!Gbl.Usrs.Me.Logged || !Usr_ItsMe (UsrCod))
+   if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod) == Usr_OTHER)
      {
       Err_NoPermission ();
       return false;

@@ -353,8 +353,8 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat,
 
 	    /* I follow user? */
 	    HTM_DIV_Begin ("id=\"follow_usr\"");
-	       if (Gbl.Usrs.Me.Logged &&	// Logged
-		   !Usr_ItsMe (UsrDat->UsrCod))	// Not me!
+	       if (Gbl.Usrs.Me.Logged &&			// Logged
+		   Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)	// Not me!
 		 {
 		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
 					      ActFolUsr);
@@ -585,7 +585,7 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** If it's me, mark possible notification as seen *****/
-      if (Usr_ItsMe (UsrDat->UsrCod))
+      if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
 	 Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_FOLLOWER);
      }
    else
@@ -633,8 +633,8 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	 Frm_EndForm ();
 	}
 
-      if (!Gbl.Usrs.Me.Logged ||	// Not logged
-	  Usr_ItsMe (UsrDat->UsrCod))	// It's me
+      if (!Gbl.Usrs.Me.Logged ||		// Not logged
+	  Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// It's me
 	 /* Inactive icon to follow/unfollow */
 	 Fol_PutInactiveIconToFollowUnfollow ();
       else				// It's not me
@@ -698,8 +698,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       /***** Icon to follow *****/
       HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",
                     The_GetColorRows ());
-	 if (!Gbl.Usrs.Me.Logged ||	// Not logged
-	     Usr_ItsMe (UsrDat->UsrCod))	// It's me
+	 if (!Gbl.Usrs.Me.Logged ||			// Not logged
+	     Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// It's me
 	    /* Inactive icon to follow/unfollow */
 	    Fol_PutInactiveIconToFollowUnfollow ();
 	 else				// It's not me

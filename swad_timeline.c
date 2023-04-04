@@ -427,7 +427,7 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 	 TmlWho_PutFormWho (Timeline);
 
       /***** Form to write a new post *****/
-      if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
 	 TmlPst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/

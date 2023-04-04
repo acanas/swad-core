@@ -49,6 +49,6 @@ void Nck_RemoveMyNick (void);
 void Nck_RemoveOtherUsrNick (void);
 
 void Nck_UpdateMyNick (void);
-void Nck_UpdateOtherUsrNick (void);
+void Nck_ChangeOtherUsrNick (void);
 
 #endif

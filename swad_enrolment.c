@@ -114,16 +114,16 @@ static void Enr_PutActionsRegRemSeveralUsrs (void);
 static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role);
 
 static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
-                                       bool UsrBelongsToCrs,bool ItsMe);
+                                       bool UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther);
 static void Enr_PutActionRegOneDegAdm (bool *OptionChecked);
 static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked);
 static void Enr_PutActionRegOneInsAdm (bool *OptionChecked);
 static void Enr_PutActionRepUsrAsDup (bool *OptionChecked);
-static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe);
-static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe);
-static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe);
-static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe);
-static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe);
+static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAcc (bool *OptionChecked,Usr_MeOrOther_t MeOrOther);
 static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
                                          bool *OptionChecked);
 static void Enr_RegRemOneUsrActionEnd (void);
@@ -315,7 +315,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole]));
-   NotifyByEmail = CreateNotif && !Usr_ItsMe (UsrDat->UsrCod) &&
+   NotifyByEmail = CreateNotif && Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&
 		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole]));
    if (CreateNotif)
       Ntf_DB_StoreNotifyEventToUsr (NotifyEvent[NewRole],UsrDat->UsrCod,-1L,
@@ -1306,7 +1306,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
+bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
   {
    bool OptionsShown = false;
    bool UsrBelongsToCrs = false;
@@ -1347,7 +1347,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       /***** Register user in course / Modify user's data *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
-	 Enr_PutActionModifyOneUsr (&OptionChecked,UsrBelongsToCrs,ItsMe);
+	 Enr_PutActionModifyOneUsr (&OptionChecked,UsrBelongsToCrs,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1380,7 +1380,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	}
 
       /***** Report user as possible duplicate *****/
-      if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
+      if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
 	 Enr_PutActionRepUsrAsDup (&OptionChecked);
 	 OptionsShown = true;
@@ -1389,7 +1389,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       /***** Remove user from the course *****/
       if (UsrBelongsToCrs)
 	{
-	 Enr_PutActionRemUsrFromCrs (&OptionChecked,ItsMe);
+	 Enr_PutActionRemUsrFromCrs (&OptionChecked,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1399,24 +1399,27 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	   {
 	    if (Gbl.Hierarchy.Ins.InsCod > 0)
 	       /***** Remove user as an administrator of the degree *****/
-	       if (UsrIsDegAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
+	       if (UsrIsDegAdmin &&
+	           (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
 		 {
-		  Enr_PutActionRemUsrAsDegAdm (&OptionChecked,ItsMe);
+		  Enr_PutActionRemUsrAsDegAdm (&OptionChecked,MeOrOther);
 		  OptionsShown = true;
 		 }
 
 	     /***** Remove user as an administrator of the center *****/
-	     if (UsrIsCtrAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
+	     if (UsrIsCtrAdmin &&
+		 (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	      {
-	       Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,ItsMe);
+	       Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,MeOrOther);
 	       OptionsShown = true;
 	      }
 	   }
 
 	 /***** Remove user as an administrator of the institution *****/
-	 if (UsrIsInsAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
+	 if (UsrIsInsAdmin &&
+	     (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
 	   {
-	    Enr_PutActionRemUsrAsInsAdm (&OptionChecked,ItsMe);
+	    Enr_PutActionRemUsrAsInsAdm (&OptionChecked,MeOrOther);
 	    OptionsShown = true;
 	   }
 	}
@@ -1424,7 +1427,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       /***** Eliminate user completely from platform *****/
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 Enr_PutActionRemUsrAcc (&OptionChecked,ItsMe);
+	 Enr_PutActionRemUsrAcc (&OptionChecked,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1439,19 +1442,22 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 /*****************************************************************************/
 
 static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
-                                       bool UsrBelongsToCrs,bool ItsMe)
+                                       bool UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther)
   {
-   extern const char *Txt_Modify_me_in_the_course_X;
-   extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
+   extern const char *Txt_Modify_me_in_the_course_X;
+   extern const char *Txt_Modify_user_in_the_course_X;
+   const char *Txt[2][Usr_NUM_ME_OR_OTHER] =
+     {
+      [false][Usr_ME   ] = Txt_Register_me_in_X,
+      [false][Usr_OTHER] = Txt_Register_USER_in_the_course_X,
+      [true ][Usr_ME   ] = Txt_Modify_me_in_the_course_X,
+      [true ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
-      HTM_TxtF (UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
-					   Txt_Modify_user_in_the_course_X) :
-				  (ItsMe ? Txt_Register_me_in_X :
-					   Txt_Register_USER_in_the_course_X),
-		Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],Gbl.Hierarchy.Crs.ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1514,15 +1520,18 @@ static void Enr_PutActionRepUsrAsDup (bool *OptionChecked)
 /****************** Put action to remove user from course ********************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe)
+static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove_USER_from_THE_COURSE_X;
+   const char *Txt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_from_THE_COURSE_X,
+      [Usr_OTHER] = Txt_Remove_USER_from_THE_COURSE_X,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,OptionChecked);
-      HTM_TxtF (ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
-			Txt_Remove_USER_from_THE_COURSE_X,
-		Gbl.Hierarchy.Crs.ShrtName);
+      HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Crs.ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1530,15 +1539,18 @@ static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe)
 /***************** Put action to remove user as degree admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
+static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
+   const char *Txt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_as_an_administrator_of_the_degree_X,
+      [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_degree_X,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
-      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-			Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-		Gbl.Hierarchy.Deg.ShrtName);
+      HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Deg.ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1546,15 +1558,18 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
 /***************** Put action to remove user as center admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
+static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_center_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_center_X;
+   const char *Txt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_as_an_administrator_of_the_center_X,
+      [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_center_X,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CENTER_ADMIN,OptionChecked);
-      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_center_X :
-			Txt_Remove_USER_as_an_administrator_of_the_center_X,
-		Gbl.Hierarchy.Ctr.ShrtName);
+      HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Ctr.ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1562,15 +1577,18 @@ static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
 /************** Put action to remove user as institution admin ***************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe)
+static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
+   const char *Txt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_as_an_administrator_of_the_institution_X,
+      [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_institution_X,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
-      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-			Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-		Gbl.Hierarchy.Ins.ShrtName);
+      HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Ins.ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1578,14 +1596,18 @@ static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe)
 /********************* Put action to remove user account *********************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe)
+static void Enr_PutActionRemUsrAcc (bool *OptionChecked,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Eliminate_my_user_account;
    extern const char *Txt_Eliminate_user_account;
+   const char *Txt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Eliminate_my_user_account,
+      [Usr_OTHER] = Txt_Eliminate_user_account,
+     };
 
    Enr_RegRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,OptionChecked);
-      HTM_Txt (ItsMe ? Txt_Eliminate_my_user_account :
-		       Txt_Eliminate_user_account);
+      HTM_Txt (Txt[MeOrOther]);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -2698,7 +2720,7 @@ static bool Enr_CheckIfICanRemUsrFromCrs (void)
       case Rol_STD:
       case Rol_NET:
 	 // A student or non-editing teacher can remove herself/himself
-	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -2846,7 +2868,7 @@ void Enr_ModifyUsr1 (void)
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
    static const Act_Action_t Action[Rol_NUM_ROLES] =
@@ -2860,7 +2882,7 @@ void Enr_ModifyUsr1 (void)
    /***** Get user from form *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+      MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Get the action to do *****/
       Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
@@ -2871,7 +2893,7 @@ void Enr_ModifyUsr1 (void)
       switch (Gbl.Usrs.RegRemAction)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
-	    if (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
+	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	      {
 	       /***** Get user's name from record form *****/
 	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
@@ -2918,15 +2940,19 @@ void Enr_ModifyUsr1 (void)
 
 		  /***** Change user's groups *****/
 		  if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-		    {
-		     if (ItsMe)
-			Grp_ChangeMyGrps (Cns_QUIET);
-		     else
-			Grp_ChangeOtherUsrGrps ();
-		    }
+		     switch (MeOrOther)
+		       {
+			case Usr_ME:
+			   Grp_ChangeMyGrps (Cns_QUIET);
+			   break;
+			case Usr_OTHER:
+			default:
+			   Grp_ChangeOtherUsrGrps ();
+			   break;
+		       }
 
 		  /***** If it's me, change my roles *****/
-		  if (ItsMe)
+		  if (MeOrOther == Usr_ME)
 		    {
 		     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;
                      Gbl.Usrs.Me.UsrDat.Roles.InCrss = Gbl.Usrs.Other.UsrDat.Roles.InCrss;
@@ -2956,23 +2982,23 @@ void Enr_ModifyUsr1 (void)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
-	    if (ItsMe || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_USR_FROM_CRS:
-	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
-	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
+	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_CENTER_ADMIN:
-	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
+	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
-	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
+	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
@@ -3050,23 +3076,31 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X;
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActRemStdCrs,
       [Rol_NET] = ActRemNETCrs,
       [Rol_TCH] = ActRemTchCrs,
      };
+   const char *Question[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_from_the_course_X,
+      [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X
+     };
+   const char *TxtButton[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_from_this_course,
+      [Usr_OTHER] = Txt_Remove_user_from_this_course
+     };
 
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+      MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
-		                                    Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
-	                       Gbl.Hierarchy.Crs.FullName);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],Gbl.Hierarchy.Crs.FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
@@ -3077,8 +3111,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
-				      Txt_Remove_user_from_this_course);
+	 Btn_PutRemoveButton (TxtButton[MeOrOther]);
       Frm_EndForm ();
 
       /* End alert */
@@ -3143,33 +3176,35 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
       Usr_FlushCachesUsr ();
 
       /***** If it's me, change my roles *****/
-      if (Usr_ItsMe (UsrDat->UsrCod))
+      switch (Usr_ItsMe (UsrDat->UsrCod))
 	{
-	 /* Now I don't belong to current course */
-	 Gbl.Usrs.Me.IBelongToCurrentCrs =
-         Gbl.Usrs.Me.UsrDat.Accepted     = false;
+	 case Usr_ME:
+	    /* Now I don't belong to current course */
+	    Gbl.Usrs.Me.IBelongToCurrentCrs =
+	    Gbl.Usrs.Me.UsrDat.Accepted     = false;
 
-         /* Fill the list with the courses I belong to */
-         Gbl.Usrs.Me.MyCrss.Filled = false;
-         Enr_GetMyCourses ();
+	    /* Fill the list with the courses I belong to */
+	    Gbl.Usrs.Me.MyCrss.Filled = false;
+	    Enr_GetMyCourses ();
 
-         /* Set my roles */
-	 Gbl.Usrs.Me.Role.FromSession              =
-	 Gbl.Usrs.Me.Role.Logged                   =
-	 Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
-	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs     =
-	 UsrDat->Roles.InCurrentCrs                = Rol_UNK;
+	    /* Set my roles */
+	    Gbl.Usrs.Me.Role.FromSession              =
+	    Gbl.Usrs.Me.Role.Logged                   =
+	    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs     =
+	    UsrDat->Roles.InCurrentCrs                = Rol_UNK;
 
-	 Gbl.Usrs.Me.UsrDat.Roles.InCrss =
-	 UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
+	    Gbl.Usrs.Me.UsrDat.Roles.InCrss =
+	    UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
 
-	 Rol_SetMyRoles ();
-	}
-      else	// Not me
-       {
-         /* Now he/she does not belong to current course */
-         UsrDat->Accepted           = false;
-	 UsrDat->Roles.InCurrentCrs = Rol_USR;
+	    Rol_SetMyRoles ();
+	    break;
+	 case Usr_OTHER:
+	 default:
+	    /* Now he/she does not belong to current course */
+	    UsrDat->Accepted           = false;
+	    UsrDat->Roles.InCurrentCrs = Rol_USR;
+	    break;
         }
 
       if (QuietOrVerbose == Cns_VERBOSE)
@@ -3405,7 +3440,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: It's me? *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/

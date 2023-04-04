@@ -1463,9 +1463,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActDetStdPho	] = {1436,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Pho_RecOtherUsrPhotoDetFaces	,NULL},
    [ActDetTchPho	] = {1437,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Pho_RecOtherUsrPhotoDetFaces	,NULL},
 
-   [ActUpdOthPho	] = {1438,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
-   [ActUpdStdPho	] = {1439,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
-   [ActUpdTchPho	] = {1440,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_UpdateUsrPhoto1		,Pho_UpdateUsrPhoto2		,NULL},
+   [ActChgOthPho	] = {1438,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_ChangeUsrPhoto1		,Pho_ChangeUsrPhoto2		,NULL},
+   [ActChgStdPho	] = {1439,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_ChangeUsrPhoto1		,Pho_ChangeUsrPhoto2		,NULL},
+   [ActChgTchPho	] = {1440,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pho_ChangeUsrPhoto1		,Pho_ChangeUsrPhoto2		,NULL},
 
    [ActReqRemOthPho	] = {1574,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqRemUsrPhoto		,NULL},
    [ActReqRemStdPho	] = {1575,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ReqRemUsrPhoto		,NULL},
@@ -1515,19 +1515,19 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmAccStd	] = {1736,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgOtherUsrAccount	,NULL},
    [ActFrmAccTch	] = {1737,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormChgOtherUsrAccount	,NULL},
 
-   [ActRemOldNicOth	] = {1738,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
-   [ActRemOldNicStd	] = {1739,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
-   [ActRemOldNicTch	] = {1740,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
-   [ActChgNicOth	] = {1741,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_UpdateOtherUsrNick		,NULL},
-   [ActChgNicStd	] = {1742,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_UpdateOtherUsrNick		,NULL},
-   [ActChgNicTch	] = {1743,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_UpdateOtherUsrNick		,NULL},
+   [ActRemNicOth	] = {1738,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
+   [ActRemNicStd	] = {1739,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
+   [ActRemNicTch	] = {1740,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_RemoveOtherUsrNick		,NULL},
+   [ActChgNicOth	] = {1741,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_ChangeOtherUsrNick		,NULL},
+   [ActChgNicStd	] = {1742,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_ChangeOtherUsrNick		,NULL},
+   [ActChgNicTch	] = {1743,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Nck_ChangeOtherUsrNick		,NULL},
 
    [ActRemID_Oth	] = {1450,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveOtherUsrID		,NULL},
    [ActRemID_Std	] = {1451,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveOtherUsrID		,NULL},
    [ActRemID_Tch	] = {1452,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveOtherUsrID		,NULL},
-   [ActNewID_Oth	] = {1453,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_NewOtherUsrID		,NULL},
-   [ActNewID_Std	] = {1454,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_NewOtherUsrID		,NULL},
-   [ActNewID_Tch	] = {1455,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_NewOtherUsrID		,NULL},
+   [ActChgID_Oth	] = {1453,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_ChangeOtherUsrID		,NULL},
+   [ActChgID_Std	] = {1454,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_ChangeOtherUsrID		,NULL},
+   [ActChgID_Tch	] = {1455,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_ChangeOtherUsrID		,NULL},
 
    [ActChgPwdOth	] = {1467,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherUsrPwd		,Acc_ShowFormChgOtherUsrAccount	,NULL},
    [ActChgPwdStd	] = {1468,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,Pwd_UpdateOtherUsrPwd		,Acc_ShowFormChgOtherUsrAccount	,NULL},
@@ -1536,9 +1536,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemMaiOth	] = {1478,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
    [ActRemMaiStd	] = {1479,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
    [ActRemMaiTch	] = {1480,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveOtherUsrEmail	,NULL},
-   [ActNewMaiOth	] = {1481,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_NewOtherUsrEmail		,NULL},
-   [ActNewMaiStd	] = {1482,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_NewOtherUsrEmail		,NULL},
-   [ActNewMaiTch	] = {1483,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_NewOtherUsrEmail		,NULL},
+   [ActChgMaiOth	] = {1481,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ChangeOtherUsrEmail	,NULL},
+   [ActChgMaiStd	] = {1482,-1,TabUnk,ActLstStd		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ChangeOtherUsrEmail	,NULL},
+   [ActChgMaiTch	] = {1483,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ChangeOtherUsrEmail	,NULL},
 
    [ActRemStdCrs	] = {1462,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,NULL},
    [ActRemNETCrs	] = {1647,-1,TabUnk,ActLstTch		,0x3F0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Enr_RemUsrFromCrs1		,Enr_RemUsrFromCrs2		,NULL},
@@ -3329,9 +3329,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDetOthPho,		// #1435
 	ActDetStdPho,		// #1436
 	ActDetTchPho,		// #1437
-	ActUpdOthPho,		// #1438
-	ActUpdStdPho,		// #1439
-	ActUpdTchPho,		// #1440
+	ActChgOthPho,		// #1438
+	ActChgStdPho,		// #1439
+	ActChgTchPho,		// #1440
 	ActRemOthPho,		// #1441
 	ActRemStdPho,		// #1442
 	ActRemTchPho,		// #1443
@@ -3344,9 +3344,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemID_Oth,		// #1450
 	ActRemID_Std,		// #1451
 	ActRemID_Tch,		// #1452
-	ActNewID_Oth,		// #1453
-	ActNewID_Std,		// #1454
-	ActNewID_Tch,		// #1455
+	ActChgID_Oth,		// #1453
+	ActChgID_Std,		// #1454
+	ActChgID_Tch,		// #1455
 	ActReqAccEnrStd,	// #1456
 	ActReqAccEnrTch,	// #1457
 	ActAccEnrStd,		// #1458
@@ -3372,9 +3372,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemMaiOth,		// #1478
 	ActRemMaiStd,		// #1479
 	ActRemMaiTch,		// #1480
-	ActNewMaiOth,		// #1481
-	ActNewMaiStd,		// #1482
-	ActNewMaiTch,		// #1483
+	ActChgMaiOth,		// #1481
+	ActChgMaiStd,		// #1482
+	ActChgMaiTch,		// #1483
 	ActChg1stDay,		// #1484
 	-1,			// #1485 (obsolete action)
 	ActChgCrsTT1stDay,	// #1486
@@ -3629,9 +3629,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActFrmAccOth,		// #1735
 	ActFrmAccStd,		// #1736
 	ActFrmAccTch,		// #1737
-	ActRemOldNicOth,	// #1738
-	ActRemOldNicStd,	// #1739
-	ActRemOldNicTch,	// #1740
+	ActRemNicOth,	// #1738
+	ActRemNicStd,	// #1739
+	ActRemNicTch,	// #1740
 	ActChgNicOth,		// #1741
 	ActChgNicStd,		// #1742
 	ActChgNicTch,		// #1743

@@ -128,8 +128,8 @@ static void Rec_ShowMyCrsRecordUpdated (void);
 static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args);
-static void Rec_PutParsMyTsts (__attribute__((unused)) void *Args);
-static void Rec_PutParsStdTsts (__attribute__((unused)) void *Args);
+static void Rec_PutParsMyResults (__attribute__((unused)) void *Args);
+static void Rec_PutParsStdResults (__attribute__((unused)) void *Args);
 static void Rec_PutParsWorks (__attribute__((unused)) void *Args);
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args);
 static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args);
@@ -1014,7 +1014,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
 		 {
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
@@ -1143,7 +1143,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		       Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
 		       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 		      (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
-		       Usr_ItsMe (UsrDat.UsrCod)))		// ...and it's me
+		       Usr_ItsMe (UsrDat.UsrCod) == Usr_ME))	// ...and it's me
 		    {
 		     HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 			Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
@@ -1590,7 +1590,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// I am a student
-	 if (Usr_ItsMe (UsrDat->UsrCod))
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
 	   {
 	    switch (TypeOfView)
 	      {
@@ -2037,7 +2037,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       [Rol_SYS_ADM] = NULL,
      };
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    bool IAmLoggedAsTeacherOrSysAdm;
    bool CountryForm;
    bool ICanEdit;
@@ -2052,12 +2052,12 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Act_Action_t NextAction;
 
    /***** Initializations *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+   MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
    IAmLoggedAsTeacherOrSysAdm = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||		// My current role is non-editing teacher
 	                         Gbl.Usrs.Me.Role.Logged == Rol_TCH ||		// My current role is teacher
                                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// My current role is system admin
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
-   ShowData = (ItsMe ||
+   ShowData = (MeOrOther == Usr_ME ||
 	       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||
 	       UsrDat->Accepted);
    ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
@@ -2265,19 +2265,21 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	       case Rec_SHA_OTHER_EXISTING_USR_FORM:
 		  /***** Show list of groups to register/remove me/user *****/
 		  if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-		    {
-		     if (ItsMe)
+		     switch (MeOrOther)
 		       {
-			// Don't show groups if I don't belong to course
-			if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-			   Grp_ShowLstGrpsToChgMyGrps ();
+			case Usr_ME:
+			   // Don't show groups if I don't belong to course
+			   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+			      Grp_ShowLstGrpsToChgMyGrps ();
+			   break;
+			case Usr_OTHER:
+			default:
+			   Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+			   break;
 		       }
-		     else	// Not me
-			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-		    }
 
 		  /***** Which action, register or removing? *****/
-		  if (Enr_PutActionsRegRemOneUsr (ItsMe))
+		  if (Enr_PutActionsRegRemOneUsr (MeOrOther))
 		     Btn_PutConfirmButton (Txt_Confirm);
 
 		  Frm_EndForm ();
@@ -2300,7 +2302,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
   {
-   bool ItsMe = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -2316,6 +2318,56 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Rol_INS_ADM] = ActReqMdfOth,
       [Rol_SYS_ADM] = ActReqMdfOth,
      };
+   static Act_Action_t ActSeeAgd[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActSeeMyAgd,
+      [Usr_OTHER] = ActSeeUsrAgd,
+     };
+   static Act_Action_t ActSeeTstResCrs[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActSeeMyTstResCrs,
+      [Usr_OTHER] = ActSeeUsrTstResCrs,
+     };
+   static Act_Action_t ActSeeExaResCrs[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActSeeMyExaResCrs,
+      [Usr_OTHER] = ActSeeUsrExaResCrs,
+     };
+   static Act_Action_t ActSeeMchResCrs[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActSeeMyMchResCrs,
+      [Usr_OTHER] = ActSeeUsrMchResCrs,
+     };
+   static Act_Action_t ActAdmAsgWrk[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActAdmAsgWrkUsr,
+      [Usr_OTHER] = ActAdmAsgWrkCrs,	// Not me, I am not a student in current course
+     };
+   static Act_Action_t ActSeeLstAtt[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = ActSeeLstMyAtt,
+      [Usr_OTHER] = ActSeeLstUsrAtt,
+     };
+   static void (*FuncPutParsAgd[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+     {
+      [Usr_ME   ] = NULL,
+      [Usr_OTHER] = Rec_PutParUsrCodEncrypted,
+     };
+   static void (*FuncPutParsResults[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+     {
+      [Usr_ME   ] = Rec_PutParsMyResults,
+      [Usr_OTHER] = Rec_PutParsStdResults,
+     };
+   static void (*FuncPutParsAdmAsgWrk[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+     {
+      [Usr_ME   ] = NULL,
+      [Usr_OTHER] = Rec_PutParsWorks,	// Not me, I am not a student in current course
+     };
+   static void (*FuncPutParsSeeLstAtt[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+     {
+      [Usr_ME   ] = NULL,
+      [Usr_OTHER] = Rec_PutParsStudent,
+     };
 
    if (!Frm_CheckIfInside () &&					// Only if not inside another form
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
@@ -2327,13 +2379,14 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
-	 if (ItsMe)
-	    /***** Button to edit my record card *****/
+	 /***** Button to edit my record card *****/
+	 if (MeOrOther == Usr_ME)
 	    Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,
 					   NULL,NULL,
 					   "pen.svg",Ico_BLACK);
+
+	 /***** Button to view user's profile *****/
 	 if (ICanViewUsrProfile)
-	    /***** Button to view user's profile *****/
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user.svg",Ico_BLACK);
@@ -2345,22 +2398,19 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat))
+	    /* View teacher's record card and timetable */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 
 	 /***** Button to view user's agenda *****/
-	 if (ItsMe)
-	    Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
-					   NULL,NULL,
-					   "calendar.svg",Ico_BLACK);
-	 else if (Usr_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat))
-	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
-					   Rec_PutParUsrCodEncrypted,NULL,
+	 if (Usr_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (ActSeeAgd[MeOrOther],NULL,
+					   FuncPutParsAgd[MeOrOther],NULL,
 					   "calendar.svg",Ico_BLACK);
 
 	 /***** Button to admin user *****/
-	 if (ItsMe ||
+	 if (MeOrOther == Usr_ME ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
@@ -2377,63 +2427,31 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	       /***** Buttons to view student's test, exam and match results *****/
 	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat))
 		 {
-		  if (ItsMe)
-		    {
-		     /* My test results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
-						    Rec_PutParsMyTsts,NULL,
-						    "check.svg",Ico_BLACK);
-		     /* My exam results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
-						    Rec_PutParsMyTsts,NULL,
-						    "file-signature.svg",Ico_BLACK);
-		     /* My match results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
-						    Rec_PutParsMyTsts,NULL,
-						    "gamepad.svg",Ico_BLACK);
-		    }
-		  else	// Not me
-		    {
-		     /* User's test results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
-						    Rec_PutParsStdTsts,NULL,
-						    "check.svg",Ico_BLACK);
-		     /* User's exam results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
-						    Rec_PutParsStdTsts,NULL,
-						    "file-signature.svg",Ico_BLACK);
-		     /* User's match results in course */
-		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
-						    Rec_PutParsStdTsts,NULL,
-						    "gamepad.svg",Ico_BLACK);
-		    }
+		  /* Test results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeTstResCrs[MeOrOther],NULL,
+						 FuncPutParsResults[MeOrOther],NULL,
+						 "check.svg",Ico_BLACK);
+		  /* Exam results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeExaResCrs[MeOrOther],NULL,
+						 FuncPutParsResults[MeOrOther],NULL,
+						 "file-signature.svg",Ico_BLACK);
+		  /* Match results in course */
+		  Lay_PutContextualLinkOnlyIcon (ActSeeMchResCrs[MeOrOther],NULL,
+						 FuncPutParsResults[MeOrOther],NULL,
+						 "gamepad.svg",Ico_BLACK);
 		 }
 
 	       /***** Button to view student's assignments and works *****/
 	       if (Usr_CheckIfICanViewAsgWrk (Rec_Record.UsrDat))
-		 {
-		  if (ItsMe)
-		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
-						    NULL,NULL,
-						    "folder-open.svg",Ico_BLACK);
-		  else	// Not me, I am not a student in current course
-		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
-						    Rec_PutParsWorks,NULL,
-						    "folder-open.svg",Ico_BLACK);
-		 }
+		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrk[MeOrOther],NULL,
+						 FuncPutParsAdmAsgWrk[MeOrOther],NULL,
+						 "folder-open.svg",Ico_BLACK);
 
 	       /***** Button to view student's attendance *****/
 	       if (Usr_CheckIfICanViewAtt (Rec_Record.UsrDat))
-		 {
-		  if (ItsMe)
-		     Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
-						    NULL,NULL,
-						    "calendar-check.svg",Ico_BLACK);
-		  else	// Not me
-		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
-						    Rec_PutParsStudent,NULL,
-						    "calendar-check.svg",Ico_BLACK);
-		 }
+		  Lay_PutContextualLinkOnlyIcon (ActSeeLstAtt[MeOrOther],NULL,
+						 FuncPutParsSeeLstAtt[MeOrOther],NULL,
+						 "calendar-check.svg",Ico_BLACK);
 	      }
 	   }
 
@@ -2450,7 +2468,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   "envelope.svg",Ico_BLACK);
 
 	 /***** Button to follow / unfollow *****/
-	 if (!ItsMe)	// Not me
+	 if (MeOrOther == Usr_OTHER)	// Not me
 	   {
 	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					     Rec_Record.UsrDat->UsrCod))
@@ -2480,13 +2498,13 @@ void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args)
    Usr_PutParUsrCodEncrypted (Rec_Record.UsrDat->EnUsrCod);
   }
 
-static void Rec_PutParsMyTsts (__attribute__((unused)) void *Args)
+static void Rec_PutParsMyResults (__attribute__((unused)) void *Args)
   {
    Dat_SetIniEndDatesToPastAndNow ();
    Dat_WriteParsIniEndDates ();
   }
 
-static void Rec_PutParsStdTsts (__attribute__((unused)) void *Args)
+static void Rec_PutParsStdResults (__attribute__((unused)) void *Args)
   {
    Rec_PutParsStudent (NULL);
    Dat_SetIniEndDatesToPastAndNow ();
@@ -2615,7 +2633,11 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   bool ItsMe;
+   const char *Title[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_My_public_profile,
+      [Usr_OTHER] = Txt_Another_user_s_profile
+     };
 
    HTM_TD_Begin ("class=\"REC_C2_MID LB\"");
       HTM_DIV_Begin ("class=\"REC_NICK\"");
@@ -2624,11 +2646,9 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
 	    if (PutFormLinks)
 	      {
 	       /* Put form to go to public profile */
-	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	       Frm_BeginForm (ActSeeOthPubPrf);
 		  Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-		  HTM_BUTTON_Submit_Begin (ItsMe ? Txt_My_public_profile :
-						   Txt_Another_user_s_profile,
+		  HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
 					   "class=\"BT_LINK\"");
 	      }
 	    HTM_TxtF ("@%s",UsrDat->Nickname);

@@ -1173,7 +1173,7 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (Usr_ItsMe (UsrCod))
+   if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -1188,7 +1188,7 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (Usr_ItsMe (UsrCod))
+   if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -1203,7 +1203,7 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (Usr_ItsMe (UsrCod))
+   if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -3051,7 +3051,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 5. Fast check: It's me? *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** 6. Fast check: Is already calculated if user shares

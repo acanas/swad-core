@@ -3248,7 +3248,7 @@ int swad__sendMessage (struct soap *soap,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
 	       /* This received message must be notified by email? */
-	       NotifyByEmail = (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) &&
+	       NotifyByEmail = (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER &&
 				(Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
 
 	       /* Send message to this user */

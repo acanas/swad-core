@@ -971,7 +971,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
 	 /***** Form to remove post *****/
 	 if (LastPst)
-	    if (Usr_ItsMe (UsrDat.UsrCod))
+	    if (Usr_ItsMe (UsrDat.UsrCod) == Usr_ME)
 	       // Post can be removed if post is the last (without answers) and it's mine
 	       Ico_PutContextualIconToRemove (For_ActionsDelPstFor[Forums->Forum.Type],
 					      PstNum == 1 ? For_FORUM_THREADS_SECTION_ID : 	// First and unique post in thread
@@ -2914,7 +2914,7 @@ void For_RemovePost (void)
       Err_WrongPostExit ();
 
    /* Check if I am the author of the message */
-   if (!Usr_ItsMe (UsrDat.UsrCod))
+   if (Usr_ItsMe (UsrDat.UsrCod) == Usr_OTHER)
       Err_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */

@@ -351,6 +351,11 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
+   const char *Title[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_My_public_profile,
+      [Usr_OTHER] = Txt_Another_user_s_profile,
+     };
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
@@ -358,8 +363,7 @@ void TmlNot_WriteAuthorName (const struct Usr_Data *UsrDat,
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_Submit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							    Txt_Another_user_s_profile,
+      HTM_BUTTON_Submit_Begin (Title[Usr_ItsMe (UsrDat->UsrCod)],
 			       "class=\"%s\"",Class);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
@@ -847,7 +851,7 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 
       /***** Foot column 3: icon to remove this note *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
-	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// I am the author
 	    TmlNot_PutFormToRemoveNote (Timeline,Not->NotCod);
       HTM_DIV_End ();
 
@@ -1115,8 +1119,8 @@ static void TmlNot_RemoveNote (void)
       return;
      }
 
-   /***** Trivial check 2: Am I the author of this note *****/
-   if (!Usr_ItsMe (Not.UsrCod))
+   /***** Trivial check 2: Am I the author of this note? *****/
+   if (Usr_ItsMe (Not.UsrCod) == Usr_OTHER)
      {
       Err_NoPermission ();
       return;

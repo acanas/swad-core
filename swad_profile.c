@@ -109,7 +109,8 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures);
 
 static void Prf_GetAndShowRankingFigure (const char *FldName);
-static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool ItsMe);
+static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
+                                  Usr_MeOrOther_t MeOrOther);
 
 /*****************************************************************************/
 /************* Suggest who to follow or request user's profile ***************/
@@ -265,7 +266,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
      }
 
    /***** If it's not me, mark possible notification as seen *****/
-   if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
+   if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)	// Not me
       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_FOLLOWER,
                                       Gbl.Usrs.Other.UsrDat.UsrCod);
   }
@@ -277,11 +278,16 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
 bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
   {
+   static void (*PutLinkToUsrProfile[Usr_NUM_ME_OR_OTHER]) (void) =
+     {
+      [Usr_ME   ] = Prf_PutLinkRequestAnotherUserProfile,	// Request another user's profile
+      [Usr_OTHER] = Prf_PutLinkMyPublicProfile			// My public profile
+     };
    unsigned NumFollowing;
    unsigned NumFollowers;
    bool UsrFollowsMe;
    bool IFollowUsr;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
    if (Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat))
@@ -290,16 +296,13 @@ bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
 	{
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
-	    if (ItsMe)
-	       Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
-	    else	// Not me
-	       Prf_PutLinkMyPublicProfile ();		// My public profile
-	    Fol_PutLinkWhoToFollow ();			// Users to follow
+	    PutLinkToUsrProfile[MeOrOther] ();	// Public profile
+	    Fol_PutLinkWhoToFollow ();		// Users to follow
 	 Mnu_ContextMenuEnd ();
 	}
 
       /***** Shared record card *****/
-      if (!ItsMe &&				// If not me...
+      if (MeOrOther == Usr_OTHER &&		// If not me...
 	  Gbl.Hierarchy.Level == HieLvl_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
@@ -1170,11 +1173,16 @@ static void Prf_GetAndShowRankingFigure (const char *FldName)
 
 void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
   {
+   static const char *Class[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = "DAT_SMALL_STRONG",
+      [Usr_OTHER] = "DAT_SMALL"
+     };
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned Rank;
    struct Usr_Data UsrDat;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    long FigureHigh = LONG_MAX;
    long Figure;
 
@@ -1197,7 +1205,6 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
 					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 
 	    /* Get figure (row[1]) */
 	    if (sscanf (row[1],"%ld",&Figure) != 1)
@@ -1211,10 +1218,10 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
-	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
+	       MeOrOther = Usr_ItsMe (UsrDat.UsrCod);
+	       Prf_ShowUsrInRanking (&UsrDat,Rank,MeOrOther);
 	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-			     ItsMe ? "DAT_SMALL_STRONG" :
-				     "DAT_SMALL",
+			     Class[MeOrOther],
 		             The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_Long (Figure);
@@ -1238,13 +1245,18 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
+   static const char *Class[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = "DAT_SMALL_STRONG",
+      [Usr_OTHER] = "DAT_SMALL"
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
    unsigned NumUsr;
    unsigned Rank;
    struct Usr_Data UsrDat;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    double NumClicksPerDayHigh = (double) LONG_MAX;
    double NumClicksPerDay;
 
@@ -1268,7 +1280,6 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
 					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 
 	    /* Get average number of clicks per day (row[1]) */
 	    NumClicksPerDay = Str_GetDoubleFromStr (row[1]);
@@ -1280,10 +1291,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
-	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-			     ItsMe ? "DAT_SMALL_STRONG" :
-				     "DAT_SMALL",
+	       MeOrOther = Usr_ItsMe (UsrDat.UsrCod);
+	       Prf_ShowUsrInRanking (&UsrDat,Rank,MeOrOther);
+	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",Class[MeOrOther],
 			     The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_DoubleFewDigits (NumClicksPerDay);
@@ -1305,9 +1315,15 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool ItsMe)
+static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
+                                  Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Another_user_s_profile;
+   static const char *Class[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = "DAT_SMALL_STRONG",
+      [Usr_OTHER] = "DAT_SMALL"
+     };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC30x40",
@@ -1318,8 +1334,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool Its
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		 ItsMe ? "DAT_SMALL_STRONG" :
-		         "DAT_SMALL",
+		 Class[MeOrOther],
 		 The_GetSuffix (),
                  The_GetColorRows ());
       HTM_TxtF ("#%u",Rank);
@@ -1335,8 +1350,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,bool Its
 
    /***** Put form to go to public profile *****/
    HTM_TD_Begin ("class=\"RANK_USR %s_%s %s\"",	// Limited width
-                 ItsMe ? "DAT_SMALL_STRONG" :
-			 "DAT_SMALL",
+                 Class[MeOrOther],
 	         The_GetSuffix (),
                  The_GetColorRows ());
       if (Visible)

@@ -94,10 +94,11 @@ static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
 
-static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *UsrDat);
+static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
+                                            const struct Usr_Data *UsrDat);
 
-static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat);
-static void Pho_UpdatePhoto2 (void);
+static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat);
+static void Pho_ChangePhoto2 (void);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
@@ -143,7 +144,7 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
   {
    /***** I can change my photo *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** Check if I have permission to change user's photo *****/
@@ -188,15 +189,21 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
      };
 
    /***** Link for changing / uploading the photo *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
-      Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
-                                     NULL,NULL,
-				     "camera.svg",Ico_BLACK);
-   else	// Not me
-      if (Pho_ICanChangeOtherUsrPhoto (UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
-				        Rec_PutParUsrCodEncrypted,NULL,
-	                                "camera.svg",Ico_BLACK);
+   switch (Usr_ItsMe (UsrDat->UsrCod))
+     {
+      case Usr_ME:
+	 Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
+					NULL,NULL,
+					"camera.svg",Ico_BLACK);
+	 break;
+      case Usr_OTHER:
+      default:
+	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
+					   "camera.svg",Ico_BLACK);
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -277,7 +284,6 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActDetOthPho,
@@ -291,20 +297,29 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
       [Rol_INS_ADM] = ActDetOthPho,
       [Rol_SYS_ADM] = ActDetOthPho,
      };
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+     {
+      [Usr_ME   ] = Pho_PutIconToReqRemMyPhoto,
+      [Usr_OTHER] = Pho_PutIconToReqRemOtherUsrPhoto
+     };
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,
-                 ItsMe ? Pho_PutIconToReqRemMyPhoto :
-	                 Pho_PutIconToReqRemOtherUsrPhoto,NULL,
+                 FunctionToDrawContextualIcons[MeOrOther],NULL,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
-      if (ItsMe)
-	 Frm_BeginForm (ActDetMyPho);
-      else
-	{
-	 Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
-	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
+      switch (MeOrOther)
+        {
+	 case Usr_ME:
+	    Frm_BeginForm (ActDetMyPho);
+	    break;
+	 case Usr_OTHER:
+	 default:
+	    Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
+	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
+	    break;
 	}
 
 	 /***** Show help message *****/
@@ -344,12 +359,18 @@ void Pho_SendPhotoUsr (void)
       return;
      }
 
-   if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-      /***** Form to send my photo *****/
-      Pho_ReqMyPhoto ();
-   else	// Not me
-      /***** Form to send another user's photo *****/
-      Pho_ReqOtherUsrPhoto ();
+   switch (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      case Usr_ME:
+	 /***** Form to send my photo *****/
+	 Pho_ReqMyPhoto ();
+	 break;
+      case Usr_OTHER:
+      default:
+	 /***** Form to send another user's photo *****/
+	 Pho_ReqOtherUsrPhoto ();
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -555,7 +576,8 @@ void Pho_RemoveUsrPhoto (void)
 /*****************************************************************************/
 // Return false if no "green" faces detected
 
-static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *UsrDat)
+static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
+                                            const struct Usr_Data *UsrDat)
   {
    extern const char *Txt_The_file_is_not_X;
    extern const char *Txt_Could_not_detect_any_face_in_front_position_;
@@ -593,16 +615,21 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
    char StrFileName[NAME_MAX + 1];
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = ActUpdOthPho,
-      [Rol_GST	  ] = ActUpdOthPho,
-      [Rol_USR	  ] = ActUpdOthPho,
-      [Rol_STD	  ] = ActUpdStdPho,
-      [Rol_NET	  ] = ActUpdTchPho,
-      [Rol_TCH	  ] = ActUpdTchPho,
-      [Rol_DEG_ADM] = ActUpdOthPho,
-      [Rol_CTR_ADM] = ActUpdOthPho,
-      [Rol_INS_ADM] = ActUpdOthPho,
-      [Rol_SYS_ADM] = ActUpdOthPho,
+      [Rol_UNK	  ] = ActChgOthPho,
+      [Rol_GST	  ] = ActChgOthPho,
+      [Rol_USR	  ] = ActChgOthPho,
+      [Rol_STD	  ] = ActChgStdPho,
+      [Rol_NET	  ] = ActChgTchPho,
+      [Rol_TCH	  ] = ActChgTchPho,
+      [Rol_DEG_ADM] = ActChgOthPho,
+      [Rol_CTR_ADM] = ActChgOthPho,
+      [Rol_INS_ADM] = ActChgOthPho,
+      [Rol_SYS_ADM] = ActChgOthPho,
+     };
+   Act_Action_t ActChgPho[Rol_NUM_ROLES] =
+     {
+      [Usr_ME   ] = ActUpdMyPho,
+      [Usr_OTHER] = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]
      };
    char ErrorTxt[256];
    char *Icon;
@@ -683,15 +710,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
             if (BackgroundCode == 1)
               {
 	       snprintf (FormId,sizeof (FormId),"photo_%u",++NumFaces.Green);
-               if (ItsMe)
-        	  Frm_BeginFormId (ActUpdMyPho,FormId);
-               else
-        	 {
-		  Frm_BeginFormId (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],FormId);
-		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-        	 }
+               Frm_BeginFormId (ActChgPho[MeOrOther],FormId);
+		  if (MeOrOther == Usr_OTHER)
+		     Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  Par_PutParString (NULL,"FileName",StrFileName);
-		  Frm_EndForm ();
+	       Frm_EndForm ();
               }
             else
                NumFaces.Red++;
@@ -789,7 +812,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct Usr_Data *Us
 
 void Pho_UpdateMyPhoto1 (void)
   {
-   Pho_UpdatePhoto1 (&Gbl.Usrs.Me.UsrDat);
+   Pho_ChangePhoto1 (&Gbl.Usrs.Me.UsrDat);
 
    /***** The link to my photo is not valid now, so build it again before writing the web page *****/
    Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
@@ -797,38 +820,38 @@ void Pho_UpdateMyPhoto1 (void)
 
 void Pho_UpdateMyPhoto2 (void)
   {
-   Pho_UpdatePhoto2 ();
+   Pho_ChangePhoto2 ();
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
   }
 
 /*****************************************************************************/
-/*********************** Update another user's photo *************************/
+/*********************** Change another user's photo *************************/
 /*****************************************************************************/
 
-void Pho_UpdateUsrPhoto1 (void)
+void Pho_ChangeUsrPhoto1 (void)
   {
    /***** Get user's code from form and user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
+      Pho_ChangePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
-void Pho_UpdateUsrPhoto2 (void)
+void Pho_ChangeUsrPhoto2 (void)
   {
-   Pho_UpdatePhoto2 ();
+   Pho_ChangePhoto2 ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
   }
 
 /*****************************************************************************/
-/*************** Update a user's photo with a selected face ******************/
+/*************** Change a user's photo with a selected face ******************/
 /*****************************************************************************/
 
-static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat)
+static void Pho_ChangePhoto1 (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_Photo_has_been_updated;
    char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the temporary file with the selected face
@@ -862,7 +885,7 @@ static void Pho_UpdatePhoto1 (struct Usr_Data *UsrDat)
 	               "Error updating photo.");
   }
 
-static void Pho_UpdatePhoto2 (void)
+static void Pho_ChangePhoto2 (void)
   {
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;

@@ -75,6 +75,7 @@
 #include "swad_setting_database.h"
 #include "swad_test_print.h"
 #include "swad_timeline.h"
+#include "swad_user.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/
@@ -98,7 +99,7 @@ static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
 static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod);
 
-static void Acc_AskIfRemoveUsrAccount (bool ItsMe);
+static void Acc_AskIfRemoveUsrAccount (Usr_MeOrOther_t MeOrOther);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
 
 static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat);
@@ -832,12 +833,12 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
 
 void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
-   bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    switch (RequestOrRemove)
      {
       case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
-	 Acc_AskIfRemoveUsrAccount (ItsMe);
+	 Acc_AskIfRemoveUsrAccount (MeOrOther);
 	 break;
       case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
 	 if (Pwd_GetConfirmationOnDangerousAction ())
@@ -848,7 +849,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 	    Msg_DB_MoveUnusedMsgsContentToDeleted ();
 	   }
 	 else
-	    Acc_AskIfRemoveUsrAccount (ItsMe);
+	    Acc_AskIfRemoveUsrAccount (MeOrOther);
 	 break;
      }
   }
@@ -859,27 +860,33 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 
 bool Acc_CheckIfICanEliminateAccount (long UsrCod)
   {
-   bool ItsMe = Usr_ItsMe (UsrCod);
+   Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrCod);
 
    // A user logged as superuser can eliminate any user except her/him
    // Other users only can eliminate themselves
-   return (( ItsMe &&							// It's me
-	    (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0)	// I can not be system admin
-	   ||
-           (!ItsMe &&							// It's not me
-             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));			// I am logged as system admin
+   switch (MeOrOther)
+     {
+      case Usr_ME:
+	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0;	// I can not be system admin
+      case Usr_OTHER:
+      default:
+	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;			// I am logged as system admin
+     }
   }
 
 /*****************************************************************************/
 /*********** Ask if really wanted to eliminate completely a user *************/
 /*****************************************************************************/
 
-static void Acc_AskIfRemoveUsrAccount (bool ItsMe)
+static void Acc_AskIfRemoveUsrAccount (Usr_MeOrOther_t MeOrOther)
   {
-   if (ItsMe)
-      Acc_AskIfRemoveMyAccount ();
-   else
-      Acc_AskIfRemoveOtherUsrAccount ();
+   static void (*FuncAskIfRemoveUsrAccount[Usr_NUM_ME_OR_OTHER]) (void) =
+     {
+      [Usr_ME   ] = Acc_AskIfRemoveMyAccount,
+      [Usr_OTHER] = Acc_AskIfRemoveOtherUsrAccount
+     };
+
+   FuncAskIfRemoveUsrAccount[MeOrOther] ();
   }
 
 void Acc_AskIfRemoveMyAccount (void)
@@ -1128,13 +1135,19 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
      };
 
    /***** Link for changing the account *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
-      Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
-                                     NULL,NULL,
-			             "at.svg",Ico_BLACK);
-   else	// Not me
-      if (Usr_ICanEditOtherUsr (UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
-	                                Rec_PutParUsrCodEncrypted,NULL,
-	                                "at.svg",Ico_BLACK);
+   switch (Usr_ItsMe (UsrDat->UsrCod))
+     {
+      case Usr_ME:
+	 Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
+					NULL,NULL,
+					"at.svg",Ico_BLACK);
+         break;
+      case Usr_OTHER:
+      default:
+	 if (Usr_ICanEditOtherUsr (UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
+					   Rec_PutParUsrCodEncrypted,NULL,
+					   "at.svg",Ico_BLACK);
+	 break;
+     }
   }

@@ -1715,7 +1715,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      {
       case Rol_STD:
 	 // A student can see only her/his attendance
-	 if (!Usr_ItsMe (UsrDat->UsrCod))
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = false;
 	 ICanEditStdComment = Event->Open;	// Attendance event is open

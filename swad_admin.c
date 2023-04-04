@@ -75,7 +75,7 @@ static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,
 static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
                                 HieLvl_Level_t Scope,long Cod,
                                 const char *InsCtrDegName);
-static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
+static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,HieLvl_Level_t Scope,
                              const char *InsCtrDegName);
 static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,
                                    HieLvl_Level_t Scope,long Cod,
@@ -345,7 +345,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
                                 const char *InsCtrDegName)
   {
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    bool ICanRemove;
 
    if (Cod > 0)
@@ -354,8 +354,8 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
         {
          /* Check if it's forbidden to remove an administrator */
-         ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-         ICanRemove = (ItsMe ||
+         MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+         ICanRemove = (MeOrOther == Usr_ME ||
                        (Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
                        (Scope == HieLvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
                        (Scope == HieLvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
@@ -367,7 +367,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
                switch (ReqDelOrDelUsr)
                  {
                   case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
-                     Adm_AskIfRemAdm (ItsMe,Scope,InsCtrDegName);
+                     Adm_AskIfRemAdm (MeOrOther,Scope,InsCtrDegName);
                      break;
                   case Enr_REMOVE_USR:             // Remove administrator from current institution
                      Adm_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,Scope,
@@ -391,14 +391,14 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
 /** Ask if really wanted to remove an administrator from current institution */
 /*****************************************************************************/
 
-static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
+static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,HieLvl_Level_t Scope,
                              const char *InsCtrDegName)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Remove_me_as_an_administrator;
    extern const char *Txt_Remove_USER_as_an_administrator;
-   static const Act_Action_t Enr_ActRemAdm[HieLvl_NUM_LEVELS] =
+   static const Act_Action_t ActRemAdm[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_UNK] = ActUnk,
       [HieLvl_SYS] = ActUnk,
@@ -408,24 +408,30 @@ static void Adm_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
       [HieLvl_DEG] = ActRemAdmDeg,
       [HieLvl_CRS] = ActUnk,
      };
+   const char *Question[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X,
+      [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
+     };
+   const char *TxtButton[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Remove_me_as_an_administrator,
+      [Usr_OTHER] = Txt_Remove_USER_as_an_administrator,
+     };
 
    if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
-                                                    Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
-                               InsCtrDegName);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],InsCtrDegName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
+      Ale_ShowAlertAndButton2 (ActRemAdm[Scope],NULL,NULL,
                                Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-                               Btn_REMOVE_BUTTON,
-                               ItsMe ? Txt_Remove_me_as_an_administrator :
-                                       Txt_Remove_USER_as_an_administrator);
+                               Btn_REMOVE_BUTTON,TxtButton[MeOrOther]);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

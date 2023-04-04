@@ -86,7 +86,7 @@ void Mai_RemoveMyUsrEmail (void);
 void Mai_RemoveOtherUsrEmail (void);
 
 void May_NewMyUsrEmail (void);
-void Mai_NewOtherUsrEmail (void);
+void Mai_ChangeOtherUsrEmail (void);
 bool Mai_UpdateEmailInDB (const struct Usr_Data *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 

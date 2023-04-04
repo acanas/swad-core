@@ -26742,7 +26742,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Send teacher's photo and detect faces on it"		// Çeviri lazim!
 #endif
 	,
-	[ActUpdOthPho] =
+	[ActChgOthPho] =
 #if   L==1	// ca
 	"Update a user's photo"		// Necessita traducció
 #elif L==2	// de
@@ -26765,7 +26765,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Update a user's photo"		// Çeviri lazim!
 #endif
 	,
-	[ActUpdStdPho] =
+	[ActChgStdPho] =
 #if   L==1	// ca
 	"Update a student's photo"		// Necessita traducció
 #elif L==2	// de
@@ -26788,7 +26788,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Update a student's photo"		// Çeviri lazim!
 #endif
 	,
-	[ActUpdTchPho] =
+	[ActChgTchPho] =
 #if   L==1	// ca
 	"Update a teacher's photo"		// Necessita traducció
 #elif L==2	// de
@@ -27685,7 +27685,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Forms to the change a teacher's account"		// Çeviri lazim!
 #endif
 	,
-	[ActRemOldNicOth] =
+	[ActRemNicOth] =
 #if   L==1	// ca
 	"Remove user's nickname"	// Necessita traducció
 #elif L==2	// de
@@ -27708,7 +27708,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove user's nickname"	// Çeviri lazim!
 #endif
 	,
-	[ActRemOldNicStd] =
+	[ActRemNicStd] =
 #if   L==1	// ca
 	"Remove student's nickname"	// Necessita traducció
 #elif L==2	// de
@@ -27731,7 +27731,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove student's nickname"	// Çeviri lazim!
 #endif
 	,
-	[ActRemOldNicTch] =
+	[ActRemNicTch] =
 #if   L==1	// ca
 	"Remove teacher's nickname"	// Necessita traducció
 #elif L==2	// de
@@ -27892,7 +27892,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove teacher's ID"		// Çeviri lazim!
 #endif
 	,
-	[ActNewID_Oth] =
+	[ActChgID_Oth] =
 #if   L==1	// ca
 	"Create new user's ID"		// Necessita traducció
 #elif L==2	// de
@@ -27915,7 +27915,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create new user's ID"		// Çeviri lazim!
 #endif
 	,
-	[ActNewID_Std] =
+	[ActChgID_Std] =
 #if   L==1	// ca
 	"Create new student's ID"	// Necessita traducció
 #elif L==2	// de
@@ -27938,7 +27938,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create new student's ID"	// Çeviri lazim!
 #endif
 	,
-	[ActNewID_Tch] =
+	[ActChgID_Tch] =
 #if   L==1	// ca
 	"Create new teacher's ID"	// Necessita traducció
 #elif L==2	// de
@@ -28099,7 +28099,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove teacher's email"				// Çeviri lazim!
 #endif
 	,
-	[ActNewMaiOth] =
+	[ActChgMaiOth] =
 #if   L==1	// ca
 	"Create new user's email"				// Necessita traducció
 #elif L==2	// de
@@ -28122,7 +28122,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create new user's email"				// Çeviri lazim!
 #endif
 	,
-	[ActNewMaiStd] =
+	[ActChgMaiStd] =
 #if   L==1	// ca
 	"Create new student's email"				// Necessita traducció
 #elif L==2	// de
@@ -28145,7 +28145,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create new student's email"				// Çeviri lazim!
 #endif
 	,
-	[ActNewMaiTch] =
+	[ActChgMaiTch] =
 #if   L==1	// ca
 	"Create new teacher's email"				// Necessita traducció
 #elif L==2	// de

@@ -137,6 +137,7 @@ typedef enum
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 
+#define Usr_NUM_ME_OR_OTHER 2
 typedef enum
   {
    Usr_ME,
@@ -287,7 +288,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_AllocateListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
-bool Usr_ItsMe (long UsrCod);
+Usr_MeOrOther_t Usr_ItsMe (long UsrCod);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat);
 void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                Usr_GetPrefs_t GetPrefs,

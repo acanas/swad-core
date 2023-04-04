@@ -101,7 +101,7 @@ void Enr_ReceiveFormAdminStds (void);
 void Enr_ReceiveFormAdminNonEditTchs (void);
 void Enr_ReceiveFormAdminTchs (void);
 
-bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
+bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther);
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);

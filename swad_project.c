@@ -2962,7 +2962,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
 	 Prj_DB_AddUsrToPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Flush cache */
-	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
 	    Prj_FlushCacheMyRolesInProject ();
 
 	 /* Show success alert */
@@ -3027,6 +3027,11 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
       [Prj_ROLE_TUT] = ActRemTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActRemEvlPrj,	// Evaluator
      };
+   const char *Question[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y,
+      [Usr_OTHER] = Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y
+     };
    char *TxtButton;
 
    /***** Allocate memory for the project *****/
@@ -3046,8 +3051,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	{
 	 /***** Show question and button to remove user as a role from project *****/
 	 /* Begin alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
-			                                                                  Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
+	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
 				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 				  Projects->Prj.Title);
 
@@ -3127,7 +3131,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 	 Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Flush cache *****/
-	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
 	    Prj_FlushCacheMyRolesInProject ();
 
 	 /***** Show success alert *****/
@@ -4528,7 +4532,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    Prj_DB_RemoveUsrFromProjects (UsrCod);
 
    /***** Flush cache *****/
-   if (Usr_ItsMe (UsrCod))
+   if (Usr_ItsMe (UsrCod) == Usr_ME)
       Prj_FlushCacheMyRolesInProject ();
   }
 

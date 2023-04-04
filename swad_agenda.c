@@ -377,8 +377,18 @@ void Agd_ShowUsrAgenda (void)
    extern const char *Txt_Public_agenda_USER;
    struct Agd_Agenda Agenda;
    bool Error = true;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    char *Title;
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
+   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
+     {
+      [Usr_ME   ] = Agd_PutIconsMyPublicAgenda,
+      [Usr_OTHER] = Agd_PutIconsOtherPublicAgenda,
+     };
 
    /***** Get user *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -390,16 +400,11 @@ void Agd_ShowUsrAgenda (void)
 	 Agd_ResetAgenda (&Agenda);
 
 	 /***** Begin box *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 if (asprintf (&Title,Txt_Public_agenda_USER,
-	               ItsMe ? Gbl.Usrs.Me.UsrDat.FullName :
-	        	       Gbl.Usrs.Other.UsrDat.FullName) < 0)
+	 MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
             Err_NotEnoughMemoryExit ();
 	 Box_BoxBegin ("100%",Title,
-		       ItsMe ? Agd_PutIconsMyPublicAgenda :
-			       Agd_PutIconsOtherPublicAgenda,
-		       ItsMe ? Gbl.Usrs.Me.UsrDat.EnUsrCod :
-			       Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	               FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          free (Title);
 
@@ -428,8 +433,18 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    struct Agd_Agenda Agenda;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    char *Title;
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
+   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
+     {
+      [Usr_ME   ] = Agd_PutIconToViewEditMyFullAgenda,
+      [Usr_OTHER] = Agd_PutIconsOtherPublicAgenda,
+     };
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -445,16 +460,11 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Agd_ResetAgenda (&Agenda);
 
 	    /***** Begin box *****/
-	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (asprintf (&Title,Txt_Public_agenda_USER,
-			  ItsMe ? Gbl.Usrs.Me.UsrDat.FullName :
-				  Gbl.Usrs.Other.UsrDat.FullName) < 0)
+	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	    if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin ("100%",Title,
-			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-				  Agd_PutIconsOtherPublicAgenda,
-			  ItsMe ? Gbl.Usrs.Me.UsrDat.EnUsrCod :
-				  Gbl.Usrs.Other.UsrDat.EnUsrCod,
+	                  FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             free (Title);
 

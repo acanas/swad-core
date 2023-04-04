@@ -256,7 +256,7 @@ Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
 bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct Usr_Data *UsrDat)
   {
    /***** I always can see my things *****/
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** System admins always can see others' profiles *****/

@@ -75,13 +75,13 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor);
 
-static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID);
+static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillInID);
 
 static void ID_PutParsRemoveMyID (void *ID);
 static void ID_PutParsRemoveOtherID (void *ID);
 
-static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
-static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe);
+static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
+static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
@@ -346,7 +346,8 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 
 bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
   {
-   if (Usr_ItsMe (UsrDat->UsrCod))
+   /***** Fast check: It's me? *****/
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
@@ -457,7 +458,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (true,	// ItsMe
+	 ID_ShowFormChangeUsrID (Usr_ME,
 				 IShouldFillInID);
 
       /***** End box *****/
@@ -487,7 +488,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (false,	// ItsMe
+	 ID_ShowFormChangeUsrID (Usr_OTHER,
 				 false);	// IShouldFillInID
 
       /***** End box *****/
@@ -501,7 +502,7 @@ void ID_ShowFormChangeOtherUsrID (void)
 /*********************** Show form to change my user's ID ********************/
 /*****************************************************************************/
 
-static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
+static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Please_fill_in_your_ID;
@@ -516,22 +517,41 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
    static const struct
      {
       Act_Action_t Remove;
-      Act_Action_t New;
+      Act_Action_t Change;
      } NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_GST	  ] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_USR    ] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_STD	  ] = {ActRemID_Std,ActNewID_Std},
-      [Rol_NET	  ] = {ActRemID_Tch,ActNewID_Tch},
-      [Rol_TCH	  ] = {ActRemID_Tch,ActNewID_Tch},
-      [Rol_DEG_ADM] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_CTR_ADM] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_INS_ADM] = {ActRemID_Oth,ActNewID_Oth},
-      [Rol_SYS_ADM] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_UNK	  ] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_GST	  ] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_USR    ] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_STD	  ] = {ActRemID_Std,ActChgID_Std},
+      [Rol_NET	  ] = {ActRemID_Tch,ActChgID_Tch},
+      [Rol_TCH	  ] = {ActRemID_Tch,ActChgID_Tch},
+      [Rol_DEG_ADM] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_CTR_ADM] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_INS_ADM] = {ActRemID_Oth,ActChgID_Oth},
+      [Rol_SYS_ADM] = {ActRemID_Oth,ActChgID_Oth},
      };
-   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
-	                                   &Gbl.Usrs.Other.UsrDat);
+   static const struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
+     };
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+     {
+      [Usr_ME   ] = ID_PutParsRemoveMyID,
+      [Usr_OTHER] = ID_PutParsRemoveOtherID
+     };
+   struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t Change;
+     } ActID[Rol_NUM_ROLES] =
+     {
+      [Usr_ME   ] = {.Remove = ActRemMyID,
+	             .Change = ActChgMyID},
+      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
+	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
+     };
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (ID_ID_SECTION_ID);
@@ -545,7 +565,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 
       /***** List existing user's IDs *****/
       for (NumID = 0;
-	   NumID < UsrDat->IDs.Num;
+	   NumID < UsrDat[MeOrOther]->IDs.Num;
 	   NumID++)
 	{
 	 if (NumID == 0)
@@ -561,46 +581,41 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	 else	// NumID >= 1
 	    HTM_BR ();
 
-	 if (UsrDat->IDs.Num > 1)	// I have two or more IDs
+	 if (UsrDat[MeOrOther]->IDs.Num > 1)	// I have two or more IDs
 	   {
-	    if (ItsMe && UsrDat->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
+	    if (MeOrOther == Usr_ME &&
+		UsrDat[MeOrOther]->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
 	       /* Put disabled icon to remove user's ID */
 	       Ico_PutIconRemovalNotAllowed ();
-	    else							// I can remove
-	      {
+	    else						// I can remove
 	       /* Form to remove user's ID */
-	       if (ItsMe)
-		  Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
-						 ID_PutParsRemoveMyID,UsrDat->IDs.List[NumID].ID);
-	       else
-		  Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,ID_ID_SECTION_ID,
-						 ID_PutParsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
-	      }
+	       Ico_PutContextualIconToRemove (ActID[MeOrOther].Remove,ID_ID_SECTION_ID,
+					      FuncParsRemove[MeOrOther],UsrDat[MeOrOther]->IDs.List[NumID].ID);
 	   }
 
 	    /* User's ID */
-	    if (asprintf (&Title,UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-								     Txt_ID_X_not_confirmed,
-			  UsrDat->IDs.List[NumID].ID) < 0)
+	    if (asprintf (&Title,UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+								                Txt_ID_X_not_confirmed,
+			  UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
-			    UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-								"USR_ID_NC",
+			    UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+								           "USR_ID_NC",
 			    Title);
 	    free (Title);
-	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
-	       HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
+	       HTM_Txt (UsrDat[MeOrOther]->IDs.List[NumID].ID);
+	       HTM_Txt (UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "&check;" :
 							     "");
 	    HTM_SPAN_End ();
 
-	 if (NumID == UsrDat->IDs.Num - 1)
+	 if (NumID == UsrDat[MeOrOther]->IDs.Num - 1)
 	   {
 	       HTM_TD_End ();
 	    HTM_TR_End ();
 	   }
 	}
 
-      if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
+      if (UsrDat[MeOrOther]->IDs.Num < ID_MAX_IDS_PER_USER)
 	{
 	 /***** Write help text *****/
 	 HTM_TR_Begin (NULL);
@@ -617,22 +632,18 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 
 	    /* Label */
 	    Frm_LabelColumn ("REC_C1_BOT RT","NewID",
-			     UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
-					       Txt_ID);		// The first user's ID
+			     UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :	// A new user's ID
+					                  Txt_ID);		// The first user's ID
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
 	                  The_GetSuffix ());
-	       if (ItsMe)
-		  Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
-	       else
-		 {
-		  Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,ID_ID_SECTION_ID);
-		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-		 }
+	       Frm_BeginFormAnchor (ActID[MeOrOther].Change,ID_ID_SECTION_ID);
+		  if (MeOrOther == Usr_OTHER)
+		     Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
-				  UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
-						    "",	// Show the most recent ID
+				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
+						               "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"NewID\" class=\"INPUT_%s\" size=\"18\"",
 				  The_GetSuffix ());
@@ -712,7 +723,7 @@ void ID_RemoveOtherUsrID (void)
 /***************************** Remove user's ID ******************************/
 /*****************************************************************************/
 
-static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
+static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
@@ -729,11 +740,18 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
 
       if (UsrDat->IDs.Num < 2)	// One unique ID
 	 ICanRemove = false;
-      else if (ItsMe)
-	 // I can remove my ID only if it is not confirmed
-	 ICanRemove = !ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
       else
-	 ICanRemove = true;
+	 switch (MeOrOther)
+	   {
+	    case Usr_ME:
+	       // I can remove my ID only if it is not confirmed
+	       ICanRemove = !ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
+	       break;
+	    case Usr_OTHER:
+	    default:
+	       ICanRemove = true;
+	       break;
+	   }
 
       if (ICanRemove)
 	{
@@ -760,7 +778,7 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
 void ID_NewMyUsrID (void)
   {
    /***** New user's ID *****/
-   ID_NewUsrID (&Gbl.Usrs.Me.UsrDat,
+   ID_ChangeUsrID (&Gbl.Usrs.Me.UsrDat,
 		true);	// It's me
 
    /***** Update list of IDs *****/
@@ -771,19 +789,19 @@ void ID_NewMyUsrID (void)
   }
 
 /*****************************************************************************/
-/********************* New user's ID for another user ************************/
+/************************* Change another user's ID **************************/
 /*****************************************************************************/
 
-void ID_NewOtherUsrID (void)
+void ID_ChangeOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** New user's ID *****/
-	 ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,
-	              Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+	 /***** Change user's ID *****/
+	 ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
+	                 Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	 /***** Update list of IDs *****/
 	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -799,10 +817,10 @@ void ID_NewOtherUsrID (void)
   }
 
 /*****************************************************************************/
-/***************************** New user's ID *********************************/
+/***************************** Change user's ID ******************************/
 /*****************************************************************************/
 
-static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
+static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_The_ID_X_matches_one_of_the_existing;
    extern const char *Txt_The_ID_X_has_been_confirmed;
@@ -836,7 +854,7 @@ static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
 
 	 if (AlreadyExists)	// This new ID was already associated to this user
 	   {
-	    if (ItsMe || UsrDat->IDs.List[NumIDFound].Confirmed)
+	    if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
 	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
 		                Txt_The_ID_X_matches_one_of_the_existing,
 			        NewID);
@@ -859,7 +877,7 @@ static void ID_NewUsrID (const struct Usr_Data *UsrDat,bool ItsMe)
 	    /***** Save this new ID *****/
 	    // It's me ==> ID not confirmed
 	    // Not me  ==> ID confirmed
-	    ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,!ItsMe);
+	    ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
 
 	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 		             Txt_The_ID_X_has_been_registered_successfully,
@@ -895,7 +913,7 @@ void ID_ConfirmOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
+      if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)	// Not me
         {
 	 /* If user is a student in current course,
 	    check if he/she has accepted */

@@ -162,7 +162,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
 static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args);
 static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther);
 static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat);
-static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
+static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                                          unsigned NumPrints,
                                          struct TstPrn_NumQuestions *NumTotalQsts,
                                          double TotalScore);
@@ -2024,7 +2024,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	   }
 
 	 /***** Write totals for this user *****/
-	 TstPrn_ShowPrintsSummaryRow (Usr_ItsMe (UsrDat->UsrCod),NumPrintsVisibleByTchs,
+	 TstPrn_ShowPrintsSummaryRow (Usr_ItsMe (UsrDat->UsrCod),
+	                              NumPrintsVisibleByTchs,
 				      &NumTotalQsts,TotalScore);
 	}
       else
@@ -2072,7 +2073,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 /****************** Show row with summary of user's tess *********************/
 /*****************************************************************************/
 
-static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
+static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                                          unsigned NumPrints,
                                          struct TstPrn_NumQuestions *NumTotalQsts,
                                          double TotalScore)
@@ -2083,7 +2084,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewTotalScore = ItsMe &&
+	 ICanViewTotalScore = MeOrOther == Usr_ME &&
 		              TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
 	 break;
       case Rol_NET:
@@ -2091,7 +2092,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 ICanViewTotalScore = ItsMe ||
+	 ICanViewTotalScore = MeOrOther == Usr_ME ||
 			      NumPrints;
 	 break;
       case Rol_SYS_ADM:
@@ -2414,7 +2415,7 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
       case Rol_STD:
 	 // Depends on whether the print is sent or not
 	 // if the print is not sent ==> I can not view results
-	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod);
+	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME;
 
 	 if (ICanView->Result)
 	    // Depends on 5 visibility icons associated to tests
@@ -2431,7 +2432,8 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	 // if the print is not sent ==> I can not view results
 	 // if teachers are not allowed ==> I can not view results (except if the print is mine)
 	 ICanView->Result =
-	 ICanView->Score  = Print->Sent && (Print->AllowTeachers || Usr_ItsMe (UsrCod));
+	 ICanView->Score  = Print->Sent &&
+	                    (Print->AllowTeachers || Usr_ItsMe (UsrCod) == Usr_ME);
 	 break;
       case Rol_SYS_ADM:
 	 ICanView->Result =

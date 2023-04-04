@@ -56,12 +56,12 @@ const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
+static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
                                            bool IMustFillNickname);
 static void Nck_PutParsRemoveMyNick (void *Nick);
 static void Nck_PutParsRemoveOtherNick (void *Nick);
 
-static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat);
+static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
 /********* Check whether a nickname (with initial arroba) if valid ***********/
@@ -130,7 +130,7 @@ long Nck_GetUsrCodFromNickname (const char *NickWithArr)
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
   {
-   Nck_ShowFormChangeUsrNickname (true,		// ItsMe
+   Nck_ShowFormChangeUsrNickname (Usr_ME,
 				  IMustFillNickname);
   }
 
@@ -140,7 +140,7 @@ void Nck_ShowFormChangeMyNickname (bool IMustFillNickname)
 
 void Nck_ShowFormChangeOtherUsrNickname (void)
   {
-   Nck_ShowFormChangeUsrNickname (false,	// ItsMe
+   Nck_ShowFormChangeUsrNickname (Usr_OTHER,
 				  false);	// IMustFillNickname
   }
 
@@ -148,7 +148,7 @@ void Nck_ShowFormChangeOtherUsrNickname (void)
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 
-static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
+static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
@@ -166,16 +166,16 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
       Act_Action_t Change;
      } NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_GST	  ] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_USR	  ] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_STD	  ] = {ActRemOldNicStd,ActChgNicStd},
-      [Rol_NET	  ] = {ActRemOldNicTch,ActChgNicTch},
-      [Rol_TCH	  ] = {ActRemOldNicTch,ActChgNicTch},
-      [Rol_DEG_ADM] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_CTR_ADM] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_INS_ADM] = {ActRemOldNicOth,ActChgNicOth},
-      [Rol_SYS_ADM] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_UNK	  ] = {ActRemNicOth,ActChgNicOth},
+      [Rol_GST	  ] = {ActRemNicOth,ActChgNicOth},
+      [Rol_USR	  ] = {ActRemNicOth,ActChgNicOth},
+      [Rol_STD	  ] = {ActRemNicStd,ActChgNicStd},
+      [Rol_NET	  ] = {ActRemNicTch,ActChgNicTch},
+      [Rol_TCH	  ] = {ActRemNicTch,ActChgNicTch},
+      [Rol_DEG_ADM] = {ActRemNicOth,ActChgNicOth},
+      [Rol_CTR_ADM] = {ActRemNicOth,ActChgNicOth},
+      [Rol_INS_ADM] = {ActRemNicOth,ActChgNicOth},
+      [Rol_SYS_ADM] = {ActRemNicOth,ActChgNicOth},
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -183,14 +183,33 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    unsigned NumNicks;
    unsigned NumNick;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   const struct Usr_Data *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
-	                                   &Gbl.Usrs.Other.UsrDat);
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
+     };
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+     {
+      [Usr_ME   ] = Nck_PutParsRemoveMyNick,
+      [Usr_OTHER] = Nck_PutParsRemoveOtherNick
+     };
+   struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t Change;
+     } ActNck[Rol_NUM_ROLES] =
+     {
+      [Usr_ME   ] = {.Remove = ActRemMyNck,
+	             .Change = ActChgMyNck},
+      [Usr_OTHER] = {.Remove = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Remove,
+	             .Change = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs].Change}
+     };
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
       /***** Get my nicknames *****/
-      NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat->UsrCod);
+      NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat[MeOrOther]->UsrCod);
 
       /***** Begin box *****/
       snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
@@ -242,34 +261,25 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		    }
 
 		  /* Form to remove old nickname */
-		  if (ItsMe)
-		     Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
-						    Nck_PutParsRemoveMyNick,row[0]);
-		  else
-		     Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Nck_NICKNAME_SECTION_ID,
-						    Nck_PutParsRemoveOtherNick,row[0]);
+		  Ico_PutContextualIconToRemove (ActNck[MeOrOther].Remove,Nck_NICKNAME_SECTION_ID,
+						 FuncParsRemove[MeOrOther],row[0]);
 		 }
 
 	       /* Nickname */
 	       HTM_TxtF ("@%s",row[0]);
 
 	       /* Link to QR code */
-	       if (NumNick == 1 && UsrDat->Nickname[0])
+	       if (NumNick == 1 && UsrDat[MeOrOther]->Nickname[0])
 		  QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-					   Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+					   Usr_PutParOtherUsrCodEncrypted,UsrDat[MeOrOther]->EnUsrCod);
 
 	       /* Form to change the nickname */
 	       if (NumNick > 1)
 		 {
 		  HTM_BR ();
-		  if (ItsMe)
-		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
-		  else
-		    {
-		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-		    }
-
+	          Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
+	             if (MeOrOther == Usr_OTHER)
+		        Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
 		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
 			Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
@@ -297,15 +307,11 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
 	                     The_GetSuffix ());
-		  if (ItsMe)
-		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
-		  else
-		    {
-		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-		    }
+	          Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
+	             if (MeOrOther == Usr_OTHER)
+		        Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-			       Gbl.Usrs.Me.UsrDat.Nickname);
+			       UsrDat[MeOrOther]->Nickname);
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"NewNick\" class=\"INPUT_%s\""
@@ -416,25 +422,25 @@ void Nck_RemoveOtherUsrNick (void)
 void Nck_UpdateMyNick (void)
   {
    /***** Update my nickname *****/
-   Nck_UpdateUsrNick (&Gbl.Usrs.Me.UsrDat);
+   Nck_ChangeUsrNick (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
    Acc_ShowFormChgMyAccount ();
   }
 
 /*****************************************************************************/
-/*********************** Update another user's nickname **********************/
+/*********************** Change another user's nickname **********************/
 /*****************************************************************************/
 
-void Nck_UpdateOtherUsrNick (void)
+void Nck_ChangeOtherUsrNick (void)
   {
    /***** Get user whose nick must be changed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Update my nickname *****/
-	 Nck_UpdateUsrNick (&Gbl.Usrs.Other.UsrDat);
+	 /***** Update user's nickname *****/
+	 Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Show user's account again *****/
 	 Acc_ShowFormChgOtherUsrAccount ();
@@ -447,10 +453,10 @@ void Nck_UpdateOtherUsrNick (void)
   }
 
 /*****************************************************************************/
-/*************************** Update user's nickname **************************/
+/*************************** Change user's nickname **************************/
 /*****************************************************************************/
 
-static void Nck_UpdateUsrNick (struct Usr_Data *UsrDat)
+static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_The_nickname_matches_the_one_you_had_previously_registered;
    extern const char *Txt_The_nickname_had_been_registered_by_another_user;

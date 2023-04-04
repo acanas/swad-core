@@ -561,28 +561,32 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
      };
    const char *ClassTxt;
    long UsrCod;
-   bool ItsMe;
+   Usr_MeOrOther_t MeOrOther;
    struct Usr_Data *UsrDat;
    struct Usr_Data OtherUsrDat;
 
    /***** Get user's code from list *****/
    UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
-   ItsMe = Usr_ItsMe (UsrCod);
+   MeOrOther = Usr_ItsMe (UsrCod);
 
-   if (ItsMe)
-      UsrDat = &Gbl.Usrs.Me.UsrDat;
-   else
+   switch (MeOrOther)
      {
-      /***** Initialize structure with user's data *****/
-      OtherUsrDat.UsrCod = UsrCod;
-      Usr_UsrDataConstructor (&OtherUsrDat);
+      case Usr_ME:
+         UsrDat = &Gbl.Usrs.Me.UsrDat;
+	 break;
+      case Usr_OTHER:
+      default:
+	 /***** Initialize structure with user's data *****/
+	 OtherUsrDat.UsrCod = UsrCod;
+	 Usr_UsrDataConstructor (&OtherUsrDat);
 
-      /***** Get user's data *****/
-      Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat,
-                                   Usr_DONT_GET_PREFS,
-                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	 /***** Get user's data *****/
+	 Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat,
+				      Usr_DONT_GET_PREFS,
+				      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-      UsrDat = &OtherUsrDat;
+	 UsrDat = &OtherUsrDat;
+	 break;
      }
 
    HTM_TR_Begin (NULL);
@@ -623,9 +627,16 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    HTM_TR_End ();
 
-   if (!ItsMe)
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&OtherUsrDat);
+   switch (MeOrOther)
+     {
+      case Usr_ME:
+	 break;
+      case Usr_OTHER:
+      default:
+	 /***** Free memory used for user's data *****/
+         Usr_UsrDataDestructor (&OtherUsrDat);
+         break;
+     }
 
    The_ChangeRowColor ();
   }
