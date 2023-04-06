@@ -4177,8 +4177,8 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
    va_list ap;
    int NumBytesPrinted;
    char *Query;
-   bool TooBig = false;
-   char ErrorTxt[256];
+   // bool TooBig = false;
+   // char ErrorTxt[256];
 
    /***** Create query string *****/
    va_start (ap,fmt);
@@ -4193,14 +4193,15 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
      {
       row = mysql_fetch_row (mysql_res);
 
-      TooBig = (strlen (row[0]) > StrSize);
-      if (!TooBig)
+      // TooBig = (strlen (row[0]) > StrSize);
+      // if (!TooBig)
          Str_Copy (Str,row[0],StrSize);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
+   /*
    if (TooBig)
      {
       snprintf (ErrorTxt,sizeof (ErrorTxt),
@@ -4209,6 +4210,7 @@ void DB_QuerySELECTString (char *Str,size_t StrSize,const char *MsgError,
                 StrSize);
       Err_ShowErrorAndExit (ErrorTxt);
      }
+   */
   }
 
 /*****************************************************************************/

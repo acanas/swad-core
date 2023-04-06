@@ -81,14 +81,10 @@ void RubRsc_GetLinkToRubric (void)
 void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Rubrics;
-   char TitleFromDB[Rub_MAX_BYTES_TITLE + 1];
 
    if (RubCod > 0)
-     {
-      /***** Get rubric title *****/
-      Rub_DB_GetRubricTitle (RubCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get rubric title from database *****/
+      Rub_DB_GetRubricTitle (RubCod,Title,TitleSize);
    else
       /***** Generic title for all rubrics *****/
       Str_Copy (Title,Txt_Rubrics,TitleSize);

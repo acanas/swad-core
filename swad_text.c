@@ -6130,6 +6130,29 @@ const char *Txt_course =
 	"kurs";
 #endif
 
+const char *Txt_Course_forum =
+#if   L==1	// ca
+	"F&ograve;rum de l'assignatura";
+#elif L==2	// de
+	"Kursforum";
+#elif L==3	// en
+	"Course forum";
+#elif L==4	// es
+	"Foro de la asignatura";
+#elif L==5	// fr
+	"Forum de mati&egrave;re";
+#elif L==6	// gn
+	"Foro de la asignatura";	// Okoteve traducción
+#elif L==7	// it
+	"Forum del corso";
+#elif L==8	// pl
+	"Forum kursu";
+#elif L==9	// pt
+	"F&oacute;rum da disciplina";
+#elif L==10	// tr
+	"Kurs forumu";
+#endif
+
 const char *Txt_COURSE_program =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Programa de %s";
@@ -15137,7 +15160,7 @@ const char *Txt_Format =
 
 const char *Txt_Forum =
 #if   L==1	// ca
-	"Foro";
+	"F&ograve;rum";
 #elif L==2	// de
 	"Forum";
 #elif L==3	// en
@@ -15147,7 +15170,7 @@ const char *Txt_Forum =
 #elif L==5	// fr
 	"Forum";
 #elif L==6	// gn
-	"Foro";		// Okoteve traducción
+	"Foro";
 #elif L==7	// it
 	"Forum";
 #elif L==8	// pl
@@ -15155,7 +15178,7 @@ const char *Txt_Forum =
 #elif L==9	// pt
 	"F&oacute;rum";
 #elif L==10	// tr
-	"Forum";	// Çeviri lazim!
+	"Forum";
 #endif
 
 const char *Txt_Forum_posts =

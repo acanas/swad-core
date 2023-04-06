@@ -539,10 +539,9 @@ unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod)
 /***************************** Get thread subject ****************************/
 /*****************************************************************************/
 
-void For_DB_GetThreadSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
+void For_DB_GetThreadTitle (long ThrCod,char *Subject,size_t TitleSize)
   {
-   DB_QuerySELECTString (Subject,Cns_MAX_BYTES_SUBJECT,
-                         "can not get thread subject",
+   DB_QuerySELECTString (Subject,TitleSize,"can not get thread subject",
 		         "SELECT for_posts.Subject"	// row[0]
 			  " FROM for_threads,"
 			        "for_posts"

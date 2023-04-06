@@ -128,9 +128,9 @@ unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
 /********************** Get rubric title from database ***********************/
 /*****************************************************************************/
 
-void Rub_DB_GetRubricTitle (long RubCod,char Title[Rub_MAX_BYTES_TITLE + 1])
+void Rub_DB_GetRubricTitle (long RubCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Rub_MAX_BYTES_TITLE,"can not get rubric title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get rubric title",
 		         "SELECT Title"	// row[0]
 			  " FROM rub_rubrics"
 		         " WHERE RubCod=%ld"

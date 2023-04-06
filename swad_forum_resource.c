@@ -97,16 +97,12 @@ void ForRsc_FreeAnchorStr (char **Anchor)
 
 void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
   {
-   extern const char *Txt_Forum;
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   extern const char *Txt_Course_forum;
 
    if (ThrCod > 0)
-     {
-      /***** Get thread subject *****/
-      For_DB_GetThreadSubject (ThrCod,Subject);
-      Str_Copy (Title,Subject,TitleSize);
-     }
+      /***** Get thread subject from database *****/
+      For_DB_GetThreadTitle (ThrCod,Title,TitleSize);
    else
-      snprintf (Title,TitleSize + 1,"%s %s",
-                Txt_Forum,Gbl.Hierarchy.Crs.ShrtName);
+      /***** Generic title for all posts *****/
+      Str_Copy (Title,Txt_Course_forum,TitleSize);
   }

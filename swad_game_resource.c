@@ -74,14 +74,10 @@ void GamRsc_GetLinkToGame (void)
 void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Games;
-   char TitleFromDB[Gam_MAX_BYTES_TITLE + 1];
 
    if (GamCod > 0)
-     {
-      /***** Get game title *****/
-      Gam_DB_GetGameTitle (GamCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get game title from database *****/
+      Gam_DB_GetGameTitle (GamCod,Title,TitleSize);
    else
       /***** Generic title for all games *****/
       Str_Copy (Title,Txt_Games,TitleSize);

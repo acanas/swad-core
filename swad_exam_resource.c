@@ -72,14 +72,10 @@ void ExaRsc_GetLinkToExam (void)
 void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Exams;
-   char TitleFromDB[Exa_MAX_BYTES_TITLE + 1];
 
    if (ExaCod > 0)
-     {
-      /***** Get exam title *****/
-      Exa_DB_GetExamTitle (ExaCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get exam title from database *****/
+      Exa_DB_GetExamTitle (ExaCod,Title,TitleSize);
    else
       /***** Generic title for all exams *****/
       Str_Copy (Title,Txt_Exams,TitleSize);

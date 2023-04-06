@@ -192,11 +192,9 @@ unsigned Att_DB_GetEventDataByCod (MYSQL_RES **mysql_res,long AttCod)
 /***************** Get attendance event title from database ******************/
 /*****************************************************************************/
 
-void Att_DB_GetEventTitle (long AttCod,
-                           char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1])
+void Att_DB_GetEventTitle (long AttCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE,
-                         "can not get attendance event title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get attendance event title",
 		         "SELECT Title"	// row[0]
 			  " FROM att_events"
 		         " WHERE AttCod=%ld"

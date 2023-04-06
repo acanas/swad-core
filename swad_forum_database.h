@@ -67,7 +67,7 @@ void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
 unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
                                  const struct For_Forums *Forums);
 unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod);
-void For_DB_GetThreadSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
+void For_DB_GetThreadTitle (long ThrCod,char *Subject,size_t TitleSize);
 bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
 long For_DB_GetThrLastPst (long ThrCod);
 void For_DB_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);

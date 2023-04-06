@@ -77,14 +77,10 @@ void PrjRsc_GetLinkToProject (void)
 void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Projects;
-   char TitleFromDB[Prj_MAX_BYTES_TITLE + 1];
 
    if (PrjCod > 0)
-     {
-      /***** Get project title *****/
-      Prj_DB_GetProjectTitle (PrjCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get project title from database *****/
+      Prj_DB_GetProjectTitle (PrjCod,Title,TitleSize);
    else
       /***** Generic title for all projects *****/
       Str_Copy (Title,Txt_Projects,TitleSize);

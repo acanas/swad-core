@@ -198,9 +198,9 @@ unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod
 /******************** Get assignment title from database *********************/
 /*****************************************************************************/
 
-void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1])
+void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE,"can not get assignment title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get assignment title",
 		         "SELECT Title"
 			  " FROM asg_assignments"
 		         " WHERE AsgCod=%ld"

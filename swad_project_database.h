@@ -48,7 +48,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const char *UsrsSubQuery);	// NULL if no users
 unsigned Prj_DB_GetCrsPrjsConfig (MYSQL_RES **mysql_res);
 unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod);
-void Prj_DB_GetProjectTitle (long PrjCod,char Title[Prj_MAX_BYTES_TITLE + 1]);
+void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize);
 unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod);
 unsigned Prj_DB_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject);
 unsigned Prj_DB_GetUsrsInPrj (MYSQL_RES **mysql_res,

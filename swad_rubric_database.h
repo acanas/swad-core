@@ -44,7 +44,7 @@ void Rub_DB_HideOrUnhideRubric (long RubCod,bool Hide);
 
 unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res);
 unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod);
-void Rub_DB_GetRubricTitle (long RubCod,char Title[Rub_MAX_BYTES_TITLE + 1]);
+void Rub_DB_GetRubricTitle (long RubCod,char *Title,size_t TitleSize);
 void Rub_DB_GetRubricTxt (long RubCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric);
 unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Scope);

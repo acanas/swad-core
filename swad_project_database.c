@@ -598,9 +598,9 @@ unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
 /********************* Get project title from database ***********************/
 /*****************************************************************************/
 
-void Prj_DB_GetProjectTitle (long PrjCod,char Title[Prj_MAX_BYTES_TITLE + 1])
+void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Prj_MAX_BYTES_TITLE,"can not get project title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get project title",
 		         "SELECT Title"	// row[0]
 			  " FROM prj_projects"
 		         " WHERE PrjCod=%ld"

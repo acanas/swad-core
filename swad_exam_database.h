@@ -44,7 +44,7 @@ void Exa_DB_HideOrUnhideExam (long ExaCod,bool Hide);
 unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
 unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
-void Exa_DB_GetExamTitle (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1]);
+void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
 unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope);

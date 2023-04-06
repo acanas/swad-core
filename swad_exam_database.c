@@ -218,9 +218,9 @@ unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
 /*********************** Get exam title from database ************************/
 /*****************************************************************************/
 
-void Exa_DB_GetExamTitle (long ExaCod,char Title[Exa_MAX_BYTES_TITLE + 1])
+void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Exa_MAX_BYTES_TITLE,"can not get exam title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get exam title",
 		         "SELECT Title"	// row[0]
 			  " FROM exa_exams"
 		         " WHERE ExaCod=%ld"

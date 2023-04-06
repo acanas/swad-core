@@ -83,14 +83,10 @@ void AsgRsc_GetLinkToAssignment (void)
 void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Assignments;
-   char TitleFromDB[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
 
    if (AsgCod > 0)
-     {
-      /***** Get assignment title *****/
-      Asg_DB_GetAssignmentTitleByCod (AsgCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get assignment title from database *****/
+      Asg_DB_GetAssignmentTitleByCod (AsgCod,Title,TitleSize);
    else
       /***** Generic title for all assignments *****/
       Str_Copy (Title,Txt_Assignments,TitleSize);

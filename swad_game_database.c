@@ -226,9 +226,9 @@ unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
 /*********************** Get game title from database ************************/
 /*****************************************************************************/
 
-void Gam_DB_GetGameTitle (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
+void Gam_DB_GetGameTitle (long GamCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Gam_MAX_BYTES_TITLE,"can not get game title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get game title",
 		         "SELECT Title"	// row[0]
 			  " FROM gam_games"
 		         " WHERE GamCod=%ld"

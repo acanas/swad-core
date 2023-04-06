@@ -68,14 +68,10 @@ void AttRsc_GetLinkToEvent (void)
 void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
   {
    extern const char *Txt_Control_of_class_attendance;
-   char TitleFromDB[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 
    if (AttCod > 0)
-     {
-      /***** Get attendance event title *****/
-      Att_DB_GetEventTitle (AttCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
+      /***** Get attendance event title from database *****/
+      Att_DB_GetEventTitle (AttCod,Title,TitleSize);
    else
       /***** Generic title for all attendance events *****/
       Str_Copy (Title,Txt_Control_of_class_attendance,TitleSize);
