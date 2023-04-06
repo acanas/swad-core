@@ -235,23 +235,6 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-   static void (*WriteLinkName[Rsc_NUM_TYPES]) (long Cod,Frm_PutFormToGo_t PutFormToGo,
-						const char *Icon,
-						const char *IconTitle) =
-     {
-      [Rsc_NONE            ] = Rsc_WriteResourceEmpty,
-      [Rsc_ASSIGNMENT      ] = AsgRsc_WriteResourceAssignment,
-      [Rsc_PROJECT         ] = PrjRsc_WriteResourceProject,
-      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_WriteResourceCallForExam,
-      [Rsc_EXAM            ] = ExaRsc_WriteResourceExam,
-      [Rsc_GAME            ] = GamRsc_WriteResourceGame,
-      [Rsc_RUBRIC          ] = RubRsc_WriteResourceRubric,
-      [Rsc_DOCUMENT        ] = BrwRsc_WriteResourceDocument,
-      [Rsc_MARKS           ] = BrwRsc_WriteResourceMarksFile,
-      [Rsc_ATTENDANCE_EVENT] = AttRsc_WriteResourceEvent,
-      [Rsc_FORUM_THREAD    ] = ForRsc_WriteResourceThread,
-      [Rsc_SURVEY          ] = SvyRsc_WriteResourceSurvey,
-     };
    static void (*GetResourceTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
       [Rsc_NONE            ] = Rsc_GetResourceEmptyTitle,
@@ -324,73 +307,48 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
    char Title[Cns_MAX_BYTES_SUBJECT + 1];
    char *Anchor;
 
-   /***** Write link name *****/
-   if (WriteLinkName[Link->Type])
+   /***** Get resource title *****/
+   GetResourceTitle[Link->Type] (Link->Cod,Title,sizeof (Title) - 1);
+
+   switch (PutFormToGo)
      {
-      GetResourceTitle[Link->Type] (Link->Cod,Title,sizeof (Title) - 1);
-
-      /***** Begin form to go to resource *****/
-      if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-	{
+      case Frm_DONT_PUT_FORM_TO_GO:
+	 /* Icon and title of resource *****/
+	 Ico_PutIconOn (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,
+	                Txt_RESOURCE_TYPES[Link->Type]);
+	 HTM_Txt (Title);
+	 break;
+      case Frm_PUT_FORM_TO_GO:
+	 /* Begin form to go to resource */
 	 NextAction = (Link->Cod > 0) ? NextActions[Link->Type].IfCod :		// Resource specified
-				        NextActions[Link->Type].IfNotCod;	// All resources of this type
-         if (FuncAnchor[Link->Type].Set)
-           {
-            FuncAnchor[Link->Type].Set (Link->Cod,&Anchor);
+					NextActions[Link->Type].IfNotCod;	// All resources of this type
+	 if (FuncAnchor[Link->Type].Set)
+	   {
+	    FuncAnchor[Link->Type].Set (Link->Cod,&Anchor);
 	    Frm_BeginFormAnchor (NextAction,Anchor);
-            FuncAnchor[Link->Type].Free (&Anchor);
-           }
-         else
-            Frm_BeginForm (NextAction);
-
+	    FuncAnchor[Link->Type].Free (&Anchor);
+	   }
+	 else
+	    Frm_BeginForm (NextAction);
 	 if (Link->Cod > 0)
 	    ParCod_PutPar (ParCod[Link->Type],Link->Cod);
 
+	 /* Begin link */
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 				  "class=\"LM BT_LINK PRG_LNK_%s\"",
 				  The_GetSuffix ());
-	}
 
-      /***** Icon depending on type ******/
-      switch (PutFormToGo)
-	{
-	 case Frm_DONT_PUT_FORM_TO_GO:
-	    Ico_PutIconOn (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,Txt_RESOURCE_TYPES[Link->Type]);
-	    break;
-	 case Frm_PUT_FORM_TO_GO:
-	    Ico_PutIconLink (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,NextAction);
-	    break;
-	}
+	    /* Icon and title of resource *****/
+	    Ico_PutIconLink (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,
+	                     NextAction);
+	    HTM_Txt (Title);
 
-      /***** Write title of resource*****/
-      HTM_Txt (Title);
+         /* End link */
+	 HTM_BUTTON_End ();
 
-      /***** End form to download file *****/
-      if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-	{
-	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
-	}
+	 break;
      }
-   else
-      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
-  }
-
-/*****************************************************************************/
-/******************** Write empty resource as resource ***********************/
-/*****************************************************************************/
-
-void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,
-                             __attribute__((unused)) Frm_PutFormToGo_t PutFormToGo,
-                             const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
-   /***** Icon depending on type ******/
-   Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-
-   /***** Write text *****/
-   HTM_Txt (Txt_RESOURCE_TYPES[Rsc_NONE]);
   }
 
 /*****************************************************************************/

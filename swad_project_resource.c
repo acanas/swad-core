@@ -28,7 +28,6 @@
 #include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_error.h"
-#include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_program_database.h"
 #include "swad_project.h"
@@ -68,54 +67,6 @@ void PrjRsc_GetLinkToProject (void)
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
-  }
-
-/*****************************************************************************/
-/*********************** Write project as resource ************************/
-/*****************************************************************************/
-
-void PrjRsc_WriteResourceProject (long PrjCod,Frm_PutFormToGo_t PutFormToGo,
-                                  const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Prj_MAX_BYTES_TITLE + 1];
-
-   /***** Get project title *****/
-   PrjRsc_GetTitleFromPrjCod (PrjCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to project *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (PrjCod > 0)	? ActSeeOnePrj :	// Project specified
-				  ActSeePrj;		// All projects
-      Frm_BeginForm (NextAction);
-	 ParCod_PutPar (ParCod_Prj,PrjCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-				  "class=\"LM BT_LINK PRG_LNK_%s\"",
-				  The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write project title *****/
-   HTM_Txt (Title);
-
-   /***** End form to go to project *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/

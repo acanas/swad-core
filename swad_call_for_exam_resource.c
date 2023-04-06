@@ -30,7 +30,6 @@
 #include "swad_call_for_exam.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_error.h"
-#include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 
@@ -38,7 +37,7 @@
 /************************ Get link to call for exam **************************/
 /*****************************************************************************/
 
-void Cfe_GetLinkToCallForExam (void)
+void CfeRsc_GetLinkToCallForExam (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
@@ -64,62 +63,6 @@ void Cfe_GetLinkToCallForExam (void)
 
    /***** Show again the list of calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
-  }
-
-/*****************************************************************************/
-/********************** Write call for exam as resource **********************/
-/*****************************************************************************/
-
-void CfeRsc_WriteResourceCallForExam (long ExaCod,Frm_PutFormToGo_t PutFormToGo,
-                                      const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
-   char *Anchor = NULL;
-
-   /***** Get session and date of the exam *****/
-   CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      /* Build anchor string */
-      Frm_SetAnchorStr (ExaCod,&Anchor);
-
-      /* Begin form */
-      NextAction = (ExaCod > 0)	? ActSeeOneCfe :	// Call for exam specified
-				  ActSeeAllCfe;		// All calls for exams
-      Frm_BeginFormAnchor (NextAction,Anchor);
-         ParCod_PutPar (ParCod_Exa,ExaCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-
-      /* Free anchor string */
-      Frm_FreeAnchorStr (&Anchor);
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write title of call for exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/

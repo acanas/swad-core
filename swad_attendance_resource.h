@@ -29,15 +29,11 @@
 
 #include <stddef.h>		// For size_t
 
-#include "swad_form.h"
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void AttRsc_GetLinkToEvent (void);
-void AttRsc_WriteResourceEvent (long AttCod,Frm_PutFormToGo_t PutFormToGo,
-                                const char *Icon,const char *IconTitle);
 void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

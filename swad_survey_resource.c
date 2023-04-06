@@ -66,54 +66,6 @@ void SvyRsc_GetLinkToSurvey (void)
   }
 
 /*****************************************************************************/
-/************************* Write survey as resource **************************/
-/*****************************************************************************/
-
-void SvyRsc_WriteResourceSurvey (long SvyCod,Frm_PutFormToGo_t PutFormToGo,
-                                 const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-
-   /***** Get survey title *****/
-   SvyRsc_GetTitleFromSvyCod (SvyCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to survey *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (SvyCod > 0)	? ActSeeSvy :	// Survey specified
-				  ActSeeAllSvy;	// All surveys
-      Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Svy,SvyCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write title of survey *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
 /********************* Get survey title from survey code *********************/
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize

@@ -76,54 +76,6 @@ void AsgRsc_GetLinkToAssignment (void)
   }
 
 /*****************************************************************************/
-/************************ Write assignment as resource ***********************/
-/*****************************************************************************/
-
-void AsgRsc_WriteResourceAssignment (long AsgCod,Frm_PutFormToGo_t PutFormToGo,
-                                     const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
-
-   /***** Get assignment title *****/
-   AsgRsc_GetTitleFromAsgCod (AsgCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to assignment *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (AsgCod > 0)	? ActSeeOneAsg :	// Assignment specified
-				  ActSeeAsg;		// All assignments
-      Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Asg,AsgCod);
-         HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-         Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write assignment title of exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
 /**************** Get assignment title from assignment code ******************/
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize

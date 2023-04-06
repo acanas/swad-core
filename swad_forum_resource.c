@@ -26,7 +26,6 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
-#include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_forum_database.h"
 #include "swad_forum_resource.h"
@@ -74,61 +73,6 @@ void ForRsc_GetLinkToThread (void)
 
    /***** Show the posts of that thread *****/
    For_ShowPostsOfAThread (&Forums,Ale_SUCCESS,NULL);
-  }
-
-/*****************************************************************************/
-/************************ Write thread as resource ***************************/
-/*****************************************************************************/
-
-void ForRsc_WriteResourceThread (long ThrCod,Frm_PutFormToGo_t PutFormToGo,
-                                 const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-
-   /***** Get thread subject *****/
-   ForRsc_GetTitleFromThrCod (ThrCod,Subject,sizeof (Subject) - 1);
-
-   /***** Begin form to go to survey *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      /***** Set forum and thread *****/
-      // TODO: In the listing of threads, the page is always the first.
-      //       The page should be that corresponding to the selected thread.
-      NextAction = (ThrCod > 0)	? ActSeePstForCrsUsr :	// Thread specified
-				  ActSeeForCrsUsr;	// All threads
-      Frm_BeginFormAnchor (NextAction,ThrCod > 0 ? For_FORUM_POSTS_SECTION_ID :
-					           For_FORUM_THREADS_SECTION_ID);
-         if (ThrCod > 0)
-            ParCod_PutPar (ParCod_Thr,ThrCod);
-         else
-            ParCod_PutPar (ParCod_OthHie,Gbl.Hierarchy.Crs.CrsCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write title of forum *****/
-   HTM_Txt (Subject);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/

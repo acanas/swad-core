@@ -28,7 +28,6 @@
 #include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_error.h"
-#include "swad_form.h"
 #include "swad_game.h"
 #include "swad_game_database.h"
 #include "swad_game_resource.h"
@@ -65,54 +64,6 @@ void GamRsc_GetLinkToGame (void)
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
-  }
-
-/*****************************************************************************/
-/************************** Write game as resource ***************************/
-/*****************************************************************************/
-
-void GamRsc_WriteResourceGame (long GamCod,Frm_PutFormToGo_t PutFormToGo,
-                               const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Gam_MAX_BYTES_TITLE + 1];
-
-   /***** Get game title *****/
-   GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to game *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (GamCod > 0)	? ActSeeGam :	// Game specified
-				  ActSeeAllGam;	// All games
-      Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Gam,GamCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write game title of exam *****/
-   HTM_Txt (Title);
-
-   /***** End form to go to game *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/

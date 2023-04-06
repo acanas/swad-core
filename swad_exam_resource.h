@@ -29,15 +29,11 @@
 
 #include <stddef.h>		// For size_t
 
-#include "swad_form.h"
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void ExaRsc_GetLinkToExam (void);
-void ExaRsc_WriteResourceExam (long ExaCod,Frm_PutFormToGo_t PutFormToGo,
-                               const char *Icon,const char *IconTitle);
 void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

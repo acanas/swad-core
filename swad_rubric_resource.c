@@ -29,7 +29,6 @@
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_error.h"
-#include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 #include "swad_rubric.h"
@@ -72,54 +71,6 @@ void RubRsc_GetLinkToRubric (void)
 
    /***** Show rubrics again *****/
    Rub_ListAllRubrics (&Rubrics);
-  }
-
-/*****************************************************************************/
-/*************************** Write rubric as resource ************************/
-/*****************************************************************************/
-
-void RubRsc_WriteResourceRubric (long RubCod,Frm_PutFormToGo_t PutFormToGo,
-                                 const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Rub_MAX_BYTES_TITLE + 1];
-
-   /***** Get rubric title *****/
-   RubRsc_GetTitleFromRubCod (RubCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to rubric *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (RubCod > 0)	? ActSeeRub :	// Rubric specified
-				  ActSeeAllRub;	// All rubrics
-      Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Rub,RubCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-	 Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write title of rubric *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/

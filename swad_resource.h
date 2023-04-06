@@ -79,9 +79,6 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                             HTM_SubmitOnClick_t SubmitOnClick,bool Checked);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToGo);
-void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,
-                             __attribute__((unused)) Frm_PutFormToGo_t PutFormToGo,
-                             const char *Icon,const char *IconTitle);
 
 void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
                                    char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);

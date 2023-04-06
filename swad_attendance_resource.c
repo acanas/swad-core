@@ -30,7 +30,6 @@
 #include "swad_attendance_database.h"
 #include "swad_attendance_resource.h"
 #include "swad_error.h"
-#include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 
@@ -59,54 +58,6 @@ void AttRsc_GetLinkToEvent (void)
 
    /***** Show attendance events again *****/
    Att_SeeEvents ();
-  }
-
-/*****************************************************************************/
-/****************** Write attendance event as resource ***********************/
-/*****************************************************************************/
-
-void AttRsc_WriteResourceEvent (long AttCod,Frm_PutFormToGo_t PutFormToGo,
-                                const char *Icon,const char *IconTitle)
-  {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   Act_Action_t NextAction;
-   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
-
-   /***** Get game title *****/
-   AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
-
-   /***** Begin form to go to game *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-      NextAction = (AttCod > 0)	? ActSeeOneAtt :	// Attendance events specified
-				  ActSeeAtt;		// All attendance events
-      Frm_BeginForm (NextAction);
-         ParCod_PutPar (ParCod_Att,AttCod);
-	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
-	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
-	                          The_GetSuffix ());
-     }
-
-   /***** Icon depending on type ******/
-   switch (PutFormToGo)
-     {
-      case Frm_DONT_PUT_FORM_TO_GO:
-         Ico_PutIconOn (Icon,Ico_BLACK,IconTitle);
-	 break;
-      case Frm_PUT_FORM_TO_GO:
-         Ico_PutIconLink (Icon,Ico_BLACK,NextAction);
-	 break;
-     }
-
-   /***** Write attendance event title *****/
-   HTM_Txt (Title);
-
-   /***** End form to download file *****/
-   if (PutFormToGo == Frm_PUT_FORM_TO_GO)
-     {
-         HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
   }
 
 /*****************************************************************************/
