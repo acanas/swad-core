@@ -652,8 +652,10 @@ CREATE TABLE IF NOT EXISTS fir_banned (
 CREATE TABLE IF NOT EXISTS fir_log (
 	ClickTime DATETIME NOT NULL,
 	IP CHAR(15) NOT NULL,
+	UsrCod INT NOT NULL DEFAULT -1,
 	INDEX(ClickTime),
-	INDEX(IP));
+	INDEX(IP),
+	INDEX(UsrCod));
 --
 -- Table for_clipboards: stores the clipboards used to move threads from one forum to another
 --
@@ -704,12 +706,12 @@ CREATE TABLE IF NOT EXISTS for_read (
 CREATE TABLE IF NOT EXISTS for_threads (
 	ThrCod INT NOT NULL AUTO_INCREMENT,
 	ForumType TINYINT NOT NULL,
-	Location INT NOT NULL DEFAULT -1,
+	HieCod INT NOT NULL DEFAULT -1,
 	FirstPstCod INT NOT NULL,
 	LastPstCod INT NOT NULL,
 	UNIQUE INDEX(ThrCod),
 	INDEX(ForumType),
-	INDEX(Location),
+	INDEX(HieCod),
 	UNIQUE INDEX(FirstPstCod),
 	UNIQUE INDEX(LastPstCod));
 --
@@ -1162,6 +1164,16 @@ CREATE TABLE IF NOT EXISTS plg_plugins (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(PlgCod));
 --
+-- Table prg_expanded: stores the items of the course program currently expanded for each user
+--
+CREATE TABLE IF NOT EXISTS prg_expanded (
+	UsrCod INT NOT NULL,
+	ItmCod INT NOT NULL,
+	ClickTime DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod,ItmCod),
+	INDEX(ItmCod),
+	INDEX(ClickTime));
+--
 -- Table prg_items: stores the items of the course program
 --
 CREATE TABLE IF NOT EXISTS prg_items (
@@ -1185,6 +1197,7 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 	ItmCod INT NOT NULL DEFAULT -1,
 	RscInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(RscCod),
 	UNIQUE INDEX(ItmCod,RscInd));
@@ -1202,23 +1215,27 @@ CREATE TABLE IF NOT EXISTS prj_projects (
 	PrjCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	DptCod INT NOT NULL DEFAULT -1,
-	Locked ENUM('N','Y') NOT NULL DEFAULT 'N',	
+	Locked ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Assigned ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NumStds INT NOT NULL DEFAULT 1,
 	Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',
 	CreatTime DATETIME NOT NULL,
 	ModifTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
+	Title VARCHAR(4095) NOT NULL,
 	Description TEXT NOT NULL,
 	Knowledge TEXT NOT NULL,
 	Materials TEXT NOT NULL,
 	URL VARCHAR(255) NOT NULL,
+	ReviewStatus ENUM('unreviewed','unapproved','approved') NOT NULL DEFAULT 'unreviewed',
+	ReviewTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00',
+	ReviewTxt TEXT NOT NULL,
 	UNIQUE INDEX(PrjCod),
 	INDEX(CrsCod,Hidden),
 	INDEX(CrsCod,CreatTime),
 	INDEX(CrsCod,ModifTime),
-	INDEX(CrsCod,DptCod));
+	INDEX(CrsCod,DptCod),
+	INDEX(CrsCod,ReviewStatus));
 --
 -- Table prj_users: stores the users inside projects
 --
@@ -1260,6 +1277,44 @@ CREATE TABLE IF NOT EXISTS roo_rooms (
 	Capacity INT NOT NULL,
 	UNIQUE INDEX(RooCod),
 	INDEX(CtrCod,BldCod,Floor));
+--
+-- Table rsc_clipboards: stores the clipboards for resources to be linked in program and rubrics
+--
+CREATE TABLE IF NOT EXISTS rsc_clipboards (
+	UsrCod INT NOT NULL,
+	CrsCod INT NOT NULL,
+	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Cod INT NOT NULL DEFAULT -1,
+	CopyTime TIMESTAMP,
+	UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),
+	INDEX(CrsCod,Type,Cod),
+	INDEX(CopyTime));
+--
+-- Table rub_criteria: stores the criteria associated to each rubric
+--
+CREATE TABLE IF NOT EXISTS rub_criteria (
+	CriCod INT NOT NULL AUTO_INCREMENT,
+	RubCod INT NOT NULL,
+	CriInd INT NOT NULL,
+	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy'),
+	Cod INT NOT NULL DEFAULT -1,
+	MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,
+	MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,
+	Weight DOUBLE PRECISION NOT NULL DEFAULT 1,
+	Title VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(CriCod),
+	UNIQUE INDEX(RubCod,CriInd));
+--
+-- Table rub_criteria: stores the assessment rubrics
+--
+CREATE TABLE IF NOT EXISTS rub_rubrics (
+	RubCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	UsrCod INT NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(RubCod),
+	INDEX(CrsCod));
 --
 -- Table ses_params: stores some hidden parameters passed from a page to another using database instead of forms
 --

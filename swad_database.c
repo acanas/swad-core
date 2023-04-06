@@ -1565,16 +1565,16 @@ mysql> DESCRIBE for_read;
    /***** Table for_threads *****/
 /*
 mysql> DESCRIBE for_threads;
-+-------------+------------+------+-----+---------+----------------+
-| Field       | Type       | Null | Key | Default | Extra          |
-+-------------+------------+------+-----+---------+----------------+
-| ThrCod      | int(11)    | NO   | PRI | NULL    | auto_increment |
-| ForumType   | tinyint(4) | NO   | MUL | 0       |                |
-| Location    | int(11)    | NO   | MUL | -1      |                |
-| FirstPstCod | int(11)    | NO   | UNI | NULL    |                |
-| LastPstCod  | int(11)    | NO   | UNI | NULL    |                |
-+-------------+------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++-------------+---------+------+-----+---------+----------------+
+| Field       | Type    | Null | Key | Default | Extra          |
++-------------+---------+------+-----+---------+----------------+
+| ThrCod      | int     | NO   | PRI | NULL    | auto_increment |
+| ForumType   | tinyint | NO   | MUL | NULL    |                |
+| HieCod      | int     | NO   | MUL | -1      |                |
+| FirstPstCod | int     | NO   | UNI | NULL    |                |
+| LastPstCod  | int     | NO   | UNI | NULL    |                |
++-------------+---------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_threads ("
 			"ThrCod INT NOT NULL AUTO_INCREMENT,"
