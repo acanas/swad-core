@@ -466,7 +466,7 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
 	 break;
       case TmlNot_FORUM_POST:
 	 /* Get forum type of the post */
-	 For_GetForumTypeAndLocationOfAPost (Not->Cod,Forum);
+	 For_GetThreadForumTypeAndHieCodOfAPost (Not->Cod,Forum);
 
 	 /* Set forum name in recipient's language */
 	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,false);
@@ -672,7 +672,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 				       1,	// Page of posts   = first
 				       Forums->ForumSet,
 				       Forums->ThreadsOrder,
-				       Forums->Forum.Location,
+				       Forums->Forum.HieCod,
 				       Forums->Thread.Selected,
 				       -1L);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course

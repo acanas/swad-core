@@ -96,8 +96,6 @@ void AsgRsc_WriteResourceAssignment (long AsgCod,Frm_PutFormToGo_t PutFormToGo,
 				  ActSeeAsg;		// All assignments
       Frm_BeginForm (NextAction);
          ParCod_PutPar (ParCod_Asg,AsgCod);
-	 // TODO: In the listing of assignments, the page is always the first.
-	 //       The page should be that corresponding to the selected assignment.
          HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

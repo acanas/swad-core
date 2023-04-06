@@ -629,10 +629,16 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.90.1 (2023-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 22.91 (2023-04-04)"
 #define CSS_FILE		"swad22.88.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.91:    Apr 06, 2023  Code refactoring in forums. (338928 lines)
+					3 changes necessary in database:
+ALTER TABLE for_threads CHANGE COLUMN Location HieCod INT NOT NULL DEFAULT -1;
+ALTER TABLE for_threads DROP INDEX Location;
+ALTER TABLE for_threads ADD INDEX (HieCod);
+
 	Version 22.90.1:  Apr 04, 2023  Code refactoring in resources. (338881 lines)
 	Version 22.90:    Apr 04, 2023  Code refactoring checking user. (338807 lines)
 	Version 22.89.1:  Apr 04, 2023  Code refactoring in projects configuration. (338622 lines)

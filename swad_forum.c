@@ -317,6 +317,8 @@ static time_t For_GetThrReadTime (long ThrCod);
 
 static void For_PutIconsOneThread (void *Forums);
 
+static void For_PutParsNewPost (void *Forums);
+
 static void For_ShowAForumPost (struct For_Forums *Forums,
 	                        unsigned PstNum,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
@@ -330,7 +332,6 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 static void For_PutParsForum (void *Forums);
 
 static void For_PutParForumSet (For_ForumSet_t ForumSet);
-static void For_PutParForumLocation (long Location);
 
 static void For_PutIconsForums (__attribute__((unused)) void *Args);
 static void For_PutFormWhichForums (const struct For_Forums *Forums);
@@ -403,7 +404,7 @@ void For_ResetForums (struct For_Forums *Forums)
    Forums->CurrentPagePsts = 0;
 
    Forums->Forum.Type      = For_FORUM_UNKNOWN;
-   Forums->Forum.Location  = -1L;
+   Forums->Forum.HieCod  = -1L;
 
    Forums->Thread.Selected =
    Forums->Thread.Current  =
@@ -588,22 +589,63 @@ static void For_RemoveThreadAndItsPsts (long ThrCod)
   }
 
 /*****************************************************************************/
-/*************** Get the forum type and location of a post *******************/
+/*********** Get thread, forum type and hierarchy code of a post *************/
 /*****************************************************************************/
+// Return thread to which the post belongs
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum)
+long For_GetThreadForumTypeAndHieCodOfAPost (long PstCod,struct For_Forum *Forum)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
-   long LongNum;
+   long ThrCod;
 
-   /***** Set default forum type and location *****/
+   /***** Set defaults *****/
    Forum->Type = For_FORUM_UNKNOWN;
-   Forum->Location = -1L;
+   Forum->HieCod = -1L;
+   ThrCod = -1L;
 
    /***** Check if there is a row with forum type *****/
-   if (For_DB_GetForumTypeAndLocationOfAPost (&mysql_res,PstCod))
+   if (For_DB_GetThreadForumTypeAndHieCodOfAPost (&mysql_res,PstCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get forum thread (row[0]) */
+      if (sscanf (row[0],"%ld",&ThrCod) != 1)
+	 Err_WrongThreadExit ();
+
+      /* Get forum type (row[1]) */
+      if (sscanf (row[1],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < For_NUM_TYPES_FORUM)
+	    Forum->Type = (For_ForumType_t) UnsignedNum;
+
+      /* Get forum hierarchy code (row[2]) */
+      if (sscanf (row[2],"%ld",&Forum->HieCod) != 1)
+	 Err_WrongForumExit ();
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return ThrCod;
+  }
+
+/*****************************************************************************/
+/*************** Get forum type and hierarchy code of a post *****************/
+/*****************************************************************************/
+
+void For_GetForumTypeAndHieCodOfAThread (long ThrCod,struct For_Forum *Forum)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+
+   /***** Set defaults *****/
+   Forum->Type = For_FORUM_UNKNOWN;
+   Forum->HieCod = -1L;
+
+   /***** Check if there is a row with forum type *****/
+   if (For_DB_GetForumTypeAndHieCodOfAThread (&mysql_res,ThrCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -612,9 +654,9 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum)
 	 if (UnsignedNum < For_NUM_TYPES_FORUM)
 	    Forum->Type = (For_ForumType_t) UnsignedNum;
 
-      /* Get forum location (row[1]) */
-      if (sscanf (row[1],"%ld",&LongNum) == 1)
-         Forum->Location = LongNum;
+      /* Get forum hierarchy code (row[1]) */
+      if (sscanf (row[1],"%ld",&Forum->HieCod) != 1)
+	 Err_WrongForumExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -837,14 +879,14 @@ static void For_PutIconsOneThread (void *Forums)
      }
   }
 
-void For_PutParsNewPost (void *Forums)
+static void For_PutParsNewPost (void *Forums)
   {
    if (Forums)
       For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
 			   UINT_MAX,						// Page of posts   = last
 			   ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
-			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Forum.HieCod,
 			   ((struct For_Forums *) Forums)->Thread.Current,
 			   -1L);
   }
@@ -1039,7 +1081,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    /***** Get creation time (row[1]) *****/
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
-   /***** Get subject (row[2]) and location (row[3]) *****/
+   /***** Get subject (row[2]) and content (row[3]) *****/
    Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT  );
    Str_Copy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
 
@@ -1124,7 +1166,7 @@ static void For_PutParsForum (void *Forums)
                            ((struct For_Forums *) Forums)->CurrentPagePsts,	// Page of posts   = current
                            ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
-			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Forum.HieCod,
 			   ((struct For_Forums *) Forums)->Thread.Current,
 			   ((struct For_Forums *) Forums)->PstCod);
   }
@@ -1133,7 +1175,7 @@ void For_PutAllParsForum (unsigned NumPageThreads,
                           unsigned NumPagePosts,
                           For_ForumSet_t ForumSet,
                           Dat_StartEndTime_t Order,
-                          long Location,
+                          long HieCod,
                           long ThrCod,
                           long PstCod)
   {
@@ -1141,7 +1183,7 @@ void For_PutAllParsForum (unsigned NumPageThreads,
    Pag_PutParPagNum (Pag_POSTS_FORUM,NumPagePosts);
    For_PutParForumSet (ForumSet);
    Par_PutParOrder ((unsigned) Order);
-   For_PutParForumLocation (Location);
+   ParCod_PutPar (ParCod_OthHie,HieCod);
    ParCod_PutPar (ParCod_Thr,ThrCod);
    ParCod_PutPar (ParCod_Pst,PstCod);
   }
@@ -1153,19 +1195,6 @@ void For_PutAllParsForum (unsigned NumPageThreads,
 static void For_PutParForumSet (For_ForumSet_t ForumSet)
   {
    Par_PutParUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
-  }
-
-/*****************************************************************************/
-/************** Put hidden parameter with code of            *****************/
-/************** forum institution, center, degree and course *****************/
-/*****************************************************************************/
-
-static void For_PutParForumLocation (long Location)
-  {
-   if (Location > 0)
-      /***** Put a hidden parameter with the
-             institution, center, degree or course of the forum *****/
-      Par_PutParLong (NULL,"Location",Location);
   }
 
 /*****************************************************************************/
@@ -1435,7 +1464,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
 
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
-   Forum.Location = -1L;
+   Forum.HieCod = -1L;
    Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS);
    IsLastItemInLevel[1] = false;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1445,7 +1474,7 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    if (ICanSeeTeacherForum)
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
-      Forum.Location = -1L;
+      Forum.HieCod = -1L;
       Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS);
       IsLastItemInLevel[1] = false;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1472,7 +1501,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
 
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
-   Forum.Location = -1L;
+   Forum.HieCod = -1L;
    Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1481,7 +1510,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    if (ICanSeeTeacherForum)
      {
       Forum.Type = For_FORUM__SWAD__TCHS;
-      Forum.Location = -1L;
+      Forum.HieCod = -1L;
       Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS);
       IsLastItemInLevel[1] = IsLastForum;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1511,9 +1540,9 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
 
       /***** Link to the forum of users from this institution *****/
       Forum.Type = For_FORUM_INSTIT_USRS;
-      Forum.Location = InsCod;
+      Forum.HieCod = InsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
-	           Forums->Forum.Location == InsCod);
+	           Forums->Forum.HieCod == InsCod);
       IsLastItemInLevel[2] = (IsLastIns && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
@@ -1521,9 +1550,9 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
       if (ICanSeeTeacherForum)
         {
 	 Forum.Type = For_FORUM_INSTIT_TCHS;
-	 Forum.Location = InsCod;
+	 Forum.HieCod = InsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
-		      Forums->Forum.Location == InsCod);
+		      Forums->Forum.HieCod == InsCod);
          IsLastItemInLevel[2] = IsLastIns;
          For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
         }
@@ -1554,9 +1583,9 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 
       /***** Link to the forum of users from this center *****/
       Forum.Type = For_FORUM_CENTER_USRS;
-      Forum.Location = CtrCod;
+      Forum.HieCod = CtrCod;
       Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
-	           Forums->Forum.Location == CtrCod);
+	           Forums->Forum.HieCod == CtrCod);
       IsLastItemInLevel[3] = (IsLastCtr && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
 
@@ -1564,9 +1593,9 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
       if (ICanSeeTeacherForum)
         {
 	 Forum.Type = For_FORUM_CENTER_TCHS;
-	 Forum.Location = CtrCod;
+	 Forum.HieCod = CtrCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
-		      Forums->Forum.Location == CtrCod);
+		      Forums->Forum.HieCod == CtrCod);
          IsLastItemInLevel[3] = IsLastCtr;
          For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
         }
@@ -1597,9 +1626,9 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
 
       /***** Link to the forum of users from this degree *****/
       Forum.Type = For_FORUM_DEGREE_USRS;
-      Forum.Location = DegCod;
+      Forum.HieCod = DegCod;
       Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
-	           Forums->Forum.Location == DegCod);
+	           Forums->Forum.HieCod == DegCod);
       IsLastItemInLevel[4] = (IsLastDeg && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
 
@@ -1607,9 +1636,9 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
       if (ICanSeeTeacherForum)
         {
 	 Forum.Type = For_FORUM_DEGREE_TCHS;
-	 Forum.Location = DegCod;
+	 Forum.HieCod = DegCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
-		      Forums->Forum.Location == DegCod);
+		      Forums->Forum.HieCod == DegCod);
 	 IsLastItemInLevel[4] = IsLastDeg;
          For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
         }
@@ -1640,9 +1669,9 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 
       /***** Link to the forum of users from this course *****/
       Forum.Type = For_FORUM_COURSE_USRS;
-      Forum.Location = CrsCod;
+      Forum.HieCod = CrsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_COURSE_USRS &&
-	           Forums->Forum.Location == CrsCod);
+	           Forums->Forum.HieCod == CrsCod);
       IsLastItemInLevel[5] = (IsLastCrs && !ICanSeeTeacherForum);
       For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
 
@@ -1650,9 +1679,9 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
       if (ICanSeeTeacherForum)
         {
 	 Forum.Type = For_FORUM_COURSE_TCHS;
-	 Forum.Location = CrsCod;
+	 Forum.HieCod = CrsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
-		      Forums->Forum.Location == CrsCod);
+		      Forums->Forum.HieCod == CrsCod);
          IsLastItemInLevel[5] = IsLastCrs;
          For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
         }
@@ -1701,7 +1730,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 				    1,	// Page of posts   = first
 				    Forums->ForumSet,
 				    Forums->ThreadsOrder,
-				    Forum->Location,
+				    Forum->HieCod,
 				    Forums->Thread.ToMove,
 				    -1L);
 	       Ico_PutIconPaste (For_ActionsPasThrFor[Forum->Type]);
@@ -1716,7 +1745,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 			      1,	// Page of posts   = first
 			      Forums->ForumSet,
 			      Forums->ThreadsOrder,
-			      Forum->Location,
+			      Forum->HieCod,
 			      -1L,
 			      -1L);
 
@@ -1738,15 +1767,15 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 		  break;
 	       case For_FORUM_INSTIT_USRS:
 	       case For_FORUM_INSTIT_TCHS:
-		  Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_INS,Forum->HieCod,ForumName,16,NULL,true);
 		  break;
 	       case For_FORUM_CENTER_USRS:
 	       case For_FORUM_CENTER_TCHS:
-		  Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_CTR,Forum->HieCod,ForumName,16,NULL,true);
 		  break;
 	       case For_FORUM_DEGREE_USRS:
 	       case For_FORUM_DEGREE_TCHS:
-		  Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_DEG,Forum->HieCod,ForumName,16,NULL,true);
 		  break;
 	       case For_FORUM_COURSE_USRS:
 	       case For_FORUM_COURSE_TCHS:
@@ -1768,7 +1797,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 
       /***** Put link to register students *****/
       if (Forum->Type == For_FORUM_COURSE_USRS)
-	 Enr_PutButtonInlineToRegisterStds (Forum->Location);
+	 Enr_PutButtonInlineToRegisterStds (Forum->HieCod);
 
    HTM_LI_End ();
   }
@@ -1812,13 +1841,13 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-	 Hie.Ins.InsCod = Forum->Location;
+	 Hie.Ins.InsCod = Forum->HieCod;
 	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 Hie.Ins.InsCod = Forum->Location;
+	 Hie.Ins.InsCod = Forum->HieCod;
 	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
@@ -1827,13 +1856,13 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTER_USRS:
-	 Hie.Ctr.CtrCod = Forum->Location;
+	 Hie.Ctr.CtrCod = Forum->HieCod;
 	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 	    Err_WrongCenterExit ();
          Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
-	 Hie.Ctr.CtrCod = Forum->Location;
+	 Hie.Ctr.CtrCod = Forum->HieCod;
 	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
@@ -1842,13 +1871,13 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-	 Hie.Deg.DegCod = Forum->Location;
+	 Hie.Deg.DegCod = Forum->HieCod;
 	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 	    Err_WrongDegreeExit ();
          Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 Hie.Deg.DegCod = Forum->Location;
+	 Hie.Deg.DegCod = Forum->HieCod;
 	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
@@ -1857,13 +1886,13 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_COURSE_USRS:
-	 Hie.Crs.CrsCod = Forum->Location;
+	 Hie.Crs.CrsCod = Forum->HieCod;
 	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
 	    Err_WrongCourseExit ();
          Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
-	 Hie.Crs.CrsCod = Forum->Location;
+	 Hie.Crs.CrsCod = Forum->HieCod;
 	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
 	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
@@ -2052,7 +2081,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 					        1,				// Page of posts   = first
 					        Forums->ForumSet,
 					        Order,
-				                Forums->Forum.Location,
+				                Forums->Forum.HieCod,
 					        -1L,
 					        -1L);
 			   HTM_BUTTON_Submit_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],
@@ -2125,7 +2154,7 @@ static void For_PutParsNewThread (void *Forums)
 			   1,	// Page of posts = first
 			   ((struct For_Forums *)Forums)->ForumSet,
 			   ((struct For_Forums *)Forums)->ThreadsOrder,
-			   ((struct For_Forums *)Forums)->Forum.Location,
+			   ((struct For_Forums *)Forums)->Forum.HieCod,
 			   -1L,
 			   -1L);
   }
@@ -2227,7 +2256,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 				       1,			// Page of posts   = first
 				       Forums->ForumSet,
 				       Forums->ThreadsOrder,
-				       Forums->Forum.Location,
+				       Forums->Forum.HieCod,
 				       Thr.ThrCod,
 				       -1L);
 		  Ico_PutIconCut (For_ActionsCutThrFor[Forums->Forum.Type]);
@@ -2432,19 +2461,12 @@ void For_GetParsForums (struct For_Forums *Forums)
       case For_FORUM_DEGREE_TCHS:
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-	 Forums->Forum.Location = Par_GetParLong ("Location");
+	 Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie);
          break;
       default:
-	 Forums->Forum.Location = -1L;
+	 Forums->Forum.HieCod = -1L;
          break;
      }
-
-   /***** Get optional parameter with code of a selected thread *****/
-   Forums->Thread.Current  =
-   Forums->Thread.Selected = ParCod_GetPar (ParCod_Thr);
-
-   /***** Get optional parameter with code of a selected post *****/
-   Forums->PstCod = ParCod_GetPar (ParCod_Pst);
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)
@@ -2463,6 +2485,22 @@ void For_GetParsForums (struct For_Forums *Forums)
    /***** Get optional page numbers for threads and posts *****/
    Forums->CurrentPageThrs = Pag_GetParPagNum (Pag_THREADS_FORUM);
    Forums->CurrentPagePsts = Pag_GetParPagNum (Pag_POSTS_FORUM);
+
+   /***** Get optional parameter with code of a selected thread *****/
+   Forums->Thread.Current  =
+   Forums->Thread.Selected = ParCod_GetPar (ParCod_Thr);
+
+   /***** Get optional parameter with code of a selected post *****/
+   Forums->PstCod = ParCod_GetPar (ParCod_Pst);
+
+   /***** If post or thread are specified, get other params from them *****/
+   if (Forums->PstCod > 0)	// If post specified ==> get other parameters in function of post
+      // Get thread, type and hierarchy code from database
+      Forums->Thread.Selected =
+      Forums->Thread.Current  = For_GetThreadForumTypeAndHieCodOfAPost (Forums->PstCod,&Forums->Forum);
+   else if (Forums->Thread.Current > 0)	// If thread specified ==> get other parameters in function of thread
+      // Get type and hierarchy code from database
+      For_GetForumTypeAndHieCodOfAThread (Forums->Thread.Current,&Forums->Forum);
 
    /***** Restrict access to forum *****/
    For_RestrictAccess (Forums);
@@ -2602,53 +2640,53 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
                                                             (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTER_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTER_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_USRS:
-	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_TCHS:
-	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.Location);
+	 MaxRole = Rol_GetMyRoleInCrs (Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
@@ -3010,7 +3048,7 @@ static void For_PutParsRemThread (void *Forums)
 			   1,				// Page of posts   = first
 			   ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
-			   ((struct For_Forums *) Forums)->Forum.Location,
+			   ((struct For_Forums *) Forums)->Forum.HieCod,
 			   ((struct For_Forums *) Forums)->Thread.Current,
 			   -1L);
   }

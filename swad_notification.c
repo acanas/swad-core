@@ -442,7 +442,7 @@ void Ntf_ShowMyNotifications (void)
 		   NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 		 {
 		  For_ResetForums (&Forums);
-		  For_GetForumTypeAndLocationOfAPost (Cod,&Forums.Forum);
+		  For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
 		  For_SetForumName (&Forums.Forum,
 				    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 		 }
@@ -796,7 +796,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 				 1,	// Page of posts   = first
 				 Forums->ForumSet,
 				 Forums->ThreadsOrder,
-				 Forums->Forum.Location,
+				 Forums->Forum.HieCod,
 				 Forums->Thread.Selected,
 				 -1L);
 	 break;
@@ -1102,8 +1102,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          return 0;
       case Ntf_EVENT_FORUM_POST_COURSE:
 	 // Check if forum is for users or for all users in the course
-	 For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
-
+	 For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
 	 if (GetUsrsForum[ForumSelected.Type])
             NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res);
 	 else
@@ -1128,19 +1127,19 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
         {
 	 case For_FORUM_INSTIT_USRS:
 	 case For_FORUM_INSTIT_TCHS:
-            InsCod = ForumSelected.Location;
+            InsCod = ForumSelected.HieCod;
             break;
 	 case For_FORUM_CENTER_USRS:
 	 case For_FORUM_CENTER_TCHS:
-            CtrCod = ForumSelected.Location;
+            CtrCod = ForumSelected.HieCod;
             break;
 	 case For_FORUM_DEGREE_USRS:
 	 case For_FORUM_DEGREE_TCHS:
-            DegCod = ForumSelected.Location;
+            DegCod = ForumSelected.HieCod;
             break;
 	 case For_FORUM_COURSE_USRS:
 	 case For_FORUM_COURSE_TCHS:
-            CrsCod = ForumSelected.Location;
+            CrsCod = ForumSelected.HieCod;
             break;
 	 default:
 	    break;
@@ -1357,7 +1356,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	    /* Get forum type */
 	    if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 		NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-	       For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
+	       For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
 
 	    /* Information about the type of this event */
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrLanguage],

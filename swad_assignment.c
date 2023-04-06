@@ -388,6 +388,7 @@ void Asg_SeeOneAssignment (void)
    Asg_ShowOneAssignmentInBox (&Assignments);
 
    /***** Show current assignments, if any *****/
+   // TODO: The page should be that corresponding to the selected assignment.
    Asg_ShowAllAssignments (&Assignments);
   }
 

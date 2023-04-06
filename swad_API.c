@@ -3000,7 +3000,7 @@ int swad__getNotifications (struct soap *soap,
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	   {
-	    For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
+	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
             For_SetForumName (&ForumSelected,
         	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",

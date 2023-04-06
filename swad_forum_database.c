@@ -48,8 +48,8 @@ unsigned For_DB_GetNumThrsInForum (const struct For_Forum *Forum)
    char SubQuery[256];
 
    /***** Get number of threads in a forum from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND Location=%ld",Forum->Location);
+   if (Forum->HieCod > 0)
+      sprintf (SubQuery," AND HieCod=%ld",Forum->HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -74,8 +74,8 @@ unsigned For_DB_GetNumThrsInForumNewerThan (const struct For_Forum *Forum,
 
    /***** Get number of threads with a last message modify time
           > specified time from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   if (Forum->HieCod > 0)
+      sprintf (SubQuery," AND for_threads.HieCod=%ld",Forum->HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -103,8 +103,8 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
    char SubQuery[256];
 
    /***** Get number of posts from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   if (Forum->HieCod > 0)
+      sprintf (SubQuery," AND for_threads.HieCod=%ld",Forum->HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -126,7 +126,7 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
 /************* Remove all threads and posts in forums of a scope *************/
 /*****************************************************************************/
 
-void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
+void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
   {
    static const struct
      {
@@ -153,12 +153,12 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
 		     " (for_threads.ForumType=%u"
 		      " OR"
 		      " for_threads.ForumType=%u)"
-		     " AND for_threads.Location=%ld"
+		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod"
 		     " AND for_posts.PstCod=for_disabled.PstCod",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
-	           ForumLocation);
+	           HieCod);
 
    /***** Remove posts *****/
    DB_QueryDELETE ("can not remove posts in forums",
@@ -169,11 +169,11 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
 		     " (for_threads.ForumType=%u"
 		      " OR"
 		      " for_threads.ForumType=%u)"
-		     " AND for_threads.Location=%ld"
+		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
-	           ForumLocation);
+	           HieCod);
 
    /***** Remove threads read *****/
    DB_QueryDELETE ("can not remove read threads in forums",
@@ -184,11 +184,11 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
 		     " (for_threads.ForumType=%u"
 		      " OR"
 		      " for_threads.ForumType=%u)"
-		     " AND for_threads.Location=%ld"
+		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_read.ThrCod",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
-	           ForumLocation);
+	           HieCod);
 
    /***** Remove threads *****/
    DB_QueryDELETE ("can not remove threads in forums",
@@ -197,10 +197,10 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
 		    " (for_threads.ForumType=%u"
 		     " OR"
 		     " for_threads.ForumType=%u)"
-		     " AND Location=%ld",
+		     " AND HieCod=%ld",
 	           ForumType[Scope].Usrs,
 	           ForumType[Scope].Tchs,
-	           ForumLocation);
+	           HieCod);
   }
 
 /*****************************************************************************/
@@ -290,20 +290,36 @@ unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod)
   }
 
 /*****************************************************************************/
-/*************** Get the forum type and location of a post *******************/
+/********* Get the forum thread, type and hierarchy code of a post ***********/
 /*****************************************************************************/
 
-unsigned For_DB_GetForumTypeAndLocationOfAPost (MYSQL_RES **mysql_res,long PstCod)
+unsigned For_DB_GetThreadForumTypeAndHieCodOfAPost (MYSQL_RES **mysql_res,long PstCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get forum type and location",
-		   "SELECT for_threads.ForumType,"	// row[0]
-			  "for_threads.Location"	// row[1]
+   DB_QuerySELECT (mysql_res,"can not get forum thread, type and hierarchy",
+		   "SELECT for_threads.ThrCod,"		// row[0]
+			  "for_threads.ForumType,"	// row[1]
+			  "for_threads.HieCod"	// row[2]
 		    " FROM for_posts,"
 			  "for_threads"
 		   " WHERE for_posts.PstCod=%ld"
 		     " AND for_posts.ThrCod=for_threads.ThrCod",
 		   PstCod);
+  }
+
+/*****************************************************************************/
+/*********** Get the forum type and hierarchy code of a thread ***************/
+/*****************************************************************************/
+
+unsigned For_DB_GetForumTypeAndHieCodOfAThread (MYSQL_RES **mysql_res,long ThrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get forum type and hierarchy",
+		   "SELECT ForumType,"	// row[0]
+			  "HieCod"	// row[1]
+		    " FROM for_threads"
+		   " WHERE ThrCod=%ld",
+		   ThrCod);
   }
 
 /*****************************************************************************/
@@ -408,11 +424,11 @@ long For_DB_InsertForumThread (const struct For_Forums *Forums,
    return
    DB_QueryINSERTandReturnCode ("can not create a new thread in a forum",
 				"INSERT INTO for_threads"
-				" (ForumType,Location,FirstPstCod,LastPstCod)"
+				" (ForumType,HieCod,FirstPstCod,LastPstCod)"
 				" VALUES"
 				" (%u,%ld,%ld,%ld)",
 				(unsigned) Forums->Forum.Type,
-				Forums->Forum.Location,
+				Forums->Forum.HieCod,
 				FirstPstCod,
 				FirstPstCod);
   }
@@ -458,9 +474,9 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
    char SubQuery[256];
 
    /***** Get threads of a forum from database *****/
-   if (Forums->Forum.Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",
-	       Forums->Forum.Location);
+   if (Forums->Forum.HieCod > 0)
+      sprintf (SubQuery," AND for_threads.HieCod=%ld",
+	       Forums->Forum.HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -544,8 +560,8 @@ bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
    char SubQuery[256];
 
    /***** Get if a thread belong to current forum from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   if (Forum->HieCod > 0)
+      sprintf (SubQuery," AND for_threads.HieCod=%ld",Forum->HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -738,8 +754,8 @@ unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
   {
    char SubQuery[256];
 
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   if (Forum->HieCod > 0)
+      sprintf (SubQuery," AND for_threads.HieCod=%ld",Forum->HieCod);
    else
       SubQuery[0] = '\0';
 
@@ -830,7 +846,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE for_threads"
 			   " SET ForumType=%u,"
-			        "Location=-1"
+			        "HieCod=-1"
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
                          Forums->Thread.Current);
@@ -840,10 +856,10 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE for_threads"
 			   " SET ForumType=%u,"
-			        "Location=%ld"
+			        "HieCod=%ld"
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
-		         Forums->Forum.Location,
+		         Forums->Forum.HieCod,
 		         Forums->Thread.Current);
          break;
       case For_FORUM_CENTER_USRS:
@@ -851,10 +867,10 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE for_threads"
 			   " SET ForumType=%u,"
-			        "Location=%ld"
+			        "HieCod=%ld"
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
-                         Forums->Forum.Location,
+                         Forums->Forum.HieCod,
                          Forums->Thread.Current);
          break;
       case For_FORUM_DEGREE_USRS:
@@ -862,10 +878,10 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE for_threads"
 			   " SET ForumType=%u,"
-			        "Location=%ld"
+			        "HieCod=%ld"
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
-		         Forums->Forum.Location,
+		         Forums->Forum.HieCod,
 		         Forums->Thread.Current);
          break;
       case For_FORUM_COURSE_USRS:
@@ -873,10 +889,10 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
          DB_QueryUPDATE ("can not move a thread to current forum",
 			 "UPDATE for_threads"
 			   " SET ForumType=%u,"
-			        "Location=%ld"
+			        "HieCod=%ld"
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
-		         Forums->Forum.Location,
+		         Forums->Forum.HieCod,
 		         Forums->Thread.Current);
          break;
       default:
@@ -1022,10 +1038,10 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // InsCod > 0 ==> 0 <= number of institutions forums for an institution <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT Location)"
+			   "SELECT COUNT(DISTINCT HieCod)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
                            (unsigned) ForumType,
                            InsCod);
 
@@ -1033,11 +1049,11 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // InsCod <= 0 && CtyCod > 0 ==> Number of institution forums for a country
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ins_instits.InsCod"
+			     " AND for_threads.HieCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,
 		           CtyCod);
@@ -1045,7 +1061,7 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          // CtyCod <= 0 ==> Number of institutions forums for the whole platform
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of forums of a type",
-			 "SELECT COUNT(DISTINCT Location)"
+			 "SELECT COUNT(DISTINCT HieCod)"
 			  " FROM for_threads"
 			 " WHERE ForumType=%u",
 			 (unsigned) ForumType);
@@ -1055,10 +1071,10 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CtrCod > 0 ==> 0 <= number of center forums for a center <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT Location)"
+			   "SELECT COUNT(DISTINCT HieCod)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
                            (unsigned) ForumType,
                            CtrCod);
 
@@ -1066,11 +1082,11 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CtrCod <= 0 && InsCod > 0 ==> Number of center forums for an institution
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "ctr_centers"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ctr_centers.CtrCod"
+			     " AND for_threads.HieCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
 		           (unsigned) ForumType,
 		           InsCod);
@@ -1079,12 +1095,12 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // InsCod <= 0 && CtyCod > 0 ==> Number of center forums for a country
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ctr_centers.CtrCod"
+			     " AND for_threads.HieCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 		           (unsigned) ForumType,
@@ -1093,7 +1109,7 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          // InsCod <= 0 ==> Number of center forums for the whole platform
          return (unsigned)
          DB_QueryCOUNT ("can not get number of forums of a type",
-		        "SELECT COUNT(DISTINCT Location)"
+		        "SELECT COUNT(DISTINCT HieCod)"
 		         " FROM for_threads"
 		        " WHERE ForumType=%u",
 		        (unsigned) ForumType);
@@ -1103,10 +1119,10 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // DegCod > 0 ==> 0 <= number of degree forums for a degree <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT Location)"
+			   "SELECT COUNT(DISTINCT HieCod)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
                            (unsigned) ForumType,
                            DegCod);
 
@@ -1114,11 +1130,11 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // DegCod <= 0 && CtrCod > 0 ==> Number of degree forums for a center
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "deg_degrees"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=deg_degrees.DegCod"
+			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 		           (unsigned) ForumType,
 		           CtrCod);
@@ -1127,12 +1143,12 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CtrCod <= 0 && InsCod > 0 ==> Number of degree forums for an institution
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "deg_degrees,"
 			          "ctr_centers"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=deg_degrees.DegCod"
+			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
 		           (unsigned) ForumType,
@@ -1142,13 +1158,13 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // InsCod <= 0 && CtyCod > 0 ==> Number of degree forums for a country
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "deg_degrees,"
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=deg_degrees.DegCod"
+			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
@@ -1158,7 +1174,7 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          // InsCod <= 0 ==> Number of degree forums for the whole platform
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of forums of a type",
-			"SELECT COUNT(DISTINCT Location)"
+			"SELECT COUNT(DISTINCT HieCod)"
 			 " FROM for_threads"
 			" WHERE ForumType=%u",
 			(unsigned) ForumType);
@@ -1168,10 +1184,10 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CrsCod > 0 ==> 0 <= number of course forums for a course <= 1
             return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT Location)"
+			   "SELECT COUNT(DISTINCT HieCod)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
                            (unsigned) ForumType,
                            CrsCod);
 
@@ -1179,11 +1195,11 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CrsCod <= 0 && DegCod > 0 ==> Number of course forums for a degree
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "crs_courses"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=%ld",
 		           (unsigned) ForumType,
 		           DegCod);
@@ -1192,12 +1208,12 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // DegCod <= 0 && CtrCod > 0 ==> Number of course forums for a center
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "crs_courses,"
 			          "deg_degrees"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 		           (unsigned) ForumType,
@@ -1207,13 +1223,13 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // CtrCod <= 0 && InsCod > 0 ==> Number of course forums for an institution
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "crs_courses,"
 			          "deg_degrees,"
 			          "ctr_centers"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
@@ -1224,14 +1240,14 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
             // InsCod <= 0 && CtyCod > 0 ==> Number of course forums for a country
 	    return (unsigned)
             DB_QueryCOUNT ("can not get number of forums of a type",
-			   "SELECT COUNT(DISTINCT for_threads.Location)"
+			   "SELECT COUNT(DISTINCT for_threads.HieCod)"
 			    " FROM for_threads,"
 			          "crs_courses,"
 			          "deg_degrees,"
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
@@ -1242,7 +1258,7 @@ unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          // InsCod <= 0 ==> Number of course forums for the whole platform
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of forums of a type",
-			"SELECT COUNT(DISTINCT Location)"
+			"SELECT COUNT(DISTINCT HieCod)"
 			 " FROM for_threads"
 			" WHERE ForumType=%u",
 			(unsigned) ForumType);
@@ -1285,7 +1301,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
 			   InsCod);
 
@@ -1297,7 +1313,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM for_threads,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ins_instits.InsCod"
+			     " AND for_threads.HieCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
 			   CtyCod);
@@ -1318,7 +1334,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
 			   CtrCod);
 
@@ -1330,7 +1346,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM for_threads,"
 			          "ctr_centers"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ctr_centers.CtrCod"
+			     " AND for_threads.HieCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
 			   (unsigned) ForumType,
 			   InsCod);
@@ -1344,7 +1360,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=ctr_centers.CtrCod"
+			     " AND for_threads.HieCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
 			   (unsigned) ForumType,
@@ -1366,7 +1382,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
 			   DegCod);
 
@@ -1378,7 +1394,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM for_threads,"
 			          "deg_degrees"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=deg_degrees.DegCod"
+			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 			   (unsigned) ForumType,
 			   CtrCod);
@@ -1392,7 +1408,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			         "deg_degrees,"
 			         "ctr_centers"
 			  " WHERE for_threads.ForumType=%u"
-			    " AND for_threads.Location=deg_degrees.DegCod"
+			    " AND for_threads.HieCod=deg_degrees.DegCod"
 			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			    " AND ctr_centers.InsCod=%ld",
 			  (unsigned) ForumType,
@@ -1407,7 +1423,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=deg_degrees.DegCod"
+			     " AND for_threads.HieCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
 			     " AND ins_instits.CtyCod=%ld",
@@ -1430,7 +1446,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   "SELECT COUNT(*)"
 			    " FROM for_threads"
 			   " WHERE ForumType=%u"
-			     " AND Location=%ld",
+			     " AND HieCod=%ld",
 			   (unsigned) ForumType,
 			   CrsCod);
 
@@ -1442,7 +1458,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			    " FROM for_threads,"
 			          "crs_courses"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=%ld",
 			   (unsigned) ForumType,
 			   DegCod);
@@ -1456,7 +1472,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			          "crs_courses,"
 			          "deg_degrees"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=%ld",
 			   (unsigned) ForumType,
@@ -1472,7 +1488,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			          "deg_degrees,"
 			          "ctr_centers"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=%ld",
@@ -1490,7 +1506,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			          "ctr_centers,"
 			          "ins_instits"
 			   " WHERE for_threads.ForumType=%u"
-			     " AND for_threads.Location=crs_courses.CrsCod"
+			     " AND for_threads.HieCod=crs_courses.CrsCod"
 			     " AND crs_courses.DegCod=deg_degrees.DegCod"
 			     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			     " AND ctr_centers.InsCod=ins_instits.InsCod"
@@ -1553,7 +1569,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			     " FROM for_threads,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=%ld"
+			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
                             InsCod);
@@ -1566,7 +1582,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ins_instits,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=ins_instits.InsCod"
+			      " AND for_threads.HieCod=ins_instits.InsCod"
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
@@ -1592,7 +1608,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			     " FROM for_threads,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=%ld"
+			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
                             CtrCod);
@@ -1605,7 +1621,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ctr_centers,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=ctr_centers.CtrCod"
+			      " AND for_threads.HieCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
@@ -1620,7 +1636,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ins_instits,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=ctr_centers.CtrCod"
+			      " AND for_threads.HieCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=ins_instits.InsCod"
 			      " AND ins_instits.CtyCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
@@ -1647,7 +1663,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			     " FROM for_threads,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=%ld"
+			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
                             DegCod);
@@ -1660,7 +1676,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "deg_degrees,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=deg_degrees.DegCod"
+			      " AND for_threads.HieCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
@@ -1675,7 +1691,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ctr_centers,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=deg_degrees.DegCod"
+			      " AND for_threads.HieCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
@@ -1692,7 +1708,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ins_instits,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=deg_degrees.DegCod"
+			      " AND for_threads.HieCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=ins_instits.InsCod"
 			      " AND ins_instits.CtyCod=%ld"
@@ -1720,7 +1736,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			     " FROM for_threads,"
 			           "for_posts "
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=%ld"
+			      " AND for_threads.HieCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
                             (unsigned) ForumType,
                             CrsCod);
@@ -1733,7 +1749,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "crs_courses,"
 			           "for_posts "
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=crs_courses.CrsCod"
+			      " AND for_threads.HieCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
 		            (unsigned) ForumType,
@@ -1748,7 +1764,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "deg_degrees,"
 			           "for_posts "
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=crs_courses.CrsCod"
+			      " AND for_threads.HieCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=%ld"
 			      " AND for_threads.ThrCod=for_posts.ThrCod",
@@ -1765,7 +1781,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ctr_centers,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=crs_courses.CrsCod"
+			      " AND for_threads.HieCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=%ld"
@@ -1784,7 +1800,7 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			           "ins_instits,"
 			           "for_posts"
 			    " WHERE for_threads.ForumType=%u"
-			      " AND for_threads.Location=crs_courses.CrsCod"
+			      " AND for_threads.HieCod=crs_courses.CrsCod"
 			      " AND crs_courses.DegCod=deg_degrees.DegCod"
 			      " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			      " AND ctr_centers.InsCod=ins_instits.InsCod"

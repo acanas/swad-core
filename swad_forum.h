@@ -68,7 +68,7 @@ typedef enum
 struct For_Forum
   {
    For_ForumType_t Type;	// Type of forum
-   long Location;		// Code of institution, center, degree or course
+   long HieCod;			// Hierachy code (code of institution, center, degree or course)
   };
 
 struct For_Thread
@@ -127,12 +127,11 @@ void For_ResetForums (struct For_Forums *Forums);
 void For_EnablePost (void);
 void For_DisablePost (void);
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
+long For_GetThreadForumTypeAndHieCodOfAPost (long PstCod,struct For_Forum *Forum);
+void For_GetForumTypeAndHieCodOfAThread (long ThrCod,struct For_Forum *Forum);
 
 void For_ShowPostsOfAThread (struct For_Forums *Forums,
 			     Ale_AlertType_t AlertType,const char *Message);
-
-void For_PutParsNewPost (void *Forums);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
@@ -142,10 +141,9 @@ void For_PutAllParsForum (unsigned NumPageThreads,
                           unsigned NumPagePosts,
                           For_ForumSet_t ForumSet,
                           Dat_StartEndTime_t Order,
-                          long Location,
+                          long HieCod,
                           long ThrCod,
                           long PstCod);
-
 void For_ShowForumList (struct For_Forums *Forums);
 
 void For_SetForumName (const struct For_Forum *Forum,

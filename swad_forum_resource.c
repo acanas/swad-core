@@ -31,6 +31,7 @@
 #include "swad_forum_database.h"
 #include "swad_forum_resource.h"
 #include "swad_global.h"
+#include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 
 /*****************************************************************************/
@@ -84,7 +85,6 @@ void ForRsc_WriteResourceThread (long ThrCod,Frm_PutFormToGo_t PutFormToGo,
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    Act_Action_t NextAction;
-   struct For_Forums Forums;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get thread subject *****/
@@ -94,18 +94,16 @@ void ForRsc_WriteResourceThread (long ThrCod,Frm_PutFormToGo_t PutFormToGo,
    if (PutFormToGo == Frm_PUT_FORM_TO_GO)
      {
       /***** Set forum and thread *****/
-      For_ResetForums (&Forums);
-      Forums.Forum.Type = For_FORUM_COURSE_USRS;
-      Forums.Forum.Location = Gbl.Hierarchy.Crs.CrsCod;
-      Forums.Thread.Current =
-      Forums.Thread.Selected = ThrCod;
       // TODO: In the listing of threads, the page is always the first.
       //       The page should be that corresponding to the selected thread.
       NextAction = (ThrCod > 0)	? ActSeePstForCrsUsr :	// Thread specified
 				  ActSeeForCrsUsr;	// All threads
       Frm_BeginFormAnchor (NextAction,ThrCod > 0 ? For_FORUM_POSTS_SECTION_ID :
 					           For_FORUM_THREADS_SECTION_ID);
-	 For_PutParsNewPost (&Forums);
+         if (ThrCod > 0)
+            ParCod_PutPar (ParCod_Thr,ThrCod);
+         else
+            ParCod_PutPar (ParCod_OthHie,Gbl.Hierarchy.Crs.CrsCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

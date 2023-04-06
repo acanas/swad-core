@@ -82,7 +82,6 @@ void AttRsc_WriteResourceEvent (long AttCod,Frm_PutFormToGo_t PutFormToGo,
 				  ActSeeAtt;		// All attendance events
       Frm_BeginForm (NextAction);
          ParCod_PutPar (ParCod_Att,AttCod);
-	 Att_PutParsCodGrps (AttCod);
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 	                          "class=\"LM BT_LINK PRG_LNK_%s\"",
 	                          The_GetSuffix ());

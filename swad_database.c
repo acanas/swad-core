@@ -1579,12 +1579,12 @@ mysql> DESCRIBE for_threads;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_threads ("
 			"ThrCod INT NOT NULL AUTO_INCREMENT,"
 			"ForumType TINYINT NOT NULL,"
-			"Location INT NOT NULL DEFAULT -1,"
+			"HieCod INT NOT NULL DEFAULT -1,"
 			"FirstPstCod INT NOT NULL,"
 			"LastPstCod INT NOT NULL,"
 		   "UNIQUE INDEX(ThrCod),"
 		   "INDEX(ForumType),"
-		   "INDEX(Location),"
+		   "INDEX(HieCod),"
 		   "UNIQUE INDEX(FirstPstCod),"
 		   "UNIQUE INDEX(LastPstCod))");
 

@@ -84,9 +84,9 @@ static const char *Pag_ParNumPag[Pag_NUM_WHAT_PAGINATE] =
 /******* Calculate variables related to the pagination of the messages *******/
 /*****************************************************************************/
 // Return the number of subsets of N elements in a set of NumElements elements
-#define NumSubsetsOfNElements(NumElements,N) ((NumElements+(N-1)) / N)
-#define NUM_PAGES_BEFORE_CURRENT 1
-#define NUM_PAGES_AFTER_CURRENT 1
+#define Pag_NumPags(NumItems) ((Pagination->NumItems+(Pag_ITEMS_PER_PAGE-1)) / Pag_ITEMS_PER_PAGE)
+#define Pag_NUM_PAGES_BEFORE_CURRENT 1
+#define Pag_NUM_PAGES_AFTER_CURRENT 1
 
 void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
   {
@@ -95,7 +95,8 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
    Pagination->RightPage =
    Pagination->EndPage   = 1;
    Pagination->MoreThanOnePage = false;
-   if ((Pagination->NumPags = NumSubsetsOfNElements (Pagination->NumItems,Pag_ITEMS_PER_PAGE)) > 1)
+   Pagination->NumPags = ((Pagination->NumItems + (Pag_ITEMS_PER_PAGE-1)) / Pag_ITEMS_PER_PAGE);
+   if (Pagination->NumPags > 1)
      {
       Pagination->MoreThanOnePage = true;
 
@@ -106,13 +107,13 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
          Pagination->CurrentPage = Pagination->NumPags;
 
       /* Compute first page with link around the current */
-      if (Pagination->CurrentPage <= NUM_PAGES_BEFORE_CURRENT)
+      if (Pagination->CurrentPage <= Pag_NUM_PAGES_BEFORE_CURRENT)
          Pagination->StartPage = 1;
       else
-         Pagination->StartPage = Pagination->CurrentPage - NUM_PAGES_BEFORE_CURRENT;
+         Pagination->StartPage = Pagination->CurrentPage - Pag_NUM_PAGES_BEFORE_CURRENT;
 
       /* Compute last page with link around the current */
-      if ((Pagination->EndPage = Pagination->CurrentPage + NUM_PAGES_AFTER_CURRENT) > Pagination->NumPags)
+      if ((Pagination->EndPage = Pagination->CurrentPage + Pag_NUM_PAGES_AFTER_CURRENT) > Pagination->NumPags)
          Pagination->EndPage = Pagination->NumPags;
 
       /* Compute left page with link in the middle of first page and current page */
@@ -221,7 +222,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 					  1,	// Page of posts   = first
 					  ((struct For_Forums *) Context)->ForumSet,
 					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.Location,
+					  ((struct For_Forums *) Context)->Forum.HieCod,
 					  -1L,
 					  -1L);
 		  break;
@@ -232,7 +233,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 					  1,	// Page of posts   = first
 					  ((struct For_Forums *) Context)->ForumSet,
 					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.Location,
+					  ((struct For_Forums *) Context)->Forum.HieCod,
 					  Cod,
 					  -1L);
 		  break;
@@ -348,7 +349,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       1,	// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       -1L,
 				       -1L);
 	       break;
@@ -359,7 +360,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       1,	// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       Cod,
 				       -1L);
 	       break;
@@ -468,7 +469,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       1,			// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       -1L,
 				       -1L);
                break;
@@ -479,7 +480,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       Pagination->LeftPage,	// Page of posts   = left
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       Cod,
 				       -1L);
 	       break;
@@ -601,7 +602,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 					  1,		// Page of posts   = first
 					  ((struct For_Forums *) Context)->ForumSet,
 					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.Location,
+					  ((struct For_Forums *) Context)->Forum.HieCod,
 					  -1L,
 					  -1L);
                   break;
@@ -612,7 +613,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 					  NumPage,	// Page of posts   = number of page
 					  ((struct For_Forums *) Context)->ForumSet,
 					  ((struct For_Forums *) Context)->ThreadsOrder,
-					  ((struct For_Forums *) Context)->Forum.Location,
+					  ((struct For_Forums *) Context)->Forum.HieCod,
 					  Cod,
 					  -1L);
                   break;
@@ -720,7 +721,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       1,			// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       -1L,
 				       -1L);
 	       break;
@@ -731,7 +732,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       Pagination->RightPage,	// Page of posts   = right
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       Cod,
 				       -1L);
                break;
@@ -840,7 +841,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       1,			// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       -1L,
 				       -1L);
                break;
@@ -851,7 +852,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				       Pagination->NumPags,	// Page of posts   = last
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
-				       ((struct For_Forums *) Context)->Forum.Location,
+				       ((struct For_Forums *) Context)->Forum.HieCod,
 				       Cod,
 				       -1L);
                break;
