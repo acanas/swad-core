@@ -177,14 +177,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    switch (WhatPaginate)
 	      {
 	       case Pag_ASSIGNMENTS:
-		  Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+		  Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParWhichGroups ();
 		     Grp_PutParWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_PROJECTS:
-		  Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				  ((struct Prj_Projects *) Context)->SelectedOrder,
 				  1,
@@ -209,7 +209,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     Pag_PutParPagNum (WhatPaginate,1);
 		  break;
 	       case Pag_ATT_EVENTS:
-		  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+		  Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParWhichGroups ();
@@ -304,14 +304,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
-               Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				 ((struct Prj_Projects *) Context)->SelectedOrder,
 				 1,
@@ -336,7 +336,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Pag_PutParPagNum (WhatPaginate,1);
                break;
             case Pag_ATT_EVENTS:
-               Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
@@ -424,14 +424,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
-               Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				 ((struct Prj_Projects *) Context)->SelectedOrder,
 				 Pagination->LeftPage,
@@ -456,7 +456,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
                break;
             case Pag_ATT_EVENTS:
-               Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
@@ -557,14 +557,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             switch (WhatPaginate)
               {
                case Pag_ASSIGNMENTS:
-                  Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+                  Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParWhichGroups ();
 		     Grp_PutParWhichGroups (&WhichGroups);
                   break;
 	       case Pag_PROJECTS:
-		  Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				    ((struct Prj_Projects *) Context)->SelectedOrder,
 				    NumPage,
@@ -589,7 +589,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
                   break;
                case Pag_ATT_EVENTS:
-                  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+                  Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		     WhichGroups = Grp_GetParWhichGroups ();
@@ -676,14 +676,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
-	       Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				 ((struct Prj_Projects *) Context)->SelectedOrder,
 				 Pagination->RightPage,
@@ -708,7 +708,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
                break;
             case Pag_ATT_EVENTS:
-               Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
@@ -796,14 +796,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
-	       Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				 ((struct Prj_Projects *) Context)->SelectedOrder,
 				 Pagination->NumPags,
@@ -828,7 +828,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
                break;
             case Pag_ATT_EVENTS:
-               Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+               Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();

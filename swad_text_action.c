@@ -8940,7 +8940,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change first day of week of course timetable"				// Çeviri lazim!
 #endif
 	,
-	[ActSeeAsg] =
+	[ActSeeAllAsg] =
 #if   L==1	// ca
 	"See assignments"	// Necessita traducció
 #elif L==2	// de
@@ -8963,7 +8963,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See assignments"	// Çeviri lazim!
 #endif
 	,
-	[ActSeePrj] =
+	[ActSeeAllPrj] =
 #if   L==1	// ca
 	"See projects"	// Necessita traducció
 #elif L==2	// de
@@ -11815,7 +11815,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a test result for a user"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeExa] =
+	[ActSeeOneExa] =
 #if   L==1	// ca
 	"Veure examen"
 #elif L==2	// de
@@ -12873,7 +12873,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change visibility of exam results"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeGam] =
+	[ActSeeOneGam] =
 #if   L==1	// ca
 	"See game"	// Necessita traducció
 #elif L==2	// de
@@ -13931,7 +13931,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to game"	// Çeviri lazim!
 #endif
 	,
-	[ActSeeRub] =
+	[ActSeeOneRub] =
 #if   L==1	// ca
 	"Veure r&uacute;brica"
 #elif L==2	// de
@@ -24626,7 +24626,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show class photo or list of guests"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeAtt] =
+	[ActSeeAllAtt] =
 #if   L==1	// ca
 	"Show attendance events"	// Necessita traducció
 #elif L==2	// de
@@ -32768,7 +32768,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See statistics of courses"			// Çeviri lazim!
 #endif
 	,
-	[ActSeeSvy] =
+	[ActSeeOneSvy] =
 #if   L==1	// ca
 	"Show survey"		// Necessita traducció
 #elif L==2	// de

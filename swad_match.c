@@ -283,7 +283,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	    if (Gbl.Crs.Grps.NumGrps)
 	      {
 	       Set_BeginSettingsHead ();
-	       Grp_ShowFormToSelWhichGrps (ActSeeGam,
+	       Grp_ShowFormToSelWhichGrps (ActSeeOneGam,
 					   Gam_PutPars,Games);
 	       Set_EndSettingsHead ();
 	      }

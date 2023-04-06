@@ -161,7 +161,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	 Grp_ShowFormToSelWhichGrps (ActSeeAsg,
+	 Grp_ShowFormToSelWhichGrps (ActSeeAllAsg,
 				     Asg_ParsWhichGroupsToShow,Assignments);
 	 Set_EndSettingsHead ();
 	}
@@ -242,7 +242,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	    if (!PrintView)
 	      {
 	       /* Begin form */
-	       Frm_BeginForm (ActSeeAsg);
+	       Frm_BeginForm (ActSeeAllAsg);
 		  WhichGroups = Grp_GetParWhichGroups ();
 		  Grp_PutParWhichGroups (&WhichGroups);
 		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);

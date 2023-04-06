@@ -4353,10 +4353,10 @@ Grp_WhichGroups_t Grp_GetParWhichGroups (void)
 	 case ActSeeCrsTT:	// Show course timetable
 	 case ActPrnCrsTT:	// Print course timetable
 	 case ActChgCrsTT1stDay:// Change first day of week in course timetable
-	 case ActSeeAsg:	// List assignments
+	 case ActSeeAllAsg:	// List assignments
 	 case ActSeeAllExa:	// List exams
 	 case ActSeeAllGam:	// List games
-	 case ActSeeAtt:	// List attendance
+	 case ActSeeAllAtt:	// List attendance
 	 case ActSeeAllSvy:	// List surveys
 	    /*
 	    If I belong       to this course ==> see only my groups

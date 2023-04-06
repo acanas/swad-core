@@ -139,7 +139,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    /* Degree tab */
    /* Course tab */
    /* Assessment tab */
-   [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAsg,
+   [Ntf_EVENT_ASSIGNMENT       ] = ActSeeAllAsg,
    [Ntf_EVENT_CALL_FOR_EXAM    ] = ActSeeAllCfe,
    /* Files tab */
    [Ntf_EVENT_DOCUMENT_FILE    ] = ActSeeAdmDocCrsGrp,

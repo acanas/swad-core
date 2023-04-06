@@ -417,7 +417,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 
       /* Rubric title */
-      Frm_BeginForm (ActSeeRub);
+      Frm_BeginForm (ActSeeOneRub);
 	 Rub_PutPars (Rubrics);
 	 HTM_BUTTON_Submit_Begin (Txt_View_rubric,"class=\"LT BT_LINK ASG_TITLE_%s\"",
 				  The_GetSuffix ());

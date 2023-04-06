@@ -633,6 +633,7 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 #define CSS_FILE		"swad22.88.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.92.2:  Apr 06, 2023  Code refactoring in resources. (338500 lines)
 	Version 22.92.1:  Apr 06, 2023  Removed unused code in resources. (338514 lines)
 	Version 22.92:    Apr 06, 2023  Code refactoring in resources. (339106 lines)
 	Version 22.91.1:  Apr 06, 2023  SQL script used to create database updated. (338984 lines)

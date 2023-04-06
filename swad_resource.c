@@ -235,21 +235,6 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-   static void (*GetResourceTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
-     {
-      [Rsc_NONE            ] = Rsc_GetResourceEmptyTitle,
-      [Rsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
-      [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
-      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
-      [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
-      [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [Rsc_RUBRIC          ] = RubRsc_GetTitleFromRubCod,
-      [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
-      [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,
-      [Rsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
-      [Rsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
-      [Rsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
-     };
    static struct
      {
       void (*Set) (long Cod,char **Anchor);
@@ -276,17 +261,17 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
      } NextActions[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE            ] = {ActUnk			,ActUnk			},
-      [Rsc_ASSIGNMENT      ] = {ActSeeOneAsg		,ActSeeAsg		},
-      [Rsc_PROJECT         ] = {ActSeeOnePrj		,ActSeePrj		},
+      [Rsc_ASSIGNMENT      ] = {ActSeeOneAsg		,ActSeeAllAsg		},
+      [Rsc_PROJECT         ] = {ActSeeOnePrj		,ActSeeAllPrj		},
       [Rsc_CALL_FOR_EXAM   ] = {ActSeeOneCfe		,ActSeeAllCfe		},
-      [Rsc_EXAM            ] = {ActSeeExa		,ActSeeAllExa		},
-      [Rsc_GAME            ] = {ActSeeGam		,ActSeeAllGam		},
-      [Rsc_RUBRIC          ] = {ActSeeRub		,ActSeeAllRub		},
+      [Rsc_EXAM            ] = {ActSeeOneExa		,ActSeeAllExa		},
+      [Rsc_GAME            ] = {ActSeeOneGam		,ActSeeAllGam		},
+      [Rsc_RUBRIC          ] = {ActSeeOneRub		,ActSeeAllRub		},
       [Rsc_DOCUMENT        ] = {ActReqDatSeeDocCrs	,ActSeeAdmDocCrsGrp	},
       [Rsc_MARKS           ] = {ActReqDatSeeMrkCrs	,ActSeeAdmMrk		},
-      [Rsc_ATTENDANCE_EVENT] = {ActSeeOneAtt		,ActSeeAtt		},
+      [Rsc_ATTENDANCE_EVENT] = {ActSeeOneAtt		,ActSeeAllAtt		},
       [Rsc_FORUM_THREAD    ] = {ActSeePstForCrsUsr	,ActSeeForCrsUsr	},
-      [Rsc_SURVEY          ] = {ActSeeSvy		,ActSeeAllSvy		},
+      [Rsc_SURVEY          ] = {ActSeeOneSvy		,ActSeeAllSvy		},
      };
    static ParCod_Param_t ParCod[Rsc_NUM_TYPES] =
      {
@@ -308,12 +293,13 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
    char *Anchor;
 
    /***** Get resource title *****/
-   GetResourceTitle[Link->Type] (Link->Cod,Title,sizeof (Title) - 1);
+   Rsc_GetResourceTitleFromLink (Link,Title);
 
+   /***** Put icon and title of resource *****/
    switch (PutFormToGo)
      {
       case Frm_DONT_PUT_FORM_TO_GO:
-	 /* Icon and title of resource *****/
+	 /* Icon and title of resource */
 	 Ico_PutIconOn (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,
 	                Txt_RESOURCE_TYPES[Link->Type]);
 	 HTM_Txt (Title);
@@ -330,15 +316,14 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
 	   }
 	 else
 	    Frm_BeginForm (NextAction);
-	 if (Link->Cod > 0)
-	    ParCod_PutPar (ParCod[Link->Type],Link->Cod);
+	 ParCod_PutPar (ParCod[Link->Type],Link->Cod);
 
 	 /* Begin link */
 	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 				  "class=\"LM BT_LINK PRG_LNK_%s\"",
 				  The_GetSuffix ());
 
-	    /* Icon and title of resource *****/
+	    /* Icon and title of resource */
 	    Ico_PutIconLink (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,
 	                     NextAction);
 	    HTM_Txt (Title);
@@ -368,12 +353,12 @@ static void Rsc_GetResourceEmptyTitle (__attribute__((unused)) long Cod,
 /************* Get the title for a new resource from link title **************/
 /*****************************************************************************/
 
-void Rsc_GetResourceTitleFromLink (struct Rsc_Link *Link,
+void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
                                    char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
    static void (*GetTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
-      [Rsc_NONE            ] = NULL,
+      [Rsc_NONE            ] = Rsc_GetResourceEmptyTitle,
       [Rsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
       [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,

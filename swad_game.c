@@ -579,7 +579,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       /* Game title */
       HTM_ARTICLE_Begin (Anchor);
-	 Frm_BeginForm (ActSeeGam);
+	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
 	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
 				     Games->Game.Hidden ? "ASG_TITLE_LIGHT":
@@ -611,7 +611,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
-      Frm_BeginForm (ActSeeGam);
+      Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
 	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
 	                          Games->Game.Hidden ? "ASG_TITLE_LIGHT":

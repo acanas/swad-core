@@ -369,7 +369,7 @@ static void Prj_ReqUsrsToSelect (void *Projects)
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-				     ActSeePrj,
+				     ActSeeAllPrj,
 				     Prj_PutCurrentPars,Projects,
 				     Txt_Projects,
 				     Hlp_ASSESSMENT_Projects,
@@ -622,7 +622,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	{
 	 Set_BeginPref (Who == Projects->Filter.Who);
 	    Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
-						     ActSeePrj);
+						     ActSeeAllPrj);
 	       Filter.Who    = Who;
 	       Filter.Assign = Projects->Filter.Assign;
 	       Filter.Hidden = Projects->Filter.Hidden;
@@ -656,7 +656,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	Assign++)
      {
       Set_BeginPref ((Projects->Filter.Assign & (1 << Assign)));
-	 Frm_BeginForm (ActSeePrj);
+	 Frm_BeginForm (ActSeeAllPrj);
 	    Filter.Who    = Projects->Filter.Who;
 	    Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
 	    Filter.Hidden = Projects->Filter.Hidden;
@@ -700,7 +700,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	HidVis++)
      {
       Set_BeginPref ((Projects->Filter.Hidden & (1 << HidVis)));
-	 Frm_BeginForm (ActSeePrj);
+	 Frm_BeginForm (ActSeeAllPrj);
 	    Filter.Who    = Projects->Filter.Who;
 	    Filter.Assign = Projects->Filter.Assign;
 	    Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
@@ -745,7 +745,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	Faultiness++)
      {
       Set_BeginPref ((Projects->Filter.Faulti & (1 << Faultiness)));
-	 Frm_BeginForm (ActSeePrj);
+	 Frm_BeginForm (ActSeeAllPrj);
 	    Filter.Who    = Projects->Filter.Who;
 	    Filter.Assign = Projects->Filter.Assign;
 	    Filter.Hidden = Projects->Filter.Hidden;
@@ -781,7 +781,7 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 	ReviewStatus++)
      {
       Set_BeginPref ((Projects->Filter.Review & (1 << ReviewStatus)));
-	 Frm_BeginForm (ActSeePrj);
+	 Frm_BeginForm (ActSeeAllPrj);
 	    Filter.Who    = Projects->Filter.Who;
 	    Filter.Assign = Projects->Filter.Assign;
 	    Filter.Hidden = Projects->Filter.Hidden;
@@ -813,7 +813,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
-      Frm_BeginForm (ActSeePrj);
+      Frm_BeginForm (ActSeeAllPrj);
 	 Filter.Who    = Projects->Filter.Who;
 	 Filter.Assign = Projects->Filter.Assign;
 	 Filter.Hidden = Projects->Filter.Hidden;
@@ -1148,7 +1148,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
 	      {
 	       case Prj_LIST_PROJECTS:
 	       case Prj_FILE_BROWSER_PROJECT:
-		  Frm_BeginForm (ActSeePrj);
+		  Frm_BeginForm (ActSeeAllPrj);
 		     Prj_PutPars (&Projects->Filter,
 				    Order,
 				    Projects->CurrentPage,

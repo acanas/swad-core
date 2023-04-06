@@ -591,8 +591,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // TabAss ******************************************************************
    // Actions in menu:
-   [ActSeeAsg		] = { 801, 0,TabAss,ActSeeAsg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"edit"			},
-   [ActSeePrj		] = {1674, 1,TabAss,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"file-invoice"		},
+   [ActSeeAllAsg	] = { 801, 0,TabAss,ActSeeAllAsg	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"edit"			},
+   [ActSeeAllPrj	] = {1674, 1,TabAss,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"file-invoice"		},
    [ActSeeAllCfe	] = {  85, 2,TabAss,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsSee	,"bullhorn"		},
    [ActEdiTstQst	] = { 104, 3,TabAss,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDatesToPastAndNow	,Qst_ReqEditQsts		,"clipboard-question"	},
    [ActReqTst		] = { 103, 4,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ReqTest			,"check"		},
@@ -601,92 +601,92 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeAllRubrics		,"tasks"		},
 
    // Actions not in menu:
-   [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
-   [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
-   [ActSeeOneAsg	] = {1942,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeOneAssignment		,NULL},
-   [ActPrnOneAsg	] = {1637,-1,TabUnk,ActSeeAsg		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Asg_PrintOneAssignment		,NULL},
-   [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
-   [ActChgAsg		] = { 815,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
-   [ActReqRemAsg	] = { 813,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqRemAssignment		,NULL},
-   [ActRemAsg		] = { 806,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RemoveAssignment		,NULL},
-   [ActHidAsg		] = { 964,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_HideAssignment		,NULL},
-   [ActUnhAsg		] = { 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_UnhideAssignment		,NULL},
-   [ActReqLnkAsg	] = {1943,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AsgRsc_GetLinkToAssignment	,NULL},
+   [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
+   [ActEdiOneAsg	] = { 814,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},
+   [ActSeeOneAsg	] = {1942,-1,TabUnk,ActSeeAllAsg	,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeOneAssignment		,NULL},
+   [ActPrnOneAsg	] = {1637,-1,TabUnk,ActSeeAllAsg	,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Asg_PrintOneAssignment		,NULL},
+   [ActNewAsg		] = { 803,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
+   [ActChgAsg		] = { 815,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReceiveFormAssignment	,NULL},
+   [ActReqRemAsg	] = { 813,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqRemAssignment		,NULL},
+   [ActRemAsg		] = { 806,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_RemoveAssignment		,NULL},
+   [ActHidAsg		] = { 964,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_HideAssignment		,NULL},
+   [ActUnhAsg		] = { 965,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_UnhideAssignment		,NULL},
+   [ActReqLnkAsg	] = {1943,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AsgRsc_GetLinkToAssignment	,NULL},
 
-   [ActCfgPrj		] = {1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ShowFormConfig		,NULL},
-   [ActRcvCfgPrj	] = {1804,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ReceiveConfig		,NULL},
-   [ActReqUsrPrj	] = {1805,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ListUsrsToSelect		,NULL},
-   [ActSeeTblAllPrj	] = {1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableSelectedPrjs	,NULL},
-   [ActReqLckAllPrj	] = {1775,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockSelectedPrjsEdition	,NULL},
-   [ActReqUnlAllPrj	] = {1776,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnloSelectedPrjsEdition	,NULL},
-   [ActLckAllPrj	] = {1777,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockSelectedPrjsEdition	,NULL},
-   [ActUnlAllPrj	] = {1778,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnloSelectedPrjsEdition	,NULL},
-   [ActFrmNewPrj	] = {1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqCreatePrj		,NULL},
-   [ActEdiOnePrj	] = {1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqEditPrj			,NULL},
-   [ActSeeOnePrj	] = {1949,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
-   [ActPrnOnePrj	] = {1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
-   [ActNewPrj		] = {1678,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
-   [ActChgPrj		] = {1679,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
-   [ActReqRemPrj	] = {1680,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
-   [ActRemPrj		] = {1681,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
-   [ActHidPrj		] = {1682,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
-   [ActUnhPrj		] = {1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
-   [ActLckPrj		] = {1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
-   [ActUnlPrj		] = {1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnloProjectEdition		,NULL},
-   [ActChgPrjRev	] = {1950,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ChangeReviewStatus		,NULL},
-   [ActReqAddStdPrj	] = {1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
-   [ActReqAddTutPrj	] = {1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
-   [ActReqAddEvlPrj	] = {1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
-   [ActAddStdPrj	] = {1687,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddStds	,NULL},
-   [ActAddTutPrj	] = {1688,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddTuts	,NULL},
-   [ActAddEvlPrj	] = {1689,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddEvls	,NULL},
-   [ActReqRemStdPrj	] = {1690,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemStd			,NULL},
-   [ActReqRemTutPrj	] = {1691,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemTut			,NULL},
-   [ActReqRemEvlPrj	] = {1692,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemEvl			,NULL},
-   [ActRemStdPrj	] = {1693,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
-   [ActRemTutPrj	] = {1694,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
-   [ActRemEvlPrj	] = {1695,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEvl			,NULL},
-   [ActReqLnkPrj	] = {1948,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjRsc_GetLinkToProject	,NULL},
+   [ActCfgPrj		] = {1803,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ShowFormConfig		,NULL},
+   [ActRcvCfgPrj	] = {1804,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ReceiveConfig		,NULL},
+   [ActReqUsrPrj	] = {1805,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ListUsrsToSelect		,NULL},
+   [ActSeeTblAllPrj	] = {1696,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableSelectedPrjs	,NULL},
+   [ActReqLckAllPrj	] = {1775,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockSelectedPrjsEdition	,NULL},
+   [ActReqUnlAllPrj	] = {1776,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnloSelectedPrjsEdition	,NULL},
+   [ActLckAllPrj	] = {1777,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockSelectedPrjsEdition	,NULL},
+   [ActUnlAllPrj	] = {1778,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnloSelectedPrjsEdition	,NULL},
+   [ActFrmNewPrj	] = {1675,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqCreatePrj		,NULL},
+   [ActEdiOnePrj	] = {1676,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqEditPrj			,NULL},
+   [ActSeeOnePrj	] = {1949,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   [ActPrnOnePrj	] = {1677,-1,TabUnk,ActSeeAllPrj	,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
+   [ActNewPrj		] = {1678,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
+   [ActChgPrj		] = {1679,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveFormProject		,NULL},
+   [ActReqRemPrj	] = {1680,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemProject		,NULL},
+   [ActRemPrj		] = {1681,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
+   [ActHidPrj		] = {1682,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
+   [ActUnhPrj		] = {1683,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnhideProject		,NULL},
+   [ActLckPrj		] = {1773,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
+   [ActUnlPrj		] = {1774,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnloProjectEdition		,NULL},
+   [ActChgPrjRev	] = {1950,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ChangeReviewStatus		,NULL},
+   [ActReqAddStdPrj	] = {1684,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
+   [ActReqAddTutPrj	] = {1685,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
+   [ActReqAddEvlPrj	] = {1686,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
+   [ActAddStdPrj	] = {1687,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddStds	,NULL},
+   [ActAddTutPrj	] = {1688,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddTuts	,NULL},
+   [ActAddEvlPrj	] = {1689,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddEvls	,NULL},
+   [ActReqRemStdPrj	] = {1690,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemStd			,NULL},
+   [ActReqRemTutPrj	] = {1691,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemTut			,NULL},
+   [ActReqRemEvlPrj	] = {1692,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemEvl			,NULL},
+   [ActRemStdPrj	] = {1693,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
+   [ActRemTutPrj	] = {1694,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
+   [ActRemEvlPrj	] = {1695,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEvl			,NULL},
+   [ActReqLnkPrj	] = {1948,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjRsc_GetLinkToProject	,NULL},
 
-   [ActAdmDocPrj	] = {1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
-   [ActReqRemFilDocPrj	] = {1698,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
-   [ActRemFilDocPrj	] = {1699,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
-   [ActRemFolDocPrj	] = {1700,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
-   [ActCopDocPrj	] = {1701,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
-   [ActPasDocPrj	] = {1702,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
-   [ActRemTreDocPrj	] = {1703,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
-   [ActFrmCreDocPrj	] = {1704,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
-   [ActCreFolDocPrj	] = {1705,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
-   [ActCreLnkDocPrj	] = {1706,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
-   [ActRenFolDocPrj	] = {1707,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
-   [ActRcvFilDocPrjDZ	] = {1708,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
-   [ActRcvFilDocPrjCla	] = {1709,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
-   [ActExpDocPrj	] = {1710,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
-   [ActConDocPrj	] = {1711,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
-   [ActZIPDocPrj	] = {1712,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActReqDatDocPrj	] = {1713,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
-   [ActChgDatDocPrj	] = {1714,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
-   [ActDowDocPrj	] = {1715,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   [ActAdmDocPrj	] = {1697,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   [ActReqRemFilDocPrj	] = {1698,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
+   [ActRemFilDocPrj	] = {1699,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
+   [ActRemFolDocPrj	] = {1700,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
+   [ActCopDocPrj	] = {1701,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   [ActPasDocPrj	] = {1702,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   [ActRemTreDocPrj	] = {1703,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   [ActFrmCreDocPrj	] = {1704,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   [ActCreFolDocPrj	] = {1705,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   [ActCreLnkDocPrj	] = {1706,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   [ActRenFolDocPrj	] = {1707,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   [ActRcvFilDocPrjDZ	] = {1708,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   [ActRcvFilDocPrjCla	] = {1709,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   [ActExpDocPrj	] = {1710,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
+   [ActConDocPrj	] = {1711,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
+   [ActZIPDocPrj	] = {1712,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
+   [ActReqDatDocPrj	] = {1713,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   [ActChgDatDocPrj	] = {1714,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   [ActDowDocPrj	] = {1715,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   [ActAdmAssPrj	] = {1716,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
-   [ActReqRemFilAssPrj	] = {1717,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
-   [ActRemFilAssPrj	] = {1718,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
-   [ActRemFolAssPrj	] = {1719,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
-   [ActCopAssPrj	] = {1720,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
-   [ActPasAssPrj	] = {1721,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
-   [ActRemTreAssPrj	] = {1722,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
-   [ActFrmCreAssPrj	] = {1723,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
-   [ActCreFolAssPrj	] = {1724,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
-   [ActCreLnkAssPrj	] = {1725,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
-   [ActRenFolAssPrj	] = {1726,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
-   [ActRcvFilAssPrjDZ	] = {1727,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
-   [ActRcvFilAssPrjCla	] = {1728,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
-   [ActExpAssPrj	] = {1729,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
-   [ActConAssPrj	] = {1730,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
-   [ActZIPAssPrj	] = {1731,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
-   [ActReqDatAssPrj	] = {1732,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
-   [ActChgDatAssPrj	] = {1733,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
-   [ActDowAssPrj	] = {1734,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
+   [ActAdmAssPrj	] = {1716,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
+   [ActReqRemFilAssPrj	] = {1717,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
+   [ActRemFilAssPrj	] = {1718,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFileFromTree		,NULL},
+   [ActRemFolAssPrj	] = {1719,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemFolderFromTree		,NULL},
+   [ActCopAssPrj	] = {1720,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_CopyFromFileBrowser	,NULL},
+   [ActPasAssPrj	] = {1721,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_PasteIntoFileBrowser	,NULL},
+   [ActRemTreAssPrj	] = {1722,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemSubtreeInFileBrowser	,NULL},
+   [ActFrmCreAssPrj	] = {1723,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFormFileBrowser	,NULL},
+   [ActCreFolAssPrj	] = {1724,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecFolderFileBrowser	,NULL},
+   [ActCreLnkAssPrj	] = {1725,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RecLinkFileBrowser		,NULL},
+   [ActRenFolAssPrj	] = {1726,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RenFolderFileBrowser	,NULL},
+   [ActRcvFilAssPrjDZ	] = {1727,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_UPLOAD_FILE,Brw_RcvFileInFileBrwDropzone	,NULL				,NULL},
+   [ActRcvFilAssPrjCla	] = {1728,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Brw_RcvFileInFileBrwClassic	,NULL},
+   [ActExpAssPrj	] = {1729,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
+   [ActConAssPrj	] = {1730,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
+   [ActZIPAssPrj	] = {1731,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
+   [ActReqDatAssPrj	] = {1732,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
+   [ActChgDatAssPrj	] = {1733,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
+   [ActDowAssPrj	] = {1734,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    [ActSeeOneCfe	] = {1572,-1,TabUnk,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsCod	,NULL},
    [ActSeeDatCfe	] = {1571,-1,TabUnk,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsDay	,NULL},
@@ -729,7 +729,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeUsrTstResCrs	] = {1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_GetUsrsAndShowPrints	,NULL},
    [ActSeeOneTstResOth	] = {1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_ShowOnePrint		,NULL},
 
-   [ActSeeExa		] = {1849,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeOneExam			,NULL},
+   [ActSeeOneExa	] = {1849,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeOneExam			,NULL},
 
    [ActFrmNewExa	] = {1877,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ReqCreatOrEditExam		,NULL},
    [ActEdiOneExa	] = {1878,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ReqCreatOrEditExam		,NULL},
@@ -784,7 +784,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    [ActChgVisExaRes	] = {1876,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ToggleVisResultsSesUsr	,NULL},
 
-   [ActSeeGam		] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
+   [ActSeeOneGam	] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
    [ActReqRemMch	] = {1783,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ReqRemMatch		,NULL},
    [ActRemMch		] = {1784,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatch		,NULL},
@@ -839,7 +839,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActDwnGamQst	] = {1669,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_MoveDownQst		,NULL},
    [ActReqLnkGam	] = {1935,-1,TabUnk,ActSeeAllGam	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,GamRsc_GetLinkToGame		,NULL},
 
-   [ActSeeRub		] = {1952,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeOneRubric		,NULL},
+   [ActSeeOneRub	] = {1952,-1,TabUnk,ActSeeAllRub	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeOneRubric		,NULL},
    [ActFrmNewRub	] = {1953,-1,TabUnk,ActSeeAllRub	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReqCreatOrEditRubric	,NULL},
    [ActEdiOneRub	] = {1954,-1,TabUnk,ActSeeAllRub	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReqCreatOrEditRubric	,NULL},
    [ActNewRub		] = {1955,-1,TabUnk,ActSeeAllRub	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_ReceiveFormRubric		,NULL},
@@ -1351,7 +1351,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstStd		] = { 678, 1,TabUsr,ActLstStd		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_SeeStudents		,"users"		},
    [ActLstTch		] = { 679, 2,TabUsr,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_SeeTeachers		,"user-tie"		},
    [ActLstOth		] = {1186, 3,TabUsr,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_ListDataAdms		,"user-friends"		},
-   [ActSeeAtt		] = { 861, 4,TabUsr,ActSeeAtt		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeEvents		,"calendar-check"	},
+   [ActSeeAllAtt	] = { 861, 4,TabUsr,ActSeeAllAtt	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeEvents			,"calendar-check"	},
    [ActReqSignUp	] = {1054, 5,TabUsr,ActReqSignUp	,    0,0x006,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqSignUpInCrs		,"hand-point-up"	},
    [ActSeeSignUpReq	] = {1057, 6,TabUsr,ActSeeSignUpReq	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ShowEnrolmentRequests	,"hand-point-up"	},
    [ActLstCon		] = { 995, 7,TabUsr,ActLstCon		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Con_ShowConnectedUsrs		,"user-clock"		},
@@ -1423,23 +1423,23 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqEnrSevNET	] = {1642,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqAdminNonEditingTchs	,NULL},
    [ActReqEnrSevTch	] = {1427,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqAdminTchs		,NULL},
 
-   [ActReqLstUsrAtt	] = {1073,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqListUsrsAttendanceCrs	,NULL},
-   [ActSeeLstMyAtt	] = {1473,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ListMyAttendanceCrs	,NULL},
-   [ActPrnLstMyAtt	] = {1474,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Att_PrintMyAttendanceCrs	,NULL},
-   [ActSeeLstUsrAtt	] = {1074,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ListUsrsAttendanceCrs	,NULL},
-   [ActPrnLstUsrAtt	] = {1075,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Att_PrintUsrsAttendanceCrs	,NULL},
-   [ActFrmNewAtt	] = {1063,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqCreatOrEditEvent	,NULL},
-   [ActEdiOneAtt	] = {1064,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqCreatOrEditEvent	,NULL},
-   [ActNewAtt		] = {1065,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormEvent	,NULL},
-   [ActChgAtt		] = {1066,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormEvent	,NULL},
-   [ActReqRemAtt	] = {1067,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_AskRemEvent		,NULL},
-   [ActRemAtt		] = {1068,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetAndRemEvent		,NULL},
-   [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideEvent		,NULL},
-   [ActUnhAtt		] = {1070,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideEvent		,NULL},
-   [ActSeeOneAtt	] = {1071,-1,TabUnk,ActSeeAtt		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeOneEvent		,NULL},
-   [ActReqLnkAtt	] = {1938,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AttRsc_GetLinkToEvent		,NULL},
-   [ActRecAttStd	] = {1072,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterStudentsInEvent	,NULL},
-   [ActRecAttMe		] = {1076,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterMeAsStdInEvent	,NULL},
+   [ActReqLstUsrAtt	] = {1073,-1,TabUnk,ActSeeAllAtt	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqListUsrsAttendanceCrs	,NULL},
+   [ActSeeLstMyAtt	] = {1473,-1,TabUnk,ActSeeAllAtt	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ListMyAttendanceCrs	,NULL},
+   [ActPrnLstMyAtt	] = {1474,-1,TabUnk,ActSeeAllAtt	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Att_PrintMyAttendanceCrs	,NULL},
+   [ActSeeLstUsrAtt	] = {1074,-1,TabUnk,ActSeeAllAtt	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ListUsrsAttendanceCrs	,NULL},
+   [ActPrnLstUsrAtt	] = {1075,-1,TabUnk,ActSeeAllAtt	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Att_PrintUsrsAttendanceCrs	,NULL},
+   [ActFrmNewAtt	] = {1063,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqCreatOrEditEvent	,NULL},
+   [ActEdiOneAtt	] = {1064,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReqCreatOrEditEvent	,NULL},
+   [ActNewAtt		] = {1065,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormEvent		,NULL},
+   [ActChgAtt		] = {1066,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_ReceiveFormEvent		,NULL},
+   [ActReqRemAtt	] = {1067,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_AskRemEvent		,NULL},
+   [ActRemAtt		] = {1068,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_GetAndRemEvent		,NULL},
+   [ActHidAtt		] = {1069,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_HideEvent			,NULL},
+   [ActUnhAtt		] = {1070,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_UnhideEvent		,NULL},
+   [ActSeeOneAtt	] = {1071,-1,TabUnk,ActSeeAllAtt	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_SeeOneEvent		,NULL},
+   [ActReqLnkAtt	] = {1938,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AttRsc_GetLinkToEvent		,NULL},
+   [ActRecAttStd	] = {1072,-1,TabUnk,ActSeeAllAtt	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterStudentsInEvent	,NULL},
+   [ActRecAttMe		] = {1076,-1,TabUnk,ActSeeAllAtt	,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Att_RegisterMeAsStdInEvent	,NULL},
 
    [ActSignUp		] = {1056,-1,TabUnk,ActReqSignUp	,    0,0x006,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_SignUpInCrs		,NULL},
    [ActUpdSignUpReq	] = {1522,-1,TabUnk,ActSeeSignUpReq	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_UpdateEnrolmentRequests	,NULL},
@@ -1777,7 +1777,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    [ActSeeAllStaCrs	] = { 768,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ind_ShowIndicatorsCourses	,NULL},
 
-   [ActSeeSvy		] = { 982,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeOneSurvey		,NULL},
+   [ActSeeOneSvy	] = { 982,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_SeeOneSurvey		,NULL},
    [ActAnsSvy		] = { 983,-1,TabUnk,ActSeeAllSvy	,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
    [ActFrmNewSvy	] = { 973,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy		,NULL},
    [ActEdiOneSvy	] = { 974,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqCreatOrEditSvy		,NULL},
@@ -2692,7 +2692,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	-1,			// #798 (obsolete action)
 	-1,			// #799 (obsolete action)
 	-1,			// #800 (obsolete action)
-	ActSeeAsg,		// #801
+	ActSeeAllAsg,		// #801
 	-1,			// #802 (obsolete action)
 	ActNewAsg,		// #803
 	-1,			// #804 (obsolete action)
@@ -2752,7 +2752,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenMaiSho,		// #858
 	ActRenMaiFul,		// #859
 	ActRemMai,		// #860
-	ActSeeAtt,		// #861
+	ActSeeAllAtt,		// #861
 	ActSeeCty,		// #862
 	ActEdiCty,		// #863
 	ActNewCty,		// #864
@@ -2873,7 +2873,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActEdiOneSvyQst,	// #979
 	ActRcvSvyQst,		// #980
 	ActRemSvyQst,		// #981
-	ActSeeSvy,		// #982
+	ActSeeOneSvy,		// #982
 	ActAnsSvy,		// #983
 	ActReqRstSvy,		// #984
 	ActRstSvy,		// #985
@@ -3541,7 +3541,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemNETCrs,		// #1647
 	ActChgCtrPlcCfg,	// #1648
 	ActSeeAllGam,		// #1649
-	ActSeeGam,		// #1650
+	ActSeeOneGam,		// #1650
 	ActAnsMchQstStd,	// #1651
 	ActFrmNewGam,		// #1652
 	ActEdiOneGam,		// #1653
@@ -3565,7 +3565,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActNewMch,		// #1671
 	ActFwdMch,		// #1672
 	-1,			// #1673 (obsolete action)
-	ActSeePrj,		// #1674
+	ActSeeAllPrj,		// #1674
 	ActFrmNewPrj,		// #1675
 	ActEdiOnePrj,		// #1676
 	ActPrnOnePrj,		// #1677
@@ -3740,7 +3740,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgRooFlo,		// #1846
 	ActChgRooTyp,		// #1847
 	ActSeeAllExa,		// #1848
-	ActSeeExa,		// #1849
+	ActSeeOneExa,		// #1849
 	ActReqRemExaSes,	// #1850
 	ActRemExaSes,		// #1851
 	ActReqNewExaSes,	// #1852
@@ -3843,7 +3843,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeOnePrj,		// #1949
 	ActChgPrjRev,		// #1950
 	ActSeeAllRub,		// #1951
-	ActSeeRub,		// #1952
+	ActSeeOneRub,		// #1952
 	ActFrmNewRub,		// #1953
 	ActEdiOneRub,		// #1954
 	ActNewRub,		// #1955

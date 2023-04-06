@@ -22000,7 +22000,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 [TabAss] =
 	{
-	//  0: ActSeeAsg
+	//  0: ActSeeAllAsg
 #if   L==1	// ca
 	"Activitats"
 #elif L==2	// de
@@ -22023,7 +22023,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"&Ouml;devler"
 #endif
 	,
-	//  1: ActSeePrj
+	//  1: ActSeeAllPrj
 #if   L==1	// ca
 	"Projectes"
 #elif L==2	// de
@@ -22585,7 +22585,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Di&gbreve;erleri"
 #endif
 	,
-	//  4: ActSeeAtt
+	//  4: ActSeeAllAtt
 #if   L==1	// ca
 	"Assist&egrave;ncia"
 #elif L==2	// de

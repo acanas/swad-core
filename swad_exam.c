@@ -529,7 +529,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
       /* Exam title */
       HTM_ARTICLE_Begin (Anchor);
-	 Frm_BeginForm (ActSeeExa);
+	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
 	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
 				     Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
@@ -561,7 +561,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 
-      Frm_BeginForm (ActSeeExa);
+      Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
 				  Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":

@@ -237,7 +237,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	 Grp_ShowFormToSelWhichGrps (ActSeeAtt,
+	 Grp_ShowFormToSelWhichGrps (ActSeeAllAtt,
 				     Att_ParsWhichGroupsToShow,&Events);
 	 Set_EndSettingsHead ();
 	}
@@ -261,7 +261,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 		 {
                   HTM_TH_Begin (HTM_HEAD_LEFT);
 
-		     Frm_BeginForm (ActSeeAtt);
+		     Frm_BeginForm (ActSeeAllAtt);
 			WhichGroups = Grp_GetParWhichGroups ();
 			Grp_PutParWhichGroups (&WhichGroups);
 			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
@@ -2793,7 +2793,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 
 static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeAtt,NULL,
+   Ico_PutContextualIconToView (ActSeeAllAtt,NULL,
 				NULL,NULL);
   }
 
@@ -2803,7 +2803,7 @@ static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
 
 static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActSeeAtt,NULL,
+   Ico_PutContextualIconToEdit (ActSeeAllAtt,NULL,
 				NULL,NULL);
   }
 

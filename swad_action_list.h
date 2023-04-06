@@ -518,8 +518,8 @@
 /***************************** Assessment tab ********************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActSeeAsg		(ActChgCrsTT1stDay +   1)
-#define ActSeePrj		(ActChgCrsTT1stDay +   2)
+#define ActSeeAllAsg		(ActChgCrsTT1stDay +   1)
+#define ActSeeAllPrj		(ActChgCrsTT1stDay +   2)
 #define ActSeeAllCfe		(ActChgCrsTT1stDay +   3)
 #define ActEdiTstQst		(ActChgCrsTT1stDay +   4)
 #define ActReqTst		(ActChgCrsTT1stDay +   5)
@@ -655,7 +655,7 @@
 #define ActSeeUsrTstResCrs	(ActChgCrsTT1stDay + 125)
 #define ActSeeOneTstResOth	(ActChgCrsTT1stDay + 126)
 
-#define ActSeeExa		(ActChgCrsTT1stDay + 127)
+#define ActSeeOneExa		(ActChgCrsTT1stDay + 127)
 
 #define ActFrmNewExa		(ActChgCrsTT1stDay + 128)
 #define ActEdiOneExa		(ActChgCrsTT1stDay + 129)
@@ -708,7 +708,7 @@
 #define ActSeeOneExaResOth	(ActChgCrsTT1stDay + 171)
 #define ActChgVisExaRes		(ActChgCrsTT1stDay + 172)
 
-#define ActSeeGam		(ActChgCrsTT1stDay + 173)
+#define ActSeeOneGam		(ActChgCrsTT1stDay + 173)
 #define ActReqRemMch		(ActChgCrsTT1stDay + 174)
 #define ActRemMch		(ActChgCrsTT1stDay + 175)
 #define ActEdiMch		(ActChgCrsTT1stDay + 176)
@@ -762,7 +762,7 @@
 #define ActDwnGamQst		(ActChgCrsTT1stDay + 218)
 #define ActReqLnkGam		(ActChgCrsTT1stDay + 219)
 
-#define ActSeeRub		(ActChgCrsTT1stDay + 220)
+#define ActSeeOneRub		(ActChgCrsTT1stDay + 220)
 #define ActFrmNewRub		(ActChgCrsTT1stDay + 221)
 #define ActEdiOneRub		(ActChgCrsTT1stDay + 222)
 #define ActNewRub		(ActChgCrsTT1stDay + 223)
@@ -1266,7 +1266,7 @@
 #define ActLstStd		(ActRemOldBrf +   2)
 #define ActLstTch		(ActRemOldBrf +   3)
 #define ActLstOth		(ActRemOldBrf +   4)
-#define ActSeeAtt		(ActRemOldBrf +   5)
+#define ActSeeAllAtt		(ActRemOldBrf +   5)
 #define ActReqSignUp		(ActRemOldBrf +   6)
 #define ActSeeSignUpReq		(ActRemOldBrf +   7)
 #define ActLstCon		(ActRemOldBrf +   8)
@@ -1667,7 +1667,7 @@
 
 #define ActSeeAllStaCrs		(ActMaiUsr + 11)
 
-#define ActSeeSvy		(ActMaiUsr + 12)
+#define ActSeeOneSvy		(ActMaiUsr + 12)
 #define ActAnsSvy		(ActMaiUsr + 13)
 #define ActFrmNewSvy		(ActMaiUsr + 14)
 #define ActEdiOneSvy		(ActMaiUsr + 15)

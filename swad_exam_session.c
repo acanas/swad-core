@@ -153,7 +153,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	 if (Gbl.Crs.Grps.NumGrps)
 	   {
 	    Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelWhichGrps (ActSeeExa,
+	    Grp_ShowFormToSelWhichGrps (ActSeeOneExa,
 					Exa_PutPars,Exams);
 	    Set_EndSettingsHead ();
 	   }

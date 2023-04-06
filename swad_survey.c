@@ -530,7 +530,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       HTM_ARTICLE_Begin (Anchor);
-	 Frm_BeginForm (ActSeeSvy);
+	 Frm_BeginForm (ActSeeOneSvy);
 	    ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 	    Svy_PutParSvyOrder (Surveys->SelectedOrder);
 	    WhichGroups = Grp_GetParWhichGroups ();
@@ -574,7 +574,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	   {
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
-	       Frm_BeginForm (ActSeeSvy);
+	       Frm_BeginForm (ActSeeOneSvy);
 		  ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 		  Svy_PutParSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
@@ -590,7 +590,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	   {
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
-	       Frm_BeginForm (ActSeeSvy);
+	       Frm_BeginForm (ActSeeOneSvy);
 		  ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 		  Svy_PutParSvyOrder (Surveys->SelectedOrder);
 		  WhichGroups = Grp_GetParWhichGroups ();
