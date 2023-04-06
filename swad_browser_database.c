@@ -325,13 +325,13 @@ unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
   }
 
 /*****************************************************************************/
-/*********************** Get file name using its code ************************/
+/************************ Get file path using its code ***********************/
 /*****************************************************************************/
 
-unsigned Brw_DB_GetFileNameByCod (MYSQL_RES **mysql_res,long FilCod)
+unsigned Brw_DB_GetPathByCod (MYSQL_RES **mysql_res,long FilCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get file name",
+   DB_QuerySELECT (mysql_res,"can not get path",
 		   "SELECT Path"		// row[0]
 		    " FROM brw_files"
 		   " WHERE FilCod=%ld",

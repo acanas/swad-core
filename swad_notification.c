@@ -717,7 +717,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
             ParCod_PutPar (ParCod_Exa,Cod);
 
 	 /* Free anchor string */
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 	 break;
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_TEACHERS_FILE:

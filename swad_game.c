@@ -668,7 +668,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       The_ChangeRowColor ();
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/
@@ -688,7 +688,7 @@ static void Gam_PutIconsOneGame (void *Games)
       Gam_PutIconsToRemEditOneGame (Games,Anchor);
 
       /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
   }
 
@@ -1763,7 +1763,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 HTM_TR_End ();
 
 	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);

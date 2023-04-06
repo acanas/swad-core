@@ -97,7 +97,7 @@ void CfeRsc_WriteResourceCallForExam (long ExaCod,Frm_PutFormToGo_t PutFormToGo,
 	                          The_GetSuffix ());
 
       /* Free anchor string */
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
 
    /***** Icon depending on type ******/

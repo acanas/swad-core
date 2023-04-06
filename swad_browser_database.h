@@ -47,7 +47,7 @@ void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
 long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic);
 unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path);
 unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
-unsigned Brw_DB_GetFileNameByCod (MYSQL_RES **mysql_res,long FilCod);
+unsigned Brw_DB_GetPathByCod (MYSQL_RES **mysql_res,long FilCod);
 long Brw_DB_GetPublisherOfSubtree (const char *Path);
 unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod);

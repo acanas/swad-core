@@ -566,7 +566,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
    HTM_TR_End ();
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/
@@ -1508,7 +1508,7 @@ static void Att_PutIconsOneEvent (void *Events)
    Att_PutFormsToRemEditOneEvent ((struct Att_Events *) Events,Anchor);
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/

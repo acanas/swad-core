@@ -132,6 +132,21 @@ void ForRsc_WriteResourceThread (long ThrCod,Frm_PutFormToGo_t PutFormToGo,
   }
 
 /*****************************************************************************/
+/************** Build/free anchor string given a thread code *****************/
+/*****************************************************************************/
+
+void ForRsc_SetAnchorStr (long ThrCod,char **Anchor)
+  {
+   *Anchor = (ThrCod > 0) ? For_FORUM_POSTS_SECTION_ID :
+			    For_FORUM_THREADS_SECTION_ID;
+  }
+
+void ForRsc_FreeAnchorStr (char **Anchor)
+  {
+   *Anchor = NULL;
+  }
+
+/*****************************************************************************/
 /********************* Get survey title from survey code *********************/
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize

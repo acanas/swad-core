@@ -646,7 +646,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/

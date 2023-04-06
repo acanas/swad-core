@@ -716,7 +716,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 HTM_TR_End ();
 
 	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 	}
 
    /***** End table *****/
@@ -1067,24 +1067,6 @@ static void RubCri_ExchangeCriteria (long RubCod,
    /***** Unlock table *****/
    DB_UnlockTables ();
   }
-
-/*****************************************************************************/
-/************************** Show criterion resource **************************/
-/*****************************************************************************/
-/*
-static void RubCri_ShowResource (struct Rub_Rubrics *Rubrics,
-                                 const struct RubCri_Criterion *Criterion,
-                                 bool Editing,const char *Anchor)
-  {
-   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
-   Rsc_WriteLinkName (&Criterion->Link,
-		      true,	// Put form to go
-                      Rsc_ResourceTypesIcons[Criterion->Link.Type],
-	              Txt_RESOURCE_TYPES[Criterion->Link.Type]);
-  }
-*/
 
 /*****************************************************************************/
 /***************** Show clipboard to change resource link ********************/

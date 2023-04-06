@@ -367,9 +367,6 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item)
   {
-   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -384,10 +381,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
-	 Rsc_WriteLinkName (&Item->Resource.Link,
-			       true,	// Put form
-			       Rsc_ResourceTypesIcons[Item->Resource.Link.Type],
-			       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
+	 Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM_TO_GO);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -401,9 +395,6 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,bool EditLink)
   {
-   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
@@ -444,10 +435,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
            }
 	 else
 	    /* Show current link */
-	    Rsc_WriteLinkName (&Item->Resource.Link,
-	                       true,	// Put form
-			       Rsc_ResourceTypesIcons[Item->Resource.Link.Type],
-	                       Txt_RESOURCE_TYPES[Item->Resource.Link.Type]);
+	    Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM_TO_GO);
 
       HTM_TD_End ();
 

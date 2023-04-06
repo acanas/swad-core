@@ -1117,9 +1117,10 @@ void ParCod_PutPar (ParCod_Param_t ParCod,long Cod)
   {
    extern const char *Par_CodeStr[];
 
-   			// <0 => not specified => don't write parameter
-   if (Cod >= 0)	//  0 => another country, institution, centre...
-			// >0 => a given country, institution, centre...
+   if (ParCod != ParCod_None && Cod >= 0)
+      // <0 => not specified => don't write parameter
+      //  0 => another country, institution, centre...
+      // >0 => a given country, institution, centre...
       Par_PutParLong (NULL,Par_CodeStr[ParCod],Cod);
   }
 

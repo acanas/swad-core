@@ -2450,18 +2450,32 @@ void For_GetParsForums (struct For_Forums *Forums)
    /***** Set forum type *****/
    For_SetForumType (Forums);
 
-   /***** Get parameter with code of course, degree, center or institution *****/
+   /***** Get parameter with code of institution, center, degree or course *****/
    switch (Forums->Forum.Type)
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
+	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
+	    // If no institution specified ==> go to current institution forum
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Ins.InsCod;
+         break;
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
+	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
+	    // If no center specified ==> go to current center forum
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Ctr.CtrCod;
+         break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
+	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
+	    // If no degree specified ==> go to current degree forum
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Deg.DegCod;
+         break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-	 Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie);
+	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
+	    // If no course specified ==> go to current course forum
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Crs.CrsCod;
          break;
       default:
 	 Forums->Forum.HieCod = -1L;

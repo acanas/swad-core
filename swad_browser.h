@@ -224,7 +224,7 @@ void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata);
-void Brw_GetFileNameByCod (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetPathByCod (struct Brw_FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);

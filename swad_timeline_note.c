@@ -659,7 +659,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],
 				    Anchor);	// Locate on this specific exam
-	       Frm_FreeAnchorStr (Anchor);
+	       Frm_FreeAnchorStr (&Anchor);
 		  ParCod_PutPar (ParCod_Exa,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);	// Go to another course
@@ -681,7 +681,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
-	       Frm_FreeAnchorStr (Anchor);
+	       Frm_FreeAnchorStr (&Anchor);
 		  ParCod_PutPar (ParCod_Not,Not->Cod);
 		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);		// Go to another course

@@ -4718,10 +4718,6 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
 			     Frm_PUT_FORM_TO_GO);	// Put link to view metadata
 	 else
-	    /*
-	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"up-right-from-square.svg",Txt_Link,
-			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
-			     Ico_GetPreffix (Ico_BLACK),The_GetSuffix ()); */
 	    Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,
 	                     Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
 
@@ -8574,19 +8570,19 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/*********************** Get file name using its code ************************/
+/****************** Get file type and path using its code ********************/
 /*****************************************************************************/
 // FileMetadata.FilCod must be filled
-// This function only gets file name stored in table files,
+// This function only gets type and path stored in table files,
 // The rest of the fields are not filled
 
-void Brw_GetFileNameByCod (struct Brw_FileMetadata *FileMetadata)
+void Brw_GetPathByCod (struct Brw_FileMetadata *FileMetadata)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get metadata of a file from database *****/
-   if (Brw_DB_GetFileNameByCod (&mysql_res,FileMetadata->FilCod))
+   if (Brw_DB_GetPathByCod (&mysql_res,FileMetadata->FilCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

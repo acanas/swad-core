@@ -1041,7 +1041,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActConSeeDocCrs	] = { 476,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActZIPSeeDocCrs	] = {1124,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ZIP_CompressFileTree		,NULL},
    [ActReqDatSeeDocCrs	] = {1033,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
-   [ActReqLnkSeeDocCrs	] = {1930,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToFile		,NULL},
+   [ActReqLnkSeeDocCrs	] = {1930,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToDocFil		,NULL},
    [ActDowSeeDocCrs	] = {1111,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    [ActSeeDocGrp	] = {1200,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -1073,7 +1073,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActHidDocCrs	] = { 465,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmDocCrs	] = {1029,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmDocCrs	] = { 996,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
-   [ActReqLnkAdmDocCrs	] = {1931,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToFile		,NULL},
+   [ActReqLnkAdmDocCrs	] = {1931,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToDocFil		,NULL},
    [ActDowAdmDocCrs	] = {1113,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
    [ActAdmDocGrp	] = {1201,-1,TabUnk,ActSeeAdmDocCrsGrp	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -1266,7 +1266,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpSeeMrkCrs	] = { 528,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ExpandFileTree		,NULL				,NULL},
    [ActConSeeMrkCrs	] = { 527,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_204_NO_CONT,Brw_ContractFileTree		,NULL				,NULL},
    [ActReqDatSeeMrkCrs	] = {1086,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
-   [ActReqLnkSeeMrkCrs	] = {1939,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToFile		,NULL},
+   [ActReqLnkSeeMrkCrs	] = {1939,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToMrkFil		,NULL},
    [ActSeeMyMrkCrs	] = { 523,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mrk_ShowMyMarks		,NULL				,NULL},
 
    [ActSeeMrkGrp	] = {1204,-1,TabUnk,ActSeeAdmMrk	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -1296,7 +1296,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActHidMrkCrs	] = {1192,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_SetDocumentAsHidden	,NULL},
    [ActReqDatAdmMrkCrs	] = {1035,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatAdmMrkCrs	] = {1036,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
-   [ActReqLnkAdmMrkCrs	] = {1940,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToFile		,NULL},
+   [ActReqLnkAdmMrkCrs	] = {1940,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,BrwRsc_GetLinkToMrkFil		,NULL},
    [ActDowAdmMrkCrs	] = {1121,-1,TabUnk,ActSeeAdmMrk	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
    [ActChgNumRowHeaCrs	] = { 503,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsHeader	,NULL},
    [ActChgNumRowFooCrs	] = { 504,-1,TabUnk,ActSeeAdmMrk	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mrk_ChangeNumRowsFooter	,NULL},

@@ -28,6 +28,7 @@
 #include <stdbool.h>		// For boolean type
 #include <string.h>		// For string functions
 
+#include "swad_action_list.h"
 #include "swad_alert.h"
 #include "swad_assignment_resource.h"
 #include "swad_attendance_resource.h"
@@ -40,6 +41,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_parameter_code.h"
 #include "swad_project_resource.h"
 #include "swad_resource.h"
 #include "swad_resource_database.h"
@@ -90,7 +92,7 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
    [Rsc_EXAM            ] = "file-signature.svg",
    [Rsc_GAME            ] = "gamepad.svg",
    [Rsc_RUBRIC          ] = "tasks.svg",
-   [Rsc_DOCUMENT        ] = "folder-open.svg",
+   [Rsc_DOCUMENT        ] = "file.svg",
    [Rsc_MARKS           ] = "list-alt.svg",
    // grp GROUPS		// ??? User select groups
    [Rsc_ATTENDANCE_EVENT] = "calendar-check.svg",
@@ -105,13 +107,18 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/**************************** Private prototypes *****************************/
+/*****************************************************************************/
+
+static void Rsc_GetResourceEmptyTitle (__attribute__((unused)) long Cod,
+                                       char *Title,size_t TitleSize);
+
+/*****************************************************************************/
 /************************* Show resources clipboard **************************/
 /*****************************************************************************/
 
 void Rsc_ShowClipboard (void)
   {
-   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
@@ -128,10 +135,7 @@ void Rsc_ShowClipboard (void)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	 HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
-	    Rsc_WriteLinkName (&Link,
-			       true,	// Put form to go
-			       Rsc_ResourceTypesIcons[Link.Type],
-			       Txt_RESOURCE_TYPES[Link.Type]);
+	    Rsc_WriteLinkName (&Link,Frm_PUT_FORM_TO_GO);
 	 HTM_LI_End ();
 	}
       DB_FreeMySQLResult (&mysql_res);
@@ -202,8 +206,6 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                             HTM_SubmitOnClick_t SubmitOnClick,bool Checked)
   {
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
    /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
@@ -216,10 +218,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 				    "");
 
 	 /***** Name *****/
-         Rsc_WriteLinkName (Link,
-                            false,	// Don't put form to go
-			    Rsc_ResourceTypesIcons[Link->Type],
-	                    Txt_RESOURCE_TYPES[Link->Type]);
+         Rsc_WriteLinkName (Link,Frm_DONT_PUT_FORM_TO_GO);
 
       HTM_LABEL_End ();
 
@@ -231,9 +230,11 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToGo,
-                        const char *Icon,const char *IconTitle)
+void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToGo)
   {
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    static void (*WriteLinkName[Rsc_NUM_TYPES]) (long Cod,Frm_PutFormToGo_t PutFormToGo,
 						const char *Icon,
 						const char *IconTitle) =
@@ -251,10 +252,126 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
       [Rsc_FORUM_THREAD    ] = ForRsc_WriteResourceThread,
       [Rsc_SURVEY          ] = SvyRsc_WriteResourceSurvey,
      };
+   static void (*GetResourceTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
+     {
+      [Rsc_NONE            ] = Rsc_GetResourceEmptyTitle,
+      [Rsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
+      [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
+      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
+      [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
+      [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
+      [Rsc_RUBRIC          ] = RubRsc_GetTitleFromRubCod,
+      [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
+      [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,
+      [Rsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
+      [Rsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
+      [Rsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
+     };
+   static struct
+     {
+      void (*Set) (long Cod,char **Anchor);
+      void (*Free) (char **Anchor);
+     } FuncAnchor[Rsc_NUM_TYPES] =
+     {
+      [Rsc_NONE            ] = {NULL,NULL},
+      [Rsc_ASSIGNMENT      ] = {NULL,NULL},
+      [Rsc_PROJECT         ] = {NULL,NULL},
+      [Rsc_CALL_FOR_EXAM   ] = {Frm_SetAnchorStr,Frm_FreeAnchorStr},
+      [Rsc_EXAM            ] = {NULL,NULL},
+      [Rsc_GAME            ] = {NULL,NULL},
+      [Rsc_RUBRIC          ] = {NULL,NULL},
+      [Rsc_DOCUMENT        ] = {NULL,NULL},
+      [Rsc_MARKS           ] = {NULL,NULL},
+      [Rsc_ATTENDANCE_EVENT] = {NULL,NULL},
+      [Rsc_FORUM_THREAD    ] = {ForRsc_SetAnchorStr,ForRsc_FreeAnchorStr},
+      [Rsc_SURVEY          ] = {NULL,NULL},
+     };
+   static struct
+     {
+      Act_Action_t IfCod;
+      Act_Action_t IfNotCod;
+     } NextActions[Rsc_NUM_TYPES] =
+     {
+      [Rsc_NONE            ] = {ActUnk			,ActUnk			},
+      [Rsc_ASSIGNMENT      ] = {ActSeeOneAsg		,ActSeeAsg		},
+      [Rsc_PROJECT         ] = {ActSeeOnePrj		,ActSeePrj		},
+      [Rsc_CALL_FOR_EXAM   ] = {ActSeeOneCfe		,ActSeeAllCfe		},
+      [Rsc_EXAM            ] = {ActSeeExa		,ActSeeAllExa		},
+      [Rsc_GAME            ] = {ActSeeGam		,ActSeeAllGam		},
+      [Rsc_RUBRIC          ] = {ActSeeRub		,ActSeeAllRub		},
+      [Rsc_DOCUMENT        ] = {ActReqDatSeeDocCrs	,ActSeeAdmDocCrsGrp	},
+      [Rsc_MARKS           ] = {ActReqDatSeeMrkCrs	,ActSeeAdmMrk		},
+      [Rsc_ATTENDANCE_EVENT] = {ActSeeOneAtt		,ActSeeAtt		},
+      [Rsc_FORUM_THREAD    ] = {ActSeePstForCrsUsr	,ActSeeForCrsUsr	},
+      [Rsc_SURVEY          ] = {ActSeeSvy		,ActSeeAllSvy		},
+     };
+   static ParCod_Param_t ParCod[Rsc_NUM_TYPES] =
+     {
+      [Rsc_NONE            ] = ParCod_None,
+      [Rsc_ASSIGNMENT      ] = ParCod_Asg,
+      [Rsc_PROJECT         ] = ParCod_Prj,
+      [Rsc_CALL_FOR_EXAM   ] = ParCod_Exa,
+      [Rsc_EXAM            ] = ParCod_Exa,
+      [Rsc_GAME            ] = ParCod_Gam,
+      [Rsc_RUBRIC          ] = ParCod_Rub,
+      [Rsc_DOCUMENT        ] = ParCod_Fil,
+      [Rsc_MARKS           ] = ParCod_Fil,
+      [Rsc_ATTENDANCE_EVENT] = ParCod_Att,
+      [Rsc_FORUM_THREAD    ] = ParCod_Thr,
+      [Rsc_SURVEY          ] = ParCod_Svy,
+     };
+   Act_Action_t NextAction;
+   char Title[Cns_MAX_BYTES_SUBJECT + 1];
+   char *Anchor;
 
    /***** Write link name *****/
    if (WriteLinkName[Link->Type])
-      WriteLinkName[Link->Type] (Link->Cod,PutFormToGo,Icon,IconTitle);
+     {
+      GetResourceTitle[Link->Type] (Link->Cod,Title,sizeof (Title) - 1);
+
+      /***** Begin form to go to resource *****/
+      if (PutFormToGo == Frm_PUT_FORM_TO_GO)
+	{
+	 NextAction = (Link->Cod > 0) ? NextActions[Link->Type].IfCod :		// Resource specified
+				        NextActions[Link->Type].IfNotCod;	// All resources of this type
+         if (FuncAnchor[Link->Type].Set)
+           {
+            FuncAnchor[Link->Type].Set (Link->Cod,&Anchor);
+	    Frm_BeginFormAnchor (NextAction,Anchor);
+            FuncAnchor[Link->Type].Free (&Anchor);
+           }
+         else
+            Frm_BeginForm (NextAction);
+
+	 if (Link->Cod > 0)
+	    ParCod_PutPar (ParCod[Link->Type],Link->Cod);
+
+	 HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
+				  "class=\"LM BT_LINK PRG_LNK_%s\"",
+				  The_GetSuffix ());
+	}
+
+      /***** Icon depending on type ******/
+      switch (PutFormToGo)
+	{
+	 case Frm_DONT_PUT_FORM_TO_GO:
+	    Ico_PutIconOn (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,Txt_RESOURCE_TYPES[Link->Type]);
+	    break;
+	 case Frm_PUT_FORM_TO_GO:
+	    Ico_PutIconLink (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,NextAction);
+	    break;
+	}
+
+      /***** Write title of resource*****/
+      HTM_Txt (Title);
+
+      /***** End form to download file *****/
+      if (PutFormToGo == Frm_PUT_FORM_TO_GO)
+	{
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+     }
    else
       Ale_ShowAlert (Ale_ERROR,"Not implemented!");
   }
@@ -274,6 +391,19 @@ void Rsc_WriteResourceEmpty (__attribute__((unused)) long Cod,
 
    /***** Write text *****/
    HTM_Txt (Txt_RESOURCE_TYPES[Rsc_NONE]);
+  }
+
+/*****************************************************************************/
+/******************** Write empty resource as resource ***********************/
+/*****************************************************************************/
+// The trailing null character is not counted in TitleSize
+
+static void Rsc_GetResourceEmptyTitle (__attribute__((unused)) long Cod,
+                                       char *Title,size_t TitleSize)
+  {
+   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
+
+   Str_Copy (Title,Txt_RESOURCE_TYPES[Rsc_NONE],TitleSize);
   }
 
 /*****************************************************************************/

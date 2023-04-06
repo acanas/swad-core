@@ -474,7 +474,7 @@ static void Asg_PutIconsOneAsg (void *Assignments)
       Asg_PutIconsToRemEditOneAsg (Assignments,Anchor);
 
       /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
   }
 
@@ -615,7 +615,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    HTM_TR_End ();
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_ASSIGNMENT,Assignments->Asg.AsgCod);

@@ -490,7 +490,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	 HTM_TR_End ();
 
 	 /* Free anchor string */
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 	}
 
    /***** End table *****/

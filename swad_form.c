@@ -279,12 +279,12 @@ void Frm_SetAnchorStr (long Cod,char **Anchor)
       *Anchor = NULL;
   }
 
-void Frm_FreeAnchorStr (char *Anchor)
+void Frm_FreeAnchorStr (char **Anchor)
   {
-   if (Anchor)
+   if (*Anchor)
      {
-      free (Anchor);
-      Anchor = NULL;
+      free (*Anchor);
+      *Anchor = NULL;
      }
   }
 

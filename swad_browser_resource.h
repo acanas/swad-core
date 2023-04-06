@@ -33,7 +33,8 @@
 /************************ Public types and constants *************************/
 /*****************************************************************************/
 
-void BrwRsc_GetLinkToFile (void);
+void BrwRsc_GetLinkToDocFil (void);
+void BrwRsc_GetLinkToMrkFil (void);
 void BrwRsc_WriteResourceDocument (long FilCod,Frm_PutFormToGo_t PutFormToGo,
                                    const char *Icon,const char *IconTitle);
 void BrwRsc_WriteResourceMarksFile (long FilCod,Frm_PutFormToGo_t PutFormToGo,

@@ -763,7 +763,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_End ();
 
 	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 	}
 
    /***** End table *****/
@@ -923,7 +923,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_End ();
 
 	 /***** Free anchor string *****/
-	 Frm_FreeAnchorStr (Anchor);
+	 Frm_FreeAnchorStr (&Anchor);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -1500,7 +1500,7 @@ void ExaSet_ReqRemQstFromSet (void)
 			   Exams.QstCod);
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,

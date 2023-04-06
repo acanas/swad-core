@@ -618,7 +618,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
       The_ChangeRowColor ();
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/
@@ -638,7 +638,7 @@ static void Exa_PutIconsOneExam (void *Exams)
       Exa_PutIconsToRemEditOneExam ((struct Exa_Exams *) Exams,Anchor);
 
       /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
   }
 

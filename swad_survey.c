@@ -716,7 +716,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
      }
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/
@@ -736,7 +736,7 @@ static void Svy_PutIconsOneSvy (void *Surveys)
       Svy_PutFormsToRemEditOneSvy ((struct Svy_Surveys *) Surveys,Anchor);
 
       /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
   }
 

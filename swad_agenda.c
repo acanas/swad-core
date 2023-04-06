@@ -885,7 +885,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    HTM_TR_End ();
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/

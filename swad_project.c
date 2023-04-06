@@ -1393,7 +1393,7 @@ static void Prj_PutIconsOnePrj (void *Projects)
       Prj_PutIconsToRemEditOnePrj (Projects,Anchor);
 
       /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      Frm_FreeAnchorStr (&Anchor);
      }
   }
 
@@ -1505,7 +1505,7 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
    Prj_ShowProjectURL (Projects,ClassLabel,ClassData,"prj_url_",UniqueId);
 
    /***** Free anchor string *****/
-   Frm_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (&Anchor);
   }
 
 /*****************************************************************************/

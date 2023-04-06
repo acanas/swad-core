@@ -24,6 +24,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <string.h>		// For string functions
+
 #include "swad_action.h"
 #include "swad_action_list.h"
 #include "swad_alert.h"
@@ -45,12 +47,11 @@ extern struct Globals Gbl;
 /****************************** Get link to file *****************************/
 /*****************************************************************************/
 
-void BrwRsc_GetLinkToFile (void)
+void BrwRsc_GetLinkToDocFil (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    long FilCod;
    char Title[NAME_MAX + 1];	// File or link name
-   Rsc_Type_t Type;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -59,26 +60,36 @@ void BrwRsc_GetLinkToFile (void)
    FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file title *****/
-   switch (Gbl.Action.Act)
-     {
-      case ActReqLnkSeeDocCrs:
-      case ActReqLnkAdmDocCrs:
-	 Type = Rsc_DOCUMENT;
-         BrwRsc_GetTitleFromDocFilCod (FilCod,Title,sizeof (Title) - 1);
-	 break;
-      case ActReqLnkSeeMrkCrs:
-      case ActReqLnkAdmMrkCrs:
-	 Type = Rsc_MARKS;
-         BrwRsc_GetTitleFromMrkFilCod (FilCod,Title,sizeof (Title) - 1);
-	 break;
-      default:
-	 Type = Rsc_NONE;	// Initialized to avoid warning
-	 Err_WrongTypeExit ();
-	 break;
-     }
+   BrwRsc_GetTitleFromDocFilCod (FilCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Type,FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FilCod);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+		  Title);
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+void BrwRsc_GetLinkToMrkFil (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   long FilCod;
+   char Title[NAME_MAX + 1];	// File or link name
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+
+   /***** Get file code *****/
+   FilCod = ParCod_GetPar (ParCod_Fil);
+
+   /***** Get file title *****/
+   BrwRsc_GetTitleFromMrkFilCod (FilCod,Title,sizeof (Title) - 1);
+
+   /***** Copy link to file into resource clipboard *****/
+   Rsc_DB_CopyToClipboard (Rsc_MARKS,FilCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -243,7 +254,7 @@ void BrwRsc_WriteResourceMarksFile (long FilCod,Frm_PutFormToGo_t PutFormToGo,
   }
 
 /*****************************************************************************/
-/******************** Get document name from file code ***********************/
+/********************** Get file name from file code *************************/
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
@@ -256,7 +267,11 @@ void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize)
      {
       /***** Get file name *****/
       FileMetadata.FilCod = FilCod;
-      Brw_GetFileNameByCod (&FileMetadata);
+      Brw_GetPathByCod (&FileMetadata);
+
+      /***** Remove .url if it's a link *****/
+      if (Str_FileIs (FileMetadata.FilFolLnk.Name,"url"))
+         FileMetadata.FilFolLnk.Name[strlen (FileMetadata.FilFolLnk.Name) - 4] = '\0';
 
       /***** Copy file name into title *****/
       Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
@@ -265,11 +280,6 @@ void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize)
       /***** Generic title for all documents *****/
       Str_Copy (Title,Txt_Documents,TitleSize);
   }
-
-/*****************************************************************************/
-/******************* Get marks file name from file code **********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
 
 void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize)
   {
@@ -280,7 +290,7 @@ void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize)
      {
       /***** Get file name *****/
       FileMetadata.FilCod = FilCod;
-      Brw_GetFileNameByCod (&FileMetadata);
+      Brw_GetPathByCod (&FileMetadata);
 
       /***** Copy file name into title *****/
       Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
