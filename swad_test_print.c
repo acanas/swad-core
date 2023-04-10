@@ -2212,193 +2212,190 @@ void TstPrn_ShowOnePrint (void)
    /***** Get test data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
 
-   /***** Get if I can see print result and score *****/
+   /***** Check if I can see print result and score *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
       TstCfg_GetConfig ();	// To get visibility
    TstRes_CheckIfICanSeePrintResult (&Print,Gbl.Usrs.Other.UsrDat.UsrCod,&ICanView);
-
-   if (ICanView.Result)	// I am allowed to view this test print result
-     {
-      /***** Get questions and user's answers of the test from database *****/
-      if (!TstPrn_GetPrintQuestionsFromDB (&Print))
-	 Err_WrongExamExit ();
-
-      /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Result,
-                    NULL,NULL,
-                    Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
-	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Ins.InsCod,
-				    Gbl.Hierarchy.Deg.DegCod,
-				    Gbl.Hierarchy.Crs.CrsCod);
-
-	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (10);
-
-	    /***** User *****/
-	    /* Get data of the user who made the test */
-	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-							  Usr_DONT_GET_PREFS,
-							  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	       Err_WrongUserExit ();
-	    if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
-	       Err_NoPermissionExit ();
-
-	    /* User */
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-		  ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-		  HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
-		  if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-		     HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
-		  if (Gbl.Usrs.Other.UsrDat.FrstName[0])
-		     HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
-		  HTM_BR ();
-		  Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Start/end time (for user in this test print) *****/
-	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
-		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-		 StartEndTime++)
-	      {
-	       if (asprintf (&Id,"tst_date_%u",(unsigned) StartEndTime) < 0)
-		  Err_NotEnoughMemoryExit ();
-
-	       HTM_TR_Begin (NULL);
-
-		  HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-		                The_GetSuffix ());
-		     HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",
-		                Id,The_GetSuffix ());
-		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
-						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						   true,true,true,0x7);
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-
-	       free (Id);
-	      }
-
-	    /***** Number of questions *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Questions);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",
-	                     The_GetSuffix ());
-		  HTM_Unsigned (Print.NumQsts.All);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Number of answers *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Answers);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",
-	                     The_GetSuffix ());
-		  HTM_Unsigned (Print.NumQsts.NotBlank);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Score *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Score);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",
-	                     The_GetSuffix ());
-		  if (ICanView.Score)
-		    {
-		     HTM_STRONG_Begin ();
-			HTM_Double2Decimals (Print.Score);
-			HTM_Txt ("/");
-			HTM_Unsigned (Print.NumQsts.All);
-		     HTM_STRONG_End ();
-		    }
-		  else
-		     Ico_PutIconNotVisible ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Grade *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Grade);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",
-	                     The_GetSuffix ());
-		  if (ICanView.Score)
-		    {
-		     HTM_STRONG_Begin ();
-			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
-		     HTM_STRONG_End ();
-		    }
-		  else
-		     Ico_PutIconNotVisible ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Tags present in this test *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Tags);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB DAT_%s\"",
-	                     The_GetSuffix ());
-		  TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Write answers and solutions *****/
-	    TstPrn_ShowPrintAnswers (&Gbl.Usrs.Other.UsrDat,
-				     Print.NumQsts.All,
-				     Print.PrintedQuestions,
-				     Print.TimeUTC,
-				     TstCfg_GetConfigVisibility ());
-
-	 /***** End table *****/
-	 HTM_TABLE_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
-   else	// I am not allowed to view this test
+   if (!ICanView.Result)	// I am not allowed to view this test
       Err_NoPermissionExit ();
+
+   /***** Get questions and user's answers of the test from database *****/
+   if (!TstPrn_GetPrintQuestionsFromDB (&Print))
+      Err_WrongExamExit ();
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Result,
+		 NULL,NULL,
+		 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (10);
+
+	 /***** User *****/
+	 /* Get data of the user who made the test */
+	 if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						       Usr_DONT_GET_PREFS,
+						       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	    Err_WrongUserExit ();
+	 if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    Err_NoPermissionExit ();
+
+	 /* User */
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	       HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
+	       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+		  HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
+	       if (Gbl.Usrs.Other.UsrDat.FrstName[0])
+		  HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
+	       HTM_BR ();
+	       Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
+					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Start/end time (for user in this test print) *****/
+	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	      StartEndTime++)
+	   {
+	    if (asprintf (&Id,"tst_date_%u",(unsigned) StartEndTime) < 0)
+	       Err_NotEnoughMemoryExit ();
+
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			     The_GetSuffix ());
+		  HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",
+			     Id,The_GetSuffix ());
+		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						true,true,true,0x7);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    free (Id);
+	   }
+
+	 /***** Number of questions *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_Questions);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
+			  The_GetSuffix ());
+	       HTM_Unsigned (Print.NumQsts.All);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Number of answers *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_Answers);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
+			  The_GetSuffix ());
+	       HTM_Unsigned (Print.NumQsts.NotBlank);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Score *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_Score);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
+			  The_GetSuffix ());
+	       if (ICanView.Score)
+		 {
+		  HTM_STRONG_Begin ();
+		     HTM_Double2Decimals (Print.Score);
+		     HTM_Txt ("/");
+		     HTM_Unsigned (Print.NumQsts.All);
+		  HTM_STRONG_End ();
+		 }
+	       else
+		  Ico_PutIconNotVisible ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Grade *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_Grade);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
+			  The_GetSuffix ());
+	       if (ICanView.Score)
+		 {
+		  HTM_STRONG_Begin ();
+		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
+		  HTM_STRONG_End ();
+		 }
+	       else
+		  Ico_PutIconNotVisible ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Tags present in this test *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
+			  The_GetSuffix ());
+	       HTM_TxtColon (Txt_Tags);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
+			  The_GetSuffix ());
+	       TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Write answers and solutions *****/
+	 TstPrn_ShowPrintAnswers (&Gbl.Usrs.Other.UsrDat,
+				  Print.NumQsts.All,
+				  Print.PrintedQuestions,
+				  Print.TimeUTC,
+				  TstCfg_GetConfigVisibility ());
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

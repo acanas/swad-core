@@ -12031,50 +12031,27 @@ const char *Txt_Edit_rich_text =
 	"Edit rich text";		// Çeviri lazim!
 #endif
 
-const char *Txt_Editable =
+const char *Txt_Non_editing_teachers_can_create_new_projects =
 #if   L==1	// ca
-	"Editables";
+	"Els professors no editors poden crear nous projectes";
 #elif L==2	// de
-	"Bearbeitbare";
+	"Nicht bearbeitende Lehrern k&ouml;nnen neue Projekte erstellen";
 #elif L==3	// en
-	"Editable";
+	"Non-editing teachers can create new projects";
 #elif L==4	// es
-	"Editables";
+	"Los profesores no editores pueden crear nuevos proyectos";
 #elif L==5	// fr
-	"&Eacute;ditables";
+	"Les enseignants non &eacute;diteurs peuvent cr&eacute;er de nouveaux projets";
 #elif L==6	// gn
-	"Ojeedit&aacute;kuaa";
+	"Mbo'eh&aacute;a ndaha'&eacute;iva editor ikatu omohe&ntilde;&oacute;i proyecto pyahu";
 #elif L==7	// it
-	"Modificabili";
+	"Gli insegnanti non editori possono creare nuovi progetti";
 #elif L==8	// pl
-	"Edytowalne";
+	"Nauczyciele nieedytuj&aogon;cy mog&aogon; tworzy&cacute; nowe projekty";
 #elif L==9	// pt
-	"Edit&aacute;veis";
+	"Professores n&atilde;o editores podem criar novos projetos";
 #elif L==10	// tr
-	"D&uuml;zenlenebilir";
-#endif
-
-const char *Txt_Editable_by_non_editing_teachers =
-#if   L==1	// ca
-	"Editables per professors no editors";
-#elif L==2	// de
-	"Bearbeitbare von nicht bearbeitenden Lehrern";
-#elif L==3	// en
-	"Editable by non-editing teachers";
-#elif L==4	// es
-	"Editables por profesores no editores";
-#elif L==5	// fr
-	"&Eacute;ditables par des enseignants non-&eacute;diteurs";
-#elif L==6	// gn
-	"Omohendakuaa mbo'eh&aacute;ra ndaha'&eacute;iva edici&oacute;n";
-#elif L==7	// it
-	"Modificabili da professori non-editing";
-#elif L==8	// pl
-	"Edytowalne przez nauczycieli, kt&oacute;rzy nie dokonali edycji";
-#elif L==9	// pt
-	"Edit&aacute;veis por professores n&atilde;o editores";
-#elif L==10	// tr
-	"D&uuml;zenleme yapmayan &ouml;&gbreve;retmenler taraf&inodot;ndan d&uuml;zenlenebilir";
+	"Edit&ouml;r olmayan &ouml;&gbreve;retmenler yeni projeler olu&scedil;turabilir";
 #endif
 
 const char *Txt_eg_A_B =
@@ -21415,7 +21392,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Plugins"
 #elif L==6	// gn
-	"Complementos"	// Okoteve traducción
+	"Complementos"
 #elif L==7	// it
 	"Plugin"
 #elif L==8	// pl
@@ -32144,7 +32121,7 @@ const char *Txt_Plugins =
 #elif L==5	// fr
 	"Plugins";
 #elif L==6	// gn
-	"Complementos";	// Okoteve traducción
+	"Complementos";
 #elif L==7	// it
 	"Plugin";
 #elif L==8	// pl
@@ -32152,7 +32129,7 @@ const char *Txt_Plugins =
 #elif L==9	// pt
 	"Plugins";
 #elif L==10	// tr
-	"Plugins";	// Çeviri lazim!
+	"Eklentiler";
 #endif
 
 const char *Txt_Possibly_duplicate_users =

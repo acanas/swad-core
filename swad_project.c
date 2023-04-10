@@ -196,7 +196,7 @@ static Usr_Who_t Prj_GetParWho (void);
 
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
-static bool Prj_CheckIfICanCreateProjects (void);
+static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects);
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
@@ -318,29 +318,34 @@ long Prj_GetPrjCod (void)
   }
 
 /*****************************************************************************/
-/******************************* Reset projects ******************************/
+/*********** Reset projects and read configuration from database *************/
 /*****************************************************************************/
 
-void Prj_ResetProjects (struct Prj_Projects *Projects)
+void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects)
   {
-   Projects->Config.Editable = PrjCfg_EDITABLE_DEFAULT;
-   Projects->Filter.Who      = Prj_FILTER_WHO_DEFAULT;
-   Projects->Filter.Assign   = Prj_FILTER_ASSIGNED_DEFAULT |
-	                       Prj_FILTER_NONASSIG_DEFAULT;
-   Projects->Filter.Hidden   = Prj_FILTER_HIDDEN_DEFAULT |
-	                       Prj_FILTER_VISIBL_DEFAULT;
-   Projects->Filter.Faulti   = Prj_FILTER_FAULTY_DEFAULT |
-	                       Prj_FILTER_FAULTLESS_DEFAULT;
-   Projects->Filter.Review   = Prj_FILTER_UNREVIEWED_DEFAULT |
-                               Prj_FILTER_UNAPPROVED_DEFAULT |
-                               Prj_FILTER_APPROVED_DEFAULT;
-   Projects->Filter.DptCod   = Prj_FILTER_DPT_DEFAULT;
-   Projects->LstIsRead       = false;	// List is not read
-   Projects->Num             = 0;
-   Projects->LstPrjCods      = NULL;
-   Projects->SelectedOrder   = Prj_ORDER_DEFAULT;
-   Projects->CurrentPage     = 0;
-   Projects->Prj.PrjCod      = -1L;
+   /***** Filters *****/
+   Projects->Filter.Who    = Prj_FILTER_WHO_DEFAULT;
+   Projects->Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
+	                     Prj_FILTER_NONASSIG_DEFAULT;
+   Projects->Filter.Hidden = Prj_FILTER_HIDDEN_DEFAULT |
+	                     Prj_FILTER_VISIBL_DEFAULT;
+   Projects->Filter.Faulti = Prj_FILTER_FAULTY_DEFAULT |
+	                     Prj_FILTER_FAULTLESS_DEFAULT;
+   Projects->Filter.Review = Prj_FILTER_UNREVIEWED_DEFAULT |
+                             Prj_FILTER_UNAPPROVED_DEFAULT |
+                             Prj_FILTER_APPROVED_DEFAULT;
+   Projects->Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
+
+   /***** Project list *****/
+   Projects->LstIsRead     = false;	// List is not read
+   Projects->Num           = 0;
+   Projects->LstPrjCods    = NULL;
+   Projects->SelectedOrder = Prj_ORDER_DEFAULT;
+   Projects->CurrentPage   = 0;
+   Projects->Prj.PrjCod    = -1L;
+
+   /***** Read project configuration from database *****/
+   PrjCfg_GetConfig (Projects);
   }
 
 /*****************************************************************************/
@@ -352,7 +357,7 @@ void Prj_ListUsrsToSelect (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -386,7 +391,7 @@ void Prj_SeeProjects (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -440,7 +445,7 @@ void Prj_ShowTableSelectedPrjs (void)
    unsigned NumPrj;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -591,7 +596,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	    Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
 	 /***** Button to create a new project *****/
-	 if (Prj_CheckIfICanCreateProjects ())
+	 if (Prj_CheckIfICanCreateProjects ((struct Prj_Projects *) Projects))
 	    Prj_PutButtonToCreateNewPrj ((struct Prj_Projects *) Projects);
 
       /***** End box *****/
@@ -1211,23 +1216,18 @@ static void Prj_ShowTableAllProjectsHead (void)
 /********************** Check if I can create projects ***********************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanCreateProjects (void)
+static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects)
   {
-   static const bool ICanCreateProjects[Rol_NUM_ROLES] =
+   switch (Gbl.Usrs.Me.Role.Logged)
      {
-      [Rol_UNK    ] = false,
-      [Rol_GST    ] = false,
-      [Rol_USR    ] = false,
-      [Rol_STD    ] = false,
-      [Rol_NET    ] = true,
-      [Rol_TCH    ] = true,
-      [Rol_DEG_ADM] = true,
-      [Rol_CTR_ADM] = true,
-      [Rol_INS_ADM] = true,
-      [Rol_SYS_ADM] = true,
-     };
-
-   return ICanCreateProjects[Gbl.Usrs.Me.Role.Logged];
+      case Rol_NET:
+         return Projects->Config.NETCanCreate;
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -1243,7 +1243,7 @@ void Prj_PutIconsListProjects (void *Projects)
       ICanConfigAllProjects = PrjCfg_CheckIfICanConfig ();
 
       /***** Put icon to create a new project *****/
-      if (Prj_CheckIfICanCreateProjects ())
+      if (Prj_CheckIfICanCreateProjects ((struct Prj_Projects *) Projects))
 	 Prj_PutIconToCreateNewPrj ((struct Prj_Projects *) Projects);
 
       if (((struct Prj_Projects *) Projects)->Num)
@@ -1317,7 +1317,7 @@ void Prj_ShowOneProject (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -1406,7 +1406,7 @@ void Prj_PrintOneProject (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -2807,7 +2807,7 @@ void Prj_ReqAddStds (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_FormToSelectStds (&Projects);
   }
@@ -2817,7 +2817,7 @@ void Prj_ReqAddTuts (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_FormToSelectTuts (&Projects);
   }
@@ -2827,7 +2827,7 @@ void Prj_ReqAddEvls (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_FormToSelectEvls (&Projects);
   }
@@ -2938,7 +2938,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
    const char *Ptr;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -2988,7 +2988,7 @@ void Prj_ReqRemStd (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_ReqRemUsrFromPrj (&Projects,Prj_ROLE_STD);
   }
@@ -2998,7 +2998,7 @@ void Prj_ReqRemTut (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_ReqRemUsrFromPrj (&Projects,Prj_ROLE_TUT);
   }
@@ -3008,7 +3008,7 @@ void Prj_ReqRemEvl (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    Prj_ReqRemUsrFromPrj (&Projects,Prj_ROLE_EVL);
   }
@@ -3110,7 +3110,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -3494,7 +3494,7 @@ void Prj_ReqRemProject (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -3506,15 +3506,16 @@ void Prj_ReqRemProject (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-      /***** Show question and button to remove the project *****/
-      Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,
-                              Prj_PutCurrentPars,&Projects,
-			      Btn_REMOVE_BUTTON,Txt_Remove_project,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
-	                      Projects.Prj.Title);
-   else
+   /***** Check if I can edit this project *****/
+   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
       Err_NoPermissionExit ();
+
+   /***** Show question and button to remove the project *****/
+   Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,
+			   Prj_PutCurrentPars,&Projects,
+			   Btn_REMOVE_BUTTON,Txt_Remove_project,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
+			   Projects.Prj.Title);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -3534,7 +3535,7 @@ void Prj_RemoveProject (void)
    char PathRelPrj[PATH_MAX + 1];
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -3546,32 +3547,31 @@ void Prj_RemoveProject (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
 
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-     {
-      /***** Remove users in project *****/
-      Prj_DB_RemoveUsrsFromPrj (Projects.Prj.PrjCod);
-
-      /***** Flush cache *****/
-      Prj_FlushCacheMyRolesInProject ();
-
-      /***** Remove project *****/
-      Prj_DB_RemovePrj (Projects.Prj.PrjCod);
-
-      /***** Remove information related to files in project *****/
-      Brw_DB_RemovePrjFiles (Projects.Prj.PrjCod);
-
-      /***** Remove directory of the project *****/
-      snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%ld/%s/%02u/%ld",
-	        Cfg_PATH_CRS_PRIVATE,Projects.Prj.CrsCod,Cfg_FOLDER_PRJ,
-	        (unsigned) (Projects.Prj.PrjCod % 100),Projects.Prj.PrjCod);
-      Fil_RemoveTree (PathRelPrj);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_removed,
-	             Projects.Prj.Title);
-     }
-   else
+   /***** Check if I can edit this project *****/
+   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
       Err_NoPermissionExit ();
+
+   /***** Remove users in project *****/
+   Prj_DB_RemoveUsrsFromPrj (Projects.Prj.PrjCod);
+
+   /***** Flush cache *****/
+   Prj_FlushCacheMyRolesInProject ();
+
+   /***** Remove project *****/
+   Prj_DB_RemovePrj (Projects.Prj.PrjCod);
+
+   /***** Remove information related to files in project *****/
+   Brw_DB_RemovePrjFiles (Projects.Prj.PrjCod);
+
+   /***** Remove directory of the project *****/
+   snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%ld/%s/%02u/%ld",
+	     Cfg_PATH_CRS_PRIVATE,Projects.Prj.CrsCod,Cfg_FOLDER_PRJ,
+	     (unsigned) (Projects.Prj.PrjCod % 100),Projects.Prj.PrjCod);
+   Fil_RemoveTree (PathRelPrj);
+
+   /***** Write message to show the change made *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_removed,
+		  Projects.Prj.Title);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -3589,7 +3589,7 @@ void Prj_HideProject (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -3601,11 +3601,12 @@ void Prj_HideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   /***** Hide project *****/
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-      Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,true);
-   else
+   /***** Check if I can edit this project *****/
+   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
       Err_NoPermissionExit ();
+
+   /***** Hide project *****/
+   Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,true);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -3623,7 +3624,7 @@ void Prj_UnhideProject (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -3635,11 +3636,12 @@ void Prj_UnhideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   /***** Unhide project *****/
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-      Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,false);
-   else
+   /***** Check if I can edit this project *****/
+   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
       Err_NoPermissionExit ();
+
+   /***** Unhide project *****/
+   Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,false);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -3657,7 +3659,11 @@ void Prj_ReqCreatePrj (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can create new projects *****/
+   if (!Prj_CheckIfICanCreateProjects (&Projects))
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -3672,7 +3678,7 @@ void Prj_ReqEditPrj (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
@@ -4017,7 +4023,7 @@ void Prj_ReceiveFormProject (void)
    bool NewProjectIsCorrect = true;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -4031,7 +4037,7 @@ void Prj_ReceiveFormProject (void)
       /* Reset project data */
       Prj_ResetProject (&Projects.Prj);
 
-      ICanEditProject = true;
+      ICanEditProject = Prj_CheckIfICanCreateProjects (&Projects);
      }
    else
      {
@@ -4041,79 +4047,78 @@ void Prj_ReceiveFormProject (void)
       ICanEditProject = Prj_CheckIfICanEditProject (&Projects.Prj);
      }
 
-   if (ICanEditProject)
+   /* Check if I can create/edit project */
+   if (!ICanEditProject)
+      Err_NoPermissionExit ();
+
+   /* Get project title */
+   Par_GetParText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
+
+   /* Get department */
+   Projects.Prj.DptCod = ParCod_GetPar (ParCod_Dpt);
+
+   /* Get whether the project is assigned */
+   Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
+							   Prj_NONASSIG;
+
+   /* Get number of students */
+   Projects.Prj.NumStds = (unsigned)
+			  Par_GetParUnsignedLong ("NumStds",
+						  0,
+						  UINT_MAX,
+						  1);
+
+   /* Get status */
+   Projects.Prj.Proposal = (Prj_Proposal_t)
+			   Par_GetParUnsignedLong ("Proposal",
+						   0,
+						   Prj_NUM_PROPOSAL_TYPES - 1,
+						   (unsigned long) Prj_PROPOSAL_DEFAULT);
+
+   /* Get project description, required knowledge and required materials */
+   Par_GetParHTML ("Description",Projects.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Knowledge"  ,Projects.Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Par_GetParHTML ("Materials"  ,Projects.Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+   /* Get degree WWW */
+   Par_GetParText ("URL",Projects.Prj.URL,Cns_MAX_BYTES_WWW);
+
+   /***** Check if title is correct *****/
+   if (!Projects.Prj.Title[0])	// If there is not a project title
      {
-      /* Get project title */
-      Par_GetParText ("Title",Projects.Prj.Title,Prj_MAX_BYTES_TITLE);
+      NewProjectIsCorrect = false;
+      Ale_ShowAlertYouMustSpecifyTheTitle ();
+     }
 
-      /* Get department */
-      Projects.Prj.DptCod = ParCod_GetPar (ParCod_Dpt);
-
-      /* Get whether the project is assigned */
-      Projects.Prj.Assigned = (Par_GetParBool ("Assigned")) ? Prj_ASSIGNED :
-					 	              Prj_NONASSIG;
-
-      /* Get number of students */
-      Projects.Prj.NumStds = (unsigned)
-	                     Par_GetParUnsignedLong ("NumStds",
-	                                             0,
-	                                             UINT_MAX,
-	                                             1);
-
-      /* Get status */
-      Projects.Prj.Proposal = (Prj_Proposal_t)
-	                      Par_GetParUnsignedLong ("Proposal",
-						      0,
-						      Prj_NUM_PROPOSAL_TYPES - 1,
-						      (unsigned long) Prj_PROPOSAL_DEFAULT);
-
-      /* Get project description, required knowledge and required materials */
-      Par_GetParHTML ("Description",Projects.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-      Par_GetParHTML ("Knowledge"  ,Projects.Prj.Knowledge  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-      Par_GetParHTML ("Materials"  ,Projects.Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-      /* Get degree WWW */
-      Par_GetParText ("URL",Projects.Prj.URL,Cns_MAX_BYTES_WWW);
-
-      /***** Check if title is correct *****/
-      if (!Projects.Prj.Title[0])	// If there is not a project title
+   /***** Create a new project or update an existing one *****/
+   if (NewProjectIsCorrect)
+     {
+      if (ItsANewProject)
 	{
-	 NewProjectIsCorrect = false;
-         Ale_ShowAlertYouMustSpecifyTheTitle ();
-	}
+	 /* Create project */
+	 Prj_CreateProject (&Projects.Prj);	// Add new project to database
 
-      /***** Create a new project or update an existing one *****/
-      if (NewProjectIsCorrect)
+	 /* Write success message */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
+			Projects.Prj.Title);
+	}
+      else if (NewProjectIsCorrect)
 	{
-	 if (ItsANewProject)
-	   {
-	    /* Create project */
-	    Prj_CreateProject (&Projects.Prj);	// Add new project to database
+	 /* Update project */
+	 Prj_UpdateProject (&Projects.Prj);
 
-	    /* Write success message */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_project_X,
-		           Projects.Prj.Title);
-	   }
-	 else if (NewProjectIsCorrect)
-	   {
-	    /* Update project */
-	    Prj_UpdateProject (&Projects.Prj);
-
-	    /* Write success message */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
-	   }
+	 /* Write success message */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_project_has_been_modified);
 	}
-      else
-         Prj_PutFormProject (&Projects,ItsANewProject);
-
-      /***** Show again form to edit project *****/
-      Prj_ReqCreatOrEditPrj (&Projects);
      }
    else
-      Err_NoPermissionExit ();
+      Prj_PutFormProject (&Projects,ItsANewProject);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
+
+   /***** Show again form to edit project *****/
+   Prj_ReqCreatOrEditPrj (&Projects);
   }
 
 /*****************************************************************************/
@@ -4178,32 +4183,31 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
 
    /***** Show question and button to lock all selected projects *****/
-   if (PrjCfg_CheckIfICanConfig ())
-     {
-      /* Get list of projects */
-      Prj_GetListProjects (&Projects);
+   /* Get list of projects */
+   Prj_GetListProjects (&Projects);
 
-      /* Show question and button */
-      if (Projects.Num)
-	 Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
-	                         Prj_PutCurrentPars,&Projects,
-				 Btn_REMOVE_BUTTON,Txt_Lock_editing,
-				 Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
-				 Projects.Num);
-      else	// No projects found
-	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+   /* Show question and button */
+   if (Projects.Num)
+      Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,
+			      Prj_PutCurrentPars,&Projects,
+			      Btn_REMOVE_BUTTON,Txt_Lock_editing,
+			      Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
+			      Projects.Num);
+   else	// No projects found
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
-      /* Free list of projects */
-      Prj_FreeListProjects (&Projects);
-     }
-   else
-      Err_NoPermissionExit ();
+   /* Free list of projects */
+   Prj_FreeListProjects (&Projects);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4217,32 +4221,31 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
 
    /***** Show question and button to unlock all selected projects *****/
-   if (PrjCfg_CheckIfICanConfig ())
-     {
-      /* Get list of projects */
-      Prj_GetListProjects (&Projects);
+   /* Get list of projects */
+   Prj_GetListProjects (&Projects);
 
-      /* Show question and button */
-      if (Projects.Num)
-	 Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
-	                         Prj_PutCurrentPars,&Projects,
-				 Btn_CREATE_BUTTON,Txt_Unlock_editing,
-				 Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
-				 Projects.Num);
-      else	// No projects found
-	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+   /* Show question and button */
+   if (Projects.Num)
+      Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,
+			      Prj_PutCurrentPars,&Projects,
+			      Btn_CREATE_BUTTON,Txt_Unlock_editing,
+			      Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
+			      Projects.Num);
+   else	// No projects found
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
-      /* Free list of projects */
-      Prj_FreeListProjects (&Projects);
-     }
-   else
-      Err_NoPermissionExit ();
+   /* Free list of projects */
+   Prj_FreeListProjects (&Projects);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4259,31 +4262,30 @@ void Prj_LockSelectedPrjsEdition (void)
    unsigned NumPrj;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
 
    /***** Lock all selected projects *****/
-   if (PrjCfg_CheckIfICanConfig ())
-     {
-      /* Get list of projects */
-      Prj_GetListProjects (&Projects);
+   /* Get list of projects */
+   Prj_GetListProjects (&Projects);
 
-      /* Lock projects */
-      if (Projects.Num)
-	 for (NumPrj = 0;
-	      NumPrj < Projects.Num;
-	      NumPrj++)
-            Prj_DB_LockProjectEdition (Projects.LstPrjCods[NumPrj]);
-      else	// No projects found
-	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+   /* Lock projects */
+   if (Projects.Num)
+      for (NumPrj = 0;
+	   NumPrj < Projects.Num;
+	   NumPrj++)
+	 Prj_DB_LockProjectEdition (Projects.LstPrjCods[NumPrj]);
+   else	// No projects found
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
-      /* Free list of projects */
-      Prj_FreeListProjects (&Projects);
-     }
-   else
-      Err_NoPermissionExit ();
+   /* Free list of projects */
+   Prj_FreeListProjects (&Projects);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4296,31 +4298,30 @@ void Prj_UnloSelectedPrjsEdition (void)
    unsigned NumPrj;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);
 
    /***** Unlock all selected projects *****/
-   if (PrjCfg_CheckIfICanConfig ())
-     {
-      /* Get list of projects */
-      Prj_GetListProjects (&Projects);
+   /* Get list of projects */
+   Prj_GetListProjects (&Projects);
 
-      /* Unlock projects */
-      if (Projects.Num)
-	 for (NumPrj = 0;
-	      NumPrj < Projects.Num;
-	      NumPrj++)
-            Prj_DB_UnlockProjectEdition (Projects.LstPrjCods[NumPrj]);
-      else	// No projects found
-	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+   /* Unlock projects */
+   if (Projects.Num)
+      for (NumPrj = 0;
+	   NumPrj < Projects.Num;
+	   NumPrj++)
+	 Prj_DB_UnlockProjectEdition (Projects.LstPrjCods[NumPrj]);
+   else	// No projects found
+      Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
-      /* Free list of projects */
-      Prj_FreeListProjects (&Projects);
-     }
-   else
-      Err_NoPermissionExit ();
+   /* Free list of projects */
+   Prj_FreeListProjects (&Projects);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -4387,7 +4388,11 @@ void Prj_LockProjectEdition (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -4399,17 +4404,12 @@ void Prj_LockProjectEdition (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-     {
-      /***** Lock project edition *****/
-      Prj_DB_LockProjectEdition (Projects.Prj.PrjCod);
-      Projects.Prj.Locked = Prj_LOCKED;
+   /***** Lock project edition *****/
+   Prj_DB_LockProjectEdition (Projects.Prj.PrjCod);
+   Projects.Prj.Locked = Prj_LOCKED;
 
-      /***** Show updated form and icon *****/
-      Prj_FormLockUnlock (&Projects.Prj);
-     }
-   else
-      Err_NoPermissionExit ();
+   /***** Show updated form and icon *****/
+   Prj_FormLockUnlock (&Projects.Prj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -4424,7 +4424,11 @@ void Prj_UnloProjectEdition (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can configure projects *****/
+   if (!PrjCfg_CheckIfICanConfig ())
+      Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -4436,17 +4440,12 @@ void Prj_UnloProjectEdition (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   if (Prj_CheckIfICanEditProject (&Projects.Prj))
-     {
-      /***** Unlock project edition *****/
-      Prj_DB_UnlockProjectEdition (Projects.Prj.PrjCod);
-      Projects.Prj.Locked = Prj_UNLOCKED;
+   /***** Unlock project edition *****/
+   Prj_DB_UnlockProjectEdition (Projects.Prj.PrjCod);
+   Projects.Prj.Locked = Prj_UNLOCKED;
 
-      /***** Show updated form and icon *****/
-      Prj_FormLockUnlock (&Projects.Prj);
-     }
-   else
-      Err_NoPermissionExit ();
+   /***** Show updated form and icon *****/
+   Prj_FormLockUnlock (&Projects.Prj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);
@@ -4461,7 +4460,11 @@ void Prj_ChangeReviewStatus (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Check if I can review projects *****/
+   if (!Prj_CheckIfICanReviewProjects ())
+      Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Projects.Prj);
@@ -4473,15 +4476,10 @@ void Prj_ChangeReviewStatus (void)
    /***** Get data of the project from database *****/
    Prj_GetProjectDataByCod (&Projects.Prj);
 
-   /***** Hide project *****/
-   if (Prj_CheckIfICanReviewProjects ())
-     {
-      Projects.Prj.Review.Status = Prj_GetParReviewStatus ();
-      Par_GetParHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-      Prj_DB_UpdateReview (&Projects.Prj);
-     }
-   else
-      Err_NoPermissionExit ();
+   /***** Update review *****/
+   Projects.Prj.Review.Status = Prj_GetParReviewStatus ();
+   Par_GetParHTML ("ReviewTxt",Projects.Prj.Review.Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+   Prj_DB_UpdateReview (&Projects.Prj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

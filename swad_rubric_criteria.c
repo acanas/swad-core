@@ -331,10 +331,6 @@ void RubCri_ChangeTitle (void)
    struct RubCri_Criterion Criterion;
    char NewTitle[RubCri_MAX_BYTES_TITLE + 1];
 
-   /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
-      Err_NoPermissionExit ();
-
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_ResetRubric (&Rubrics.Rubric);
@@ -383,10 +379,6 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
    struct RubCri_Criterion Criterion;
    char ValueStr[64];
 
-   /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
-      Err_NoPermissionExit ();
-
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_ResetRubric (&Rubrics.Rubric);
@@ -426,10 +418,6 @@ void RubCri_ChangeWeight (void)
    struct Rub_Rubrics Rubrics;
    struct RubCri_Criterion Criterion;
    char WeightStr[64];
-
-   /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
-      Err_NoPermissionExit ();
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);

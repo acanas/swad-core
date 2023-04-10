@@ -2044,12 +2044,10 @@ static void Mch_ShowMatchStatusForTch (struct Mch_Match *Match)
 
 static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Update)
   {
-   bool ICanPlayThisMatchBasedOnGrps;
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Can I play this match? *****/
-   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match);
-   if (!ICanPlayThisMatchBasedOnGrps)
+   if (!Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match))
       Err_NoPermissionExit ();
 
    /***** Get student's answer to this question

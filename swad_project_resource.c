@@ -46,7 +46,7 @@ void PrjRsc_GetLinkToProject (void)
    char Title[Prj_MAX_BYTES_TITLE + 1];
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
    Prj_GetPars (&Projects);

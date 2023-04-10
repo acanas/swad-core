@@ -1580,30 +1580,27 @@ void Crs_RemoveCourse (void)
 
    /***** Get data of the course from database *****/
    Crs_GetCourseDataByCod (Crs_EditingCrs);
-
-   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
-     {
-      /***** Check if this course has users *****/
-      if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
-				1 << Rol_STD |
-				1 << Rol_NET |
-				1 << Rol_TCH))	// Course has users ==> don't remove
-         Ale_ShowAlert (Ale_WARNING,
-			Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
-      else					// Course has no users ==> remove it
-        {
-         /***** Remove course *****/
-         Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
-
-         /***** Write message to show the change made *****/
-         Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
-                        Crs_EditingCrs->FullName);
-
-         Crs_EditingCrs->CrsCod = -1L;	// To not showing button to go to course
-        }
-     }
-   else
+   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
+
+   /***** Check if this course has users *****/
+   if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
+			     1 << Rol_STD |
+			     1 << Rol_NET |
+			     1 << Rol_TCH))	// Course has users ==> don't remove
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
+   else					// Course has no users ==> remove it
+     {
+      /***** Remove course *****/
+      Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
+
+      /***** Write message to show the change made *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
+		     Crs_EditingCrs->FullName);
+
+      Crs_EditingCrs->CrsCod = -1L;	// To not showing button to go to course
+     }
   }
 
 /*****************************************************************************/
@@ -1822,25 +1819,22 @@ void Crs_ChangeInsCrsCod (void)
 
    /* Get data of the course */
    Crs_GetCourseDataByCod (Crs_EditingCrs);
-
-   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
-     {
-      /***** Change the institutional course code *****/
-      if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCrsCod))
-        {
-         Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
-         Ale_CreateAlert (Ale_SUCCESS,NULL,
-                          Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-                          Crs_EditingCrs->ShrtName,
-			  NewInstitutionalCrsCod);
-        }
-      else	// The same institutional code
-	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_institutional_code_of_the_course_X_has_not_changed,
-                          Crs_EditingCrs->ShrtName);
-     }
-   else
+   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
+
+   /***** Change the institutional course code *****/
+   if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCrsCod))
+     {
+      Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
+		       Crs_EditingCrs->ShrtName,
+		       NewInstitutionalCrsCod);
+     }
+   else	// The same institutional code
+      Ale_CreateAlert (Ale_INFO,NULL,
+		       Txt_The_institutional_code_of_the_course_X_has_not_changed,
+		       Crs_EditingCrs->ShrtName);
   }
 
 /*****************************************************************************/
@@ -1867,43 +1861,41 @@ void Crs_ChangeCrsYear (void)
    Par_GetParText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
+   /* Get data of the course */
    Crs_GetCourseDataByCod (Crs_EditingCrs);
-
-   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
-     {
-      if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
-        {
-         /***** If name of course was in database in the new year... *****/
-         if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-                                                     -1L,Crs_EditingCrs->DegCod,NewYear))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_course_X_already_exists_in_year_Y,
-                             Crs_EditingCrs->ShrtName,
-			     Txt_YEAR_OF_DEGREE[NewYear]);
-         else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-                                                          -1L,Crs_EditingCrs->DegCod,NewYear))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_course_X_already_exists_in_year_Y,
-                             Crs_EditingCrs->FullName,
-			     Txt_YEAR_OF_DEGREE[NewYear]);
-         else	// Update year in database
-           {
-            /***** Update year in table of courses *****/
-            Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
-
-            /***** Create message to show the change made *****/
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-		             Txt_The_year_of_the_course_X_has_changed,
-			     Crs_EditingCrs->ShrtName);
-           }
-        }
-      else	// Year not valid
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-		          Txt_The_year_X_is_not_allowed,
-			  NewYear);
-     }
-   else
+   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
+
+   if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
+     {
+      /***** If name of course was in database in the new year... *****/
+      if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
+						  -1L,Crs_EditingCrs->DegCod,NewYear))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_The_course_X_already_exists_in_year_Y,
+			  Crs_EditingCrs->ShrtName,
+			  Txt_YEAR_OF_DEGREE[NewYear]);
+      else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
+						       -1L,Crs_EditingCrs->DegCod,NewYear))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_The_course_X_already_exists_in_year_Y,
+			  Crs_EditingCrs->FullName,
+			  Txt_YEAR_OF_DEGREE[NewYear]);
+      else	// Update year in database
+	{
+	 /***** Update year in table of courses *****/
+	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
+
+	 /***** Create message to show the change made *****/
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+			  Txt_The_year_of_the_course_X_has_changed,
+			  Crs_EditingCrs->ShrtName);
+	}
+     }
+   else	// Year not valid
+      Ale_CreateAlert (Ale_WARNING,NULL,
+		       Txt_The_year_X_is_not_allowed,
+		       NewYear);
   }
 
 /*****************************************************************************/
@@ -1995,45 +1987,42 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 
    /***** Get from the database the data of the degree *****/
    Crs_GetCourseDataByCod (Crs);
+   if (!Crs_CheckIfICanEdit (Crs))
+      Err_NoPermissionExit ();
 
-   if (Crs_CheckIfICanEdit (Crs))
+   /***** Check if new name is empty *****/
+   if (NewCrsName[0])
      {
-      /***** Check if new name is empty *****/
-      if (NewCrsName[0])
-        {
-         /***** Check if old and new names are the same
-                (this happens when return is pressed without changes) *****/
-         if (strcmp (CurrentCrsName,NewCrsName))	// Different names
-           {
-            /***** If course was in database... *****/
-            if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->CrsCod,
-                                                        Crs->DegCod,Crs->Year))
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-		                Txt_The_course_X_already_exists,
-                                NewCrsName);
-            else
-              {
-               /* Update the table changing old name by new name */
-               Crs_DB_UpdateCrsName (Crs->CrsCod,FldName,NewCrsName);
+      /***** Check if old and new names are the same
+	     (this happens when return is pressed without changes) *****/
+      if (strcmp (CurrentCrsName,NewCrsName))	// Different names
+	{
+	 /***** If course was in database... *****/
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->CrsCod,
+						     Crs->DegCod,Crs->Year))
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_course_X_already_exists,
+			     NewCrsName);
+	 else
+	   {
+	    /* Update the table changing old name by new name */
+	    Crs_DB_UpdateCrsName (Crs->CrsCod,FldName,NewCrsName);
 
-               /* Create alert to show the change made */
-	       Ale_CreateAlert (Ale_SUCCESS,NULL,
-		                Txt_The_course_X_has_been_renamed_as_Y,
-				CurrentCrsName,NewCrsName);
+	    /* Create alert to show the change made */
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_The_course_X_has_been_renamed_as_Y,
+			     CurrentCrsName,NewCrsName);
 
-               /* Change current course name in order to display it properly */
-               Str_Copy (CurrentCrsName,NewCrsName,MaxBytes);
-              }
-           }
-         else	// The same name
-	    Ale_CreateAlert (Ale_INFO,NULL,
-		             Txt_The_name_X_has_not_changed,CurrentCrsName);
-        }
-      else
-         Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
+	    /* Change current course name in order to display it properly */
+	    Str_Copy (CurrentCrsName,NewCrsName,MaxBytes);
+	   }
+	}
+      else	// The same name
+	 Ale_CreateAlert (Ale_INFO,NULL,
+			  Txt_The_name_X_has_not_changed,CurrentCrsName);
      }
    else
-      Err_NoPermissionExit ();
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
   }
 
 /*****************************************************************************/

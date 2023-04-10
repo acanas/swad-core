@@ -47,12 +47,29 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrjCfg_ShowFormConfigEditableByNET (const struct Prj_Projects *Projects);
+static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects);
 
-static void PrjCfg_GetCrsPrjsConfig (struct Prj_Projects *Projects);
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct Prj_Projects *Projects);
-static bool PrjCfg_GetEditableFromForm (void);
+static bool PrjCfg_GetIfNETCanCreateFromForm (void);
+
+/*****************************************************************************/
+/************** Get configuration of projects for current course *************/
+/*****************************************************************************/
+
+void PrjCfg_GetConfig (struct Prj_Projects *Projects)
+  {
+   MYSQL_RES *mysql_res;
+
+   /***** Get configuration of projects for current course from database *****/
+   if (Prj_DB_GetConfig (&mysql_res))
+      PrjCfg_GetConfigDataFromRow (mysql_res,Projects);
+   else
+      Projects->Config.NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
 
 /*****************************************************************************/
 /************************ Can I configure all projects? **********************/
@@ -81,10 +98,7 @@ void PrjCfg_ShowFormConfig (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
-
-   /***** Read projects configuration from database *****/
-   PrjCfg_GetCrsPrjsConfig (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_projects,
@@ -97,7 +111,7 @@ void PrjCfg_ShowFormConfig (void)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Projects are editable by non-editing teachers? *****/
-	    PrjCfg_ShowFormConfigEditableByNET (&Projects);
+	    PrjCfg_ShowFormNETCanCreate (&Projects);
 
 	 HTM_TABLE_End ();
 
@@ -112,47 +126,35 @@ void PrjCfg_ShowFormConfig (void)
   }
 
 /*****************************************************************************/
-/************** Projects are editable by non-editing teachers? ***************/
+/*************** Cam non-editing teachers create new projects? ***************/
 /*****************************************************************************/
 
-static void PrjCfg_ShowFormConfigEditableByNET (const struct Prj_Projects *Projects)
+static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
   {
-   extern const char *Txt_Editable;
-   extern const char *Txt_Editable_by_non_editing_teachers;
+   extern const char *Txt_Create_project;
+   extern const char *Txt_Non_editing_teachers_can_create_new_projects;
 
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      Frm_LabelColumn ("RT","Editable",Txt_Editable);
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+		    The_GetSuffix ());
+	 HTM_TxtColon (Txt_Create_project);
+      HTM_TD_End ();
 
       /***** Data *****/
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Editable\" value=\"Y\"%s",
-			     Projects->Config.Editable ? " checked=\"checked\"" :
-							 "");
-	 HTM_Txt (Txt_Editable_by_non_editing_teachers);
+	 HTM_LABEL_Begin ("class=\"DAT_%s\"",
+			  The_GetSuffix ());
+	    HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"NETCanCreate\" value=\"Y\"%s",
+				Projects->Config.NETCanCreate ? " checked=\"checked\"" :
+								"");
+	    HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
+	 HTM_LABEL_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Get configuration of projects for current course *************/
-/*****************************************************************************/
-
-static void PrjCfg_GetCrsPrjsConfig (struct Prj_Projects *Projects)
-  {
-   MYSQL_RES *mysql_res;
-
-   /***** Get configuration of projects for current course from database *****/
-   if (Prj_DB_GetCrsPrjsConfig (&mysql_res))
-      PrjCfg_GetConfigDataFromRow (mysql_res,Projects);
-   else
-      Projects->Config.Editable = PrjCfg_EDITABLE_DEFAULT;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -167,8 +169,8 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get whether project are visible via plugins or not *****/
-   Projects->Config.Editable = (row[0][0] == 'Y');
+   /***** Get whether non-editing teachers can create new projects or not *****/
+   Projects->Config.NETCanCreate = (row[0][0] == 'Y');
   }
 
 /*****************************************************************************/
@@ -181,13 +183,13 @@ void PrjCfg_ReceiveConfig (void)
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
-   Prj_ResetProjects (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Projects);
 
-   /***** Get whether projects are editable by non-editing teachers or not *****/
-   Projects.Config.Editable = PrjCfg_GetEditableFromForm ();
+   /***** Get non-editing teachers can create new projects or not *****/
+   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
 
    /***** Update database *****/
-   Prj_DB_UpdateCrsPrjsConfig (Projects.Config.Editable);
+   Prj_DB_UpdateCrsPrjsConfig (Projects.Config.NETCanCreate);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
@@ -197,10 +199,10 @@ void PrjCfg_ReceiveConfig (void)
   }
 
 /*****************************************************************************/
-/****** Get if projects are editable by non-editing teachers from form *******/
+/****** Get if projects are creatable by non-editing teachers from form *******/
 /*****************************************************************************/
 
-static bool PrjCfg_GetEditableFromForm (void)
+static bool PrjCfg_GetIfNETCanCreateFromForm (void)
   {
-   return Par_GetParBool ("Editable");
+   return Par_GetParBool ("NETCanCreate");
   }

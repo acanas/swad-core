@@ -8293,93 +8293,90 @@ void Brw_ChgFileMetadata (void)
      {
       /***** Check if I can change file metadata *****/
       IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-      if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
-	{
-	 /* Check if the file was public before the edition */
-	 PublicFileBeforeEdition = FileMetadata.IsPublic;
+      if (!Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
+	 Err_NoPermissionExit ();
 
-	 /***** Get the new file privacy and license from form *****/
+      /***** Check if the file was public before the edition *****/
+      PublicFileBeforeEdition = FileMetadata.IsPublic;
+
+      /***** Get the new file privacy and license from form *****/
+      switch (Gbl.FileBrowser.Type)
+	{
+	 case Brw_ADMI_DOC_INS:
+	 case Brw_ADMI_SHR_INS:
+	 case Brw_ADMI_DOC_CTR:
+	 case Brw_ADMI_SHR_CTR:
+	 case Brw_ADMI_DOC_DEG:
+	 case Brw_ADMI_SHR_DEG:
+	 case Brw_ADMI_DOC_CRS:
+	 case Brw_ADMI_SHR_CRS:
+	    PublicFileAfterEdition = Brw_GetParPublicFile ();
+	    License = Brw_GetParLicense ();
+	    break;
+	 case Brw_ADMI_DOC_GRP:
+	 case Brw_ADMI_TCH_CRS:
+	 case Brw_ADMI_TCH_GRP:
+	 case Brw_ADMI_SHR_GRP:
+	 case Brw_ADMI_ASG_USR:
+	 case Brw_ADMI_ASG_CRS:
+	 case Brw_ADMI_WRK_USR:
+	 case Brw_ADMI_WRK_CRS:
+	 case Brw_ADMI_DOC_PRJ:
+	 case Brw_ADMI_ASS_PRJ:
+	 case Brw_ADMI_BRF_USR:
+	    PublicFileAfterEdition = false;	// Files in these zones can not be public
+	    License = Brw_GetParLicense ();
+	    break;
+	 default:
+	    PublicFileAfterEdition = false;	// Files in other zones can not be public
+	    License = Brw_LICENSE_DEFAULT;
+	    break;
+	}
+
+      /***** Change file metadata *****/
+      Brw_DB_ChangeFilePublic (&FileMetadata,PublicFileAfterEdition,License);
+
+      /***** Remove the affected clipboards *****/
+      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
+
+      /***** Insert file into public social activity *****/
+      if (!PublicFileBeforeEdition &&
+	   PublicFileAfterEdition)	// Only if file has changed from private to public
 	 switch (Gbl.FileBrowser.Type)
 	   {
 	    case Brw_ADMI_DOC_INS:
-	    case Brw_ADMI_SHR_INS:
-	    case Brw_ADMI_DOC_CTR:
-	    case Brw_ADMI_SHR_CTR:
-	    case Brw_ADMI_DOC_DEG:
-	    case Brw_ADMI_SHR_DEG:
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_SHR_CRS:
-	       PublicFileAfterEdition = Brw_GetParPublicFile ();
-	       License = Brw_GetParLicense ();
+	       TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 	       break;
-	    case Brw_ADMI_DOC_GRP:
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_TCH_GRP:
-	    case Brw_ADMI_SHR_GRP:
-	    case Brw_ADMI_ASG_USR:
-	    case Brw_ADMI_ASG_CRS:
-	    case Brw_ADMI_WRK_USR:
-	    case Brw_ADMI_WRK_CRS:
-	    case Brw_ADMI_DOC_PRJ:
-	    case Brw_ADMI_ASS_PRJ:
-	    case Brw_ADMI_BRF_USR:
-	       PublicFileAfterEdition = false;	// Files in these zones can not be public
-	       License = Brw_GetParLicense ();
+	    case Brw_ADMI_SHR_INS:
+	       TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOC_CTR:
+	       TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHR_CTR:
+	       TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOC_DEG:
+	       TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHR_DEG:
+	       TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_DOC_CRS:
+	       TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+	       break;
+	    case Brw_ADMI_SHR_CRS:
+	       TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 	       break;
 	    default:
-	       PublicFileAfterEdition = false;	// Files in other zones can not be public
-	       License = Brw_LICENSE_DEFAULT;
 	       break;
 	   }
 
-	 /***** Change file metadata *****/
-	 Brw_DB_ChangeFilePublic (&FileMetadata,PublicFileAfterEdition,License);
-
-	 /***** Remove the affected clipboards *****/
-	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				          Gbl.Usrs.Me.UsrDat.UsrCod,
-				          Gbl.Usrs.Other.UsrDat.UsrCod);
-
-	 /***** Insert file into public social activity *****/
-	 if (!PublicFileBeforeEdition &&
-	      PublicFileAfterEdition)	// Only if file has changed from private to public
-	    switch (Gbl.FileBrowser.Type)
-	      {
-	       case Brw_ADMI_DOC_INS:
-		  TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_SHR_INS:
-		  TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_DOC_CTR:
-		  TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_SHR_CTR:
-		  TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_DOC_DEG:
-		  TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_SHR_DEG:
-		  TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_DOC_CRS:
-		  TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       case Brw_ADMI_SHR_CRS:
-		  TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
-		  break;
-	       default:
-		  break;
-	      }
-
-	 /***** Write sucess message *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
-			FileMetadata.FilFolLnk.Name);
-	}
-      else
-	 /***** Write error message and exit *****/
-	 Err_NoPermissionExit ();
+      /***** Write sucess message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
+		     FileMetadata.FilFolLnk.Name);
      }
 
    /***** Show again the file browser *****/

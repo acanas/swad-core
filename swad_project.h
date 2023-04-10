@@ -37,7 +37,7 @@
 /*****************************************************************************/
 
 /***** Configuration *****/
-#define PrjCfg_EDITABLE_DEFAULT true
+#define PrjCfg_NET_CAN_CREATE_DEFAULT true
 
 /***** Filters to list projects *****/
 /* Whose projects */
@@ -187,7 +187,7 @@ struct Prj_Projects
    Prj_ProjectView_t View;
    struct
      {
-      bool Editable;
+      bool NETCanCreate;
      } Config;
    struct Prj_Filter Filter;
    bool LstIsRead;		// Is the list already read from database, or it needs to be read?
@@ -206,7 +206,7 @@ struct Prj_Projects
 void Prj_SetPrjCod (long PrjCod);
 long Prj_GetPrjCod (void);
 
-void Prj_ResetProjects (struct Prj_Projects *Projects);
+void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects);
 
 void Prj_ListUsrsToSelect (void);
 void Prj_SeeProjects (void);
@@ -264,8 +264,6 @@ void Prj_UnhideProject (void);
 
 void Prj_ReceiveFormProject (void);
 
-void PrjCfg_ShowFormConfig (void);
-void PrjCfg_ReceiveConfig (void);
 void Prj_ReqLockSelectedPrjsEdition (void);
 void Prj_ReqUnloSelectedPrjsEdition (void);
 void Prj_LockSelectedPrjsEdition (void);

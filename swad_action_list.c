@@ -94,6 +94,7 @@
 #include "swad_program.h"
 #include "swad_program_resource.h"
 #include "swad_project.h"
+#include "swad_project_config.h"
 #include "swad_project_resource.h"
 #include "swad_question_import.h"
 #include "swad_QR.h"

@@ -551,10 +551,10 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 /************** Get configuration of projects for current course *************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetCrsPrjsConfig (MYSQL_RES **mysql_res)
+unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get configuration of test",
+   DB_QuerySELECT (mysql_res,"can not get project configuration",
 		   "SELECT Editable"		// row[0]
 		    " FROM prj_config"
 		   " WHERE CrsCod=%ld",

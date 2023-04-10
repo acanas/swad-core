@@ -1590,39 +1590,37 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// I am a student
-	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-	   {
-	    switch (TypeOfView)
-	      {
-	       case Rec_CRS_LIST_ONE_RECORD:
-	       case Rec_CRS_LIST_SEVERAL_RECORDS:
-		  // When listing records, I can see only my record as student
-		  TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
-		  break;
-	       case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
-	       case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
-	       case Rec_CRS_PRINT_ONE_RECORD:
-	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
-		  break;
-	       default:
-		  Err_NoPermissionExit ();
-		  break;
-	      }
-
-	    if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM)
-	       /* Check if I can edit any of the record fields */
-	       for (NumField = 0;
-		    NumField < Gbl.Crs.Records.LstFields.Num;
-		    NumField++)
-		  if (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
-		    {
-		     ICanEdit = true;
-		     Frm_BeginForm (ActRcvRecCrs);
-		     break;
-		    }
-	   }
-	 else	// Not me ==> I am a student trying to do something forbidden
+	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)	// Not me ==> I am a student trying to do something forbidden
 	    Err_NoPermissionExit ();
+
+	 switch (TypeOfView)
+	   {
+	    case Rec_CRS_LIST_ONE_RECORD:
+	    case Rec_CRS_LIST_SEVERAL_RECORDS:
+	       // When listing records, I can see only my record as student
+	       TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
+	       break;
+	    case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
+	    case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
+	    case Rec_CRS_PRINT_ONE_RECORD:
+	    case Rec_CRS_PRINT_SEVERAL_RECORDS:
+	       break;
+	    default:
+	       Err_NoPermissionExit ();
+	       break;
+	   }
+
+	 if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM)
+	    /* Check if I can edit any of the record fields */
+	    for (NumField = 0;
+		 NumField < Gbl.Crs.Records.LstFields.Num;
+		 NumField++)
+	       if (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
+		 {
+		  ICanEdit = true;
+		  Frm_BeginForm (ActRcvRecCrs);
+		  break;
+		 }
 	 break;
       case Rol_NET:
 	 break;

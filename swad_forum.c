@@ -3085,30 +3085,29 @@ void For_RemoveThread (void)
    /***** Get parameters related to forum *****/
    For_GetParsForums (&Forums);
 
-   if (PermissionThreadDeletion[Forums.Forum.Type] &
-       (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
+   /***** Check if I have permission to remove thread in this forum *****/
+   if (!(PermissionThreadDeletion[Forums.Forum.Type] &
+         (1 << Gbl.Usrs.Me.Role.Logged)))
+      Err_NoPermissionExit ();
+
+   /***** Get subject of thread to delete *****/
+   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
+
+   /***** Remove the thread and all its posts *****/
+   For_RemoveThreadAndItsPsts (Forums.Thread.Current);
+
+   /***** Show forum list again *****/
+   For_ShowForumList (&Forums);
+
+   /***** Show the threads again *****/
+   if (Subject[0])
      {
-      /***** Get subject of thread to delete *****/
-      For_DB_GetThrSubject (Forums.Thread.Current,Subject);
-
-      /***** Remove the thread and all its posts *****/
-      For_RemoveThreadAndItsPsts (Forums.Thread.Current);
-
-      /***** Show forum list again *****/
-      For_ShowForumList (&Forums);
-
-      /***** Show the threads again *****/
-      if (Subject[0])
-      	{
-         snprintf (Message,sizeof (Message),
-	           Txt_Thread_X_removed,Subject);
-         For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
-      	}
-      else
-	 For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_Thread_removed);
+      snprintf (Message,sizeof (Message),
+		Txt_Thread_X_removed,Subject);
+      For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Message);
      }
    else
-      Err_NoPermissionExit ();
+      For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,Txt_Thread_removed);
   }
 
 /*****************************************************************************/

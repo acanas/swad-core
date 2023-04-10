@@ -32,14 +32,15 @@
 /*****************************************************************************/
 
 /***** Configuration *****/
-#define PrjCfg_EDITABLE_DEFAULT true
+#define PrjCfg_NET_CAN_CREATE_DEFAULT true
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool PrjCfg_CheckIfICanConfig (void);
+void PrjCfg_GetConfig (struct Prj_Projects *Projects);
 
+bool PrjCfg_CheckIfICanConfig (void);
 void PrjCfg_ShowFormConfig (void);
 void PrjCfg_ReceiveConfig (void);
 

@@ -1410,41 +1410,37 @@ void Gam_ReceiveFormGame (void)
    /***** Get parameters *****/
    ItsANewGame = ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0);
 
-   /***** If I can edit games ==> receive game from form *****/
-   if (Gam_CheckIfICanEditGames ())
+   /***** Receive game from form *****/
+   Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
+   if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
      {
-      Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
-      if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
-	{
-         /***** Create a new game or update an existing one *****/
-	 if (ItsANewGame)
-	    Gam_CreateGame (&Games.Game,Txt);	// Add new game to database
-	 else
-	    Gam_UpdateGame (&Games.Game,Txt);	// Update game data in database
-
-         /***** Put forms to edit the game created or updated *****/
-         Gam_PutFormsEditionGame (&Games,Txt,
-                                  false);	// No new game
-
-         /***** Show questions of the game ready to be edited ******/
-         Gam_ListGameQuestions (&Games);
-	}
+      /***** Create a new game or update an existing one *****/
+      if (ItsANewGame)
+	 Gam_CreateGame (&Games.Game,Txt);	// Add new game to database
       else
-	{
-         /***** Put forms to create/edit the game *****/
-         Gam_PutFormsEditionGame (&Games,Txt,ItsANewGame);
+	 Gam_UpdateGame (&Games.Game,Txt);	// Update game data in database
 
-         /***** Show games or questions *****/
-         if (ItsANewGame)
-            /* Show games again */
-            Gam_ListAllGames (&Games);
-         else
-            /* Show questions of the game ready to be edited */
-            Gam_ListGameQuestions (&Games);
-	}
+      /***** Put forms to edit the game created or updated *****/
+      Gam_PutFormsEditionGame (&Games,Txt,
+			       false);	// No new game
+
+      /***** Show questions of the game ready to be edited ******/
+      Gam_ListGameQuestions (&Games);
      }
    else
-      Err_NoPermissionExit ();
+     {
+      /***** Put forms to create/edit the game *****/
+      Gam_PutFormsEditionGame (&Games,Txt,ItsANewGame);
+
+      /***** Show games or questions *****/
+      if (ItsANewGame)
+	 /* Show games again */
+	 Gam_ListAllGames (&Games);
+      else
+	 /* Show questions of the game ready to be edited */
+	 Gam_ListGameQuestions (&Games);
+     }
+
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
