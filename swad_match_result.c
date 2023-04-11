@@ -100,10 +100,10 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
                                              double TotalScore,
 					     double TotalGrade);
 
-static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
-                                              const struct Mch_Match *Match,
-                                              long UsrCod,
-                                              struct MchRes_ICanView *ICanView);
+static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
+                                               const struct Mch_Match *Match,
+                                               long UsrCod,
+                                               struct MchRes_ICanView *ICanView);
 
 /*****************************************************************************/
 /*************************** Show my matches results *************************/
@@ -764,7 +764,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 Gam_GetGameDataByCod (&Games->Game);
 
 	 /* Check if I can view this match result and score */
-	 MchRes_CheckIfICanSeeMatchResult (&Games->Game,&Match,UsrDat->UsrCod,&ICanView);
+	 MchRes_CheckIfICanViewMatchResult (&Games->Game,&Match,UsrDat->UsrCod,&ICanView);
 
 	 if (NumResult)
 	    HTM_TR_Begin (NULL);
@@ -1103,7 +1103,7 @@ void MchRes_ShowOneMchResult (void)
    MchPrn_GetMatchPrintDataByMchCodAndUsrCod (&Print);
 
    /***** Check if I can view this match result and score *****/
-   MchRes_CheckIfICanSeeMatchResult (&Games.Game,&Match,UsrDat->UsrCod,&ICanView);
+   MchRes_CheckIfICanViewMatchResult (&Games.Game,&Match,UsrDat->UsrCod,&ICanView);
    if (!ICanView.Result)
       Err_NoPermissionExit ();
 
@@ -1288,13 +1288,13 @@ void MchRes_ShowOneMchResult (void)
   }
 
 /*****************************************************************************/
-/********************** Get if I can see match result ************************/
+/********************** Get if I can view match result ***********************/
 /*****************************************************************************/
 
-static void MchRes_CheckIfICanSeeMatchResult (const struct Gam_Game *Game,
-                                              const struct Mch_Match *Match,
-                                              long UsrCod,
-                                              struct MchRes_ICanView *ICanView)
+static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
+                                               const struct Mch_Match *Match,
+                                               long UsrCod,
+                                               struct MchRes_ICanView *ICanView)
   {
    /***** Check if I can view print result and score *****/
    switch (Gbl.Usrs.Me.Role.Logged)

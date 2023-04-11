@@ -46,12 +46,14 @@ void Rub_ResetRubric (struct Rub_Rubric *Rubric);
 void Rub_SeeAllRubrics (void);
 void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics);
 bool Rub_CheckIfICanEditRubrics (void);
-bool Rub_CheckIfEditable (const struct Rub_Rubric *Rubric);
+bool Rub_CheckIfEditable (void);
 void Rub_SeeOneRubric (void);
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics,
-			    bool ListRubricDims);
+                            const struct Rub_Rubric *Rubric,
+			    bool ListRubricCriteria);
 void Rub_ShowOnlyOneRubricBegin (struct Rub_Rubrics *Rubrics,
-			         bool ListRubricDims);
+                                 const struct Rub_Rubric *Rubric,
+			         bool ListRubricCriteria);
 void Rub_ShowOnlyOneRubricEnd (void);
 
 void Rub_SetCurrentRubCod (long GamCod);
@@ -71,9 +73,11 @@ void Rub_ListRubric (void);
 
 void Rub_ReqCreatOrEditRubric (void);
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
+                            struct Rub_Rubric *Rubric,
 			    struct RubCri_Criterion *Criterion,
 			    Rub_ExistingNewRubric_t ExistingNewRubric);
 void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
+                               struct Rub_Rubric *Rubric,
 			       char Txt[Cns_MAX_BYTES_TEXT + 1],
 			       Rub_ExistingNewRubric_t ExistingNewRubric);
 

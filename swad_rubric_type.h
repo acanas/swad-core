@@ -50,7 +50,6 @@ struct Rub_Rubric
    long CrsCod;			// Course code
    long UsrCod;			// Author code
    char Title[Rub_MAX_BYTES_TITLE + 1];
-   unsigned NumCriteria;	// Number of criteria in the rubric
   };
 
 struct Rub_Rubrics
@@ -58,12 +57,11 @@ struct Rub_Rubrics
    bool LstIsRead;		// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Total number of rubrics
-   long *Lst;			// List of rubric codes
+   struct Rub_Rubric *Lst;	// List of rubrics
    unsigned CurrentPage;
-   struct Rub_Rubric Rubric;	// Selected/current rubric
+   long RubCod;			// Selected/current rubric code
    long CriCod;			// Selected/current criterion code
    unsigned CriInd;		// Current citerion index
-   long QstCod;			// Current question code
   };
 
 typedef enum

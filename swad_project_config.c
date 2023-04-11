@@ -36,6 +36,7 @@
 #include "swad_project.h"
 #include "swad_project_config.h"
 #include "swad_project_database.h"
+#include "swad_rubric.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -48,6 +49,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects);
+static void PrjCfg_ShowFormRubrics (void);
 
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct Prj_Projects *Projects);
@@ -113,6 +115,9 @@ void PrjCfg_ShowFormConfig (void)
 	    /***** Projects are editable by non-editing teachers? *****/
 	    PrjCfg_ShowFormNETCanCreate (&Projects);
 
+	    /***** Rubrics *****/
+	    PrjCfg_ShowFormRubrics ();
+
 	 HTM_TABLE_End ();
 
 	 /***** Send button *****/
@@ -126,7 +131,7 @@ void PrjCfg_ShowFormConfig (void)
   }
 
 /*****************************************************************************/
-/*************** Cam non-editing teachers create new projects? ***************/
+/****** Show form to edit if non-editing teachers create new projects ********/
 /*****************************************************************************/
 
 static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
@@ -155,6 +160,102 @@ static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
       HTM_TD_End ();
 
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************ Show form to edit rubrics associated to projects ***************/
+/*****************************************************************************/
+
+static void PrjCfg_ShowFormRubrics (void)
+  {
+   struct Rub_Rubrics Rubrics;
+   unsigned NumRub;
+   struct
+     {
+      struct Rub_Rubric Tutors;
+      struct Rub_Rubric Evaluators;
+      struct Rub_Rubric Global;
+     } PrjRubrics = {};
+
+   /***** Reset rubrics context *****/
+   Rub_ResetRubrics (&Rubrics);
+
+   /***** Get list of rubrics *****/
+   Rub_GetListRubrics (&Rubrics);
+
+   /***** Rubric for tutors *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+		    The_GetSuffix ());
+	 HTM_TxtColon ("R&uacute;brica para tutores");
+      HTM_TD_End ();
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"rub_tut\" name=\"rub_tut\" class=\"LICENSE\"");
+	    for (NumRub = 0;
+		 NumRub < Rubrics.Num;
+		 NumRub++)
+	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
+			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
+			   "%s",Rubrics.Lst[NumRub].Title);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Rubric for evaluators *****/
+   HTM_TR_Begin (NULL);
+      /* Label */
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+		    The_GetSuffix ());
+	 HTM_TxtColon ("R&uacute;brica para evaluadores");
+      HTM_TD_End ();
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"rub_eva\" name=\"rub_eva\" class=\"LICENSE\"");
+	    for (NumRub = 0;
+		 NumRub < Rubrics.Num;
+		 NumRub++)
+	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
+			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
+			   "%s",Rubrics.Lst[NumRub].Title);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Rubric global *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+		    The_GetSuffix ());
+	 HTM_TxtColon ("R&uacute;brica global");
+      HTM_TD_End ();
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"rub_gbl\" name=\"rub_gbl\" class=\"LICENSE\"");
+	    for (NumRub = 0;
+		 NumRub < Rubrics.Num;
+		 NumRub++)
+	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
+			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
+			   "%s",Rubrics.Lst[NumRub].Title);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Free list of rubrics *****/
+   Rub_FreeListRubrics (&Rubrics);
   }
 
 /*****************************************************************************/

@@ -98,7 +98,10 @@ unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get rubrics",
-		   "SELECT RubCod"			// row[0]
+		   "SELECT RubCod,"		// row[0]
+			  "CrsCod,"		// row[1]
+			  "UsrCod,"		// row[2]
+			  "Title"		// row[3]
 		    " FROM rub_rubrics"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY Title",
