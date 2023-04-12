@@ -39,10 +39,27 @@
 #include "swad_rubric.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static const char *PrjCfg_RubricIDs[PrjCfg_NUM_RUBRICS] =
+  {
+   [PrjCfg_RUBRIC_TUT] = "rub_tut",
+   [PrjCfg_RUBRIC_EVL] = "rub_evl",
+   [PrjCfg_RUBRIC_GBL] = "rub_gbl",
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
 extern struct Globals Gbl;
+
+/*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct Rub_Rubric PrjCfg_Rubrics[PrjCfg_NUM_RUBRICS];
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -50,6 +67,8 @@ extern struct Globals Gbl;
 
 static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects);
 static void PrjCfg_ShowFormRubrics (void);
+static void PrjCfg_ShowFormRubric (struct Rub_Rubrics *Rubrics,
+                                   PrjCfg_Rubric_t WhichRubric);
 
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct Prj_Projects *Projects);
@@ -142,13 +161,13 @@ static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
+      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
 		    The_GetSuffix ());
 	 HTM_TxtColon (Txt_Create_project);
       HTM_TD_End ();
 
       /***** Data *****/
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"LM\"");
 	 HTM_LABEL_Begin ("class=\"DAT_%s\"",
 			  The_GetSuffix ());
 	    HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
@@ -169,13 +188,7 @@ static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
 static void PrjCfg_ShowFormRubrics (void)
   {
    struct Rub_Rubrics Rubrics;
-   unsigned NumRub;
-   struct
-     {
-      struct Rub_Rubric Tutors;
-      struct Rub_Rubric Evaluators;
-      struct Rub_Rubric Global;
-     } PrjRubrics = {};
+   PrjCfg_Rubric_t WhichRubric;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
@@ -183,79 +196,51 @@ static void PrjCfg_ShowFormRubrics (void)
    /***** Get list of rubrics *****/
    Rub_GetListRubrics (&Rubrics);
 
-   /***** Rubric for tutors *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-		    The_GetSuffix ());
-	 HTM_TxtColon ("R&uacute;brica para tutores");
-      HTM_TD_End ();
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"rub_tut\" name=\"rub_tut\" class=\"LICENSE\"");
-	    for (NumRub = 0;
-		 NumRub < Rubrics.Num;
-		 NumRub++)
-	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
-			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
-			   "%s",Rubrics.Lst[NumRub].Title);
-	 HTM_SELECT_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Rubric for evaluators *****/
-   HTM_TR_Begin (NULL);
-      /* Label */
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-		    The_GetSuffix ());
-	 HTM_TxtColon ("R&uacute;brica para evaluadores");
-      HTM_TD_End ();
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"rub_eva\" name=\"rub_eva\" class=\"LICENSE\"");
-	    for (NumRub = 0;
-		 NumRub < Rubrics.Num;
-		 NumRub++)
-	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
-			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
-			   "%s",Rubrics.Lst[NumRub].Title);
-	 HTM_SELECT_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Rubric global *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-		    The_GetSuffix ());
-	 HTM_TxtColon ("R&uacute;brica global");
-      HTM_TD_End ();
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"rub_gbl\" name=\"rub_gbl\" class=\"LICENSE\"");
-	    for (NumRub = 0;
-		 NumRub < Rubrics.Num;
-		 NumRub++)
-	       HTM_OPTION (HTM_Type_LONG,&Rubrics.Lst[NumRub].RubCod,
-			   Rubrics.Lst[NumRub].RubCod == PrjRubrics.Global.RubCod,false,
-			   "%s",Rubrics.Lst[NumRub].Title);
-	 HTM_SELECT_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   /***** Rubric selectors *****/
+   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	WhichRubric++)
+      PrjCfg_ShowFormRubric (&Rubrics,WhichRubric);
 
    /***** Free list of rubrics *****/
    Rub_FreeListRubrics (&Rubrics);
+  }
+
+/*****************************************************************************/
+/************ Show form to edit rubrics associated to projects ***************/
+/*****************************************************************************/
+
+static void PrjCfg_ShowFormRubric (struct Rub_Rubrics *Rubrics,
+                                   PrjCfg_Rubric_t WhichRubric)
+  {
+   extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
+   unsigned NumRub;
+
+   /***** Row with form for rubric *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
+		    The_GetSuffix ());
+	 HTM_TxtColon (Txt_PROJECT_RUBRIC[WhichRubric]);
+      HTM_TD_End ();
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"%s\" name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
+			   PrjCfg_RubricIDs[WhichRubric],
+			   PrjCfg_RubricIDs[WhichRubric]);
+	    for (NumRub = 0;
+		 NumRub < Rubrics->Num;
+		 NumRub++)
+	       HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRub].RubCod,
+			   Rubrics->Lst[NumRub].RubCod == PrjCfg_Rubrics[WhichRubric].RubCod,false,
+			   "%s",Rubrics->Lst[NumRub].Title);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

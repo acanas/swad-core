@@ -84,6 +84,7 @@
 #include "swad_privacy.h"
 #include "swad_program.h"
 #include "swad_project.h"
+#include "swad_project_config.h"
 #include "swad_record.h"
 #include "swad_role.h"
 #include "swad_room.h"
@@ -22528,7 +22529,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Estudiantes"	// Okoteve traducción
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -33243,7 +33244,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo'e"
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -33266,7 +33267,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"Tuteurs"
 #elif L==6	// gn
-	"Tutores"	// Okoteve traducción
+	"Tutor-ku&eacute;ra"
 #elif L==7	// it
 	"Precettori"
 #elif L==8	// pl
@@ -33274,7 +33275,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Tutores"
 #elif L==10	// tr
-	"Tutors"	// Çeviri lazim!
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[Prj_ROLE_EVL] =
@@ -33289,7 +33290,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&Eacute;valuateurs"
 #elif L==6	// gn
-	"Evaluadores"	// Okoteve traducción
+	"Evaluador-ku&eacute;ra"
 #elif L==7	// it
 	"Valutatori"
 #elif L==8	// pl
@@ -33297,7 +33298,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"Avaliadores"
 #elif L==10	// tr
-	"Evaluators"	// Çeviri lazim!
+	"De&gbreve;erlendiriciler"
 #endif
 	};
 
@@ -33338,7 +33339,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -33346,7 +33347,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	"students"	// Çeviri lazim!
+	"&ouml;&gbreve;renciler"
 #endif
 	,
 	[Prj_ROLE_TUT] =
@@ -33361,7 +33362,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"tuteurs"
 #elif L==6	// gn
-	"tutores"	// Okoteve traducción
+	"tutor-ku&eacute;ra"
 #elif L==7	// it
 	"precettori"
 #elif L==8	// pl
@@ -33369,7 +33370,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"tutores"
 #elif L==10	// tr
-	"tutors"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Prj_ROLE_EVL] =
@@ -33384,7 +33385,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==5	// fr
 	"&eacute;valuateurs"
 #elif L==6	// gn
-	"evaluadores"	// Okoteve traducción
+	"evaluador-ku&eacute;ra"
 #elif L==7	// it
 	"valutatori"
 #elif L==8	// pl
@@ -33392,7 +33393,79 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"avaliadores"
 #elif L==10	// tr
-	"evaluators"	// Çeviri lazim!
+	"de&gbreve;erlendiriciler"
+#endif
+	};
+
+const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS] =
+	{
+	[PrjCfg_RUBRIC_TUT] =
+#if   L==1	// ca
+	"R&uacute;brica per a tutors"
+#elif L==2	// de
+	"Rubrik f&uuml;r Tutoren"
+#elif L==3	// en
+	"Rubric for tutors"
+#elif L==4	// es
+	"R&uacute;brica para tutores"
+#elif L==5	// fr
+	"Rubrique pour les tuteurs"
+#elif L==6	// gn
+	"R&uacute;brica tutor-ku&eacute;rape guar&atilde;"
+#elif L==7	// it
+	"Rubrica per precettori"
+#elif L==8	// pl
+	"Rubryka dla nauczyciele"
+#elif L==9	// pt
+	"Rubrica para tutores"
+#elif L==10	// tr
+	"&Ouml;&gbreve;retmenler i&ccedil;in de&gbreve;erlendirme listesi"
+#endif
+	,
+	[PrjCfg_RUBRIC_EVL] =
+#if   L==1	// ca
+	"R&uacute;brica per a avaluadors"
+#elif L==2	// de
+	"Rubrik f&uuml;r Auswerter"
+#elif L==3	// en
+	"Rubric for evaluators"
+#elif L==4	// es
+	"R&uacute;brica para evaluadores"
+#elif L==5	// fr
+	"Rubrique pour les &eacute;valuateurs"
+#elif L==6	// gn
+	"R&uacute;brica evaluador-ku&eacute;rape guar&atilde;"
+#elif L==7	// it
+	"Rubrica per valutatori"
+#elif L==8	// pl
+	"Rubryka dla ewaluator&oacute;w"
+#elif L==9	// pt
+	"Rubrica para avaliadores"
+#elif L==10	// tr
+	"De&gbreve;erlendiriciler i&ccedil;in de&gbreve;erlendirme listesi"
+#endif
+	,
+	[PrjCfg_RUBRIC_GBL] =
+#if   L==1	// ca
+	"R&uacute;brica global"
+#elif L==2	// de
+	"Gesamtrubrik"
+#elif L==3	// en
+	"Globale rubric"
+#elif L==4	// es
+	"R&uacute;brica global"
+#elif L==5	// fr
+	"Rubrique globale"
+#elif L==6	// gn
+	"R&uacute;brica general"
+#elif L==7	// it
+	"Rubrica complessiva"
+#elif L==8	// pl
+	"Globalna rubryka"
+#elif L==9	// pt
+	"Rubrica geral"
+#elif L==10	// tr
+	"Genel de&gbreve;erlendirme listesi"
 #endif
 	};
 
@@ -37206,7 +37279,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -37214,7 +37287,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"estudantes"
 #elif L==10	// tr
-	"students"	// Çeviri lazim!
+	"&ouml;&gbreve;renciler"
 #endif
 	,
 	[Sta_ROLE_USERS] =
@@ -39446,7 +39519,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo'e"
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -39469,7 +39542,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiantes"
 #elif L==6	// gn
-	"Temimbo'e"
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studentesse"
 #elif L==8	// pl
@@ -39492,7 +39565,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo'e"
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -39515,7 +39588,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&Eacute;tudiants"
 #elif L==6	// gn
-	"Temimbo'e"
+	"Temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"Studenti"
 #elif L==8	// pl
@@ -40602,7 +40675,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -40625,7 +40698,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiantes"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studentesse"
 #elif L==8	// pl
@@ -40648,7 +40721,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl
@@ -40671,7 +40744,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==5	// fr
 	"&eacute;tudiants"
 #elif L==6	// gn
-	"temimbo'e"
+	"temimbo'eku&eacute;ra"
 #elif L==7	// it
 	"studenti"
 #elif L==8	// pl

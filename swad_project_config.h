@@ -31,8 +31,15 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-/***** Configuration *****/
 #define PrjCfg_NET_CAN_CREATE_DEFAULT true
+
+#define PrjCfg_NUM_RUBRICS 3
+typedef enum
+  {
+   PrjCfg_RUBRIC_TUT,
+   PrjCfg_RUBRIC_EVL,
+   PrjCfg_RUBRIC_GBL,
+  } PrjCfg_Rubric_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
