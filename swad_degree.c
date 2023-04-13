@@ -242,7 +242,7 @@ void Deg_WriteSelectorOfDegree (void)
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Deg.DegCod <= 0,	// Selected?
-		  true,					// Disabled
+		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Degree);
 
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
@@ -266,7 +266,7 @@ void Deg_WriteSelectorOfDegree (void)
 	    HTM_OPTION (HTM_Type_LONG,&DegCod,
 			Gbl.Hierarchy.Deg.DegCod > 0 &&
 			DegCod == Gbl.Hierarchy.Deg.DegCod,	// Selected?
-			false,					// Not disabled
+			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
 
@@ -418,7 +418,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			   DegTypInLst = &DegTypes->Lst[NumDegTyp];
 			   HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
 				       DegTypInLst->DegTypCod == DegInLst->DegTypCod,	// Selected?
-				       false,						// Not disabled
+				       HTM_OPTION_ENABLED,
 				       "%s",DegTypInLst->DegTypName);
 			  }
 		     HTM_SELECT_End ();
@@ -581,7 +581,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		  DegTypInLst = &DegTypes->Lst[NumDegTyp];
 		  HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
 			      DegTypInLst->DegTypCod == Deg_EditingDeg->DegTypCod,	// Selected?
-			      false,							// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%s",DegTypInLst->DegTypName);
 		 }
 	    HTM_SELECT_End ();

@@ -7693,11 +7693,11 @@ void Brw_ShowFileMetadata (void)
 				       "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
 			HTM_OPTION (HTM_Type_STRING,"N",
 				    !FileMetadata.IsPublic,	// Selected?
-				    false,			// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_Private_available_to_certain_users_identified);
 			HTM_OPTION (HTM_Type_STRING,"Y",
 				    FileMetadata.IsPublic,	// Selected?
-				    false,			// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_Public_open_educational_resource_OER_for_everyone);
 		     HTM_SELECT_End ();
 		    }
@@ -7730,7 +7730,7 @@ void Brw_ShowFileMetadata (void)
 			   LicenseUnsigned = (unsigned) License;
 			   HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
 				       License == FileMetadata.License,	// Selected?
-				       false,				// Not disabled
+				       HTM_OPTION_ENABLED,
 				       "%s",Txt_LICENSES[License]);
 			  }
 		     HTM_SELECT_End ();
@@ -9756,7 +9756,7 @@ void Brw_AskRemoveOldFiles (void)
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
 			      Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,	// Selected?
-			      false,						// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();

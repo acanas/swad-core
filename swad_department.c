@@ -490,7 +490,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 		                 DptInLst->InsCod == 0,	// Selected?
-		                 false,			// Not disabled
+		                 HTM_OPTION_ENABLED,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.Inss.Num;
@@ -499,7 +499,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
 				    InsInLst->InsCod == DptInLst->InsCod,	// Selected?
-				    false,					// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",InsInLst->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -824,7 +824,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
 		              Dpt_EditingDpt->InsCod == 0,	// Selected?
-		              false,				// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%s",Txt_Another_institution);
 		  for (NumIns = 0;
 		       NumIns < Gbl.Hierarchy.Inss.Num;
@@ -833,7 +833,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 		     InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
 		     HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
 				InsInLst->InsCod == Dpt_EditingDpt->InsCod,	// Selected?
-				false,						// Not disabled
+				HTM_OPTION_ENABLED,
 				 "%s",InsInLst->ShrtName);
 		    }
 	       HTM_SELECT_End ();
@@ -1029,14 +1029,15 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                DptCod < 0,		// Selected?
-	                !NoDptSelectable,	// Disabled?
+	                NoDptSelectable ? HTM_OPTION_ENABLED :
+	                		  HTM_OPTION_DISABLED,
 			"%s",TextWhenNoDptSelected);
 	   }
 
 	 /* Another department selected (different to all departments listed) */
 	 HTM_OPTION (HTM_Type_STRING,"0",
 	             DptCod == 0,		// Selected?
-	             false,			// Not disabled
+	             HTM_OPTION_ENABLED,
 		     "%s",Txt_Another_department);
 	}
 
@@ -1048,7 +1049,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	 DptInLst = &Departments.Lst[NumDpt];
 	 HTM_OPTION (HTM_Type_LONG,&DptInLst->DptCod,
 		     DptInLst->DptCod == DptCod,	// Selected?
-		     false,				// Not disabled
+		     HTM_OPTION_ENABLED,
 		     "%s",DptInLst->FullName);
 	}
 

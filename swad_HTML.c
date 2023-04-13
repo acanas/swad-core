@@ -1680,7 +1680,8 @@ void HTM_OPTGROUP_End (void)
    HTM_OPTGROUP_NestingLevel--;
   }
 
-void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disabled,
+void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
+                 bool Selected,HTM_OptionEnabled_t Disabled,
 		 const char *fmt,...)
   {
    va_list ap;
@@ -1703,7 +1704,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disable
    HTM_Txt ("\"");
    if (Selected)
       HTM_Txt (" selected=\"selected\"");
-   if (Disabled)
+   if (Disabled == HTM_OPTION_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
    HTM_Txt (">");
 

@@ -879,7 +879,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ins.InsCod < 0,	// Selected?
-		  true,				// Disabled
+		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Institution);
 
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
@@ -903,7 +903,7 @@ void Ins_WriteSelectorOfInstitution (void)
 	    HTM_OPTION (HTM_Type_LONG,&InsCod,
 			Gbl.Hierarchy.Ins.InsCod > 0 &&
 			InsCod == Gbl.Hierarchy.Ins.InsCod,	// Selected?
-			false,					// Not disabled
+			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
 

@@ -705,7 +705,7 @@ void Ctr_WriteSelectorOfCenter (void)
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ctr.CtrCod < 0,		// Selected?
-		  true,					// Disabled
+		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Center);
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
@@ -727,7 +727,7 @@ void Ctr_WriteSelectorOfCenter (void)
 	    HTM_OPTION (HTM_Type_LONG,&CtrCod,
 			Gbl.Hierarchy.Ctr.CtrCod > 0 &&
 			CtrCod == Gbl.Hierarchy.Ctr.CtrCod,	// Selected?
-			false,					// Not disabled
+			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
 
@@ -820,7 +820,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 				       " class=\"PLC_SEL INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    Ctr->PlcCod == 0,false,
+				    Ctr->PlcCod == 0,	// Selected?
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_Another_place);
 			for (NumPlc = 0;
 			     NumPlc < Places->Num;
@@ -829,7 +830,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			   PlcInLst = &Places->Lst[NumPlc];
 			   HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
 				       PlcInLst->PlcCod == Ctr->PlcCod,	// Selected?
-				       false,				// Not disabled
+				       HTM_OPTION_ENABLED,
 				       "%s",PlcInLst->ShrtName);
 			  }
 		     HTM_SELECT_End ();
@@ -1312,7 +1313,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			   "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
-			Ctr_EditingCtr->PlcCod == 0,false,
+			Ctr_EditingCtr->PlcCod == 0,	// Selected?
+			HTM_OPTION_ENABLED,
 			"%s",Txt_Another_place);
 	    for (NumPlc = 0;
 		 NumPlc < Places->Num;
@@ -1321,7 +1323,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	       PlcInLst = &Places->Lst[NumPlc];
 	       HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
 			   PlcInLst->PlcCod == Ctr_EditingCtr->PlcCod,	// Selected?
-			   false,					// Not disabled
+			   HTM_OPTION_ENABLED,
 			   "%s",PlcInLst->ShrtName);
 	      }
 	 HTM_SELECT_End ();

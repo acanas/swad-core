@@ -573,7 +573,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		     InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
 		     HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
 				 InsInLst->InsCod == Gbl.Hierarchy.Ins.InsCod,	// Selected?
-				 false,						// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",InsInLst->ShrtName);
 		    }
 	       HTM_SELECT_End ();
@@ -671,7 +671,8 @@ static void CtrCfg_Place (bool PutForm)
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
-			      Gbl.Hierarchy.Ctr.PlcCod == 0,false,
+			      Gbl.Hierarchy.Ctr.PlcCod == 0,	// Selected?
+			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Another_place);
 		  for (NumPlc = 0;
 		       NumPlc < Places.Num;
@@ -680,7 +681,7 @@ static void CtrCfg_Place (bool PutForm)
 		     PlcInLst = &Places.Lst[NumPlc];
 		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
 				 PlcInLst->PlcCod == Gbl.Hierarchy.Ctr.PlcCod,	// Selected?
-				 false,						// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",PlcInLst->ShrtName);
 		    }
 	       HTM_SELECT_End ();

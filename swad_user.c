@@ -6228,7 +6228,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 	      Cols++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
 			Cols == Gbl.Usrs.ClassPhoto.Cols,	// Selected?
-			false,					// Not disabled
+			HTM_OPTION_ENABLED,
 			"%u",Cols);
 
       /***** End selector *****/

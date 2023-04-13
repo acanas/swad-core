@@ -52,6 +52,12 @@ typedef enum
    HTM_SUBMIT_ON_CLICK,
   } HTM_SubmitOnClick_t;
 
+typedef enum
+  {
+   HTM_OPTION_DISABLED,
+   HTM_OPTION_ENABLED,
+  } HTM_OptionEnabled_t;
+
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
   {
@@ -185,7 +191,8 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
 void HTM_SELECT_End (void);
 void HTM_OPTGROUP_Begin (const char *Label);
 void HTM_OPTGROUP_End (void);
-void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,bool Selected,bool Disabled,
+void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
+                 bool Selected,HTM_OptionEnabled_t Disabled,
 		 const char *fmt,...);
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,

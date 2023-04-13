@@ -201,7 +201,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (HieLvl_Level_t DefaultS
 			WTS = (unsigned) WhatToSearch;
 			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
 				    WhatToSearch == Search->WhatToSearch,	// Selected?
-				    false,					// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",*Titles[WhatToSearch]);
 		       }
 	       HTM_SELECT_End ();

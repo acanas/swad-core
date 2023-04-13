@@ -1803,7 +1803,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 		  TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
 			      TypeOfAvg == DegPhotos->TypeOfAverage,	// Selected?
-			      false,					// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
 		 }
 	    HTM_SELECT_End ();
@@ -1869,7 +1869,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 		  PhoSiUnsigned = (unsigned) PhoSi;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
 			      PhoSi == DegPhotos->HowComputePhotoSize,	// Selected?
-			      false,					// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
 		 }
 	    HTM_SELECT_End ();
@@ -1934,7 +1934,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 		  OrderUnsigned = (unsigned) Order;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
 			      Order == DegPhotos->HowOrderDegrees,	// Selected?
-			      false,					// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
 		 }
 	    HTM_SELECT_End ();
@@ -2045,11 +2045,12 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
 		  if (Selected)
-		     Disabled = false;
+		     Disabled = HTM_OPTION_ENABLED;
 		  else
 		     // Too recently computed ?
 		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
-				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
+				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_OPTION_DISABLED :
+					                                                                HTM_OPTION_ENABLED;
 		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,
 		              Selected,
 		              Disabled,

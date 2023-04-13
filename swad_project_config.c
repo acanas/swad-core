@@ -214,7 +214,7 @@ static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
 	    /* First option to indicate that no rubric is selected */
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 			RubCodInConfig <= 0,			// Selected?
-			false,					// Not disabled
+			HTM_OPTION_ENABLED,
 			"[%s]",Txt_no_rubric);
 
 	    /* One option for each rubric in this course */
@@ -225,7 +225,7 @@ static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
 	       Rubric = &Rubrics->Lst[NumRub];
 	       HTM_OPTION (HTM_Type_LONG,&Rubric->RubCod,
 			   Rubric->RubCod == RubCodInConfig,	// Selected?
-			   false,				// Not disabled
+			   HTM_OPTION_ENABLED,
 			   "%s",Rubric->Title);
 	      }
 

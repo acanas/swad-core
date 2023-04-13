@@ -525,7 +525,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 		                 HldInLst->PlcCod <= 0,	// Selected?
-		                 false,			// Not disabled
+		                 HTM_OPTION_ENABLED,
 				 "%s",Txt_All_places);
 		     for (NumPlc = 0;
 			  NumPlc < Places->Num;
@@ -534,7 +534,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 			PlcInLst = &Places->Lst[NumPlc];
 			HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
 				    PlcInLst->PlcCod == HldInLst->PlcCod,	// Selected?
-				    false,					// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",PlcInLst->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -556,7 +556,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 			HolidayTypeUnsigned = (unsigned) HolidayType;
 			HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
 				    HolidayType == HldInLst->HldTyp,	// Selected?
-				    false,				// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_HOLIDAY_TYPES[HolidayType]);
 		       }
 		  HTM_SELECT_End ();
@@ -903,7 +903,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"-1",
 		              Hld_EditingHld->PlcCod <= 0,	// Selected?
-		              false,				// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%s",Txt_All_places);
 		  for (NumPlc = 0;
 		       NumPlc < Places->Num;
@@ -912,7 +912,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 		     PlcInLst = &Places->Lst[NumPlc];
 		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
 				 PlcInLst->PlcCod == Hld_EditingHld->PlcCod,	// Selected?
-				 false,						// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",PlcInLst->ShrtName);
 		    }
 	       HTM_SELECT_End ();
@@ -931,7 +931,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 		     HolidayTypeUnsigned = (unsigned) HolidayType;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
 				 HolidayType == Hld_EditingHld->HldTyp,	// Selected?
-				 false,					// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",Txt_HOLIDAY_TYPES[HolidayType]);
 		    }
 	       HTM_SELECT_End ();

@@ -1853,7 +1853,7 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
 		     ReviewStatus == Projects->Prj.Review.Status,	// Selected?
-		     false,						// Not disabled
+		     HTM_OPTION_ENABLED,
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
    HTM_SELECT_End ();
@@ -3842,11 +3842,11 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"Y",
 		              Projects->Prj.Assigned == Prj_ASSIGNED,	// Selected?
-		              false,					// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%s",Txt_Yes);
 		  HTM_OPTION (HTM_Type_STRING,"N",
 		              Projects->Prj.Assigned == Prj_NONASSIG,	// Selected?
-		              false,					// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%s",Txt_No);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -3888,7 +3888,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		     ProposalUnsigned = (unsigned) Proposal;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
 				 Projects->Prj.Proposal == Proposal,	// Selected?
-				 false,					// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",Txt_PROJECT_STATUS[Proposal]);
 		    }
 	       HTM_SELECT_End ();

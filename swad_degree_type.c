@@ -118,7 +118,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 		     The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  SelectedDegTypCod <= 0,	// Selected?
-		  false,			// Not disabled
+		  HTM_OPTION_ENABLED,
 		  "%s",Txt_Any_type_of_degree);
       for (NumDegTyp = 0;
 	   NumDegTyp < DegTypes.Num;
@@ -127,7 +127,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 	 DegTypInLst = &DegTypes.Lst[NumDegTyp];
 	 HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
 		     DegTypInLst->DegTypCod == SelectedDegTypCod,	// Selected?
-		     false,						// Not disabled
+		     HTM_OPTION_ENABLED,
 		     "%s",DegTypInLst->DegTypName);
 	}
    HTM_SELECT_End ();

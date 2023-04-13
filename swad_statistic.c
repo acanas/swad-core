@@ -371,7 +371,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
 						ClicksGroupedBy == Stats->ClicksGroupedBy,	// Selected?
-						false,						// Not disabled
+						HTM_OPTION_ENABLED,
 						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 				   }
 			      HTM_SELECT_End ();
@@ -408,7 +408,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				      i++)
 				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
 						RowsPerPage[i] == Stats->RowsPerPage,	// Selected?
-						false,					// Not disabled
+						HTM_OPTION_ENABLED,
 						"%u",RowsPerPage[i]);
 			      HTM_SELECT_End ();
 			      HTM_Txt (")");
@@ -520,7 +520,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		     RoleStatUnsigned = (unsigned) RoleStat;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
 				 RoleStat == Stats->Role,	// Selected?
-				 false,				// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",Txt_ROLE_STATS[RoleStat]);
 		    }
 	       HTM_SELECT_End ();
@@ -581,7 +581,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 			ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 			HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
 				    ClicksGroupedBy == Stats->ClicksGroupedBy,	// Selected?
-				    false,					// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 		       }
 		  HTM_SELECT_End ();
@@ -662,7 +662,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 	 StatCountTypeUnsigned = (unsigned) StatCountType;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
 		     StatCountType == Stats->CountType,	// Selected?
-		     false,				// Not disabled
+		     HTM_OPTION_ENABLED,
 		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
 	}
    HTM_SELECT_End ();
@@ -694,7 +694,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
 	                Stats->NumAction == 0,	// Selected?
-	                false,			// Not disabled
+	                HTM_OPTION_ENABLED,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
 		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
@@ -704,7 +704,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	       ActionUnsigned = (unsigned) Action;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
 			   Action == Stats->NumAction,	// Selected?
-			   false,			// Not disabled
+			   HTM_OPTION_ENABLED,
 			   "%u: %s &gt; %s",
 			   (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
 	      }
@@ -1621,7 +1621,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 		     ColorTypeUnsigned = (unsigned) ColorType;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
 				 ColorType == SelectedColorType,	// Selected?
-				 false,					// Not selected
+				 HTM_OPTION_ENABLED,
 				 "%s",Txt_STAT_COLOR_TYPES[ColorType]);
 		    }
 	       HTM_SELECT_End ();

@@ -884,7 +884,7 @@ void Cty_WriteSelectorOfCountry (void)
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
 	             Gbl.Hierarchy.Cty.CtyCod < 0,	// Selected?
-	             true,				// Disabled
+	             HTM_OPTION_DISABLED,
 		     "[%s]",Txt_Country);
 
 	 /***** List countries *****/
@@ -895,7 +895,7 @@ void Cty_WriteSelectorOfCountry (void)
 	    CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 	    HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
 			CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod,	// Selected?
-			false,						// Not disabled
+			HTM_OPTION_ENABLED,
 			"%s",CtyInLst->Name[Gbl.Prefs.Language]);
 	   }
 

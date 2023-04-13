@@ -1055,7 +1055,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 				    Year == CallsForExams->CallForExam.Year,	// Selected
-				    false,					// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
 		 }
@@ -1140,14 +1140,14 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 				 CallsForExams->CallForExam.StartTime.Hour == 0,	// Selected?
-				 false,							// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "-");
 		     for (Hour  = 7;
 			  Hour <= 22;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
 				    Hour == CallsForExams->CallForExam.StartTime.Hour,	// Selected?
-				    false,						// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
@@ -1159,7 +1159,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 				    Minute == CallsForExams->CallForExam.StartTime.Minute,	// Selected?
-				    false,							// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }
@@ -1193,7 +1193,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
 				    Hour == CallsForExams->CallForExam.Duration.Hour,	// Selected?
-				    false,						// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
@@ -1206,7 +1206,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 				    Minute == CallsForExams->CallForExam.Duration.Minute,	// Selected?
-				    false,							// Not disabled
+				    HTM_OPTION_ENABLED,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }

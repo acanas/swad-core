@@ -1823,7 +1823,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
          /* Write a first option to select any course */
 	 HTM_OPTION (HTM_Type_STRING,"",
 		     Messages->FilterCrsCod < 0,	// Selected?
-		     false,				// Not disabled
+		     HTM_OPTION_ENABLED,
 		     "%s",Txt_any_course);
 
 	 /* Write an option for each origin course */
@@ -1837,7 +1837,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			   CrsCod == Messages->FilterCrsCod,	// Selected?
-			   false,				// Not disabled
+			   HTM_OPTION_ENABLED,
 			   "%s",row[1]);	// Course short name
 	   }
 

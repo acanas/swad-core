@@ -1066,11 +1066,11 @@ void Att_ReqCreatOrEditEvent (void)
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"N",
 	                   !Events.Event.CommentTchVisible,	// Selected?
-	                   false,				// Not disabled
+	                   HTM_OPTION_ENABLED,
 			   "%s",Txt_Hidden_MALE_PLURAL);
 	       HTM_OPTION (HTM_Type_STRING,"Y",
 	                   Events.Event.CommentTchVisible,	// Selected?
-	                   false,				// Not disabled
+	                   HTM_OPTION_ENABLED,
 			   "%s",Txt_Visible_MALE_PLURAL);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();

@@ -768,7 +768,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 		              false,	// Not selected
-		              false,	// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%u",Year);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -785,7 +785,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Month++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
 		              false,	// Not selected
-		              false,	// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -802,7 +802,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Day++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,
 		              false,	// Not selected
-		              false,	// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%u",Day);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -819,7 +819,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Hour++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
 		              false,	// Not selected
-		              false,	// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%02u h",Hour);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -836,7 +836,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Minute += MinutesIInterval[FormSeconds])
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 		              false,	// Not selected
-		              false,	// Not disabled
+		              HTM_OPTION_ENABLED,
 			      "%02u &prime;",Minute);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -855,7 +855,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		       Second++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Second,
 				 false,	// Not selected
-				 false,	// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%02u &Prime;",Second);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -1022,14 +1022,14 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 				         "");
 	       HTM_OPTION (HTM_Type_STRING,"0",
 		           false,	// Not selected
-		           false,	// Not disabled
+		           HTM_OPTION_ENABLED,
 			   "-");
 	       for (Year  = FirstYear;
 		    Year <= LastYear;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 			      Year == DateSelected->Year,	// Selected?
-			      false,				// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%u",Year);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -1045,14 +1045,14 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 				         "");
 	       HTM_OPTION (HTM_Type_STRING,"0",
 		           false,	// Not selected
-		           false,	// Not disabled
+		           HTM_OPTION_ENABLED,
 			   "-");
 	       for (Month  =  1;
 		    Month <= 12;
 		    Month++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
 			      Month == DateSelected->Month,	// Selected?
-			      false,				// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -1070,7 +1070,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 				         "");
 		  HTM_OPTION (HTM_Type_STRING,"0",
 			      false,	// Not selected
-			      false,	// Not disabled
+			      HTM_OPTION_ENABLED,
 			      "-");
 		  NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
 								      ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
@@ -1080,7 +1080,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		       Day++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Day,
 				 Day == DateSelected->Day,	// Selected?
-				 false,				// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%u",Day);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();

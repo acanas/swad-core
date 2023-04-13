@@ -339,7 +339,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		     CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
 				 CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod,	// Selected?
-				 false,						// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",CtyInLst->Name[Gbl.Prefs.Language]);
 		    }
 	       HTM_SELECT_End ();

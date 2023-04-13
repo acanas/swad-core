@@ -244,7 +244,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		     DegInLst = &Gbl.Hierarchy.Degs.Lst[NumDeg];
 		     HTM_OPTION (HTM_Type_LONG,&DegInLst->DegCod,
 				 DegInLst->DegCod == Gbl.Hierarchy.Deg.DegCod,	// Selected?
-				 false,						// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",DegInLst->ShrtName);
 		    }
 	       HTM_SELECT_End ();
@@ -332,7 +332,7 @@ static void CrsCfg_Year (bool PutForm)
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 				 Year == Gbl.Hierarchy.Crs.Year,	// Selected?
-				 false,					// Not disabled
+				 HTM_OPTION_ENABLED,
 				 "%s",Txt_YEAR_OF_DEGREE[Year]);
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();

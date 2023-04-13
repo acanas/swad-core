@@ -817,15 +817,15 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    HTM_Txt (" />");
       HTM_OPTION (HTM_Type_STRING,"" ,
                   Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',// Selected?
-                  false,						// Not disabled
+                  HTM_OPTION_ENABLED,
                   "&nbsp;");
       HTM_OPTION (HTM_Type_STRING,"T",
                   Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T',	// Selected?
-                  false,						// Not disabled
+                  HTM_OPTION_ENABLED,
                   "%s",Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
                   Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F',	// Selected?
-                  false,						// Not disabled
+                  HTM_OPTION_ENABLED,
                   "%s",Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
