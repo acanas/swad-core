@@ -30,6 +30,7 @@
 #include "swad_browser.h"
 #include "swad_date.h"
 #include "swad_notification.h"
+#include "swad_project_config.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -185,10 +186,7 @@ struct Prj_Project
 struct Prj_Projects
   {
    Prj_ProjectView_t View;
-   struct
-     {
-      bool NETCanCreate;
-     } Config;
+   struct PrjCfg_Config Config;
    struct Prj_Filter Filter;
    bool LstIsRead;		// Is the list already read from database, or it needs to be read?
    unsigned Num;		// Number of projects

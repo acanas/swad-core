@@ -2554,17 +2554,23 @@ mysql> DESCRIBE prg_resources;
    /***** Table prj_config *****/
 /*
 mysql> DESCRIBE prj_config;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| CrsCod   | int(11)       | NO   | PRI | -1      |       |
-| Editable | enum('N','Y') | NO   |     | Y       |       |
-+----------+---------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| CrsCod       | int           | NO   | PRI | -1      |       |
+| RubTutCod    | int           | NO   |     | -1      |       |
+| RubEvlCod    | int           | NO   |     | -1      |       |
+| RubGblCod    | int           | NO   |     | -1      |       |
+| NETCanCreate | enum('N','Y') | NO   |     | Y       |       |
++--------------+---------------+------+-----+---------+-------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_config ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',"
+			"RubTutCod INT NOT NULL DEFAULT -1,"
+			"RubEvlCod INT NOT NULL DEFAULT -1,"
+			"RubGblCod INT NOT NULL DEFAULT -1,"
+			"NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(CrsCod))");
 
    /***** Table prj_projects *****/

@@ -680,7 +680,8 @@ void Enr_AskRemoveOldUsrs (void)
 		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-			      Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
+			      Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,	// Selected?
+			      false,								// Not disabled
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();

@@ -442,9 +442,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
   {
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
-   struct Dpt_Department *Dpt;
+   struct Dpt_Department *DptInLst;
    struct Ins_Instit Ins;
    unsigned NumIns;
+   struct Ins_Instit *InsInLst;
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -457,44 +458,50 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	   NumDpt < Departments->Num;
 	   NumDpt++)
 	{
-	 Dpt = &Departments->Lst[NumDpt];
+	 DptInLst = &Departments->Lst[NumDpt];
 
 	 /* Get data of institution of this department */
-	 Ins.InsCod = Dpt->InsCod;
+	 Ins.InsCod = DptInLst->InsCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 HTM_TR_Begin (NULL);
 
 	    /* Put icon to remove department */
 	    HTM_TD_Begin ("class=\"BM\"");
-	       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
+	       if (DptInLst->NumTchs)	// Department has teachers ==> deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDpt,NULL,
-						 Dpt_PutParDptCod,&Dpt->DptCod);
+						 Dpt_PutParDptCod,&DptInLst->DptCod);
 	    HTM_TD_End ();
 
 	    /* Department code */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
+	       HTM_TxtF ("%ld&nbsp;",DptInLst->DptCod);
 	    HTM_TD_End ();
 
 	    /* Institution */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptIns);
-		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
+		     HTM_OPTION (HTM_Type_STRING,"0",
+		                 DptInLst->InsCod == 0,	// Selected?
+		                 false,			// Not disabled
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.Inss.Num;
 			  NumIns++)
-			HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-				    Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
-				    "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+		       {
+			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
+				    InsInLst->InsCod == DptInLst->InsCod,	// Selected?
+				    false,					// Not disabled
+				    "%s",InsInLst->ShrtName);
+		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -502,8 +509,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptSho);
-		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
+		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
+		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -513,8 +520,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenDptFul);
-		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
+		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
+		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,DptInLst->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -524,8 +531,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgDptWWW);
-		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
+		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
+		  HTM_INPUT_URL ("WWW",DptInLst->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
 				 The_GetSuffix ());
@@ -534,7 +541,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 	    /* Number of teachers */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Dpt->NumTchs);
+	       HTM_Unsigned (DptInLst->NumTchs);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -789,6 +796,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    extern const char *Txt_Another_institution;
    extern const char *Txt_Create_department;
    unsigned NumIns;
+   const struct Ins_Instit *InsInLst;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewDpt);
@@ -814,14 +822,20 @@ static void Dpt_PutFormToCreateDepartment (void)
 				 "name=\"OthInsCod\""
 				 " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
+		  HTM_OPTION (HTM_Type_STRING,"0",
+		              Dpt_EditingDpt->InsCod == 0,	// Selected?
+		              false,				// Not disabled
 			      "%s",Txt_Another_institution);
 		  for (NumIns = 0;
 		       NumIns < Gbl.Hierarchy.Inss.Num;
 		       NumIns++)
-		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-				 Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
-				 "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+		    {
+		     InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
+		     HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
+				InsInLst->InsCod == Dpt_EditingDpt->InsCod,	// Selected?
+				false,						// Not disabled
+				 "%s",InsInLst->ShrtName);
+		    }
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
@@ -988,6 +1002,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    extern const char *Txt_Another_department;
    struct Dpt_Departments Departments;
    unsigned NumDpt;
+   const struct Dpt_Department *DptInLst;
    bool NoDptSelectable;
 
    /***** Reset departments context *****/
@@ -1012,12 +1027,16 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	       if (TextWhenNoDptSelected[0])
 		  NoDptSelectable = true;
 
-	    HTM_OPTION (HTM_Type_STRING,"-1",DptCod < 0,!NoDptSelectable,
+	    HTM_OPTION (HTM_Type_STRING,"-1",
+	                DptCod < 0,		// Selected?
+	                !NoDptSelectable,	// Disabled?
 			"%s",TextWhenNoDptSelected);
 	   }
 
 	 /* Another department selected (different to all departments listed) */
-	 HTM_OPTION (HTM_Type_STRING,"0",DptCod == 0,false,
+	 HTM_OPTION (HTM_Type_STRING,"0",
+	             DptCod == 0,		// Selected?
+	             false,			// Not disabled
 		     "%s",Txt_Another_department);
 	}
 
@@ -1025,9 +1044,13 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
       for (NumDpt = 0;
 	   NumDpt < Departments.Num;
 	   NumDpt++)
-	 HTM_OPTION (HTM_Type_LONG,&Departments.Lst[NumDpt].DptCod,
-		     Departments.Lst[NumDpt].DptCod == DptCod,false,
-		     "%s",Departments.Lst[NumDpt].FullName);
+	{
+	 DptInLst = &Departments.Lst[NumDpt];
+	 HTM_OPTION (HTM_Type_LONG,&DptInLst->DptCod,
+		     DptInLst->DptCod == DptCod,	// Selected?
+		     false,				// Not disabled
+		     "%s",DptInLst->FullName);
+	}
 
    /* End selector */
    HTM_SELECT_End ();

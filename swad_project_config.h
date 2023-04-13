@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_project.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
@@ -41,11 +43,17 @@ typedef enum
    PrjCfg_RUBRIC_GBL,
   } PrjCfg_Rubric_t;
 
+struct PrjCfg_Config
+  {
+   long RubCod[PrjCfg_NUM_RUBRICS];
+   bool NETCanCreate;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void PrjCfg_GetConfig (struct Prj_Projects *Projects);
+void PrjCfg_GetConfig (struct PrjCfg_Config *Config);
 
 bool PrjCfg_CheckIfICanConfig (void);
 void PrjCfg_ShowFormConfig (void);

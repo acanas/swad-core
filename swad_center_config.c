@@ -543,6 +543,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
    unsigned NumIns;
+   const struct Ins_Instit *InsInLst;
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
@@ -568,9 +569,13 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		  for (NumIns = 0;
 		       NumIns < Gbl.Hierarchy.Inss.Num;
 		       NumIns++)
-		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-				 Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
-				 "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+		    {
+		     InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
+		     HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
+				 InsInLst->InsCod == Gbl.Hierarchy.Ins.InsCod,	// Selected?
+				 false,						// Not disabled
+				 "%s",InsInLst->ShrtName);
+		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 
@@ -637,13 +642,10 @@ static void CtrCfg_Place (bool PutForm)
    struct Plc_Places Places;
    struct Plc_Place Plc;
    unsigned NumPlc;
+   const struct Plc_Place *PlcInLst;
 
    /***** Reset places context *****/
    Plc_ResetPlaces (&Places);
-
-   /***** Get data of place *****/
-   Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
-   Plc_GetPlaceDataByCod (&Plc);
 
    /***** Place *****/
    HTM_TR_Begin (NULL);
@@ -655,6 +657,7 @@ static void CtrCfg_Place (bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+
 	 if (PutForm)
 	   {
 	    /* Get list of places of the current institution */
@@ -673,9 +676,13 @@ static void CtrCfg_Place (bool PutForm)
 		  for (NumPlc = 0;
 		       NumPlc < Places.Num;
 		       NumPlc++)
-		     HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
-				 Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
-				 "%s",Places.Lst[NumPlc].ShrtName);
+		    {
+		     PlcInLst = &Places.Lst[NumPlc];
+		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
+				 PlcInLst->PlcCod == Gbl.Hierarchy.Ctr.PlcCod,	// Selected?
+				 false,						// Not disabled
+				 "%s",PlcInLst->ShrtName);
+		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 
@@ -683,7 +690,13 @@ static void CtrCfg_Place (bool PutForm)
 	    Plc_FreeListPlaces (&Places);
 	   }
 	 else	// I can not change center place
+	   {
+	    /* Text with the place name */
+	    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
+	    Plc_GetPlaceDataByCod (&Plc);
 	    HTM_Txt (Plc.FullName);
+	   }
+
       HTM_TD_End ();
 
    HTM_TR_End ();

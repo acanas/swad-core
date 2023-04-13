@@ -815,9 +815,18 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
-      HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',false,"&nbsp;");
-      HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-      HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+      HTM_OPTION (HTM_Type_STRING,"" ,
+                  Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',// Selected?
+                  false,						// Not disabled
+                  "&nbsp;");
+      HTM_OPTION (HTM_Type_STRING,"T",
+                  Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T',	// Selected?
+                  false,						// Not disabled
+                  "%s",Txt_TF_QST[0]);
+      HTM_OPTION (HTM_Type_STRING,"F",
+                  Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F',	// Selected?
+                  false,						// Not disabled
+                  "%s",Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
 

@@ -343,10 +343,6 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
    const char *TxtClassStrong;
    const char *BgColor;
 
-   /***** Get data of place of this center *****/
-   Plc.PlcCod = Ctr->PlcCod;
-   Plc_GetPlaceDataByCod (&Plc);
-
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal =
@@ -383,6 +379,8 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       /***** Place *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
+	 Plc.PlcCod = Ctr->PlcCod;
+	 Plc_GetPlaceDataByCod (&Plc);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
@@ -706,7 +704,8 @@ void Ctr_WriteSelectorOfCenter (void)
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Ctr.CtrCod < 0,true,
+		  Gbl.Hierarchy.Ctr.CtrCod < 0,		// Selected?
+		  true,					// Disabled
 		  "[%s]",Txt_Center);
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
@@ -727,7 +726,8 @@ void Ctr_WriteSelectorOfCenter (void)
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&CtrCod,
 			Gbl.Hierarchy.Ctr.CtrCod > 0 &&
-			CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+			CtrCod == Gbl.Hierarchy.Ctr.CtrCod,	// Selected?
+			false,					// Not disabled
 			"%s",row[1]);
 	   }
 
@@ -753,6 +753,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumCtr;
    struct Ctr_Center *Ctr;
    unsigned NumPlc;
+   const struct Plc_Place *PlcInLst;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    bool ICanEdit;
@@ -824,9 +825,13 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			for (NumPlc = 0;
 			     NumPlc < Places->Num;
 			     NumPlc++)
-			   HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
-				       Places->Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
-				       "%s",Places->Lst[NumPlc].ShrtName);
+			  {
+			   PlcInLst = &Places->Lst[NumPlc];
+			   HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
+				       PlcInLst->PlcCod == Ctr->PlcCod,	// Selected?
+				       false,				// Not disabled
+				       "%s",PlcInLst->ShrtName);
+			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();
 		 }
@@ -1268,6 +1273,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_center;
    unsigned NumPlc;
+   const struct Plc_Place *PlcInLst;
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
@@ -1311,9 +1317,13 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	    for (NumPlc = 0;
 		 NumPlc < Places->Num;
 		 NumPlc++)
-	       HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
-			   Places->Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
-			   "%s",Places->Lst[NumPlc].ShrtName);
+	      {
+	       PlcInLst = &Places->Lst[NumPlc];
+	       HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
+			   PlcInLst->PlcCod == Ctr_EditingCtr->PlcCod,	// Selected?
+			   false,					// Not disabled
+			   "%s",PlcInLst->ShrtName);
+	      }
 	 HTM_SELECT_End ();
       HTM_TD_End ();
 

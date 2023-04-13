@@ -345,7 +345,7 @@ void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects)
    Projects->Prj.PrjCod    = -1L;
 
    /***** Read project configuration from database *****/
-   PrjCfg_GetConfig (Projects);
+   PrjCfg_GetConfig (&Projects->Config);
   }
 
 /*****************************************************************************/
@@ -1852,7 +1852,8 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	{
 	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
-		     ReviewStatus == Projects->Prj.Review.Status,false,
+		     ReviewStatus == Projects->Prj.Review.Status,	// Selected?
+		     false,						// Not disabled
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
    HTM_SELECT_End ();
@@ -3839,9 +3840,13 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"Assigned\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"Y",Projects->Prj.Assigned == Prj_ASSIGNED,false,
+		  HTM_OPTION (HTM_Type_STRING,"Y",
+		              Projects->Prj.Assigned == Prj_ASSIGNED,	// Selected?
+		              false,					// Not disabled
 			      "%s",Txt_Yes);
-		  HTM_OPTION (HTM_Type_STRING,"N",Projects->Prj.Assigned == Prj_NONASSIG,false,
+		  HTM_OPTION (HTM_Type_STRING,"N",
+		              Projects->Prj.Assigned == Prj_NONASSIG,	// Selected?
+		              false,					// Not disabled
 			      "%s",Txt_No);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -3882,7 +3887,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		    {
 		     ProposalUnsigned = (unsigned) Proposal;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-				 Projects->Prj.Proposal == Proposal,false,
+				 Projects->Prj.Proposal == Proposal,	// Selected?
+				 false,					// Not disabled
 				 "%s",Txt_PROJECT_STATUS[Proposal]);
 		    }
 	       HTM_SELECT_End ();

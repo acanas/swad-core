@@ -781,6 +781,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
    extern const char *Txt_No_assigned_building;
    extern const char *Txt_Another_building;
    unsigned NumBld;
+   const struct Bld_Building *BldInLst;
 
    /***** Begin selector *****/
    HTM_SELECT_Begin (SubmitOnChange,NULL,
@@ -789,21 +790,27 @@ static void Roo_PutSelectorBuilding (long BldCod,
 
       /***** Option for no assigned building *****/
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  BldCod < 0,false,
+		  BldCod < 0,	// Selected?
+		  false,	// Not disabled
 		  "%s",Txt_No_assigned_building);
 
       /***** Option for another room *****/
       HTM_OPTION (HTM_Type_STRING,"0",
-		  BldCod == 0,false,
+		  BldCod == 0,	// Selected?
+		  false,	// Not disabled
 		  "%s",Txt_Another_building);
 
       /***** Options for buildings *****/
       for (NumBld = 0;
 	   NumBld < Buildings->Num;
 	   NumBld++)
-	 HTM_OPTION (HTM_Type_LONG,&Buildings->Lst[NumBld].BldCod,
-		     BldCod == Buildings->Lst[NumBld].BldCod,false,
-		     "%s",Buildings->Lst[NumBld].ShrtName);
+	{
+	 BldInLst = &Buildings->Lst[NumBld];
+	 HTM_OPTION (HTM_Type_LONG,&BldInLst->BldCod,
+		     BldCod == BldInLst->BldCod,	// Selected?
+		     false,				// Not disabled
+		     "%s",BldInLst->ShrtName);
+	}
 
    /***** End selector *****/
    HTM_SELECT_End ();
@@ -829,7 +836,8 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 	   Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
 	   Type++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Type,
-		     Type == RoomType,false,
+		     Type == RoomType,	// Selected?
+		     false,		// Not disabled
 		     "%s",Txt_ROOM_TYPES[Type]);
 
    /***** End selector *****/

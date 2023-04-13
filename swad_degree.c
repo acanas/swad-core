@@ -241,7 +241,8 @@ void Deg_WriteSelectorOfDegree (void)
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Deg.DegCod < 0,true,
+		  Gbl.Hierarchy.Deg.DegCod <= 0,	// Selected?
+		  true,					// Disabled
 		  "[%s]",Txt_Degree);
 
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
@@ -264,7 +265,8 @@ void Deg_WriteSelectorOfDegree (void)
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&DegCod,
 			Gbl.Hierarchy.Deg.DegCod > 0 &&
-			DegCod == Gbl.Hierarchy.Deg.DegCod,false,
+			DegCod == Gbl.Hierarchy.Deg.DegCod,	// Selected?
+			false,					// Not disabled
 			"%s",row[1]);
 	   }
 
@@ -312,9 +314,9 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
-   struct DegTyp_DegreeType *DegTyp;
-   struct Deg_Degree *Deg;
+   struct Deg_Degree *DegInLst;
    unsigned NumDegTyp;
+   struct DegTyp_DegreeType *DegTypInLst;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    bool ICanEdit;
@@ -335,11 +337,11 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	   NumDeg < Gbl.Hierarchy.Degs.Num;
 	   NumDeg++)
 	{
-	 Deg = &(Gbl.Hierarchy.Degs.Lst[NumDeg]);
+	 DegInLst = &(Gbl.Hierarchy.Degs.Lst[NumDeg]);
 
-	 ICanEdit = Deg_CheckIfICanEditADegree (Deg);
-	 NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
-	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
+	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
+	 NumCrss = Crs_GetNumCrssInDeg (DegInLst->DegCod);
+	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,DegInLst->DegCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -354,17 +356,17 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDeg,NULL,
-						 Hie_PutParOtherHieCod,&Deg->DegCod);
+						 Hie_PutParOtherHieCod,&DegInLst->DegCod);
 	    HTM_TD_End ();
 
 	    /* Degree code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_Long (Deg->DegCod);
+	       HTM_Long (DegInLst->DegCod);
 	    HTM_TD_End ();
 
 	    /* Degree logo */
-	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
-	       Lgo_DrawLogo (HieLvl_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
+	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",DegInLst->FullName);
+	       Lgo_DrawLogo (HieLvl_DEG,DegInLst->DegCod,DegInLst->ShrtName,20,NULL,true);
 	    HTM_TD_End ();
 
 	    /* Degree short name */
@@ -372,15 +374,15 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
-		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
+		     ParCod_PutPar (ParCod_OthHie,DegInLst->DegCod);
+		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
-		  HTM_Txt (Deg->ShrtName);
+		  HTM_Txt (DegInLst->ShrtName);
 	    HTM_TD_End ();
 
 	    /* Degree full name */
@@ -388,15 +390,15 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
-		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
-		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
+		     ParCod_PutPar (ParCod_OthHie,DegInLst->DegCod);
+		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,DegInLst->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
-		  HTM_Txt (Deg->FullName);
+		  HTM_Txt (DegInLst->FullName);
 	    HTM_TD_End ();
 
 	    /* Degree type */
@@ -404,7 +406,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
+		     ParCod_PutPar (ParCod_OthHie,DegInLst->DegCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -413,11 +415,11 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			     NumDegTyp < DegTypes->Num;
 			     NumDegTyp++)
 			  {
-			   DegTyp = &DegTypes->Lst[NumDegTyp];
-			   HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-				       // Gbl.Hierarchy.Deg.DegCod > 0 &&
-				       DegTyp->DegTypCod == Deg->DegTypCod,false,
-				       "%s",DegTyp->DegTypName);
+			   DegTypInLst = &DegTypes->Lst[NumDegTyp];
+			   HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
+				       DegTypInLst->DegTypCod == DegInLst->DegTypCod,	// Selected?
+				       false,						// Not disabled
+				       "%s",DegTypInLst->DegTypName);
 			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();
@@ -426,8 +428,11 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  for (NumDegTyp = 0;
 		       NumDegTyp < DegTypes->Num;
 		       NumDegTyp++)
-		     if (DegTypes->Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
-			HTM_Txt (DegTypes->Lst[NumDegTyp].DegTypName);
+		    {
+		     DegTypInLst = &DegTypes->Lst[NumDegTyp];
+		     if (DegTypInLst->DegTypCod == DegInLst->DegTypCod)
+			HTM_Txt (DegTypInLst->DegTypName);
+		    }
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
@@ -435,8 +440,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		     ParCod_PutPar (ParCod_OthHie,Deg->DegCod);
-		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
+		     ParCod_PutPar (ParCod_OthHie,DegInLst->DegCod);
+		     HTM_INPUT_URL ("WWW",DegInLst->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
@@ -444,12 +449,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 }
 	       else
 		 {
-		  Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
+		  Str_Copy (WWW,DegInLst->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 			          " class=\"DAT_%s\"",
-				  Deg->WWW,
-				  Deg->WWW,
+				  DegInLst->WWW,
+				  DegInLst->WWW,
 				  The_GetSuffix ());
 			HTM_Txt (WWW);
 		     HTM_A_End ();
@@ -468,7 +473,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree requester */
-	    UsrDat.UsrCod = Deg->RequesterUsrCod;
+	    UsrDat.UsrCod = DegInLst->RequesterUsrCod;
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
@@ -479,7 +484,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree status */
 	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM,
-	                                 Deg->Status,ActChgDegSta,Deg->DegCod,
+	                                 DegInLst->Status,ActChgDegSta,DegInLst->DegCod,
 	                                 Txt_DEGREE_STATUS);
 
 	 HTM_TR_End ();
@@ -511,8 +516,8 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
-   struct DegTyp_DegreeType *DegTyp;
    unsigned NumDegTyp;
+   struct DegTyp_DegreeType *DegTypInLst;
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -573,10 +578,11 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		    NumDegTyp < DegTypes->Num;
 		    NumDegTyp++)
 		 {
-		  DegTyp = &DegTypes->Lst[NumDegTyp];
-		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-			      DegTyp->DegTypCod == Deg_EditingDeg->DegTypCod,false,
-			      "%s",DegTyp->DegTypName);
+		  DegTypInLst = &DegTypes->Lst[NumDegTyp];
+		  HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
+			      DegTypInLst->DegTypCod == Deg_EditingDeg->DegTypCod,	// Selected?
+			      false,							// Not disabled
+			      "%s",DegTypInLst->DegTypName);
 		 }
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();

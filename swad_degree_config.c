@@ -209,6 +209,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
    unsigned NumCtr;
+   const struct Ctr_Center *CtrInLst;
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
@@ -234,9 +235,13 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		  for (NumCtr = 0;
 		       NumCtr < Gbl.Hierarchy.Ctrs.Num;
 		       NumCtr++)
-		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
-				 Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-				 "%s",Gbl.Hierarchy.Ctrs.Lst[NumCtr].ShrtName);
+		    {
+		     CtrInLst = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
+		     HTM_OPTION (HTM_Type_LONG,&CtrInLst->CtrCod,
+				 CtrInLst->CtrCod == Gbl.Hierarchy.Ctr.CtrCod,	// Selected?
+				 false,						// Not disabled
+				 "%s",CtrInLst->ShrtName);
+		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 

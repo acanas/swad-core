@@ -868,6 +868,7 @@ void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
    unsigned NumCty;
+   const struct Cty_Countr *CtyInLst;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -881,16 +882,22 @@ void Cty_WriteSelectorOfCountry (void)
 			The_GetSuffix ());
 
          /***** Initial disabled option *****/
-	 HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Cty.CtyCod < 0,true,
+	 HTM_OPTION (HTM_Type_STRING,"",
+	             Gbl.Hierarchy.Cty.CtyCod < 0,	// Selected?
+	             true,				// Disabled
 		     "[%s]",Txt_Country);
 
 	 /***** List countries *****/
 	 for (NumCty = 0;
 	      NumCty < Gbl.Hierarchy.Ctys.Num;
 	      NumCty++)
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
-			Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
-			"%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	   {
+	    CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
+	    HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
+			CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod,	// Selected?
+			false,						// Not disabled
+			"%s",CtyInLst->Name[Gbl.Prefs.Language]);
+	   }
 
       /***** End selector of country *****/
       HTM_SELECT_End ();

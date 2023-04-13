@@ -59,34 +59,42 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-static struct Rub_Rubric PrjCfg_Rubrics[PrjCfg_NUM_RUBRICS];
+// static struct Rub_Rubric PrjCfg_Rubrics[PrjCfg_NUM_RUBRICS];
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects);
-static void PrjCfg_ShowFormRubrics (void);
-static void PrjCfg_ShowFormRubric (struct Rub_Rubrics *Rubrics,
+static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config);
+static void PrjCfg_ShowFormRubrics (const struct PrjCfg_Config *Config);
+static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
+                                   const struct Rub_Rubrics *Rubrics,
                                    PrjCfg_Rubric_t WhichRubric);
 
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
-				         struct Prj_Projects *Projects);
+				         struct PrjCfg_Config *Config);
 static bool PrjCfg_GetIfNETCanCreateFromForm (void);
 
 /*****************************************************************************/
 /************** Get configuration of projects for current course *************/
 /*****************************************************************************/
 
-void PrjCfg_GetConfig (struct Prj_Projects *Projects)
+void PrjCfg_GetConfig (struct PrjCfg_Config *Config)
   {
    MYSQL_RES *mysql_res;
+   PrjCfg_Rubric_t WhichRubric;
 
    /***** Get configuration of projects for current course from database *****/
    if (Prj_DB_GetConfig (&mysql_res))
-      PrjCfg_GetConfigDataFromRow (mysql_res,Projects);
+      PrjCfg_GetConfigDataFromRow (mysql_res,Config);
    else
-      Projects->Config.NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
+     {
+      for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+	   WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	   WhichRubric++)
+	 Config->RubCod[WhichRubric] = -1L;
+      Config->NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -132,10 +140,10 @@ void PrjCfg_ShowFormConfig (void)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Projects are editable by non-editing teachers? *****/
-	    PrjCfg_ShowFormNETCanCreate (&Projects);
+	    PrjCfg_ShowFormNETCanCreate (&Projects.Config);
 
 	    /***** Rubrics *****/
-	    PrjCfg_ShowFormRubrics ();
+	    PrjCfg_ShowFormRubrics (&Projects.Config);
 
 	 HTM_TABLE_End ();
 
@@ -150,42 +158,10 @@ void PrjCfg_ShowFormConfig (void)
   }
 
 /*****************************************************************************/
-/****** Show form to edit if non-editing teachers create new projects ********/
-/*****************************************************************************/
-
-static void PrjCfg_ShowFormNETCanCreate (const struct Prj_Projects *Projects)
-  {
-   extern const char *Txt_Create_project;
-   extern const char *Txt_Non_editing_teachers_can_create_new_projects;
-
-   HTM_TR_Begin (NULL);
-
-      /***** Label *****/
-      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-		    The_GetSuffix ());
-	 HTM_TxtColon (Txt_Create_project);
-      HTM_TD_End ();
-
-      /***** Data *****/
-      HTM_TD_Begin ("class=\"LM\"");
-	 HTM_LABEL_Begin ("class=\"DAT_%s\"",
-			  The_GetSuffix ());
-	    HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"NETCanCreate\" value=\"Y\"%s",
-				Projects->Config.NETCanCreate ? " checked=\"checked\"" :
-								"");
-	    HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
-	 HTM_LABEL_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
 /************ Show form to edit rubrics associated to projects ***************/
 /*****************************************************************************/
 
-static void PrjCfg_ShowFormRubrics (void)
+static void PrjCfg_ShowFormRubrics (const struct PrjCfg_Config *Config)
   {
    struct Rub_Rubrics Rubrics;
    PrjCfg_Rubric_t WhichRubric;
@@ -200,43 +176,59 @@ static void PrjCfg_ShowFormRubrics (void)
    for (WhichRubric  = (PrjCfg_Rubric_t) 0;
 	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
 	WhichRubric++)
-      PrjCfg_ShowFormRubric (&Rubrics,WhichRubric);
+      PrjCfg_ShowFormRubric (Config,&Rubrics,WhichRubric);
 
    /***** Free list of rubrics *****/
    Rub_FreeListRubrics (&Rubrics);
   }
 
 /*****************************************************************************/
-/************ Show form to edit rubrics associated to projects ***************/
+/******** Show form to edit one of the rubrics associated to projects ********/
 /*****************************************************************************/
 
-static void PrjCfg_ShowFormRubric (struct Rub_Rubrics *Rubrics,
+static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
+                                   const struct Rub_Rubrics *Rubrics,
                                    PrjCfg_Rubric_t WhichRubric)
   {
    extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
+   extern const char *Txt_no_rubric;
    unsigned NumRub;
+   const struct Rub_Rubric *Rubric;
+   long RubCodInConfig = Config->RubCod[WhichRubric];
 
    /***** Row with form for rubric *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-		    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColon (Txt_PROJECT_RUBRIC[WhichRubric]);
       HTM_TD_End ();
 
-      /* Data */
+      /* Selector of rubrics */
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"%s\" name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
 			   PrjCfg_RubricIDs[WhichRubric],
 			   PrjCfg_RubricIDs[WhichRubric]);
+
+	    /* First option to indicate that no rubric is selected */
+	    HTM_OPTION (HTM_Type_STRING,"-1",
+			RubCodInConfig <= 0,			// Selected?
+			false,					// Not disabled
+			"[%s]",Txt_no_rubric);
+
+	    /* One option for each rubric in this course */
 	    for (NumRub = 0;
 		 NumRub < Rubrics->Num;
 		 NumRub++)
-	       HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRub].RubCod,
-			   Rubrics->Lst[NumRub].RubCod == PrjCfg_Rubrics[WhichRubric].RubCod,false,
-			   "%s",Rubrics->Lst[NumRub].Title);
+	      {
+	       Rubric = &Rubrics->Lst[NumRub];
+	       HTM_OPTION (HTM_Type_LONG,&Rubric->RubCod,
+			   Rubric->RubCod == RubCodInConfig,	// Selected?
+			   false,				// Not disabled
+			   "%s",Rubric->Title);
+	      }
+
 	 HTM_SELECT_End ();
       HTM_TD_End ();
 
@@ -248,15 +240,57 @@ static void PrjCfg_ShowFormRubric (struct Rub_Rubrics *Rubrics,
 /*****************************************************************************/
 
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
-				         struct Prj_Projects *Projects)
+				         struct PrjCfg_Config *Config)
   {
    MYSQL_ROW row;
+   PrjCfg_Rubric_t WhichRubric;
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
+   /*
+   row[0]	RubTutCod
+   row[1]	RubEvlCod
+   row[2]	RubGblCod
+   row[3]	NETCanCreate
+   */
+   /***** Get rubric codes (row[0], row[1], row[2] *****/
+   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	WhichRubric++)
+      Config->RubCod[WhichRubric] = Str_ConvertStrCodToLongCod (row[WhichRubric]);
 
-   /***** Get whether non-editing teachers can create new projects or not *****/
-   Projects->Config.NETCanCreate = (row[0][0] == 'Y');
+   /***** Get whether non-editing teachers can create new projects or not (row[3]) *****/
+   Config->NETCanCreate = (row[3][0] == 'Y');
+  }
+
+/*****************************************************************************/
+/****** Show form to edit if non-editing teachers create new projects ********/
+/*****************************************************************************/
+
+static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
+  {
+   extern const char *Txt_Create_project;
+   extern const char *Txt_Non_editing_teachers_can_create_new_projects;
+
+   HTM_TR_Begin (NULL);
+
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+	 HTM_TxtColon (Txt_Create_project);
+      HTM_TD_End ();
+
+      /***** Data *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+	    HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"NETCanCreate\" value=\"Y\"%s",
+				Config->NETCanCreate ? " checked=\"checked\"" :
+						       "");
+	    HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -267,15 +301,22 @@ void PrjCfg_ReceiveConfig (void)
   {
    extern const char *Txt_The_configuration_of_the_projects_has_been_updated;
    struct Prj_Projects Projects;
+   PrjCfg_Rubric_t WhichRubric;
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Get rubric codes *****/
+   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	WhichRubric++)
+      Projects.Config.RubCod[WhichRubric] = Par_GetParLong (PrjCfg_RubricIDs[WhichRubric]);
 
    /***** Get non-editing teachers can create new projects or not *****/
    Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
 
    /***** Update database *****/
-   Prj_DB_UpdateCrsPrjsConfig (Projects.Config.NETCanCreate);
+   Prj_DB_UpdateConfig (&Projects);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);

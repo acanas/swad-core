@@ -547,7 +547,7 @@ void Plc_RemovePlace (void)
    /***** Get place code *****/
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
-   /***** Get data of the place from database *****/
+   /***** Get place data from database *****/
    Plc_GetPlaceDataByCod (Plc_EditingPlc);
 
    /***** Check if this place has centers *****/
@@ -630,7 +630,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    /* Get the new name for the place */
    Par_GetParText (ParName,NewPlcName,MaxBytes);
 
-   /***** Get from the database the old names of the place *****/
+   /***** Get place old names from database  *****/
    Plc_GetPlaceDataByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/

@@ -1927,7 +1927,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 					     IndTag,IndTag,
 					     The_GetSuffix ());
 			   free (FuncOnChange);
-			      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
+			      HTM_OPTION (HTM_Type_STRING,"",
+			                  false,	// Not selected
+			                  false,	// Not disabled
+			                  "&nbsp;");
 			      mysql_data_seek (mysql_res,0);
 			      TagFound = false;
 			      for (NumTag  = 1;
@@ -1948,16 +1951,19 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				    TagFound = true;
 				   }
 				 HTM_OPTION (HTM_Type_STRING,row[1],
-					     IsThisTag,false,
+					     IsThisTag,		// Selected?
+					     false,		// Not disabled
 					     "%s",row[1]);
 				}
 			      /* If it's a new tag received from the form */
 			      if (!TagFound && Question->Tags.Txt[IndTag][0])
 				 HTM_OPTION (HTM_Type_STRING,Question->Tags.Txt[IndTag],
-					     true,false,
+					     true,	// Selected
+					     false,	// Not disabled
 					     "%s",Question->Tags.Txt[IndTag]);
 			      HTM_OPTION (HTM_Type_STRING,"",
-					  false,false,
+					  false,	// Selected
+					  false,	// Not disabled
 					  "[%s]",Txt_new_tag);
 			   HTM_SELECT_End ();
 			HTM_TD_End ();

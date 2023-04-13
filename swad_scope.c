@@ -105,42 +105,48 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		 {
 		  case HieLvl_SYS:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_System,
 				 Cfg_PLATFORM_SHORT_NAME);
 		     break;
 		  case HieLvl_CTY:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_Country,
 				 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 		     break;
 		  case HieLvl_INS:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_Institution,
 				 Gbl.Hierarchy.Ins.ShrtName);
 		     break;
 		  case HieLvl_CTR:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_Center,
 				 Gbl.Hierarchy.Ctr.ShrtName);
 		     break;
 		  case HieLvl_DEG:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_Degree,
 				 Gbl.Hierarchy.Deg.ShrtName);
 		     break;
 		  case HieLvl_CRS:
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,false,
+				 Gbl.Scope.Current == Scope,	// Selected?
+				 false,				// Not disabled
 				 "%s: %s",
 				 Txt_Course,
 				 Gbl.Hierarchy.Crs.ShrtName);

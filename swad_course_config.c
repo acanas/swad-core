@@ -214,6 +214,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
    unsigned NumDeg;
+   const struct Deg_Degree *DegInLst;
 
    /***** Degree *****/
    HTM_TR_Begin (NULL);
@@ -239,9 +240,13 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		  for (NumDeg = 0;
 		       NumDeg < Gbl.Hierarchy.Degs.Num;
 		       NumDeg++)
-		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Degs.Lst[NumDeg].DegCod,
-				 Gbl.Hierarchy.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod,false,
-				 "%s",Gbl.Hierarchy.Degs.Lst[NumDeg].ShrtName);
+		    {
+		     DegInLst = &Gbl.Hierarchy.Degs.Lst[NumDeg];
+		     HTM_OPTION (HTM_Type_LONG,&DegInLst->DegCod,
+				 DegInLst->DegCod == Gbl.Hierarchy.Deg.DegCod,	// Selected?
+				 false,						// Not disabled
+				 "%s",DegInLst->ShrtName);
+		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 
@@ -326,7 +331,8 @@ static void CrsCfg_Year (bool PutForm)
 		       Year <= Deg_MAX_YEARS_PER_DEGREE;
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				 Year == Gbl.Hierarchy.Crs.Year,false,
+				 Year == Gbl.Hierarchy.Crs.Year,	// Selected?
+				 false,					// Not disabled
 				 "%s",Txt_YEAR_OF_DEGREE[Year]);
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();

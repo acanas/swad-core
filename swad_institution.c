@@ -878,7 +878,8 @@ void Ins_WriteSelectorOfInstitution (void)
 			   The_GetSuffix ());
 
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Ins.InsCod < 0,true,
+		  Gbl.Hierarchy.Ins.InsCod < 0,	// Selected?
+		  true,				// Disabled
 		  "[%s]",Txt_Institution);
 
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
@@ -901,7 +902,8 @@ void Ins_WriteSelectorOfInstitution (void)
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&InsCod,
 			Gbl.Hierarchy.Ins.InsCod > 0 &&
-			InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+			InsCod == Gbl.Hierarchy.Ins.InsCod,	// Selected?
+			false,					// Not disabled
 			"%s",row[1]);
 	   }
 

@@ -492,7 +492,8 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	   {
 	    RoleUnsigned = (unsigned) Role;
 	    HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			Role == Gbl.Usrs.Me.Role.Logged,false,
+			Role == Gbl.Usrs.Me.Role.Logged,	// Selected?
+			false,					// Not disabled
 			"%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
 	   }
       HTM_SELECT_End ();

@@ -124,7 +124,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		 {
 		  FigureTypeUnsigned = (unsigned) FigType;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-			      FigType == SelectedFigureType,false,
+			      FigType == SelectedFigureType,	// Selected?
+			      false,				// Not disabled?
 			      "%s",Txt_FIGURE_TYPES[FigType]);
 		 }
 	    HTM_SELECT_End ();

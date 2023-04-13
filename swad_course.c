@@ -642,7 +642,9 @@ void Crs_WriteSelectorOfCourse (void)
 			   The_GetSuffix ());
 
       /***** Initial disabled option *****/
-      HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Crs.CrsCod < 0,true,
+      HTM_OPTION (HTM_Type_STRING,"",
+                  Gbl.Hierarchy.Crs.CrsCod < 0,	// Selected?
+                  true,				// Disabled
 		  "[%s]",Txt_Course);
 
       if (Gbl.Hierarchy.Deg.DegCod > 0)
@@ -663,7 +665,8 @@ void Crs_WriteSelectorOfCourse (void)
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
-			CrsCod == Gbl.Hierarchy.Crs.CrsCod,false,
+			CrsCod == Gbl.Hierarchy.Crs.CrsCod,
+			false,					// Not disabled
 			"%s",row[1]);	// Short name (row[1])
 	   }
 
@@ -776,7 +779,9 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option when no course selected *****/
 	 if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
-	    HTM_OPTION (HTM_Type_STRING,"-1",true,true,
+	    HTM_OPTION (HTM_Type_STRING,"-1",
+	                true,	// Selected
+	                true,	// Disabled
 			"%s",Txt_Course);
 
 	 if (Gbl.Usrs.Me.MyCrss.Num)
@@ -799,8 +804,9 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		  LastDegCod = DegCod;
 		 }
 
-	       HTM_OPTION (HTM_Type_LONG,&Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod,
-			   CrsCod == Gbl.Hierarchy.Crs.CrsCod,false,	// Course selected
+	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
+			   CrsCod == Gbl.Hierarchy.Crs.CrsCod,	// Selected?
+			   false,				// Not disabled
 			   "%s",CrsShortName);
 	      }
 
@@ -812,7 +818,9 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		when I don't belong to it *****/
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	     !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Crs.CrsCod,true,true,
+	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Crs.CrsCod,
+	                true,	// Selected
+	                true,	// Disabled
 			"%s",Gbl.Hierarchy.Crs.ShrtName);
 
       /***** End selector of courses *****/
@@ -1210,7 +1218,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 					// because it's possible to move this course
 					// to another degree (with other active years)
 			HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
-				    YearAux == Crs->Year,false,
+				    YearAux == Crs->Year,	// Selected?
+				    false,			// Not disabled
 				    "%s",Txt_YEAR_OF_DEGREE[YearAux]);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -1352,7 +1361,8 @@ static void Crs_PutFormToCreateCourse (void)
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      Year == Crs_EditingCrs->Year,false,
+			      Year == Crs_EditingCrs->Year,	// Selected?
+			      false,				// Not disabled
 			      "%s",Txt_YEAR_OF_DEGREE[Year]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -2544,7 +2554,8 @@ void Crs_AskRemoveOldCrss (void)
 		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   i == MonthsWithoutAccess,false,
+			   i == MonthsWithoutAccess,	// Selected?
+			   false,			// Not disabled
 			   "%u",i);
 	 HTM_SELECT_End ();
 	 HTM_NBSP ();

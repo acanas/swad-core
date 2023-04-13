@@ -61,22 +61,6 @@ const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS] =
   };
 
 /*****************************************************************************/
-/************ Update configuration of projects for current course ************/
-/*****************************************************************************/
-
-void Prj_DB_UpdateCrsPrjsConfig (bool Editable)
-  {
-   DB_QueryREPLACE ("can not save configuration of projects",
-		    "REPLACE INTO prj_config"
-	            " (CrsCod,Editable)"
-                    " VALUES"
-                    " (%ld,'%c')",
-		    Gbl.Hierarchy.Crs.CrsCod,
-		    Editable ? 'Y' :
-			       'N');
-  }
-
-/*****************************************************************************/
 /**************************** Lock project edition ***************************/
 /*****************************************************************************/
 
@@ -548,20 +532,6 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
-/************** Get configuration of projects for current course *************/
-/*****************************************************************************/
-
-unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get project configuration",
-		   "SELECT Editable"		// row[0]
-		    " FROM prj_config"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
@@ -956,4 +926,40 @@ void Prj_DB_RemoveCrsPrjs (long CrsCod)
 		   "DELETE FROM prj_projects"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Update configuration of projects for current course ************/
+/*****************************************************************************/
+
+void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects)
+  {
+   DB_QueryREPLACE ("can not save configuration of projects",
+		    "REPLACE INTO prj_config"
+	            " (CrsCod,RubTutCod,RubEvlCod,RubGblCod,NETCanCreate)"
+                    " VALUES"
+                    " (%ld,%ld,%ld,%ld,'%c')",
+		    Gbl.Hierarchy.Crs.CrsCod,
+	            Projects->Config.RubCod[PrjCfg_RUBRIC_TUT],
+	            Projects->Config.RubCod[PrjCfg_RUBRIC_EVL],
+	            Projects->Config.RubCod[PrjCfg_RUBRIC_GBL],
+		    Projects->Config.NETCanCreate ? 'Y' :
+			                            'N');
+  }
+
+/*****************************************************************************/
+/************** Get configuration of projects for current course *************/
+/*****************************************************************************/
+
+unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get project configuration",
+		   "SELECT RubTutCod,"		// row[0]
+                          "RubEvlCod,"		// row[1]
+                          "RubGblCod,"		// row[2]
+			  "NETCanCreate"	// row[3]
+		    " FROM prj_config"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
   }

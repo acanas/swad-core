@@ -397,9 +397,18 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
-      HTM_OPTION (HTM_Type_STRING,"" ,PrintedQuestion->StrAnswers[0] == '\0',false,"&nbsp;");
-      HTM_OPTION (HTM_Type_STRING,"T",PrintedQuestion->StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-      HTM_OPTION (HTM_Type_STRING,"F",PrintedQuestion->StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+      HTM_OPTION (HTM_Type_STRING,"" ,
+                  PrintedQuestion->StrAnswers[0] == '\0',	// Selected?
+                  false,					// Not disabled
+                  "&nbsp;");
+      HTM_OPTION (HTM_Type_STRING,"T",
+                  PrintedQuestion->StrAnswers[0] == 'T',	// Selected?
+                  false,					// Not disabled
+                  "%s",Txt_TF_QST[0]);
+      HTM_OPTION (HTM_Type_STRING,"F",
+                  PrintedQuestion->StrAnswers[0] == 'F',	// Selected?
+                  false,					// Not disabled
+                  "%s",Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
 

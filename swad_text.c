@@ -26974,6 +26974,28 @@ const char *Txt_No_results =
 #elif L==10	// tr
 	"No results.";			// Çeviri lazim!
 #endif
+const char *Txt_no_rubric =
+#if   L==1	// ca
+	"sense r&uacute;brica";
+#elif L==2	// de
+	"keine Rubrik";
+#elif L==3	// en
+	"no rubric";
+#elif L==4	// es
+	"sin r&uacute;brica";
+#elif L==5	// fr
+	"pas de rubrique";
+#elif L==6	// gn
+	"ndaip&oacute;ri r&uacute;brica";
+#elif L==7	// it
+	"nessuna rubrica";
+#elif L==8	// pl
+	"bez rubryk";
+#elif L==9	// pt
+	"sem rubrica";
+#elif L==10	// tr
+	"de&gbreve;erlendirme listesi olmadan";
+#endif
 
 const char *Txt_No_rubrics =
 #if   L==1	// ca
@@ -26987,7 +27009,7 @@ const char *Txt_No_rubrics =
 #elif L==5	// fr
 	"Pas de rubriques.";
 #elif L==6	// gn
-	"No hay r&uacute;bricas.";		// Okoteve traducción
+	"Ndaip&oacute;ri r&uacute;brica.";
 #elif L==7	// it
 	"Non ci sono rubriche.";
 #elif L==8	// pl

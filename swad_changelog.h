@@ -629,10 +629,18 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.95 (2023-04-12)"
+#define Log_PLATFORM_VERSION	"SWAD 22.96 (2023-04-12)"
 #define CSS_FILE		"swad22.95.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.96:    Apr 12, 2023  Changes in configuration of projects.
+				        Code refactoring in selectors. (338977 lines)
+					4 changes necessary in database:
+ALTER TABLE prj_config CHANGE COLUMN Editable NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y';
+ALTER TABLE prj_config ADD COLUMN RubTutCod INT NOT NULL DEFAULT -1 AFTER CrsCod;
+ALTER TABLE prj_config ADD COLUMN RubEvlCod INT NOT NULL DEFAULT -1 AFTER RubTutCod;
+ALTER TABLE prj_config ADD COLUMN RubGblCod INT NOT NULL DEFAULT -1 AFTER RubEvlCod;
+
 	Version 22.95:    Apr 12, 2023  Changes in configuration of projects. (338602 lines)
 	Version 22.94:    Apr 12, 2023  Code refactoring in rubrics.
 					Changes in configuration of projects. (338537 lines)

@@ -1264,10 +1264,12 @@ static void Grp_ListGroupTypesForEdition (void)
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
 		                    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
+				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,	// Selected?
+				 false,									// Not disabled
 				 "%s",Txt_It_is_optional_to_choose_a_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,false,
+				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment,	// Selected?
+				 false,									// Not disabled
 				 "%s",Txt_It_is_mandatory_to_choose_a_group);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -1282,10 +1284,12 @@ static void Grp_ListGroupTypesForEdition (void)
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
+				 !Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,	// Selected?
+				 false,									// Not disabled
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,false,
+				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment,	// Selected?
+				 false,									// Not disabled
 				 "%s",Txt_A_student_can_belong_to_several_groups);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -1400,13 +1404,14 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
-   unsigned NumGrpTyp;
-   unsigned NumTipGrpAux;
+   unsigned NumGrpTyp1;
+   const struct GroupType *GrpTyp1InLst;
+   unsigned NumGrpTyp2;
+   const struct GroupType *GrpTyp2InLst;
    unsigned NumGrpThisType;
-   unsigned NumRoo;
-   struct GroupType *GrpTyp;
-   struct GroupType *GrpTypAux;
    struct Group *Grp;
+   unsigned NumRoo;
+   const struct Roo_Room *RooInLst;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -1417,16 +1422,16 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
       Grp_WriteHeadingGroups ();
 
       /***** List the groups *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	   NumGrpTyp++)
+      for (NumGrpTyp1 = 0;
+	   NumGrpTyp1 < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	   NumGrpTyp1++)
 	{
-	 GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+	 GrpTyp1InLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp1];
 	 for (NumGrpThisType = 0;
-	      NumGrpThisType < GrpTyp->NumGrps;
+	      NumGrpThisType < GrpTyp1InLst->NumGrps;
 	      NumGrpThisType++)
 	   {
-	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+	    Grp = &GrpTyp1InLst->LstGrps[NumGrpThisType];
 
 	    HTM_TR_Begin (NULL);
 
@@ -1477,14 +1482,15 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 				       The_GetSuffix ());
 
 			/* Options for group types */
-			for (NumTipGrpAux = 0;
-			     NumTipGrpAux < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-			     NumTipGrpAux++)
+			for (NumGrpTyp2 = 0;
+			     NumGrpTyp2 < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+			     NumGrpTyp2++)
 			  {
-			   GrpTypAux = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumTipGrpAux];
-			   HTM_OPTION (HTM_Type_LONG,&GrpTypAux->GrpTypCod,
-				       GrpTypAux->GrpTypCod == GrpTyp->GrpTypCod,false,
-				       "%s",GrpTypAux->GrpTypName);
+			   GrpTyp2InLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp2];
+			   HTM_OPTION (HTM_Type_LONG,&GrpTyp2InLst->GrpTypCod,
+				       GrpTyp2InLst->GrpTypCod == GrpTyp1InLst->GrpTypCod,	// Selected?
+				       false,							// Not disabled
+				       "%s",GrpTyp2InLst->GrpTypName);
 			  }
 
 		     /* End selector */
@@ -1515,7 +1521,8 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 			/* Option for no assigned room */
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    Grp->Room.RooCod < 0,false,
+				    Grp->Room.RooCod < 0,	// Selected?
+				    false,			// Not disabled
 				    "%s",Txt_No_assigned_room);
 
 			/* Option for another room */
@@ -1527,9 +1534,13 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			for (NumRoo = 0;
 			     NumRoo < Rooms->Num;
 			     NumRoo++)
-			   HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumRoo].RooCod,
-				       Rooms->Lst[NumRoo].RooCod == Grp->Room.RooCod,false,
-				       "%s",Rooms->Lst[NumRoo].ShrtName);
+			  {
+			   RooInLst = &Rooms->Lst[NumRoo];
+			   HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
+				       RooInLst->RooCod == Grp->Room.RooCod,	// Selected
+				       false,					// Not disabled
+				       "%s",RooInLst->ShrtName);
+			  }
 
 		     /* End selector */
 		     HTM_SELECT_End ();
@@ -2437,10 +2448,12 @@ static void Grp_PutFormToCreateGroupType (void)
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
+				 !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
+				 false,						// Not disabled
 				 "%s",Txt_It_is_optional_to_choose_a_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,false,
+				 Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
+				 false,						// Not disabled
 				 "%s",Txt_It_is_mandatory_to_choose_a_group);
 		  HTM_SELECT_End ();
 	       HTM_TD_End ();
@@ -2452,10 +2465,12 @@ static void Grp_PutFormToCreateGroupType (void)
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
+				 !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,	// Selected?
+				 false,						// Not disabled
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,false,
+				 Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,		// Selected?
+				 false,						// Not disabled
 				 "%s",Txt_A_student_can_belong_to_several_groups);
 		  HTM_SELECT_End ();
 	       HTM_TD_End ();
@@ -2520,7 +2535,9 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    extern const char *Txt_Another_room;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
+   const struct GroupType *GrpTypInLst;
    unsigned NumRoo;
+   const struct Roo_Room *RooInLst;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -2566,10 +2583,13 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		     for (NumGrpTyp = 0;
 			  NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 			  NumGrpTyp++)
-			HTM_OPTION (HTM_Type_LONG,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
-				    Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
-				    Gbl.Crs.Grps.GrpTyp.GrpTypCod,false,
-				    "%s",Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+		       {
+			GrpTypInLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+			HTM_OPTION (HTM_Type_LONG,&GrpTypInLst->GrpTypCod,
+				    GrpTypInLst->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod,	// Selected?
+				    false,							// Not disabled
+				    "%s",GrpTypInLst->GrpTypName);
+		       }
 
 		  /* End selector */
 		  HTM_SELECT_End ();
@@ -2593,20 +2613,28 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 				    The_GetSuffix ());
 
 		     /* Option for no assigned room */
-		     HTM_OPTION (HTM_Type_STRING,"-1",Gbl.Crs.Grps.RooCod < 0,false,
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+		                 Gbl.Crs.Grps.RooCod < 0,	// Selected?
+		                 false,				// Not disabled
 				 "%s",Txt_No_assigned_room);
 
 		     /* Option for another room */
-		     HTM_OPTION (HTM_Type_STRING,"0",Gbl.Crs.Grps.RooCod == 0,false,
+		     HTM_OPTION (HTM_Type_STRING,"0",
+		                 Gbl.Crs.Grps.RooCod == 0,	// Selected?
+		                 false,				// Not disabled
 				 "%s",Txt_Another_room);
 
 		     /* Options for rooms */
 		     for (NumRoo = 0;
 			  NumRoo < Rooms->Num;
 			  NumRoo++)
-			HTM_OPTION (HTM_Type_LONG,&Rooms->Lst[NumRoo].RooCod,
-				    Rooms->Lst[NumRoo].RooCod == Gbl.Crs.Grps.RooCod,false,
-				    "%s",Rooms->Lst[NumRoo].ShrtName);
+		       {
+			RooInLst = &Rooms->Lst[NumRoo];
+			HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
+				    RooInLst->RooCod == Gbl.Crs.Grps.RooCod,	// Selected?
+				    false,					// Not disabled
+				    "%s",RooInLst->ShrtName);
+		       }
 
 		  /* End selector */
 		  HTM_SELECT_End ();

@@ -1206,7 +1206,10 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 --
 CREATE TABLE IF NOT EXISTS prj_config (
 	CrsCod INT NOT NULL DEFAULT -1,
-	Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',
+	RubTutCod INT NOT NULL DEFAULT -1,
+	RubEvlCod INT NOT NULL DEFAULT -1,
+	RubGblCod INT NOT NULL DEFAULT -1,
+	NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(CrsCod));
 --
 -- Table prj_projects: stores the projects proposed by the teachers to their students

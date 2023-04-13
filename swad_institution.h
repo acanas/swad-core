@@ -64,7 +64,7 @@ typedef enum
 struct ListInstits
   {
    unsigned Num;		// Number of institutions
-   struct Ins_Instit *Lst;		// List of institutions
+   struct Ins_Instit *Lst;	// List of institutions
    Ins_Order_t SelectedOrder;	// Order of institutions
   };
 

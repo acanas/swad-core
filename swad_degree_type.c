@@ -105,6 +105,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    extern const char *Txt_Any_type_of_degree;
    struct DegTyp_DegTypes DegTypes;
    unsigned NumDegTyp;
+   const struct DegTyp_DegreeType *DegTypInLst;
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
@@ -116,14 +117,19 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 		     " class=\"INPUT_%s\"",
 		     The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  SelectedDegTypCod == -1L,false,
+		  SelectedDegTypCod <= 0,	// Selected?
+		  false,			// Not disabled
 		  "%s",Txt_Any_type_of_degree);
       for (NumDegTyp = 0;
 	   NumDegTyp < DegTypes.Num;
 	   NumDegTyp++)
-	 HTM_OPTION (HTM_Type_LONG,&DegTypes.Lst[NumDegTyp].DegTypCod,
-		     DegTypes.Lst[NumDegTyp].DegTypCod == SelectedDegTypCod,false,
-		     "%s",DegTypes.Lst[NumDegTyp].DegTypName);
+	{
+	 DegTypInLst = &DegTypes.Lst[NumDegTyp];
+	 HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
+		     DegTypInLst->DegTypCod == SelectedDegTypCod,	// Selected?
+		     false,						// Not disabled
+		     "%s",DegTypInLst->DegTypName);
+	}
    HTM_SELECT_End ();
 
    /***** Free list of degree types *****/

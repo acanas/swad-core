@@ -33,8 +33,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Prj_DB_UpdateCrsPrjsConfig (bool Editable);
-
 void Prj_DB_LockProjectEdition (long PrjCod);
 void Prj_DB_UnlockProjectEdition (long PrjCod);
 long Prj_DB_CreateProject (const struct Prj_Project *Prj);
@@ -46,7 +44,6 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj);
 unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const struct Prj_Projects *Projects,
                                  const char *UsrsSubQuery);	// NULL if no users
-unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res);
 unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod);
 void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize);
 unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod);
@@ -65,5 +62,10 @@ void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod);
 void Prj_DB_RemoveConfigOfCrsPrjs (long CrsCod);
 void Prj_DB_RemovePrj (long PrjCod);
 void Prj_DB_RemoveCrsPrjs (long CrsCod);
+
+//----------------------------- Configuration ---------------------------------
+
+void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects);
+unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res);
 
 #endif

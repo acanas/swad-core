@@ -810,11 +810,15 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_PENDING);
-	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
+	                   true,	// Selected
+	                   false,	// Not disabled
 			   "%s",Txt[Hie_STATUS_PENDING]);
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_ACTIVE);
-	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
+	                   false,	// Not selected
+	                   false,	// Not disabled
 			   "%s",Txt[Hie_STATUS_ACTIVE]);
 
 	    HTM_SELECT_End ();

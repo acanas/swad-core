@@ -309,6 +309,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    unsigned NumCty;
+   const struct Cty_Countr *CtyInLst;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -334,9 +335,13 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		  for (NumCty = 0;
 		       NumCty < Gbl.Hierarchy.Ctys.Num;
 		       NumCty++)
-		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
-				 Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
-				 "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+		    {
+		     CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
+		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
+				 CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod,	// Selected?
+				 false,						// Not disabled
+				 "%s",CtyInLst->Name[Gbl.Prefs.Language]);
+		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
