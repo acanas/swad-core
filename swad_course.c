@@ -66,6 +66,7 @@
 #include "swad_parameter_code.h"
 #include "swad_project.h"
 #include "swad_record_database.h"
+#include "swad_rubric.h"
 #include "swad_search.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
@@ -1754,11 +1755,28 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
              before removing groups and projects *****/
       Brw_DB_RemoveCrsFiles (CrsCod);
 
-      /***** Remove assignments of the course *****/
+      /***** Assessment tab *****/
+      /* Remove assignments of the course */
       Asg_RemoveCrsAssignments (CrsCod);
 
-      /***** Remove projects of the course *****/
+      /* Remove projects of the course */
       Prj_RemoveCrsProjects (CrsCod);
+
+      /* Remove tests of the course */
+      TstPrn_RemoveCrsPrints (CrsCod);
+      Tst_DB_RemoveTstConfig (CrsCod);
+
+      /* Remove all exams in the course */
+      Exa_RemoveCrsExams (CrsCod);
+
+      /* Remove all games in the course */
+      Gam_RemoveCrsGames (CrsCod);
+
+      /* Remove all questions in the course */
+      Qst_RemoveCrsQsts (CrsCod);
+
+      /* Remove all rubrics in the course */
+      Rub_RemoveCrsRubrics (CrsCod);
 
       /***** Remove attendance events of the course *****/
       Att_RemoveCrsEvents (CrsCod);
@@ -1771,21 +1789,6 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove all surveys in the course *****/
       Svy_RemoveSurveys (HieLvl_CRS,CrsCod);
-
-      /***** Remove all games in the course *****/
-      Gam_RemoveCrsGames (CrsCod);
-
-      /***** Remove all exams in the course *****/
-      Exa_RemoveCrsExams (CrsCod);
-
-      /***** Remove all test prints made in the course *****/
-      TstPrn_RemoveCrsPrints (CrsCod);
-
-      /***** Remove test configuration of the course *****/
-      Tst_DB_RemoveTstConfig (CrsCod);
-
-      /***** Remove all questions in the course *****/
-      Qst_RemoveCrsQsts (CrsCod);
 
       /***** Remove groups in the course *****/
       Grp_DB_RemoveCrsGrps (CrsCod);

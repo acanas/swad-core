@@ -83,8 +83,6 @@ struct RubCri_Criterion
    long CriCod;		// Criterion code
    unsigned CriInd;	// Criterion index (position in the rubric)
    struct Rsc_Link Link;
-   // Rsc_Type_t Source;
-   // long Cod;
    double Values[RubCri_NUM_VALUES];
    double Weight;	// Relative weight (from 0.0 to 1.0)
    char Title[RubCri_MAX_BYTES_TITLE + 1];	// Title of the criterion

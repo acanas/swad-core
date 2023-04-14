@@ -41,8 +41,9 @@ void RubCri_ChangeMinValue (void);
 void RubCri_ChangeMaxValue (void);
 void RubCri_ChangeWeight (void);
 
-void RubCri_ListCriteria (struct Rub_Rubrics *Rubrics,
-			  struct RubCri_Criterion *Criterion);
+void RubCri_ListCriteriaForSeeing (const struct Rub_Rubrics *Rubrics);
+void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics,
+			            struct RubCri_Criterion *Criterion);
 
 void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion);
 

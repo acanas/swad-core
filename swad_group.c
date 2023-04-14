@@ -1538,7 +1538,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			  {
 			   RooInLst = &Rooms->Lst[NumRoo];
 			   HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
-				       RooInLst->RooCod == Grp->Room.RooCod,	// Selected
+				       RooInLst->RooCod == Grp->Room.RooCod,	// Selected?
 				       HTM_OPTION_ENABLED,
 				       "%s",RooInLst->ShrtName);
 			  }

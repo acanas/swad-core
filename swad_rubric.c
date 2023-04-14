@@ -338,8 +338,7 @@ void Rub_SeeOneRubric (void)
    Rub_GetRubricDataByCod (&Rubric);
 
    /***** Show rubric *****/
-   Rub_ShowOnlyOneRubric (&Rubrics,&Rubric,
-                          false);	// Do not list rubric criteria
+   Rub_ShowOnlyOneRubric (&Rubrics,&Rubric);
   }
 
 /*****************************************************************************/
@@ -347,16 +346,7 @@ void Rub_SeeOneRubric (void)
 /*****************************************************************************/
 
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics,
-                            const struct Rub_Rubric *Rubric,
-			    bool ListRubricCriteria)
-  {
-   Rub_ShowOnlyOneRubricBegin (Rubrics,Rubric,ListRubricCriteria);
-   Rub_ShowOnlyOneRubricEnd ();
-  }
-
-void Rub_ShowOnlyOneRubricBegin (struct Rub_Rubrics *Rubrics,
-                                 const struct Rub_Rubric *Rubric,
-			         bool ListRubricCriteria)
+                            const struct Rub_Rubric *Rubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics;
    extern const char *Txt_Rubric;
@@ -371,13 +361,8 @@ void Rub_ShowOnlyOneRubricBegin (struct Rub_Rubrics *Rubrics,
 		              true);	// Show only this rubric
 
       /***** Write criteria of this rubric *****/
-      if (ListRubricCriteria)
-	 Ale_ShowAlert (Ale_INFO,"The criteria of the rubric should be listed here.");
-	 // Rub_ListRubricCriteria (Rubrics);
-  }
+      RubCri_ListCriteriaForSeeing (Rubrics);
 
-void Rub_ShowOnlyOneRubricEnd (void)
-  {
    /***** End box *****/
    Box_BoxEnd ();
   }
@@ -734,33 +719,6 @@ void Rub_RemoveCrsRubrics (long CrsCod)
   }
 
 /*****************************************************************************/
-/************************ List the criteria in a rubric **********************/
-/*****************************************************************************/
-
-void Rub_ListRubric (void)
-  {
-   struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Reset rubrics context *****/
-   Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
-
-   /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
-   Rubric.RubCod = Rubrics.RubCod;
-
-   /***** Get rubric data *****/
-   Rub_GetRubricDataByCod (&Rubric);
-   Rub_DB_GetRubricTxt (Rubric.RubCod,Txt);
-
-   /***** Show rubric *****/
-   Rub_ShowOnlyOneRubric (&Rubrics,&Rubric,
-                          true);	// List rubric criteria
-  }
-
-/*****************************************************************************/
 /*************** Request the creation or edition of a rubric *****************/
 /*****************************************************************************/
 
@@ -833,7 +791,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
      {
       case Rub_EXISTING_RUBRIC:
 	 /* Show list of criteria */
-	 RubCri_ListCriteria (Rubrics,Criterion);
+	 RubCri_ListCriteriaForEdition (Rubrics,Criterion);
          break;
       case Rub_NEW_RUBRIC:
 	 /* Show rubrics again */
