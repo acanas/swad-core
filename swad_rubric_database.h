@@ -38,14 +38,14 @@
 /*****************************************************************************/
 
 //-------------------------------- Rubrics ------------------------------------
-long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric,const char *Txt);
-void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric,const char *Txt);
+long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric);
+void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric);
 void Rub_DB_HideOrUnhideRubric (long RubCod,bool Hide);
 
 unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res);
 unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod);
 void Rub_DB_GetRubricTitle (long RubCod,char *Title,size_t TitleSize);
-void Rub_DB_GetRubricTxt (long RubCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+void Rub_DB_GetRubricTxt (struct Rub_Rubric *Rubric);
 bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric);
 unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Scope);
 unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Scope);

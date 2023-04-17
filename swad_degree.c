@@ -1121,10 +1121,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 	   }
 	}
       else	// If there is not a degree logo or web
-         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
+         Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a degree name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

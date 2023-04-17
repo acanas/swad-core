@@ -1563,14 +1563,14 @@ void Agd_ReceiveFormEvent (void)
    if (!AgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Event[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new event or update an existing one *****/

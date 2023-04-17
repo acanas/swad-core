@@ -1488,7 +1488,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
    else	// If there is not an exam title
      {
       NewExamIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    return NewExamIsCorrect;

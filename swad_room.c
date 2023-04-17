@@ -1403,7 +1403,7 @@ void Roo_ReceiveFormNewRoom (void)
         }
      }
    else	// If there is not a room name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

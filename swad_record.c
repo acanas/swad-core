@@ -474,7 +474,7 @@ void Rec_ReceiveFormField (void)
          Rec_CreateRecordField ();
      }
    else		// If there is not name
-      Ale_ShowAlertYouMustSpecifyTheName ();
+      Ale_CreateAlertYouMustSpecifyTheName ();
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();

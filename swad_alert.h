@@ -82,13 +82,13 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
                               void (*FuncPars) (void *Args),void *Args,
                               Btn_Button_t Button,const char *TxtButton);
 
-void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void);
-void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
-void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void);
 void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void);
-void Ale_ShowAlertYouMustSpecifyTheTitle (void);
-void Ale_ShowAlertYouMustSpecifyTheWebAddress (void);
-void Ale_ShowAlertYouMustSpecifyTheName (void);
-void Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName (void);
+void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
+void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void);
+void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void);
+void Ale_CreateAlertYouMustSpecifyTheTitle (void);
+void Ale_CreateAlertYouMustSpecifyTheWebAddress (void);
+void Ale_CreateAlertYouMustSpecifyTheName (void);
+void Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName (void);
 
 #endif

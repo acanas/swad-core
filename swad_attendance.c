@@ -1237,7 +1237,7 @@ void Att_ReceiveFormEvent (void)
    else	// If there is not an attendance event title
      {
       ReceivedAttEventIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new attendance event or update an existing one *****/

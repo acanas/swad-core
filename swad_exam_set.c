@@ -313,7 +313,7 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
    else	// If there is not a set title
      {
       NewTitleIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    return NewTitleIsCorrect;

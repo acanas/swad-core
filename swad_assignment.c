@@ -1483,7 +1483,7 @@ void Asg_ReceiveFormAssignment (void)
    else	// If there is not an assignment title
      {
       NewAssignmentIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new assignment or update an existing one *****/

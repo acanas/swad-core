@@ -817,7 +817,7 @@ void Bld_ReceiveFormNewBuilding (void)
         }
      }
    else	// If there is not a building name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

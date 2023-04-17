@@ -945,7 +945,7 @@ void Ban_ReceiveFormNewBanner (void)
         }
      }
    else	// If there is not a banner name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

@@ -804,7 +804,7 @@ void Plc_ReceiveFormNewPlace (void)
         }
      }
    else	// If there is not a place name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

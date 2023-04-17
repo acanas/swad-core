@@ -946,10 +946,10 @@ void Dpt_ReceiveFormNewDpt (void)
            }
         }
       else	// If there is not a web
-         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
+         Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a department name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

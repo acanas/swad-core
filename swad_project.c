@@ -4093,7 +4093,7 @@ void Prj_ReceiveFormProject (void)
    if (!Projects.Prj.Title[0])	// If there is not a project title
      {
       NewProjectIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new project or update an existing one *****/

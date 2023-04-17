@@ -1600,10 +1600,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
            }
         }
       else	// If there is not a web
-         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
+         Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a institution name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

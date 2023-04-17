@@ -1543,7 +1543,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	   }
 	}
       else	// If there is not a course name
-         Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+         Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
      }
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,

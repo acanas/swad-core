@@ -49,7 +49,8 @@ struct Rub_Rubric
    long RubCod;			// Rubric code
    long CrsCod;			// Course code
    long UsrCod;			// Author code
-   char Title[Rub_MAX_BYTES_TITLE + 1];
+   char Title[Rub_MAX_BYTES_TITLE + 1];	// Title
+   char *Txt;			// Text (dynamically allocated)
   };
 
 struct Rub_Rubrics
@@ -57,7 +58,7 @@ struct Rub_Rubrics
    bool LstIsRead;		// Is the list already read from database...
 				// ...or it needs to be read?
    unsigned Num;		// Total number of rubrics
-   struct Rub_Rubric *Lst;	// List of rubrics
+   long *Lst;			// List of rubric codes
    unsigned CurrentPage;
    long RubCod;			// Selected/current rubric code
    long CriCod;			// Selected/current criterion code

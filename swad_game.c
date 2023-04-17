@@ -1484,7 +1484,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
    else	// If there is not a game title
      {
       NewGameIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    return NewGameIsCorrect;

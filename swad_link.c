@@ -795,7 +795,7 @@ void Lnk_ReceiveFormNewLink (void)
         }
      }
    else	// If there is not a link name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /*************************** Create a new rubric *****************************/
 /*****************************************************************************/
 
-long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric,const char *Txt)
+long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create new rubric",
@@ -69,14 +69,14 @@ long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric,const char *Txt)
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Rubric->Title,
-				Txt);
+				Rubric->Txt);
   }
 
 /*****************************************************************************/
 /************************** Update an existing rubric ************************/
 /*****************************************************************************/
 
-void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric,const char *Txt)
+void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric)
   {
    DB_QueryUPDATE ("can not update rubric",
 		   "UPDATE rub_rubrics"
@@ -86,22 +86,19 @@ void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric,const char *Txt)
 		   " WHERE RubCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
 	           Rubric->Title,
-	           Txt,
+	           Rubric->Txt,
 	           Rubric->RubCod);
   }
 
 /*****************************************************************************/
-/************** Get list of all rubrics in the current course ****************/
+/************ Get list of all rubric codes in the current course *************/
 /*****************************************************************************/
 
 unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get rubrics",
-		   "SELECT RubCod,"		// row[0]
-			  "CrsCod,"		// row[1]
-			  "UsrCod,"		// row[2]
-			  "Title"		// row[3]
+		   "SELECT RubCod"		// row[0]
 		    " FROM rub_rubrics"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY Title",
@@ -145,14 +142,15 @@ void Rub_DB_GetRubricTitle (long RubCod,char *Title,size_t TitleSize)
 /*****************************************************************************/
 /********************** Get rubric text from database ************************/
 /*****************************************************************************/
+// Rubric->Txt must be allocated with Cns_MAX_BYTES_TEXT + 1 bytes
 
-void Rub_DB_GetRubricTxt (long RubCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+void Rub_DB_GetRubricTxt (struct Rub_Rubric *Rubric)
   {
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get rubric text",
+   DB_QuerySELECTString (Rubric->Txt,Cns_MAX_BYTES_TEXT,"can not get rubric text",
 		         "SELECT Txt"	// row[0]
 			  " FROM rub_rubrics"
 		         " WHERE RubCod=%ld",
-		         RubCod);
+		         Rubric->RubCod);
   }
 
 /*****************************************************************************/

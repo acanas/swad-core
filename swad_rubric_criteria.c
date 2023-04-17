@@ -239,7 +239,7 @@ void RubCri_ReceiveFormCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get parameters *****/
@@ -261,7 +261,10 @@ void RubCri_ReceiveFormCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion)
@@ -318,7 +321,7 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
    else	// If there is not a criterion title
      {
       NewTitleIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    return NewTitleIsCorrect;
@@ -337,7 +340,7 @@ void RubCri_ChangeTitle (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -360,7 +363,10 @@ void RubCri_ChangeTitle (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -386,7 +392,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get parameters *****/
@@ -411,7 +417,10 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -427,7 +436,7 @@ void RubCri_ChangeWeight (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get parameters *****/
@@ -452,7 +461,10 @@ void RubCri_ChangeWeight (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -941,7 +953,7 @@ void RubCri_ReqRemCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -960,7 +972,10 @@ void RubCri_ReqRemCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -976,7 +991,7 @@ void RubCri_RemoveCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -1001,7 +1016,10 @@ void RubCri_RemoveCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -1019,7 +1037,7 @@ void RubCri_MoveUpCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -1048,7 +1066,10 @@ void RubCri_MoveUpCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -1067,7 +1088,7 @@ void RubCri_MoveDownCriterion (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -1099,7 +1120,10 @@ void RubCri_MoveDownCriterion (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new trubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }
 
 /*****************************************************************************/
@@ -1184,7 +1208,7 @@ void RubCri_ChangeLink (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_ResetRubric (&Rubric);
+   Rub_RubricConstructor (&Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get and check parameters *****/
@@ -1206,5 +1230,8 @@ void RubCri_ChangeLink (void)
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,
-                          Rub_EXISTING_RUBRIC);	// It's not a new rubric
+                          Rub_EXISTING_RUBRIC);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubric);
   }

@@ -476,15 +476,14 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
   }
 
 /*****************************************************************************/
-/** Create alert when user not found or no permission to perform an action ***/
+/**************** Create alert when a form field is empty ********************/
 /*****************************************************************************/
 
-void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void)
+void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   extern const char *Txt_You_can_not_leave_the_field_empty;
 
-   Ale_CreateAlert (Ale_WARNING,NULL,
-		    Txt_User_not_found_or_you_do_not_have_permission_);
+   Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_field_empty);
   }
 
 /*****************************************************************************/
@@ -499,6 +498,18 @@ void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
   }
 
 /*****************************************************************************/
+/** Create alert when user not found or no permission to perform an action ***/
+/*****************************************************************************/
+
+void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
 /**************** Create alert when a form field is empty ********************/
 /*****************************************************************************/
 
@@ -510,21 +521,10 @@ void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void)
   }
 
 /*****************************************************************************/
-/**************** Create alert when a form field is empty ********************/
-/*****************************************************************************/
-
-void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void)
-  {
-   extern const char *Txt_You_can_not_leave_the_field_empty;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_field_empty);
-  }
-
-/*****************************************************************************/
 /********************* Create alert when title is empty **********************/
 /*****************************************************************************/
 
-void Ale_ShowAlertYouMustSpecifyTheTitle (void)
+void Ale_CreateAlertYouMustSpecifyTheTitle (void)
   {
    extern const char *Txt_You_must_specify_the_title;
 
@@ -536,7 +536,7 @@ void Ale_ShowAlertYouMustSpecifyTheTitle (void)
 /****************** Create alert when web address is empty *******************/
 /*****************************************************************************/
 
-void Ale_ShowAlertYouMustSpecifyTheWebAddress (void)
+void Ale_CreateAlertYouMustSpecifyTheWebAddress (void)
   {
    extern const char *Txt_You_must_specify_the_web_address;
 
@@ -548,7 +548,7 @@ void Ale_ShowAlertYouMustSpecifyTheWebAddress (void)
 /************ Create alert when short name or full name are empty ************/
 /*****************************************************************************/
 
-void Ale_ShowAlertYouMustSpecifyTheName (void)
+void Ale_CreateAlertYouMustSpecifyTheName (void)
   {
    extern const char *Txt_You_must_specify_the_name;
 
@@ -560,7 +560,7 @@ void Ale_ShowAlertYouMustSpecifyTheName (void)
 /************ Create alert when short name or full name are empty ************/
 /*****************************************************************************/
 
-void Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName (void)
+void Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName (void)
   {
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name;
 

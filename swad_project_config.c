@@ -37,6 +37,7 @@
 #include "swad_project_config.h"
 #include "swad_project_database.h"
 #include "swad_rubric.h"
+#include "swad_rubric_database.h"
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
@@ -193,7 +194,7 @@ static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
    extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
    extern const char *Txt_no_rubric;
    unsigned NumRub;
-   const struct Rub_Rubric *Rubric;
+   char Title[Rub_MAX_BYTES_TITLE + 1];
    long RubCodInConfig = Config->RubCod[WhichRubric];
 
    /***** Row with form for rubric *****/
@@ -222,11 +223,11 @@ static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
 		 NumRub < Rubrics->Num;
 		 NumRub++)
 	      {
-	       Rubric = &Rubrics->Lst[NumRub];
-	       HTM_OPTION (HTM_Type_LONG,&Rubric->RubCod,
-			   Rubric->RubCod == RubCodInConfig,	// Selected?
+	       Rub_DB_GetRubricTitle (Rubrics->Lst[NumRub],Title,Rub_MAX_BYTES_TITLE);
+	       HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRub],
+			   Rubrics->Lst[NumRub] == RubCodInConfig,	// Selected?
 			   HTM_OPTION_ENABLED,
-			   "%s",Rubric->Title);
+			   "%s",Title);
 	      }
 
 	 HTM_SELECT_End ();

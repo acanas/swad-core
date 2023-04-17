@@ -911,7 +911,8 @@ void Par_GetMainPars (void)
 unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes)
   {
    return Par_GetParAndChangeFormat (ParName,ParValue,MaxBytes,
-                                     Str_TO_TEXT,true);
+                                     Str_TO_TEXT,
+                                     true);	// Remove leading and trailing spaces
   }
 
 /*****************************************************************************/

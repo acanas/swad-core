@@ -1560,10 +1560,10 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
            }
         }
       else	// If there is not a web
-         Ale_ShowAlertYouMustSpecifyTheWebAddress ();
+         Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a center name
-      Ale_ShowAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
   }
 
 /*****************************************************************************/

@@ -2074,7 +2074,7 @@ void Svy_ReceiveFormSurvey (void)
    else	// If there is not a survey title
      {
       NewSurveyIsCorrect = false;
-      Ale_ShowAlertYouMustSpecifyTheTitle ();
+      Ale_CreateAlertYouMustSpecifyTheTitle ();
      }
 
    /***** Create a new survey or update an existing one *****/
