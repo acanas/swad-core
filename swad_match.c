@@ -851,8 +851,6 @@ void Mch_ToggleVisResultsMchUsr (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -972,8 +970,6 @@ void Mch_ReqRemMatch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -1005,8 +1001,6 @@ void Mch_RemoveMatch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -1103,8 +1097,6 @@ void Mch_EditMatch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -1383,8 +1375,6 @@ void Mch_ChangeMatch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 

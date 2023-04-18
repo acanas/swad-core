@@ -485,7 +485,8 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    extern const char *Txt_Game;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Game,
+   Box_BoxBegin (NULL,Games->Game.Title[0] ? Games->Game.Title :
+					     Txt_Game,
                  Gam_PutIconsOneGame,Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 

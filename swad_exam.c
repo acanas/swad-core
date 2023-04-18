@@ -444,7 +444,8 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    extern const char *Txt_Exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Exam,
+   Box_BoxBegin (NULL,Exams->Exam.Title[0] ? Exams->Exam.Title :
+					     Txt_Exam,
                  Exa_PutIconsOneExam,Exams,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 

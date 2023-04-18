@@ -51,21 +51,20 @@ void RubRsc_GetLinkToRubric (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
    char Title[Rub_MAX_BYTES_TITLE + 1];
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);
-   Rubric.RubCod = Rubrics.RubCod;
 
    /***** Get rubric title *****/
-   RubRsc_GetTitleFromRubCod (Rubric.RubCod,Title,sizeof (Title) - 1);
+   RubRsc_GetTitleFromRubCod (Rubrics.Rubric.RubCod,Title,sizeof (Title) - 1);
 
    /***** Copy link to rubric into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubric.RubCod);
+   Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
@@ -73,6 +72,9 @@ void RubRsc_GetLinkToRubric (void)
 
    /***** Show rubrics again *****/
    Rub_ListAllRubrics (&Rubrics);
+
+   /***** Free memory used for rubric *****/
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 /*****************************************************************************/

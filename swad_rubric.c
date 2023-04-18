@@ -65,7 +65,6 @@ static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics);
 static void Rub_PutParsToCreateNewRubric (void *Rubrics);
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
-                                    struct Rub_Rubric *Rubric,
                                     bool ShowOnlyThisRubric);
 
 static void Rub_PutIconsOneRubric (void *Rubrics);
@@ -151,7 +150,6 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
    extern const char *Txt_No_rubrics;
    struct Pag_Pagination Pagination;
    unsigned NumRubric;
-   struct Rub_Rubric Rubric;
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
@@ -196,16 +194,16 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 		 NumRubric++)
 	      {
 	       /***** Get rubric data *****/
-	       Rub_RubricConstructor (&Rubric);
-	       Rubrics->RubCod = Rubric.RubCod = Rubrics->Lst[NumRubric - 1];
-	       Rub_GetRubricDataByCod (&Rubric);
+	       Rub_RubricConstructor (&Rubrics->Rubric);
+	       Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric - 1];
+	       Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
 	       /***** Show main data of this rubric *****/
-	       Rub_ShowRubricMainData (Rubrics,&Rubric,
-				       false);	// Do not show only this rubric
+	       Rub_ShowRubricMainData (Rubrics,
+	                               false);	// Do not show only this rubric
 
 	       /***** Free memory used for rubric *****/
-	       Rub_RubricDestructor (&Rubric);
+	       Rub_RubricDestructor (&Rubrics->Rubric);
 	      }
 
 	 /***** End table *****/
@@ -342,44 +340,41 @@ static void Rub_PutParsToCreateNewRubric (void *Rubrics)
 void Rub_SeeOneRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Rubric.RubCod = Rubrics.RubCod;
 
    /***** Get rubric data *****/
-   Rub_GetRubricDataByCod (&Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Show rubric *****/
-   Rub_ShowOnlyOneRubric (&Rubrics,&Rubric);
+   Rub_ShowOnlyOneRubric (&Rubrics);
 
    /***** Free memory used for rubric *****/
-   Rub_RubricDestructor (&Rubric);
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 /*****************************************************************************/
 /******************************* Show one rubric *****************************/
 /*****************************************************************************/
 
-void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics,
-                            struct Rub_Rubric *Rubric)
+void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics;
    extern const char *Txt_Rubric;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Rubric->Title[0] ? Rubric->Title :
-					 Txt_Rubric,
+   Box_BoxBegin (NULL,Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+						 Txt_Rubric,
                  Rub_PutIconsOneRubric,Rubrics,
 		 Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
       /***** Show main data of this rubric *****/
-      Rub_ShowRubricMainData (Rubrics,Rubric,
+      Rub_ShowRubricMainData (Rubrics,
 		              true);	// Show only this rubric
 
       /***** Write criteria of this rubric *****/
@@ -394,7 +389,6 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics,
 /*****************************************************************************/
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
-                                    struct Rub_Rubric *Rubric,
                                     bool ShowOnlyThisRubric)
   {
    extern const char *Txt_View_rubric;
@@ -427,7 +421,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 	 Rub_PutPars (Rubrics);
 	 HTM_BUTTON_Submit_Begin (Txt_View_rubric,"class=\"LT BT_LINK ASG_TITLE_%s\"",
 				  The_GetSuffix ());
-	    HTM_Txt (Rubric->Title);
+	    HTM_Txt (Rubrics->Rubric.Title);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
 
@@ -435,7 +429,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       HTM_DIV_Begin ("class=\"ASG_GRP_%s\"",The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_criteria);
 	 // HTM_Unsigned (Rubrics->Rubric.NumCriteria);
-	 HTM_Unsigned (Rub_DB_GetNumCriteriaInRubric (Rubric->RubCod));
+	 HTM_Unsigned (Rub_DB_GetNumCriteriaInRubric (Rubrics->Rubric.RubCod));
       HTM_DIV_End ();
 
    /***** End 1st row of this rubric *****/
@@ -449,7 +443,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 	 HTM_TD_Begin ("class=\"LT\"");
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      Rub_WriteAuthor (Rubric);
+      Rub_WriteAuthor (&Rubrics->Rubric);
       HTM_TD_End ();
 
       /***** Text of the rubric *****/
@@ -458,10 +452,10 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Rubric->Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      ALn_InsertLinks (Rubric->Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+			Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      ALn_InsertLinks (Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR DAT_%s\"",The_GetSuffix ());
-	 HTM_Txt (Rubric->Txt);
+	 HTM_Txt (Rubrics->Rubric.Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
 
@@ -526,7 +520,7 @@ void Rub_PutPars (void *Rubrics)
   {
    if (Rubrics)
      {
-      ParCod_PutPar (ParCod_Rub,((struct Rub_Rubrics *) Rubrics)->RubCod);
+      ParCod_PutPar (ParCod_Rub,((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
       Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
      }
   }
@@ -547,7 +541,7 @@ void Rub_GetPars (struct Rub_Rubrics *Rubrics,bool CheckRubCod)
    Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
-   Rubrics->RubCod = GetExaCo[CheckRubCod] (ParCod_Rub);
+   Rubrics->Rubric.RubCod = GetExaCo[CheckRubCod] (ParCod_Rub);
   }
 
 /*****************************************************************************/
@@ -657,18 +651,16 @@ void Rub_AskRemRubric (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_rubric_X;
    extern const char *Txt_Remove_rubric;
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Rubric.RubCod = Rubrics.RubCod;
 
    /***** Get data of the rubric from database *****/
-   Rub_GetRubricDataByCod (&Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
@@ -677,13 +669,13 @@ void Rub_AskRemRubric (void)
                            Rub_PutPars,&Rubrics,
 			   Btn_REMOVE_BUTTON,Txt_Remove_rubric,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_rubric_X,
-                           Rubric.Title);
+                           Rubrics.Rubric.Title);
 
    /***** Show rubrics again *****/
    Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
-   Rub_RubricDestructor (&Rubric);
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 /*****************************************************************************/
@@ -694,33 +686,30 @@ void Rub_RemoveRubric (void)
   {
    extern const char *Txt_Rubric_X_removed;
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Rubric.RubCod = Rubrics.RubCod;
 
    /***** Get data of the rubric from database *****/
-   Rub_GetRubricDataByCod (&Rubric);
+   Rub_GetRubricDataByCod (&Rubrics.Rubric);
    if (!Rub_CheckIfICanEditRubrics ())
       Err_NoPermissionExit ();
 
    /***** Remove rubric from all tables *****/
-   Rub_RemoveRubricFromAllTables (Rubric.RubCod);
+   Rub_RemoveRubricFromAllTables (Rubrics.Rubric.RubCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Rubric_X_removed,
-                  Rubric.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Rubric_X_removed,Rubrics.Rubric.Title);
 
    /***** Show rubrics again *****/
    Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
-   Rub_RubricDestructor (&Rubric);
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 /*****************************************************************************/
@@ -756,7 +745,6 @@ void Rub_RemoveCrsRubrics (long CrsCod)
 void Rub_ReqCreatOrEditRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
    struct RubCri_Criterion Criterion;
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
@@ -766,31 +754,31 @@ void Rub_ReqCreatOrEditRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);	// Don't check rubric code
-   Criterion.RubCod = Rubric.RubCod = Rubrics.RubCod;
-   ExistingNewRubric = (Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
-					     Rub_NEW_RUBRIC;
+   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
+						     Rub_NEW_RUBRIC;
 
    /***** Get rubric data *****/
    switch (ExistingNewRubric)
      {
       case Rub_EXISTING_RUBRIC:
          /* Get rubric data from database */
-         Rub_GetRubricDataByCod (&Rubric);
+         Rub_GetRubricDataByCod (&Rubrics.Rubric);
          break;
       case Rub_NEW_RUBRIC:
          break;
      }
 
    /***** Put form to create/edit a rubric and show criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
 
    /***** Free memory used for rubric *****/
-   Rub_RubricDestructor (&Rubric);
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 /*****************************************************************************/
@@ -798,12 +786,11 @@ void Rub_ReqCreatOrEditRubric (void)
 /*****************************************************************************/
 
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
-                            struct Rub_Rubric *Rubric,
 			    struct RubCri_Criterion *Criterion,
 			    Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    /***** Put form to create/edit a rubric *****/
-   Rub_PutFormEditionRubric (Rubrics,Rubric,ExistingNewRubric);
+   Rub_PutFormEditionRubric (Rubrics,ExistingNewRubric);
 
    /***** Show other lists *****/
    switch (ExistingNewRubric)
@@ -824,7 +811,6 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 /*****************************************************************************/
 
 void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
-                               struct Rub_Rubric *Rubric,
 			       Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
@@ -867,8 +853,8 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,
-			 Rubric->Title[0] ? Rubric->Title :
-					    Title[ExistingNewRubric],
+			 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+						    Title[ExistingNewRubric],
 			 NULL,NULL,
 			 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE,2);
 
@@ -880,7 +866,7 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubric->Title,
+	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
 			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -901,7 +887,7 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 				   The_GetSuffix ());
-		  HTM_Txt (Rubric->Txt);
+		  HTM_Txt (Rubrics->Rubric.Txt);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
@@ -922,7 +908,6 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 void Rub_ReceiveFormRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct Rub_Rubric Rubric;
    struct RubCri_Criterion Criterion;
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
@@ -932,14 +917,14 @@ void Rub_ReceiveFormRubric (void)
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
-   Rub_RubricConstructor (&Rubric);
+   Rub_RubricConstructor (&Rubrics.Rubric);
    RubCri_ResetCriterion (&Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);
-   Criterion.RubCod = Rubric.RubCod = Rubrics.RubCod;
-   ExistingNewRubric = (Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
-					     Rub_NEW_RUBRIC;
+   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
+						     Rub_NEW_RUBRIC;
 
    /***** Get all current rubric data from database *****/
    // Some data, not received from form,
@@ -947,24 +932,24 @@ void Rub_ReceiveFormRubric (void)
    switch (ExistingNewRubric)
      {
       case Rub_EXISTING_RUBRIC:
-         Rub_GetRubricDataByCod (&Rubric);
+         Rub_GetRubricDataByCod (&Rubrics.Rubric);
          break;
       case Rub_NEW_RUBRIC:
          break;
      }
 
    /***** Overwrite some rubric data with the data received from form *****/
-   Rub_ReceiveRubricFieldsFromForm (&Rubric);
-   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubric))
+   Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
+   if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
      {
       /***** Create a new rubric or update an existing one *****/
       switch (ExistingNewRubric)
 	{
 	 case Rub_EXISTING_RUBRIC:
-	    Rub_UpdateRubric (&Rubric);	// Update rubric data in database
+	    Rub_UpdateRubric (&Rubrics.Rubric);	// Update rubric data in database
 	    break;
 	 case Rub_NEW_RUBRIC:
-	    Rub_CreateRubric (&Rubric);	// Add new rubric to database
+	    Rub_CreateRubric (&Rubrics.Rubric);	// Add new rubric to database
 	    ExistingNewRubric = Rub_EXISTING_RUBRIC;
 	    break;
 	}
@@ -974,10 +959,10 @@ void Rub_ReceiveFormRubric (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Rubric,&Criterion,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
 
    /***** Free memory used for rubric *****/
-   Rub_RubricDestructor (&Rubric);
+   Rub_RubricDestructor (&Rubrics.Rubric);
   }
 
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric)

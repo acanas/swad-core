@@ -157,8 +157,6 @@ void MchRes_ShowMyMchResultsInGam (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game *****/
    Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
@@ -206,8 +204,6 @@ void MchRes_ShowMyMchResultsInMch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -361,8 +357,6 @@ void MchRes_ShowAllMchResultsInGam (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game *****/
    Gam_ResetGame (&Games.Game);
 
    /***** Get parameters *****/
@@ -432,8 +426,6 @@ void MchRes_ShowAllMchResultsInMch (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 
@@ -1074,8 +1066,6 @@ void MchRes_ShowOneMchResult (void)
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
-
-   /***** Reset game and match *****/
    Gam_ResetGame (&Games.Game);
    Mch_ResetMatch (&Match);
 

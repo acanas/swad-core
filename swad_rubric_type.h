@@ -60,7 +60,7 @@ struct Rub_Rubrics
    unsigned Num;		// Total number of rubrics
    long *Lst;			// List of rubric codes
    unsigned CurrentPage;
-   long RubCod;			// Selected/current rubric code
+   struct Rub_Rubric Rubric;	// Selected/current rubric
    long CriCod;			// Selected/current criterion code
    unsigned CriInd;		// Current citerion index
   };
