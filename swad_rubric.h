@@ -65,7 +65,6 @@ void Rub_RemoveCrsRubrics (long CrsCod);
 
 void Rub_ReqCreatOrEditRubric (void);
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
-			    struct RubCri_Criterion *Criterion,
 			    Rub_ExistingNewRubric_t ExistingNewRubric);
 void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 			       Rub_ExistingNewRubric_t ExistingNewRubric);

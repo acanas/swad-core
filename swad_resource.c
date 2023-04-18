@@ -30,24 +30,25 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
-#include "swad_assignment_resource.h"
-#include "swad_attendance_resource.h"
+#include "swad_assignment_database.h"
+#include "swad_attendance_database.h"
 #include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_database.h"
-#include "swad_exam_resource.h"
+#include "swad_exam_database.h"
+#include "swad_forum_database.h"
 #include "swad_forum_resource.h"
-#include "swad_game_resource.h"
+#include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
-#include "swad_project_resource.h"
+#include "swad_project_database.h"
 #include "swad_resource.h"
 #include "swad_resource_database.h"
 #include "swad_role.h"
-#include "swad_rubric_resource.h"
-#include "swad_survey_resource.h"
+#include "swad_rubric_database.h"
+#include "swad_survey_database.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -105,13 +106,6 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-
-/*****************************************************************************/
-/**************************** Private prototypes *****************************/
-/*****************************************************************************/
-
-static void Rsc_GetResourceEmptyTitle (__attribute__((unused)) long Cod,
-                                       char *Title,size_t TitleSize);
 
 /*****************************************************************************/
 /************************* Show resources clipboard **************************/
@@ -337,49 +331,75 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
   }
 
 /*****************************************************************************/
-/******************** Write empty resource as resource ***********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-static void Rsc_GetResourceEmptyTitle (__attribute__((unused)) long Cod,
-                                       char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
-
-   Str_Copy (Title,Txt_RESOURCE_TYPES[Rsc_NONE],TitleSize);
-  }
-
-/*****************************************************************************/
 /************* Get the title for a new resource from link title **************/
 /*****************************************************************************/
 
 void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
                                    char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
+   extern const char *Txt_Assignments;
+   extern const char *Txt_Projects;
+   extern const char *Txt_Calls_for_exams;
+   extern const char *Txt_Exams;
+   extern const char *Txt_Games;
+   extern const char *Txt_Rubrics;
+   extern const char *Txt_Documents;
+   extern const char *Txt_Marks_area;
+   extern const char *Txt_Control_of_class_attendance;
+   extern const char *Txt_Course_forum;
+   extern const char *Txt_Surveys;
    static void (*GetTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
-      [Rsc_NONE            ] = Rsc_GetResourceEmptyTitle,
-      [Rsc_ASSIGNMENT      ] = AsgRsc_GetTitleFromAsgCod,
-      [Rsc_PROJECT         ] = PrjRsc_GetTitleFromPrjCod,
+      [Rsc_NONE            ] = NULL,
+      [Rsc_ASSIGNMENT      ] = Asg_DB_GetAssignmentTitleByCod,
+      [Rsc_PROJECT         ] = Prj_DB_GetProjectTitle,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
-      [Rsc_EXAM            ] = ExaRsc_GetTitleFromExaCod,
-      [Rsc_GAME            ] = GamRsc_GetTitleFromGamCod,
-      [Rsc_RUBRIC          ] = RubRsc_GetTitleFromRubCod,
-      [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromDocFilCod,
-      [Rsc_MARKS           ] = BrwRsc_GetTitleFromMrkFilCod,
-      [Rsc_ATTENDANCE_EVENT] = AttRsc_GetTitleFromAttCod,
-      [Rsc_FORUM_THREAD    ] = ForRsc_GetTitleFromThrCod,
-      [Rsc_SURVEY          ] = SvyRsc_GetTitleFromSvyCod,
+      [Rsc_EXAM            ] = Exa_DB_GetExamTitle,
+      [Rsc_GAME            ] = Gam_DB_GetGameTitle,
+      [Rsc_RUBRIC          ] = Rub_DB_GetRubricTitle,
+      [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromFilCod,
+      [Rsc_MARKS           ] = BrwRsc_GetTitleFromFilCod,
+      [Rsc_ATTENDANCE_EVENT] = Att_DB_GetEventTitle,
+      [Rsc_FORUM_THREAD    ] = For_DB_GetThreadTitle,
+      [Rsc_SURVEY          ] = Svy_DB_GetSurveyTitle,
+     };
+   const char *GenericTitle[Rsc_NUM_TYPES] =
+     {
+      [Rsc_NONE            ] = NULL,
+      [Rsc_ASSIGNMENT      ] = Txt_Assignments,
+      [Rsc_PROJECT         ] = Txt_Projects,
+      [Rsc_CALL_FOR_EXAM   ] = Txt_Calls_for_exams,
+      [Rsc_EXAM            ] = Txt_Exams,
+      [Rsc_GAME            ] = Txt_Games,
+      [Rsc_RUBRIC          ] = Txt_Rubrics,
+      [Rsc_DOCUMENT        ] = Txt_Documents,
+      [Rsc_MARKS           ] = Txt_Marks_area,
+      [Rsc_ATTENDANCE_EVENT] = Txt_Control_of_class_attendance,
+      [Rsc_FORUM_THREAD    ] = Txt_Course_forum,
+      [Rsc_SURVEY          ] = Txt_Surveys,
      };
 
    /***** Reset title *****/
    Title[0] = '\0';
 
    /***** Get title *****/
-   if (GetTitle[Link->Type])
-      GetTitle[Link->Type] (Link->Cod,Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
-   else
-      Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+   if (Link->Type != Rsc_NONE)
+     {
+      if (Link->Cod > 0)
+	{
+	 if (GetTitle[Link->Type])
+	    GetTitle[Link->Type] (Link->Cod,Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
+	 else
+	    Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+	}
+      else
+	{
+	 if (GenericTitle[Link->Type])
+	    Str_Copy (Title,GenericTitle[Link->Type],Rsc_MAX_BYTES_RESOURCE_TITLE);
+	 else
+	    Ale_ShowAlert (Ale_ERROR,"Not implemented!");
+	}
+     }
   }
 
 /*****************************************************************************/

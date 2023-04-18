@@ -46,24 +46,28 @@ extern struct Globals Gbl;
 void ForRsc_GetLinkToThread (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Course_forum;
    struct For_Forums Forums;
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   struct For_Thread Thr;
 
    /***** Reset forum *****/
    For_ResetForums (&Forums);
 
    /***** Get parameters related to forums *****/
    For_GetParsForums (&Forums);
+   Thr.ThrCod = Forums.Thread.Current;
 
    /***** Get thread subject *****/
-   ForRsc_GetTitleFromThrCod (Forums.Thread.Current,Subject,sizeof (Subject) - 1);
+   if (Thr.ThrCod > 0)
+      For_GetThreadData (&Thr);
 
    /***** Copy link to thread into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_FORUM_THREAD,Forums.Thread.Current);
+   Rsc_DB_CopyToClipboard (Rsc_FORUM_THREAD,Thr.ThrCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Subject);
+   		  Thr.ThrCod > 0 ? Thr.Subject :
+   				   Txt_Course_forum);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -88,21 +92,4 @@ void ForRsc_SetAnchorStr (long ThrCod,char **Anchor)
 void ForRsc_FreeAnchorStr (char **Anchor)
   {
    *Anchor = NULL;
-  }
-
-/*****************************************************************************/
-/********************* Get survey title from survey code *********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Course_forum;
-
-   if (ThrCod > 0)
-      /***** Get thread subject from database *****/
-      For_DB_GetThreadTitle (ThrCod,Title,TitleSize);
-   else
-      /***** Generic title for all posts *****/
-      Str_Copy (Title,Txt_Course_forum,TitleSize);
   }

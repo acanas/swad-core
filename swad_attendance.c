@@ -299,7 +299,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 
 	       /***** Show one attendance event *****/
 	       Att_ShowOneEventRow (Events,
-				       false);	// Don't show only this event
+				    false);	// Don't show only this event
 	      }
 
 	 /***** End table *****/
@@ -1474,7 +1474,8 @@ static void Att_ShowEvent (struct Att_Events *Events)
    Events->Event.NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInEvent (Events->Event.AttCod);
 
    /***** Show attendance event inside a box *****/
-   Box_BoxTableBegin (NULL,Txt_Event,
+   Box_BoxTableBegin (NULL,Events->Event.Title[0] ? Events->Event.Title :
+						    Txt_Event,
                       Att_PutIconsOneEvent,Events,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
       Att_ShowOneEventRow (Events,

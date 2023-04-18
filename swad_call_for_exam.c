@@ -612,14 +612,14 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_Calls_for_exams;
    extern const char *Txt_No_calls_for_exams_of_X;
    MYSQL_RES *mysql_res;
-   unsigned NumExaAnns;
-   unsigned NumExaAnn;
+   unsigned NumCalls;
+   unsigned NumCall;
    long ExaCod;
    bool HighLight;
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
-   NumExaAnns = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res);
+   NumCalls = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Calls_for_exams,
@@ -627,10 +627,10 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 		 Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
 
       /***** List the existing calls for exams *****/
-      if (NumExaAnns)
-	 for (NumExaAnn = 0;
-	      NumExaAnn < NumExaAnns;
-	      NumExaAnn++)
+      if (NumCalls)
+	 for (NumCall = 0;
+	      NumCall < NumCalls;
+	      NumCall++)
 	   {
 	    /***** Get the code of the call for exam (row[0]) *****/
 	    if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)

@@ -34,7 +34,6 @@
 /*****************************************************************************/
 
 void PrjRsc_GetLinkToProject (void);
-void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize);
 
 #endif
 

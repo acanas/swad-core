@@ -34,6 +34,5 @@
 /*****************************************************************************/
 
 void AttRsc_GetLinkToEvent (void);
-void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize);
 
 #endif

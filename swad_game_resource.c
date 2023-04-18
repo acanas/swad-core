@@ -42,43 +42,27 @@
 void GamRsc_GetLinkToGame (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Games;
    struct Gam_Games Games;
-   long GamCod;
-   char Title[Gam_MAX_BYTES_TITLE + 1];
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
 
    /***** Get parameters *****/
-   GamCod = Gam_GetPars (&Games);
+   Games.Game.GamCod = Gam_GetPars (&Games);
 
-   /***** Get game title *****/
-   GamRsc_GetTitleFromGamCod (GamCod,Title,sizeof (Title) - 1);
+   /***** Get game data *****/
+   if (Games.Game.GamCod > 0)
+      Gam_GetGameDataByCod (&Games.Game);
 
    /***** Copy link to game into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_GAME,GamCod);
+   Rsc_DB_CopyToClipboard (Rsc_GAME,Games.Game.GamCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Games.Game.GamCod > 0 ? Games.Game.Title :
+   					  Txt_Games);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
-  }
-
-/*****************************************************************************/
-/*********************** Get game title from game code ***********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Games;
-
-   if (GamCod > 0)
-      /***** Get game title from database *****/
-      Gam_DB_GetGameTitle (GamCod,Title,TitleSize);
-   else
-      /***** Generic title for all games *****/
-      Str_Copy (Title,Txt_Games,TitleSize);
   }

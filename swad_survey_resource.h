@@ -34,6 +34,5 @@
 /*****************************************************************************/
 
 void SvyRsc_GetLinkToSurvey (void);
-void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize);
 
 #endif

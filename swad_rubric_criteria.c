@@ -73,7 +73,6 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
 static void RubCri_PutParsOneCriterion (void *Rubrics);
 
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
-				        struct RubCri_Criterion *Criterion,
 				        unsigned MaxCriInd);
 static void RubCri_ReceiveCriterionFieldsFromForm (struct RubCri_Criterion *Criterion);
 static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Criterion *Criterion,
@@ -95,8 +94,7 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
 
 static void RubCri_PutTableHeadingForCriteria (void);
 
-static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics,
-                                                  struct RubCri_Criterion *Criterion);
+static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics);
 
 static void RubCri_ExchangeCriteria (long RubCod,
                                      unsigned CriIndTop,unsigned CriIndBottom);
@@ -110,7 +108,7 @@ static void RubCri_PutParsOneCriterion (void *Rubrics)
    if (Rubrics)
      {
       Rub_PutPars (Rubrics);
-      ParCod_PutPar (ParCod_Cri,((struct Rub_Rubrics *) Rubrics)->CriCod);
+      ParCod_PutPar (ParCod_Cri,((struct Rub_Rubrics *) Rubrics)->Criterion.CriCod);
      }
   }
 
@@ -146,7 +144,6 @@ void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
 /*****************************************************************************/
 
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
-				        struct RubCri_Criterion *Criterion,
 				        unsigned MaxCriInd)
   {
    extern const char *Txt_New_criterion;
@@ -179,7 +176,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 
 	    /***** Title *****/
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Criterion->Title,
+	       HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
 			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -199,7 +196,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	      {
 	       HTM_TD_Begin ("class=\"RM\"");
 		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
-		                   Criterion->Values[ValueRange],false,
+		                   Rubrics->Criterion.Values[ValueRange],false,
 				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();
@@ -211,7 +208,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	                        RubCri_WEIGHT_MIN,
 	                        RubCri_WEIGHT_MAX,
 	                        RubCri_WEIGHT_STEP,
-				Criterion->Weight,false,
+				Rubrics->Criterion.Weight,false,
 				" class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
@@ -233,16 +230,15 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 void RubCri_ReceiveFormCriterion (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
 
    /***** Get rubric data from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
@@ -252,14 +248,13 @@ void RubCri_ReceiveFormCriterion (void)
       Err_NoPermissionExit ();
 
    /***** If I can edit rubrics ==> receive criterion from form *****/
-   RubCri_ReceiveCriterionFieldsFromForm (&Criterion);
+   RubCri_ReceiveCriterionFieldsFromForm (&Rubrics.Criterion);
 
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Criterion,Criterion.Title))
-      RubCri_CreateCriterion (&Criterion);	// Add new criterion to database
+   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,Rubrics.Criterion.Title))
+      RubCri_CreateCriterion (&Rubrics.Criterion);	// Add new criterion to database
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -332,16 +327,15 @@ static bool RubCri_CheckCriterionTitleReceivedFromForm (const struct RubCri_Crit
 void RubCri_ChangeTitle (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    char NewTitle[RubCri_MAX_BYTES_TITLE + 1];
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
@@ -351,16 +345,15 @@ void RubCri_ChangeTitle (void)
    Par_GetParText ("Title",NewTitle,RubCri_MAX_BYTES_TITLE);
 
    /***** Check if title should be changed *****/
-   if (RubCri_CheckCriterionTitleReceivedFromForm (&Criterion,NewTitle))
+   if (RubCri_CheckCriterionTitleReceivedFromForm (&Rubrics.Criterion,NewTitle))
      {
       /* Update title and database table */
-      Str_Copy (Criterion.Title,NewTitle,sizeof (Criterion.Title) - 1);
-      Rub_DB_UpdateCriterionTitle (&Criterion);
+      Str_Copy (Rubrics.Criterion.Title,NewTitle,sizeof (Rubrics.Criterion.Title) - 1);
+      Rub_DB_UpdateCriterionTitle (&Rubrics.Criterion);
      }
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -383,21 +376,20 @@ void RubCri_ChangeMaxValue (void)
 static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    char ValueStr[64];
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
-   Rubrics.CriCod = Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
@@ -405,15 +397,14 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 
    /***** Receive new value from form *****/
    Par_GetParText (RubCri_ParValues[ValueRange],ValueStr,sizeof (ValueStr) - 1);
-   Criterion.Values[ValueRange] = Str_GetDoubleFromStr (ValueStr);
+   Rubrics.Criterion.Values[ValueRange] = Str_GetDoubleFromStr (ValueStr);
 
    /***** Change value *****/
    /* Update the table changing old value by new value */
-   Rub_DB_UpdateCriterionValue (&Criterion,ValueRange);
+   Rub_DB_UpdateCriterionValue (&Rubrics.Criterion,ValueRange);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -426,21 +417,20 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
 void RubCri_ChangeWeight (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    char WeightStr[64];
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,true);
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
-   Rubrics.CriCod = Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
@@ -448,15 +438,14 @@ void RubCri_ChangeWeight (void)
 
    /***** Receive new weight from form *****/
    Par_GetParText ("Weight",WeightStr,sizeof (WeightStr) - 1);
-   Criterion.Weight = Str_GetDoubleFromStr (WeightStr);
+   Rubrics.Criterion.Weight = Str_GetDoubleFromStr (WeightStr);
 
    /***** Change value *****/
    /* Update the table changing old weight by new weight */
-   Rub_DB_UpdateCriterionWeight (&Criterion);
+   Rub_DB_UpdateCriterionWeight (&Rubrics.Criterion);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -517,8 +506,7 @@ void RubCri_ListCriteriaForSeeing (const struct Rub_Rubrics *Rubrics)
 /**************** List the criteria of a rubric for edition ******************/
 /*****************************************************************************/
 
-void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics,
-			            struct RubCri_Criterion *Criterion)
+void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_criteria;
    extern const char *Txt_Criteria;
@@ -549,7 +537,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
       /***** Put forms to create/edit a criterion *****/
       if (ICanEditCriteria)
-	 RubCri_PutFormNewCriterion (Rubrics,Criterion,MaxCriInd);
+	 RubCri_PutFormNewCriterion (Rubrics,MaxCriInd);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -566,10 +554,6 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
    RubCri_ValueRange_t ValueRange;
-
-   /***** Trivial check *****/
-   if (!NumCriteria)
-      return;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -628,7 +612,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
-		  HTM_Unsigned (Criterion.Values[ValueRange]);
+		  HTM_Double (Criterion.Values[ValueRange]);
 	       HTM_TD_End ();
 	      }
 
@@ -636,7 +620,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       HTM_Unsigned (Criterion.Weight);
+	       HTM_Double (Criterion.Weight);
 	    HTM_TD_End ();
 
 	 /***** End first row *****/
@@ -679,13 +663,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
       [RubCri_MAX] = ActChgMaxRubCri,
      };
    unsigned NumCriterion;
-   struct RubCri_Criterion Criterion;
    char *Anchor;
    RubCri_ValueRange_t ValueRange;
-
-   /***** Trivial check *****/
-   if (!NumCriteria)
-      return;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -699,17 +678,13 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	   NumCriterion++, The_ChangeRowColor ())
 	{
 	 /***** Create criterion of questions *****/
-	 RubCri_ResetCriterion (&Criterion);
+	 RubCri_ResetCriterion (&Rubrics->Criterion);
 
 	 /***** Get criterion data *****/
-	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
-
-	 /* Initialize context */
-	 Rubrics->CriCod = Criterion.CriCod;
-	 Rubrics->CriInd = Criterion.CriInd;
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Rubrics->Criterion);
 
 	 /***** Build anchor string *****/
-	 Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
+	 Frm_SetAnchorStr (Rubrics->Criterion.CriCod,&Anchor);
 
 	 /***** Begin first row *****/
 	 HTM_TR_Begin (NULL);
@@ -723,7 +698,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					      RubCri_PutParsOneCriterion,Rubrics);
 
 	       /* Put icon to move up the question */
-	       if (Criterion.CriInd > 1)
+	       if (Rubrics->Criterion.CriInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_RubCri,Anchor,
 						 RubCri_PutParsOneCriterion,Rubrics,
 						 "arrow-up.svg",Ico_BLACK);
@@ -732,7 +707,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the criterion */
-	       if (Criterion.CriInd < MaxCriInd)
+	       if (Rubrics->Criterion.CriInd < MaxCriInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnRubCri,Anchor,
 						 RubCri_PutParsOneCriterion,Rubrics,
 						 "arrow-down.svg",Ico_BLACK);
@@ -745,7 +720,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    /***** Index *****/
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
 	                  The_GetColorRows ());
-	       Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
+	       Lay_WriteIndex (Rubrics->Criterion.CriInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
@@ -753,7 +728,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_ARTICLE_Begin (Anchor);
 		  Frm_BeginFormAnchor (ActChgTitRubCri,Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
-		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Criterion.Title,
+		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
 				     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
@@ -767,7 +742,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	       Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
-		  Rsc_ShowClipboardToChangeLink (&Criterion.Link);
+		  Rsc_ShowClipboardToChangeLink (&Rubrics->Criterion.Link);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -780,7 +755,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		  Frm_BeginFormAnchor (RubCri_ActionsValues[ValueRange],Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
-				      Criterion.Values[ValueRange],false,
+				      Rubrics->Criterion.Values[ValueRange],false,
 				      " class=\"INPUT_FLOAT INPUT_%s\""
 				      " required=\"required\"",
 				      The_GetSuffix ());
@@ -796,7 +771,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 				   RubCri_WEIGHT_MIN,
 				   RubCri_WEIGHT_MAX,
 				   RubCri_WEIGHT_STEP,
-				   Criterion.Weight,false,
+				   Rubrics->Criterion.Weight,false,
 				   " class=\"INPUT_FLOAT INPUT_%s\""
 				   " required=\"required\"",
 				   The_GetSuffix ());
@@ -943,15 +918,14 @@ void RubCri_ReqRemCriterion (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_criterion_X;
    extern const char *Txt_Remove_criterion;
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
@@ -962,11 +936,10 @@ void RubCri_ReqRemCriterion (void)
 			   RubCri_PutParsOneCriterion,&Rubrics,
 			   Btn_REMOVE_BUTTON,Txt_Remove_criterion,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_criterion_X,
-			   Criterion.Title);
+			   Rubrics.Criterion.Title);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -980,15 +953,14 @@ void RubCri_RemoveCriterion (void)
   {
    extern const char *Txt_Criterion_removed;
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
@@ -999,17 +971,16 @@ void RubCri_RemoveCriterion (void)
    // Exa_DB_RemoveAllSetQuestionsFromSet (Criterion.CriCod,Criterion.RubCod);
 
    /* Remove the criterion itself */
-   Rub_DB_RemoveCriterionFromRubric (&Criterion);
+   Rub_DB_RemoveCriterionFromRubric (&Rubrics.Criterion);
 
    /* Change indexes of criteria greater than this */
-   Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (&Criterion);
+   Rub_DB_UpdateCriteriaIndexesInRubricGreaterThan (&Rubrics.Criterion);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Criterion_removed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1023,24 +994,23 @@ void RubCri_MoveUpCriterion (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    unsigned CriIndTop;
    unsigned CriIndBottom;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
-   CriIndBottom = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Criterion.CriCod);
+   CriIndBottom = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
 
    /***** Move up criterion *****/
    if (CriIndBottom > 1)
@@ -1057,8 +1027,7 @@ void RubCri_MoveUpCriterion (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1072,7 +1041,6 @@ void RubCri_MoveDownCriterion (void)
   {
    extern const char *Txt_Movement_not_allowed;
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    unsigned CriIndTop;
    unsigned CriIndBottom;
    unsigned MaxCriInd;	// 0 if no criteria
@@ -1080,17 +1048,17 @@ void RubCri_MoveDownCriterion (void)
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
       Err_NoPermissionExit ();
 
    /***** Get criterion index *****/
-   CriIndTop = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Criterion.CriCod);
+   CriIndTop = Rub_DB_GetCriIndFromCriCod (Rubrics.Rubric.RubCod,Rubrics.Criterion.CriCod);
 
    /***** Get maximum criterion index *****/
    MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics.Rubric.RubCod);
@@ -1110,8 +1078,7 @@ void RubCri_MoveDownCriterion (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,
-                          Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -1121,12 +1088,11 @@ void RubCri_MoveDownCriterion (void)
 /********* Get and check parameters, rubric data and criterion data **********/
 /*****************************************************************************/
 
-static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics,
-                                                  struct RubCri_Criterion *Criterion)
+static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics)
   {
    /***** Get parameters *****/
    Rub_GetPars (Rubrics,true);
-   Criterion->CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   Rubrics->Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
    /***** Get rubric data from database *****/
    Rub_GetRubricDataByCod (&Rubrics->Rubric);
@@ -1134,10 +1100,9 @@ static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics,
       Err_WrongRubricExit ();
 
    /***** Get criterion data from database *****/
-   RubCri_GetCriterionDataByCod (Criterion);
-   if (Criterion->RubCod != Rubrics->Rubric.RubCod)
+   RubCri_GetCriterionDataByCod (&Rubrics->Criterion);
+   if (Rubrics->Criterion.RubCod != Rubrics->Rubric.RubCod)
       Err_WrongCriterionExit ();
-   Rubrics->CriCod = Criterion->CriCod;
   }
 
 /*****************************************************************************/
@@ -1192,32 +1157,31 @@ static void RubCri_ExchangeCriteria (long RubCod,
 void RubCri_ChangeLink (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get and check parameters *****/
-   RubCri_GetAndCheckRubricAndCriterion (&Rubrics,&Criterion);
+   RubCri_GetAndCheckRubricAndCriterion (&Rubrics);
 
    /***** Check if rubric is editable *****/
    if (!Rub_CheckIfEditable ())
       Err_NoPermissionExit ();
 
    /***** Get link type and code *****/
-   if (Rsc_GetParLink (&Criterion.Link))
+   if (Rsc_GetParLink (&Rubrics.Criterion.Link))
      {
       /***** Update link to resource in criterion *****/
-      Rub_DB_UpdateCriterionLink (&Criterion);
+      Rub_DB_UpdateCriterionLink (&Rubrics.Criterion);
 
       /***** Remove link from clipboard *****/
-      Rsc_DB_RemoveLinkFromClipboard (&Criterion.Link);
+      Rsc_DB_RemoveLinkFromClipboard (&Rubrics.Criterion.Link);
      }
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,Rub_EXISTING_RUBRIC);
+   Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);

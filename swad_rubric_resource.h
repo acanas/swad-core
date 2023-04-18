@@ -34,7 +34,6 @@
 /*****************************************************************************/
 
 void RubRsc_GetLinkToRubric (void);
-void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize);
 
 void RubRsc_ViewResourceClipboard (void);
 void RubRsc_RemoveResourceClipboard (void);

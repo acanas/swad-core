@@ -42,8 +42,8 @@
 void SvyRsc_GetLinkToSurvey (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Surveys;
    struct Svy_Surveys Surveys;
-   char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
 
    /***** Reset surveys context *****/
    Svy_ResetSurveys (&Surveys);
@@ -51,37 +51,18 @@ void SvyRsc_GetLinkToSurvey (void)
    /***** Get survey code *****/
    Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy);
 
-   /***** Get survey title *****/
-   SvyRsc_GetTitleFromSvyCod (Surveys.Svy.SvyCod,Title,sizeof (Title) - 1);
+   /***** Get survey data *****/
+   if (Surveys.Svy.SvyCod > 0)
+      Svy_GetSurveyDataByCod (&Surveys.Svy);
 
    /***** Copy link to survey into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Surveys.Svy.SvyCod > 0 ? Surveys.Svy.Title :
+   					   Txt_Surveys);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
-  }
-
-/*****************************************************************************/
-/********************* Get survey title from survey code *********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void SvyRsc_GetTitleFromSvyCod (long SvyCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Surveys;
-   char TitleFromDB[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-
-   if (SvyCod > 0)
-     {
-      /***** Get survey title *****/
-      Svy_DB_GetSurveyTitle (SvyCod,TitleFromDB);
-      Str_Copy (Title,TitleFromDB,TitleSize);
-     }
-   else
-      /***** Generic title for all surveys *****/
-      Str_Copy (Title,Txt_Surveys,TitleSize);
   }

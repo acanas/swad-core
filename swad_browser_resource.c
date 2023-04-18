@@ -29,7 +29,7 @@
 #include "swad_action.h"
 #include "swad_action_list.h"
 #include "swad_alert.h"
-#include "swad_browser.h"
+#include "swad_browser_database.h"
 #include "swad_browser_resource.h"
 #include "swad_error.h"
 #include "swad_global.h"
@@ -49,24 +49,26 @@ extern struct Globals Gbl;
 void BrwRsc_GetLinkToDocFil (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   long FilCod;
-   char Title[NAME_MAX + 1];	// File or link name
+   extern const char *Txt_Documents;
+   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file code *****/
-   FilCod = ParCod_GetPar (ParCod_Fil);
+   FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
 
-   /***** Get file title *****/
-   BrwRsc_GetTitleFromDocFilCod (FilCod,Title,sizeof (Title) - 1);
+   /***** Get file metadata *****/
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  Title);
+                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
+                			    Txt_Documents);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -75,24 +77,26 @@ void BrwRsc_GetLinkToDocFil (void)
 void BrwRsc_GetLinkToMrkFil (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   long FilCod;
-   char Title[NAME_MAX + 1];	// File or link name
+   extern const char *Txt_Marks_area;
+   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get file code *****/
-   FilCod = ParCod_GetPar (ParCod_Fil);
+   FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
 
-   /***** Get file title *****/
-   BrwRsc_GetTitleFromMrkFilCod (FilCod,Title,sizeof (Title) - 1);
+   /***** Get file metadata *****/
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_MARKS,FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  Title);
+                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
+                			    Txt_Marks_area);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -103,44 +107,23 @@ void BrwRsc_GetLinkToMrkFil (void)
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize)
+void BrwRsc_GetTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
   {
-   extern const char *Txt_Documents;
    struct Brw_FileMetadata FileMetadata;
 
-   if (FilCod > 0)
-     {
-      /***** Get file name *****/
-      FileMetadata.FilCod = FilCod;
-      Brw_GetPathByCod (&FileMetadata);
+   /***** Get file name *****/
+   FileMetadata.FilCod = FilCod;
+   Brw_DB_GetPathByCod (FileMetadata.FilCod,
+                        FileMetadata.FilFolLnk.Full,
+                        sizeof (FileMetadata.FilFolLnk.Full) - 1);
+   Str_SplitFullPathIntoPathAndFileName (FileMetadata.FilFolLnk.Full,
+					 FileMetadata.FilFolLnk.Path,
+					 FileMetadata.FilFolLnk.Name);
 
-      /***** Remove .url if it's a link *****/
-      if (Str_FileIs (FileMetadata.FilFolLnk.Name,"url"))
-         FileMetadata.FilFolLnk.Name[strlen (FileMetadata.FilFolLnk.Name) - 4] = '\0';
+   /***** Remove .url if it's a link *****/
+   if (Str_FileIs (FileMetadata.FilFolLnk.Name,"url"))
+      FileMetadata.FilFolLnk.Name[strlen (FileMetadata.FilFolLnk.Name) - 4] = '\0';
 
-      /***** Copy file name into title *****/
-      Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
-     }
-   else
-      /***** Generic title for all documents *****/
-      Str_Copy (Title,Txt_Documents,TitleSize);
-  }
-
-void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Marks_area;
-   struct Brw_FileMetadata FileMetadata;
-
-   if (FilCod > 0)
-     {
-      /***** Get file name *****/
-      FileMetadata.FilCod = FilCod;
-      Brw_GetPathByCod (&FileMetadata);
-
-      /***** Copy file name into title *****/
-      Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
-     }
-   else
-      /***** Generic title for marks area *****/
-      Str_Copy (Title,Txt_Marks_area,TitleSize);
+   /***** Copy file name into title *****/
+   Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
   }

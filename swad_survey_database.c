@@ -290,9 +290,9 @@ unsigned Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod)
 /******************** Get survey title using its code ************************/
 /*****************************************************************************/
 
-void Svy_DB_GetSurveyTitle (long SvyCod,char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1])
+void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize)
   {
-   DB_QuerySELECTString (Title,Svy_MAX_BYTES_SURVEY_TITLE,"can not get survey title",
+   DB_QuerySELECTString (Title,TitleSize,"can not get survey title",
 		         "SELECT Title"	// row[0]
 			  " FROM svy_surveys"
 		         " WHERE SvyCod=%ld",	// Extra check

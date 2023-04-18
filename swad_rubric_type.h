@@ -44,6 +44,13 @@
 #define RubCri_MAX_CHARS_TITLE	(256 - 1)	// 255
 #define RubCri_MAX_BYTES_TITLE	((RubCri_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
+#define RubCri_NUM_VALUES 2
+typedef enum
+  {
+   RubCri_MIN = 0,
+   RubCri_MAX = 1,
+  } RubCri_ValueRange_t;
+
 struct Rub_Rubric
   {
    long RubCod;			// Rubric code
@@ -52,31 +59,6 @@ struct Rub_Rubric
    char Title[Rub_MAX_BYTES_TITLE + 1];	// Title
    char *Txt;			// Text (dynamically allocated)
   };
-
-struct Rub_Rubrics
-  {
-   bool LstIsRead;		// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Total number of rubrics
-   long *Lst;			// List of rubric codes
-   unsigned CurrentPage;
-   struct Rub_Rubric Rubric;	// Selected/current rubric
-   long CriCod;			// Selected/current criterion code
-   unsigned CriInd;		// Current citerion index
-  };
-
-typedef enum
-  {
-   Rub_EXISTING_RUBRIC,
-   Rub_NEW_RUBRIC,
-  } Rub_ExistingNewRubric_t;
-
-#define RubCri_NUM_VALUES 2
-typedef enum
-  {
-   RubCri_MIN = 0,
-   RubCri_MAX = 1,
-  } RubCri_ValueRange_t;
 
 struct RubCri_Criterion
   {
@@ -88,5 +70,22 @@ struct RubCri_Criterion
    double Weight;	// Relative weight (from 0.0 to 1.0)
    char Title[RubCri_MAX_BYTES_TITLE + 1];	// Title of the criterion
   };
+
+struct Rub_Rubrics
+  {
+   bool LstIsRead;		// Is the list already read from database...
+				// ...or it needs to be read?
+   unsigned Num;		// Total number of rubrics
+   long *Lst;			// List of rubric codes
+   unsigned CurrentPage;
+   struct Rub_Rubric Rubric;		// Selected/current rubric
+   struct RubCri_Criterion Criterion;	// Selected/current criterion
+  };
+
+typedef enum
+  {
+   Rub_EXISTING_RUBRIC,
+   Rub_NEW_RUBRIC,
+  } Rub_ExistingNewRubric_t;
 
 #endif

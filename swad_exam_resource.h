@@ -34,6 +34,5 @@
 /*****************************************************************************/
 
 void ExaRsc_GetLinkToExam (void);
-void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

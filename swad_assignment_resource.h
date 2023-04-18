@@ -34,6 +34,5 @@
 /*****************************************************************************/
 
 void AsgRsc_GetLinkToAssignment (void);
-void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize);
 
 #endif

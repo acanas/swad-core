@@ -34,6 +34,5 @@
 /*****************************************************************************/
 
 void GamRsc_GetLinkToGame (void);
-void GamRsc_GetTitleFromGamCod (long GamCod,char *Title,size_t TitleSize);
 
 #endif

@@ -42,8 +42,8 @@
 void PrjRsc_GetLinkToProject (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Projects;
    struct Prj_Projects Projects;
-   char Title[Prj_MAX_BYTES_TITLE + 1];
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
@@ -52,36 +52,27 @@ void PrjRsc_GetLinkToProject (void)
    Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj);
 
-   /***** Get project title *****/
-   PrjRsc_GetTitleFromPrjCod (Projects.Prj.PrjCod,Title,sizeof (Title) - 1);
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Projects.Prj);
+
+   /***** Get project data *****/
+   Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Copy link to PROJECT into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Projects.Prj.PrjCod > 0 ? Projects.Prj.Title :
+   					    Txt_Projects);
 
    /***** Show project and (if possible) its file browser *****/
-   Prj_ShowOneProjectWithFileBrowser (&Projects);
+   if (Projects.Prj.PrjCod > 0)
+      Prj_ShowOneProjectWithFileBrowser (&Projects);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Projects.Prj);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
-  }
-
-/*****************************************************************************/
-/******************* Get project title from project code *********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void PrjRsc_GetTitleFromPrjCod (long PrjCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Projects;
-
-   if (PrjCod > 0)
-      /***** Get project title from database *****/
-      Prj_DB_GetProjectTitle (PrjCod,Title,TitleSize);
-   else
-      /***** Generic title for all projects *****/
-      Str_Copy (Title,Txt_Projects,TitleSize);
   }

@@ -40,39 +40,24 @@
 void AttRsc_GetLinkToEvent (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   long AttCod;
-   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
+   extern const char *Txt_Control_of_class_attendance;
+   struct Att_Event Event;
 
    /***** Get attendance event code *****/
-   AttCod = ParCod_GetPar (ParCod_Att);
+   Event.AttCod = ParCod_GetPar (ParCod_Att);
 
-   /***** Get attendance event title *****/
-   AttRsc_GetTitleFromAttCod (AttCod,Title,sizeof (Title) - 1);
+   /***** Get attendance event data *****/
+   if (Event.AttCod > 0)
+      Att_GetEventDataByCod (&Event);
 
    /***** Copy link to attendance event into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,AttCod);
+   Rsc_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,Event.AttCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+                  Event.AttCod > 0 ? Event.Title :
+                	             Txt_Control_of_class_attendance);
 
    /***** Show attendance events again *****/
    Att_SeeEvents ();
-  }
-
-/*****************************************************************************/
-/*************** Get attendance event title from game code *******************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void AttRsc_GetTitleFromAttCod (long AttCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Control_of_class_attendance;
-
-   if (AttCod > 0)
-      /***** Get attendance event title from database *****/
-      Att_DB_GetEventTitle (AttCod,Title,TitleSize);
-   else
-      /***** Generic title for all attendance events *****/
-      Str_Copy (Title,Txt_Control_of_class_attendance,TitleSize);
   }

@@ -35,7 +35,6 @@
 
 void BrwRsc_GetLinkToDocFil (void);
 void BrwRsc_GetLinkToMrkFil (void);
-void BrwRsc_GetTitleFromDocFilCod (long FilCod,char *Title,size_t TitleSize);
-void BrwRsc_GetTitleFromMrkFilCod (long FilCod,char *Title,size_t TitleSize);
+void BrwRsc_GetTitleFromFilCod (long FilCod,char *Title,size_t TitleSize);
 
 #endif

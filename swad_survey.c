@@ -445,7 +445,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Begin box *****/
    if (ShowOnlyThisSvyComplete)
-      Box_BoxBegin (NULL,Txt_Survey,
+      Box_BoxBegin (NULL,Surveys->Svy.Title[0] ? Surveys->Svy.Title :
+					         Txt_Survey,
                     Svy_PutIconsOneSvy,Surveys,
                     Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 

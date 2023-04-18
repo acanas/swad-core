@@ -36,6 +36,5 @@
 void ForRsc_GetLinkToThread (void);
 void ForRsc_SetAnchorStr (long ThrCod,char **Anchor);
 void ForRsc_FreeAnchorStr (char **Anchor);
-void ForRsc_GetTitleFromThrCod (long ThrCod,char *Title,size_t TitleSize);
 
 #endif

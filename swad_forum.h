@@ -154,6 +154,8 @@ void For_ShowForumTheads (void);
 void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
                                                 Ale_AlertType_t AlertType,const char *Message);
 
+void For_GetThreadData (struct For_Thread *Thr);
+
 void For_ShowThreadPosts (void);
 
 void For_GetParsForums (struct For_Forums *Forums);

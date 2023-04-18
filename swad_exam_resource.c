@@ -41,8 +41,8 @@
 void ExaRsc_GetLinkToExam (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Exams;
    struct Exa_Exams Exams;
-   char Title[Exa_MAX_BYTES_TITLE + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -51,32 +51,17 @@ void ExaRsc_GetLinkToExam (void)
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
 
    /***** Get exam title *****/
-   ExaRsc_GetTitleFromExaCod (Exams.Exam.ExaCod,Title,sizeof (Title) - 1);
+   if (Exams.Exam.ExaCod > 0)
+      Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Copy link to exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_EXAM,Exams.Exam.ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Exams.Exam.ExaCod > 0 ? Exams.Exam.Title :
+   					  Txt_Exams);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
-  }
-
-/*****************************************************************************/
-/*********************** Get exam title from exam code ***********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void ExaRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Exams;
-
-   if (ExaCod > 0)
-      /***** Get exam title from database *****/
-      Exa_DB_GetExamTitle (ExaCod,Title,TitleSize);
-   else
-      /***** Generic title for all exams *****/
-      Str_Copy (Title,Txt_Exams,TitleSize);
   }

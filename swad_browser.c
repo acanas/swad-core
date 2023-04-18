@@ -8570,36 +8570,6 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/****************** Get file type and path using its code ********************/
-/*****************************************************************************/
-// FileMetadata.FilCod must be filled
-// This function only gets type and path stored in table files,
-// The rest of the fields are not filled
-
-void Brw_GetPathByCod (struct Brw_FileMetadata *FileMetadata)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get metadata of a file from database *****/
-   if (Brw_DB_GetPathByCod (&mysql_res,FileMetadata->FilCod))
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get path (row[0]) */
-      Str_Copy (FileMetadata->FilFolLnk.Full,row[0],
-                sizeof (FileMetadata->FilFolLnk.Full) - 1);
-      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
-					    FileMetadata->FilFolLnk.Path,
-					    FileMetadata->FilFolLnk.Name);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /********************** Get file type, size and date *************************/
 /*****************************************************************************/
 // Return true if file exists

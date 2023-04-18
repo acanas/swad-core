@@ -40,26 +40,40 @@
 void CfeRsc_GetLinkToCallForExam (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Calls_for_exams;
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
-   long ExaCod;
-   char Title[Cfe_MAX_BYTES_SESSION_AND_DATE];
+   char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
+
+   /***** Reset calls for exams context *****/
+   Cfe_ResetCallsForExams (CallsForExams);
 
    /***** Get the code of the call for exam *****/
-   ExaCod = ParCod_GetPar (ParCod_Exa);
+   CallsForExams->ExaCod = ParCod_GetPar (ParCod_Exa);
 
-   /***** Get session and date of the exam *****/
-   CfeRsc_GetTitleFromExaCod (ExaCod,Title,sizeof (Title) - 1);
+   /***** Get call for exam title *****/
+   if (CallsForExams->ExaCod > 0)
+     {
+      /* Get data of call for exam */
+      Cfe_AllocMemCallForExam (CallsForExams);
+      Cfe_GetCallForExamDataByCod (CallsForExams,CallsForExams->ExaCod);
+
+      /* Session and date of the exam */
+      Cfe_BuildSessionAndDate (CallsForExams,SessionAndDate);
+
+      /* Free memory of the call for exam */
+      Cfe_FreeMemCallForExam (CallsForExams);
+     }
 
    /***** Copy link to call for exam into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,ExaCod);
+   Rsc_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,CallsForExams->ExaCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-		  Title);
+		  CallsForExams->ExaCod > 0 ? SessionAndDate :
+					      Txt_Calls_for_exams);
 
    /***** Set exam to be highlighted *****/
-   Cfe_ResetCallsForExams (CallsForExams);
-   CallsForExams->HighlightExaCod = ExaCod;
+   CallsForExams->HighlightExaCod = CallsForExams->ExaCod;
 
    /***** Show again the list of calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
@@ -72,28 +86,20 @@ void CfeRsc_GetLinkToCallForExam (void)
 
 void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
   {
-   extern const char *Txt_Call_for_exam;
-   extern const char *Txt_Calls_for_exams;
    struct Cfe_CallsForExams CallsForExams;
    char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];
 
-   if (ExaCod > 0)
-     {
-      /***** Reset calls for exams context *****/
-      Cfe_ResetCallsForExams (&CallsForExams);
+   /***** Reset calls for exams context *****/
+   Cfe_ResetCallsForExams (&CallsForExams);
 
-      /***** Get data of call for exam *****/
-      Cfe_AllocMemCallForExam (&CallsForExams);
-      Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
+   /***** Get data of call for exam *****/
+   Cfe_AllocMemCallForExam (&CallsForExams);
+   Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
-      /***** Session and date of the exam *****/
-      Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
-      snprintf (Title,TitleSize,"%s: %s",Txt_Call_for_exam,SessionAndDate);
+   /***** Session and date of the exam *****/
+   Cfe_BuildSessionAndDate (&CallsForExams,SessionAndDate);
+   Str_Copy (Title,SessionAndDate,TitleSize);
 
-      /***** Free memory of the call for exam *****/
-      Cfe_FreeMemCallForExam (&CallsForExams);
-     }
-   else
-      /***** Generic title for all calls for exams *****/
-      Str_Copy (Title,Txt_Calls_for_exams,TitleSize);
+   /***** Free memory of the call for exam *****/
+   Cfe_FreeMemCallForExam (&CallsForExams);
   }

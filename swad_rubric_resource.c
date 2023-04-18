@@ -50,8 +50,8 @@ static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
 void RubRsc_GetLinkToRubric (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Rubrics;
    struct Rub_Rubrics Rubrics;
-   char Title[Rub_MAX_BYTES_TITLE + 1];
 
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
@@ -60,38 +60,23 @@ void RubRsc_GetLinkToRubric (void)
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);
 
-   /***** Get rubric title *****/
-   RubRsc_GetTitleFromRubCod (Rubrics.Rubric.RubCod,Title,sizeof (Title) - 1);
+   /***** Get rubric data *****/
+   if (Rubrics.Rubric.RubCod > 0)
+      Rub_GetRubricDataByCod (&Rubrics.Rubric);
 
    /***** Copy link to rubric into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Rubrics.Rubric.RubCod > 0 ? Rubrics.Rubric.Title :
+   					      Txt_Rubrics);
 
    /***** Show rubrics again *****/
    Rub_ListAllRubrics (&Rubrics);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
-  }
-
-/*****************************************************************************/
-/********************* Get rubric title from rubric code *********************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void RubRsc_GetTitleFromRubCod (long RubCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Rubrics;
-
-   if (RubCod > 0)
-      /***** Get rubric title from database *****/
-      Rub_DB_GetRubricTitle (RubCod,Title,TitleSize);
-   else
-      /***** Generic title for all rubrics *****/
-      Str_Copy (Title,Txt_Rubrics,TitleSize);
   }
 
 /*****************************************************************************/

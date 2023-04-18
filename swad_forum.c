@@ -370,7 +370,6 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pag_Pagination *PaginationThrs);
-static void For_GetThreadData (struct For_Thread *Thr);
 
 static void For_SetForumType (struct For_Forums *Forums);
 static void For_RestrictAccess (const struct For_Forums *Forums);
@@ -2353,7 +2352,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 /***************************** Get data of a thread **************************/
 /*****************************************************************************/
 
-static void For_GetThreadData (struct For_Thread *Thr)
+void For_GetThreadData (struct For_Thread *Thr)
   {
    extern const char *Txt_no_subject;
    MYSQL_RES *mysql_res;

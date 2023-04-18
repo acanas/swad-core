@@ -43,8 +43,8 @@
 void AsgRsc_GetLinkToAssignment (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Assignments;
    struct Asg_Assignments Assignments;
-   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
 
    /***** Reset assignments *****/
    Asg_ResetAssignments (&Assignments);
@@ -57,15 +57,17 @@ void AsgRsc_GetLinkToAssignment (void)
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);
 
-   /***** Get assignment title *****/
-   AsgRsc_GetTitleFromAsgCod (Assignments.Asg.AsgCod,Title,sizeof (Title) - 1);
+   /***** Get data of this assignment *****/
+   if (Assignments.Asg.AsgCod > 0)
+      Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Copy link to assignment into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Title);
+   		  Assignments.Asg.AsgCod > 0 ? Assignments.Asg.Title :
+   					       Txt_Assignments);
 
    /***** Show selected assignment in a box *****/
    if (Assignments.Asg.AsgCod > 0)
@@ -73,21 +75,4 @@ void AsgRsc_GetLinkToAssignment (void)
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments (&Assignments);
-  }
-
-/*****************************************************************************/
-/**************** Get assignment title from assignment code ******************/
-/*****************************************************************************/
-// The trailing null character is not counted in TitleSize
-
-void AsgRsc_GetTitleFromAsgCod (long AsgCod,char *Title,size_t TitleSize)
-  {
-   extern const char *Txt_Assignments;
-
-   if (AsgCod > 0)
-      /***** Get assignment title from database *****/
-      Asg_DB_GetAssignmentTitleByCod (AsgCod,Title,TitleSize);
-   else
-      /***** Generic title for all assignments *****/
-      Str_Copy (Title,Txt_Assignments,TitleSize);
   }

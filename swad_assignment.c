@@ -186,6 +186,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 		 NumAsg++, The_ChangeRowColor ())
 	      {
 	       Assignments->Asg.AsgCod = Assignments->LstAsgCods[NumAsg - 1];
+	       Asg_GetAssignmentDataByCod (&Assignments->Asg);
 	       Asg_ShowAssignmentRow (Assignments,
 	                              false,	// Not only this assignment in table
 				      false);	// Not print view
@@ -384,6 +385,9 @@ void Asg_SeeOneAssignment (void)
    /***** Get the code of the assignment *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
+   /***** Get data of this assignment *****/
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
+
    /***** Show selected assignment in a box *****/
    Asg_ShowOneAssignmentInBox (&Assignments);
 
@@ -405,6 +409,9 @@ void Asg_PrintOneAssignment (void)
 
    /***** Get the code of the assignment *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+
+   /***** Get data of this assignment *****/
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
@@ -439,7 +446,8 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
    extern const char *Txt_Assignment;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Assignment,
+   Box_BoxTableBegin (NULL,Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+						       Txt_Assignment,
                       Asg_PutIconsOneAsg,Assignments,
 		      Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE,2);
 
@@ -492,9 +500,6 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    char *Id;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Get data of this assignment *****/
-   Asg_GetAssignmentDataByCod (&Assignments->Asg);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Assignments->Asg.AsgCod,&Anchor);

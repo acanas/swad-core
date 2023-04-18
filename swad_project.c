@@ -1323,8 +1323,17 @@ void Prj_ShowOneProject (void)
    Prj_GetPars (&Projects);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Projects.Prj);
+
+   /***** Get project data *****/
+   Prj_GetProjectDataByCod (&Projects.Prj);
+
    /***** Show project and (if possible) its file browser *****/
    Prj_ShowOneProjectWithFileBrowser (&Projects);
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Projects.Prj);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
@@ -1337,16 +1346,6 @@ void Prj_ShowOneProject (void)
 void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
-
-   /***** Trivial check: show project only if code > 0 *****/
-   if (Projects->Prj.PrjCod <= 0)
-      return;
-
-   /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Projects->Prj);
-
-   /***** Get project data *****/
-   Prj_GetProjectDataByCod (&Projects->Prj);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Projects->Prj.Title,
@@ -1371,9 +1370,6 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Projects->Prj);
   }
 
 /*****************************************************************************/

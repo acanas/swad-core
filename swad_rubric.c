@@ -745,7 +745,6 @@ void Rub_RemoveCrsRubrics (long CrsCod)
 void Rub_ReqCreatOrEditRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
@@ -755,11 +754,11 @@ void Rub_ReqCreatOrEditRubric (void)
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);	// Don't check rubric code
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
 						     Rub_NEW_RUBRIC;
 
@@ -775,7 +774,7 @@ void Rub_ReqCreatOrEditRubric (void)
      }
 
    /***** Put form to create/edit a rubric and show criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,ExistingNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
@@ -786,7 +785,6 @@ void Rub_ReqCreatOrEditRubric (void)
 /*****************************************************************************/
 
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
-			    struct RubCri_Criterion *Criterion,
 			    Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    /***** Put form to create/edit a rubric *****/
@@ -797,7 +795,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
      {
       case Rub_EXISTING_RUBRIC:
 	 /* Show list of criteria */
-	 RubCri_ListCriteriaForEdition (Rubrics,Criterion);
+	 RubCri_ListCriteriaForEdition (Rubrics);
          break;
       case Rub_NEW_RUBRIC:
 	 /* Show rubrics again */
@@ -908,7 +906,6 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 void Rub_ReceiveFormRubric (void)
   {
    struct Rub_Rubrics Rubrics;
-   struct RubCri_Criterion Criterion;
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
@@ -918,11 +915,11 @@ void Rub_ReceiveFormRubric (void)
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
    Rub_RubricConstructor (&Rubrics.Rubric);
-   RubCri_ResetCriterion (&Criterion);
+   RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
    Rub_GetPars (&Rubrics,false);
-   Criterion.RubCod = Rubrics.Rubric.RubCod;
+   Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
 						     Rub_NEW_RUBRIC;
 
@@ -959,7 +956,7 @@ void Rub_ReceiveFormRubric (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current rubric and its criteria *****/
-   Rub_PutFormsOneRubric (&Rubrics,&Criterion,ExistingNewRubric);
+   Rub_PutFormsOneRubric (&Rubrics,ExistingNewRubric);
 
    /***** Free memory used for rubric *****/
    Rub_RubricDestructor (&Rubrics.Rubric);
