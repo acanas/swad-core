@@ -118,7 +118,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
    extern const char *Txt_Test;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Generate_test;
-   extern const char *Txt_No_test_questions;
+   extern const char *Txt_No_questions;
    MYSQL_RES *mysql_res;
 
    /***** Read test configuration from database *****/
@@ -173,14 +173,8 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	   }
 	}
       else
-	{
 	 /***** Warning message *****/
-	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
-
-	 /***** Button to create a new question *****/
-	 if (Qst_CheckIfICanEditQsts ())
-	    Qst_PutButtonToAddQuestion ();
-	}
+	 Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

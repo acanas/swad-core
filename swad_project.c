@@ -205,7 +205,6 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
 static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects);
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects);
-static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 
 static void Prj_PutIconsOnePrj (void *Projects);
@@ -601,10 +600,6 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	   }
 	 else	// No projects created
 	    Ale_ShowAlert (Ale_INFO,Txt_No_projects);
-
-	 /***** Button to create a new project *****/
-	 if (Prj_CheckIfICanCreateProjects ((struct Prj_Projects *) Projects))
-	    Prj_PutButtonToCreateNewPrj ((struct Prj_Projects *) Projects);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -1287,21 +1282,6 @@ static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects)
   {
    Projects->Prj.PrjCod = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewPrj,NULL,Prj_PutCurrentPars,Projects);
-  }
-
-/*****************************************************************************/
-/******************** Put button to create a new project *********************/
-/*****************************************************************************/
-
-static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
-  {
-   extern const char *Txt_New_project;
-
-   Projects->Prj.PrjCod = -1L;
-   Frm_BeginForm (ActFrmNewPrj);
-      Prj_PutCurrentPars (Projects);
-      Btn_PutConfirmButton (Txt_New_project);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3708,11 +3688,9 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
 static void Prj_PutFormProject (struct Prj_Projects *Projects,
                                 bool ItsANewProject)
   {
-   extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *Par_CodeStr[];
-   extern const char *Txt_New_project;
-   extern const char *Txt_Edit_project;
+   extern const char *Txt_Project;
    extern const char *Txt_Data;
    extern const char *Txt_Title;
    extern const char *Txt_Department;
@@ -3736,190 +3714,182 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    char *SelectClass;
 
    /***** Begin project box *****/
-   if (ItsANewProject)
-     {
-      Projects->Prj.PrjCod = -1L;
-      Box_BoxBegin (NULL,Txt_New_project,
-                    NULL,NULL,
-                    Hlp_ASSESSMENT_Projects_new_project,Box_NOT_CLOSABLE);
-     }
-   else
-      Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
-                	                          Txt_Edit_project,
-                    NULL,NULL,
-                    Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
+					       Txt_Project,
+		 NULL,NULL,
+		 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
 
-   /***** 1. Project members *****/
-   if (!ItsANewProject)	// Existing project
-     {
-      Box_BoxTableBegin (NULL,Txt_Members,
-                         NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-         Projects->View = Prj_EDIT_ONE_PROJECT;
-	 for (NumRoleToShow = 0;
-	      NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
-	      NumRoleToShow++)
-	    Prj_ShowProjectMembersWithARole (Projects,Prj_RolesToShow[NumRoleToShow]);
-      Box_BoxTableEnd ();
-     }
+      /***** 1. Project members *****/
+      if (!ItsANewProject)	// Existing project
+	{
+	 Box_BoxTableBegin (NULL,Txt_Members,
+			    NULL,NULL,
+			    NULL,Box_NOT_CLOSABLE,2);
+	    Projects->View = Prj_EDIT_ONE_PROJECT;
+	    for (NumRoleToShow = 0;
+		 NumRoleToShow < Prj_NUM_ROLES_TO_SHOW;
+		 NumRoleToShow++)
+	       Prj_ShowProjectMembersWithARole (Projects,Prj_RolesToShow[NumRoleToShow]);
+	 Box_BoxTableEnd ();
+	}
 
-   /***** 2. Project data *****/
-   /* Begin data form */
-   Frm_BeginForm (ItsANewProject ? ActNewPrj :
-	                           ActChgPrj);
-      Prj_PutCurrentPars (Projects);
+      /***** 2. Project data *****/
+      /* Begin data form */
+      Frm_BeginForm (ItsANewProject ? ActNewPrj :
+				      ActChgPrj);
+	 Prj_PutCurrentPars (Projects);
 
-      /* Begin box and table */
-      Box_BoxTableBegin (NULL,Txt_Data,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+	 /* Begin box and table */
+	 Box_BoxTableBegin (NULL,Txt_Data,
+			    NULL,NULL,
+			    NULL,Box_NOT_CLOSABLE,2);
 
-	 /* Project title */
-	 HTM_TR_Begin (NULL);
+	    /* Project title */
+	    HTM_TR_Begin (NULL);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	       /* Label */
+	       Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Title\""
+				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /* Department */
-	 HTM_TR_Begin (NULL);
+	    /* Department */
+	    HTM_TR_Begin (NULL);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
+	       /* Label */
+	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
-	                     The_GetSuffix ()) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
-					    Projects->Prj.DptCod,	// Selected department
-					    Par_CodeStr[ParCod_Dpt],	// Parameter name
-					    SelectClass,		// Selector class
-					    0,				// First option
-					    Txt_Another_department,	// Text when no department selected
-					    HTM_DONT_SUBMIT_ON_CHANGE);
-	       free (SelectClass);
-	    HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
+				The_GetSuffix ()) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
+					       Projects->Prj.DptCod,	// Selected department
+					       Par_CodeStr[ParCod_Dpt],	// Parameter name
+					       SelectClass,		// Selector class
+					       0,				// First option
+					       Txt_Another_department,	// Text when no department selected
+					       HTM_DONT_SUBMIT_ON_CHANGE);
+		  free (SelectClass);
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /* Assigned? */
-	 HTM_TR_Begin (NULL);
+	    /* Assigned? */
+	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Assigned_QUESTION);
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+		  HTM_TxtColon (Txt_Assigned_QUESTION);
+	       HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				 "name=\"Assigned\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"Y",
-		              Projects->Prj.Assigned == Prj_ASSIGNED,	// Selected?
-		              HTM_OPTION_ENABLED,
-			      "%s",Txt_Yes);
-		  HTM_OPTION (HTM_Type_STRING,"N",
-		              Projects->Prj.Assigned == Prj_NONASSIG,	// Selected?
-		              HTM_OPTION_ENABLED,
-			      "%s",Txt_No);
-	       HTM_SELECT_End ();
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /* Number of students */
-	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Number_of_students);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
-			       HTM_DONT_SUBMIT_ON_CHANGE,false,
-			       "class=\"INPUT_%s\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /* Proposal */
-	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Proposal);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				 "name=\"Proposal\""
-				 " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (Proposal  = (Prj_Proposal_t) 0;
-		       Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
-		       Proposal++)
-		    {
-		     ProposalUnsigned = (unsigned) Proposal;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-				 Projects->Prj.Proposal == Proposal,	// Selected?
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"Assigned\" class=\"INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"Y",
+				 Projects->Prj.Assigned == Prj_ASSIGNED,	// Selected?
 				 HTM_OPTION_ENABLED,
-				 "%s",Txt_PROJECT_STATUS[Proposal]);
-		    }
-	       HTM_SELECT_End ();
-	    HTM_TD_End ();
+				 "%s",Txt_Yes);
+		     HTM_OPTION (HTM_Type_STRING,"N",
+				 Projects->Prj.Assigned == Prj_NONASSIG,	// Selected?
+				 HTM_OPTION_ENABLED,
+				 "%s",Txt_No);
+		  HTM_SELECT_End ();
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /* Description of the project */
-	 Prj_EditOneProjectTxtArea ("Description",Txt_Description,
-				    Projects->Prj.Description,12,
-				    true);	// Required
+	    /* Number of students */
+	    HTM_TR_Begin (NULL);
 
-	 /* Required knowledge to carry out the project */
-	 Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
-				    Projects->Prj.Knowledge,4,
-				    false);	// Not required
+	       HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+		  HTM_TxtColon (Txt_Number_of_students);
+	       HTM_TD_End ();
 
-	 /* Required materials to carry out the project */
-	 Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
-				    Projects->Prj.Materials,4,
-				    false);	// Not required
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
+				  HTM_DONT_SUBMIT_ON_CHANGE,false,
+				  "class=\"INPUT_%s\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /* URL for additional info */
-	 HTM_TR_Begin (NULL);
+	    HTM_TR_End ();
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","WWW",Txt_URL);
+	    /* Proposal */
+	    HTM_TR_Begin (NULL);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       HTM_INPUT_URL ("URL",Projects->Prj.URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			      The_GetSuffix ());
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+		  HTM_TxtColon (Txt_Proposal);
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"Proposal\""
+				    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (Proposal  = (Prj_Proposal_t) 0;
+			  Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
+			  Proposal++)
+		       {
+			ProposalUnsigned = (unsigned) Proposal;
+			HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
+				    Projects->Prj.Proposal == Proposal,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_PROJECT_STATUS[Proposal]);
+		       }
+		  HTM_SELECT_End ();
+	       HTM_TD_End ();
 
-      /* End table, send button and end box */
-      if (ItsANewProject)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_project);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+	    HTM_TR_End ();
 
-   /* End data form */
-   Frm_EndForm ();
+	    /* Description of the project */
+	    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
+				       Projects->Prj.Description,12,
+				       true);	// Required
+
+	    /* Required knowledge to carry out the project */
+	    Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
+				       Projects->Prj.Knowledge,4,
+				       false);	// Not required
+
+	    /* Required materials to carry out the project */
+	    Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
+				       Projects->Prj.Materials,4,
+				       false);	// Not required
+
+	    /* URL for additional info */
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("RT","WWW",Txt_URL);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+		  HTM_INPUT_URL ("URL",Projects->Prj.URL,HTM_DONT_SUBMIT_ON_CHANGE,
+				 "class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				 The_GetSuffix ());
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	 /* End table, send button and end box */
+	 if (ItsANewProject)
+	    Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_project);
+	 else
+	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+      /* End data form */
+      Frm_EndForm ();
 
    /***** End project box *****/
    Box_BoxEnd ();

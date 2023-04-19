@@ -95,8 +95,7 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get calls for exams"
-			     " in this course for listing",
+   DB_QuerySELECT (mysql_res,"can not get calls for exams",
 		   "SELECT ExaCod"	// row[0]
 		    " FROM cfe_exams"
 		   " WHERE CrsCod=%ld"
@@ -116,7 +115,7 @@ unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 	  of visible calls for exams
 	  in current course from database *****/
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get calls for exams in this course",
+   DB_QuerySELECT (mysql_res,"can not get calls for exams",
 		   "SELECT ExaCod,"		// row[0]
 			  "DATE(ExamDate)"	// row[1]
 		    " FROM cfe_exams"

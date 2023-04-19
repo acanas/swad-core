@@ -124,7 +124,6 @@ void Ban_ShowAllBanners (void)
    extern const char *Hlp_SYSTEM_Banners;
    extern const char *Txt_Banners;
    extern const char *Txt_No_banners;
-   extern const char *Txt_New_banner;
    struct Ban_Banners Banners;
    MYSQL_RES *mysql_res;
 
@@ -145,14 +144,6 @@ void Ban_ShowAllBanners (void)
 	 Ban_WriteListOfBanners (&Banners);
       else		// No banners created
 	 Ale_ShowAlert (Ale_INFO,Txt_No_banners);
-
-      /***** Button to create banner *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	{
-	 Frm_BeginForm (ActEdiBan);
-	    Btn_PutConfirmButton (Txt_New_banner);
-	 Frm_EndForm ();
-	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -798,14 +789,14 @@ void Ban_ContEditAfterChgBan (void)
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
-   extern const char *Txt_New_banner;
+   extern const char *Txt_Banner;
    extern const char *Txt_Create_banner;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewBan);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_banner,
+      Box_BoxTableBegin (NULL,Txt_Banner,
 			 NULL,NULL,
 			 Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
 

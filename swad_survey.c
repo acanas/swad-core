@@ -92,7 +92,6 @@ struct Svy_Question	// Must be initialized to 0 before using it
 static bool Svy_CheckIfICanCreateSvy (void);
 static void Svy_PutIconsListSurveys (void *Surveys);
 static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys);
-static void Svy_PutButtonToCreateNewSvy (struct Svy_Surveys *Surveys);
 static void Svy_PutParsToCreateNewSvy (void *Surveys);
 static void Svy_ParsWhichGroupsToShow (void *Surveys);
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
@@ -133,7 +132,6 @@ static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
                                    char Stem[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_PutParsToEditQuestion (void *Surveys);
 static void Svy_PutIconToAddNewQuestion (void *Surveys);
-static void Svy_PutButtonToCreateNewQuestion (struct Svy_Surveys *Surveys);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
@@ -288,10 +286,6 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
 				     Surveys,-1L);
 
-      /***** Button to create a new survey *****/
-      if (Svy_CheckIfICanCreateSvy ())
-	 Svy_PutButtonToCreateNewSvy (Surveys);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -344,20 +338,6 @@ static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys)
   {
    Ico_PutContextualIconToAdd (ActFrmNewSvy,NULL,
                                Svy_PutParsToCreateNewSvy,Surveys);
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new survey *********************/
-/*****************************************************************************/
-
-static void Svy_PutButtonToCreateNewSvy (struct Svy_Surveys *Surveys)
-  {
-   extern const char *Txt_New_survey;
-
-   Frm_BeginForm (ActFrmNewSvy);
-      Svy_PutParsToCreateNewSvy (Surveys);
-      Btn_PutConfirmButton (Txt_New_survey);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1636,11 +1616,9 @@ void Svy_UnhideSurvey (void)
 
 void Svy_ReqCreatOrEditSvy (void)
   {
-   extern const char *Hlp_ANALYTICS_Surveys_new_survey;
    extern const char *Hlp_ANALYTICS_Surveys_edit_survey;
-   extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
-   extern const char *Txt_Edit_survey;
+   extern const char *Txt_Survey;
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Users;
@@ -1708,92 +1686,87 @@ void Svy_ReqCreatOrEditSvy (void)
       Svy_PutPars (&Surveys);
 
       /***** Begin box and table *****/
-      if (ItsANewSurvey)
-	 Box_BoxTableBegin (NULL,Txt_New_survey,
-			    NULL,NULL,
-			    Hlp_ANALYTICS_Surveys_new_survey,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Surveys.Svy.Title[0] ? Surveys.Svy.Title :
-						   Txt_Edit_survey,
-			    NULL,NULL,
-			    Hlp_ANALYTICS_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Surveys.Svy.Title[0] ? Surveys.Svy.Title :
+						Txt_Survey,
+			 NULL,NULL,
+			 Hlp_ANALYTICS_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
 
-      /***** Scope of the survey *****/
-      HTM_TR_Begin (NULL);
+	 /***** Scope of the survey *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
+	    /* Label */
+	    Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    Svy_SetDefaultAndAllowedScope (&Surveys.Svy);
-	    Sco_GetScope ("ScopeSvy");
-	    Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Svy_SetDefaultAndAllowedScope (&Surveys.Svy);
+	       Sco_GetScope ("ScopeSvy");
+	       Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Survey title *****/
-      HTM_TR_Begin (NULL);
+	 /***** Survey title *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Survey start and end dates *****/
-      Dat_PutFormStartEndClientLocalDateTimes (Surveys.Svy.TimeUTC,
-					       Dat_FORM_SECONDS_ON,
-					       SetHMS);
+	 /***** Survey start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (Surveys.Svy.TimeUTC,
+						  Dat_FORM_SECONDS_ON,
+						  SetHMS);
 
-      /***** Survey text *****/
-      HTM_TR_Begin (NULL);
+	 /***** Survey text *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_GetSuffix ());
-	       if (!ItsANewSurvey)
-		  HTM_Txt (Txt);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  if (!ItsANewSurvey)
+		     HTM_Txt (Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Users' roles who can answer the survey *****/
-      HTM_TR_Begin (NULL);
+	 /***** Users' roles who can answer the survey *****/
+	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Users);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Users);
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    Rol_WriteSelectorRoles (1 << Rol_STD |
-				    1 << Rol_NET |
-				    1 << Rol_TCH,
-				    Surveys.Svy.Roles,
-				    false,false);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	       Rol_WriteSelectorRoles (1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH,
+				       Surveys.Svy.Roles,
+				       false,false);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Groups *****/
-      Svy_ShowLstGrpsToEditSurvey (Surveys.Svy.SvyCod);
+	 /***** Groups *****/
+	 Svy_ShowLstGrpsToEditSurvey (Surveys.Svy.SvyCod);
 
       /***** End table, send button and end box *****/
       if (ItsANewSurvey)
@@ -2291,7 +2264,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
   {
    extern const char *Hlp_ANALYTICS_Surveys_questions;
    extern const char *Txt_Question;
-   extern const char *Txt_New_question;
    extern const char *Txt_Wording;
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
@@ -2352,7 +2324,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       free (Title);
      }
    else
-      Box_BoxBegin (NULL,Txt_New_question,
+      Box_BoxBegin (NULL,Txt_Question,
                     NULL,NULL,
                     Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
@@ -2822,12 +2794,6 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
    else	// This survey has no questions
       Ale_ShowAlert (Ale_INFO,Txt_This_survey_has_no_questions);
 
-   if (Surveys->Svy.Status.ICanEdit &&	// I can edit
-       (!NumQsts ||			// This survey has no questions
-	Editing))			// I am editing
-      /***** Put button to add a new question in this survey *****/
-      Svy_PutButtonToCreateNewQuestion (Surveys);
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
@@ -2882,20 +2848,6 @@ static void Svy_PutParsToEditQuestion (void *Surveys)
 static void Svy_PutIconToAddNewQuestion (void *Surveys)
   {
    Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,Svy_PutPars,Surveys);
-  }
-
-/*****************************************************************************/
-/**************** Put button to add a new question to survey *****************/
-/*****************************************************************************/
-
-static void Svy_PutButtonToCreateNewQuestion (struct Svy_Surveys *Surveys)
-  {
-   extern const char *Txt_New_question;
-
-   Frm_BeginForm (ActEdiOneSvyQst);
-      Svy_PutPars (Surveys);
-      Btn_PutConfirmButton (Txt_New_question);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

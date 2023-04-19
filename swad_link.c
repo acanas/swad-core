@@ -46,6 +46,16 @@
 #include "swad_parameter_code.h"
 
 /*****************************************************************************/
+/****************************** Private constants ****************************/
+/*****************************************************************************/
+
+static const bool Lnk_ICanEditLinks[Rol_NUM_ROLES] =
+  {
+   /* Users who can edit */
+   [Rol_SYS_ADM] = true,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -103,7 +113,6 @@ void Lnk_SeeLinks (void)
    extern const char *Hlp_SYSTEM_Links;
    extern const char *Txt_Links;
    extern const char *Txt_No_links;
-   extern const char *Txt_New_link;
    struct Lnk_Links Links;
 
    /***** Get list of links *****/
@@ -120,14 +129,6 @@ void Lnk_SeeLinks (void)
       else			// No links created
 	 Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
-      /***** Button to create link *****/
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	{
-	 Frm_BeginForm (ActEdiLnk);
-	    Btn_PutConfirmButton (Txt_New_link);
-	 Frm_EndForm ();
-	}
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -142,7 +143,7 @@ void Lnk_SeeLinks (void)
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit links *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+   if (Lnk_ICanEditLinks[Gbl.Usrs.Me.Role.Logged])
       Lnk_PutIconToEditLinks ();
 
    /***** Put icon to view banners *****/
@@ -671,14 +672,14 @@ void Lnk_ContEditAfterChgLnk (void)
 static void Lnk_PutFormToCreateLink (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
-   extern const char *Txt_New_link;
+   extern const char *Txt_Link;
    extern const char *Txt_Create_link;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewLnk);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_link,
+      Box_BoxTableBegin (NULL,Txt_Link,
 			 NULL,NULL,
 			 Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
 

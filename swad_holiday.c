@@ -45,6 +45,17 @@
 #include "swad_parameter_code.h"
 
 /*****************************************************************************/
+/****************************** Private constants ****************************/
+/*****************************************************************************/
+
+static const bool Hld_ICanEditHlds[Rol_NUM_ROLES] =
+  {
+   /* Users who can edit */
+   [Rol_INS_ADM] = true,
+   [Rol_SYS_ADM] = true,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -107,7 +118,6 @@ void Hld_SeeAllHolidays (void)
    extern const char *Txt_Holiday;
    extern const char *Txt_All_places;
    extern const char *Txt_No_holidays;
-   extern const char *Txt_New_holiday;
    Hld_Order_t Order;
    unsigned NumHld;
    char StrDate[Cns_MAX_BYTES_DATE + 1];
@@ -206,14 +216,6 @@ void Hld_SeeAllHolidays (void)
 	 else	// No holidays created in the current institution
 	    Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
 
-	 /***** Button to create center *****/
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)	// Institution admin or system admin
-	   {
-	    Frm_BeginForm (ActEdiHld);
-	       Btn_PutConfirmButton (Txt_New_holiday);
-	    Frm_EndForm ();
-	   }
-
       /***** End box *****/
       Box_BoxEnd ();
 
@@ -241,7 +243,7 @@ static Hld_Order_t Hld_GetParHldOrder (void)
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
   {
    /***** Edit holidays calendar *****/
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+   if (Hld_ICanEditHlds[Gbl.Usrs.Me.Role.Logged])
       Ico_PutContextualIconToEdit (ActEdiHld,NULL,
 				   NULL,NULL);
 
@@ -864,7 +866,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_All_places;
-   extern const char *Txt_New_holiday;
+   extern const char *Txt_Holiday;
    extern const char *Txt_Place;
    extern const char *Txt_Type;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -881,7 +883,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
    Frm_BeginForm (ActNewHld);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_holiday,
+      Box_BoxTableBegin (NULL,Txt_Holiday,
 			 NULL,NULL,
 			 Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 

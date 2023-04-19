@@ -114,7 +114,6 @@ static bool Gam_CheckIfICanEditGames (void);
 static bool Gam_CheckIfICanListGameQuestions (void);
 static void Gam_PutIconsListGames (void *Games);
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
-static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutParsToCreateNewGame (void *Games);
 
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
@@ -324,10 +323,6 @@ void Gam_ListAllGames (struct Gam_Games *Games)
       Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
 				     Games,-1L);
 
-      /***** Button to create a new game *****/
-      if (Gam_CheckIfICanEditGames ())
-	 Gam_PutButtonToCreateNewGame (Games);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -409,22 +404,6 @@ static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
   {
    Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,
                                Gam_PutParsToCreateNewGame,Games);
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new game ***********************/
-/*****************************************************************************/
-
-static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
-  {
-   extern const char *Txt_New_game;
-
-   Frm_BeginForm (ActFrmNewGam);
-      Gam_PutParsToCreateNewGame (Games);
-
-      Btn_PutConfirmButton (Txt_New_game);
-
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1287,10 +1266,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 				     char Txt[Cns_MAX_BYTES_TEXT + 1],
 				     bool ItsANewGame)
   {
-   extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
-   extern const char *Txt_New_game;
-   extern const char *Txt_Edit_game;
+   extern const char *Txt_Game;
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
@@ -1304,16 +1281,11 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
       Gam_PutPars (Games);
 
       /***** Begin box and table *****/
-      if (ItsANewGame)
-	 Box_BoxTableBegin (NULL,Txt_New_game,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Games->Game.Title[0] ? Games->Game.Title :
-					           Txt_Edit_game,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Games->Game.Title[0] ? Games->Game.Title :
+						Txt_Game,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
       /***** Game title *****/
       HTM_TR_Begin (NULL);
@@ -2155,22 +2127,6 @@ static bool Gam_CheckIfEditable (const struct Gam_Game *Game)
       return Game->NumMchs == 0;	// Games with matches should not be edited
    else
       return false;			// Questions are not editable
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new match **********************/
-/*****************************************************************************/
-
-void Gam_PutButtonNewMatch (struct Gam_Games *Games)
-  {
-   extern const char *Txt_New_match;
-
-   Frm_BeginFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
-      Gam_PutPars (Games);
-
-      Btn_PutConfirmButton (Txt_New_match);
-
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

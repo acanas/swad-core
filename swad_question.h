@@ -144,7 +144,6 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 bool Qst_CheckIfICanEditQsts (void);
 void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
 void Qst_PutIconsEditBankQsts (void *Questions);
-void Qst_PutButtonToAddQuestion (void);
 
 void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,

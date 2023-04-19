@@ -84,7 +84,6 @@ static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 static bool Not_CheckIfICanEditNotices (void);
 static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
 static void Not_PutIconToAddNewNotice (void);
-static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
 static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
                                       struct Not_Notice *Notice,
@@ -103,7 +102,7 @@ void Not_ShowFormNotice (void)
   {
    extern const char *Hlp_COMMUNICATION_Notices;
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
-   extern const char *Txt_New_notice;
+   extern const char *Txt_Notice;
    extern const char *Txt_Create_notice;
 
    /***** Help message *****/
@@ -114,7 +113,7 @@ void Not_ShowFormNotice (void)
    Frm_BeginForm (ActRcvNot);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_New_notice,
+      Box_BoxBegin (NULL,Txt_Notice,
 		    NULL,NULL,
 		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 
@@ -381,10 +380,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 HTM_DIV_End ();
 	 break;
       case Not_LIST_FULL_NOTICES:
-	    /***** Button to add new notice *****/
-	    if (Not_CheckIfICanEditNotices ())
-	       Not_PutButtonToAddNewNotice ();
-
 	 /***** End box *****/
 	 Box_BoxEnd ();
 	 break;
@@ -428,19 +423,6 @@ static void Not_PutIconsListNotices (__attribute__((unused)) void *Args)
 static void Not_PutIconToAddNewNotice (void)
   {
    Ico_PutContextualIconToAdd (ActWriNot,NULL,NULL,NULL);
-  }
-
-/*****************************************************************************/
-/********************** Put button to add a new notice ***********************/
-/*****************************************************************************/
-
-static void Not_PutButtonToAddNewNotice (void)
-  {
-   extern const char *Txt_New_notice;
-
-   Frm_BeginForm (ActWriNot);
-      Btn_PutConfirmButton (Txt_New_notice);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

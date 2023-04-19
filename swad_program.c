@@ -117,7 +117,6 @@ static void Prg_PutIconToEditProgram (void);
 static void Prg_PutIconToViewProgram (void);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutIconToViewResourceClipboard (void);
-static void Prg_PutButtonToCreateNewItem (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
@@ -359,18 +358,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	 HTM_TBODY_End ();					// 3rd tbody end
       HTM_TABLE_End ();
 
-      /***** Button to create a new program item *****/
-      switch (ListingType)
-	{
-	 case Prg_PRINT:
-	 case Prg_VIEW:
-	    break;
-	 default:
-	    if (Prg_CheckIfICanEditProgram ())
-	       Prg_PutButtonToCreateNewItem ();
-	    break;
-	}
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -464,19 +451,6 @@ static void Prg_PutIconToViewResourceClipboard (void)
   {
    Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InPrg,NULL,
                                          NULL,NULL);
-  }
-
-/*****************************************************************************/
-/***************** Put button to create a new program item *******************/
-/*****************************************************************************/
-
-static void Prg_PutButtonToCreateNewItem (void)
-  {
-   extern const char *Txt_New_item;
-
-   Frm_BeginFormAnchor (ActFrmNewPrgItm,Prg_ITEM_SECTION_ID);
-      Btn_PutConfirmButton (Txt_New_item);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1959,7 +1933,7 @@ void Prg_ReqCreateItem (void)
 static void Prg_ShowFormToCreateItem (long ParentItmCod)
   {
    extern const char *Hlp_COURSE_Program_new_item;
-   extern const char *Txt_New_item;
+   extern const char *Txt_Item;
    extern const char *Txt_Create_item;
    struct Prg_Item ParentItem;	// Parent item
    struct Prg_Item Item;
@@ -1987,7 +1961,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
       ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin ("100%",Txt_New_item,
+      Box_BoxTableBegin ("100%",Txt_Item,
 			 NULL,NULL,
 			 Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
 

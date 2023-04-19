@@ -48,7 +48,7 @@ struct Agd_Event
    bool Hidden;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    Dat_TimeStatus_t TimeStatus;
-   char Event[Agd_MAX_BYTES_EVENT + 1];
+   char Title[Agd_MAX_BYTES_EVENT + 1];
    char Location[Agd_MAX_BYTES_LOCATION + 1];
   };
 

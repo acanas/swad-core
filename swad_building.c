@@ -103,7 +103,6 @@ void Bld_SeeBuildings (void)
    extern const char *Txt_Buildings;
    extern const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS];
    extern const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS];
-   extern const char *Txt_New_building;
    struct Bld_Buildings Buildings;
    Bld_Order_t Order;
    unsigned NumBuilding;
@@ -121,74 +120,62 @@ void Bld_SeeBuildings (void)
    /***** Get list of buildings *****/
    Bld_GetListBuildings (&Buildings,Bld_ALL_DATA);
 
-   /***** Table head *****/
-   Box_BoxBegin (NULL,Txt_Buildings,
-                 Bld_PutIconsListingBuildings,NULL,
-		 Hlp_CENTER_Buildings,Box_NOT_CLOSABLE);
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_Buildings,
+                      Bld_PutIconsListingBuildings,NULL,
+		      Hlp_CENTER_Buildings,Box_NOT_CLOSABLE,2);
 
-      HTM_TABLE_BeginWideMarginPadding (2);
-	 HTM_TR_Begin (NULL);
-	    for (Order  = (Bld_Order_t) 0;
-		 Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
-		 Order++)
-	      {
-               HTM_TH_Begin (HTM_HEAD_LEFT);
-		  Frm_BeginForm (ActSeeBld);
-		     Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-		     HTM_BUTTON_Submit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],
-		                              "class=\"BT_LINK\"");
-			if (Order == Buildings.SelectedOrder)
-			   HTM_U_Begin ();
-			HTM_Txt (Txt_BUILDINGS_ORDER[Order]);
-			if (Order == Buildings.SelectedOrder)
-			   HTM_U_End ();
-		     HTM_BUTTON_End ();
-		  Frm_EndForm ();
-	       HTM_TH_End ();
-	      }
-	 HTM_TR_End ();
-
-	 /***** Write list of buildings *****/
-	 for (NumBuilding = 0, The_ResetRowColor ();
-	      NumBuilding < Buildings.Num;
-	      NumBuilding++, The_ChangeRowColor ())
+      HTM_TR_Begin (NULL);
+	 for (Order  = (Bld_Order_t) 0;
+	      Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
+	      Order++)
 	   {
-	    HTM_TR_Begin (NULL);
-
-	       /* Short name */
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
-		  HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
-	       HTM_TD_End ();
-
-	       /* Full name */
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
-		  HTM_Txt (Buildings.Lst[NumBuilding].FullName);
-	       HTM_TD_End ();
-
-	       /* Location */
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
-		  HTM_Txt (Buildings.Lst[NumBuilding].Location);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
+	    HTM_TH_Begin (HTM_HEAD_LEFT);
+	       Frm_BeginForm (ActSeeBld);
+		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_Submit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],
+					   "class=\"BT_LINK\"");
+		     if (Order == Buildings.SelectedOrder)
+			HTM_U_Begin ();
+		     HTM_Txt (Txt_BUILDINGS_ORDER[Order]);
+		     if (Order == Buildings.SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	    HTM_TH_End ();
 	   }
+      HTM_TR_End ();
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Button to create building *****/
-      if (Bld_CheckIfICanCreateBuildings ())
+      /***** Write list of buildings *****/
+      for (NumBuilding = 0, The_ResetRowColor ();
+	   NumBuilding < Buildings.Num;
+	   NumBuilding++, The_ChangeRowColor ())
 	{
-	 Frm_BeginForm (ActEdiBld);
-	    Btn_PutConfirmButton (Txt_New_building);
-	 Frm_EndForm ();
+	 HTM_TR_Begin (NULL);
+
+	    /* Short name */
+	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+			  The_GetSuffix (),The_GetColorRows ());
+	       HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
+	    HTM_TD_End ();
+
+	    /* Full name */
+	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+			  The_GetSuffix (),The_GetColorRows ());
+	       HTM_Txt (Buildings.Lst[NumBuilding].FullName);
+	    HTM_TD_End ();
+
+	    /* Location */
+	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
+			  The_GetSuffix (),The_GetColorRows ());
+	       HTM_Txt (Buildings.Lst[NumBuilding].Location);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
 	}
 
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
 
    /***** Free list of buildings *****/
    Bld_FreeListBuildings (&Buildings);
@@ -693,14 +680,14 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   extern const char *Txt_New_building;
+   extern const char *Txt_Building;
    extern const char *Txt_Create_building;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewBld);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_building,
+      Box_BoxTableBegin (NULL,Txt_Building,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

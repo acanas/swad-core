@@ -1412,7 +1412,7 @@ static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Par_CodeStr[];
-   extern const char *Txt_New_country;
+   extern const char *Txt_Country;
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    Lan_Language_t Lan;
@@ -1423,7 +1423,7 @@ static void Cty_PutFormToCreateCountry (void)
    Frm_BeginForm (ActNewCty);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_country,
+      Box_BoxTableBegin (NULL,Txt_Country,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

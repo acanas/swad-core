@@ -89,7 +89,6 @@ static void Att_ShowAllEvents (struct Att_Events *Events);
 static void Att_ParsWhichGroupsToShow (void *Events);
 static void Att_PutIconsInListOfEvents (void *Events);
 static void Att_PutIconToCreateNewEvent (struct Att_Events *Events);
-static void Att_PutButtonToCreateNewEvent (struct Att_Events *Events);
 static void Att_PutParsToCreateNewEvent (void *Events);
 static void Att_PutParsToListUsrsAttendance (void *Events);
 
@@ -219,8 +218,6 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
    Dat_StartEndTime_t Order;
    Grp_WhichGroups_t WhichGroups;
    unsigned NumAttEvent;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Events->Num;
@@ -312,10 +309,6 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
       Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
 				     Events,-1L);
 
-      /***** Button to create a new attendance event *****/
-      if (ICanEdit)
-	 Att_PutButtonToCreateNewEvent (Events);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -389,25 +382,6 @@ static void Att_PutIconToCreateNewEvent (struct Att_Events *Events)
   {
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
                                Att_PutParsToCreateNewEvent,Events);
-  }
-
-/*****************************************************************************/
-/**************** Put button to create a new attendance event ****************/
-/*****************************************************************************/
-
-static void Att_PutButtonToCreateNewEvent (struct Att_Events *Events)
-  {
-   extern const char *Txt_New_event;
-
-   /***** Begin form *****/
-   Frm_BeginForm (ActFrmNewAtt);
-      Att_PutParsToCreateNewEvent (Events);
-
-      /***** Button to create new event *****/
-      Btn_PutConfirmButton (Txt_New_event);
-
-   /***** End form *****/
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -950,10 +924,8 @@ void Att_UnhideEvent (void)
 
 void Att_ReqCreatOrEditEvent (void)
   {
-   extern const char *Hlp_USERS_Attendance_new_event;
    extern const char *Hlp_USERS_Attendance_edit_event;
-   extern const char *Txt_New_event;
-   extern const char *Txt_Edit_event;
+   extern const char *Txt_Event;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_Title;
    extern const char *Txt_Hidden_MALE_PLURAL;
@@ -1019,84 +991,79 @@ void Att_ReqCreatOrEditEvent (void)
       Pag_PutParPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
       /***** Begin box and table *****/
-      if (ItsANewAttEvent)
-	 Box_BoxTableBegin (NULL,Txt_New_event,
-			    NULL,NULL,
-			    Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Events.Event.Title[0] ? Events.Event.Title :
-						    Txt_Edit_event,
-			    NULL,NULL,
-			    Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Events.Event.Title[0] ? Events.Event.Title :
+						 Txt_Event,
+			 NULL,NULL,
+			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
 
-      /***** Attendance event title *****/
-      HTM_TR_Begin (NULL);
+	 /***** Attendance event title *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Assignment start and end dates *****/
-      Dat_PutFormStartEndClientLocalDateTimes (Events.Event.TimeUTC,
-					       Dat_FORM_SECONDS_ON,
-					       SetHMS);
+	 /***** Assignment start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (Events.Event.TimeUTC,
+						  Dat_FORM_SECONDS_ON,
+						  SetHMS);
 
-      /***** Visibility of comments *****/
-      HTM_TR_Begin (NULL);
+	 /***** Visibility of comments *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
+	    /* Label */
+	    Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			      "id=\"ComTchVisible\" name=\"ComTchVisible\""
-			      " class=\"INPUT_%s\"",
-			      The_GetSuffix ());
-	       HTM_OPTION (HTM_Type_STRING,"N",
-	                   !Events.Event.CommentTchVisible,	// Selected?
-	                   HTM_OPTION_ENABLED,
-			   "%s",Txt_Hidden_MALE_PLURAL);
-	       HTM_OPTION (HTM_Type_STRING,"Y",
-	                   Events.Event.CommentTchVisible,	// Selected?
-	                   HTM_OPTION_ENABLED,
-			   "%s",Txt_Visible_MALE_PLURAL);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
+				 " class=\"INPUT_%s\"",
+				 The_GetSuffix ());
+		  HTM_OPTION (HTM_Type_STRING,"N",
+			      !Events.Event.CommentTchVisible,	// Selected?
+			      HTM_OPTION_ENABLED,
+			      "%s",Txt_Hidden_MALE_PLURAL);
+		  HTM_OPTION (HTM_Type_STRING,"Y",
+			      Events.Event.CommentTchVisible,	// Selected?
+			      HTM_OPTION_ENABLED,
+			      "%s",Txt_Visible_MALE_PLURAL);
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Attendance event description *****/
-      HTM_TR_Begin (NULL);
+	 /***** Attendance event description *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_GetSuffix ());
-	       if (!ItsANewAttEvent)
-		  HTM_Txt (Description);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  if (!ItsANewAttEvent)
+		     HTM_Txt (Description);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Groups *****/
-      Att_ShowLstGrpsToEditEvent (Events.Event.AttCod);
+	 /***** Groups *****/
+	 Att_ShowLstGrpsToEditEvent (Events.Event.AttCod);
 
       /***** End table, send button and end box *****/
       if (ItsANewAttEvent)

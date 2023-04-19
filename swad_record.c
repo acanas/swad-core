@@ -100,6 +100,7 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Rec_ListFieldsRecordsForEdition (void);
 static void Rec_WriteHeadingRecordFields (void);
 
 static void Rec_PutParFldCod (void *FldCod);
@@ -180,25 +181,23 @@ void Rec_ReqEditRecordFields (void)
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
-   /***** List the current fields of records for edit them *****/
-   if (Gbl.Crs.Records.LstFields.Num)	// Fields found...
-     {
-      /* Begin box and table */
-      Box_BoxTableBegin (NULL,Txt_Record_fields,
-                         NULL,NULL,
-                         Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Record_fields,
+		 NULL,NULL,
+		 Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE);
 
+      /***** Put a form to create a new record field *****/
+      Rec_ShowFormCreateRecordField ();
+
+      /***** List the current fields of records for edit them *****/
+      if (Gbl.Crs.Records.LstFields.Num)	// Fields found...
 	 Rec_ListFieldsRecordsForEdition ();
+      else	// No fields of records found for current course in the database
+	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
+			Gbl.Hierarchy.Crs.FullName);
 
-      /* End table and box */
-      Box_BoxTableEnd ();
-     }
-   else	// No fields of records found for current course in the database
-      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
-                     Gbl.Hierarchy.Crs.FullName);
-
-   /***** Put a form to create a new record field *****/
-   Rec_ShowFormCreateRecordField ();
+   /***** End box *****/
+   Box_BoxEnd ();
 
    /* Free list of fields of records */
    Rec_FreeListFields ();
@@ -263,7 +262,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 /********* List the fields of records already present in database ************/
 /*****************************************************************************/
 
-void Rec_ListFieldsRecordsForEdition (void)
+static void Rec_ListFieldsRecordsForEdition (void)
   {
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
@@ -272,72 +271,78 @@ void Rec_ListFieldsRecordsForEdition (void)
    unsigned VisUnsigned;
    char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Write heading *****/
-   Rec_WriteHeadingRecordFields ();
+   /***** Begin table *****/
+   HTM_TABLE_BeginWidePadding (2);
 
-   /***** List the fields *****/
-   for (NumField = 0;
-	NumField < Gbl.Crs.Records.LstFields.Num;
-	NumField++)
-     {
-      FldInLst = &Gbl.Crs.Records.LstFields.Lst[NumField];
+      /***** Write heading *****/
+      Rec_WriteHeadingRecordFields ();
 
-      HTM_TR_Begin (NULL);
+      /***** List the fields *****/
+      for (NumField = 0;
+	   NumField < Gbl.Crs.Records.LstFields.Num;
+	   NumField++)
+	{
+	 FldInLst = &Gbl.Crs.Records.LstFields.Lst[NumField];
 
-	 /* Write icon to remove the field */
-	 HTM_TD_Begin ("class=\"BM\"");
-	    Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
-					   Rec_PutParFldCod,&FldInLst->FieldCod);
-	 HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-	 /* Name of the field */
-	 HTM_TD_Begin ("class=\"LM\"");
-	    Frm_BeginForm (ActRenFie);
-	       ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
-	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
-			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"REC_FIELDNAME INPUT_%s\"",
-			       The_GetSuffix ());
-	    Frm_EndForm ();
-	 HTM_TD_End ();
+	    /* Write icon to remove the field */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
+					      Rec_PutParFldCod,&FldInLst->FieldCod);
+	    HTM_TD_End ();
 
-	 /* Number of lines in the form */
-	 HTM_TD_Begin ("class=\"CM\"");
-	    Frm_BeginForm (ActChgRowFie);
-	       ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
-	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-			 FldInLst->NumLines);
-	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"2\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
-	    Frm_EndForm ();
-	 HTM_TD_End ();
+	    /* Name of the field */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Frm_BeginForm (ActRenFie);
+		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
+				  Gbl.Crs.Records.LstFields.Lst[NumField].Name,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"REC_FIELDNAME INPUT_%s\"",
+				  The_GetSuffix ());
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-	 /* Visibility of a field */
-	 HTM_TD_Begin ("class=\"CM\"");
-	    Frm_BeginForm (ActChgVisFie);
-	       ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "name=\"Visibility\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
-		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
-		       Vis++)
-		    {
-		     VisUnsigned = (unsigned) Vis;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				 Vis == FldInLst->Visibility,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
-		    }
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
-	 HTM_TD_End ();
+	    /* Number of lines in the form */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgRowFie);
+		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  snprintf (StrNumLines,sizeof (StrNumLines),"%u",
+			    FldInLst->NumLines);
+		  HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"2\" class=\"INPUT_%s\"",
+				  The_GetSuffix ());
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    /* Visibility of a field */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgVisFie);
+		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"Visibility\" class=\"INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+			  Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
+			  Vis++)
+		       {
+			VisUnsigned = (unsigned) Vis;
+			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
+				    Vis == FldInLst->Visibility,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+		       }
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -347,7 +352,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *Txt_New_record_field;
+   extern const char *Txt_Record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
@@ -358,7 +363,7 @@ void Rec_ShowFormCreateRecordField (void)
    Frm_BeginForm (ActNewFie);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_record_field,
+      Box_BoxTableBegin (NULL,Txt_Record_field,
 			 NULL,NULL,
 			 Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 

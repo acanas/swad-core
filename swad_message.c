@@ -219,8 +219,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
-   extern const char *Txt_Reply_message;
-   extern const char *Txt_New_message;
+   extern const char *Txt_Message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
@@ -269,8 +268,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Messages->Reply.IsReply ? Txt_Reply_message :
-					        Txt_New_message,
+   Box_BoxBegin (NULL,Txt_Message,
                  Msg_PutIconsListMsgs,Messages,
 		 Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 

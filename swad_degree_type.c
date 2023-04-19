@@ -467,14 +467,14 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
-   extern const char *Txt_New_type_of_degree;
+   extern const char *Txt_Type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewDegTyp);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_type_of_degree,
+      Box_BoxTableBegin (NULL,Txt_Type_of_degree,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

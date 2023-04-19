@@ -241,7 +241,7 @@ long Agd_DB_CreateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
 				AgdEvent->UsrCod,
 				AgdEvent->TimeUTC[Dat_STR_TIME],
 				AgdEvent->TimeUTC[Dat_END_TIME],
-				AgdEvent->Event,
+				AgdEvent->Title,
 				AgdEvent->Location,
 				Txt);
   }
@@ -264,7 +264,7 @@ void Agd_DB_UpdateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
 		     " AND UsrCod=%ld",
                    AgdEvent->TimeUTC[Dat_STR_TIME],
                    AgdEvent->TimeUTC[Dat_END_TIME],
-                   AgdEvent->Event,
+                   AgdEvent->Title,
                    AgdEvent->Location,
                    Txt,
                    AgdEvent->AgdCod,

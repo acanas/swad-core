@@ -181,7 +181,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
-   extern const char *Txt_New_set_of_questions;
+   extern const char *Txt_Set_of_questions;
    extern const char *Txt_Create_set_of_questions;
 
    /***** Begin form *****/
@@ -189,7 +189,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
       Exa_PutPars (Exams);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
+      Box_BoxTableBegin (NULL,Txt_Set_of_questions,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

@@ -672,7 +672,7 @@ void Mai_ContEditAfterChgMai (void)
 static void Mai_PutFormToCreateMailDomain (void)
   {
    extern const char *Hlp_START_Domains_edit;
-   extern const char *Txt_New_email_domain;
+   extern const char *Txt_Email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
 
@@ -680,7 +680,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Frm_BeginForm (ActNewMai);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_email_domain,
+      Box_BoxTableBegin (NULL,Txt_Email_domain,
 			 NULL,NULL,
 			 Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 

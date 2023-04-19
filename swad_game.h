@@ -153,7 +153,6 @@ void Gam_RemoveQstFromGame (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_PutButtonNewMatch (struct Gam_Games *Games);
 void Gam_ReqNewMatch (void);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);

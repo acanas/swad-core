@@ -61,7 +61,6 @@ extern struct Globals Gbl;
 static void Rub_PutIconsListRubrics (void *Rubrics);
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics);
 static void Prg_PutIconToViewResourceClipboard (void);
-static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics);
 static void Rub_PutParsToCreateNewRubric (void *Rubrics);
 
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
@@ -108,6 +107,7 @@ void Rub_RubricConstructor (struct Rub_Rubric *Rubric)
    /***** Allocate memory for rubric text *****/
    if ((Rubric->Txt = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
+   Rubric->Txt[0] = '\0';
   }
 
 void Rub_RubricDestructor (struct Rub_Rubric *Rubric)
@@ -216,10 +216,6 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
       Pag_WriteLinksToPagesCentered (Pag_RUBRICS,&Pagination,
 				     Rubrics,-1L);
 
-      /***** Button to create a new rubric *****/
-      if (Rub_CheckIfICanEditRubrics ())
-	 Rub_PutButtonToCreateNewRubric (Rubrics);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -305,22 +301,6 @@ static void Prg_PutIconToViewResourceClipboard (void)
   {
    Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InRub,NULL,
                                          NULL,NULL);
-  }
-
-/*****************************************************************************/
-/******************** Put button to create a new rubric **********************/
-/*****************************************************************************/
-
-static void Rub_PutButtonToCreateNewRubric (struct Rub_Rubrics *Rubrics)
-  {
-   extern const char *Txt_New_rubric;
-
-   Frm_BeginForm (ActFrmNewRub);
-      Rub_PutParsToCreateNewRubric (Rubrics);
-
-      Btn_PutConfirmButton (Txt_New_rubric);
-
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -813,8 +793,7 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
-   extern const char *Txt_New_rubric;
-   extern const char *Txt_Edit_rubric;
+   extern const char *Txt_Rubric;
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Create_rubric;
@@ -828,11 +807,6 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
      {
       [Rub_EXISTING_RUBRIC] = Btn_CONFIRM_BUTTON,
       [Rub_NEW_RUBRIC     ] = Btn_CREATE_BUTTON,
-     };
-   const char *Title[] =
-     {
-      [Rub_EXISTING_RUBRIC] = Txt_Edit_rubric,
-      [Rub_NEW_RUBRIC     ] = Txt_New_rubric,
      };
    const char *HelpLink[] =
      {
@@ -852,7 +826,7 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,
 			 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
-						    Title[ExistingNewRubric],
+						    Txt_Rubric,
 			 NULL,NULL,
 			 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE,2);
 

@@ -146,7 +146,7 @@ void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd)
   {
-   extern const char *Txt_New_criterion;
+   extern const char *Txt_Criterion;
    extern const char *Txt_Create_criterion;
    RubCri_ValueRange_t ValueRange;
 
@@ -155,7 +155,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
       Rub_PutPars (Rubrics);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_criterion,
+      Box_BoxTableBegin (NULL,Txt_Criterion,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

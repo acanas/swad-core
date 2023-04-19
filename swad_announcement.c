@@ -51,7 +51,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args);
-static void Ann_PutButtonToAddNewAnnouncement (void);
 
 static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
                                             struct Ann_Announcement *Announcement);
@@ -112,10 +111,6 @@ void Ann_ShowAllAnnouncements (void)
 	                         ICanEdit);
 	}
 
-      /***** Button to add new announcement *****/
-      if (ICanEdit)
-	 Ann_PutButtonToAddNewAnnouncement ();
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -130,19 +125,6 @@ void Ann_ShowAllAnnouncements (void)
 static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args)
   {
    Ico_PutContextualIconToAdd (ActWriAnn,NULL,NULL,NULL);
-  }
-
-/*****************************************************************************/
-/******************* Put button to add a new announcement ********************/
-/*****************************************************************************/
-
-static void Ann_PutButtonToAddNewAnnouncement (void)
-  {
-   extern const char *Txt_New_announcement;
-
-   Frm_BeginForm (ActWriAnn);
-      Btn_PutConfirmButton (Txt_New_announcement);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -319,7 +301,7 @@ static void Ann_PutParAnnCod (void *AnnCod)
 void Ann_ShowFormAnnouncement (void)
   {
    extern const char *Hlp_COMMUNICATION_Announcements;
-   extern const char *Txt_New_announcement;
+   extern const char *Txt_Announcement;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Users;
@@ -329,7 +311,7 @@ void Ann_ShowFormAnnouncement (void)
    Frm_BeginForm (ActRcvAnn);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_announcement,
+      Box_BoxTableBegin (NULL,Txt_Announcement,
 			 NULL,NULL,
 			 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE,2);
 

@@ -156,7 +156,6 @@ void Roo_SeeRooms (void)
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_MAC_address;
    extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
-   extern const char *Txt_New_room;
    struct Roo_Rooms Rooms;
    Roo_Order_t Order;
    unsigned NumRoom;
@@ -288,14 +287,6 @@ void Roo_SeeRooms (void)
 
       /***** End table *****/
       HTM_TABLE_End ();
-
-      /***** Button to create room *****/
-      if (Roo_CheckIfICanCreateRooms ())
-	{
-	 Frm_BeginForm (ActEdiRoo);
-	    Btn_PutConfirmButton (Txt_New_room);
-	 Frm_EndForm ();
-	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1229,7 +1220,7 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
-   extern const char *Txt_New_room;
+   extern const char *Txt_Room;
    extern const char *Txt_Create_room;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
@@ -1238,7 +1229,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    Frm_BeginForm (ActNewRoo);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_room,
+      Box_BoxTableBegin (NULL,Txt_Room,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

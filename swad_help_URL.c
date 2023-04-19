@@ -1379,29 +1379,6 @@ const char *Hlp_ASSESSMENT_Assignments =
 	"ASSESSMENT.Assignments.en";
 #endif
 
-const char *Hlp_ASSESSMENT_Assignments_new_assignment =
-#if   L==1
-	"ASSESSMENT.Assignments.es#nueva-actividad";
-#elif L==2
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==3
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==4
-	"ASSESSMENT.Assignments.es#nueva-actividad";
-#elif L==5
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==6
-	"ASSESSMENT.Assignments.es#nueva-actividad";
-#elif L==7
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==8
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==9
-	"ASSESSMENT.Assignments.en#new-assignment";
-#elif L==10	// tr
-	"ASSESSMENT.Assignments.en#new-assignment";
-#endif
-
 const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 #if   L==1
 	"ASSESSMENT.Assignments.es#editar-actividad";
@@ -1447,29 +1424,6 @@ const char *Hlp_ASSESSMENT_Projects =
 	"ASSESSMENT.Projects.en";
 #elif L==10	// tr
 	"ASSESSMENT.Projects.en";
-#endif
-
-const char *Hlp_ASSESSMENT_Projects_new_project =
-#if   L==1
-	"ASSESSMENT.Projects.es#nuevo-proyecto";
-#elif L==2
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==3
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==4
-	"ASSESSMENT.Projects.es#nuevo-proyecto";
-#elif L==5
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==6
-	"ASSESSMENT.Projects.es#nuevo-proyecto";
-#elif L==7
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==8
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==9
-	"ASSESSMENT.Projects.en#new-project";
-#elif L==10	// tr
-	"ASSESSMENT.Projects.en#new-project";
 #endif
 
 const char *Hlp_ASSESSMENT_Projects_edit_project =
@@ -1817,29 +1771,6 @@ const char *Hlp_ASSESSMENT_Exams_sessions =
 	"ASSESSMENT.Exams.en#sessions";
 #endif
 
-const char *Hlp_ASSESSMENT_Exams_new_exam =
-#if   L==1
-	"ASSESSMENT.Exams.es#nuevo-examen";
-#elif L==2
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==3
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==4
-	"ASSESSMENT.Exams.es#nuevo-examen";
-#elif L==5
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==6
-	"ASSESSMENT.Exams.es#nuevo-examen";
-#elif L==7
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==8
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==9
-	"ASSESSMENT.Exams.en#new-exam";
-#elif L==10	// tr
-	"ASSESSMENT.Exams.en#new-exam";
-#endif
-
 const char *Hlp_ASSESSMENT_Exams_questions =
 #if   L==1
 	"ASSESSMENT.Exams.es#preguntas";
@@ -1976,29 +1907,6 @@ const char *Hlp_ASSESSMENT_Games_matches =
 	"ASSESSMENT.Games.en#matches";
 #elif L==10	// tr
 	"ASSESSMENT.Games.en#matches";
-#endif
-
-const char *Hlp_ASSESSMENT_Games_new_game =
-#if   L==1
-	"ASSESSMENT.Games.es#nuevo-juego";
-#elif L==2
-	"ASSESSMENT.Games.en#new-game";
-#elif L==3
-	"ASSESSMENT.Games.en#new-game";
-#elif L==4
-	"ASSESSMENT.Games.es#nuevo-juego";
-#elif L==5
-	"ASSESSMENT.Games.en#new-game";
-#elif L==6
-	"ASSESSMENT.Games.es#nuevo-juego";
-#elif L==7
-	"ASSESSMENT.Games.en#new-game";
-#elif L==8
-	"ASSESSMENT.Games.en#new-game";
-#elif L==9
-	"ASSESSMENT.Games.en#new-game";
-#elif L==10	// tr
-	"ASSESSMENT.Games.en#new-game";
 #endif
 
 const char *Hlp_ASSESSMENT_Games_questions =
@@ -4056,29 +3964,6 @@ const char *Hlp_ANALYTICS_Surveys =
 	"ANALYTICS.Surveys.en";
 #endif
 
-const char *Hlp_ANALYTICS_Surveys_new_survey =
-#if   L==1
-	"ANALYTICS.Surveys.es#nueva-encuesta";
-#elif L==2
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==3
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==4
-	"ANALYTICS.Surveys.es#nueva-encuesta";
-#elif L==5
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==6
-	"ANALYTICS.Surveys.es#nueva-encuesta";
-#elif L==7
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==8
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==9
-	"ANALYTICS.Surveys.en#new-survey";
-#elif L==10	// tr
-	"ANALYTICS.Surveys.en#new-survey";
-#endif
-
 const char *Hlp_ANALYTICS_Surveys_edit_survey =
 #if   L==1
 	"ANALYTICS.Surveys.es#editar-encuesta";
@@ -4378,29 +4263,6 @@ const char *Hlp_PROFILE_Agenda =
 	"PROFILE.Agenda.en";
 #elif L==10	// tr
 	"PROFILE.Agenda.en";
-#endif
-
-const char *Hlp_PROFILE_Agenda_new_event =
-#if   L==1
-	"PROFILE.Agenda.es#nuevo-evento";
-#elif L==2
-	"PROFILE.Agenda.en#new-event";
-#elif L==3
-	"PROFILE.Agenda.en#new-event";
-#elif L==4
-	"PROFILE.Agenda.es#nuevo-evento";
-#elif L==5
-	"PROFILE.Agenda.en#new-event";
-#elif L==6
-	"PROFILE.Agenda.es#nuevo-evento";
-#elif L==7
-	"PROFILE.Agenda.en#new-event";
-#elif L==8
-	"PROFILE.Agenda.en#new-event";
-#elif L==9
-	"PROFILE.Agenda.en#new-event";
-#elif L==10	// tr
-	"PROFILE.Agenda.en#new-event";
 #endif
 
 const char *Hlp_PROFILE_Agenda_edit_event =

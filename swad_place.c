@@ -114,7 +114,6 @@ void Plc_SeeAllPlaces (void)
    extern const char *Txt_PLACES_ORDER[2];
    extern const char *Txt_Other_places;
    extern const char *Txt_Place_unspecified;
-   extern const char *Txt_New_place;
    struct Plc_Places Places;
    Plc_Order_t Order;
    unsigned NumPlc;
@@ -223,14 +222,6 @@ void Plc_SeeAllPlaces (void)
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();
-
-	 /***** Button to create place *****/
-	 if (Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged])
-	   {
-	    Frm_BeginForm (ActEdiPlc);
-	       Btn_PutConfirmButton (Txt_New_place);
-	    Frm_EndForm ();
-	   }
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -690,14 +681,14 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *Txt_New_place;
+   extern const char *Txt_Place;
    extern const char *Txt_Create_place;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewPlc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_place,
+      Box_BoxTableBegin (NULL,Txt_Place,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

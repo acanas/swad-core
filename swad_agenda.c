@@ -101,7 +101,6 @@ static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod);
 static void Agd_PutIconToShowQR (void);
 static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod);
 
-static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda);
 static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
                               Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_GetParEventOrder (struct Agd_Agenda *Agenda);
@@ -548,10 +547,6 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],&Pagination,
 				  Agenda,-1L);
 
-   /***** Button to create a new event *****/
-   if (AgendaType == Agd_MY_AGENDA)
-      Agd_PutButtonToCreateNewEvent (Agenda);
-
    /***** Free list of events *****/
    Agd_FreeListEvents (Agenda);
   }
@@ -747,30 +742,6 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
   }
 
 /*****************************************************************************/
-/********************* Put button to create a new event **********************/
-/*****************************************************************************/
-
-static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda)
-  {
-   extern const char *Txt_New_event;
-
-   /***** Begin form *****/
-   Frm_BeginForm (ActFrmNewEvtMyAgd);
-      Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
-			   Agenda->PrivatPublicEvents,
-			   Agenda->HiddenVisiblEvents,
-			   Agenda->SelectedOrder,
-			   Agenda->CurrentPage,
-			   -1L);
-
-      /***** Confirm button *****/
-      Btn_PutConfirmButton (Txt_New_event);
-
-   /***** End form *****/
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
 /******************************* Show one event ******************************/
 /*****************************************************************************/
 
@@ -835,7 +806,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 			    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 					      "ASG_TITLE",
 			    The_GetSuffix ());
-	       HTM_Txt (AgdEvent.Event);
+	       HTM_Txt (AgdEvent.Title);
 	    HTM_SPAN_End ();
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
@@ -1128,7 +1099,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
 	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) and its location (row[8]) */
-      Str_Copy (AgdEvent->Event   ,row[7],sizeof (AgdEvent->Event   ) - 1);
+      Str_Copy (AgdEvent->Title   ,row[7],sizeof (AgdEvent->Title   ) - 1);
       Str_Copy (AgdEvent->Location,row[8],sizeof (AgdEvent->Location) - 1);
      }
    else
@@ -1140,7 +1111,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
       AgdEvent->TimeUTC[Dat_STR_TIME] =
       AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
       AgdEvent->TimeStatus            = Dat_FUTURE;
-      AgdEvent->Event[0]              = '\0';
+      AgdEvent->Title[0]              = '\0';
       AgdEvent->Location[0]           = '\0';
      }
 
@@ -1194,7 +1165,7 @@ void Agd_AskRemEvent (void)
                            Agd_PutCurrentParsMyAgenda,&Agenda,
 			   Btn_REMOVE_BUTTON,Txt_Remove_event,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
-	                   AgdEvent.Event);
+	                   AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1228,7 +1199,7 @@ void Agd_RemoveEvent (void)
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,
-	          AgdEvent.Event);
+	          AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1320,7 +1291,7 @@ void Agd_MakeEventPrivate (void)
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_private,
-	          AgdEvent.Event);
+	          AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1354,7 +1325,7 @@ void Agd_MakeEventPublic (void)
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible_to_users_of_your_courses,
-                  AgdEvent.Event);
+                  AgdEvent.Title);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1366,12 +1337,9 @@ void Agd_MakeEventPublic (void)
 
 void Agd_ReqCreatOrEditEvent (void)
   {
-   extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
-   extern const char *Txt_New_event;
-   extern const char *Txt_Edit_event;
-   extern const char *Txt_Location;
    extern const char *Txt_Event;
+   extern const char *Txt_Location;
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
    extern const char *Txt_Save_changes;
@@ -1403,7 +1371,7 @@ void Agd_ReqCreatOrEditEvent (void)
       AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
       AgdEvent.TimeStatus = Dat_FUTURE;
-      AgdEvent.Event[0]    = '\0';
+      AgdEvent.Title[0]    = '\0';
       AgdEvent.Location[0] = '\0';
      }
    else
@@ -1429,77 +1397,73 @@ void Agd_ReqCreatOrEditEvent (void)
    Agd_PutCurrentParsMyAgenda (&Agenda);
 
       /***** Begin box and table *****/
-      if (ItsANewEvent)
-	 Box_BoxTableBegin (NULL,Txt_New_event,
-			    NULL,NULL,
-			    Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,Txt_Edit_event,
-			    NULL,NULL,
-			    Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,AgdEvent.Title[0] ? AgdEvent.Title :
+						  Txt_Event,
+			 NULL,NULL,
+			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
-      /***** Event *****/
-      /* Begin table row */
-      HTM_TR_Begin (NULL);
+	 /***** Event *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Event",Txt_Event);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Event",Txt_Event);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-      /* End table row */
-      HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
-      /***** Location *****/
-      /* Begin table row */
-      HTM_TR_Begin (NULL);
+	 /***** Location *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Location",Txt_Location);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Location",Txt_Location);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-      /* End table row */
-      HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
-      /***** Start and end dates *****/
-      Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
-					       Dat_FORM_SECONDS_OFF,
-					       SetHMS);
+	 /***** Start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
+						  Dat_FORM_SECONDS_OFF,
+						  SetHMS);
 
-      /***** Text *****/
-      /* Begin table row */
-      HTM_TR_Begin (NULL);
+	 /***** Text *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_GetSuffix ());
-	       if (!ItsANewEvent)
-		  HTM_Txt (Txt);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  if (!ItsANewEvent)
+		     HTM_Txt (Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      /* End table row */
-      HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
       if (ItsANewEvent)
@@ -1548,7 +1512,7 @@ void Agd_ReceiveFormEvent (void)
    Par_GetParText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
 
    /***** Get event title *****/
-   Par_GetParText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
+   Par_GetParText ("Event",AgdEvent.Title,Agd_MAX_BYTES_EVENT);
 
    /***** Get event description *****/
    Par_GetParHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1567,7 +1531,7 @@ void Agd_ReceiveFormEvent (void)
      }
 
    /***** Check if event is correct *****/
-   if (!AgdEvent.Event[0])	// If there is no event
+   if (!AgdEvent.Title[0])	// If there is no event
      {
       NewEventIsCorrect = false;
       Ale_CreateAlertYouMustSpecifyTheTitle ();
@@ -1582,7 +1546,7 @@ void Agd_ReceiveFormEvent (void)
 
 	 /***** Write success message *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
-		        AgdEvent.Event);
+		        AgdEvent.Title);
 	}
       else
         {

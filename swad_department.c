@@ -798,7 +798,7 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *Txt_New_department;
+   extern const char *Txt_Department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
@@ -812,7 +812,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Frm_BeginForm (ActNewDpt);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_department,
+      Box_BoxTableBegin (NULL,Txt_Department,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

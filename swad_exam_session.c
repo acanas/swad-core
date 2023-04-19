@@ -191,8 +191,6 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	    /* Put form to create new session */
 	    ExaSes_PutFormSession (Session);	// Form to create session
 	   }
-	 else
-	    ExaSes_PutButtonNewSession (Exams);	// Button to create a new exam session
 	 break;
       default:
 	 break;
@@ -962,7 +960,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
-   extern const char *Txt_New_session;
+   extern const char *Txt_Session;
    extern const char *Txt_Title;
    extern const char *Txt_Create_session;
    extern const char *Txt_Save_changes;
@@ -984,7 +982,7 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
 	    ParCod_PutPar (ParCod_Ses,Session->SesCod);
 
 	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
+	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_Session :
 						  Session->Title,
 			    NULL,NULL,
 			    Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
@@ -1089,20 +1087,6 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
-  }
-
-/*****************************************************************************/
-/******************** Put button to create a new session *********************/
-/*****************************************************************************/
-
-void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams)
-  {
-   extern const char *Txt_New_session;
-
-   Frm_BeginFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
-      Exa_PutPars (Exams);
-      Btn_PutConfirmButton (Txt_New_session);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

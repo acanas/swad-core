@@ -307,8 +307,6 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	 case Rol_SYS_ADM:
 	    if (PutFormNewMatch)
 	       Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
-	    else
-	       Gam_PutButtonNewMatch (Games);	// Button to create a new match
 	    break;
 	 default:
 	    break;
@@ -1216,7 +1214,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *Txt_New_match;
+   extern const char *Txt_Match;
    extern const char *Txt_Title;
    extern const char *Txt_Play;
 
@@ -1229,7 +1227,7 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 	 Gam_PutParQstInd (0);	// Start by first question in game
 
 	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,Txt_New_match,
+	 Box_BoxTableBegin (NULL,Txt_Match,
 			    NULL,NULL,
 			    Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 

@@ -138,7 +138,7 @@ void Qst_ReqEditQsts (void)
 void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
   {
    extern const char *Hlp_ASSESSMENT_Questions;
-   extern const char *Txt_No_test_questions;
+   extern const char *Txt_No_questions;
    extern const char *Txt_Question_bank;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
@@ -178,13 +178,8 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	 Frm_EndForm ();
 	}
       else	// No test questions
-	{
 	 /***** Warning message *****/
-	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
-
-	 /***** Button to create a new question *****/
-	 Qst_PutButtonToAddQuestion ();
-	}
+	 Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -315,7 +310,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
                                               struct Qst_Questions *Questions)
   {
    extern const char *Hlp_ASSESSMENT_Exams_questions;
-   extern const char *Txt_No_test_questions;
+   extern const char *Txt_No_questions;
    extern const char *Txt_Select_questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
@@ -355,13 +350,8 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	 Frm_EndForm ();
 	}
       else	// No test questions
-	{
 	 /***** Warning message *****/
-	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
-
-	 /***** Button to create a new question *****/
-	 Qst_PutButtonToAddQuestion ();
-	}
+	 Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -378,7 +368,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
                                            struct Qst_Questions *Questions)
   {
    extern const char *Hlp_ASSESSMENT_Games_questions;
-   extern const char *Txt_No_test_questions;
+   extern const char *Txt_No_questions;
    extern const char *Txt_Select_questions;
    extern const char *Txt_Show_questions;
    MYSQL_RES *mysql_res;
@@ -415,13 +405,8 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	 Frm_EndForm ();
 	}
       else	// No test questions
-	{
 	 /***** Warning message *****/
-	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
-
-	 /***** Button to create a new question *****/
-	 Qst_PutButtonToAddQuestion ();
-	}
+	 Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -492,19 +477,6 @@ void Qst_PutIconsEditBankQsts (void *Questions)
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
-  }
-
-/*****************************************************************************/
-/**************** Put button to create a new test question *******************/
-/*****************************************************************************/
-
-void Qst_PutButtonToAddQuestion (void)
-  {
-   extern const char *Txt_New_question;
-
-   Frm_BeginForm (ActEdiOneTstQst);
-      Btn_PutConfirmButton (Txt_New_question);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -839,45 +811,36 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
    unsigned QstInd;
    MYSQL_ROW row;
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
-                 Qst_PutIconsEditBankQsts,Questions,
-		 Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE);
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_Questions,
+                      Qst_PutIconsEditBankQsts,Questions,
+		      Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE,5);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
+      /***** Write the heading *****/
+      Qst_WriteHeadingRowQuestionsForEdition (Questions);
 
-         /***** Write the heading *****/
-	 Qst_WriteHeadingRowQuestionsForEdition (Questions);
+      /***** Write rows *****/
+      for (QstInd = 0, The_ResetRowColor ();
+	   QstInd < Questions->NumQsts;
+	   QstInd++, The_ChangeRowColor ())
+	{
+	 /***** Create test question *****/
+	 Qst_QstConstructor (&Questions->Question);
 
-	 /***** Write rows *****/
-	 for (QstInd = 0, The_ResetRowColor ();
-	      QstInd < Questions->NumQsts;
-	      QstInd++, The_ChangeRowColor ())
-	   {
-	    /***** Create test question *****/
-	    Qst_QstConstructor (&Questions->Question);
+	 /***** Get question code (row[0]) *****/
+	 row = mysql_fetch_row (mysql_res);
+	 if ((Questions->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	    Err_WrongQuestionExit ();
 
-	    /***** Get question code (row[0]) *****/
-	    row = mysql_fetch_row (mysql_res);
-	    if ((Questions->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongQuestionExit ();
+	 /***** Write question row *****/
+	 Qst_WriteQuestionListing (Questions,QstInd);
 
-	    /***** Write question row *****/
-	    Qst_WriteQuestionListing (Questions,QstInd);
+	 /***** Destroy test question *****/
+	 Qst_QstDestructor (&Questions->Question);
+	}
 
-	    /***** Destroy test question *****/
-	    Qst_QstDestructor (&Questions->Question);
-	   }
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Button to add a new question *****/
-      Qst_PutButtonToAddQuestion ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -1403,33 +1366,24 @@ void Qst_WriteAnswersBank (struct Qst_Question *Question,
 
 void Qst_ListOneQstToEdit (struct Qst_Questions *Questions)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Questions;
    extern const char *Txt_Questions;
 
    /***** List only one question *****/
    Questions->NumQsts = 1;
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
-                 Qst_PutIconsEditBankQsts,Questions,
-		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_Questions,
+                      Qst_PutIconsEditBankQsts,Questions,
+		      Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE,5);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
+      /***** Write the heading *****/
+      Qst_WriteHeadingRowQuestionsForEdition (Questions);
 
-         /***** Write the heading *****/
-	 Qst_WriteHeadingRowQuestionsForEdition (Questions);
+      /***** Write question row *****/
+      Qst_WriteQuestionListing (Questions,0);
 
-	 /***** Write question row *****/
-	 Qst_WriteQuestionListing (Questions,0);
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Button to add a new question *****/
-      Qst_PutButtonToAddQuestion ();
-
-   /***** End box *****/
+   /***** End table and box *****/
    Box_BoxEnd ();
   }
 
@@ -1835,7 +1789,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
    extern const char *Txt_Question_code_X;
-   extern const char *Txt_New_question;
+   extern const char *Txt_Question;
    extern const char *Txt_Tags;
    extern const char *Txt_new_tag;
    extern const char *Txt_Wording;
@@ -1880,7 +1834,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       free (Title);
      }
    else
-      Box_BoxBegin (NULL,Txt_New_question,
+      Box_BoxBegin (NULL,Txt_Question,
                     NULL,NULL,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 

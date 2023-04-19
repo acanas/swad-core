@@ -113,7 +113,6 @@ extern struct Globals Gbl;
 
 static void Exa_PutIconsListExams (void *Exams);
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
-static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams);
 static void Exa_PutParsToCreateNewExam (void *Exams);
 
 static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam);
@@ -301,10 +300,6 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
       Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
 				     Exams,-1L);
 
-      /***** Button to create a new exam *****/
-      if (Exa_CheckIfICanEditExams ())
-	 Exa_PutButtonToCreateNewExam (Exams);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -370,20 +365,6 @@ static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
   {
    Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,
                                Exa_PutParsToCreateNewExam,Exams);
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new exam *********************/
-/*****************************************************************************/
-
-static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
-  {
-   extern const char *Txt_New_exam;
-
-   Frm_BeginForm (ActFrmNewExa);
-      Exa_PutParsToCreateNewExam (Exams);
-      Btn_PutConfirmButton (Txt_New_exam);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1297,10 +1278,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 			     char Txt[Cns_MAX_BYTES_TEXT + 1],
 			     bool ItsANewExam)
   {
-   extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
-   extern const char *Txt_New_exam;
-   extern const char *Txt_Edit_exam;
+   extern const char *Txt_Exam;
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
@@ -1314,79 +1293,74 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       Exa_PutPars (Exams);
 
       /***** Begin box and table *****/
-      if (ItsANewExam)
-	 Box_BoxTableBegin (NULL,Txt_New_exam,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Exams_new_exam,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Exams->Exam.Title[0] ? Exams->Exam.Title :
-						   Txt_Edit_exam,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Exams->Exam.Title[0] ? Exams->Exam.Title :
+						Txt_Exam,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
 
-      /***** Exam title *****/
-      HTM_TR_Begin (NULL);
+	 /***** Exam title *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Maximum grade *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Maximum_grade);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,false,
+				" class=\"INPUT_%s\" required=\"required\"",
+				The_GetSuffix ());
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Visibility of results *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Result_visibility);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB\"");
+	       TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Exam text *****/
+	 HTM_TR_Begin (NULL);
 
 	 /* Label */
-	 Frm_LabelColumn ("RT","Title",Txt_Title);
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				The_GetSuffix ());
+	       HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();
 
-      HTM_TR_End ();
-
-      /***** Maximum grade *****/
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Maximum_grade);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,false,
-			     " class=\"INPUT_%s\" required=\"required\"",
-			     The_GetSuffix ());
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Visibility of results *****/
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Result_visibility);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"LB\"");
-	    TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Exam text *****/
-      HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RT","Txt",Txt_Description);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-			     The_GetSuffix ());
-	    HTM_Txt (Txt);
-	 HTM_TEXTAREA_End ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
       if (ItsANewExam)

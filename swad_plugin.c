@@ -775,7 +775,7 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
-   extern const char *Txt_New_plugin;
+   extern const char *Txt_Plugin;
    extern const char *Txt_Name;
    extern const char *Txt_Description;
    extern const char *Txt_Logo;
@@ -788,7 +788,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Frm_BeginForm (ActNewPlg);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_New_plugin,
+      Box_BoxTableBegin (NULL,Txt_Plugin,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

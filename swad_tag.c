@@ -383,7 +383,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 void Tag_ShowFormEditTags (void)
   {
    extern const char *Hlp_ASSESSMENT_Questions_editing_tags;
-   extern const char *Txt_No_test_questions;
+   extern const char *Txt_No_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -440,7 +440,7 @@ void Tag_ShowFormEditTags (void)
       Box_BoxTableEnd ();
      }
    else
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);

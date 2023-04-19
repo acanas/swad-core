@@ -71,7 +71,6 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
-static void Asg_PutButtonToCreateNewAsg (void *Assignments);
 static void Asg_ParsWhichGroupsToShow (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
@@ -202,10 +201,6 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
 				     Assignments,-1L);
 
-      /***** Button to create a new assignment *****/
-      if (Asg_CheckIfICanCreateAssignments ())
-	 Asg_PutButtonToCreateNewAsg (Assignments);
-
    /***** End box *****/
    Box_BoxEnd ();
 
@@ -325,29 +320,6 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments)
      {
       ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
       Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutPars,Assignments);
-     }
-  }
-
-/*****************************************************************************/
-/****************** Put button to create a new assignment ********************/
-/*****************************************************************************/
-
-static void Asg_PutButtonToCreateNewAsg (void *Assignments)
-  {
-   extern const char *Txt_New_assignment;
-
-   if (Assignments)
-     {
-      /* Begin form */
-      Frm_BeginForm (ActFrmNewAsg);
-	 ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
-	 Asg_PutPars (Assignments);
-
-         /* Button to create new assignment */
-	 Btn_PutConfirmButton (Txt_New_assignment);
-
-      /* End form */
-      Frm_EndForm ();
      }
   }
 
@@ -1152,10 +1124,8 @@ void Asg_UnhideAssignment (void)
 
 void Asg_ReqCreatOrEditAsg (void)
   {
-   extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
-   extern const char *Txt_New_assignment;
-   extern const char *Txt_Edit_assignment;
+   extern const char *Txt_Assignment;
    extern const char *Txt_Title;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
@@ -1223,81 +1193,75 @@ void Asg_ReqCreatOrEditAsg (void)
    Asg_PutPars (&Assignments);
 
       /***** Begin box and table *****/
-      if (ItsANewAssignment)
-	 Box_BoxTableBegin (NULL,Txt_New_assignment,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
-      else
-	 Box_BoxTableBegin (NULL,
-			    Assignments.Asg.Title[0] ? Assignments.Asg.Title :
-						       Txt_Edit_assignment,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 Assignments.Asg.Title[0] ? Assignments.Asg.Title :
+						    Txt_Assignment,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
 
+	 /***** Assignment title *****/
+	 HTM_TR_Begin (NULL);
 
-      /***** Assignment title *****/
-      HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RM","Title",Txt_Title);
 
-	 /* Label */
-	 Frm_LabelColumn ("RM","Title",Txt_Title);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Assignment start and end dates *****/
-      Dat_PutFormStartEndClientLocalDateTimes (Assignments.Asg.TimeUTC,
-					       Dat_FORM_SECONDS_ON,
-					       Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
-										SetHMSDontSet);
-
-      /***** Send work? *****/
-      HTM_TR_Begin (NULL);
-
-	 /* Label */
-	 Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Folder);
-	       HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Folder\" size=\"30\" class=\"INPUT_%s\"",
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
 			       The_GetSuffix ());
-	    HTM_LABEL_End ();
-	 HTM_TD_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Assignment text *****/
-      HTM_TR_Begin (NULL);
+	 /***** Assignment start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (Assignments.Asg.TimeUTC,
+						  Dat_FORM_SECONDS_ON,
+						  Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
+										   SetHMSDontSet);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /***** Send work? *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				The_GetSuffix ());
-	       if (!ItsANewAssignment)
-		  HTM_Txt (Txt);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Label */
+	    Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
 
-      HTM_TR_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+		  HTM_TxtColon (Txt_Folder);
+		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Folder\" size=\"30\" class=\"INPUT_%s\"",
+				  The_GetSuffix ());
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-      /***** Groups *****/
-      Asg_ShowLstGrpsToEditAssignment (Assignments.Asg.AsgCod);
+	 HTM_TR_End ();
+
+	 /***** Assignment text *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  if (!ItsANewAssignment)
+		     HTM_Txt (Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Groups *****/
+	 Asg_ShowLstGrpsToEditAssignment (Assignments.Asg.AsgCod);
 
       /***** End table, send button and end box *****/
       if (ItsANewAssignment)

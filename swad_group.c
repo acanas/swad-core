@@ -1708,7 +1708,6 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    extern const char *Txt_Change_my_groups;
    extern const char *Txt_Enrol_in_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
-   extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
    unsigned NumGrpsThisTypeIBelong;
    unsigned NumGrpsIBelong = 0;
@@ -1768,18 +1767,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	}
      }
    else	// This course has no groups
-     {
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
                      Gbl.Hierarchy.Crs.FullName);
-
-      /***** Button to create group *****/
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActReqEdiGrp);
-	    Btn_PutConfirmButton (Txt_Create_group);
-	 Frm_EndForm ();
-	}
-     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2403,7 +2392,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
-   extern const char *Txt_New_type_of_group;
+   extern const char *Txt_Type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -2420,7 +2409,7 @@ static void Grp_PutFormToCreateGroupType (void)
       Frm_BeginFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
 	 /***** Begin box *****/
-	 Box_BoxTableBegin (NULL,Txt_New_type_of_group,
+	 Box_BoxTableBegin (NULL,Txt_Type_of_group,
 			    NULL,NULL,
 			    NULL,Box_NOT_CLOSABLE,2);
 
@@ -2529,7 +2518,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
   {
-   extern const char *Txt_New_group;
+   extern const char *Txt_Group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
    extern const char *Txt_No_assigned_room;
@@ -2549,7 +2538,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
       Frm_BeginFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
 	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,Txt_New_group,
+	 Box_BoxTableBegin (NULL,Txt_Group,
 			    NULL,NULL,
 			    NULL,Box_NOT_CLOSABLE,2);
 

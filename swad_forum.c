@@ -2721,8 +2721,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
   {
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
-   extern const char *Txt_New_post;
-   extern const char *Txt_New_thread;
+   extern const char *Txt_Post;
+   extern const char *Txt_Thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Send;
@@ -2730,11 +2730,11 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
    /***** Begin box *****/
    if (IsReply)
-      Box_BoxBegin (NULL,Txt_New_post,
+      Box_BoxBegin (NULL,Txt_Post,
                     NULL,NULL,
 		    Hlp_COMMUNICATION_Forums_new_post,Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin (NULL,Txt_New_thread,
+      Box_BoxBegin (NULL,Txt_Thread,
                     NULL,NULL,
 		    Hlp_COMMUNICATION_Forums_new_thread,Box_NOT_CLOSABLE);
 

@@ -74,7 +74,6 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
 static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
                                    Cfe_TypeViewCallForExam_t TypeViewCallForExam);
 static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args);
-static void Cfe_PutButtonToCreateNewCallForExam (void);
 
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
                                  long ExaCod,
@@ -169,7 +168,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    long ExaCod;
 
    /***** Get the code of the call for exam *****/
-   ExaCod = ParCod_GetAndCheckPar (ParCod_Exa);
+   ExaCod = ParCod_GetPar (ParCod_Exa);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
    Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
@@ -665,10 +664,6 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** Button to create a new call for exam *****/
-      if (Cfe_CheckIfICanEditCallsForExams ())
-	 Cfe_PutButtonToCreateNewCallForExam ();
-
    /***** End box *****/
    Box_BoxEnd ();
   }
@@ -687,19 +682,6 @@ static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
    if (Rsc_CheckIfICanGetLink ())
       Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 				      NULL,NULL);
-  }
-
-/*****************************************************************************/
-/****************** Put button to create a new call for exam *****************/
-/*****************************************************************************/
-
-static void Cfe_PutButtonToCreateNewCallForExam (void)
-  {
-   extern const char *Txt_New_call_FOR_EXAM;
-
-   Frm_BeginForm (ActEdiCfe);
-      Btn_PutConfirmButton (Txt_New_call_FOR_EXAM);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
