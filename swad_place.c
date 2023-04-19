@@ -46,6 +46,17 @@
 #include "swad_place_database.h"
 
 /*****************************************************************************/
+/****************************** Private constants ****************************/
+/*****************************************************************************/
+
+static const bool Plc_ICanEditPlaces[Rol_NUM_ROLES] =
+  {
+   /* Users who can edit */
+   [Rol_INS_ADM] = true,
+   [Rol_SYS_ADM] = true,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -62,7 +73,6 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 /*****************************************************************************/
 
 static Plc_Order_t Plc_GetParPlcOrder (void);
-static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_EditPlacesInternal (void);
@@ -215,7 +225,7 @@ void Plc_SeeAllPlaces (void)
 	 HTM_TABLE_End ();
 
 	 /***** Button to create place *****/
-	 if (Plc_CheckIfICanCreatePlaces ())
+	 if (Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged])
 	   {
 	    Frm_BeginForm (ActEdiPlc);
 	       Btn_PutConfirmButton (Txt_New_place);
@@ -243,22 +253,13 @@ static Plc_Order_t Plc_GetParPlcOrder (void)
   }
 
 /*****************************************************************************/
-/********************** Check if I can create places *************************/
-/*****************************************************************************/
-
-static bool Plc_CheckIfICanCreatePlaces (void)
-  {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-  }
-
-/*****************************************************************************/
 /****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit places *****/
-   if (Plc_CheckIfICanCreatePlaces ())
+   if (Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged])
       Plc_PutIconToEditPlaces ();
 
    /***** Put icon to view centers *****/

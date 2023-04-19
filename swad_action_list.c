@@ -308,11 +308,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgCtrWWW	] = { 683,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x3C6,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrWWW		,Ctr_ContEditAfterChgCtr	,NULL},
    [ActChgCtrSta	] = {1209,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Ctr_ChangeCtrStatus		,Ctr_ContEditAfterChgCtr	,NULL},
 
-   [ActEdiPlc		] = { 704,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_EditPlaces			,NULL},
-   [ActNewPlc		] = { 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_ReceiveFormNewPlace	,Plc_ContEditAfterChgPlc	,NULL},
-   [ActRemPlc		] = { 776,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RemovePlace		,Plc_ContEditAfterChgPlc	,NULL},
-   [ActRenPlcSho	] = { 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceShort		,Plc_ContEditAfterChgPlc	,NULL},
-   [ActRenPlcFul	] = { 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceFull		,Plc_ContEditAfterChgPlc	,NULL},
+   [ActEdiPlc		] = { 704,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_EditPlaces			,NULL},
+   [ActNewPlc		] = { 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_ReceiveFormNewPlace	,Plc_ContEditAfterChgPlc	,NULL},
+   [ActRemPlc		] = { 776,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RemovePlace		,Plc_ContEditAfterChgPlc	,NULL},
+   [ActRenPlcSho	] = { 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceShort		,Plc_ContEditAfterChgPlc	,NULL},
+   [ActRenPlcFul	] = { 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceFull		,Plc_ContEditAfterChgPlc	,NULL},
 
    [ActEdiDpt		] = { 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_EditDepartments		,NULL},
    [ActNewDpt		] = { 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ReceiveFormNewDpt		,Dpt_ContEditAfterChgDpt	,NULL},
