@@ -40,12 +40,6 @@
 
 const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
   {
-   /* Users who can not admin */
-   [Rol_UNK    ] = false,
-   [Rol_GST    ] = false,
-   [Rol_USR    ] = false,
-   [Rol_STD    ] = false,
-   [Rol_NET    ] = false,
    /* Users who can admin */
    [Rol_TCH    ] = true,
    [Rol_DEG_ADM] = true,

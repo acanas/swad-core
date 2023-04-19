@@ -97,7 +97,7 @@ void Hld_ResetHolidays (struct Hld_Holidays *Holidays)
 /****************************** List all holidays ****************************/
 /*****************************************************************************/
 
-void Hld_SeeHolidays (void)
+void Hld_SeeAllHolidays (void)
   {
    extern const char *Hlp_INSTITUTION_Holidays;
    extern const char *Txt_Holidays;

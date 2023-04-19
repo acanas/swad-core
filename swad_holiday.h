@@ -84,7 +84,7 @@ struct Hld_Holidays
 
 void Hld_ResetHolidays (struct Hld_Holidays *Holidays);
 
-void Hld_SeeHolidays (void);
+void Hld_SeeAllHolidays (void);
 void Hld_PutIconToSeeHlds (void);
 void Hld_EditHolidays (void);
 void Hld_GetListHolidays (struct Hld_Holidays *Holidays);

@@ -284,9 +284,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Actions in menu:
    [ActSeeInsInf	] = {1153, 0,TabIns,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,InsCfg_ShowConfiguration	,"info"			},
    [ActSeeCtr		] = { 676, 1,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ctr_ShowCtrsOfCurrentIns	,"building"		},
-   [ActSeePlc		] = { 703, 2,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeePlaces			,"map-marker-alt"	},
-   [ActSeeDpt		] = { 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeDepts			,"users"		},
-   [ActSeeHld		] = { 707, 4,TabIns,ActSeeHld		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_SeeHolidays		,"calendar-day"		},
+   [ActSeePlc		] = { 703, 2,TabIns,ActSeePlc		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plc_SeeAllPlaces		,"map-marker-alt"	},
+   [ActSeeDpt		] = { 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_SeeAllDepts		,"users"		},
+   [ActSeeHld		] = { 707, 4,TabIns,ActSeeHld		,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_SeeAllHolidays		,"calendar-day"		},
 
    // Actions not in menu:
    [ActPrnInsInf	] = {1154,-1,TabUnk,ActSeeInsInf	,    0,    0,    0,    0,0x3C7,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,InsCfg_PrintConfiguration	,NULL},
@@ -314,13 +314,13 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenPlcSho	] = { 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceShort		,Plc_ContEditAfterChgPlc	,NULL},
    [ActRenPlcFul	] = { 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Plc_RenamePlaceFull		,Plc_ContEditAfterChgPlc	,NULL},
 
-   [ActEdiDpt		] = { 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_EditDepartments		,NULL},
-   [ActNewDpt		] = { 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ReceiveFormNewDpt		,Dpt_ContEditAfterChgDpt	,NULL},
-   [ActRemDpt		] = { 690,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RemoveDepartment		,Dpt_ContEditAfterChgDpt	,NULL},
-   [ActChgDptIns	] = { 721,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDepartIns		,Dpt_ContEditAfterChgDpt	,NULL},
-   [ActRenDptSho	] = { 688,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RenameDepartShort		,Dpt_ContEditAfterChgDpt	,NULL},
-   [ActRenDptFul	] = { 689,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RenameDepartFull		,Dpt_ContEditAfterChgDpt	,NULL},
-   [ActChgDptWWW	] = { 691,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDptWWW		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActEdiDpt		] = { 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dpt_EditDepartments		,NULL},
+   [ActNewDpt		] = { 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ReceiveFormNewDpt		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActRemDpt		] = { 690,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RemoveDepartment		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActChgDptIns	] = { 721,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDepartIns		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActRenDptSho	] = { 688,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RenameDepartShort		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActRenDptFul	] = { 689,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_RenameDepartFull		,Dpt_ContEditAfterChgDpt	,NULL},
+   [ActChgDptWWW	] = { 691,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDptWWW		,Dpt_ContEditAfterChgDpt	,NULL},
 
    [ActEdiHld		] = { 713,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_EditHolidays		,NULL},
    [ActNewHld		] = { 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ReceiveFormNewHoliday	,Hld_ContEditAfterChgHld	,NULL},

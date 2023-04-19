@@ -69,7 +69,7 @@ struct Plc_Places
 
 void Plc_ResetPlaces (struct Plc_Places *Places);
 
-void Plc_SeePlaces (void);
+void Plc_SeeAllPlaces (void);
 void Plc_EditPlaces (void);
 void Plc_PutIconToViewPlaces (void);
 void Plc_GetListPlaces (struct Plc_Places *Places);

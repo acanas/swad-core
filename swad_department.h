@@ -62,7 +62,7 @@ struct Dpt_Departments
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dpt_SeeDepts (void);
+void Dpt_SeeAllDepts (void);
 void Dpt_EditDepartments (void);
 void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
 void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt);

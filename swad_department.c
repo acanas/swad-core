@@ -50,6 +50,17 @@
 #include "swad_string.h"
 
 /*****************************************************************************/
+/****************************** Private constants ****************************/
+/*****************************************************************************/
+
+static const bool Dpt_ICanEditDpts[Rol_NUM_ROLES] =
+  {
+   /* Users who can edit */
+   [Rol_INS_ADM] = true,
+   [Rol_SYS_ADM] = true,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -102,7 +113,7 @@ static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
 /*************************** List all departments ****************************/
 /*****************************************************************************/
 
-void Dpt_SeeDepts (void)
+void Dpt_SeeAllDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
    extern const char *Txt_Departments_of_INSTITUTION_X;
@@ -139,9 +150,7 @@ void Dpt_SeeDepts (void)
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxTableBegin (NULL,Title,
-		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-							       NULL,
-		      NULL,
+		      Dpt_PutIconToEditDpts,NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    free (Title);
 
@@ -255,8 +264,9 @@ static Dpt_Order_t Dpt_GetParDptOrder (void)
 
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
-				NULL,NULL);
+   if (Dpt_ICanEditDpts[Gbl.Usrs.Me.Role.Logged])
+      Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
+				   NULL,NULL);
   }
 
 /*****************************************************************************/

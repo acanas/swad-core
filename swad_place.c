@@ -96,7 +96,7 @@ void Plc_ResetPlaces (struct Plc_Places *Places)
 /***************************** List all places *******************************/
 /*****************************************************************************/
 
-void Plc_SeePlaces (void)
+void Plc_SeeAllPlaces (void)
   {
    extern const char *Hlp_INSTITUTION_Places;
    extern const char *Txt_Places;
