@@ -151,7 +151,7 @@ typedef enum
 typedef enum
   {
    Prj_LIST_PROJECTS,
-   Prj_FILE_BROWSER_PROJECT,
+   Prj_FILE_BROWSER_ONE_PROJECT,
    Prj_PRINT_ONE_PROJECT,
    Prj_EDIT_ONE_PROJECT,
   } Prj_ProjectView_t;
@@ -207,7 +207,7 @@ long Prj_GetPrjCod (void);
 void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects);
 
 void Prj_ListUsrsToSelect (void);
-void Prj_SeeProjects (void);
+void Prj_SeeAllProjects (void);
 void Prj_ShowProjects (struct Prj_Projects *Projects);
 void Prj_ShowTableSelectedPrjs (void);
 

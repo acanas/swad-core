@@ -32435,6 +32435,29 @@ const char *Txt_Private_available_to_certain_users_identified =
 	"Private, available to certain users identified";		// Çeviri lazim!
 #endif
 
+const char *Txt_Project =
+#if   L==1	// ca
+	"Projecte";
+#elif L==2	// de
+	"Projekt";
+#elif L==3	// en
+	"Project";
+#elif L==4	// es
+	"Proyecto";
+#elif L==5	// fr
+	"Projet";
+#elif L==6	// gn
+	"Apopyr&atilde;";
+#elif L==7	// it
+	"Progetto";
+#elif L==8	// pl
+	"Projekt";
+#elif L==9	// pt
+	"Projeto";
+#elif L==10	// tr
+	"Proje";
+#endif
+
 const char *Txt_project =
 #if   L==1	// ca
 	"projecte";
@@ -32447,15 +32470,15 @@ const char *Txt_project =
 #elif L==5	// fr
 	"project";
 #elif L==6	// gn
-	"proyecto";	// Okoteve traducción
+	"apopyr&atilde;";
 #elif L==7	// it
 	"progetto";
 #elif L==8	// pl
-	"projektowe";
+	"projekt";
 #elif L==9	// pt
 	"projeto";
 #elif L==10	// tr
-	"project";	// Çeviri lazim!
+	"proje";
 #endif
 
 const char *Txt_Project_assessment =
@@ -32470,7 +32493,7 @@ const char *Txt_Project_assessment =
 #elif L==5	// fr
 	"&Eacute;valuation du project";
 #elif L==6	// gn
-	"Evaluaci&oacute;n del proyecto";	// Okoteve traducción
+	"Apopyr&atilde; jehechauka";
 #elif L==7	// it
 	"Valutazione di progetto";
 #elif L==8	// pl
@@ -32478,7 +32501,7 @@ const char *Txt_Project_assessment =
 #elif L==9	// pt
 	"Avalia&ccedil;&atilde;o do projeto";
 #elif L==10	// tr
-	"Project assessment";		// Çeviri lazim!
+	"Projenin de&gbreve;erlendirilmesi";
 #endif
 
 const char *Txt_project_assessment =
@@ -36608,7 +36631,7 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 #elif L==5	// fr
 	"Projet"
 #elif L==6	// gn
-	"Proyecto"	// Okoteve traducción
+	"Apopyr&atilde;"
 #elif L==7	// it
 	"Progetto"
 #elif L==8	// pl
@@ -36616,7 +36639,7 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 #elif L==9	// pt
 	"Projeto"
 #elif L==10	// tr
-	"Projesi"
+	"Proje"
 #endif
 	,
 	[Rsc_CALL_FOR_EXAM] =

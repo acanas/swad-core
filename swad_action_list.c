@@ -593,7 +593,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // TabAss ******************************************************************
    // Actions in menu:
    [ActSeeAllAsg	] = { 801, 0,TabAss,ActSeeAllAsg	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_SeeAssignments		,"edit"			},
-   [ActSeeAllPrj	] = {1674, 1,TabAss,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeProjects		,"file-invoice"		},
+   [ActSeeAllPrj	] = {1674, 1,TabAss,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_SeeAllProjects		,"file-invoice"		},
    [ActSeeAllCfe	] = {  85, 2,TabAss,ActSeeAllCfe	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cfe_ListCallsForExamsSee	,"bullhorn"		},
    [ActEdiTstQst	] = { 104, 3,TabAss,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDatesToPastAndNow	,Qst_ReqEditQsts		,"clipboard-question"	},
    [ActReqTst		] = { 103, 4,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ReqTest			,"check"		},
