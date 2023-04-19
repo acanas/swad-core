@@ -90,7 +90,6 @@ static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
 
 static void Deg_ListDegrees (void);
-static bool Deg_CheckIfICanCreateDegrees (void);
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg);
@@ -714,8 +713,6 @@ static void Deg_ListDegrees (void)
    extern const char *Hlp_CENTER_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
    extern const char *Txt_No_degrees;
-   extern const char *Txt_Create_another_degree;
-   extern const char *Txt_Create_degree;
    char *Title;
    unsigned NumDeg;
 
@@ -746,26 +743,8 @@ static void Deg_ListDegrees (void)
       else	// No degrees created in the current center
 	 Ale_ShowAlert (Ale_INFO,Txt_No_degrees);
 
-      /***** Button to create degree *****/
-      if (Deg_CheckIfICanCreateDegrees ())
-	{
-	 Frm_BeginForm (ActEdiDeg);
-	    Btn_PutConfirmButton (Gbl.Hierarchy.Degs.Num ? Txt_Create_another_degree :
-							   Txt_Create_degree);
-	 Frm_EndForm ();
-	}
-
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********************** Check if I can create degrees ************************/
-/*****************************************************************************/
-
-static bool Deg_CheckIfICanCreateDegrees (void)
-  {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -775,7 +754,7 @@ static bool Deg_CheckIfICanCreateDegrees (void)
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit degrees *****/
-   if (Deg_CheckIfICanCreateDegrees ())
+   if (Hie_CheckIfICanEdit ())
       Deg_PutIconToEditDegrees ();
 
    /***** Put icon to view degree types *****/

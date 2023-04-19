@@ -75,7 +75,6 @@ static struct Ctr_Center *Ctr_EditingCtr = NULL;	// Static variable to keep the 
 /*****************************************************************************/
 
 static void Ctr_ListCenters (void);
-static bool Ctr_CheckIfICanCreateCenters (void);
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args);
 static void Ctr_PutIconToEditCenters (void);
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr);
@@ -250,8 +249,6 @@ static void Ctr_ListCenters (void)
    extern const char *Hlp_INSTITUTION_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
    extern const char *Txt_No_centers;
-   extern const char *Txt_Create_another_center;
-   extern const char *Txt_Create_center;
    char *Title;
    unsigned NumCtr;
 
@@ -282,26 +279,8 @@ static void Ctr_ListCenters (void)
       else	// No centers created in the current institution
 	 Ale_ShowAlert (Ale_INFO,Txt_No_centers);
 
-      /***** Button to create center *****/
-      if (Ctr_CheckIfICanCreateCenters ())
-	{
-	 Frm_BeginForm (ActEdiCtr);
-	    Btn_PutConfirmButton (Gbl.Hierarchy.Ctrs.Num ? Txt_Create_another_center :
-							   Txt_Create_center);
-	 Frm_EndForm ();
-	}
-
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********************** Check if I can create centers ************************/
-/*****************************************************************************/
-
-static bool Ctr_CheckIfICanCreateCenters (void)
-  {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -311,7 +290,7 @@ static bool Ctr_CheckIfICanCreateCenters (void)
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit centers *****/
-   if (Ctr_CheckIfICanCreateCenters ())
+   if (Hie_CheckIfICanEdit ())
       Ctr_PutIconToEditCenters ();
 
    /***** Put icon to view places *****/

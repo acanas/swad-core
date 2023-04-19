@@ -75,7 +75,6 @@ static struct Ins_Instit *Ins_EditingIns = NULL;	// Static variable to keep the 
 /*****************************************************************************/
 
 static void Ins_ListInstitutions (void);
-static bool Ins_CheckIfICanCreateInstitutions (void);
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns);
@@ -291,8 +290,6 @@ static void Ins_ListInstitutions (void)
    extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_No_institutions;
-   extern const char *Txt_Create_another_institution;
-   extern const char *Txt_Create_institution;
    char *Title;
    unsigned NumIns;
 
@@ -323,25 +320,7 @@ static void Ins_ListInstitutions (void)
       else	// No insrtitutions created in the current country
 	 Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
 
-      /***** Button to create institution *****/
-      if (Ins_CheckIfICanCreateInstitutions ())
-	{
-	 Frm_BeginForm (ActEdiIns);
-	    Btn_PutConfirmButton (Gbl.Hierarchy.Inss.Num ? Txt_Create_another_institution :
-							   Txt_Create_institution);
-	 Frm_EndForm ();
-	}
-
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/******************* Check if I can create institutions **********************/
-/*****************************************************************************/
-
-static bool Ins_CheckIfICanCreateInstitutions (void)
-  {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -351,7 +330,7 @@ static bool Ins_CheckIfICanCreateInstitutions (void)
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit institutions *****/
-   if (Ins_CheckIfICanCreateInstitutions ())
+   if (Hie_CheckIfICanEdit ())
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/

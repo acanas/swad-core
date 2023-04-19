@@ -94,7 +94,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 
 static void Crs_GetListCrssInCurrentDeg (void);
 static void Crs_ListCourses (void);
-static bool Crs_CheckIfICanCreateCourses (void);
 static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
@@ -840,8 +839,6 @@ static void Crs_ListCourses (void)
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_No_courses;
-   extern const char *Txt_Create_another_course;
-   extern const char *Txt_Create_course;
    char *Title;
    unsigned Year;
 
@@ -874,26 +871,8 @@ static void Crs_ListCourses (void)
       else	// No courses created in the current degree
 	 Ale_ShowAlert (Ale_INFO,Txt_No_courses);
 
-      /***** Button to create course *****/
-      if (Crs_CheckIfICanCreateCourses ())
-	{
-	 Frm_BeginForm (ActEdiCrs);
-	    Btn_PutConfirmButton (Gbl.Hierarchy.Crss.Num ? Txt_Create_another_course :
-							   Txt_Create_course);
-	 Frm_EndForm ();
-	}
-
    /***** End box *****/
    Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/********************** Check if I can create courses ************************/
-/*****************************************************************************/
-
-static bool Crs_CheckIfICanCreateCourses (void)
-  {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -903,7 +882,7 @@ static bool Crs_CheckIfICanCreateCourses (void)
 static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit courses *****/
-   if (Crs_CheckIfICanCreateCourses ())
+   if (Hie_CheckIfICanEdit ())
       Crs_PutIconToEditCourses ();
 
    /***** Put icon to show a figure *****/
