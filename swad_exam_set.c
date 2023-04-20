@@ -118,7 +118,6 @@ static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
 
 static void ExaSet_PutIconToAddNewQuestions (void *Exams);
-static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams);
 
 /*****************************************************************************/
 /************ Put parameter to move/remove one set of questions **************/
@@ -181,7 +180,6 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
-   extern const char *Txt_Set_of_questions;
    extern const char *Txt_Create_set_of_questions;
 
    /***** Begin form *****/
@@ -189,7 +187,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
       Exa_PutPars (Exams);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Set_of_questions,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
@@ -598,10 +596,6 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
       if ((NumQsts = Exa_DB_GetQstsFromSet (&mysql_res,Set->SetCod)))
 	 ExaSet_ListOneOrMoreQuestionsForEdition (Exams,NumQsts,mysql_res,
 						  ICanEditQuestions);
-
-      /***** Put button to add a new question in this set *****/
-      if (ICanEditQuestions)		// I can edit questions
-	 ExaSet_PutButtonToAddNewQuestions (Exams);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1696,20 +1690,6 @@ static void ExaSet_PutIconToAddNewQuestions (void *Exams)
   {
    Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
 			       ExaSet_PutParsOneSet,Exams);
-  }
-
-/*****************************************************************************/
-/***************** Put button to add new questions to exam *******************/
-/*****************************************************************************/
-
-static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
-  {
-   extern const char *Txt_Add_questions;
-
-   Frm_BeginForm (ActReqAddQstExaSet);
-      ExaSet_PutParsOneSet (Exams);
-      Btn_PutConfirmButtonInline (Txt_Add_questions);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

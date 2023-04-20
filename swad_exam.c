@@ -1335,7 +1335,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 /***** Visibility of results *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Result_visibility);
 	    HTM_TD_End ();
 

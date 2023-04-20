@@ -12231,71 +12231,71 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqAddQstExaSet] =
 #if   L==1	// ca
-	"Request add question to exam"			// Necessita traducció
+	"Request add questions to exam"			// Necessita traducció
 #elif L==2	// de
-	"Request add question to exam"			// Need Übersetzung
+	"Request add questions to exam"			// Need Übersetzung
 #elif L==3	// en
-	"Request add question to exam"
+	"Request add questions to exam"
 #elif L==4	// es
-	"Solicitar a&ntilde;adir pregunta a examen"
+	"Solicitar a&ntilde;adir preguntas a examen"
 #elif L==5	// fr
-	"Request add question to exam"			// Besoin de traduction
+	"Request add questions to exam"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar a&ntilde;adir pregunta a examen"	// Okoteve traducción
+	"Solicitar a&ntilde;adir preguntas a examen"	// Okoteve traducción
 #elif L==7	// it
-	"Request add question to exam"			// Bisogno di traduzione
+	"Request add questions to exam"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request add question to exam"			// Potrzebujesz tlumaczenie
+	"Request add questions to exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request add question to exam"			// Precisa de tradução
+	"Request add questions to exam"			// Precisa de tradução
 #elif L==10	// tr
-	"Request add question to exam"			// Çeviri lazim!
+	"Request add questions to exam"			// Çeviri lazim!
 #endif
 	,
 	[ActLstTstQstForSet] =
 #if   L==1	// ca
-	"List test questions for exam"		// Necessita traducció
+	"List questions for exam"		// Necessita traducció
 #elif L==2	// de
-	"List test questions for exam"		// Need Übersetzung
+	"List questions for exam"		// Need Übersetzung
 #elif L==3	// en
-	"List test questions for exam"
+	"List questions for exam"
 #elif L==4	// es
-	"Listar preguntas de test para examen"
+	"Listar preguntas para examen"
 #elif L==5	// fr
-	"List test questions for exam"		// Besoin de traduction
+	"List questions for exam"		// Besoin de traduction
 #elif L==6	// gn
-	"Listar preguntas de test para examen"	// Okoteve traducción
+	"Listar preguntas para examen"	// Okoteve traducción
 #elif L==7	// it
-	"List test questions for exam"		// Bisogno di traduzione
+	"List questions for exam"		// Bisogno di traduzione
 #elif L==8	// pl
-	"List test questions for exam"		// Potrzebujesz tlumaczenie
+	"List questions for exam"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"List test questions for exam"		// Precisa de tradução
+	"List questions for exam"		// Precisa de tradução
 #elif L==10	// tr
-	"List test questions for exam"		// Çeviri lazim!
+	"List questions for exam"		// Çeviri lazim!
 #endif
 	,
 	[ActAddQstToExa] =
 #if   L==1	// ca
-	"Add question to exam"			// Necessita traducció
+	"Add questions to exam"			// Necessita traducció
 #elif L==2	// de
-	"Add question to exam"			// Need Übersetzung
+	"Add questions to exam"			// Need Übersetzung
 #elif L==3	// en
-	"Add question to exam"
+	"Add questions to exam"
 #elif L==4	// es
-	"A&ntilde;adir pregunta a examen"
+	"A&ntilde;adir preguntas a examen"
 #elif L==5	// fr
-	"Add question to exam"			// Besoin de traduction
+	"Add questions to exam"			// Besoin de traduction
 #elif L==6	// gn
-	"A&ntilde;adir pregunta a examen"	// Okoteve traducción
+	"A&ntilde;adir preguntas a examen"	// Okoteve traducción
 #elif L==7	// it
-	"Add question to exam"			// Bisogno di traduzione
+	"Add questions to exam"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Add question to exam"			// Potrzebujesz tlumaczenie
+	"Add questions to exam"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Add question to exam"			// Precisa de tradução
+	"Add questions to exam"			// Precisa de tradução
 #elif L==10	// tr
-	"Add question to exam"			// Çeviri lazim!
+	"Add questions to exam"			// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSetQst] =

@@ -150,7 +150,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  bool ICanEditQuestions);
 
 static void Gam_PutIconToAddNewQuestions (void *Games);
-static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games);
 
 static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games);
 static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games);
@@ -573,7 +572,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
                      Games->Game.Hidden ? "ASG_GRP_LIGHT" :
-				    "ASG_GRP",
+				          "ASG_GRP",
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Games->Game.NumQsts);
@@ -1606,10 +1605,6 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
       Gam_ListOneOrMoreQuestionsForEdition (Games,NumQsts,mysql_res,
 					    ICanEditQuestions);
 
-   /***** Put button to add a new question in this game *****/
-   if (ICanEditQuestions)		// I can edit questions
-      Gam_PutButtonToAddNewQuestions (Games);
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
@@ -1752,22 +1747,6 @@ static void Gam_PutIconToAddNewQuestions (void *Games)
   }
 
 /*****************************************************************************/
-/***************** Put button to add new questions to game *******************/
-/*****************************************************************************/
-
-static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
-  {
-   extern const char *Txt_Add_questions;
-
-   Frm_BeginForm (ActAddOneGamQst);
-      Gam_PutPars (Games);
-
-      Btn_PutConfirmButton (Txt_Add_questions);
-
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
 /******************** Add selected test questions to game ********************/
 /*****************************************************************************/
 
@@ -1843,6 +1822,9 @@ void Gam_AddQstsToGame (void)
 
    /***** Free space for selected question codes *****/
    Gam_FreeListsSelectedQuestions (&Games);
+
+   /***** Get game data again (to update number of questions) *****/
+   Gam_GetGameDataByCod (&Games.Game);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
