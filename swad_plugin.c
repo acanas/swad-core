@@ -80,6 +80,7 @@ static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited.
 /*****************************************************************************/
 
 static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
+static void Plg_PutIconToViewPlugins (__attribute__((unused)) void *Args);
 static void Plg_EditPluginsInternal (void);
 
 static void Plg_GetPluginDataFromRow (MYSQL_RES *mysql_res,
@@ -101,6 +102,7 @@ static void Plg_EditingPluginDestructor (void);
 
 void Plg_ListPlugins (void)
   {
+   extern const char *Hlp_SYSTEM_Plugins;
    extern const char *Txt_Option_under_development;
    extern const char *Txt_Plugins;
    extern const char *Txt_Plugin;
@@ -124,7 +126,7 @@ void Plg_ListPlugins (void)
 		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
 							       NULL,
 		      NULL,
-		      NULL,Box_NOT_CLOSABLE,2);
+		      Hlp_SYSTEM_Plugins,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
@@ -187,6 +189,16 @@ static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
+/*************************** Put icon to view plugins ************************/
+/*****************************************************************************/
+
+static void Plg_PutIconToViewPlugins (__attribute__((unused)) void *Args)
+  {
+   Ico_PutContextualIconToView (ActSeePlg,NULL,
+				NULL,NULL);
+  }
+
+/*****************************************************************************/
 /************************** Put forms to edit plugins ************************/
 /*****************************************************************************/
 
@@ -204,6 +216,7 @@ void Plg_EditPlugins (void)
 
 static void Plg_EditPluginsInternal (void)
   {
+   extern const char *Hlp_SYSTEM_Plugins_edit;
    extern const char *Txt_Plugins;
    struct Plg_Plugins Plugins;
 
@@ -212,8 +225,8 @@ static void Plg_EditPluginsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Plugins,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+                 Plg_PutIconToViewPlugins,NULL,
+                 Hlp_SYSTEM_Plugins_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new plugin *****/
       Plg_PutFormToCreatePlugin ();
@@ -389,7 +402,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\" class=\"INPUT_%s\"",
+				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -400,7 +413,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"30\" class=\"INPUT_%s\"",
+				  "size=\"16\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -422,7 +435,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"16\" class=\"INPUT_%s\"",
+				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -432,17 +445,17 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgURL);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
-				 "size=\"15\" class=\"INPUT_%s\"",
+				 "size=\"8\" class=\"INPUT_%s\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    /* Plugin IP */
+	    /* Plugin IP address */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgPlgIP);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\" class=\"INPUT_%s\"",
+				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -775,7 +788,6 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
-   extern const char *Txt_Plugin;
    extern const char *Txt_Name;
    extern const char *Txt_Description;
    extern const char *Txt_Logo;
@@ -788,7 +800,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Frm_BeginForm (ActNewPlg);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Plugin,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
@@ -809,7 +821,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"INPUT_%s\""
+			       "size=\"8\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -819,7 +831,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
 			       Plg_EditingPlg->Description,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"30\" class=\"INPUT_%s\""
+			       "size=\"16\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -837,7 +849,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"16\" class=\"INPUT_%s\""
+			       "size=\"8\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -845,7 +857,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	    /***** Plugin URL *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"15\" class=\"INPUT_%s\""
+			      "size=\"8\" class=\"INPUT_%s\""
 			      " required=\"required\"",
 			      The_GetSuffix ());
 	    HTM_TD_End ();
@@ -854,7 +866,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"INPUT_%s\""
+			       "size=\"8\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();

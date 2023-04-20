@@ -134,7 +134,7 @@
 #define ActSeeCty		(ActRenMaiFul +  2)
 #define ActSeePen		(ActRenMaiFul +  3)
 #define ActSeeLnk		(ActRenMaiFul +  4)
-#define ActLstPlg		(ActRenMaiFul +  5)
+#define ActSeePlg		(ActRenMaiFul +  5)
 #define ActMtn			(ActRenMaiFul +  6)
 
 // Secondary actions

@@ -1762,7 +1762,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See institutional links"	// Çeviri lazim!
 #endif
 	,
-	[ActLstPlg] =
+	[ActSeePlg] =
 #if   L==1	// ca
 	"List plugins"		// Necessita traducció
 #elif L==2	// de

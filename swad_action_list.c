@@ -217,7 +217,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeCty		] = { 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cty_ListCountries1		,Cty_ListCountries2		,"globe-americas"	},
    [ActSeePen		] = {1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_SeePending			,"sitemap"		},
    [ActSeeLnk		] = { 748, 3,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"up-right-from-square"	},
-   [ActLstPlg		] = { 777, 4,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
+   [ActSeePlg		] = { 777, 4,TabSys,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
    [ActMtn		] = {1820, 5,TabSys,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_Maintenance		,"tools"		},
 
    // Actions not in menu:
@@ -248,15 +248,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenLnkFul	] = { 751,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RenameLinkFull		,Lnk_ContEditAfterChgLnk	,NULL},
    [ActChgLnkWWW	] = { 752,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_ChangeLinkWWW		,Lnk_ContEditAfterChgLnk	,NULL},
 
-   [ActEdiPlg		] = { 778,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_EditPlugins		,NULL},
-   [ActNewPlg		] = { 779,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ReceiveFormNewPlg		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActRemPlg		] = { 889,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RemovePlugin		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActRenPlg		] = { 782,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RenamePlugin		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActChgPlgDes	] = { 888,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgDescription	,Plg_ContEditAfterChgPlg	,NULL},
-   [ActChgPlgLog	] = { 781,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgLogo		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActChgPlgAppKey	] = { 986,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgAppKey		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActChgPlgURL	] = { 783,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgURL		,Plg_ContEditAfterChgPlg	,NULL},
-   [ActChgPlgIP		] = { 780,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgIP		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActEdiPlg		] = { 778,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_EditPlugins		,NULL},
+   [ActNewPlg		] = { 779,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ReceiveFormNewPlg		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActRemPlg		] = { 889,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RemovePlugin		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActRenPlg		] = { 782,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_RenamePlugin		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActChgPlgDes	] = { 888,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgDescription	,Plg_ContEditAfterChgPlg	,NULL},
+   [ActChgPlgLog	] = { 781,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgLogo		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActChgPlgAppKey	] = { 986,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgAppKey		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActChgPlgURL	] = { 783,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgURL		,Plg_ContEditAfterChgPlg	,NULL},
+   [ActChgPlgIP		] = { 780,-1,TabUnk,ActSeePlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgIP		,Plg_ContEditAfterChgPlg	,NULL},
 
    [ActSetUp		] = { 840,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_SetUp			,NULL},
    [ActReqRemOldCrs	] = {1109,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_RemoveOldCrss		,NULL},
@@ -2669,7 +2669,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgPriPho,		// #774
 	ActChgNtfPrf,		// #775
 	ActRemPlc,		// #776
-	ActLstPlg,		// #777
+	ActSeePlg,		// #777
 	ActEdiPlg,		// #778
 	ActNewPlg,		// #779
 	ActChgPlgIP,		// #780

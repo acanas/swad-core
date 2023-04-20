@@ -309,27 +309,50 @@ const char *Hlp_SYSTEM_Pending =
 	"SYSTEM.Pending.en";
 #endif
 
-const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses =
+const char *Hlp_SYSTEM_Links =
 #if   L==1
-	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Links.es";
 #elif L==2
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==3
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==4
-	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Links.es";
 #elif L==5
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==6
-	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+	"SYSTEM.Links.es";
 #elif L==7
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==8
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==9
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
 #elif L==10	// tr
-	"SYSTEM.Maintenance.en#eliminate-old-courses";
+	"SYSTEM.Links.en";
+#endif
+
+const char *Hlp_SYSTEM_Links_edit =
+#if   L==1
+	"SYSTEM.Links.es#editar";
+#elif L==2
+	"SYSTEM.Links.en#edit";
+#elif L==3
+	"SYSTEM.Links.en#edit";
+#elif L==4
+	"SYSTEM.Links.es#editar";
+#elif L==5
+	"SYSTEM.Links.en#edit";
+#elif L==6
+	"SYSTEM.Links.es#editar";
+#elif L==7
+	"SYSTEM.Links.en#edit";
+#elif L==8
+	"SYSTEM.Links.en#edit";
+#elif L==9
+	"SYSTEM.Links.en#edit";
+#elif L==10	// tr
+	"SYSTEM.Links.en#edit";
 #endif
 
 const char *Hlp_SYSTEM_Banners =
@@ -378,50 +401,73 @@ const char *Hlp_SYSTEM_Banners_edit =
 	"SYSTEM.Banners.en#edit";
 #endif
 
-const char *Hlp_SYSTEM_Links =
+const char *Hlp_SYSTEM_Plugins =
 #if   L==1
-	"SYSTEM.Links.es";
+	"SYSTEM.Plugins.es";
 #elif L==2
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==3
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==4
-	"SYSTEM.Links.es";
+	"SYSTEM.Plugins.es";
 #elif L==5
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==6
-	"SYSTEM.Links.es";
+	"SYSTEM.Plugins.es";
 #elif L==7
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==8
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==9
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #elif L==10	// tr
-	"SYSTEM.Links.en";
+	"SYSTEM.Plugins.en";
 #endif
 
-const char *Hlp_SYSTEM_Links_edit =
+const char *Hlp_SYSTEM_Plugins_edit =
 #if   L==1
-	"SYSTEM.Links.es#editar";
+	"SYSTEM.Plugins.es#editar";
 #elif L==2
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==3
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==4
-	"SYSTEM.Links.es#editar";
+	"SYSTEM.Plugins.es#editar";
 #elif L==5
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==6
-	"SYSTEM.Links.es#editar";
+	"SYSTEM.Plugins.es#editar";
 #elif L==7
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==8
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==9
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
 #elif L==10	// tr
-	"SYSTEM.Links.en#edit";
+	"SYSTEM.Plugins.en#edit";
+#endif
+
+const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses =
+#if   L==1
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+#elif L==2
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==3
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==4
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+#elif L==5
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==6
+	"SYSTEM.Maintenance.es#eliminar-asignaturas-antiguas";
+#elif L==7
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==8
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==9
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
+#elif L==10	// tr
+	"SYSTEM.Maintenance.en#eliminate-old-courses";
 #endif
 
 /***** COUNTRY tab *****/

@@ -21174,7 +21174,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ba&gbreve;lant&inodot;lar"
 #endif
 	,
-	//  4: ActLstPlg
+	//  4: ActSeePlg
 #if   L==1	// ca
 	"Complements"
 #elif L==2	// de
