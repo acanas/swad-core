@@ -633,6 +633,7 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 #define CSS_FILE		"swad22.95.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.101.3: Apr 20, 2023  Changes in edition of countries, institutions, centers, degrees and courses. (337338 lines)
 	Version 22.101.2: Apr 20, 2023  Changes in edition of places, holidays, links and banners. (337342 lines)
 	Version 22.101.1: Apr 20, 2023  Changes in edition of holidays. (337338 lines)
 	Version 22.101:   Apr 20, 2023  Removed buttons to create new elements: a new place, new holiday, new link, new banner, new plugin, new building, new room, new program item, new assignment, new project, new call for exam, new question, new exam, new set of questions, new exam session, new game, new match, new rubric, new criterion, new group, new type of group, new attendance event, new record field, new announcement, new notice, new message, new forum thread, new forum post, new survey, new survey question, new agenda event, new email domain. (337332 lines)

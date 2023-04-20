@@ -1291,7 +1291,6 @@ static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *Txt_Course;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Create_course;
    unsigned Year;
@@ -1305,7 +1304,7 @@ static void Crs_PutFormToCreateCourse (void)
       Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Course,
+   Box_BoxTableBegin (NULL,NULL,
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

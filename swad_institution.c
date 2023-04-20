@@ -1376,7 +1376,6 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *Txt_Institution;
    extern const char *Txt_Create_institution;
 
    /***** Begin form *****/
@@ -1388,7 +1387,7 @@ static void Ins_PutFormToCreateInstitution (void)
       Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Institution,
+   Box_BoxTableBegin (NULL,NULL,
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

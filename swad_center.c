@@ -1249,7 +1249,6 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
-   extern const char *Txt_Center;
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_center;
    unsigned NumPlc;
@@ -1264,7 +1263,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Center,
+   Box_BoxTableBegin (NULL,NULL,
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

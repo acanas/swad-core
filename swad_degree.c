@@ -513,7 +513,6 @@ static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
 
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
-   extern const char *Txt_Degree;
    extern const char *Txt_Create_degree;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTypInLst;
@@ -527,7 +526,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
       Err_NoPermissionExit ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Degree,
+   Box_BoxTableBegin (NULL,NULL,
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
