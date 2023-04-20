@@ -788,17 +788,15 @@ void Ban_ContEditAfterChgBan (void)
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
-   extern const char *Hlp_SYSTEM_Banners_edit;
-   extern const char *Txt_Banner;
    extern const char *Txt_Create_banner;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewBan);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Banner,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
-			 Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
+			 NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
 	 Ban_PutHeadBanners ();

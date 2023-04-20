@@ -671,14 +671,13 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   extern const char *Txt_Link;
    extern const char *Txt_Create_link;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewLnk);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Link,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
