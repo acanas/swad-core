@@ -680,14 +680,13 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   extern const char *Txt_Building;
    extern const char *Txt_Create_building;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewBld);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Building,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
