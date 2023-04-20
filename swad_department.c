@@ -80,6 +80,7 @@ static void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
 
 static Dpt_Order_t Dpt_GetParDptOrder (void);
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
+static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args);
 static void Dpt_EditDepartmentsInternal (void);
 
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod);
@@ -270,6 +271,16 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
+/************************ Put icon to view departments ***********************/
+/*****************************************************************************/
+
+static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args)
+  {
+   Ico_PutContextualIconToView (ActSeeDpt,NULL,
+				NULL,NULL);
+  }
+
+/*****************************************************************************/
 /******* Put forms to edit the departments of the current institution ********/
 /*****************************************************************************/
 
@@ -308,7 +319,8 @@ static void Dpt_EditDepartmentsInternal (void)
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,NULL,NULL,
+   Box_BoxBegin (NULL,Title,
+                 Dpt_PutIconToViewDpts,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -798,7 +810,6 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *Txt_Department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
@@ -812,7 +823,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Frm_BeginForm (ActNewDpt);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Department,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

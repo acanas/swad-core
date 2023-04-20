@@ -146,7 +146,6 @@ void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd)
   {
-   extern const char *Txt_Criterion;
    extern const char *Txt_Create_criterion;
    RubCri_ValueRange_t ValueRange;
 
@@ -155,7 +154,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
       Rub_PutPars (Rubrics);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Criterion,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 
@@ -194,7 +193,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 		 ValueRange++)
 	      {
-	       HTM_TD_Begin ("class=\"RM\"");
+	       HTM_TD_Begin ("class=\"RT\"");
 		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
 		                   Rubrics->Criterion.Values[ValueRange],false,
 				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
@@ -203,7 +202,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	      }
 
 	    /***** Weight *****/
-	    HTM_TD_Begin ("class=\"RM\"");
+	    HTM_TD_Begin ("class=\"RT\"");
 	       HTM_INPUT_FLOAT ("Weight",
 	                        RubCri_WEIGHT_MIN,
 	                        RubCri_WEIGHT_MAX,
