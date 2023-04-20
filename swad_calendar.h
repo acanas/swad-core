@@ -50,7 +50,7 @@ void Cal_DrawCurrentMonth (void);
 void Cal_ShowCalendar (void);
 void Cal_PrintCalendar (void);
 
-void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args);
+void Cal_PutIconToSeeCalendar (void);
 
 //-------------------------------- Figures ------------------------------------
 void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void);

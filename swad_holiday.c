@@ -73,6 +73,7 @@ static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the
 
 static Hld_Order_t Hld_GetParHldOrder (void);
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
+static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
@@ -242,13 +243,22 @@ static Hld_Order_t Hld_GetParHldOrder (void)
 
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
   {
-   /***** Edit holidays calendar *****/
+   /***** Edit holidays *****/
    if (Hld_ICanEditHlds[Gbl.Usrs.Me.Role.Logged])
       Ico_PutContextualIconToEdit (ActEdiHld,NULL,
 				   NULL,NULL);
 
    /***** View calendar *****/
-   Cal_PutIconToSeeCalendar (NULL);
+   Cal_PutIconToSeeCalendar ();
+  }
+
+static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args)
+  {
+   /***** See holidays *****/
+   Hld_PutIconToSeeHlds ();
+
+   /***** View calendar *****/
+   Cal_PutIconToSeeCalendar ();
   }
 
 /*****************************************************************************/
@@ -488,8 +498,9 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Holidays,
-                      Cal_PutIconToSeeCalendar,NULL,
-                      Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE);
+                 Hld_PutIconsEditHolidays,NULL,
+                 // Cal_PutIconToSeeCalendar,NULL,
+                 Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new holiday *****/
       Hld_PutFormToCreateHoliday (Places);
@@ -873,7 +884,6 @@ void Hld_ContEditAfterChgHld (void)
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
   {
    extern const char *Txt_All_places;
-   extern const char *Txt_Holiday;
    extern const char *Txt_Place;
    extern const char *Txt_Type;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -890,7 +900,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
    Frm_BeginForm (ActNewHld);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Holiday,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

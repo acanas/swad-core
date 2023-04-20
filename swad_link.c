@@ -671,7 +671,6 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Link;
    extern const char *Txt_Create_link;
 
@@ -681,7 +680,7 @@ static void Lnk_PutFormToCreateLink (void)
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Link,
 			 NULL,NULL,
-			 Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
+			 NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
 	 Lnk_PutHeadLinks ();

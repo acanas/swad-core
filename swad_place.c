@@ -681,14 +681,13 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *Txt_Place;
    extern const char *Txt_Create_place;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewPlc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Place,
+      Box_BoxTableBegin (NULL,NULL,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
 

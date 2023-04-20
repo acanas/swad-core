@@ -320,7 +320,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 /************************** Put icon to see calendar *************************/
 /*****************************************************************************/
 
-void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
+void Cal_PutIconToSeeCalendar (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
 				  NULL,NULL,
