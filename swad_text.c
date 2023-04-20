@@ -6951,7 +6951,7 @@ const char *Txt_Create_holiday =
 #elif L==5	// fr
 	"Cr&eacute;er f&ecirc;te";
 #elif L==6	// gn
-	"Crear festividad";	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i arete";
 #elif L==7	// it
 	"Crea festivit&agrave;";
 #elif L==8	// pl
@@ -6959,7 +6959,7 @@ const char *Txt_Create_holiday =
 #elif L==9	// pt
 	"Criar f&eacute;ria";
 #elif L==10	// tr
-	"Create holiday";	// Çeviri lazim!
+	"Tatil olu&scedil;tur";
 #endif
 
 const char *Txt_Create_institution =
@@ -16886,7 +16886,7 @@ const char *Txt_Holiday =
 #elif L==5	// fr
 	"F&ecirc;te";
 #elif L==6	// gn
-	"Festividad";
+	"Arete";
 #elif L==7	// it
 	"Festivit&agrave;";
 #elif L==8	// pl
@@ -16894,7 +16894,7 @@ const char *Txt_Holiday =
 #elif L==9	// pt
 	"F&eacute;ria";
 #elif L==10	// tr
-	"Holiday";	// Çeviri lazim!
+	"Tatil";
 #endif
 
 const char *Txt_Holiday_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -16942,7 +16942,7 @@ const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
 #elif L==9	// pt
 	"Feriado"
 #elif L==10	// tr
-	"Holiday"	// Çeviri lazim!
+	"Tatil"
 #endif
 	,
 	[Hld_NON_SCHOOL_PERIOD] =
@@ -16971,15 +16971,15 @@ const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY] =
 
 const char *Txt_Holidays =
 #if   L==1	// ca
-	"Dies festius";
+	"Festivitats";
 #elif L==2	// de
 	"Feiertage";
 #elif L==3	// en
 	"Holidays";
 #elif L==4	// es
-	"D&iacute;as festivos";
+	"Festividades";
 #elif L==5	// fr
-	"Jours f&eacute;ri&eacute;s";
+	"Festivit&eacute;s";
 #elif L==6	// gn
 	"Arete";
 #elif L==7	// it
@@ -16989,7 +16989,7 @@ const char *Txt_Holidays =
 #elif L==9	// pt
 	"F&eacute;rias";
 #elif L==10	// tr
-	"Bayram";
+	"Tatil";
 #endif
 
 const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
@@ -25649,17 +25649,17 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 
 const char *Txt_No_holidays =
 #if   L==1	// ca
-	"No hi ha dies festius.";
+	"No hi ha festivitats.";
 #elif L==2	// de
 	"Keine Feiertage.";
 #elif L==3	// en
 	"No holidays.";
 #elif L==4	// es
-	"No hay d&iacute;as festivos.";
+	"No hay festividades.";
 #elif L==5	// fr
-	"Pas de vacances.";
+	"Pas de festivit&eacute;s.";
 #elif L==6	// gn
-	"No hay d&iacute;as festivos.";	// Okoteve traducción
+	"Ndaip&oacute;ri arete.";
 #elif L==7	// it
 	"Non ci sono festivit&agrave;.";
 #elif L==8	// pl
@@ -25667,7 +25667,7 @@ const char *Txt_No_holidays =
 #elif L==9	// pt
 	"N&atilde;o h&aacute; feriados.";
 #elif L==10	// tr
-	"No holidays.";			// Çeviri lazim!
+	"Tatil yok.";
 #endif
 
 const char *Txt_No_image_video =	// Without any image
