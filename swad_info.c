@@ -86,65 +86,6 @@ static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
    [Inf_ASSESSMENT    ] = Cfg_CRS_INFO_ASSESSMENT,
   };
 
-/* Functions to write forms in course edition (FAQ, links, etc.) */
-static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Src_t InfoSrc) =
-  {
-   [Inf_NONE      ] = NULL,
-   [Inf_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
-   [Inf_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
-   [Inf_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
-   [Inf_PAGE      ] = Inf_FormToSendPage,
-   [Inf_URL       ] = Inf_FormToSendURL,
-  };
-
-static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActEdiCrsInf,
-   [Inf_TEACHING_GUIDE] = ActEdiTchGui,
-   [Inf_LECTURES      ] = ActEdiSylLec,
-   [Inf_PRACTICALS    ] = ActEdiSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActEdiBib,
-   [Inf_FAQ           ] = ActEdiFAQ,
-   [Inf_LINKS         ] = ActEdiCrsLnk,
-   [Inf_ASSESSMENT    ] = ActEdiAss,
-  };
-
-static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActChgFrcReaCrsInf,
-   [Inf_TEACHING_GUIDE] = ActChgFrcReaTchGui,
-   [Inf_LECTURES      ] = ActChgFrcReaSylLec,
-   [Inf_PRACTICALS    ] = ActChgFrcReaSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActChgFrcReaBib,
-   [Inf_FAQ           ] = ActChgFrcReaFAQ,
-   [Inf_LINKS         ] = ActChgFrcReaCrsLnk,
-   [Inf_ASSESSMENT    ] = ActChgFrcReaAss,
-  };
-
-static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActChgHavReaCrsInf,
-   [Inf_TEACHING_GUIDE] = ActChgHavReaTchGui,
-   [Inf_LECTURES      ] = ActChgHavReaSylLec,
-   [Inf_PRACTICALS    ] = ActChgHavReaSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActChgHavReaBib,
-   [Inf_FAQ           ] = ActChgHavReaFAQ,
-   [Inf_LINKS         ] = ActChgHavReaCrsLnk,
-   [Inf_ASSESSMENT    ] = ActChgHavReaAss,
-  };
-
-static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActSelInfSrcCrsInf,
-   [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
-   [Inf_LECTURES      ] = ActSelInfSrcSylLec,
-   [Inf_PRACTICALS    ] = ActSelInfSrcSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActSelInfSrcBib,
-   [Inf_FAQ           ] = ActSelInfSrcFAQ,
-   [Inf_LINKS         ] = ActSelInfSrcCrsLnk,
-   [Inf_ASSESSMENT    ] = ActSelInfSrcAss,
-  };
-
 static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   {
    [Inf_NONE      ][Inf_INTRODUCTION  ] = ActUnk,
@@ -202,30 +143,6 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
   };
 
-static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActRcvPlaTxtCrsInf,
-   [Inf_TEACHING_GUIDE] = ActRcvPlaTxtTchGui,
-   [Inf_LECTURES      ] = ActRcvPlaTxtSylLec,
-   [Inf_PRACTICALS    ] = ActRcvPlaTxtSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActRcvPlaTxtBib,
-   [Inf_FAQ           ] = ActRcvPlaTxtFAQ,
-   [Inf_LINKS         ] = ActRcvPlaTxtCrsLnk,
-   [Inf_ASSESSMENT    ] = ActRcvPlaTxtAss,
-  };
-
-static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = ActRcvRchTxtCrsInf,
-   [Inf_TEACHING_GUIDE] = ActRcvRchTxtTchGui,
-   [Inf_LECTURES      ] = ActRcvRchTxtSylLec,
-   [Inf_PRACTICALS    ] = ActRcvRchTxtSylPra,
-   [Inf_BIBLIOGRAPHY  ] = ActRcvRchTxtBib,
-   [Inf_FAQ           ] = ActRcvRchTxtFAQ,
-   [Inf_LINKS         ] = ActRcvRchTxtCrsLnk,
-   [Inf_ASSESSMENT    ] = ActRcvRchTxtAss,
-  };
-
 /***** Help *****/
 extern const char *Hlp_COURSE_Information_textual_information;
 extern const char *Hlp_COURSE_Guide;
@@ -247,7 +164,6 @@ extern const char *Hlp_COURSE_Assessment_edit;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Inf_PutButtonToEditInfo (void);
 static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
@@ -392,21 +308,8 @@ void Inf_ShowInfo (void)
 		       NULL,NULL,
 		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       Ale_ShowAlert (Ale_INFO,Txt_No_information);
-      if (ICanEdit)
-	 Inf_PutButtonToEditInfo ();
       Box_BoxEnd ();
      }
-  }
-
-/*****************************************************************************/
-/*********************** Put button to edit course info **********************/
-/*****************************************************************************/
-
-static void Inf_PutButtonToEditInfo (void)
-  {
-   Frm_BeginForm (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]);
-      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]));
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -422,6 +325,18 @@ static void Inf_PutIconToViewInfo (void *Type)
 
 void Inf_PutIconToEditInfo (void *Type)
   {
+   static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActEdiCrsInf,
+      [Inf_TEACHING_GUIDE] = ActEdiTchGui,
+      [Inf_LECTURES      ] = ActEdiSylLec,
+      [Inf_PRACTICALS    ] = ActEdiSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActEdiBib,
+      [Inf_FAQ           ] = ActEdiFAQ,
+      [Inf_LINKS         ] = ActEdiCrsLnk,
+      [Inf_ASSESSMENT    ] = ActEdiAss,
+     };
+
    if (Type)
       Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[*((Inf_Type_t *) Type)],NULL,
 				   NULL,NULL);
@@ -434,6 +349,17 @@ void Inf_PutIconToEditInfo (void *Type)
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
   {
    extern const char *Txt_Force_students_to_read_this_information;
+   static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActChgFrcReaCrsInf,
+      [Inf_TEACHING_GUIDE] = ActChgFrcReaTchGui,
+      [Inf_LECTURES      ] = ActChgFrcReaSylLec,
+      [Inf_PRACTICALS    ] = ActChgFrcReaSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActChgFrcReaBib,
+      [Inf_FAQ           ] = ActChgFrcReaFAQ,
+      [Inf_LINKS         ] = ActChgFrcReaCrsLnk,
+      [Inf_ASSESSMENT    ] = ActChgFrcReaAss,
+     };
 
    Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.Crs.Info.Type],
                               NULL,
@@ -450,6 +376,17 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
    extern const char *Txt_I_have_read_this_information;
+   static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActChgHavReaCrsInf,
+      [Inf_TEACHING_GUIDE] = ActChgHavReaTchGui,
+      [Inf_LECTURES      ] = ActChgHavReaSylLec,
+      [Inf_PRACTICALS    ] = ActChgHavReaSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActChgHavReaBib,
+      [Inf_FAQ           ] = ActChgHavReaFAQ,
+      [Inf_LINKS         ] = ActChgHavReaCrsLnk,
+      [Inf_ASSESSMENT    ] = ActChgHavReaAss,
+     };
    bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
    Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.Crs.Info.Type],
@@ -882,6 +819,27 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
+   static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActSelInfSrcCrsInf,
+      [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
+      [Inf_LECTURES      ] = ActSelInfSrcSylLec,
+      [Inf_PRACTICALS    ] = ActSelInfSrcSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActSelInfSrcBib,
+      [Inf_FAQ           ] = ActSelInfSrcFAQ,
+      [Inf_LINKS         ] = ActSelInfSrcCrsLnk,
+      [Inf_ASSESSMENT    ] = ActSelInfSrcAss,
+     };
+   /* Functions to write forms in course edition (FAQ, links, etc.) */
+   static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Src_t InfoSrc) =
+     {
+      [Inf_NONE      ] = NULL,
+      [Inf_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
+      [Inf_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
+      [Inf_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
+      [Inf_PAGE      ] = Inf_FormToSendPage,
+      [Inf_URL       ] = Inf_FormToSendURL,
+     };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
@@ -1664,6 +1622,17 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   static const Act_Action_t Inf_ActionsRcvPlaTxtInfo[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActRcvPlaTxtCrsInf,
+      [Inf_TEACHING_GUIDE] = ActRcvPlaTxtTchGui,
+      [Inf_LECTURES      ] = ActRcvPlaTxtSylLec,
+      [Inf_PRACTICALS    ] = ActRcvPlaTxtSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActRcvPlaTxtBib,
+      [Inf_FAQ           ] = ActRcvPlaTxtFAQ,
+      [Inf_LINKS         ] = ActRcvPlaTxtCrsLnk,
+      [Inf_ASSESSMENT    ] = ActRcvPlaTxtAss,
+     };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
@@ -1721,6 +1690,17 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActRcvRchTxtCrsInf,
+      [Inf_TEACHING_GUIDE] = ActRcvRchTxtTchGui,
+      [Inf_LECTURES      ] = ActRcvRchTxtSylLec,
+      [Inf_PRACTICALS    ] = ActRcvRchTxtSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActRcvRchTxtBib,
+      [Inf_FAQ           ] = ActRcvRchTxtFAQ,
+      [Inf_LINKS         ] = ActRcvRchTxtCrsLnk,
+      [Inf_ASSESSMENT    ] = ActRcvRchTxtAss,
+     };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
       [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
