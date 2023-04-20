@@ -297,7 +297,8 @@ static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTyp
 static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degree types *****/
-   DegTyp_PutIconToViewDegreeTypes ();
+   Ico_PutContextualIconToView (ActSeeDegTyp,NULL,
+				NULL,NULL);
 
    /***** Put icon to view degrees *****/
    Deg_PutIconToViewDegrees ();

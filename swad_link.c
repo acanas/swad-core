@@ -276,7 +276,8 @@ static void Lnk_EditLinksInternal (void)
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view links *****/
-   Lnk_PutIconToViewLinks ();
+   Ico_PutContextualIconToView (ActSeeLnk,NULL,
+				NULL,NULL);
 
    /***** Put icon to view banners *****/
    Ban_PutIconToViewBanners ();

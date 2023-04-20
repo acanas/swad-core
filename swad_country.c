@@ -77,7 +77,6 @@ static void Cty_GetParCtyOrder (void);
 
 static void Cty_EditCountriesInternal (void);
 static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
-static void Cty_PutIconToViewCountries (void);
 
 static void Cty_ListCountriesForEdition (void);
 static void Cty_PutParOthCtyCod (void *CtyCod);
@@ -718,21 +717,11 @@ static void Cty_EditCountriesInternal (void)
 static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view countries *****/
-   Cty_PutIconToViewCountries ();
+   Ico_PutContextualIconToView (ActSeeCty,NULL,
+				NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
-  }
-
-/*****************************************************************************/
-/************************ Put icon to view countries *************************/
-/*****************************************************************************/
-
-static void Cty_PutIconToViewCountries (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeCty,NULL,
-                                  NULL,NULL,
-                                  "globe-americas.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

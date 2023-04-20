@@ -472,7 +472,8 @@ static void Ctr_EditCentersInternal (void)
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view centers *****/
-   Ctr_PutIconToViewCenters ();
+   Ico_PutContextualIconToView (ActSeeCtr,NULL,
+				NULL,NULL);
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();

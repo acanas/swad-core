@@ -83,7 +83,6 @@ static void Ins_GetParInsOrder (void);
 
 static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
-static void Ins_PutIconToViewInstitutions (void);
 
 static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
                                       struct Ins_Instit *Ins,
@@ -562,21 +561,11 @@ static void Ins_EditInstitutionsInternal (void)
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view institutions *****/
-   Ins_PutIconToViewInstitutions ();
+   Ico_PutContextualIconToView (ActSeeIns,NULL,
+				NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_INSTITS);
-  }
-
-/*****************************************************************************/
-/*********************** Put icon to view institutions ***********************/
-/*****************************************************************************/
-
-static void Ins_PutIconToViewInstitutions (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeIns,NULL,
-                                  NULL,NULL,
-				  "university.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

@@ -254,8 +254,9 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
 
 static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args)
   {
-   /***** See holidays *****/
-   Hld_PutIconToSeeHlds ();
+   /***** Put icon to view holidays *****/
+   Ico_PutContextualIconToView (ActSeeHld,NULL,
+				NULL,NULL);
 
    /***** View calendar *****/
    Cal_PutIconToSeeCalendar ();

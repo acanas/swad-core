@@ -357,7 +357,8 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view banners *****/
-   Ban_PutIconToViewBanners ();
+   Ico_PutContextualIconToView (ActSeeBan,NULL,
+				NULL,NULL);
 
    /***** Put icon to view links *****/
    Lnk_PutIconToViewLinks ();

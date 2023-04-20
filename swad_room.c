@@ -462,18 +462,8 @@ static void Roo_EditRoomsInternal (void)
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view rooms *****/
-   Roo_PutIconToViewRooms ();
-  }
-
-/*****************************************************************************/
-/************************** Put icon to view rooms ***************************/
-/*****************************************************************************/
-
-void Roo_PutIconToViewRooms (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeRoo,NULL,
-                                  NULL,NULL,
-                                  "chalkboard-teacher.svg",Ico_BLACK);
+   Ico_PutContextualIconToView (ActSeeRoo,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/

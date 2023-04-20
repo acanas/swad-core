@@ -82,7 +82,6 @@ void Bld_ResetBuildings (struct Bld_Buildings *Buildings);
 
 void Bld_SeeBuildings (void);
 void Bld_EditBuildings (void);
-void Bld_PutIconToViewBuildings (void);
 void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
                            Bld_WhichData_t WhichData);
 void Bld_FreeListBuildings (struct Bld_Buildings *Buildings);

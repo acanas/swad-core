@@ -321,7 +321,8 @@ static void Plc_EditPlacesInternal (void)
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+   Ico_PutContextualIconToView (ActSeePlc,NULL,
+				NULL,NULL);
 
    /***** Put icon to view centers *****/
    Ctr_PutIconToViewCenters ();

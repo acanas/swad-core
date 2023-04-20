@@ -124,7 +124,6 @@ void Roo_ResetRooms (struct Roo_Rooms *Rooms);
 void Roo_SeeRooms (void);
 void Roo_ChangeMAC (void);
 void Roo_EditRooms (void);
-void Roo_PutIconToViewRooms (void);
 void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData);
 void Roo_FreeListRooms (struct Roo_Rooms *Rooms);
 

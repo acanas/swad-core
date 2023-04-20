@@ -931,7 +931,8 @@ static void Deg_EditDegreesInternal (void)
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degrees *****/
-   Deg_PutIconToViewDegrees ();
+   Ico_PutContextualIconToView (ActSeeDeg,NULL,
+				NULL,NULL);
 
    /***** Put icon to view types of degree *****/
    DegTyp_PutIconToViewDegreeTypes ();

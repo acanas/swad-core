@@ -100,7 +100,6 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCoursesInternal (void);
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
-static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
 static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs);
@@ -1070,22 +1069,12 @@ static void Crs_EditCoursesInternal (void)
 
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
   {
-   /***** Put icon to view degrees *****/
-   Crs_PutIconToViewCourses ();
+   /***** Put icon to view courses *****/
+   Ico_PutContextualIconToView (ActSeeCrs,NULL,
+				NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
-  }
-
-/*****************************************************************************/
-/************************* Put icon to view courses **************************/
-/*****************************************************************************/
-
-static void Crs_PutIconToViewCourses (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,
-                                  NULL,NULL,
-                                  "chalkboard-teacher.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

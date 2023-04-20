@@ -277,18 +277,8 @@ static void Bld_EditBuildingsInternal (void)
 static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view buildings *****/
-   Bld_PutIconToViewBuildings ();
-  }
-
-/*****************************************************************************/
-/************************ Put icon to view buildings *************************/
-/*****************************************************************************/
-
-void Bld_PutIconToViewBuildings (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeBld,NULL,
-                                  NULL,NULL,
-                                  "building.svg",Ico_BLACK);
+   Ico_PutContextualIconToView (ActSeeBld,NULL,
+				NULL,NULL);
   }
 
 /*****************************************************************************/
