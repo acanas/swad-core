@@ -19270,29 +19270,6 @@ const char *Txt_It_is_optional_to_choose_a_group =
 	"It is optional to choose a group";	// Çeviri lazim!
 #endif
 
-const char *Txt_Item =
-#if   L==1	// ca
-	"&Iacute;tem";
-#elif L==2	// de
-	"Programmelement";
-#elif L==3	// en
-	"Item";
-#elif L==4	// es
-	"&Iacute;tem";
-#elif L==5	// fr
-	"&Eacute;l&eacute;ment";
-#elif L==6	// gn
-	"&Iacute;tem";	// Okoteve traducción
-#elif L==7	// it
-	"Elemento";
-#elif L==8	// pl
-	"Pozycja";
-#elif L==9	// pt
-	"Item";
-#elif L==10	// tr
-	"Item";		// Çeviri lazim!
-#endif
-
 const char *Txt_Item_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"&Iacute;tem <strong>%s</strong> eliminat.";

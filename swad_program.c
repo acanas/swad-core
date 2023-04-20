@@ -1933,7 +1933,6 @@ void Prg_ReqCreateItem (void)
 static void Prg_ShowFormToCreateItem (long ParentItmCod)
   {
    extern const char *Hlp_COURSE_Program_new_item;
-   extern const char *Txt_Item;
    extern const char *Txt_Create_item;
    struct Prg_Item ParentItem;	// Parent item
    struct Prg_Item Item;
@@ -1961,7 +1960,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
       ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin ("100%",Txt_Item,
+      Box_BoxTableBegin ("100%",NULL,
 			 NULL,NULL,
 			 Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
 
