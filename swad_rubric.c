@@ -66,10 +66,10 @@ static void Rub_PutParsToCreateNewRubric (void *Rubrics);
 static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
                                     bool ShowOnlyThisRubric);
 
-static void Rub_PutIconsOneRubric (void *Rubrics);
-static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric);
-
+static void Rub_PutIconsViewingOneRubric (void *Rubrics);
+static void Rub_PutIconsEditingOneRubric (void *Rubrics);
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics);
+static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric);
 
 static void Rub_RemoveRubricFromAllTables (long RubCod);
 
@@ -350,7 +350,7 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
 						 Txt_Rubric,
-                 Rub_PutIconsOneRubric,Rubrics,
+                 Rub_PutIconsViewingOneRubric,Rubrics,
 		 Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
       /***** Show main data of this rubric *****/
@@ -450,28 +450,29 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/******************* Put icons to remove/edit one rubric *********************/
+/*************** Put icons when viewing ot editing one rubric ****************/
 /*****************************************************************************/
 
-static void Rub_PutIconsOneRubric (void *Rubrics)
+static void Rub_PutIconsViewingOneRubric (void *Rubrics)
   {
    if (Rubrics)
       Rub_PutIconsToRemEditOneRubric (Rubrics);
   }
 
-/*****************************************************************************/
-/*********************** Write the author of a rubric ************************/
-/*****************************************************************************/
-
-static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric)
+static void Rub_PutIconsEditingOneRubric (void *Rubrics)
   {
-   Usr_WriteAuthor1Line (Rubric->UsrCod,
-                         false);	// Not hidden
-  }
+   if (Rubrics)
+     {
+      /***** Icon to view rubric *****/
+      Ico_PutContextualIconToView (ActSeeOneRub,NULL,
+				   Rub_PutPars,Rubrics);
 
-/*****************************************************************************/
-/******************* Put icons to remove/edit one rubric *********************/
-/*****************************************************************************/
+      /***** Link to get resource link *****/
+      if (Rsc_CheckIfICanGetLink ())
+	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
+					 Rub_PutPars,Rubrics);
+     }
+  }
 
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
   {
@@ -490,6 +491,16 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
 	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
 					 Rub_PutPars,Rubrics);
      }
+  }
+
+/*****************************************************************************/
+/*********************** Write the author of a rubric ************************/
+/*****************************************************************************/
+
+static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric)
+  {
+   Usr_WriteAuthor1Line (Rubric->UsrCod,
+                         false);	// Not hidden
   }
 
 /*****************************************************************************/
@@ -819,58 +830,67 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       [Rub_NEW_RUBRIC     ] = Txt_Create_rubric,
      };
 
-   /***** Begin form *****/
-   Frm_BeginForm (NextAction[ExistingNewRubric]);
-      Rub_PutPars (Rubrics);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,
+		 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+					    Txt_Rubric,
+		 Rub_PutIconsEditingOneRubric,Rubrics,
+		 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,
-			 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
-						    Txt_Rubric,
-			 NULL,NULL,
-			 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (NextAction[ExistingNewRubric]);
+	 Rub_PutPars (Rubrics);
 
-	 /***** Rubric title *****/
-	 HTM_TR_Begin (NULL);
+         /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /***** Rubric title *****/
+	    HTM_TR_Begin (NULL);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Label */
+	       Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	 HTM_TR_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Title\""
+				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** Rubric text *****/
-	 HTM_TR_Begin (NULL);
+	    HTM_TR_End ();
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /***** Rubric text *****/
+	    HTM_TR_Begin (NULL);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				   The_GetSuffix ());
-		  HTM_Txt (Rubrics->Rubric.Txt);
-	       HTM_TEXTAREA_End ();
-	    HTM_TD_End ();
+	       /* Label */
+	       Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	 HTM_TR_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				      " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				      The_GetSuffix ());
+		     HTM_Txt (Rubrics->Rubric.Txt);
+		  HTM_TEXTAREA_End ();
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Button[ExistingNewRubric],
-                                 TxtButton[ExistingNewRubric]);
+	    HTM_TR_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table ****/
+	 HTM_TABLE_End ();
+
+	 /***** Send button *****/
+	 Btn_PutButton (Button[ExistingNewRubric],
+			TxtButton[ExistingNewRubric]);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End box ****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
