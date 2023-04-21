@@ -66,9 +66,10 @@ void PrjRsc_GetLinkToProject (void)
    		  Projects.Prj.PrjCod > 0 ? Projects.Prj.Title :
    					    Txt_Projects);
 
-   /***** Show project and (if possible) its file browser *****/
+   /***** The link may point to all projects or to a given project.
+          It it points to a given project, show it. *****/
    if (Projects.Prj.PrjCod > 0)
-      Prj_ShowOneProjectWithFileBrowser (&Projects);
+      Prj_ShowBoxWithOneProject (&Projects);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

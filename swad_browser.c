@@ -9146,7 +9146,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
      {
       case Rol_STD:
       case Rol_NET:
-	 if ((Prj_GetMyRolesInProject (Prj_GetPrjCod ()) & (1 << Prj_ROLE_TUT |	// Tutor...
+	 if ((Prj_GetMyRolesInProject (Prj_GetPrjCod ()) & (1 << Prj_ROLE_TUT |		// Tutor...
 	                                                    1 << Prj_ROLE_EVL)))	// ...or evaluator
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
 	 return false;

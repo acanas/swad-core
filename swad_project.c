@@ -309,6 +309,11 @@ static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 //---------------------------- Review status ----------------------------------
 static Prj_ReviewStatus_t Prj_GetParReviewStatus (void);
 
+//------------------------------- Rubrics -------------------------------------
+static void Prj_ShowRubrics (long PrjCod);
+static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
+static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
+
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
 /*****************************************************************************/
@@ -1154,12 +1159,12 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
 	    switch (Projects->View)
 	      {
 	       case Prj_LIST_PROJECTS:
-	       case Prj_FILE_BROWSER_ONE_PROJECT:
+	       case Prj_VIEW_ONE_PROJECT:
 		  Frm_BeginForm (ActSeeAllPrj);
 		     Prj_PutPars (&Projects->Filter,
-				    Order,
-				    Projects->CurrentPage,
-				    -1L);
+				  Order,
+				  Projects->CurrentPage,
+				  -1L);
 		     HTM_BUTTON_Submit_Begin (Txt_PROJECT_ORDER_HELP[Order],
 		                              "class=\"BT_LINK\"");
 			if (Order == Projects->SelectedOrder)
@@ -1314,7 +1319,7 @@ void Prj_ShowOneProject (void)
           then show project and (if possible) its file browser *****/
    Prj_AllocMemProject (&Projects.Prj);
    Prj_GetProjectDataByCod (&Projects.Prj);
-   Prj_ShowOneProjectWithFileBrowser (&Projects);
+   Prj_ShowBoxWithOneProject (&Projects);
    Prj_FreeMemProject (&Projects.Prj);
 
    /***** Show projects again *****/
@@ -1325,7 +1330,7 @@ void Prj_ShowOneProject (void)
 /*** Show one project and (if possible) a file browser with its documents ****/
 /*****************************************************************************/
 
-void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
+void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Project;
@@ -1340,8 +1345,7 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
       HTM_TABLE_BeginWidePadding (2);
 
          /***** Table head and project *****/
-         Projects->View = Prj_FILE_BROWSER_ONE_PROJECT;
-	 Projects->NumIndex = 0;
+         Projects->View = Prj_VIEW_ONE_PROJECT;
 	 Prj_ShowProjectsHead (Projects);
 	 Prj_ShowProjectRow (Projects);
 
@@ -1351,6 +1355,9 @@ void Prj_ShowOneProjectWithFileBrowser (struct Prj_Projects *Projects)
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod))
 	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
+
+      /***** Show project rubrics *****/
+      Prj_ShowRubrics (Projects->Prj.PrjCod);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1406,7 +1413,6 @@ void Prj_PrintOneProject (void)
 
       /***** Table head and project *****/
       Projects.View = Prj_PRINT_ONE_PROJECT;
-      Projects.NumIndex = 0;
       Prj_ShowProjectsHead (&Projects);
       Prj_ShowProjectRow (&Projects);
 
@@ -1626,7 +1632,7 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
    /***** Show department *****/
    PutLink = (Dpt.WWW[0] &&
 	      (Projects->View == Prj_LIST_PROJECTS ||
-	       Projects->View == Prj_FILE_BROWSER_ONE_PROJECT));
+	       Projects->View == Prj_VIEW_ONE_PROJECT));
 
    switch (Projects->View)
      {
@@ -2014,7 +2020,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
 					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
-	    case Prj_FILE_BROWSER_ONE_PROJECT:
+	    case Prj_VIEW_ONE_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                     ClassLabel,The_GetSuffix ());
@@ -2037,7 +2043,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 			     ClassData,The_GetSuffix (),
 			     The_GetColorRows ());
 	       break;
-	    case Prj_FILE_BROWSER_ONE_PROJECT:
+	    case Prj_VIEW_ONE_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
 			     ClassData,The_GetSuffix ());
@@ -2159,7 +2165,7 @@ static void Prj_PutLinkToShowHiddenInfo (const struct Prj_Projects *Projects,
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 	 break;
-      case Prj_FILE_BROWSER_ONE_PROJECT:
+      case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
 	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
 	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
@@ -2196,7 +2202,7 @@ static void Prj_ShowProposal (const struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
 			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
 	 break;
-      case Prj_FILE_BROWSER_ONE_PROJECT:
+      case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
@@ -2247,7 +2253,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
 	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
 	 break;
-      case Prj_FILE_BROWSER_ONE_PROJECT:
+      case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
@@ -2270,7 +2276,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
       switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
-	 case Prj_FILE_BROWSER_ONE_PROJECT:
+	 case Prj_VIEW_ONE_PROJECT:
 	    ALn_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
 	    break;
 	 default:
@@ -2310,7 +2316,7 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
    extern const char *Txt_URL;
    bool PutLink = (Projects->Prj.URL[0] &&
 	           (Projects->View == Prj_LIST_PROJECTS ||
-	            Projects->View == Prj_FILE_BROWSER_ONE_PROJECT));
+	            Projects->View == Prj_VIEW_ONE_PROJECT));
 
    /***** Write row with label and text *****/
    switch (Projects->View)
@@ -2320,7 +2326,7 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
 	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
 	 break;
-      case Prj_FILE_BROWSER_ONE_PROJECT:
+      case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
 	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
 	                  ClassLabel,The_GetSuffix ());
@@ -4461,6 +4467,93 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
 				  0,
 				  Prj_NUM_REVIEW_STATUS - 1,
 				  (unsigned long) Prj_REVIEW_STATUS_DEFAULT);
+  }
+
+/*****************************************************************************/
+/************************ Show rubrics in a project **************************/
+/*****************************************************************************/
+
+static void Prj_ShowRubrics (long PrjCod)
+  {
+   extern const char *Hlp_ASSESSMENT_Projects;
+   extern const char *Txt_Rubrics;
+   extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
+   PrjCfg_Rubric_t WhichRubric;
+
+   /***** Begin box *****/
+   Box_BoxBegin ("100%",Txt_Rubrics,
+		 NULL,NULL,
+		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
+
+      /***** Rubrics *****/
+      for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+	   WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	   WhichRubric++)
+	{
+	 if (Prj_CheckIfICanViewRubric (PrjCod,WhichRubric))
+	   {
+	    Ale_ShowAlert (Ale_INFO,Txt_PROJECT_RUBRIC[WhichRubric]);
+	    Ale_ShowAlert (Ale_SUCCESS,"Can see");
+	    if (Prj_CheckIfICanFillRubric (PrjCod,WhichRubric))
+	       Ale_ShowAlert (Ale_SUCCESS,"Can fill");
+	   }
+	}
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************************* Who can view/fill rubrics *************************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 switch (WhichRubric)
+	   {
+	    case PrjCfg_RUBRIC_TUT:
+	    case PrjCfg_RUBRIC_EVL:
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// I am a tutor
+		                                            1 << Prj_ROLE_EVL)) != 0);	// or an evaluator
+	    case PrjCfg_RUBRIC_GBL:
+	       return (Prj_GetMyRolesInProject (PrjCod) != 0);	// I am a member
+	   }
+         return false;
+      case Rol_TCH:	// Editing teachers in a course can view all rubrics
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
+  }
+
+static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+      case Rol_NET:
+	 switch (WhichRubric)
+	   {
+	    case PrjCfg_RUBRIC_TUT:
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// I am a tutor
+	    case PrjCfg_RUBRIC_EVL:
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) != 0);	// Am I an evaluator
+	    case PrjCfg_RUBRIC_GBL:
+	       return false;
+	   }
+         return false;
+      case Rol_TCH:	// Editing teachers in a course can fill all rubrics
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
