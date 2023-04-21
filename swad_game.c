@@ -686,7 +686,7 @@ static void Gam_PutIconsEditingOneGame (void *Games)
   {
    if (Games)
       /***** Icon to view game *****/
-      Ico_PutContextualIconToView (ActSeeOneGam,NULL,
+      Ico_PutContextualIconToView (ActLstOneGam,NULL,
 				   Gam_PutPars,Games);
   }
 
@@ -1301,6 +1301,11 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create_game;
+   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+     {
+      [Gam_EXISTING_GAME] = Gam_PutIconsEditingOneGame,
+      [Gam_NEW_GAME     ] = NULL,
+     };
    static Act_Action_t NextAction[] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
@@ -1326,7 +1331,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    Box_BoxBegin (NULL,
 		 Games->Game.Title[0] ? Games->Game.Title :
 					Txt_Game,
-		 Gam_PutIconsEditingOneGame,Games,
+		 FunctionToDrawContextualIcons[ExistingNewGame],Games,
 		 HelpLink[ExistingNewGame],Box_NOT_CLOSABLE);
 
       /***** Begin form *****/

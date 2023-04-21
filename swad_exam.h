@@ -70,10 +70,10 @@ void Exa_UnhideExam (void);
 void Exa_ReqCreatOrEditExam (void);
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 			  struct ExaSet_Set *Set,
-			  bool ItsANewExam);
+			  Exa_ExistingNewExam_t ExistingNewExam);
 void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 			     char Txt[Cns_MAX_BYTES_TEXT + 1],
-			     bool ItsANewExam);
+			     Exa_ExistingNewExam_t ExistingNewExam);
 
 void Exa_ReceiveFormExam (void);
 

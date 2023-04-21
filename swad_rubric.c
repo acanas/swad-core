@@ -802,6 +802,11 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Description;
    extern const char *Txt_Create_rubric;
    extern const char *Txt_Save_changes;
+   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+     {
+      [Rub_EXISTING_RUBRIC] = Rub_PutIconsEditingOneRubric,
+      [Rub_NEW_RUBRIC     ] = NULL,
+     };
    static Act_Action_t NextAction[] =
      {
       [Rub_EXISTING_RUBRIC] = ActChgRub,
@@ -827,7 +832,7 @@ void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    Box_BoxBegin (NULL,
 		 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
 					    Txt_Rubric,
-		 Rub_PutIconsEditingOneRubric,Rubrics,
+		 FunctionToDrawContextualIcons[ExistingNewRubric],Rubrics,
 		 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);
 
       /***** Begin form *****/

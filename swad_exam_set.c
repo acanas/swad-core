@@ -470,8 +470,7 @@ void ExaSet_ReqCreatOrEditSet (void)
      }
 
    /***** Put form to edit the exam created or updated *****/
-   Exa_PutFormEditionExam (&Exams,Txt,
-			   false);	// No new exam
+   Exa_PutFormEditionExam (&Exams,Txt,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
