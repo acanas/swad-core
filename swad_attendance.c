@@ -131,7 +131,7 @@ static bool Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCo
                                                           char CommentStd[Cns_MAX_BYTES_TEXT + 1],
                                                           char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
 
-static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView);
+static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *Args);
 static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView);
 static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView);
@@ -2176,44 +2176,33 @@ static bool Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCo
 
 void Att_ReqListUsrsAttendanceCrs (void)
   {
-   Att_TypeOfView_t TypeOfView = Att_VIEW_SEL_USR;
-
-   Att_ReqListOrPrintUsrsAttendanceCrs (&TypeOfView);
+   Att_ReqListOrPrintUsrsAttendanceCrs (NULL);
   }
 
-static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView)
+static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance_list;
    extern const char *Txt_View_attendance;
    struct Att_Events Events;
 
-   switch (*((Att_TypeOfView_t *) TypeOfView))
-     {
-      case Att_VIEW_SEL_USR:
-      case Att_PRNT_SEL_USR:
-	 /***** Reset attendance events *****/
-	 Att_ResetEvents (&Events);
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
 
-	 /***** Get list of attendance events *****/
-	 Att_GetListEvents (&Events,Att_OLDEST_FIRST);
+   /***** Get list of attendance events *****/
+   Att_GetListEvents (&Events,Att_OLDEST_FIRST);
 
-	 /***** List users to select some of them *****/
-	 Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					   ActSeeLstUsrAtt,
-					   NULL,NULL,
-					   Txt_Attendance_list,
-					   Hlp_USERS_Attendance_attendance_list,
-					   Txt_View_attendance,
-					   false);	// Do not put form with date range
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeLstUsrAtt,
+				     NULL,NULL,
+				     Txt_Attendance_list,
+				     Hlp_USERS_Attendance_attendance_list,
+				     Txt_View_attendance,
+				     false);	// Do not put form with date range
 
-	 /***** Free list of attendance events *****/
-	 Att_FreeListEvents (&Events);
-	 break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
-     }
+   /***** Free list of attendance events *****/
+   Att_FreeListEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -2332,7 +2321,7 @@ static void Att_GetUsrsAndListOrPrintAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  Att_ListOrPrintUsrsAttendanceCrs,&TypeOfView,
-                                  Att_ReqListOrPrintUsrsAttendanceCrs,&TypeOfView);
+                                  Att_ReqListOrPrintUsrsAttendanceCrs,NULL);
   }
 
 static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)

@@ -71,7 +71,7 @@ struct MchRes_ICanView
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games);
+static void MchRes_PutFormToSelUsrsToViewMchResults (__attribute__((unused)) void *Args);
 
 static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games);
 static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games);
@@ -255,7 +255,7 @@ void MchRes_ShowAllMchResultsInCrs (void)
    /***** Get users and show their matches results *****/
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
 				  MchRes_ShowAllMchResultsInSelectedGames,&Games,
-                                  MchRes_PutFormToSelUsrsToViewMchResults,&Games);
+                                  MchRes_PutFormToSelUsrsToViewMchResults,NULL);
   }
 
 /*****************************************************************************/
@@ -320,29 +320,22 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
 
 void MchRes_SelUsrsToViewMchResults (void)
   {
-   struct Gam_Games Games;
-
-   /***** Reset games context *****/
-   Gam_ResetGames (&Games);
-
-   /***** Put form to select users *****/
-   MchRes_PutFormToSelUsrsToViewMchResults (&Games);
+   MchRes_PutFormToSelUsrsToViewMchResults (NULL);
   }
 
-static void MchRes_PutFormToSelUsrsToViewMchResults (void *Games)
+static void MchRes_PutFormToSelUsrsToViewMchResults (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
    extern const char *Txt_View_results;
 
-   if (Games)	// Not used
-      Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
-					ActSeeUsrMchResCrs,
-					NULL,NULL,
-					Txt_Results,
-					Hlp_ASSESSMENT_Games_results,
-					Txt_View_results,
-					false);	// Do not put form with date range
+   Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
+				     ActSeeUsrMchResCrs,
+				     NULL,NULL,
+				     Txt_Results,
+				     Hlp_ASSESSMENT_Games_results,
+				     Txt_View_results,
+				     false);	// Do not put form with date range
   }
 
 /*****************************************************************************/

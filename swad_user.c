@@ -3707,7 +3707,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       /***** Draw class photos to select users *****/
       Box_BoxBegin (NULL,Txt_Select_users,
 		    NULL,NULL,
-		    HelpLink,Box_NOT_CLOSABLE);
+		    NULL,Box_NOT_CLOSABLE);
 
 	 /***** Show form to select the groups *****/
 	 Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,
