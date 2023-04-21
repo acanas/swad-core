@@ -293,9 +293,6 @@ static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
    if (Hie_CheckIfICanEdit ())
       Ctr_PutIconToEditCenters ();
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
-
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
   }
@@ -475,18 +472,8 @@ static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToView (ActSeeCtr,NULL,
 				NULL,NULL);
 
-   /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
-
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
-  }
-
-void Ctr_PutIconToViewCenters (void)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActSeeCtr,NULL,
-                                  NULL,NULL,
-                                  "building.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

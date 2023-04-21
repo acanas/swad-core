@@ -349,7 +349,8 @@ void Tmt_ShowClassTimeTable (void)
                                                  Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
    Timetable.ContextualIcons.PutIconEditOfficeHours = (Timetable.Type == Tmt_MY_TIMETABLE &&
 	                                               !PrintView &&
-                                                       (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH)));
+                                                       (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
+                                                		                      1 << Rol_NET)));
    Timetable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/

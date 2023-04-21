@@ -86,8 +86,6 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCenters (void);
 
-void Ctr_PutIconToViewCenters (void);
-
 void Ctr_GetBasicListOfCenters (long InsCod);
 void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder);
 bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr);

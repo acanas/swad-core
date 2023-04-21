@@ -252,9 +252,6 @@ static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
    /***** Put icon to edit places *****/
    if (Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged])
       Plc_PutIconToEditPlaces ();
-
-   /***** Put icon to view centers *****/
-   Ctr_PutIconToViewCenters ();
   }
 
 /*****************************************************************************/
@@ -323,9 +320,6 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
    /***** Put icon to view places *****/
    Ico_PutContextualIconToView (ActSeePlc,NULL,
 				NULL,NULL);
-
-   /***** Put icon to view centers *****/
-   Ctr_PutIconToViewCenters ();
   }
 
 /*****************************************************************************/
