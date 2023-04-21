@@ -450,7 +450,7 @@ static void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/*************** Put icons when viewing ot editing one rubric ****************/
+/*************** Put icons when viewing or editing one rubric ****************/
 /*****************************************************************************/
 
 static void Rub_PutIconsViewingOneRubric (void *Rubrics)
@@ -462,16 +462,9 @@ static void Rub_PutIconsViewingOneRubric (void *Rubrics)
 static void Rub_PutIconsEditingOneRubric (void *Rubrics)
   {
    if (Rubrics)
-     {
       /***** Icon to view rubric *****/
       Ico_PutContextualIconToView (ActSeeOneRub,NULL,
 				   Rub_PutPars,Rubrics);
-
-      /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
-					 Rub_PutPars,Rubrics);
-     }
   }
 
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
