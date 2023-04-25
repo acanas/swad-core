@@ -3253,16 +3253,16 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .BIG_INDEX_PURPLE,
 .BIG_INDEX_BLUE,
 .BIG_INDEX_YELLOW,
-.BIG_INDEX_PINK		{color:#808080; font-size:20pt; font-weight:bold;}
-.BIG_INDEX_DARK		{color:#d0d0d0; font-size:20pt; font-weight:bold;}
+.BIG_INDEX_PINK		{color:#808080; font-size:16pt; font-weight:bold;}
+.BIG_INDEX_DARK		{color:#d0d0d0; font-size:16pt; font-weight:bold;}
 
 .BIG_INDEX_RED_WHITE,
 .BIG_INDEX_RED_GREY,
 .BIG_INDEX_RED_PURPLE,
 .BIG_INDEX_RED_BLUE,
 .BIG_INDEX_RED_YELLOW,
-.BIG_INDEX_RED_PINK	{color:#660000; font-size:20pt; font-weight:bold;}
-.BIG_INDEX_RED_DARK	{color:#ff8080; font-size:20pt; font-weight:bold;}
+.BIG_INDEX_RED_PINK	{color:#660000; font-size:16pt; font-weight:bold;}
+.BIG_INDEX_RED_DARK	{color:#ff8080; font-size:16pt; font-weight:bold;}
 
 /******************************** Update links *******************************/
 .UPD
