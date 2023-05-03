@@ -216,7 +216,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       Err_WrongNumberOfRowsExit ();
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 /*****************************************************************************/

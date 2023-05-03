@@ -1344,7 +1344,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqDatBrf	] = {1047,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileMetadata		,NULL},
    [ActChgDatBrf	] = {1048,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ChgFileMetadata		,NULL},
    [ActDowBrf		] = {1123,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
-   [ActReqRemOldBrf	] = {1488,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemoveOldFiles		,NULL},
+   [ActReqRemOldBrf	] = {1488,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemoveOldFilesBriefcase	,NULL},
    [ActRemOldBrf	] = {1489,-1,TabUnk,ActAdmBrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_RemoveOldFilesBriefcase	,NULL},
 
    // TabUsr ******************************************************************

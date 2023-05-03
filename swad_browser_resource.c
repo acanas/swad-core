@@ -71,7 +71,7 @@ void BrwRsc_GetLinkToDocFil (void)
                 			    Txt_Documents);
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 void BrwRsc_GetLinkToMrkFil (void)
@@ -99,7 +99,7 @@ void BrwRsc_GetLinkToMrkFil (void)
                 			    Txt_Marks_area);
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 /*****************************************************************************/

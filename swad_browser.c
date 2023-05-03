@@ -1065,7 +1065,6 @@ static void Brw_SetPathFileBrowser (void);
 static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod);
 
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
-static void Brw_ShowFileBrowserNormal (void);
 static void Brw_ShowFileBrowsersAsgWrkCrs (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
@@ -1735,6 +1734,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActReqDatAssPrj:
       case ActChgDatAssPrj:
       case ActDowAssPrj:
+      case ActChgPrjSco:
          Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
          break;
 
@@ -2696,13 +2696,16 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 /*********** Show normal file browser (not for assignments-works) ************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowserNormal (void)
+void Brw_ShowFileBrowserNormal (void)
   {
    /***** Write top before showing file browser *****/
    Brw_WriteTopBeforeShowingFileBrowser ();
 
    /****** Show the file browser *****/
    Brw_ShowFileBrowser ();
+
+   /***** Put legal notice *****/
+   Brw_PutLegalNotice ();
   }
 
 /*****************************************************************************/
@@ -2792,6 +2795,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
+
+   /***** Put legal notice *****/
+   Brw_PutLegalNotice ();
   }
 
 /*****************************************************************************/
@@ -2812,6 +2818,23 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (void)
    Gbl.FileBrowser.Type = Brw_ADMI_WRK_USR;
    Brw_InitializeFileBrowser ();
    Brw_ShowFileBrowser ();
+
+   /***** Put legal notice *****/
+   Brw_PutLegalNotice ();
+  }
+
+/*****************************************************************************/
+/******************** Put legal notice about files hosted ********************/
+/*****************************************************************************/
+
+void Brw_PutLegalNotice (void)
+  {
+   extern const char *Txt_Disclaimer_the_files_hosted_here_;
+
+   /***** Legal notice *****/
+   Ale_ShowAlert (Ale_INFO,Txt_Disclaimer_the_files_hosted_here_,
+                  Cfg_PLATFORM_SHORT_NAME,
+                  Cfg_PLATFORM_RESPONSIBLE_EMAIL);
   }
 
 /*****************************************************************************/
@@ -3035,9 +3058,6 @@ static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Ar
 
 void Brw_ShowAgainFileBrowserOrWorks (void)
   {
-   extern const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_;
-   extern const char *Txt_Disclaimer_the_files_hosted_here_;
-
    if (Brw_GetIfUsrAssigWorksFileBrowser ())
       Brw_ShowFileBrowsersAsgWrkUsr ();
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
@@ -3046,22 +3066,6 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
       Prj_ShowOneProject ();
    else
       Brw_ShowFileBrowserNormal ();
-
-   /***** Help *****/
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_MRK_GRP:
-         Ale_ShowAlert (Ale_INFO,Txt_Files_of_marks_must_contain_a_table_in_HTML_format_);
-         break;
-      default:
-         break;
-     }
-
-   /***** Legal notice *****/
-   Ale_ShowAlert (Ale_INFO,Txt_Disclaimer_the_files_hosted_here_,
-                  Cfg_PLATFORM_SHORT_NAME,
-                  Cfg_PLATFORM_RESPONSIBLE_EMAIL);
   }
 
 /*****************************************************************************/
@@ -3096,6 +3100,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Project_documents;
    extern const char *Txt_Project_assessment;
+   extern const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_;
 
    static const char **Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
      {
@@ -3272,6 +3277,17 @@ static void Brw_ShowFileBrowser (void)
       Box_BoxEnd ();
 
    HTM_SECTION_End ();
+
+   /***** Help *****/
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_MRK_GRP:
+         Ale_ShowAlert (Ale_INFO,Txt_Files_of_marks_must_contain_a_table_in_HTML_format_);
+         break;
+      default:
+         break;
+     }
   }
 
 /*****************************************************************************/
@@ -7371,7 +7387,7 @@ void Brw_SetDocumentAsVisible (void)
 				    Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 /*****************************************************************************/
@@ -7395,7 +7411,7 @@ void Brw_SetDocumentAsHidden (void)
 				    Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 /*****************************************************************************/
@@ -9696,7 +9712,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
 /************** Write a form fo confirm removing of old files ****************/
 /*****************************************************************************/
 
-void Brw_AskRemoveOldFiles (void)
+void Brw_AskRemoveOldFilesBriefcase (void)
   {
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
@@ -9781,7 +9797,7 @@ void Brw_RemoveOldFilesBriefcase (void)
      }
 
    /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks ();
+   Brw_ShowFileBrowserNormal ();
   }
 
 /*****************************************************************************/

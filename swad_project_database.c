@@ -233,14 +233,12 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj)
 void Prj_DB_UpdateScore (long PrjCod,long CriCod,double Score)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   DB_QueryUPDATE ("can not update score",
-		   "UPDATE prj_scores"
-		     " SET Score=%.15lg"
-		   " WHERE PrjCod=%ld"
-		     " AND CriCod=%ld",
-	           Score,
-		   PrjCod,
-	           CriCod);
+   DB_QueryREPLACE ("can not save score",
+		    "REPLACE INTO prj_scores"
+	            " (PrjCod,CriCod,Score)"
+                    " VALUES"
+                    " (%ld,%ld,%.15lg)",
+		    PrjCod,CriCod,Score);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 

@@ -1324,6 +1324,9 @@ void Prj_ShowOneProject (void)
    Prj_ShowBoxWithOneProject (&Projects);
    Prj_FreeMemProject (&Projects.Prj);
 
+   /***** Put legal notice *****/
+   Brw_PutLegalNotice ();
+
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
   }
@@ -4581,26 +4584,22 @@ static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
 
 void Prj_ChangeCriterionScore (void)
   {
-   struct Prj_Projects Projects;
+   struct Prj_Project Prj;
    long CriCod;
    double Score;
    long RubCod;
    PrjCfg_Rubric_t WhichRubric;
 
-   /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
-
    /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Projects.Prj);
+   Prj_AllocMemProject (&Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
+   Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
    CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
    Score = RubCri_GetParScore ();
 
    /***** Get data of the project from database *****/
-   Prj_GetProjectDataByCod (&Projects.Prj);
+   Prj_GetProjectDataByCod (&Prj);
 
    /***** Get which rubric match this criterion *****/
    if ((RubCod = Rub_DB_GetRubCodFromCriCod (CriCod)) <= 0)
@@ -4609,16 +4608,18 @@ void Prj_ChangeCriterionScore (void)
       Err_WrongRubricExit ();
 
    /***** Update review *****/
-   if (Prj_CheckIfICanFillRubric (Projects.Prj.PrjCod,WhichRubric))
-      Prj_DB_UpdateScore (Projects.Prj.PrjCod,CriCod,Score);
+   if (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric))
+      Prj_DB_UpdateScore (Prj.PrjCod,CriCod,Score);
    else
       Err_NoPermission ();
 
    /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Projects.Prj);
+   Prj_FreeMemProject (&Prj);
 
-   /***** Show projects again *****/
-   Prj_ShowProjects (&Projects);
+   /***** Get parameters related to file browser
+          and show again project including file browser *****/
+   Brw_GetParAndInitFileBrowser ();
+   Prj_ShowOneProject ();
   }
 
 /*****************************************************************************/

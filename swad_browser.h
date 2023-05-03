@@ -198,7 +198,10 @@ void Brw_CreateDirDownloadTmp (void);
 
 void Brw_AskEditWorksCrs (void);
 
+void Brw_ShowFileBrowserNormal (void);
 void Brw_ShowFileBrowserProject (long PrjCod);
+
+void Brw_PutLegalNotice (void);
 
 void Brw_AskRemFileFromTree (void);
 void Brw_RemFileFromTree (void);
@@ -269,7 +272,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural);
 
-void Brw_AskRemoveOldFiles (void);
+void Brw_AskRemoveOldFilesBriefcase (void);
 void Brw_RemoveOldFilesBriefcase (void);
 
 Act_Action_t Brw_GetActionExpand (void);
