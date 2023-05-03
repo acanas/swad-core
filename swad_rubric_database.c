@@ -506,6 +506,20 @@ unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod)
   }
 
 /*****************************************************************************/
+/****************** Get rubric code given a criterion code *******************/
+/*****************************************************************************/
+// Return <0 is criterion is not present in any rubric
+
+long Rub_DB_GetRubCodFromCriCod (long CriCod)
+  {
+   return DB_QuerySELECTCode ("can not get which rubric",
+			      "SELECT RubCod"	// row[0]
+			       " FROM rub_criteria"
+			      " WHERE CriCod=%ld",
+			      CriCod);
+  }
+
+/*****************************************************************************/
 /********* Get criterion code given rubric and index of criterion ************/
 /*****************************************************************************/
 

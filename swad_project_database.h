@@ -41,6 +41,7 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj);
 void Prj_DB_AddUsrToPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,long UsrCod);
 void Prj_DB_HideOrUnhideProject (long PrjCod,bool Hide);
 void Prj_DB_UpdateReview (const struct Prj_Project *Prj);
+void Prj_DB_UpdateScore (long PrjCod,long CriCod,double Score);
 
 unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const struct Prj_Projects *Projects,
@@ -53,6 +54,7 @@ unsigned Prj_DB_GetUsrsInPrj (MYSQL_RES **mysql_res,
                               long PrjCod,Prj_RoleInProject_t RoleInProject);
 unsigned Prj_DB_GetMyRolesInPrj (MYSQL_RES **mysql_res,long PrjCod);
 long Prj_DB_GetCrsOfPrj (long PrjCod);
+double Prj_DB_GetScore (long PrjCod,long CriCod);
 unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope);
 unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope);
 
@@ -61,12 +63,16 @@ void Prj_DB_RemoveUsrFromProjects (long UsrCod);
 void Prj_DB_RemoveUsrsFromPrj (long PrjCod);
 void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod);
 void Prj_DB_RemoveConfigOfCrsPrjs (long CrsCod);
+void Prj_DB_RemoveRubricsOfCrsPrjs (long CrsCod);
 void Prj_DB_RemovePrj (long PrjCod);
 void Prj_DB_RemoveCrsPrjs (long CrsCod);
 
 //----------------------------- Configuration ---------------------------------
 
 void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects);
+void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects);
 unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res);
+unsigned Prj_DB_GetRubrics (MYSQL_RES **mysql_res);
+PrjCfg_Rubric_t Prj_DB_GetWichRubricFromRubCod (long RubCod);
 
 #endif

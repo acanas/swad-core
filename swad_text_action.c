@@ -10113,6 +10113,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove evaluator from a project"	// Çeviri lazim!
 #endif
 	,
+	[ActChgPrjSco] =
+#if   L==1	// ca
+	"Canviar la puntuaci&oacute; d'un criteri en un projecte"
+#elif L==2	// de
+	"&Auml;ndern Sie die Punktzahl eines Kriteriums in einem Projekt"
+#elif L==3	// en
+	"Change the score of a criterion in a project"
+#elif L==4	// es
+	"Cambiar la puntuaci&oacute;n de un criterio en un proyecto"
+#elif L==5	// fr
+	"Modifier le score d'un crit&egrave;re dans un projet"
+#elif L==6	// gn
+	"Omoambue puntuaci&oacute;n pete&icirc; criterio pete&icirc; proyecto-pe"
+#elif L==7	// it
+	"Modificare il punteggio di un criterio in un progetto"
+#elif L==8	// pl
+	"Zmie&nacute; wynik kryterium w projekcie"
+#elif L==9	// pt
+	"Alterar a pontua&ccedil;&atilde;o de um crit&eacute;rio em um projeto"
+#elif L==10	// tr
+	"Bir projedeki bir kriterin puan&inodot;n&inodot; de&gbreve;i&scedil;tirin"
+#endif
+	,
 	[ActReqLnkPrj] =
 #if   L==1	// ca
 	"Copy link to project"		// Necessita traducció

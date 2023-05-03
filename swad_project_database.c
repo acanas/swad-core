@@ -44,8 +44,16 @@ extern struct Globals Gbl;
 /************************** Public constants and types ***********************/
 /*****************************************************************************/
 
+/***** Enum field in database for type of rubric *****/
+const char *Prj_DB_WhichRubric[PrjCfg_NUM_RUBRICS] =
+  {
+   [PrjCfg_RUBRIC_TUT] = "tut",
+   [PrjCfg_RUBRIC_EVL] = "evl",
+   [PrjCfg_RUBRIC_GBL] = "gbl",
+  };
+
 /***** Enum field in database for types of proposal *****/
-const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
+const char *Prj_DB_Proposal[Prj_NUM_PROPOSAL_TYPES] =
   {
    [Prj_PROPOSAL_NEW       ] = "new",
    [Prj_PROPOSAL_MODIFIED  ] = "modified",
@@ -53,7 +61,7 @@ const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
   };
 
 /***** Enum field in database for review status *****/
-const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS] =
+const char *Prj_DB_ReviewStatus[Prj_NUM_REVIEW_STATUS] =
   {
    [Prj_UNREVIEWED] = "unreviewed",
    [Prj_UNAPPROVED] = "unapproved",
@@ -115,7 +123,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 								'N',
 				Prj->NumStds,
-				Prj_Proposal_DB[Prj->Proposal],
+				Prj_DB_Proposal[Prj->Proposal],
 				Prj->CreatTime,
 				Prj->ModifTime,
 				Prj->Title,
@@ -123,7 +131,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				Prj->Knowledge,
 				Prj->Materials,
 				Prj->URL,
-				Prj_ReviewStatus_DB[Prj->Review.Status],
+				Prj_DB_ReviewStatus[Prj->Review.Status],
 				Prj->Review.Time,
 				Prj->Review.Txt);
   }
@@ -155,7 +163,7 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
 	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 						   'N',
 	           Prj->NumStds,
-	           Prj_Proposal_DB[Prj->Proposal],
+	           Prj_DB_Proposal[Prj->Proposal],
 	           Prj->ModifTime,
 	           Prj->Title,
 	           Prj->Description,
@@ -212,10 +220,28 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj)
 		          "ReviewTxt='%s'"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-	           Prj_ReviewStatus_DB[Prj->Review.Status],
+	           Prj_DB_ReviewStatus[Prj->Review.Status],
 		   Prj->Review.Txt,
 	           Prj->PrjCod,
 	           Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/**************** Update score of a criterion in a project *******************/
+/*****************************************************************************/
+
+void Prj_DB_UpdateScore (long PrjCod,long CriCod,double Score)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update score",
+		   "UPDATE prj_scores"
+		     " SET Score=%.15lg"
+		   " WHERE PrjCod=%ld"
+		     " AND CriCod=%ld",
+	           Score,
+		   PrjCod,
+	           CriCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/
@@ -301,38 +327,38 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
      {
       case (1 << Prj_UNREVIEWED):	// Unreviewed projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
-	               Prj_ReviewStatus_DB[Prj_UNREVIEWED]) < 0)
+	               Prj_DB_ReviewStatus[Prj_UNREVIEWED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNAPPROVED):	// Unapproved projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
-	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
+	               Prj_DB_ReviewStatus[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_APPROVED):		// Approved projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus='%s'",
-	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
+	               Prj_DB_ReviewStatus[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNREVIEWED |
 	    1 << Prj_UNAPPROVED):	// Unreviewed and unapproved projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
-	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
-	               Prj_ReviewStatus_DB[Prj_UNAPPROVED]) < 0)
+	               Prj_DB_ReviewStatus[Prj_UNREVIEWED],
+	               Prj_DB_ReviewStatus[Prj_UNAPPROVED]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNREVIEWED |
 	    1 << Prj_APPROVED):		// Unreviewed and approved projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
-	               Prj_ReviewStatus_DB[Prj_UNREVIEWED],
-	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
+	               Prj_DB_ReviewStatus[Prj_UNREVIEWED],
+	               Prj_DB_ReviewStatus[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case (1 << Prj_UNAPPROVED |
 	    1 << Prj_APPROVED):		// Unapproved and approved projects
 	 if (asprintf (&ReviewSubQuery," AND prj_projects.ReviewStatus IN ('%s','%s')",
-	               Prj_ReviewStatus_DB[Prj_UNAPPROVED],
-	               Prj_ReviewStatus_DB[Prj_APPROVED  ]) < 0)
+	               Prj_DB_ReviewStatus[Prj_UNAPPROVED],
+	               Prj_DB_ReviewStatus[Prj_APPROVED  ]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       default:				// All projects
@@ -595,8 +621,8 @@ unsigned Prj_DB_GetPrjDataToCheckFaults (MYSQL_RES **mysql_res,long PrjCod)
 			  "ReviewStatus<>'%s' AND ModifTime>ReviewTime"		// row[5] = 0 / 1
 		    " FROM prj_projects"
 		   " WHERE PrjCod=%ld",
-		   Prj_ReviewStatus_DB[Prj_UNAPPROVED],
-		   Prj_ReviewStatus_DB[Prj_UNREVIEWED],
+		   Prj_DB_ReviewStatus[Prj_UNAPPROVED],
+		   Prj_DB_ReviewStatus[Prj_UNREVIEWED],
 		   PrjCod);
   }
 
@@ -673,6 +699,21 @@ long Prj_DB_GetCrsOfPrj (long PrjCod)
 			       " FROM prj_projects"
 			      " WHERE PrjCod=%ld",
 			      PrjCod); // Project found...
+  }
+
+/*****************************************************************************/
+/********************* Get criteria in a given rubric ************************/
+/*****************************************************************************/
+
+double Prj_DB_GetScore (long PrjCod,long CriCod)
+  {
+   return DB_QuerySELECTDouble ("can not get score",
+				"SELECT Score"
+				 " FROM prj_scores"
+				" WHERE PrjCod=%ld"
+				  " AND CriCod=%ld",
+				PrjCod,
+				CriCod);
   }
 
 /*****************************************************************************/
@@ -903,6 +944,18 @@ void Prj_DB_RemoveConfigOfCrsPrjs (long CrsCod)
   }
 
 /*****************************************************************************/
+/********** Remove associations of rubrics to projects in the course *********/
+/*****************************************************************************/
+
+void Prj_DB_RemoveRubricsOfCrsPrjs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove rubrics of projects in a course",
+		   "DELETE FROM prj_rubrics"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /******************************* Remove project ******************************/
 /*****************************************************************************/
 
@@ -936,15 +989,33 @@ void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects)
   {
    DB_QueryREPLACE ("can not save configuration of projects",
 		    "REPLACE INTO prj_config"
-	            " (CrsCod,RubTutCod,RubEvlCod,RubGblCod,NETCanCreate)"
+	            " (CrsCod,NETCanCreate)"
                     " VALUES"
-                    " (%ld,%ld,%ld,%ld,'%c')",
+                    " (%ld,'%c')",
 		    Gbl.Hierarchy.Crs.CrsCod,
-	            Projects->Config.RubCod[PrjCfg_RUBRIC_TUT],
-	            Projects->Config.RubCod[PrjCfg_RUBRIC_EVL],
-	            Projects->Config.RubCod[PrjCfg_RUBRIC_GBL],
 		    Projects->Config.NETCanCreate ? 'Y' :
 			                            'N');
+  }
+
+/*****************************************************************************/
+/********* Update rubrics associated to projects for current course **********/
+/*****************************************************************************/
+
+void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects)
+  {
+   PrjCfg_Rubric_t WhichRubric;
+
+   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
+	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	WhichRubric++)
+      DB_QueryREPLACE ("can not save configuration of projects",
+		       "REPLACE INTO prj_rubrics"
+		       " (CrsCod,Type,RubCod)"
+		       " VALUES"
+		       " (%ld,'%s',%ld)",
+		       Gbl.Hierarchy.Crs.CrsCod,
+		       Prj_DB_WhichRubric[WhichRubric],
+		       Projects->Config.RubCod[WhichRubric]);
   }
 
 /*****************************************************************************/
@@ -955,11 +1026,42 @@ unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get project configuration",
-		   "SELECT RubTutCod,"		// row[0]
-                          "RubEvlCod,"		// row[1]
-                          "RubGblCod,"		// row[2]
-			  "NETCanCreate"	// row[3]
+		   "SELECT NETCanCreate"	// row[0]
 		    " FROM prj_config"
 		   " WHERE CrsCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/******************* Get project rubrics for current course ******************/
+/*****************************************************************************/
+
+unsigned Prj_DB_GetRubrics (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get project rubrics",
+		   "SELECT Type,"	// row[0]
+                          "RubCod"	// row[1]
+		    " FROM prj_rubrics"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*** Get type of project rubric in the current course given a rubric code ****/
+/*****************************************************************************/
+
+PrjCfg_Rubric_t Prj_DB_GetWichRubricFromRubCod (long RubCod)
+  {
+   char StrTypeDB[32];
+
+   DB_QuerySELECTString (StrTypeDB,sizeof (StrTypeDB) - 1,
+                         "can not get which rubric",
+			 "SELECT Type"	// row[0]
+			  " FROM prj_rubrics"
+			 " WHERE CrsCod=%ld"
+			   " AND RubCod=%ld",
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 RubCod);
+   return PrjCfg_GetRubricFromString (StrTypeDB);
   }

@@ -629,10 +629,19 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.103 (2023-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 22.104 (2023-05-03)"
 #define CSS_FILE		"swad22.103.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.104:   May 03, 2023  Rubrics in project. Not finished. (? lines)
+					3 changes necessary in database:
+CREATE TABLE IF NOT EXISTS prj_rubrics (CrsCod INT NOT NULL,Type ENUM('tut','evl','gbl') NOT NULL,RubCod INT NOT NULL,UNIQUE INDEX(CrsCod,Type,RubCod));
+CREATE TABLE IF NOT EXISTS prj_scores (PrjCod INT NOT NULL,CriCod INT NOT NULL,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(PrjCod,CriCod));
+ALTER TABLE prj_config DROP COLUMN RubTutCod,DROP COLUMN RubEvlCod,DROP COLUMN RubGblCod;
+					If you want to use MyISAM:
+ALTER TABLE prj_rubrics ENGINE=MyISAM;
+ALTER TABLE prj_scores ENGINE=MyISAM;
+
 	Version 22.103:   Apr 25, 2023  Fixed issue in list of rubric criteria. (337537 lines)
 	Version 22.102.3: Apr 21, 2023  Changes in exams. (337538 lines)
 	Version 22.102.2: Apr 21, 2023  Changes in games. (337454 lines)

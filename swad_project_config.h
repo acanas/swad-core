@@ -35,18 +35,19 @@
 
 #define PrjCfg_NET_CAN_CREATE_DEFAULT true
 
-#define PrjCfg_NUM_RUBRICS 3
+#define PrjCfg_NUM_RUBRICS 4
 typedef enum
   {
-   PrjCfg_RUBRIC_TUT,
-   PrjCfg_RUBRIC_EVL,
-   PrjCfg_RUBRIC_GBL,
+   PrjCfg_RUBRIC_ERR = 0,
+   PrjCfg_RUBRIC_TUT = 1,
+   PrjCfg_RUBRIC_EVL = 2,
+   PrjCfg_RUBRIC_GBL = 3,
   } PrjCfg_Rubric_t;
 
 struct PrjCfg_Config
   {
-   long RubCod[PrjCfg_NUM_RUBRICS];
    bool NETCanCreate;
+   long RubCod[PrjCfg_NUM_RUBRICS];
   };
 
 /*****************************************************************************/
@@ -57,6 +58,7 @@ void PrjCfg_GetConfig (struct PrjCfg_Config *Config);
 
 bool PrjCfg_CheckIfICanConfig (void);
 void PrjCfg_ShowFormConfig (void);
+PrjCfg_Rubric_t PrjCfg_GetRubricFromString (const char *Str);
 void PrjCfg_ReceiveConfig (void);
 
 #endif

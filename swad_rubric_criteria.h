@@ -43,6 +43,9 @@ void RubCri_ChangeWeight (void);
 
 void RubCri_ListCriteriaForSeeing (const struct Rub_Rubrics *Rubrics);
 void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics);
+void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
+				   bool ICanFill);
+double RubCri_GetParScore (void);
 
 void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion);
 

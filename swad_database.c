@@ -2558,18 +2558,12 @@ mysql> DESCRIBE prj_config;
 | Field        | Type          | Null | Key | Default | Extra |
 +--------------+---------------+------+-----+---------+-------+
 | CrsCod       | int           | NO   | PRI | -1      |       |
-| RubTutCod    | int           | NO   |     | -1      |       |
-| RubEvlCod    | int           | NO   |     | -1      |       |
-| RubGblCod    | int           | NO   |     | -1      |       |
 | NETCanCreate | enum('N','Y') | NO   |     | Y       |       |
 +--------------+---------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
+2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_config ("
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"RubTutCod INT NOT NULL DEFAULT -1,"
-			"RubEvlCod INT NOT NULL DEFAULT -1,"
-			"RubGblCod INT NOT NULL DEFAULT -1,"
 			"NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(CrsCod))");
 
@@ -2646,6 +2640,42 @@ mysql> DESCRIBE prj_reviews;
 			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "INDEX(PrjCod,ReviewTime),"
 		   "INDEX(PrjCod,Result))");
+
+   /***** Table prj_rubrics *****/
+/*
+mysql> DESCRIBE prj_rubrics;
++--------+-------------------------+------+-----+---------+-------+
+| Field  | Type                    | Null | Key | Default | Extra |
++--------+-------------------------+------+-----+---------+-------+
+| CrsCod | int                     | NO   | PRI | NULL    |       |
+| Type   | enum('tut','evl','gbl') | NO   | PRI | NULL    |       |
+| RubCod | int                     | NO   | PRI | NULL    |       |
++--------+-------------------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_rubrics ("
+			"CrsCod INT NOT NULL,"
+			"Type ENUM('tut','evl','gbl') NOT NULL,"
+			"RubCod INT NOT NULL,"
+		   "UNIQUE INDEX(CrsCod,Type,RubCod))");
+
+   /***** Table prj_scores *****/
+/*
+mysql> DESCRIBE prj_scores;
++--------+--------+------+-----+---------+-------+
+| Field  | Type   | Null | Key | Default | Extra |
++--------+--------+------+-----+---------+-------+
+| PrjCod | int    | NO   | PRI | NULL    |       |
+| CriCod | int    | NO   | PRI | NULL    |       |
+| Score  | double | NO   |     | 0       |       |
++--------+--------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_scores ("
+			"PrjCod INT NOT NULL,"
+			"CriCod INT NOT NULL,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(PrjCod,CriCod))");
 
    /***** Table prj_users *****/
 /*
@@ -4112,7 +4142,7 @@ double DB_QuerySELECTDouble (const char *MsgError,
    va_list ap;
    int NumBytesPrinted;
    char *Query;
-   double DoubleNum = 0.0;
+   double DoubleNum = 0.0;	// Default value
 
    /***** Create query string *****/
    va_start (ap,fmt);

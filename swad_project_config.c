@@ -25,6 +25,7 @@
 /*****************************************************************************/
 
 #include <stdbool.h>		// For boolean type
+#include <string.h>		// For string functions
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
@@ -57,12 +58,6 @@ static const char *PrjCfg_RubricIDs[PrjCfg_NUM_RUBRICS] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
-
-// static struct Rub_Rubric PrjCfg_Rubrics[PrjCfg_NUM_RUBRICS];
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -74,6 +69,8 @@ static void PrjCfg_ShowFormRubric (const struct PrjCfg_Config *Config,
 
 static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct PrjCfg_Config *Config);
+static void PrjCfg_GetRubricDataFromRow (MYSQL_RES *mysql_res,
+                                         struct PrjCfg_Config *Config);
 static bool PrjCfg_GetIfNETCanCreateFromForm (void);
 
 /*****************************************************************************/
@@ -83,19 +80,28 @@ static bool PrjCfg_GetIfNETCanCreateFromForm (void);
 void PrjCfg_GetConfig (struct PrjCfg_Config *Config)
   {
    MYSQL_RES *mysql_res;
+   unsigned NumRubrics;
+   unsigned NumRub;
    PrjCfg_Rubric_t WhichRubric;
 
    /***** Get configuration of projects for current course from database *****/
+   Config->NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
    if (Prj_DB_GetConfig (&mysql_res))
       PrjCfg_GetConfigDataFromRow (mysql_res,Config);
-   else
-     {
-      for (WhichRubric  = (PrjCfg_Rubric_t) 0;
-	   WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-	   WhichRubric++)
-	 Config->RubCod[WhichRubric] = -1L;
-      Config->NETCanCreate = PrjCfg_NET_CAN_CREATE_DEFAULT;
-     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get project rubrics for current course from database *****/
+   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
+	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	WhichRubric++)
+      Config->RubCod[WhichRubric] = -1L;
+   NumRubrics = Prj_DB_GetRubrics (&mysql_res);
+   for (NumRub = 0;
+	NumRub < NumRubrics;
+	NumRub++)
+      PrjCfg_GetRubricDataFromRow (mysql_res,Config);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -174,7 +180,7 @@ static void PrjCfg_ShowFormRubrics (const struct PrjCfg_Config *Config)
    Rub_GetListRubrics (&Rubrics);
 
    /***** Rubric selectors *****/
-   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
 	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
 	WhichRubric++)
       PrjCfg_ShowFormRubric (Config,&Rubrics,WhichRubric);
@@ -244,24 +250,56 @@ static void PrjCfg_GetConfigDataFromRow (MYSQL_RES *mysql_res,
 				         struct PrjCfg_Config *Config)
   {
    MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+   /*
+   row[0]	NETCanCreate
+   */
+   /***** Get whether non-editing teachers can create new projects or not (row[0]) *****/
+   Config->NETCanCreate = (row[0][0] == 'Y');
+  }
+
+/*****************************************************************************/
+/****************** Get project rubric from a database row *******************/
+/*****************************************************************************/
+
+static void PrjCfg_GetRubricDataFromRow (MYSQL_RES *mysql_res,
+                                         struct PrjCfg_Config *Config)
+  {
+   MYSQL_ROW row;
    PrjCfg_Rubric_t WhichRubric;
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[0]	RubTutCod
-   row[1]	RubEvlCod
-   row[2]	RubGblCod
-   row[3]	NETCanCreate
+   row[0]	Type
+   row[1]	RubCod
    */
-   /***** Get rubric codes (row[0], row[1], row[2] *****/
-   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+   /***** Get rubric type (row[0]) *****/
+   WhichRubric = PrjCfg_GetRubricFromString (row[0]);
+
+   /***** Get rubric code (row[1]) *****/
+   Config->RubCod[WhichRubric] = Str_ConvertStrCodToLongCod (row[1]);
+  }
+
+/*****************************************************************************/
+/********************** Convert from string to type **************************/
+/*****************************************************************************/
+
+PrjCfg_Rubric_t PrjCfg_GetRubricFromString (const char *Str)
+  {
+   extern const char *Prj_DB_WhichRubric[PrjCfg_NUM_RUBRICS];
+   PrjCfg_Rubric_t WhichRubric;
+
+   /***** Compare string with all string types *****/
+   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
 	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
 	WhichRubric++)
-      Config->RubCod[WhichRubric] = Str_ConvertStrCodToLongCod (row[WhichRubric]);
+      if (!strcmp (Prj_DB_WhichRubric[WhichRubric],Str))
+	 return WhichRubric;
 
-   /***** Get whether non-editing teachers can create new projects or not (row[3]) *****/
-   Config->NETCanCreate = (row[3][0] == 'Y');
+   return PrjCfg_RUBRIC_ERR;
   }
 
 /*****************************************************************************/
@@ -307,17 +345,18 @@ void PrjCfg_ReceiveConfig (void)
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Projects);
 
+   /***** Get non-editing teachers can create new projects or not *****/
+   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
+
    /***** Get rubric codes *****/
-   for (WhichRubric  = (PrjCfg_Rubric_t) 0;
+   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
 	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
 	WhichRubric++)
       Projects.Config.RubCod[WhichRubric] = Par_GetParLong (PrjCfg_RubricIDs[WhichRubric]);
 
-   /***** Get non-editing teachers can create new projects or not *****/
-   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
-
    /***** Update database *****/
    Prj_DB_UpdateConfig (&Projects);
+   Prj_DB_UpdateRubrics (&Projects);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);

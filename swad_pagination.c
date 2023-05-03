@@ -186,9 +186,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				  ((struct Prj_Projects *) Context)->SelectedOrder,
-				  1,
-				  Cod);
+				   ((struct Prj_Projects *) Context)->SelectedOrder,
+				   1,
+				   Cod);
 		  break;
 	       case Pag_EXAMS:
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -313,9 +313,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				 ((struct Prj_Projects *) Context)->SelectedOrder,
-				 1,
-				 Cod);
+			        ((struct Prj_Projects *) Context)->SelectedOrder,
+			        1,
+				Cod);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -433,9 +433,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				 ((struct Prj_Projects *) Context)->SelectedOrder,
-				 Pagination->LeftPage,
-				 Cod);
+				((struct Prj_Projects *) Context)->SelectedOrder,
+				Pagination->LeftPage,
+				Cod);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -566,9 +566,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				    ((struct Prj_Projects *) Context)->SelectedOrder,
-				    NumPage,
-				    Cod);
+				   ((struct Prj_Projects *) Context)->SelectedOrder,
+				   NumPage,
+				   Cod);
 		  break;
                case Pag_EXAMS:
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -685,9 +685,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				 ((struct Prj_Projects *) Context)->SelectedOrder,
-				 Pagination->RightPage,
-				 Cod);
+				((struct Prj_Projects *) Context)->SelectedOrder,
+				Pagination->RightPage,
+				Cod);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -805,9 +805,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
-				 ((struct Prj_Projects *) Context)->SelectedOrder,
-				 Pagination->NumPags,
-				 Cod);
+				((struct Prj_Projects *) Context)->SelectedOrder,
+				Pagination->NumPags,
+				Cod);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);

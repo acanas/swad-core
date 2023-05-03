@@ -65,8 +65,9 @@ void Rub_DB_UpdateCriterionIndex (long CriInd,long CriCod,long RubCod);
 void Rub_DB_LockTable (void);
 
 unsigned Rub_DB_GetNumCriteriaInRubric (long RubCod);
+long Rub_DB_GetRubCodFromCriCod (long CriCod);
 long Rub_DB_GetCriCodFromCriInd (long RubCod,unsigned QstInd);
-unsigned Rub_DB_GetCriIndFromCriCod (long RubCod,long QstCod);
+unsigned Rub_DB_GetCriIndFromCriCod (long RubCod,long CriCod);
 unsigned Rub_DB_GetMaxCriterionIndexInRubric (long RubCod);
 unsigned Rub_DB_GetPrevCriterionIndexInRubric (long RubCod,unsigned QstInd);
 unsigned Rub_DB_GetNextCriterionIndexInRubric (long RubCod,unsigned QstInd);

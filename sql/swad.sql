@@ -1206,9 +1206,6 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 --
 CREATE TABLE IF NOT EXISTS prj_config (
 	CrsCod INT NOT NULL DEFAULT -1,
-	RubTutCod INT NOT NULL DEFAULT -1,
-	RubEvlCod INT NOT NULL DEFAULT -1,
-	RubGblCod INT NOT NULL DEFAULT -1,
 	NETCanCreate ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	UNIQUE INDEX(CrsCod));
 --
@@ -1239,6 +1236,22 @@ CREATE TABLE IF NOT EXISTS prj_projects (
 	INDEX(CrsCod,ModifTime),
 	INDEX(CrsCod,DptCod),
 	INDEX(CrsCod,ReviewStatus));
+--
+-- Table prj_rubrics: stores the rubrics for each project
+--
+CREATE TABLE IF NOT EXISTS prj_rubrics (
+	CrsCod INT NOT NULL,
+	Type ENUM('tut','evl','gbl') NOT NULL,
+	RubCod INT NOT NULL,
+	UNIQUE INDEX(CrsCod,Type,RubCod));
+--
+-- Table prj_scores: stores the rubric criteria scores for each project
+--
+CREATE TABLE IF NOT EXISTS prj_scores (
+	PrjCod INT NOT NULL,
+	CriCod INT NOT NULL,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(PrjCod,CriCod));
 --
 -- Table prj_users: stores the users inside projects
 --

@@ -647,6 +647,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemStdPrj	] = {1693,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
    [ActRemTutPrj	] = {1694,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
    [ActRemEvlPrj	] = {1695,-1,TabUnk,ActSeeAllPrj	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEvl			,NULL},
+   [ActChgPrjSco	] = {1974,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ChangeCriterionScore	,NULL},
    [ActReqLnkPrj	] = {1948,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjRsc_GetLinkToProject	,NULL},
 
    [ActAdmDocPrj	] = {1697,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -3866,4 +3867,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemRscCli_InPrg,	// #1971
 	ActSeeRscCli_InRub,	// #1972
 	ActRemRscCli_InRub,	// #1973
+	ActChgPrjSco,		// #1974
   };

@@ -55,6 +55,9 @@
 #include "swad_project_config.h"
 #include "swad_project_database.h"
 #include "swad_role.h"
+#include "swad_rubric.h"
+#include "swad_rubric_criteria.h"
+#include "swad_rubric_database.h"
 #include "swad_setting.h"
 #include "swad_string.h"
 
@@ -188,7 +191,6 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
 static bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
 
-static void Prj_PutCurrentPars (void *Projects);
 static void Prj_PutParAssign (unsigned Assign);
 static void Prj_PutParHidden (unsigned Hidden);
 static void Prj_PutParFaulti (unsigned Faulti);
@@ -310,7 +312,7 @@ static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 static Prj_ReviewStatus_t Prj_GetParReviewStatus (void);
 
 //------------------------------- Rubrics -------------------------------------
-static void Prj_ShowRubrics (long PrjCod);
+static void Prj_ShowRubrics (struct Prj_Projects *Projects);
 static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
 static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
 
@@ -642,9 +644,9 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	       Filter.Review = Projects->Filter.Review;
 	       Filter.DptCod = Projects->Filter.DptCod;
 	       Prj_PutPars (&Filter,
-			      Projects->SelectedOrder,
-			      Projects->CurrentPage,
-			      -1L);
+			    Projects->SelectedOrder,
+			    Projects->CurrentPage,
+			    -1L);
 	       Usr_PutWhoIcon (Who);
 	    Frm_EndForm ();
 	 Set_EndPref ();
@@ -676,9 +678,9 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutPars (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
+			 Projects->SelectedOrder,
+			 Projects->CurrentPage,
+			 -1L);
 	    Ico_PutSettingIconLink (AssignedNonassigIcon[Assign],Ico_BLACK,
 				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
 	 Frm_EndForm ();
@@ -720,9 +722,9 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutPars (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
+			 Projects->SelectedOrder,
+			 Projects->CurrentPage,
+			 -1L);
 	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis].Icon,
 				    HiddenVisiblIcon[HidVis].Color,
 				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
@@ -765,9 +767,9 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	    Filter.Review = Projects->Filter.Review;
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutPars (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
+			 Projects->SelectedOrder,
+			 Projects->CurrentPage,
+			 -1L);
 	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness].Icon,
 				    FaultinessIcon[Faultiness].Color,
 				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
@@ -801,9 +803,9 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 	    Filter.Review = Projects->Filter.Review ^ (1 << ReviewStatus);	// Toggle
 	    Filter.DptCod = Projects->Filter.DptCod;
 	    Prj_PutPars (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
+			 Projects->SelectedOrder,
+			 Projects->CurrentPage,
+			 -1L);
 	    Ico_PutSettingIconLink (ReviewIcon[ReviewStatus].Icon,
 				    ReviewIcon[ReviewStatus].Color,
 				    Txt_PROJECT_REVIEW_PLURAL[ReviewStatus]);
@@ -833,9 +835,9 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 Filter.Review = Projects->Filter.Review;
 	 Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
 	 Prj_PutPars (&Filter,
-			Projects->SelectedOrder,
-			Projects->CurrentPage,
-			-1L);
+		      Projects->SelectedOrder,
+		      Projects->CurrentPage,
+		      -1L);
 
 	 /***** Write selector with departments *****/
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
@@ -919,7 +921,7 @@ bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
 /********************** Put parameters used in projects **********************/
 /*****************************************************************************/
 
-static void Prj_PutCurrentPars (void *Projects)
+void Prj_PutCurrentPars (void *Projects)
   {
    if (Projects)
       Prj_PutPars (&((struct Prj_Projects *) Projects)->Filter,
@@ -933,9 +935,9 @@ static void Prj_PutCurrentPars (void *Projects)
    Each parameter is passed only if its value is distinct to default. */
 
 void Prj_PutPars (struct Prj_Filter *Filter,
-                    Prj_Order_t Order,
-                    unsigned NumPage,
-                    long PrjCod)
+                  Prj_Order_t Order,
+                  unsigned NumPage,
+                  long PrjCod)
   {
    /***** Put filter parameters (which projects to show) *****/
    if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
@@ -1357,7 +1359,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
 	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
 
       /***** Show project rubrics *****/
-      Prj_ShowRubrics (Projects->Prj.PrjCod);
+      Prj_ShowRubrics (Projects);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3324,8 +3326,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
 
 void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
   {
-   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
-   extern const char *Prj_ReviewStatus_DB[Prj_NUM_REVIEW_STATUS];
+   extern const char *Prj_DB_Proposal[Prj_NUM_PROPOSAL_TYPES];
+   extern const char *Prj_DB_ReviewStatus[Prj_NUM_REVIEW_STATUS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Prj_Proposal_t Proposal;
@@ -3367,7 +3369,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	 for (Proposal  = (Prj_Proposal_t) 0;
 	      Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	      Proposal++)
-	    if (!strcmp (Prj_Proposal_DB[Proposal],row[7]))
+	    if (!strcmp (Prj_DB_Proposal[Proposal],row[7]))
 	      {
 	       Prj->Proposal = Proposal;
 	       break;
@@ -3392,7 +3394,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	 for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	      ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	      ReviewStatus++)
-	    if (!strcmp (Prj_ReviewStatus_DB[ReviewStatus],row[15]))
+	    if (!strcmp (Prj_DB_ReviewStatus[ReviewStatus],row[15]))
 	      {
 	       Prj->Review.Status = ReviewStatus;
 	       break;
@@ -4473,11 +4475,12 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
 /************************ Show rubrics in a project **************************/
 /*****************************************************************************/
 
-static void Prj_ShowRubrics (long PrjCod)
+static void Prj_ShowRubrics (struct Prj_Projects *Projects)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Rubrics;
    extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
+   struct Rub_Rubric Rubric;
    PrjCfg_Rubric_t WhichRubric;
 
    /***** Begin box *****/
@@ -4485,19 +4488,31 @@ static void Prj_ShowRubrics (long PrjCod)
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-      /***** Rubrics *****/
-      for (WhichRubric  = (PrjCfg_Rubric_t) 0;
-	   WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-	   WhichRubric++)
-	{
-	 if (Prj_CheckIfICanViewRubric (PrjCod,WhichRubric))
-	   {
-	    Ale_ShowAlert (Ale_INFO,Txt_PROJECT_RUBRIC[WhichRubric]);
-	    Ale_ShowAlert (Ale_SUCCESS,"Can see");
-	    if (Prj_CheckIfICanFillRubric (PrjCod,WhichRubric))
-	       Ale_ShowAlert (Ale_SUCCESS,"Can fill");
-	   }
-	}
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
+
+	    /***** Rubrics *****/
+	    for (WhichRubric  = (PrjCfg_Rubric_t) 1;
+		 WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+		 WhichRubric++)
+	       if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,WhichRubric))
+		 {
+		  /***** Get rubric data *****/
+		  Rub_RubricConstructor (&Rubric);
+		  Rubric.RubCod = Projects->Config.RubCod[WhichRubric];
+		  Rub_GetRubricDataByCod (&Rubric);
+
+		  /***** Show this rubric ready to fill it *****/
+		  Rub_ShowRubricInProject (Projects,&Rubric,
+		                           Txt_PROJECT_RUBRIC[WhichRubric],
+		                           Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,WhichRubric));
+
+		  /***** Free memory used for rubric *****/
+		  Rub_RubricDestructor (&Rubric);
+		 }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -4515,6 +4530,8 @@ static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
       case Rol_NET:
 	 switch (WhichRubric)
 	   {
+	    case PrjCfg_RUBRIC_ERR:
+	       return false;
 	    case PrjCfg_RUBRIC_TUT:
 	    case PrjCfg_RUBRIC_EVL:
 	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// I am a tutor
@@ -4540,6 +4557,8 @@ static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
       case Rol_NET:
 	 switch (WhichRubric)
 	   {
+	    case PrjCfg_RUBRIC_ERR:
+	       return false;
 	    case PrjCfg_RUBRIC_TUT:
 	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// I am a tutor
 	    case PrjCfg_RUBRIC_EVL:
@@ -4557,6 +4576,52 @@ static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
   }
 
 /*****************************************************************************/
+/************* Change the score of a criterion in a project ******************/
+/*****************************************************************************/
+
+void Prj_ChangeCriterionScore (void)
+  {
+   struct Prj_Projects Projects;
+   long CriCod;
+   double Score;
+   long RubCod;
+   PrjCfg_Rubric_t WhichRubric;
+
+   /***** Reset projects *****/
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Projects.Prj);
+
+   /***** Get parameters *****/
+   Prj_GetPars (&Projects);
+   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
+   CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+   Score = RubCri_GetParScore ();
+
+   /***** Get data of the project from database *****/
+   Prj_GetProjectDataByCod (&Projects.Prj);
+
+   /***** Get which rubric match this criterion *****/
+   if ((RubCod = Rub_DB_GetRubCodFromCriCod (CriCod)) <= 0)
+      Err_WrongRubricExit ();
+   if ((WhichRubric = Prj_DB_GetWichRubricFromRubCod (RubCod)) == PrjCfg_RUBRIC_ERR)
+      Err_WrongRubricExit ();
+
+   /***** Update review *****/
+   if (Prj_CheckIfICanFillRubric (Projects.Prj.PrjCod,WhichRubric))
+      Prj_DB_UpdateScore (Projects.Prj.PrjCod,CriCod,Score);
+   else
+      Err_NoPermission ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Projects.Prj);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Projects);
+  }
+
+/*****************************************************************************/
 /********************** Remove all projects in a course **********************/
 /*****************************************************************************/
 
@@ -4570,6 +4635,9 @@ void Prj_RemoveCrsProjects (long CrsCod)
 
    /***** Remove configuration of projects in the course *****/
    Prj_DB_RemoveConfigOfCrsPrjs (CrsCod);
+
+   /***** Remove associations of rubrics to projects in the course *****/
+   Prj_DB_RemoveRubricsOfCrsPrjs (CrsCod);
 
    /***** Remove projects *****/
    Prj_DB_RemoveCrsPrjs (CrsCod);

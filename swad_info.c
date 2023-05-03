@@ -1227,7 +1227,7 @@ static void Inf_AsignInfoType (struct Inf_Info *Info,
 Inf_Src_t Inf_GetInfoSrcFromForm (void)
   {
    /***** Get info source for a specific type of course information
-          (introduction, teaching guide, bibliography, FAQ, links or evaluation) *****/
+          (introduction, teaching guide, bibliography, FAQ, links or assessment) *****/
    return (Inf_Src_t)
 	  Par_GetParUnsignedLong ("InfoSrc",
                                     0,
@@ -1355,7 +1355,7 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
    MYSQL_ROW row;
 
    /***** Get info source for a specific type of course information
-          (bibliography, FAQ, links or evaluation) from database *****/
+          (bibliography, FAQ, links or assessment) from database *****/
    if (Inf_DB_GetInfoTxt (&mysql_res,CrsCod,InfoType) == 1)
      {
       /* Get info text */

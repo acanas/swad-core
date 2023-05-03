@@ -24,8 +24,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <float.h>		// For DBL_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_action_list.h"
@@ -40,6 +42,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_project_database.h"
 #include "swad_resource_database.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
@@ -61,6 +64,7 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
    [RubCri_MIN] = "MinVal",
    [RubCri_MAX] = "MaxVal",
   };
+#define RubCri_SCORE_STEP	0.1
 
 #define RubCri_WEIGHT_MIN	0.0
 #define RubCri_WEIGHT_MAX	1.0
@@ -75,6 +79,12 @@ typedef enum
    RubCri_DONT_PUT_COLUMN_FOR_ICONS,
    RubCri_PUT_COLUMN_FOR_ICONS,
   } RubCri_PutColumnForIcons_t;
+
+typedef enum
+  {
+   RubCri_DONT_PUT_COLUMNS_FOR_SCORE,
+   RubCri_PUT_COLUMNS_FOR_SCORE,
+  } RubCri_PutColumnsForScore_t;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -98,11 +108,16 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					            unsigned MaxCriInd,
 					            unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res);
+static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
+                                                   bool ICanFill,
+					           unsigned NumCriteria,
+                                                   MYSQL_RES *mysql_res);
 
 static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
                                             struct RubCri_Criterion *Criterion);
 
-static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons);
+static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons,
+                                               RubCri_PutColumnsForScore_t PutColumnsForScore);
 
 static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics);
 
@@ -169,7 +184,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 			 NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** Table heading *****/
-	 RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS);
+	 RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
+	                                    RubCri_DONT_PUT_COLUMNS_FOR_SCORE);
 
 	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
@@ -200,7 +216,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 		 ValueRange++)
 	      {
 	       HTM_TD_Begin ("class=\"RT\"");
-		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
+		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
+		                   0.0,DBL_MAX,RubCri_SCORE_STEP,
 		                   Rubrics->Criterion.Values[ValueRange],false,
 				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
@@ -549,6 +566,28 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
   }
 
 /*****************************************************************************/
+/**************** List the criteria of a rubric in a project *****************/
+/*****************************************************************************/
+
+void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
+				   bool ICanFill)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumCriteria;
+
+   /***** Get data of rubric criteria from database *****/
+   NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+
+   /***** Show table with rubric criteria *****/
+   if (NumCriteria)
+      RubCri_ListOneOrMoreCriteriaInProject (Projects,ICanFill,
+                                             NumCriteria,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /********************** List rubric criteria for edition *********************/
 /*****************************************************************************/
 
@@ -564,7 +603,8 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
    HTM_TABLE_BeginWideMarginPadding (5);
 
       /***** Write the heading *****/
-      RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS);
+      RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
+                                         RubCri_DONT_PUT_COLUMNS_FOR_SCORE);
 
       /***** Write rows *****/
       for (NumCriterion = 0, The_ResetRowColor ();
@@ -577,12 +617,11 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	 /***** Get criterion data *****/
 	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
-	 /***** Begin first row *****/
+	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	       Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
@@ -619,21 +658,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	       HTM_Double (Criterion.Weight);
 	    HTM_TD_End ();
 
-	 /***** End first row *****/
-	 HTM_TR_End ();
-
-	 /***** Begin second row *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Questions *****/
-	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",
-	                  The_GetColorRows ());
-
-	       // Description here
-
-	    HTM_TD_End ();
-
-	 /***** End second row *****/
+	 /***** End row *****/
 	 HTM_TR_End ();
 	}
 
@@ -666,7 +691,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    HTM_TABLE_BeginWideMarginPadding (5);
 
       /***** Write the heading *****/
-      RubCri_PutTableHeadingForCriteria (RubCri_PUT_COLUMN_FOR_ICONS);
+      RubCri_PutTableHeadingForCriteria (RubCri_PUT_COLUMN_FOR_ICONS,
+                                         RubCri_DONT_PUT_COLUMNS_FOR_SCORE);
 
       /***** Write rows *****/
       for (NumCriterion = 0, The_ResetRowColor ();
@@ -682,12 +708,11 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Rubrics->Criterion.CriCod,&Anchor);
 
-	 /***** Begin first row *****/
+	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	       /* Put icon to remove the criterion */
 	       Ico_PutContextualIconToRemove (ActReqRemRubCri,NULL,
@@ -714,7 +739,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
+	    HTM_TD_Begin ("class=\"RT %s\"",
 	                  The_GetColorRows ());
 	       Lay_WriteIndex (Rubrics->Criterion.CriInd,"BIG_INDEX");
 	    HTM_TD_End ();
@@ -750,7 +775,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 		  Frm_BeginFormAnchor (RubCri_ActionsValues[ValueRange],Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
-		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],0.0,DBL_MAX,0.1,
+		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
+		                      0.0,DBL_MAX,RubCri_SCORE_STEP,
 				      Rubrics->Criterion.Values[ValueRange],false,
 				      " class=\"INPUT_FLOAT INPUT_%s\""
 				      " required=\"required\"",
@@ -774,21 +800,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	 /***** End first row *****/
-	 HTM_TR_End ();
-
-	 /***** Begin second row *****/
-	 HTM_TR_Begin (NULL);
-
-	    /***** Questions *****/
-	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",
-	                  The_GetColorRows ());
-
-	       // Description here
-
-	    HTM_TD_End ();
-
-	 /***** End second row *****/
+	 /***** End row *****/
 	 HTM_TR_End ();
 
 	 /***** Free anchor string *****/
@@ -797,6 +809,142 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
    /***** End table *****/
    HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/********************* List rubric criteria in a project *********************/
+/*****************************************************************************/
+
+static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
+                                                   bool ICanFill,
+					           unsigned NumCriteria,
+                                                   MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_Criteria;
+   struct RubCri_Criterion Criterion;
+   unsigned NumCriterion;
+   RubCri_ValueRange_t ValueRange;
+   char *Anchor;
+   double Score = 0.0;
+
+   /***** Begin table *****/
+   HTM_TABLE_BeginWideMarginPadding (5);
+
+      /***** Write the heading *****/
+      RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
+                                         RubCri_PUT_COLUMNS_FOR_SCORE);
+
+      /***** Write rows *****/
+      for (NumCriterion = 0, The_ResetRowColor ();
+	   NumCriterion < NumCriteria;
+	   NumCriterion++, The_ChangeRowColor ())
+	{
+	 /***** Create criterion of questions *****/
+	 RubCri_ResetCriterion (&Criterion);
+
+	 /***** Get criterion data *****/
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+
+	 /***** Build anchor string *****/
+	 Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
+
+	 /***** Begin row *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Index *****/
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	       Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
+	    HTM_TD_End ();
+
+	    /***** Title *****/
+	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                  The_GetSuffix (),
+	                  The_GetColorRows ());
+	       HTM_ARTICLE_Begin (Anchor);
+		  HTM_Txt (Criterion.Title);
+	       HTM_ARTICLE_End ();
+	    HTM_TD_End ();
+
+	    /***** Link to resource *****/
+	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	                  The_GetSuffix (),
+	                  The_GetColorRows ());
+	       Rsc_WriteLinkName (&Criterion.Link,Frm_DONT_PUT_FORM_TO_GO);
+	    HTM_TD_End ();
+
+	    /***** Minimum and maximum values of criterion *****/
+	    for (ValueRange  = (RubCri_ValueRange_t) 0;
+		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
+		 ValueRange++)
+	      {
+	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                     The_GetSuffix (),
+	                     The_GetColorRows ());
+		  HTM_Double (Criterion.Values[ValueRange]);
+	       HTM_TD_End ();
+	      }
+
+	    /***** Criterion weight *****/
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                  The_GetSuffix (),
+	                  The_GetColorRows ());
+	       HTM_Double (Criterion.Weight);
+	    HTM_TD_End ();
+
+	    /***** Criterion score *****/
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                  The_GetSuffix (),
+	                  The_GetColorRows ());
+	       /* Get score from database */
+	       Score = Prj_DB_GetScore (Projects->Prj.PrjCod,
+	                                Criterion.CriCod);
+
+	       /* Show score */
+	       if (ICanFill)
+		 {
+		  Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
+		     Prj_PutCurrentPars (Projects);
+		     ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
+		     HTM_INPUT_FLOAT ("Score",
+				      Criterion.Values[RubCri_MIN],
+				      Criterion.Values[RubCri_MAX],
+				      RubCri_SCORE_STEP,
+				      Score,false,
+				      " class=\"INPUT_FLOAT INPUT_%s\""
+				      " required=\"required\"",
+				      The_GetSuffix ());
+		  Frm_EndForm ();
+		 }
+	       else
+	          HTM_Double (Score);
+	    HTM_TD_End ();
+
+	    /***** Criterion score x weight *****/
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+	                  The_GetSuffix (),
+	                  The_GetColorRows ());
+	       HTM_Double (Criterion.Weight);
+	    HTM_TD_End ();
+
+	 /***** End row *****/
+	 HTM_TR_End ();
+	}
+
+   /***** End table *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/***************** Get parameter with score of a criterion *******************/
+/*****************************************************************************/
+
+double RubCri_GetParScore (void)
+  {
+   char ScoreStr[64];
+
+   /***** Get criterion weight *****/
+   Par_GetParText ("Score",ScoreStr,sizeof (ScoreStr) - 1);
+   return Str_GetDoubleFromStr (ScoreStr);
   }
 
 /*****************************************************************************/
@@ -853,7 +1001,8 @@ static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
 /****************** Put table heading for rubric criteria ********************/
 /*****************************************************************************/
 
-static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons)
+static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons,
+                                               RubCri_PutColumnsForScore_t PutColumnsForScore)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Criterion;
@@ -861,6 +1010,8 @@ static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutCol
    extern const char *Txt_Minimum;
    extern const char *Txt_Maximum;
    extern const char *Txt_Weight;
+   extern const char *Txt_Score;
+   char *Title;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -871,9 +1022,17 @@ static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutCol
       HTM_TH (Txt_No_INDEX ,HTM_HEAD_RIGHT);
       HTM_TH (Txt_Criterion,HTM_HEAD_LEFT );
       HTM_TH (Txt_Source   ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_Minimum  ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_Maximum  ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_Weight   ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Minimum  ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Maximum  ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Weight   ,HTM_HEAD_RIGHT);
+      if (PutColumnsForScore == RubCri_PUT_COLUMNS_FOR_SCORE)
+	{
+	 HTM_TH (Txt_Score    ,HTM_HEAD_RIGHT);
+	 if (asprintf (&Title,"%s&nbsp;&times;&nbsp;%s",Txt_Score,Txt_Weight) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TH (Title,HTM_HEAD_RIGHT);
+	 free (Title);
+	}
 
    /***** End row *****/
    HTM_TR_End ();
