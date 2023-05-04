@@ -2714,23 +2714,32 @@ void Brw_ShowFileBrowserNormal (void)
 
 void Brw_ShowFileBrowserProject (long PrjCod)
   {
-   Brw_WriteTopBeforeShowingFileBrowser ();
+   extern const char *Txt_Documents;
 
-   if (Prj_CheckIfICanViewProjectDocuments (PrjCod))
-     {
-      /***** Show the tree with the project documents *****/
-      Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
-      Brw_InitializeFileBrowser ();
-      Brw_ShowFileBrowser ();
-     }
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin ();
+      HTM_LEYEND (Txt_Documents);
 
-   if (Prj_CheckIfICanViewProjectAssessment (PrjCod))
-     {
-      /***** Show the tree with the project assessment *****/
-      Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
-      Brw_InitializeFileBrowser ();
-      Brw_ShowFileBrowser ();
-     }
+      Brw_WriteTopBeforeShowingFileBrowser ();
+
+      if (Prj_CheckIfICanViewProjectDocuments (PrjCod))
+	{
+	 /***** Show the tree with the project documents *****/
+	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+	 Brw_InitializeFileBrowser ();
+	 Brw_ShowFileBrowser ();
+	}
+
+      if (Prj_CheckIfICanViewProjectAssessment (PrjCod))
+	{
+	 /***** Show the tree with the project assessment *****/
+	 Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
+	 Brw_InitializeFileBrowser ();
+	 Brw_ShowFileBrowser ();
+	}
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
@@ -3087,7 +3096,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Hlp_FILES_Marks;
    extern const char *Hlp_FILES_Briefcase;
-   extern const char *Hlp_ASSESSMENT_Projects;
+   // extern const char *Hlp_ASSESSMENT_Projects;
 
    extern const char *Txt_Documents_area;
    extern const char *Txt_Documents_management_area;
@@ -3100,6 +3109,7 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Project_documents;
    extern const char *Txt_Project_assessment;
+   extern const char *Txt_NULL;
    extern const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_;
 
    static const char **Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -3163,8 +3173,8 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_SHR_INS] = &Hlp_FILES_Shared,
       [Brw_ADMI_TCH_CRS] = &Hlp_FILES_Private,
       [Brw_ADMI_TCH_GRP] = &Hlp_FILES_Private,
-      [Brw_ADMI_DOC_PRJ] = &Hlp_ASSESSMENT_Projects,
-      [Brw_ADMI_ASS_PRJ] = &Hlp_ASSESSMENT_Projects,
+      [Brw_ADMI_DOC_PRJ] = &Txt_NULL,
+      [Brw_ADMI_ASS_PRJ] = &Txt_NULL,
      };
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];

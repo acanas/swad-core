@@ -1346,16 +1346,18 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
                  Prj_PutIconsOnePrj,Projects,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+      /***** Show project data *****/
+      HTM_FIELDSET_Begin ();
+	 HTM_LEYEND (Txt_Project);
+	 HTM_TABLE_BeginWidePadding (2);
 
-         /***** Table head and project *****/
-         Projects->View = Prj_VIEW_ONE_PROJECT;
-	 Prj_ShowProjectsHead (Projects);
-	 Prj_ShowProjectRow (Projects);
+	    /***** Table head and project *****/
+	    Projects->View = Prj_VIEW_ONE_PROJECT;
+	    Prj_ShowProjectsHead (Projects);
+	    Prj_ShowProjectRow (Projects);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 HTM_TABLE_End ();
+      HTM_FIELDSET_End ();
 
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod))
@@ -4487,45 +4489,43 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
 
 static void Prj_ShowRubrics (struct Prj_Projects *Projects)
   {
-   extern const char *Hlp_ASSESSMENT_Projects;
-   extern const char *Txt_Rubrics;
+   extern const char *Txt_Assessment;
    extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
    struct Rub_Rubric Rubric;
    PrjCfg_Rubric_t WhichRubric;
 
-   /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Rubrics,
-		 NULL,NULL,
-		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin ();
+      HTM_LEYEND (Txt_Assessment);
 
-	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (5);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (5);
 
-	    /***** Rubrics *****/
-	    for (WhichRubric  = (PrjCfg_Rubric_t) 1;
-		 WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-		 WhichRubric++)
-	       if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,WhichRubric))
-		 {
-		  /***** Get rubric data *****/
-		  Rub_RubricConstructor (&Rubric);
-		  Rubric.RubCod = Projects->Config.RubCod[WhichRubric];
-		  Rub_GetRubricDataByCod (&Rubric);
+	 /***** Rubrics *****/
+	 for (WhichRubric  = (PrjCfg_Rubric_t) 1;
+	      WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	      WhichRubric++)
+	    if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,WhichRubric))
+	      {
+	       /***** Get rubric data *****/
+	       Rub_RubricConstructor (&Rubric);
+	       Rubric.RubCod = Projects->Config.RubCod[WhichRubric];
+	       Rub_GetRubricDataByCod (&Rubric);
 
-		  /***** Show this rubric ready to fill it *****/
-		  Rub_ShowRubricInProject (Projects,&Rubric,
-		                           Txt_PROJECT_RUBRIC[WhichRubric],
-		                           Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,WhichRubric));
+	       /***** Show this rubric ready to fill it *****/
+	       Rub_ShowRubricInProject (Projects,&Rubric,
+					Txt_PROJECT_RUBRIC[WhichRubric],
+					Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,WhichRubric));
 
-		  /***** Free memory used for rubric *****/
-		  Rub_RubricDestructor (&Rubric);
-		 }
+	       /***** Free memory used for rubric *****/
+	       Rub_RubricDestructor (&Rubric);
+	      }
 
-	 /***** End table *****/
-	 HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

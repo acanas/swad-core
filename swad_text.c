@@ -111,6 +111,7 @@
 
 const unsigned Txt_Current_CGI_SWAD_Language = ((unsigned) L);
 
+const char *Txt_NULL = NULL;
 const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n the file does not look good in some Windows text editors
 
 // The HTML entity for "ß" is &szlig; It stands for "S-Z ligature", because this symbol comes from the ligature of a Gothic S and a Z.
@@ -2472,6 +2473,29 @@ const char *Txt_Application_key =
 	"Chave de aplica&ccedil;&atilde;o";
 #elif L==10	// tr
 	"Application key";		// Çeviri lazim!
+#endif
+
+const char *Txt_Assessment =
+#if   L==1	// ca
+	"Avaluaci&oacute;";
+#elif L==2	// de
+	"Bewertung";
+#elif L==3	// en
+	"Assessment";
+#elif L==4	// es
+	"Evaluaci&oacute;n";
+#elif L==5	// fr
+	"&Eacute;valuation";
+#elif L==6	// gn
+	"Mbohepy";
+#elif L==7	// it
+	"Valutazione";
+#elif L==8	// pl
+	"Ocena";
+#elif L==9	// pt
+	"Avalia&ccedil;&atilde;o";
+#elif L==10	// tr
+	"De&gbreve; erlendirme";
 #endif
 
 const char *Txt_Assessment_criteria =
