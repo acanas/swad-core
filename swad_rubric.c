@@ -487,6 +487,9 @@ void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
    /***** End 2nd row of this rubric *****/
    HTM_TR_End ();
 
+   /***** Change color for rubric criteria *****/
+   The_ChangeRowColor ();
+
    /***** Write criteria of this rubric *****/
    RubCri_ListCriteriaInProject (Projects,Rubric->RubCod,ICanFill);
 

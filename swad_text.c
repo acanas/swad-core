@@ -32394,71 +32394,71 @@ const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS] =
 	{
 	[PrjCfg_RUBRIC_TUT] =
 #if   L==1	// ca
-	"R&uacute;brica per a tutors"
+	"Tutors"
 #elif L==2	// de
-	"Rubrik f&uuml;r Tutoren"
+	"Tutoren"
 #elif L==3	// en
-	"Rubric for tutors"
+	"Tutors"
 #elif L==4	// es
-	"R&uacute;brica para tutores"
+	"Tutores"
 #elif L==5	// fr
-	"Rubrique pour les tuteurs"
+	"Tuteurs"
 #elif L==6	// gn
-	"R&uacute;brica tutor-ku&eacute;rape guar&atilde;"
+	"Tutor"
 #elif L==7	// it
-	"Rubrica per precettori"
+	"Precettori"
 #elif L==8	// pl
-	"Rubryka dla nauczyciele"
+	"Nauczyciele"
 #elif L==9	// pt
-	"Rubrica para tutores"
+	"Tutores"
 #elif L==10	// tr
-	"&Ouml;&gbreve;retmenler i&ccedil;in de&gbreve;erlendirme listesi"
+	"&Ouml;&gbreve;retmenler"
 #endif
 	,
 	[PrjCfg_RUBRIC_EVL] =
 #if   L==1	// ca
-	"R&uacute;brica per a avaluadors"
+	"Avaluadors"
 #elif L==2	// de
-	"Rubrik f&uuml;r Auswerter"
+	"Auswerter"
 #elif L==3	// en
-	"Rubric for evaluators"
+	"Evaluators"
 #elif L==4	// es
-	"R&uacute;brica para evaluadores"
+	"Evaluadores"
 #elif L==5	// fr
-	"Rubrique pour les &eacute;valuateurs"
+	"&Eacute;valuateurs"
 #elif L==6	// gn
-	"R&uacute;brica evaluador-ku&eacute;rape guar&atilde;"
+	"Evaluador"
 #elif L==7	// it
-	"Rubrica per valutatori"
+	"Valutatori"
 #elif L==8	// pl
-	"Rubryka dla ewaluator&oacute;w"
+	"Ewaluator&oacute;w"
 #elif L==9	// pt
-	"Rubrica para avaliadores"
+	"Avaliadores"
 #elif L==10	// tr
-	"De&gbreve;erlendiriciler i&ccedil;in de&gbreve;erlendirme listesi"
+	"De&gbreve;erlendiriciler"
 #endif
 	,
 	[PrjCfg_RUBRIC_GBL] =
 #if   L==1	// ca
-	"R&uacute;brica global"
+	"Global"
 #elif L==2	// de
-	"Gesamtrubrik"
+	"Gesamt"
 #elif L==3	// en
-	"Globale rubric"
+	"Globale"
 #elif L==4	// es
-	"R&uacute;brica global"
+	"Global"
 #elif L==5	// fr
-	"Rubrique globale"
+	"Globale"
 #elif L==6	// gn
-	"R&uacute;brica general"
+	"General"
 #elif L==7	// it
-	"Rubrica complessiva"
+	"Complessiva"
 #elif L==8	// pl
-	"Globalna rubryka"
+	"Globalna"
 #elif L==9	// pt
-	"Rubrica geral"
+	"Geral"
 #elif L==10	// tr
-	"Genel de&gbreve;erlendirme listesi"
+	"Genel"
 #endif
 	};
 

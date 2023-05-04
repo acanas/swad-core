@@ -130,6 +130,8 @@ void PrjCfg_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Configure_projects;
+   extern const char *Txt_Create_project;
+   extern const char *Txt_Rubrics;
    extern const char *Txt_Save_changes;
    struct Prj_Projects Projects;
 
@@ -144,15 +146,17 @@ void PrjCfg_ShowFormConfig (void)
       /***** Begin form *****/
       Frm_BeginForm (ActRcvCfgPrj);
 
-	 HTM_TABLE_BeginCenterPadding (2);
-
-	    /***** Projects are editable by non-editing teachers? *****/
+	 /***** Projects are editable by non-editing teachers? *****/
+	 HTM_FIELDSET_Begin ();
+	    HTM_LEYEND (Txt_Create_project);
 	    PrjCfg_ShowFormNETCanCreate (&Projects.Config);
+	 HTM_FIELDSET_End ();
 
-	    /***** Rubrics *****/
+	 /***** Rubrics *****/
+	 HTM_FIELDSET_Begin ();
+	    HTM_LEYEND (Txt_Rubrics);
 	    PrjCfg_ShowFormRubrics (&Projects.Config);
-
-	 HTM_TABLE_End ();
+	 HTM_FIELDSET_End ();
 
 	 /***** Send button *****/
 	 Btn_PutConfirmButton (Txt_Save_changes);
@@ -180,10 +184,12 @@ static void PrjCfg_ShowFormRubrics (const struct PrjCfg_Config *Config)
    Rub_GetListRubrics (&Rubrics);
 
    /***** Rubric selectors *****/
-   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
-	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-	WhichRubric++)
-      PrjCfg_ShowFormRubric (Config,&Rubrics,WhichRubric);
+   HTM_TABLE_BeginCenterPadding (2);
+      for (WhichRubric  = (PrjCfg_Rubric_t) 1;
+	   WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
+	   WhichRubric++)
+	 PrjCfg_ShowFormRubric (Config,&Rubrics,WhichRubric);
+   HTM_TABLE_End ();
 
    /***** Free list of rubrics *****/
    Rub_FreeListRubrics (&Rubrics);
@@ -308,28 +314,15 @@ PrjCfg_Rubric_t PrjCfg_GetRubricFromString (const char *Str)
 
 static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
   {
-   extern const char *Txt_Create_project;
    extern const char *Txt_Non_editing_teachers_can_create_new_projects;
 
-   HTM_TR_Begin (NULL);
-
-      /***** Label *****/
-      HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Create_project);
-      HTM_TD_End ();
-
-      /***** Data *****/
-      HTM_TD_Begin ("class=\"LM\"");
-	 HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"NETCanCreate\" value=\"Y\"%s",
-				Config->NETCanCreate ? " checked=\"checked\"" :
-						       "");
-	    HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
-	 HTM_LABEL_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
+   HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_INPUT_CHECKBOX ("NETCanCreate",HTM_DONT_SUBMIT_ON_CHANGE,
+			  "id=\"NETCanCreate\" value=\"Y\"%s",
+			  Config->NETCanCreate ? " checked=\"checked\"" :
+						 "");
+      HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/
