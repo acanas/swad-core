@@ -2630,7 +2630,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	display:inline-block;
 	list-style-type:none;
 	padding:0;
-	margin:12px 0;
+	/* margin:12px 0; */
+	margin:0;
 	text-align:left;
 	vertical-align:middle;
 	}
