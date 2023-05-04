@@ -463,7 +463,7 @@ void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
       /***** Rubric title *****/
-      HTM_TD_Begin ("class=\"LT ASG_TITLE_%s %s\"",
+      HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 HTM_TxtColonNBSP (WhichRubricTxt);
 	 HTM_Txt (Rubric->Title);
@@ -476,7 +476,7 @@ void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
    HTM_TR_Begin (NULL);
 
       /***** Text of the rubric *****/
-      HTM_TD_Begin ("class=\"LT PAR DAT_%s %s\"",
+      HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s %s\"",
                     The_GetSuffix (),The_GetColorRows ());
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   Rubric->Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
@@ -487,16 +487,8 @@ void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
    /***** End 2nd row of this rubric *****/
    HTM_TR_End ();
 
-   /***** Begin 4rd row of this rubric *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Write criteria of this rubric *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	 RubCri_ListCriteriaInProject (Projects,Rubric->RubCod,ICanFill);
-      HTM_TD_End ();
-
-   /***** End 3rd row of this rubric *****/
-   HTM_TR_End ();
+   /***** Write criteria of this rubric *****/
+   RubCri_ListCriteriaInProject (Projects,Rubric->RubCod,ICanFill);
 
    /***** Change color for next rubric *****/
    The_ChangeRowColor ();

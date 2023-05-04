@@ -1366,7 +1366,8 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
-		      double Value,bool Disabled,
+		      double Value,
+                      HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
 	              const char *fmt,...)
   {
    va_list ap;
@@ -1403,6 +1404,9 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 	 free (Attr);
 	}
      }
+
+   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
+      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
    HTM_Txt (" />");
   }

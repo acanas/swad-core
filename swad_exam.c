@@ -1372,7 +1372,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,false,
+		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
+		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 				   " class=\"INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();

@@ -1367,7 +1367,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,false,
+		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
+		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 				   " class=\"INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();

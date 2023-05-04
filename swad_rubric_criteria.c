@@ -42,6 +42,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_resource_database.h"
 #include "swad_rubric.h"
@@ -218,7 +219,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	       HTM_TD_Begin ("class=\"RT\"");
 		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
 		                   0.0,DBL_MAX,RubCri_SCORE_STEP,
-		                   Rubrics->Criterion.Values[ValueRange],false,
+		                   Rubrics->Criterion.Values[ValueRange],
+		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
 				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();
@@ -230,7 +232,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	                        RubCri_WEIGHT_MIN,
 	                        RubCri_WEIGHT_MAX,
 	                        RubCri_WEIGHT_STEP,
-				Rubrics->Criterion.Weight,false,
+				Rubrics->Criterion.Weight,
+				HTM_DONT_SUBMIT_ON_CHANGE,false,
 				" class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
@@ -777,7 +780,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
 		                      0.0,DBL_MAX,RubCri_SCORE_STEP,
-				      Rubrics->Criterion.Values[ValueRange],false,
+				      Rubrics->Criterion.Values[ValueRange],
+				      HTM_SUBMIT_ON_CHANGE,false,
 				      " class=\"INPUT_FLOAT INPUT_%s\""
 				      " required=\"required\"",
 				      The_GetSuffix ());
@@ -793,7 +797,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 				   RubCri_WEIGHT_MIN,
 				   RubCri_WEIGHT_MAX,
 				   RubCri_WEIGHT_STEP,
-				   Rubrics->Criterion.Weight,false,
+				   Rubrics->Criterion.Weight,
+				   HTM_SUBMIT_ON_CHANGE,false,
 				   " class=\"INPUT_FLOAT INPUT_%s\""
 				   " required=\"required\"",
 				   The_GetSuffix ());
@@ -827,111 +832,106 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
    char *Anchor;
    double Score = 0.0;
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
+   /***** Write the heading *****/
+   RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
+				      RubCri_PUT_COLUMNS_FOR_SCORE);
 
-      /***** Write the heading *****/
-      RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
-                                         RubCri_PUT_COLUMNS_FOR_SCORE);
+   /***** Write rows *****/
+   for (NumCriterion = 0, The_ResetRowColor ();
+	NumCriterion < NumCriteria;
+	NumCriterion++, The_ChangeRowColor ())
+     {
+      /***** Create criterion of questions *****/
+      RubCri_ResetCriterion (&Criterion);
 
-      /***** Write rows *****/
-      for (NumCriterion = 0, The_ResetRowColor ();
-	   NumCriterion < NumCriteria;
-	   NumCriterion++, The_ChangeRowColor ())
-	{
-	 /***** Create criterion of questions *****/
-	 RubCri_ResetCriterion (&Criterion);
+      /***** Get criterion data *****/
+      RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
-	 /***** Get criterion data *****/
-	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+      /***** Build anchor string *****/
+      Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
 
-	 /***** Build anchor string *****/
-	 Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
+      /***** Begin row *****/
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin row *****/
-	 HTM_TR_Begin (NULL);
+	 /***** Index *****/
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
+	 HTM_TD_End ();
 
-	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	       Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
+	 /***** Title *****/
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+		       The_GetSuffix (),
+		       The_GetColorRows ());
+	    HTM_ARTICLE_Begin (Anchor);
+	       HTM_Txt (Criterion.Title);
+	    HTM_ARTICLE_End ();
+	 HTM_TD_End ();
+
+	 /***** Link to resource *****/
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+		       The_GetSuffix (),
+		       The_GetColorRows ());
+	    Rsc_WriteLinkName (&Criterion.Link,Frm_DONT_PUT_FORM_TO_GO);
+	 HTM_TD_End ();
+
+	 /***** Minimum and maximum values of criterion *****/
+	 for (ValueRange  = (RubCri_ValueRange_t) 0;
+	      ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
+	      ValueRange++)
+	   {
+	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+			  The_GetSuffix (),
+			  The_GetColorRows ());
+	       HTM_Double (Criterion.Values[ValueRange]);
 	    HTM_TD_End ();
+	   }
 
-	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       HTM_ARTICLE_Begin (Anchor);
-		  HTM_Txt (Criterion.Title);
-	       HTM_ARTICLE_End ();
-	    HTM_TD_End ();
+	 /***** Criterion weight *****/
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+		       The_GetSuffix (),
+		       The_GetColorRows ());
+	    HTM_Double (Criterion.Weight);
+	 HTM_TD_End ();
 
-	    /***** Link to resource *****/
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       Rsc_WriteLinkName (&Criterion.Link,Frm_DONT_PUT_FORM_TO_GO);
-	    HTM_TD_End ();
+	 /***** Criterion score *****/
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+		       The_GetSuffix (),
+		       The_GetColorRows ());
+	    /* Get score from database */
+	    Score = Prj_DB_GetScore (Projects->Prj.PrjCod,
+				     Criterion.CriCod);
 
-	    /***** Minimum and maximum values of criterion *****/
-	    for (ValueRange  = (RubCri_ValueRange_t) 0;
-		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-		 ValueRange++)
+	    /* Show score */
+	    if (ICanFill)
 	      {
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
-		  HTM_Double (Criterion.Values[ValueRange]);
-	       HTM_TD_End ();
+	       Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
+		  Prj_PutCurrentPars (Projects);
+		  ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
+		  HTM_INPUT_FLOAT ("Score",
+				   Criterion.Values[RubCri_MIN],
+				   Criterion.Values[RubCri_MAX],
+				   RubCri_SCORE_STEP,
+				   Score,
+				   HTM_SUBMIT_ON_CHANGE,false,
+				   " class=\"INPUT_FLOAT INPUT_%s\""
+				   " required=\"required\"",
+				   The_GetSuffix ());
+	       Frm_EndForm ();
 	      }
+	    else
+	       HTM_Double (Score);
+	 HTM_TD_End ();
 
-	    /***** Criterion weight *****/
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       HTM_Double (Criterion.Weight);
-	    HTM_TD_End ();
+	 /***** Criterion score x weight *****/
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
+		       The_GetSuffix (),
+		       The_GetColorRows ());
+	    HTM_Double (Criterion.Weight);
+	 HTM_TD_End ();
 
-	    /***** Criterion score *****/
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       /* Get score from database */
-	       Score = Prj_DB_GetScore (Projects->Prj.PrjCod,
-	                                Criterion.CriCod);
-
-	       /* Show score */
-	       if (ICanFill)
-		 {
-		  Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
-		     Prj_PutCurrentPars (Projects);
-		     ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
-		     HTM_INPUT_FLOAT ("Score",
-				      Criterion.Values[RubCri_MIN],
-				      Criterion.Values[RubCri_MAX],
-				      RubCri_SCORE_STEP,
-				      Score,false,
-				      " class=\"INPUT_FLOAT INPUT_%s\""
-				      " required=\"required\"",
-				      The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-	          HTM_Double (Score);
-	    HTM_TD_End ();
-
-	    /***** Criterion score x weight *****/
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       HTM_Double (Criterion.Weight);
-	    HTM_TD_End ();
-
-	 /***** End row *****/
-	 HTM_TR_End ();
-	}
-
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End row *****/
+      HTM_TR_End ();
+     }
   }
 
 /*****************************************************************************/

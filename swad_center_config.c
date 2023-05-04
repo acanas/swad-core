@@ -358,7 +358,8 @@ static void CtrCfg_Latitude (void)
 			     -90.0,	// South Pole
 			     90.0,	// North Pole
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Latitude,false,
+			     Gbl.Hierarchy.Ctr.Coord.Latitude,
+			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
@@ -385,7 +386,8 @@ static void CtrCfg_Longitude (void)
 			     -180.0,	// West
 			     180.0,	// East
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Longitude,false,
+			     Gbl.Hierarchy.Ctr.Coord.Longitude,
+			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
@@ -412,7 +414,8 @@ static void CtrCfg_Altitude (void)
 			     -413.0,	// Dead Sea shore
 			     8848.0,	// Mount Everest
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Altitude,false,
+			     Gbl.Hierarchy.Ctr.Coord.Altitude,
+			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
