@@ -911,12 +911,6 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:100%;
 	}
-.LEFT_RIGHT_CELL
-	{
-	padding:0 6px;
-	text-align:center;
-	vertical-align:top;
-	}
 
 @media only screen and (max-width: 1280px)
 	{	/* For mobile phones and tablets */
@@ -968,6 +962,7 @@ a:hover						/* Default ==> underlined */
 		display:table-cell;
 		box-sizing:border-box;
 		width:160px;
+		padding:0 6px;
 		text-align:center;
 		vertical-align:top;
 		}
@@ -976,6 +971,7 @@ a:hover						/* Default ==> underlined */
 		display:table-cell;
 		box-sizing:border-box;
 		width:160px;
+		padding:0 6px;
 		text-align:center;
 		vertical-align:top;
 		position:absolute;
@@ -1259,13 +1255,8 @@ a:hover						/* Default ==> underlined */
 .CON
 	{
 	box-sizing:border-box;
-	margin:0 auto;
-	border-style:solid;
-	border-width:1px;
-	border-color:#80c040;
-	margin:6px 0;
+	width:100%;
 	padding:5px;
-	border-radius:2px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -1293,7 +1284,7 @@ a:hover						/* Default ==> underlined */
 	}
 .CON_USR_NARROW_TIT
 	{
-	max-width:136px;
+	max-width:134px;
 	text-align:center;
 	vertical-align:middle;
 	white-space:nowrap;
@@ -1360,8 +1351,6 @@ a:hover						/* Default ==> underlined */
 /*************************** Most frequent actions ***************************/
 #MFU_actions
 	{
-	box-sizing:border-box;
-	width:148px;
 	padding:5px;
 	font-size:11pt;
 	}
@@ -1369,7 +1358,7 @@ a:hover						/* Default ==> underlined */
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:134px;
+	width:100%;
 	margin:0;
 	padding:0;
 	list-style-type:none;
@@ -1378,7 +1367,6 @@ a:hover						/* Default ==> underlined */
 	}
 #MFU_actions li
 	{
-	width:134px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -1963,30 +1951,21 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	width:148px;
 	margin:0;
-	border-style:solid;
-	border-width:1px;
-	border-color:#8cbcce;
 	padding:5px;
-	border-radius:2px;
 	font-size:11pt;
 	}
 #institutional_links ul
 	{
-	display:inline-block;
 	box-sizing:border-box;
-	width:138px;
+	width:136px;
 	margin:2px 0;
-	padding:6px 0 0 0;
-	border-style:solid;
-	border-width:1px 0 0 0;
-	border-color:rgba(140,188,206,0.2);
+	padding:0;
 	list-style-type:none;
 	text-align:left;
-	vertical-align:middle;
 	}
 #institutional_links li
 	{
-	width:138px;
+	width:136px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

@@ -333,7 +333,7 @@ void Lay_WriteStartOfPage (void)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
 	   {
 	    HTM_Txt ("<aside id=\"left_col\">");
-	    Lay_ShowLeftColumn ();
+	       Lay_ShowLeftColumn ();
 	    HTM_Txt ("</aside>");
 	   }
 
@@ -345,7 +345,7 @@ void Lay_WriteStartOfPage (void)
 	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
 	   {
 	    HTM_Txt ("<aside id=\"right_col\">");
-	    Lay_ShowRightColumn ();
+	       Lay_ShowRightColumn ();
 	    HTM_Txt ("</aside>");
 	   }
 
@@ -1103,37 +1103,25 @@ static void Lay_ShowLeftColumn (void)
   {
    struct MFU_ListMFUActions ListMFUActions;
 
-   HTM_DIV_Begin ("style=\"width:160px;\"");
+   if (Gbl.Usrs.Me.Logged)
+     {
+      /***** Most frequently used actions *****/
+      MFU_AllocateMFUActions (&ListMFUActions,6);
+	 MFU_GetMFUActions (&ListMFUActions,6);
+	 MFU_WriteSmallMFUActions (&ListMFUActions);
+      MFU_FreeMFUActions (&ListMFUActions);
+     }
+   else
+      /***** Institutional links *****/
+      Lnk_WriteMenuWithInstitutionalLinks ();
 
-      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	 if (Gbl.Usrs.Me.Logged)
-	   {
-	    /***** Most frequently used actions *****/
-	    MFU_AllocateMFUActions (&ListMFUActions,6);
-	    MFU_GetMFUActions (&ListMFUActions,6);
-	    MFU_WriteSmallMFUActions (&ListMFUActions);
-	    MFU_FreeMFUActions (&ListMFUActions);
-	   }
-	 else
-	    /***** Institutional links *****/
-	    Lnk_WriteMenuWithInstitutionalLinks ();
-      HTM_DIV_End ();
+   /***** Month *****/
+   Cal_DrawCurrentMonth ();
 
-      /***** Month *****/
-      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	 Cal_DrawCurrentMonth ();
-      HTM_DIV_End ();
-
-      /***** Notices (yellow notes) *****/
-      if (Gbl.Hierarchy.Level == HieLvl_CRS)
-	{
-	 HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	    Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
-			     -1L);	// No notice highlighted
-	 HTM_DIV_End ();
-	}
-
-   HTM_DIV_End ();
+   /***** Notices (yellow notes) *****/
+   if (Gbl.Hierarchy.Level == HieLvl_CRS)
+      Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
+		       -1L);	// No notice highlighted
   }
 
 /*****************************************************************************/
@@ -1142,9 +1130,9 @@ static void Lay_ShowLeftColumn (void)
 
 static void Lay_ShowRightColumn (void)
   {
+   extern const char *Txt_Sessions;
+   extern const char *Txt_Connected_PLURAL;
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
-   // struct timeval tv1,tv2;
-   // long tv_usecs;
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
@@ -1152,38 +1140,38 @@ static void Lay_ShowRightColumn (void)
    /***** Number of connected users in the whole platform *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      HTM_DIV_Begin ("id=\"globalconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
-	 Con_ShowGlobalConnectedUsrs ();
-      HTM_DIV_End ();								// Used for AJAX based refresh
+      HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
+	 HTM_LEGEND (Txt_Sessions);
+	 HTM_DIV_Begin ("id=\"globalconnected\"");	// Used for AJAX based refresh
+	    Con_ShowGlobalConnectedUsrs ();
+	 HTM_DIV_End ();				// Used for AJAX based refresh
+      HTM_FIELDSET_End ();
      }
 
    /***** Number of connected users in the current course *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// There is a course selected
      {
-      HTM_DIV_Begin ("id=\"courseconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
-	 Gbl.Scope.Current = HieLvl_CRS;
-	 Con_ShowConnectedUsrsBelongingToCurrentCrs ();
-      HTM_DIV_End ();								// Used for AJAX based refresh
+      HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
+	 HTM_LEGEND (Txt_Connected_PLURAL);
+	 HTM_DIV_Begin ("id=\"courseconnected\"");	// Used for AJAX based refresh
+	    Gbl.Scope.Current = HieLvl_CRS;
+	    Con_ShowConnectedUsrsBelongingToCurrentCrs ();
+	 HTM_DIV_End ();				// Used for AJAX based refresh
+      HTM_FIELDSET_End ();
      }
-   else if (Gbl.Usrs.Me.Logged)		// I am logged
-     {
+   else if (Gbl.Usrs.Me.Logged)			// I am logged
       /***** Suggest one user to follow *****/
-      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	 Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
-      HTM_DIV_End ();
-     }
+      Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
 
    if (!Gbl.Usrs.Me.Logged)
      {
       /***** SWADroid advertisement *****/
-      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\"",
-		      Cfg_SWADROID_URL,
-		      Txt_If_you_have_an_Android_device_try_SWADroid);
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,NULL,
-		     "class=\"SWADROID\"");
-	 HTM_A_End ();
-      HTM_DIV_End ();
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\"",
+		   Cfg_SWADROID_URL,
+		   Txt_If_you_have_an_Android_device_try_SWADroid);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_SWADROID_ICO,NULL,
+		  "class=\"SWADROID\"");
+      HTM_A_End ();
      }
   }
 

@@ -1347,7 +1347,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
       /***** Show project data *****/
-      HTM_FIELDSET_Begin ();
+      HTM_FIELDSET_Begin (NULL);
 	 HTM_LEGEND (Txt_Project);
 	 HTM_TABLE_BeginWidePadding (2);
 
@@ -3735,7 +3735,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
       /***** 1. Project members *****/
       if (!ItsANewProject)	// Existing project
 	{
-	 HTM_FIELDSET_Begin ();
+	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Members);
 	    HTM_TABLE_BeginWidePadding (2);
 	       Projects->View = Prj_EDIT_ONE_PROJECT;
@@ -3748,7 +3748,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	}
 
       /***** 2. Project data *****/
-      HTM_FIELDSET_Begin ();
+      HTM_FIELDSET_Begin (NULL);
 	 HTM_LEGEND (Txt_Data);
 
 	 /* Begin data form */
@@ -4495,7 +4495,7 @@ static void Prj_ShowRubrics (struct Prj_Projects *Projects)
    PrjCfg_Rubric_t WhichRubric;
 
    /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin ();
+   HTM_FIELDSET_Begin (NULL);
       HTM_LEGEND (Txt_Assessment);
 
       /***** Begin table *****/

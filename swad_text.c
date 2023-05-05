@@ -5620,6 +5620,29 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 	" (the same applies to institutions, centers and degrees).";	// Çeviri lazim!
 #endif
 
+const char *Txt_Connected_PLURAL =
+#if   L==1	// ca
+	"Connectats";
+#elif L==2	// de
+	"Angemeldet";
+#elif L==3	// en
+	"Connected";
+#elif L==4	// es
+	"Conectados";
+#elif L==5	// fr
+	"Connect&eacute;s";
+#elif L==6	// gn
+	"Conectados";	// Okoteve traducción
+#elif L==7	// it
+	"Connessi";
+#elif L==8	// pl
+	"Online";
+#elif L==9	// pt
+	"Conectados";
+#elif L==10	// tr
+	"Connected";	// Çeviri lazim!
+#endif
+
 const char *Txt_connected_PLURAL =
 #if   L==1	// ca
 	"connectats";

@@ -172,22 +172,17 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks (&Links);
 
-   /***** Write all links *****/
-   if (Links.Num)
-     {
-      HTM_DIV_Begin ("id=\"institutional_links\" class=\"INS_LNK_%s\"",
-                     The_GetSuffix ());
+      /***** Write all links *****/
+      if (Links.Num)
+	{
+	 HTM_FIELDSET_Begin ("id=\"institutional_links\" class=\"INS_LNK_%s\"",
+			     The_GetSuffix ());
+	    HTM_LEGEND (Txt_Links);
 
-	 Frm_BeginForm (ActSeeLnk);
-	    HTM_BUTTON_Submit_Begin (Txt_Links,"class=\"BT_LINK\"");
-	       HTM_TxtF ("%s",Txt_Links);
-	    HTM_BUTTON_End ();
-	 Frm_EndForm ();
+	    Lnk_WriteListOfLinks (&Links,NULL);
 
-	 Lnk_WriteListOfLinks (&Links,NULL);
-
-      HTM_DIV_End ();
-     }
+	 HTM_FIELDSET_End ();
+	}
 
    /***** Free list of links *****/
    Lnk_FreeListLinks (&Links);

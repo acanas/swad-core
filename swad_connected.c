@@ -87,6 +87,8 @@ void Con_ShowConnectedUsrs (void)
   {
    extern const char *Hlp_USERS_Connected;
    extern const char *Txt_Connected_users;
+   extern const char *Txt_Sessions;
+   extern const char *Txt_Connected_PLURAL;
    char *Title;
 
    /***** Contextual menu *****/
@@ -119,11 +121,19 @@ void Con_ShowConnectedUsrs (void)
 				    false,false,true,0x7);
 
       /***** Number of connected users in the whole platform *****/
-      Con_ShowGlobalConnectedUsrs ();
+      HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
+	 HTM_LEGEND (Txt_Sessions);
+	 Con_ShowGlobalConnectedUsrs ();
+      HTM_FIELDSET_End ();
 
       /***** Show connected users in the current location *****/
       if (Gbl.Scope.Current != HieLvl_UNK)
-	 Con_ShowConnectedUsrsBelongingToLocation ();
+	{
+	 HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
+	    HTM_LEGEND (Txt_Connected_PLURAL);
+	    Con_ShowConnectedUsrsBelongingToLocation ();
+	 HTM_FIELDSET_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -150,6 +160,7 @@ static void Con_PutParScope (__attribute__((unused)) void *Args)
 
 void Con_ShowGlobalConnectedUsrs (void)
   {
+   extern const char *Txt_Sessions;
    extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
@@ -168,43 +179,36 @@ void Con_ShowGlobalConnectedUsrs (void)
       NumUsrsTotal += NumUsrs[Role];
      }
 
-   /***** Container start *****/
-   HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_GetSuffix ());
-
-      /***** Number of sessions *****/
-      /* Link to view more details about connected users */
-      Frm_BeginForm (ActLstCon);
+   /***** Number of sessions *****/
+   /* Link to view more details about connected users */
+   Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
 
-	    /* Write total number of sessions */
-	    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
-				   Gbl.Session.NumSessions == 1 ? Txt_session :
-								  Txt_sessions);
+	 /* Write total number of sessions */
+	 HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
+				Gbl.Session.NumSessions == 1 ? Txt_session :
+							       Txt_sessions);
 
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
+      HTM_BUTTON_End ();
+   Frm_EndForm ();
 
-      if (NumUsrsTotal)
-	{
-	 HTM_DIV_Begin ("class=\"CON_LIST\"");
+   if (NumUsrsTotal)
+     {
+      HTM_DIV_Begin ("class=\"CON_LIST\"");
 
-	    /***** Write total number of users *****/
-	    HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
-				    NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-							Txt_users[Usr_SEX_UNKNOWN]);
+	 /***** Write total number of users *****/
+	 HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
+				 NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+						     Txt_users[Usr_SEX_UNKNOWN]);
 
-	    /***** Write total number of users with each role *****/
-	    for (Role  = Rol_GST, NumUsrsTotal = 0;
-		 Role <= Rol_SYS_ADM;
-		 Role++)
-	       Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
+	 /***** Write total number of users with each role *****/
+	 for (Role  = Rol_GST, NumUsrsTotal = 0;
+	      Role <= Rol_SYS_ADM;
+	      Role++)
+	    Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
 
-	 HTM_DIV_End ();
-	}
-
-   /***** Container end *****/
-   HTM_DIV_End ();
+      HTM_DIV_End ();
+     }
   }
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
@@ -269,38 +273,28 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    extern const char *Txt_from;
    struct Con_ConnectedUsrs Usrs;
 
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_GetSuffix ());
+   /***** Number of connected users who belong to scope *****/
+   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
 
-      /***** Number of connected users who belong to scope *****/
-      Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
-      HTM_DIV_Begin (NULL);
+   /* Write number of connected users */
+   HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
 
-         /* Write number of connected users */
-	 HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
+   /* Put form to change scope */
+   Frm_BeginForm (ActLstCon);
+      Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
+   Frm_EndForm ();
 
-	 /* Put form to change scope */
-	 Frm_BeginForm (ActLstCon);
-	    Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
-	 Frm_EndForm ();
+   /***** Number of teachers and students *****/
+   HTM_TABLE_Begin ("CON_LIST");
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
+   HTM_TABLE_End ();
 
-      HTM_DIV_End ();
-
-      /***** Number of teachers and students *****/
-      HTM_TABLE_Begin ("CON_LIST");
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
-      HTM_TABLE_End ();
-
-      /***** Put link to register students *****/
-      Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
+   /***** Put link to register students *****/
+   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
   }
 
 /*****************************************************************************/
@@ -318,32 +312,25 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
 
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_GetSuffix ());
+   /***** Number of connected users who belong to course *****/
+   /* Link to view more details about connected users */
+   Frm_BeginForm (ActLstCon);
+      HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
+	 Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
+	 Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
+	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+      HTM_BUTTON_End ();
+   Frm_EndForm ();
 
-      /***** Number of connected users who belong to course *****/
-      /* Link to view more details about connected users */
-      Frm_BeginForm (ActLstCon);
-	 HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
-	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
-	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
-	    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
-
-      /***** Number of teachers and students *****/
-      HTM_TABLE_Begin ("CON_LIST");
-	 Gbl.Usrs.Connected.NumUsr        = 0;
-	 Gbl.Usrs.Connected.NumUsrs       = 0;
-	 Gbl.Usrs.Connected.NumUsrsToList = 0;
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
-	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
-      HTM_TABLE_End ();
-
-   /***** End container *****/
-   HTM_DIV_End ();
+   /***** Number of teachers and students *****/
+   HTM_TABLE_Begin ("CON_LIST");
+      Gbl.Usrs.Connected.NumUsr        = 0;
+      Gbl.Usrs.Connected.NumUsrs       = 0;
+      Gbl.Usrs.Connected.NumUsrsToList = 0;
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

@@ -951,36 +951,36 @@ void Ban_WriteMenuWithBanners (void)
    /***** Reset banners *****/
    Ban_ResetBanners (&Banners);
 
-   /***** Get random banner *****/
+   /***** Get random banners *****/
    // The banner(s) will change once in a while
    Banners.Num = Ban_DB_GetRandomBanners (&mysql_res);
    Ban_GetListBanners (&Banners,&mysql_res);
 
-   /***** Write all banners *****/
-   for (NumBan = 0;
-	NumBan < Banners.Num;
-	NumBan++)
-     {
-      /***** Write data of this banner *****/
-      /* Begin container */
-      HTM_DIV_Begin ("class=\"CM\"");
+      /***** Write all banners *****/
+      for (NumBan = 0;
+	   NumBan < Banners.Num;
+	   NumBan++)
+	{
+	 /***** Write data of this banner *****/
+	 /* Begin container */
+	 HTM_DIV_Begin ("class=\"CM\"");
 
-         /* Begin form */
-	 Frm_BeginForm (ActClkBan);
-	    ParCod_PutPar (ParCod_Ban,Banners.Lst[NumBan].BanCod);
-	    Par_PutParString (NULL,"URL",Banners.Lst[NumBan].WWW);
+	    /* Begin form */
+	    Frm_BeginForm (ActClkBan);
+	       ParCod_PutPar (ParCod_Ban,Banners.Lst[NumBan].BanCod);
+	       Par_PutParString (NULL,"URL",Banners.Lst[NumBan].WWW);
 
-	    /* Banner image */
-	    HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,
-			     Banners.Lst[NumBan].FullName,
-			     "class=\"BANNER\"");
+	       /* Banner image */
+	       HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,
+				Banners.Lst[NumBan].FullName,
+				"class=\"BANNER\"");
 
-	 /* End form */
-	 Frm_EndForm ();
+	    /* End form */
+	    Frm_EndForm ();
 
-      /* End container */
-      HTM_DIV_End ();
-     }
+	 /* End container */
+	 HTM_DIV_End ();
+	}
 
    /***** Free list of banners *****/
    Ban_FreeListBanners (&Banners);
