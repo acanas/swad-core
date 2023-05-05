@@ -1132,6 +1132,7 @@ static void Lay_ShowRightColumn (void)
   {
    extern const char *Txt_Sessions;
    extern const char *Txt_Connected_PLURAL;
+   extern const char *Txt_Who_to_follow;
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
 
    /***** Banners *****/
@@ -1160,8 +1161,13 @@ static void Lay_ShowRightColumn (void)
       HTM_FIELDSET_End ();
      }
    else if (Gbl.Usrs.Me.Logged)			// I am logged
+     {
       /***** Suggest one user to follow *****/
-      Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
+      HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
+	 HTM_LEGEND (Txt_Who_to_follow);
+	 Fol_SuggestUsrsToFollowOnRightColumn ();
+      HTM_FIELDSET_End ();
+     }
 
    if (!Gbl.Usrs.Me.Logged)
      {

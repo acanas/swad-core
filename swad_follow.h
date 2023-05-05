@@ -44,8 +44,8 @@ typedef enum
 /*****************************************************************************/
 
 void Fol_PutLinkWhoToFollow (void);
-void Fol_SuggestUsrsToFollowMainZone (void);
-void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void);
+void Fol_SuggestUsrsToFollowOnMainZone (void);
+void Fol_SuggestUsrsToFollowOnRightColumn (void);
 
 void Fol_FlushCacheFollow (void);
 void Fol_GetNumFollow (long UsrCod,

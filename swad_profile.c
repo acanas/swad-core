@@ -119,7 +119,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 void Prf_SeeSocialProfiles (void)
   {
    if (Gbl.Usrs.Me.Logged)
-      Fol_SuggestUsrsToFollowMainZone ();
+      Fol_SuggestUsrsToFollowOnMainZone ();
    else
       Prf_ReqUserProfile ();
   }

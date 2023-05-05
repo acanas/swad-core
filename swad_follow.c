@@ -113,7 +113,7 @@ void Fol_PutLinkWhoToFollow (void)
 
 #define Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE (Fol_NUM_COLUMNS_FOLLOW * 3)
 
-void Fol_SuggestUsrsToFollowMainZone (void)
+void Fol_SuggestUsrsToFollowOnMainZone (void)
   {
    extern const char *Hlp_START_Profiles_who_to_follow;
    extern const char *Txt_Who_to_follow;
@@ -185,9 +185,8 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
 #define Fol_MAX_USRS_TO_FOLLOW_RIGHT_COLUMN 3
 
-void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
+void Fol_SuggestUsrsToFollowOnRightColumn (void)
   {
-   extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -200,22 +199,11 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                           Fol_SUGGEST_ONLY_USERS_WITH_PHOTO,
                                           &mysql_res)))
      {
-      /***** Begin container *****/
-      HTM_DIV_Begin ("class=\"CON CON_%s\"",
-                  The_GetSuffix ());
-
-	 /***** Title with link to suggest more users to follow *****/
-	 Frm_BeginForm (ActSeeSocPrf);
-	    HTM_BUTTON_Submit_Begin (Txt_Who_to_follow,"class=\"BT_LINK\"");
-	       HTM_Txt (Txt_Who_to_follow);
-	    HTM_BUTTON_End ();
-	 Frm_EndForm ();
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin (NULL);
-
-	    /***** Initialize structure with user's data *****/
-	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** List users *****/
 	    for (NumUsr = 0;
@@ -235,14 +223,16 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 		  Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
 	      }
 
-	    /***** Free memory used for user's data *****/
-	    Usr_UsrDataDestructor (&UsrDat);
-
 	 /***** End table *****/
 	 HTM_TABLE_End ();
 
-      /***** End container *****/
-      HTM_DIV_End ();
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+
+      /***** Link to suggest more users to follow *****/
+      Lay_PutContextualLinkOnlyIcon (ActSeeSocPrf,NULL,
+				     NULL,NULL,
+				     "ellipsis-h.svg",Ico_BLACK);
      }
 
    /***** Free structure that stores the query result *****/

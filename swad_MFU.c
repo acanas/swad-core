@@ -263,7 +263,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
                        The_GetSuffix ());
       HTM_LEGEND (Txt_Frequent_ACTIONS);
 
-      /***** Begin list of frequently used actions *****/
+      /***** List of frequently used actions *****/
       HTM_UL_Begin (NULL);
 
 	 for (NumAct = 0;
@@ -291,14 +291,12 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	      }
 	   }
 
-      /***** End list of frequently used actions *****/
       HTM_UL_End ();
 
-      HTM_DIV_Begin ("class=\"CM\"");
-	 Lay_PutContextualLinkOnlyIcon (ActMFUAct,NULL,
-					NULL,NULL,
-					"ellipsis-h.svg",Ico_BLACK);
-      HTM_DIV_End ();
+      /***** Link to view more frequently used actions *****/
+      Lay_PutContextualLinkOnlyIcon (ActMFUAct,NULL,
+				     NULL,NULL,
+				     "ellipsis-h.svg",Ico_BLACK);
 
    /***** End fieldset *****/
    HTM_FIELDSET_End ();
