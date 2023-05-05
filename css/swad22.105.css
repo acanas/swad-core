@@ -1362,30 +1362,23 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	width:148px;
-	border-style:solid;
-	border-width:1px;
-	border-color:#8cbcce;
 	padding:5px;
-	border-radius:2px;
 	font-size:11pt;
 	}
 #MFU_actions ul
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:138px;
-	margin:2px 0;
-	padding:6px 0 0 0;
-	border-style:solid;
-	border-width:1px 0 0 0;
-	border-color:rgba(140,188,206,0.2);
+	width:134px;
+	margin:0;
+	padding:0;
 	list-style-type:none;
 	text-align:left;
 	vertical-align:middle;
 	}
 #MFU_actions li
 	{
-	width:138px;
+	width:134px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

@@ -15434,7 +15434,7 @@ const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the a
 #elif L==5	// fr
 	"Frequent";
 #elif L==6	// gn
-	"Frecuentes";	// Okoteve traducción
+	"Jepigu&aacute;va";
 #elif L==7	// it
 	"Frequenti";
 #elif L==8	// pl
@@ -22778,7 +22778,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Frequent"
 #elif L==6	// gn
-	"Frecuentes"	// Okoteve traducción
+	"Jepigu&aacute;va"
 #elif L==7	// it
 	"Frequenti"
 #elif L==8	// pl
@@ -24710,7 +24710,7 @@ const char *Txt_My_frequent_actions =
 #elif L==5	// fr
 	"Mes actions fr&eacute;quentes";
 #elif L==6	// gn
-	"Mis acciones frecuentes";	// Okoteve traducción
+	"Che rembiapo py'&ytilde;i";
 #elif L==7	// it
 	"Le mie azioni frequenti";
 #elif L==8	// pl

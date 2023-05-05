@@ -143,7 +143,7 @@ void HTM_SCRIPT_End (void);
 void HTM_PARAM (const char *Name,
 		const char *fmt,...);
 
-void HTM_FIELDSET_Begin (void);
+void HTM_FIELDSET_Begin (const char *fmt,...);
 void HTM_FIELDSET_End (void);
 void HTM_LEGEND (const char *Txt);
 

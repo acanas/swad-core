@@ -70,6 +70,7 @@ static unsigned HTM_DT_NestingLevel       = 0;
 static unsigned HTM_DD_NestingLevel       = 0;
 static unsigned HTM_A_NestingLevel        = 0;
 static unsigned HTM_SCRIPT_NestingLevel   = 0;
+static unsigned HTM_FIELDSET_NestingLevel = 0;
 static unsigned HTM_LABEL_NestingLevel    = 0;
 static unsigned HTM_BUTTON_NestingLevel   = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
@@ -99,6 +100,8 @@ static void HTM_UL_BeginWithoutAttr (void);
 static void HTM_LI_BeginWithoutAttr (void);
 
 static void HTM_A_BeginWithoutAttr (void);
+
+static void HTM_FIELDSET_BeginWithoutAttr (void);
 
 static void HTM_LABEL_BeginWithoutAttr (void);
 
@@ -1001,14 +1004,49 @@ void HTM_PARAM (const char *Name,
 /********************************* Fieldsets *********************************/
 /*****************************************************************************/
 
-void HTM_FIELDSET_Begin (void)
+void HTM_FIELDSET_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 HTM_TxtF ("<fieldset %s>",Attr);
+
+	 free (Attr);
+	}
+      else
+         HTM_FIELDSET_BeginWithoutAttr ();
+     }
+   else
+      HTM_FIELDSET_BeginWithoutAttr ();
+
+   HTM_FIELDSET_NestingLevel++;
+  }
+
+static void HTM_FIELDSET_BeginWithoutAttr (void)
   {
    HTM_Txt ("<fieldset>");
   }
 
 void HTM_FIELDSET_End (void)
   {
+   if (HTM_FIELDSET_NestingLevel == 0)	// No FIELDSET open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened FIELDSET.");
+
    HTM_Txt ("</fieldset>");
+
+   HTM_FIELDSET_NestingLevel--;
   }
 
 void HTM_LEGEND (const char *Txt)

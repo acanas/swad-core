@@ -249,7 +249,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
-   extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -259,15 +258,10 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
-   /***** Begin div and link *****/
-   HTM_DIV_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
-                  The_GetSuffix ());
-
-      Frm_BeginForm (ActMFUAct);
-	 HTM_BUTTON_Submit_Begin (Txt_My_frequent_actions,"class=\"BT_LINK\"");
-	    HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
+                       The_GetSuffix ());
+      HTM_LEGEND (Txt_Frequent_ACTIONS);
 
       /***** Begin list of frequently used actions *****/
       HTM_UL_Begin (NULL);
@@ -300,8 +294,14 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
       /***** End list of frequently used actions *****/
       HTM_UL_End ();
 
-   /***** End div *****/
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"CM\"");
+	 Lay_PutContextualLinkOnlyIcon (ActMFUAct,NULL,
+					NULL,NULL,
+					"ellipsis-h.svg",Ico_BLACK);
+      HTM_DIV_End ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
