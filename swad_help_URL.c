@@ -1796,25 +1796,25 @@ const char *Hlp_ASSESSMENT_Exams_new_exam =
 
 const char *Hlp_ASSESSMENT_Exams_question_sets =
 #if   L==1
-	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+	"ASSESSMENT.Exams.es#conjuntos-de-preguntas";
 #elif L==2
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==3
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==4
-	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+	"ASSESSMENT.Exams.es#conjuntos-de-preguntas";
 #elif L==5
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==6
-	"ASSESSMENT.Exams.es#conjunto-de-preguntas";
+	"ASSESSMENT.Exams.es#conjuntos-de-preguntas";
 #elif L==7
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==8
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==9
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #elif L==10	// tr
-	"ASSESSMENT.Exams.en#question-set";
+	"ASSESSMENT.Exams.en#question-sets";
 #endif
 
 const char *Hlp_ASSESSMENT_Exams_sessions =

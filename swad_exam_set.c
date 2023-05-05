@@ -508,19 +508,19 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
 
-   /***** Show table with sets *****/
-   if (NumSets)
-      ExaSet_ListOneOrMoreSetsForEdition (Exams,
-                                          MaxSetInd,
-                                          NumSets,mysql_res,
-				          ICanEditSets);
+      /***** Show table with sets *****/
+      if (NumSets)
+	 ExaSet_ListOneOrMoreSetsForEdition (Exams,
+					     MaxSetInd,
+					     NumSets,mysql_res,
+					     ICanEditSets);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
-   /***** Put forms to create/edit a set *****/
-   if (ICanEditSets)
-      ExaSet_PutFormNewSet (Exams,Set,MaxSetInd);
+      /***** Put forms to create/edit a set *****/
+      if (ICanEditSets)
+	 ExaSet_PutFormNewSet (Exams,Set,MaxSetInd);
 
    /***** End box *****/
    Box_BoxEnd ();

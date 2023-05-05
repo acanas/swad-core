@@ -138,6 +138,9 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod);
 
 static void Exa_HideUnhideExam (bool Hide);
 
+static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
+				    char Txt[Cns_MAX_BYTES_TEXT + 1],
+				    Exa_ExistingNewExam_t ExistingNewExam);
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam);
@@ -1259,6 +1262,19 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 			  struct ExaSet_Set *Set,
 			  Exa_ExistingNewExam_t ExistingNewExam)
   {
+   extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
+   extern const char *Hlp_ASSESSMENT_Exams_new_exam;
+   extern const char *Txt_Exam;
+   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+     {
+      [Exa_EXISTING_EXAM] = Exa_PutIconsEditingOneExam,
+      [Exa_NEW_EXAM     ] = NULL,
+     };
+   static const char **HelpLink[] =
+     {
+      [Exa_EXISTING_EXAM] = &Hlp_ASSESSMENT_Exams_edit_exam,
+      [Exa_NEW_EXAM     ] = &Hlp_ASSESSMENT_Exams_new_exam,
+     };
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize text / get text from database *****/
@@ -1272,45 +1288,47 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 	 break;
      }
 
-   /***** Put form to create/edit an exam *****/
-   Exa_PutFormEditionExam (Exams,Txt,ExistingNewExam);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,
+		 Exams->Exam.Title[0] ? Exams->Exam.Title :
+					Txt_Exam,
+		 FunctionToDrawContextualIcons[ExistingNewExam],Exams,
+		 *HelpLink[ExistingNewExam],Box_NOT_CLOSABLE);
 
-   /***** Show other lists *****/
-   switch (ExistingNewExam)
-     {
-      case Exa_EXISTING_EXAM:
-	 /* Show list of sets */
-	 ExaSet_ListExamSets (Exams,Set);
-	 break;
-      case Exa_NEW_EXAM:
-	 /* Show exams again */
-	 Exa_ListAllExams (Exams);
-	 break;
-     }
+      /***** Put form to create/edit an exam *****/
+      Exa_PutFormEditionExam (Exams,Txt,ExistingNewExam);
+
+      /***** Show other lists *****/
+      switch (ExistingNewExam)
+	{
+	 case Exa_EXISTING_EXAM:
+	    /* Show list of sets */
+	    ExaSet_ListExamSets (Exams,Set);
+	    break;
+	 case Exa_NEW_EXAM:
+	    /* Show exams again */
+	    Exa_ListAllExams (Exams);
+	    break;
+	}
+
+   /***** End box ****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
 /********************* Put a form to create/edit an exam **********************/
 /*****************************************************************************/
 
-void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
-			     char Txt[Cns_MAX_BYTES_TEXT + 1],
-			     Exa_ExistingNewExam_t ExistingNewExam)
+static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
+				    char Txt[Cns_MAX_BYTES_TEXT + 1],
+				    Exa_ExistingNewExam_t ExistingNewExam)
   {
-   extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
-   extern const char *Hlp_ASSESSMENT_Exams_new_exam;
-   extern const char *Txt_Exam;
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create_exam;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
-     {
-      [Exa_EXISTING_EXAM] = Exa_PutIconsEditingOneExam,
-      [Exa_NEW_EXAM     ] = NULL,
-     };
    static Act_Action_t NextAction[] =
      {
       [Exa_EXISTING_EXAM] = ActChgExa,
@@ -1321,80 +1339,68 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       [Exa_EXISTING_EXAM] = Btn_CONFIRM_BUTTON,
       [Exa_NEW_EXAM     ] = Btn_CREATE_BUTTON,
      };
-   const char *HelpLink[] =
-     {
-      [Exa_EXISTING_EXAM] = Hlp_ASSESSMENT_Exams_edit_exam,
-      [Exa_NEW_EXAM     ] = Hlp_ASSESSMENT_Exams_new_exam,
-     };
    const char *TxtButton[] =
      {
       [Exa_EXISTING_EXAM] = Txt_Save_changes,
       [Exa_NEW_EXAM     ] = Txt_Create_exam,
      };
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Exams->Exam.Title[0] ? Exams->Exam.Title :
-					Txt_Exam,
-		 FunctionToDrawContextualIcons[ExistingNewExam],Exams,
-		 HelpLink[ExistingNewExam],Box_NOT_CLOSABLE);
+   /***** Begin form *****/
+   Frm_BeginForm (NextAction[ExistingNewExam]);
+      Exa_PutPars (Exams);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction[ExistingNewExam]);
-	 Exa_PutPars (Exams);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Exam title *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Exam title *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\""
-				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+	 /***** Maximum grade *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Maximum grade *****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Maximum_grade);
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_Maximum_grade);
-	       HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
+				HTM_DONT_SUBMIT_ON_CHANGE,false,
+				" class=\"INPUT_%s\" required=\"required\"",
+				The_GetSuffix ());
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
-		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
-				   " class=\"INPUT_%s\" required=\"required\"",
-				   The_GetSuffix ());
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+	 /***** Visibility of results *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Visibility of results *****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Result_visibility);
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_Result_visibility);
-	       HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LB\"");
+	       TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LB\"");
-		  TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
-
-	    /***** Exam text *****/
-	    HTM_TR_Begin (NULL);
+	 /***** Exam text *****/
+	 HTM_TR_Begin (NULL);
 
 	    /* Label */
 	    Frm_LabelColumn ("RT","Txt",Txt_Description);
@@ -1408,20 +1414,17 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 
-	    HTM_TR_End ();
+	 HTM_TR_End ();
 
-	 /***** End table ****/
-	 HTM_TABLE_End ();
+      /***** End table ****/
+      HTM_TABLE_End ();
 
-	 /***** Send button *****/
-         Btn_PutButton (Button[ExistingNewExam],
-                        TxtButton[ExistingNewExam]);
+      /***** Send button *****/
+      Btn_PutButton (Button[ExistingNewExam],
+		     TxtButton[ExistingNewExam]);
 
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End box ****/
-   Box_BoxEnd ();
+   /***** End form *****/
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
