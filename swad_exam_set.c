@@ -430,50 +430,6 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
   }
 
 /*****************************************************************************/
-/********** Request the creation or edition of an set of questions ***********/
-/*****************************************************************************/
-
-void ExaSet_ReqCreatOrEditSet (void)
-  {
-   struct Exa_Exams Exams;
-   struct ExaSet_Set Set;
-   bool ItsANewSet;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
-      Err_NoPermissionExit ();
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exams.Exam);
-   ExaSet_ResetSet (&Set);
-
-   /***** Get parameters *****/
-   Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SetCod = Set.SetCod = ParCod_GetPar (ParCod_Set);
-   ItsANewSet = (Set.SetCod <= 0);
-
-   /***** Get exam data from database *****/
-   Exa_GetExamDataByCod (&Exams.Exam);
-   Exa_DB_GetExamTxt (Exams.Exam.ExaCod,Txt);
-
-   /***** Get set data *****/
-   if (ItsANewSet)
-      /* Initialize to empty set */
-      ExaSet_ResetSet (&Set);
-   else
-     {
-      /* Get set data from database */
-      ExaSet_GetSetDataByCod (&Set);
-      Exams.SetCod = Set.SetCod;
-     }
-
-   /***** Put form to edit the exam created or updated *****/
-   Exa_PutFormEditionExam (&Exams,Txt,Exa_EXISTING_EXAM);
-  }
-
-/*****************************************************************************/
 /*** Request the selection of questions to be added to a set of questions ****/
 /*****************************************************************************/
 

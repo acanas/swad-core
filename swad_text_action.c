@@ -12068,29 +12068,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to exam"		// Çeviri lazim!
 #endif
 	,
-	[ActFrmNewExaSet] =
-#if   L==1	// ca
-	"Request new exam set"			// Necessita traducció
-#elif L==2	// de
-	"Request new exam set"			// Need Übersetzung
-#elif L==3	// en
-	"Request new exam set"
-#elif L==4	// es
-	"Solicitar nuevo conjunto de preguntas"
-#elif L==5	// fr
-	"Request new exam set"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar nuevo conjunto de preguntas"	// Okoteve traducción
-#elif L==7	// it
-	"Request new exam set"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request new exam set"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request new exam set"			// Precisa de tradução
-#elif L==10	// tr
-	"Request new exam set"			// Çeviri lazim!
-#endif
-	,
 	[ActNewExaSet] =
 #if   L==1	// ca
 	"Create new exam set"			// Necessita traducció

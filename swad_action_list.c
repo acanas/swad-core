@@ -743,7 +743,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUnhExa		] = {1884,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_UnhideExam			,NULL},
    [ActReqLnkExa	] = {1936,-1,TabUnk,ActSeeAllExa	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaRsc_GetLinkToExam		,NULL},
 
-   [ActFrmNewExaSet	] = {1892,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDatesToPastAndNow	,ExaSet_ReqCreatOrEditSet	,NULL},
    [ActNewExaSet	] = {1898,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ReceiveFormSet		,NULL},
    [ActReqRemExaSet	] = {1893,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_ReqRemSet		,NULL},
    [ActRemExaSet	] = {1894,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_RemoveSet		,NULL},
@@ -3785,7 +3784,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemExaQst,		// #1889
 	-1,			// #1890 (obsolete action)
 	-1,			// #1891 (obsolete action)
-	ActFrmNewExaSet,	// #1892
+	-1,			// #1892 (obsolete action)
 	ActReqRemExaSet,	// #1893
 	ActRemExaSet,		// #1894
 	ActUp_ExaSet,		// #1895

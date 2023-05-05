@@ -43,8 +43,6 @@ void ExaSet_ReceiveFormSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 
-void ExaSet_ReqCreatOrEditSet (void);
-
 void ExaSet_ReqSelectQstsToAddToSet (void);
 void ExaSet_ListQstsToAddToSet (void);
 
