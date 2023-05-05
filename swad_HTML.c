@@ -1011,7 +1011,7 @@ void HTM_FIELDSET_End (void)
    HTM_Txt ("</fieldset>");
   }
 
-void HTM_LEYEND (const char *Txt)
+void HTM_LEGEND (const char *Txt)
   {
    HTM_Txt ("<legend>");
       HTM_Txt (Txt);

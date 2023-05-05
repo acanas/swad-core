@@ -2718,7 +2718,7 @@ void Brw_ShowFileBrowserProject (long PrjCod)
 
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin ();
-      HTM_LEYEND (Txt_Documents);
+      HTM_LEGEND (Txt_Documents);
 
       Brw_WriteTopBeforeShowingFileBrowser ();
 

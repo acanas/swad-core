@@ -148,13 +148,13 @@ void PrjCfg_ShowFormConfig (void)
 
 	 /***** Projects are editable by non-editing teachers? *****/
 	 HTM_FIELDSET_Begin ();
-	    HTM_LEYEND (Txt_Create_project);
+	    HTM_LEGEND (Txt_Create_project);
 	    PrjCfg_ShowFormNETCanCreate (&Projects.Config);
 	 HTM_FIELDSET_End ();
 
 	 /***** Rubrics *****/
 	 HTM_FIELDSET_Begin ();
-	    HTM_LEYEND (Txt_Rubrics);
+	    HTM_LEGEND (Txt_Rubrics);
 	    PrjCfg_ShowFormRubrics (&Projects.Config);
 	 HTM_FIELDSET_End ();
 

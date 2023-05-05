@@ -145,7 +145,7 @@ void HTM_PARAM (const char *Name,
 
 void HTM_FIELDSET_Begin (void);
 void HTM_FIELDSET_End (void);
-void HTM_LEYEND (const char *Txt);
+void HTM_LEGEND (const char *Txt);
 
 void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
