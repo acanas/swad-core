@@ -821,21 +821,40 @@ void Rub_ReqCreatOrEditRubric (void)
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 			    Rub_ExistingNewRubric_t ExistingNewRubric)
   {
-   /***** Put form to create/edit a rubric *****/
-   Rub_PutFormEditionRubric (Rubrics,ExistingNewRubric);
-
-   /***** Show other lists *****/
-   switch (ExistingNewRubric)
+   extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
+   extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
+   extern const char *Txt_Rubric;
+   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
      {
-      case Rub_EXISTING_RUBRIC:
-	 /* Show list of criteria */
+      [Rub_EXISTING_RUBRIC] = Rub_PutIconsEditingOneRubric,
+      [Rub_NEW_RUBRIC     ] = NULL,
+     };
+   static const char **HelpLink[] =
+     {
+      [Rub_EXISTING_RUBRIC] = &Hlp_ASSESSMENT_Rubrics_edit_rubric,
+      [Rub_NEW_RUBRIC     ] = &Hlp_ASSESSMENT_Rubrics_new_rubric,
+     };
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,
+		 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+					    Txt_Rubric,
+		 FunctionToDrawContextualIcons[ExistingNewRubric],Rubrics,
+		 *HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);
+
+      /***** Put form to create/edit a rubric *****/
+      Rub_PutFormEditionRubric (Rubrics,ExistingNewRubric);
+
+      /***** Show list of criteria inside box *****/
+      if (ExistingNewRubric == Rub_EXISTING_RUBRIC)
 	 RubCri_ListCriteriaForEdition (Rubrics);
-         break;
-      case Rub_NEW_RUBRIC:
-	 /* Show rubrics again */
-	 Rub_ListAllRubrics (Rubrics);
-         break;
-     }
+
+   /***** End box ****/
+   Box_BoxEnd ();
+
+   /***** Show rubrics again outside box *****/
+   if (ExistingNewRubric == Rub_NEW_RUBRIC)
+      Rub_ListAllRubrics (Rubrics);
   }
 
 /*****************************************************************************/
@@ -845,18 +864,10 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 			              Rub_ExistingNewRubric_t ExistingNewRubric)
   {
-   extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
-   extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
-   extern const char *Txt_Rubric;
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Create_rubric;
    extern const char *Txt_Save_changes;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
-     {
-      [Rub_EXISTING_RUBRIC] = Rub_PutIconsEditingOneRubric,
-      [Rub_NEW_RUBRIC     ] = NULL,
-     };
    static Act_Action_t NextAction[] =
      {
       [Rub_EXISTING_RUBRIC] = ActChgRub,
@@ -867,78 +878,63 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
       [Rub_EXISTING_RUBRIC] = Btn_CONFIRM_BUTTON,
       [Rub_NEW_RUBRIC     ] = Btn_CREATE_BUTTON,
      };
-   const char *HelpLink[] =
-     {
-      [Rub_EXISTING_RUBRIC] = Hlp_ASSESSMENT_Rubrics_edit_rubric,
-      [Rub_NEW_RUBRIC     ] = Hlp_ASSESSMENT_Rubrics_new_rubric,
-     };
    const char *TxtButton[] =
      {
       [Rub_EXISTING_RUBRIC] = Txt_Save_changes,
       [Rub_NEW_RUBRIC     ] = Txt_Create_rubric,
      };
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
-					    Txt_Rubric,
-		 FunctionToDrawContextualIcons[ExistingNewRubric],Rubrics,
-		 HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);
+   /***** Begin form *****/
+   Frm_BeginForm (NextAction[ExistingNewRubric]);
+      Rub_PutPars (Rubrics);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction[ExistingNewRubric]);
-	 Rub_PutPars (Rubrics);
+      /***** Begin table *****/
+      HTM_TABLE_BeginCenterPadding (2);
 
-         /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Rubric title *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Rubric title *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\""
-				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+	 /***** Rubric text *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Rubric text *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   The_GetSuffix ());
+		  HTM_Txt (Rubrics->Rubric.Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				      " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				      The_GetSuffix ());
-		     HTM_Txt (Rubrics->Rubric.Txt);
-		  HTM_TEXTAREA_End ();
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+      /***** End table ****/
+      HTM_TABLE_End ();
 
-	 /***** End table ****/
-	 HTM_TABLE_End ();
+      /***** Send button *****/
+      Btn_PutButton (Button[ExistingNewRubric],
+		     TxtButton[ExistingNewRubric]);
 
-	 /***** Send button *****/
-	 Btn_PutButton (Button[ExistingNewRubric],
-			TxtButton[ExistingNewRubric]);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End box ****/
-   Box_BoxEnd ();
+   /***** End form *****/
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/

@@ -80,7 +80,6 @@ void HTM_TABLE_BeginCenter (void);
 void HTM_TABLE_BeginWidePadding (unsigned CellPadding);
 void HTM_TABLE_BeginWide (void);
 void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding);
-void HTM_TABLE_BeginWideMargin (void);
 void HTM_TABLE_End (void);
 
 void HTM_TBODY_Begin (const char *fmt,...);

@@ -159,7 +159,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	 Frm_BeginForm (ActLstTstQst);
 	    Par_PutParUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
 
-	    HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginCenterPadding (2);
 
 	       /***** Selection of tags *****/
 	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,false);

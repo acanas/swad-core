@@ -1345,7 +1345,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       Exa_PutPars (Exams);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+      HTM_TABLE_BeginCenterPadding (2);
 
 	 /***** Exam title *****/
 	 HTM_TR_Begin (NULL);
