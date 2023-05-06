@@ -56,6 +56,12 @@ typedef enum
   } Gam_AnswerType_t;
 #define Gam_ANSWER_TYPE_DEFAULT Gam_ANS_UNIQUE_CHOICE
 
+typedef enum
+  {
+   Gam_EXISTING_GAME,
+   Gam_NEW_GAME,
+  } Gam_ExistingNewGame_t;
+
 struct Gam_GameSelected
   {
    long GamCod;		// Game code
@@ -136,7 +142,8 @@ void Gam_UnhideGame (void);
 void Gam_ListGame (void);
 
 void Gam_ReqCreatOrEditGame (void);
-
+void Gam_PutFormsOneGame (struct Gam_Games *Games,
+			  Gam_ExistingNewGame_t ExistingNewGame);
 void Gam_ReceiveFormGame (void);
 
 void Gam_ReqSelectQstsToAddToGame (void);

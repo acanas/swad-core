@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.107.6 (2023-05-06)"
+#define Log_PLATFORM_VERSION	"SWAD 22.107.7 (2023-05-06)"
 #define CSS_FILE		"swad22.107.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.107.7: May 06, 2023  Changes in edition of game. (338025 lines)
 	Version 22.107.6: May 06, 2023  Code refactoring in edition of exam. (338023 lines)
 	Version 22.107.5: May 06, 2023  Changes in edition of rubric. (338027 lines)
 	Version 22.107.4: May 06, 2023  Changes in edition of exam. (338040 lines)

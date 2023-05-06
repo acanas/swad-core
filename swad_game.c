@@ -107,16 +107,6 @@ extern struct Globals Gbl;
 #define Gam_MAX_GRADE_DEFAULT 1.0
 
 /*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-typedef enum
-  {
-   Gam_EXISTING_GAME,
-   Gam_NEW_GAME,
-  } Gam_ExistingNewGame_t;
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -1261,27 +1251,67 @@ void Gam_ReqCreatOrEditGame (void)
 	 Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
 	 break;
       case Gam_NEW_GAME:
-	 /* Initialize to empty game */
-	 Gam_ResetGame (&Games.Game);
 	 Txt[0] = '\0';
 	 break;
      }
 
-   /***** Put forms to create/edit a game *****/
-   Gam_PutFormEditionGame (&Games,Txt,ExistingNewGame);
+   /***** Put form to create/edit a game and show questions *****/
+   Gam_PutFormsOneGame (&Games,ExistingNewGame);
+  }
 
-   /***** Show games or questions *****/
+/*****************************************************************************/
+/********************* Put forms to create/edit a game ***********************/
+/*****************************************************************************/
+
+void Gam_PutFormsOneGame (struct Gam_Games *Games,
+			  Gam_ExistingNewGame_t ExistingNewGame)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_edit_game;
+   extern const char *Hlp_ASSESSMENT_Games_new_game;
+   extern const char *Txt_Game;
+   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+     {
+      [Gam_EXISTING_GAME] = Gam_PutIconsEditingOneGame,
+      [Gam_NEW_GAME     ] = NULL,
+     };
+   static const char **HelpLink[] =
+     {
+      [Gam_EXISTING_GAME] = &Hlp_ASSESSMENT_Games_edit_game,
+      [Gam_NEW_GAME     ] = &Hlp_ASSESSMENT_Games_new_game,
+     };
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Initialize text / get text from database *****/
    switch (ExistingNewGame)
      {
       case Gam_EXISTING_GAME:
-	 /* Show questions of the game ready to be edited */
-	 Gam_ListGameQuestions (&Games);
+	 Gam_DB_GetGameTxt (Games->Game.GamCod,Txt);
 	 break;
       case Gam_NEW_GAME:
-	 /* Show games again */
-	 Gam_ListAllGames (&Games);
+         Txt[0] = '\0';
 	 break;
      }
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,
+		 Games->Game.Title[0] ? Games->Game.Title :
+					Txt_Game,
+		 FunctionToDrawContextualIcons[ExistingNewGame],Games,
+		 *HelpLink[ExistingNewGame],Box_NOT_CLOSABLE);
+
+      /***** Put form to create/edit a game *****/
+      Gam_PutFormEditionGame (Games,Txt,ExistingNewGame);
+
+      /***** Show list of questions inside box *****/
+      if (ExistingNewGame == Gam_EXISTING_GAME)
+	 Gam_ListGameQuestions (Games);
+
+   /***** End box ****/
+   Box_BoxEnd ();
+
+   /***** Show games again outside box *****/
+   if (ExistingNewGame == Gam_NEW_GAME)
+      Gam_ListAllGames (Games);
   }
 
 /*****************************************************************************/
@@ -1294,18 +1324,12 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
   {
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
-   extern const char *Txt_Game;
    extern const char *Txt_Title;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create_game;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
-     {
-      [Gam_EXISTING_GAME] = Gam_PutIconsEditingOneGame,
-      [Gam_NEW_GAME     ] = NULL,
-     };
    static Act_Action_t NextAction[] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
@@ -1316,107 +1340,92 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       [Gam_EXISTING_GAME] = Btn_CONFIRM_BUTTON,
       [Gam_NEW_GAME     ] = Btn_CREATE_BUTTON,
      };
-   const char *HelpLink[] =
-     {
-      [Gam_EXISTING_GAME] = Hlp_ASSESSMENT_Games_edit_game,
-      [Gam_NEW_GAME     ] = Hlp_ASSESSMENT_Games_new_game,
-     };
    const char *TxtButton[] =
      {
       [Gam_EXISTING_GAME] = Txt_Save_changes,
       [Gam_NEW_GAME     ] = Txt_Create_game,
      };
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Games->Game.Title[0] ? Games->Game.Title :
-					Txt_Game,
-		 FunctionToDrawContextualIcons[ExistingNewGame],Games,
-		 HelpLink[ExistingNewGame],Box_NOT_CLOSABLE);
+   /***** Begin form *****/
+   Frm_BeginForm (NextAction[ExistingNewGame]);
+      Gam_PutPars (Games);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction[ExistingNewGame]);
-	 Gam_PutPars (Games);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Game title *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Game title *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\""
-				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+	 /***** Maximum grade *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Maximum grade *****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Maximum_grade);
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_Maximum_grade);
-	       HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
+				HTM_DONT_SUBMIT_ON_CHANGE,false,
+				" class=\"INPUT_%s\" required=\"required\"",
+				The_GetSuffix ());
+	    HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
-		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
-				   " class=\"INPUT_%s\" required=\"required\"",
+	 HTM_TR_End ();
+
+	 /***** Visibility of results *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Result_visibility);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LB\"");
+	       TstVis_PutVisibilityCheckboxes (Games->Game.Visibility);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Game text *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 				   The_GetSuffix ());
-	       HTM_TD_End ();
+		  HTM_Txt (Txt);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-	    HTM_TR_End ();
+	 HTM_TR_End ();
 
-	    /***** Visibility of results *****/
-	    HTM_TR_Begin (NULL);
+      /***** End table ****/
+      HTM_TABLE_End ();
 
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_Result_visibility);
-	       HTM_TD_End ();
+      /***** Send button *****/
+      Btn_PutButton (Button[ExistingNewGame],
+		     TxtButton[ExistingNewGame]);
 
-	       HTM_TD_Begin ("class=\"LB\"");
-		  TstVis_PutVisibilityCheckboxes (Games->Game.Visibility);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Game text *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT","Txt",Txt_Description);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				      " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
-				      The_GetSuffix ());
-		     HTM_Txt (Txt);
-		  HTM_TEXTAREA_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table ****/
-	 HTM_TABLE_End ();
-
-	 /***** Send button *****/
-         Btn_PutButton (Button[ExistingNewGame],
-                        TxtButton[ExistingNewGame]);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End box ****/
-   Box_BoxEnd ();
+   /***** End form *****/
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1462,21 +1471,8 @@ void Gam_ReceiveFormGame (void)
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);
 
-   /***** Put forms to create/edit the game *****/
-   Gam_PutFormEditionGame (&Games,Txt,ExistingNewGame);
-
-   /***** Show games or questions *****/
-   switch (ExistingNewGame)
-     {
-      case Gam_EXISTING_GAME:
-	 /* Show questions of the game ready to be edited */
-	 Gam_ListGameQuestions (&Games);
-	 break;
-      case Gam_NEW_GAME:
-	 /* Show games again */
-	 Gam_ListAllGames (&Games);
-	 break;
-     }
+   /***** Show current game and its questions *****/
+   Gam_PutFormsOneGame (&Games,ExistingNewGame);
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
