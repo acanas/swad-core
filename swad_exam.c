@@ -1298,21 +1298,16 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
       /***** Put form to create/edit an exam *****/
       Exa_PutFormEditionExam (Exams,Txt,ExistingNewExam);
 
-      /***** Show other lists *****/
-      switch (ExistingNewExam)
-	{
-	 case Exa_EXISTING_EXAM:
-	    /* Show list of sets */
-	    ExaSet_ListExamSets (Exams,Set);
-	    break;
-	 case Exa_NEW_EXAM:
-	    /* Show exams again */
-	    Exa_ListAllExams (Exams);
-	    break;
-	}
+      /***** Show list of sets inside box *****/
+      if (ExistingNewExam == Exa_EXISTING_EXAM)
+	 ExaSet_ListExamSets (Exams,Set);
 
    /***** End box ****/
    Box_BoxEnd ();
+
+   /***** Show exams again outside box *****/
+   if (ExistingNewExam == Exa_NEW_EXAM)
+      Exa_ListAllExams (Exams);
   }
 
 /*****************************************************************************/

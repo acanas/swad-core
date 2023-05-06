@@ -70,6 +70,8 @@ static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric);
 
 static void Rub_RemoveRubricFromAllTables (long RubCod);
 
+static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
+			              Rub_ExistingNewRubric_t ExistingNewRubric);
 static void Rub_ReceiveRubricFieldsFromForm (struct Rub_Rubric *Rubric);
 static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubric);
 
@@ -840,8 +842,8 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 /******************** Put a form to create/edit a rubric *********************/
 /*****************************************************************************/
 
-void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
-			       Rub_ExistingNewRubric_t ExistingNewRubric)
+static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
+			              Rub_ExistingNewRubric_t ExistingNewRubric)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
