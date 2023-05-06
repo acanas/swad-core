@@ -269,8 +269,7 @@ void ExaSet_ReceiveFormSet (void)
       ExaSet_CreateSet (&Set);	// Add new set to database
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
@@ -357,8 +356,7 @@ void ExaSet_ChangeSetTitle (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -404,8 +402,7 @@ void ExaSet_ChangeNumQstsToExam (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -450,8 +447,7 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
    Qst_RequestSelectQstsForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -479,8 +475,7 @@ void ExaSet_ListQstsToAddToSet (void)
    Qst_ListQuestionsToSelectForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1144,8 +1139,7 @@ void ExaSet_AddQstsToSet (void)
    ExaSet_FreeListsSelectedQuestions (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1275,8 +1269,7 @@ void ExaSet_ReqRemSet (void)
 			   Set.Title);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1315,8 +1308,7 @@ void ExaSet_RemoveSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1361,8 +1353,7 @@ void ExaSet_MoveUpSet (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1411,8 +1402,7 @@ void ExaSet_MoveDownSet (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1452,8 +1442,7 @@ void ExaSet_ReqRemQstFromSet (void)
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1489,8 +1478,7 @@ void ExaSet_RemoveQstFromSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1564,8 +1552,7 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
                              Validity);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-                        false);	// It's not a new exam
+   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/

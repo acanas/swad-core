@@ -976,7 +976,6 @@ void Rub_ReceiveFormRubric (void)
    /***** Overwrite some rubric data with the data received from form *****/
    Rub_ReceiveRubricFieldsFromForm (&Rubrics.Rubric);
    if (Rub_CheckRubricFieldsReceivedFromForm (&Rubrics.Rubric))
-     {
       /***** Create a new rubric or update an existing one *****/
       switch (ExistingNewRubric)
 	{
@@ -988,7 +987,6 @@ void Rub_ReceiveFormRubric (void)
 	    ExistingNewRubric = Rub_EXISTING_RUBRIC;
 	    break;
 	}
-     }
 
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);
@@ -1022,8 +1020,9 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
       if (Rub_DB_CheckIfSimilarRubricExists (Rubric))
 	{
 	 NewRubricIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
-			Rubric->Title);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_Already_existed_a_game_with_the_title_X,
+			   Rubric->Title);
 	}
      }
    else	// If there is not a rubric title

@@ -1227,7 +1227,7 @@ void Exa_ReqCreatOrEditExam (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
-   bool ItsANewExam;
+   Exa_ExistingNewExam_t ExistingNewExam;
 
    /***** Check if I can edit exams *****/
    if (!Exa_CheckIfICanEditExams ())
@@ -1240,18 +1240,22 @@ void Exa_ReqCreatOrEditExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   ItsANewExam = (Exams.Exam.ExaCod <= 0);
+   ExistingNewExam = (Exams.Exam.ExaCod > 0) ? Exa_EXISTING_EXAM :
+					       Exa_NEW_EXAM;
 
    /***** Get exam data *****/
-   if (ItsANewExam)
-      /* Initialize to empty exam */
-      Exa_ResetExam (&Exams.Exam);
-   else
-      /* Get exam data from database */
-      Exa_GetExamDataByCod (&Exams.Exam);
+   switch (ExistingNewExam)
+     {
+      case Exa_EXISTING_EXAM:
+	 /* Get exam data from database */
+	 Exa_GetExamDataByCod (&Exams.Exam);
+	 break;
+      case Exa_NEW_EXAM:
+	 break;
+     }
 
    /***** Put form to create/edit an exam and show sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,ItsANewExam);
+   Exa_PutFormsOneExam (&Exams,&Set,ExistingNewExam);
   }
 
 /*****************************************************************************/
@@ -1430,7 +1434,7 @@ void Exa_ReceiveFormExam (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
-   bool ItsANewExam;
+   Exa_ExistingNewExam_t ExistingNewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if I can edit exams *****/
@@ -1444,31 +1448,41 @@ void Exa_ReceiveFormExam (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
-   ItsANewExam = (Exams.Exam.ExaCod <= 0);
+   ExistingNewExam = (Exams.Exam.ExaCod > 0) ? Exa_EXISTING_EXAM :
+					       Exa_NEW_EXAM;
 
    /***** Get all current exam data from database *****/
    // Some data, not received from form,
    // are necessary to show exam and sets of questions again
-   if (!ItsANewExam)
-      Exa_GetExamDataByCod (&Exams.Exam);
+   switch (ExistingNewExam)
+     {
+      case Exa_EXISTING_EXAM:
+         Exa_GetExamDataByCod (&Exams.Exam);
+         break;
+      case Exa_NEW_EXAM:
+         break;
+     }
 
    /***** Overwrite some exam data with the data received from form *****/
    Exa_ReceiveExamFieldsFromForm (&Exams.Exam,Txt);
    if (Exa_CheckExamFieldsReceivedFromForm (&Exams.Exam))
-     {
       /***** Create a new exam or update an existing one *****/
-      if (ItsANewExam)
+      switch (ExistingNewExam)
 	{
-	 Exa_CreateExam (&Exams.Exam,Txt);	// Add new exam to database
-	 ItsANewExam = false;
+	 case Exa_EXISTING_EXAM:
+	    Exa_UpdateExam (&Exams.Exam,Txt);	// Update exam data in database
+	    break;
+	 case Exa_NEW_EXAM:
+	    Exa_CreateExam (&Exams.Exam,Txt);	// Add new exam to database
+	    ExistingNewExam = Exa_EXISTING_EXAM;
+	    break;
 	}
-      else
-	 Exa_UpdateExam (&Exams.Exam,Txt);	// Update exam data in database
-     }
+
+   /***** Show pending alerts */
+   Ale_ShowAlerts (NULL);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,
-			ItsANewExam);
+   Exa_PutFormsOneExam (&Exams,&Set,ExistingNewExam);
   }
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
@@ -1506,8 +1520,9 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
                                            Exam->ExaCod,Exam->Title))
 	{
 	 NewExamIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_exam_with_the_title_X,
-			Exam->Title);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_Already_existed_an_exam_with_the_title_X,
+			  Exam->Title);
 	}
      }
    else	// If there is not an exam title

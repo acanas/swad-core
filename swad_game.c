@@ -144,9 +144,9 @@ static Gam_Order_t Gam_GetParOrder (void);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
 
-static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
-				     char Txt[Cns_MAX_BYTES_TEXT + 1],
-			             Gam_ExistingNewGame_t ExistingNewGame);
+static void Gam_PutFormEditionGame (struct Gam_Games *Games,
+				    char Txt[Cns_MAX_BYTES_TEXT + 1],
+			            Gam_ExistingNewGame_t ExistingNewGame);
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
@@ -1268,7 +1268,7 @@ void Gam_ReqCreatOrEditGame (void)
      }
 
    /***** Put forms to create/edit a game *****/
-   Gam_PutFormsEditionGame (&Games,Txt,ExistingNewGame);
+   Gam_PutFormEditionGame (&Games,Txt,ExistingNewGame);
 
    /***** Show games or questions *****/
    switch (ExistingNewGame)
@@ -1288,9 +1288,9 @@ void Gam_ReqCreatOrEditGame (void)
 /********************* Put a form to create/edit a game **********************/
 /*****************************************************************************/
 
-static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
-				     char Txt[Cns_MAX_BYTES_TEXT + 1],
-			             Gam_ExistingNewGame_t ExistingNewGame)
+static void Gam_PutFormEditionGame (struct Gam_Games *Games,
+				    char Txt[Cns_MAX_BYTES_TEXT + 1],
+			            Gam_ExistingNewGame_t ExistingNewGame)
   {
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
@@ -1447,7 +1447,6 @@ void Gam_ReceiveFormGame (void)
    /***** Receive game from form *****/
    Gam_ReceiveGameFieldsFromForm (&Games.Game,Txt);
    if (Gam_CheckGameFieldsReceivedFromForm (&Games.Game))
-     {
       /***** Create a new game or update an existing one *****/
       switch (ExistingNewGame)
 	{
@@ -1456,34 +1455,28 @@ void Gam_ReceiveFormGame (void)
 	    break;
 	 case Gam_NEW_GAME:
 	    Gam_CreateGame (&Games.Game,Txt);	// Add new game to database
+	    ExistingNewGame = Gam_EXISTING_GAME;
 	    break;
 	}
 
-      /***** Put forms to edit the game created or updated *****/
-      Gam_PutFormsEditionGame (&Games,Txt,Gam_EXISTING_GAME);
+   /***** Show pending alerts */
+   Ale_ShowAlerts (NULL);
 
-      /***** Show questions of the game ready to be edited ******/
-      Gam_ListGameQuestions (&Games);
-     }
-   else
+   /***** Put forms to create/edit the game *****/
+   Gam_PutFormEditionGame (&Games,Txt,ExistingNewGame);
+
+   /***** Show games or questions *****/
+   switch (ExistingNewGame)
      {
-      /***** Put forms to create/edit the game *****/
-      Gam_PutFormsEditionGame (&Games,Txt,ExistingNewGame);
-
-      /***** Show games or questions *****/
-      switch (ExistingNewGame)
-	{
-	 case Gam_EXISTING_GAME:
-	    /* Show questions of the game ready to be edited */
-	    Gam_ListGameQuestions (&Games);
-	    break;
-	 case Gam_NEW_GAME:
-	    /* Show games again */
-	    Gam_ListAllGames (&Games);
-	    break;
-	}
+      case Gam_EXISTING_GAME:
+	 /* Show questions of the game ready to be edited */
+	 Gam_ListGameQuestions (&Games);
+	 break;
+      case Gam_NEW_GAME:
+	 /* Show games again */
+	 Gam_ListAllGames (&Games);
+	 break;
      }
-
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
@@ -1520,8 +1513,9 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
       if (Gam_DB_CheckIfSimilarGameExists (Game))
 	{
 	 NewGameIsCorrect = false;
-	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
-			Game->Title);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_Already_existed_a_game_with_the_title_X,
+			  Game->Title);
 	}
      }
    else	// If there is not a game title
