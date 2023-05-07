@@ -12070,25 +12070,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewExaSet] =
 #if   L==1	// ca
-	"Create new exam set"			// Necessita traducció
+	"Crear conjunt de preguntes"
 #elif L==2	// de
-	"Create new exam set"			// Need Übersetzung
+	"Satz von Fragen erstellen"
 #elif L==3	// en
-	"Create new exam set"
+	"Create set of questions"
 #elif L==4	// es
-	"Crear nuevo conjunto de preguntas"
+	"Crear conjunto de preguntas"
 #elif L==5	// fr
-	"Create new exam set"			// Besoin de traduction
+	"Cr&eacute;er ensemble de questions"
 #elif L==6	// gn
-	"Crear nuevo conjunto de preguntas"	// Okoteve traducción
+	"Ojapo porandu &ntilde;emohenda"
 #elif L==7	// it
-	"Create new exam set"			// Bisogno di traduzione
+	"Crea set di domande"
 #elif L==8	// pl
-	"Create new exam set"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz zestaw pyta&nacute;"
 #elif L==9	// pt
-	"Create new exam set"			// Precisa de tradução
+	"Criar conjunto de perguntas"
 #elif L==10	// tr
-	"Create new exam set"			// Çeviri lazim!
+	"Soru grubu olu&scedil;tur"
 #endif
 	,
 	[ActReqRemExaSet] =

@@ -6549,6 +6549,29 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 	"Courses of %s";	// Çeviri lazim!
 #endif
 
+const char *Txt_Create =
+#if   L==1	// ca
+	"Crear";
+#elif L==2	// de
+	"Erstellen";
+#elif L==3	// en
+	"Create";
+#elif L==4	// es
+	"Crear";
+#elif L==5	// fr
+	"Cr&eacute;er";
+#elif L==6	// gn
+	"Omohe&ntilde;&oacute;i hagu&atilde;";
+#elif L==7	// it
+	"Crea";
+#elif L==8	// pl
+	"Utw&oacute;rz";
+#elif L==9	// pt
+	"Criar";
+#elif L==10	// tr
+	"Yaratmak";
+#endif
+
 const char *Txt_Create_account =
 #if   L==1	// ca
 	"Crea compte";
@@ -7306,29 +7329,6 @@ const char *Txt_Create_rubric =
 	"Criar rubrica";
 #elif L==10	// tr
 	"De&gbreve;erlendirme listesi olu&scedil;turun";
-#endif
-
-const char *Txt_Create_set_of_questions =
-#if   L==1	// ca
-	"Crear conjunt de preguntes";
-#elif L==2	// de
-	"Satz von Fragen erstellen";
-#elif L==3	// en
-	"Create set of questions";
-#elif L==4	// es
-	"Crear conjunto de preguntas";
-#elif L==5	// fr
-	"Cr&eacute;er ensemble de questions";
-#elif L==6	// gn
-	"Crear conjunto de preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Crea set di domande";
-#elif L==8	// pl
-	"Utw&oacute;rz zestaw pyta&nacute;";
-#elif L==9	// pt
-	"Criar conjunto de perguntas";
-#elif L==10	// tr
-	"Create set of questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_session =
