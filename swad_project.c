@@ -3704,7 +3704,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *Par_CodeStr[];
    extern const char *Txt_Project;
-   extern const char *Txt_Data;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Title;
    extern const char *Txt_Department;
    extern const char *Txt_Another_department;
@@ -3718,13 +3718,15 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Txt_URL;
    extern const char *Txt_No;
    extern const char *Txt_Yes;
-   extern const char *Txt_Create_project;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Members;
    Prj_Proposal_t Proposal;
    unsigned ProposalUnsigned;
    unsigned NumRoleToShow;
    char *SelectClass;
+   Act_Action_t NextAction = ItsANewProject ? ActNewPrj :
+					      ActChgPrj;
 
    /***** Begin project box *****/
    Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
@@ -3749,11 +3751,10 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
       /***** 2. Project data *****/
       HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Data);
+	 HTM_LEGEND (Txt_Actions[NextAction]);
 
 	 /* Begin data form */
-	 Frm_BeginForm (ItsANewProject ? ActNewPrj :
-					 ActChgPrj);
+	 Frm_BeginForm (NextAction);
 	    Prj_PutCurrentPars (Projects);
 
 	    /* Begin table */
@@ -3902,7 +3903,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    /* Send button */
 	    if (ItsANewProject)
-	       Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create_project);
+	       Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
 	    else
 	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 

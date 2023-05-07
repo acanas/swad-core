@@ -629,17 +629,19 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.107.9 (2023-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 22.107.11 (2023-05-07)"
 #define CSS_FILE		"swad22.107.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 22.107.9: May 07, 2023  Changes in edition of rubric criterion. (338015 lines)
-	Version 22.107.8: May 07, 2023  Changes in edition of exam set. (338031 lines)
-	Version 22.107.7: May 06, 2023  Changes in edition of game. (338025 lines)
-	Version 22.107.6: May 06, 2023  Code refactoring in edition of exam. (338023 lines)
-	Version 22.107.5: May 06, 2023  Changes in edition of rubric. (338027 lines)
-	Version 22.107.4: May 06, 2023  Changes in edition of exam. (338040 lines)
-	Version 22.107.3: May 06, 2023  Changes in edition of exam. (338045 lines)
+	Version 22.107.11:May 07, 2023  Changes in edition of surveys. (337952 lines)
+	Version 22.107.10:May 07, 2023  Changes in edition of projects. (337973 lines)
+	Version 22.107.9: May 07, 2023  Changes in edition of rubric criterions. (338015 lines)
+	Version 22.107.8: May 07, 2023  Changes in edition of exam sets. (338031 lines)
+	Version 22.107.7: May 06, 2023  Changes in edition of games. (338025 lines)
+	Version 22.107.6: May 06, 2023  Code refactoring in edition of exams. (338023 lines)
+	Version 22.107.5: May 06, 2023  Changes in edition of rubrisc. (338027 lines)
+	Version 22.107.4: May 06, 2023  Changes in edition of exams. (338040 lines)
+	Version 22.107.3: May 06, 2023  Changes in edition of exams. (338045 lines)
 	Version 22.107.2: May 05, 2023  Removed unused action in exam sets. (338044 lines)
 	Version 22.107.1: May 05, 2023  Changes in list of users to follow. (338105 lines)
 	Version 22.107:   May 05, 2023  Changes in layout institutional links and connected users. (338108 lines)

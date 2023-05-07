@@ -9655,48 +9655,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewPrj] =
 #if   L==1	// ca
-	"Create new project"	// Necessita traducció
+	"Crear projecte"
 #elif L==2	// de
-	"Create new project"	// Need Übersetzung
+	"Projekt eingeben"
 #elif L==3	// en
-	"Create new project"
+	"Create project"
 #elif L==4	// es
-	"Crear nuevo proyecto"
+	"Crear proyecto"
 #elif L==5	// fr
-	"Create new project"	// Besoin de traduction
+	"Cr&eacute;er projet"
 #elif L==6	// gn
-	"Crear nuevo proyecto"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i proyecto"
 #elif L==7	// it
-	"Create new project"	// Bisogno di traduzione
+	"Crea progetto"
 #elif L==8	// pl
-	"Create new project"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz projekt"
 #elif L==9	// pt
-	"Create new project"	// Precisa de tradução
+	"Criar projeto"
 #elif L==10	// tr
-	"Create new project"	// Çeviri lazim!
+	"Proje olu&scedil;tur"
 #endif
 	,
 	[ActChgPrj] =
 #if   L==1	// ca
-	"Change project"	// Necessita traducció
+	"Canviar projecte"
 #elif L==2	// de
-	"Change project"	// Need Übersetzung
+	"Projekt &auml;ndern"
 #elif L==3	// en
 	"Change project"
 #elif L==4	// es
-	"Cambiar un proyecto"
+	"Cambiar proyecto"
 #elif L==5	// fr
-	"Change project"	// Besoin de traduction
+	"Modifier projet"
 #elif L==6	// gn
-	"Cambiar un proyecto"	// Okoteve traducción
+	"Omoambue proyecto"
 #elif L==7	// it
-	"Change project"	// Bisogno di traduzione
+	"Cambia progetto"
 #elif L==8	// pl
-	"Change project"	// Potrzebujesz tlumaczenie
+	"Zmie&nacute; projekt"
 #elif L==9	// pt
-	"Change project"	// Precisa de tradução
+	"Alterar projeto"
 #elif L==10	// tr
-	"Change project"	// Çeviri lazim!
+	"Projeyi de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActReqRemPrj] =
@@ -32862,25 +32862,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewSvy] =
 #if   L==1	// ca
-	"Create new survey"	// Necessita traducció
+	"Crear enquesta"
 #elif L==2	// de
-	"Create new survey"	// Need Übersetzung
+	"Umfrage erstellen"
 #elif L==3	// en
-	"Create new survey"
+	"Create survey"
 #elif L==4	// es
-	"Crear nueva encuesta"
+	"Crear encuesta"
 #elif L==5	// fr
-	"Create new survey"	// Besoin de traduction
+	"Cr&eacute;er sondage"
 #elif L==6	// gn
-	"Crear nueva encuesta"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i encuesta"
 #elif L==7	// it
-	"Create new survey"	// Bisogno di traduzione
+	"Crea sondaggio"
 #elif L==8	// pl
-	"Create new survey"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz ankiety"
 #elif L==9	// pt
-	"Create new survey"	// Precisa de tradução
+	"Criar inqu&eacute;rito"
 #elif L==10	// tr
-	"Create new survey"	// Çeviri lazim!
+	"Anket olu&scedil;tur"
 #endif
 	,
 	[ActChgSvy] =

@@ -1622,7 +1622,7 @@ void Svy_ReqCreatOrEditSvy (void)
    extern const char *Txt_Title;
    extern const char *Txt_Description;
    extern const char *Txt_Users;
-   extern const char *Txt_Create_survey;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    struct Svy_Surveys Surveys;
    bool ItsANewSurvey;
@@ -1770,7 +1770,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
       /***** End table, send button and end box *****/
       if (ItsANewSurvey)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_survey);
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
       else
 	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 

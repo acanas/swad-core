@@ -7193,29 +7193,6 @@ const char *Txt_Create_plugin =
 	"Create plugin";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_project =
-#if   L==1	// ca
-	"Crear projecte";
-#elif L==2	// de
-	"Projekt eingeben";
-#elif L==3	// en
-	"Create project";
-#elif L==4	// es
-	"Crear proyecto";
-#elif L==5	// fr
-	"Cr&eacute;er projet";
-#elif L==6	// gn
-	"Crear proyecto";	// Okoteve traducción
-#elif L==7	// it
-	"Crea progetto";
-#elif L==8	// pl
-	"Utw&oacute;rz projekt";
-#elif L==9	// pt
-	"Criar projeto";
-#elif L==10	// tr
-	"Create project";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_question =
 #if   L==1	// ca
 	"Crear pregunta";
@@ -7329,29 +7306,6 @@ const char *Txt_Create_session =
 	"Criar sess&atilde;o";
 #elif L==10	// tr
 	"Create session";	// Çeviri lazim!
-#endif
-
-const char *Txt_Create_survey =
-#if   L==1	// ca
-	"Crear enquesta";
-#elif L==2	// de
-	"Umfrage erstellen";
-#elif L==3	// en
-	"Create survey";
-#elif L==4	// es
-	"Crear encuesta";
-#elif L==5	// fr
-	"Cr&eacute;er sondage";
-#elif L==6	// gn
-	"Crear encuesta";	// Okoteve traducción
-#elif L==7	// it
-	"Crea sondaggio";
-#elif L==8	// pl
-	"Utw&oacute;rz ankiety";
-#elif L==9	// pt
-	"Criar inqu&eacute;rito";
-#elif L==10	// tr
-	"Create survey";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_type_of_degree =
@@ -8272,29 +8226,6 @@ const char *Txt_Current_password =
 	"Senha atual";
 #elif L==10	// tr
 	"Mevcut &scedil;ifre";
-#endif
-
-const char *Txt_Data =	// Project data
-#if   L==1	// ca
-	"Dades";
-#elif L==2	// de
-	"Daten";
-#elif L==3	// en
-	"Data";
-#elif L==4	// es
-	"Datos";
-#elif L==5	// fr
-	"Donn&eacute;es";
-#elif L==6	// gn
-	"Datos";	// Okoteve traducción
-#elif L==7	// it
-	"Dati";
-#elif L==8	// pl
-	"Dane";
-#elif L==9	// pt
-	"Dados";
-#elif L==10	// tr
-	"Data";		// Çeviri lazim!
 #endif
 
 const char *Txt_DATA_PROTECTION_POLICY =
