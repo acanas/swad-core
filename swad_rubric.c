@@ -866,7 +866,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Title;
    extern const char *Txt_Description;
-   extern const char *Txt_Create_rubric;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    static Act_Action_t NextAction[] =
      {
@@ -881,7 +881,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    const char *TxtButton[] =
      {
       [Rub_EXISTING_RUBRIC] = Txt_Save_changes,
-      [Rub_NEW_RUBRIC     ] = Txt_Create_rubric,
+      [Rub_NEW_RUBRIC     ] = Txt_Create,
      };
 
    /***** Begin form *****/

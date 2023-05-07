@@ -7262,29 +7262,6 @@ const char *Txt_Create_room =
 	"Create room";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_rubric =
-#if   L==1	// ca
-	"Crear r&uacute;brica";
-#elif L==2	// de
-	"Rubrik erstellen";
-#elif L==3	// en
-	"Create rubric";
-#elif L==4	// es
-	"Crear r&uacute;brica";
-#elif L==5	// fr
-	"Cr&eacute;er rubrique";
-#elif L==6	// gn
-	"Crear r&uacute;brica";	// Okoteve traducción
-#elif L==7	// it
-	"Crea rubrica";
-#elif L==8	// pl
-	"Utw&oacute;rz rubryk&eogon;";
-#elif L==9	// pt
-	"Criar rubrica";
-#elif L==10	// tr
-	"De&gbreve;erlendirme listesi olu&scedil;turun";
-#endif
-
 const char *Txt_Create_session =
 #if   L==1	// ca
 	"Crear sessi&oacute;";

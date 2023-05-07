@@ -14002,25 +14002,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewRub] =
 #if   L==1	// ca
-	"Crear nova r&uacute;brica"
+	"Crear r&uacute;brica"
 #elif L==2	// de
-	"Neue Rubrik erstellen"
+	"Rubrik erstellen"
 #elif L==3	// en
-	"Create new rubric"
+	"Create rubric"
 #elif L==4	// es
-	"Crear nueva r&uacute;brica"
+	"Crear r&uacute;brica"
 #elif L==5	// fr
-	"Cr&eacute;er nouvelle rubrique"
+	"Cr&eacute;er rubrique"
 #elif L==6	// gn
-	"Ojapo r&uacute;brica pyahu"
+	"Omohe&ntilde;&oacute;i  r&uacute;brica"
 #elif L==7	// it
-	"Creare nuova rubrica"
+	"Crea rubrica"
 #elif L==8	// pl
-	"Utw&oacute;rz now&aogon; rubryk&eogon;"
+	"Utw&oacute;rz rubryk&eogon;"
 #elif L==9	// pt
-	"Criar nova rubrica"
+	"Criar rubrica"
 #elif L==10	// tr
-	"Yeni de&gbreve;erlendirme listesi olu&scedil;tur"
+	"De&gbreve;erlendirme listesi olu&scedil;turun"
 #endif
 	,
 	[ActChgRub] =
