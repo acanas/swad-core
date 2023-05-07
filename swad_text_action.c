@@ -14163,25 +14163,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewRubCri] =
 #if   L==1	// ca
-	"Crear nou criteri de r&uacute;brica"
+	"Crear criteri"
 #elif L==2	// de
-	"Erstellen Sie neue Rubrikkriterien"
+	"Kriterium eingeben"
 #elif L==3	// en
-	"Create new rubric criterion"
+	"Create criterion"
 #elif L==4	// es
-	"Crear nuevo criterio de r&uacute;brica"
+	"Crear criterio"
 #elif L==5	// fr
-	"Cr&eacute;er nouveau crit&egrave;re de rubrique"
+	"Cr&eacute;er crit&egrave;re"
 #elif L==6	// gn
-	"Ojapo criterio pyahu rubrica rehegua"
+	"Omohe&ntilde;&oacute;i criterio"
 #elif L==7	// it
-	"Creare nuovo criterio di rubrica"
+	"Crear criterio"
 #elif L==8	// pl
-	"Utworzy&cacute; nowe kryteria rubryk"
+	"Utw&oacute;rz kryterium"
 #elif L==9	// pt
-	"Criar novo crit&eacute;rio de rubrica"
+	"Criar crit&eacute;rio"
 #elif L==10	// tr
-	"Yeni bir dereceli puanlama anahtar&inodot; kriteri olu&scedil;turmak i&ccedil;in"
+	"&Ouml;l&ccedil;&uuml;t olu&scedil;tur"
 #endif
 	,
 	[ActReqRemRubCri] =

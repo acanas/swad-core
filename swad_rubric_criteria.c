@@ -171,80 +171,87 @@ void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion)
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd)
   {
-   extern const char *Txt_Create_criterion;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
    RubCri_ValueRange_t ValueRange;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewRubCri);
-      Rub_PutPars (Rubrics);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewRubCri]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewRubCri);
+	 Rub_PutPars (Rubrics);
 
-	 /***** Table heading *****/
-	 RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
-	                                    RubCri_DONT_PUT_COLUMNS_FOR_SCORE);
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Begin row *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Table heading *****/
+	    RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
+					       RubCri_DONT_PUT_COLUMNS_FOR_SCORE);
 
-	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RT\"");
-	       Lay_WriteIndex (MaxCriInd + 1,"BIG_INDEX");
-	    HTM_TD_End ();
+	    /***** Begin row *****/
+	    HTM_TR_Begin (NULL);
 
-	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-
-	    /***** Link *****/
-	    HTM_TD_Begin ("class=\"LT\"");
-	       Rsc_ShowClipboardToChangeLink (NULL);
-	    HTM_TD_End ();
-
-	    /***** Minimum and maximum values of the criterion *****/
-	    for (ValueRange  = (RubCri_ValueRange_t) 0;
-		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-		 ValueRange++)
-	      {
+	       /***** Index *****/
 	       HTM_TD_Begin ("class=\"RT\"");
-		  HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
-		                   0.0,DBL_MAX,RubCri_SCORE_STEP,
-		                   Rubrics->Criterion.Values[ValueRange],
-		                   HTM_DONT_SUBMIT_ON_CHANGE,false,
+		  Lay_WriteIndex (MaxCriInd + 1,"BIG_INDEX");
+	       HTM_TD_End ();
+
+	       /***** Title *****/
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Title\""
+				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
+
+	       /***** Link *****/
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Rsc_ShowClipboardToChangeLink (NULL);
+	       HTM_TD_End ();
+
+	       /***** Minimum and maximum values of the criterion *****/
+	       for (ValueRange  = (RubCri_ValueRange_t) 0;
+		    ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
+		    ValueRange++)
+		 {
+		  HTM_TD_Begin ("class=\"RT\"");
+		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
+				      0.0,DBL_MAX,RubCri_SCORE_STEP,
+				      Rubrics->Criterion.Values[ValueRange],
+				      HTM_DONT_SUBMIT_ON_CHANGE,false,
+				      " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
+				      The_GetSuffix ());
+		  HTM_TD_End ();
+		 }
+
+	       /***** Weight *****/
+	       HTM_TD_Begin ("class=\"RT\"");
+		  HTM_INPUT_FLOAT ("Weight",
+				   RubCri_WEIGHT_MIN,
+				   RubCri_WEIGHT_MAX,
+				   RubCri_WEIGHT_STEP,
+				   Rubrics->Criterion.Weight,
+				   HTM_DONT_SUBMIT_ON_CHANGE,false,
 				   " class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
 				   The_GetSuffix ());
 	       HTM_TD_End ();
-	      }
 
-	    /***** Weight *****/
-	    HTM_TD_Begin ("class=\"RT\"");
-	       HTM_INPUT_FLOAT ("Weight",
-	                        RubCri_WEIGHT_MIN,
-	                        RubCri_WEIGHT_MAX,
-	                        RubCri_WEIGHT_STEP,
-				Rubrics->Criterion.Weight,
-				HTM_DONT_SUBMIT_ON_CHANGE,false,
-				" class=\"INPUT_FLOAT INPUT_%s\" required=\"required\"",
-				The_GetSuffix ());
-	    HTM_TD_End ();
+	    /***** End row *****/
+	    HTM_TR_End ();
 
-	 /***** End row *****/
-	 HTM_TR_End ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_criterion);
+      /***** End form *****/
+      Frm_EndForm ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

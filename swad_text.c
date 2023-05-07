@@ -6779,29 +6779,6 @@ const char *Txt_Create_course =
 	"Create course";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_criterion =
-#if   L==1	// ca
-	"Crear criteri";
-#elif L==2	// de
-	"Kriterium eingeben";
-#elif L==3	// en
-	"Create criterion";
-#elif L==4	// es
-	"Crear criterio";
-#elif L==5	// fr
-	"Cr&eacute;er crit&egrave;re";
-#elif L==6	// gn
-	"Crear criterio";	// Okoteve traducción
-#elif L==7	// it
-	"Crear criterio";
-#elif L==8	// pl
-	"Utw&oacute;rz kryterium";
-#elif L==9	// pt
-	"Criar crit&eacute;rio";
-#elif L==10	// tr
-	"&Ouml;l&ccedil;&uuml;t olu&scedil;tur";
-#endif
-
 const char *Txt_Create_degree =
 #if   L==1	// ca
 	"Crear titulaci&oacute;";
