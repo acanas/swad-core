@@ -1578,7 +1578,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Actions not in menu:
    [ActWriAnn		] = {1237,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ShowFormAnnouncement	,NULL},
-   [ActRcvAnn		] = {1238,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ReceiveAnnouncement	,NULL},
+   [ActNewAnn		] = {1238,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ReceiveAnnouncement	,NULL},
    [ActHidAnn		] = {1470,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_HideActiveAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
    [ActUnhAnn		] = {1471,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_RevealHiddenAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
    [ActRemAnn		] = {1236,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_RemoveAnnouncement		,NULL},
@@ -3130,7 +3130,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeAnn,		// #1235
 	ActRemAnn,		// #1236
 	ActWriAnn,		// #1237
-	ActRcvAnn,		// #1238
+	ActNewAnn,		// #1238
 	-1,			// #1239 (obsolete action)
 	-1,			// #1240 (obsolete action)
 	-1,			// #1241 (obsolete action)

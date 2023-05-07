@@ -28766,27 +28766,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See form to create a new global announcement"		// Çeviri lazim!
 #endif
 	,
-	[ActRcvAnn] =
+	[ActNewAnn] =
 #if   L==1	// ca
-	"Create new global announcement"	// Necessita traducció
+	"Crear anunci"
 #elif L==2	// de
-	"Create new global announcement"	// Need Übersetzung
+	"Erstelle Bekanntmachung"
 #elif L==3	// en
-	"Create new global announcement"
+	"Create announcement"
 #elif L==4	// es
-	"Crear nuevo anuncio global"
+	"Crear anuncio"
 #elif L==5	// fr
-	"Create new global announcement"	// Besoin de traduction
+	"Cr&eacute;er annonce"
 #elif L==6	// gn
-	"Crear nuevo anuncio global"		// Okoteve traducción
+	"Omohe&ntilde;&oacute;i anuncio"
 #elif L==7	// it
-	"Create new global announcement"	// Bisogno di traduzione
+	"Crea annuncio"
 #elif L==8	// pl
-	"Create new global announcement"	// Potrzebujesz tlumaczenie
+	"Stw&oacute;rz og&lstrok;oszenia"
 #elif L==9	// pt
-	"Create new global announcement"	// Precisa de tradução
+	"Criar an&uacute;ncio"
 #elif L==10	// tr
-	"Create new global announcement"	// Çeviri lazim!
+	"Duyuru olu&scedil;tur"
 #endif
 	,
 	[ActHidAnn] =

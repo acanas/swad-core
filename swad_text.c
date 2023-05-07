@@ -6595,29 +6595,6 @@ const char *Txt_Create_account =
 	"Hesab&inodot; olu&scedil;tur";
 #endif
 
-const char *Txt_Create_announcement =
-#if   L==1	// ca
-	"Crear anunci";
-#elif L==2	// de
-	"Erstelle Bekanntmachung";
-#elif L==3	// en
-	"Create announcement";
-#elif L==4	// es
-	"Crear anuncio";
-#elif L==5	// fr
-	"Cr&eacute;er annonce";
-#elif L==6	// gn
-	"Crear anuncio";	// Okoteve traducción
-#elif L==7	// it
-	"Crea annuncio";
-#elif L==8	// pl
-	"Stw&oacute;rz og&lstrok;oszenia";
-#elif L==9	// pt
-	"Criar an&uacute;ncio";
-#elif L==10	// tr
-	"Create announcement";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_another_type_of_degree =
 #if   L==1	// ca
 	"Crear un altre tipus de titulaci&oacute;";

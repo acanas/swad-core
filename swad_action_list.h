@@ -1479,7 +1479,7 @@
 #define ActReqMaiUsr		(ActUnfSevTch +   6)
 // Secondary actions
 #define ActWriAnn		(ActUnfSevTch +   7)
-#define ActRcvAnn		(ActUnfSevTch +   8)
+#define ActNewAnn		(ActUnfSevTch +   8)
 #define ActHidAnn		(ActUnfSevTch +   9)
 #define ActUnhAnn		(ActUnfSevTch +  10)
 #define ActRemAnn		(ActUnfSevTch +  11)
