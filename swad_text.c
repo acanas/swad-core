@@ -7262,29 +7262,6 @@ const char *Txt_Create_room =
 	"Create room";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_session =
-#if   L==1	// ca
-	"Crear sessi&oacute;";
-#elif L==2	// de
-	"Sitzung erstellen";
-#elif L==3	// en
-	"Create session";
-#elif L==4	// es
-	"Crear sesi&oacute;n";
-#elif L==5	// fr
-	"Cr&eacute;er session";
-#elif L==6	// gn
-	"Crear sesi&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Crea sessione";
-#elif L==8	// pl
-	"Utw&oacute;rz sesji";
-#elif L==9	// pt
-	"Criar sess&atilde;o";
-#elif L==10	// tr
-	"Create session";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_type_of_degree =
 #if   L==1	// ca
 	"Crear tipus de titulaci&oacute;";
@@ -7632,7 +7609,7 @@ const char *Txt_Created_new_event_X =	// Warning: it is very important to includ
 
 const char *Txt_Created_new_exam_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"reat nou examen <strong>%s</strong>.";
+	"Creat nou examen <strong>%s</strong>.";
 #elif L==2	// de
 	"Neues Pr&uuml;fung <strong>%s</strong> eingegeben.";
 #elif L==3	// en
@@ -7904,6 +7881,29 @@ const char *Txt_Created_new_rubric_X =	// Warning: it is very important to inclu
 	"Criada nova rubrica <strong>%s</strong>.";
 #elif L==10	// tr
 	"Yeni de&gbreve;erlendirme listesi <strong>%s</strong> olu&scedil;turuldu.";
+#endif
+
+const char *Txt_Created_new_session_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Creat nova sessi&oacute; <strong>%s</strong>.";
+#elif L==2	// de
+	"Neue Sitzung <strong>%s</strong> eingegeben.";
+#elif L==3	// en
+	"Created new session <strong>%s</strong>.";
+#elif L==4	// es
+	"Creada nueva sesi&oacute;n <strong>%s</strong>.";
+#elif L==5	// fr
+	"Cr&eacute;&eacute;e nouvelle session <strong>%s</strong>.";
+#elif L==6	// gn
+	"Ojejapo sesi&oacute;n pyahu <strong>%s</strong>.";
+#elif L==7	// it
+	"Creata nuova sessione <strong>%s</strong>.";
+#elif L==8	// pl
+	"Utworzono now&aogon; sesj&eogon; <strong>%s</strong>.";
+#elif L==9	// pt
+	"Criada nova sess&atilde;o <strong>%s</strong>.";
+#elif L==10	// tr
+	"Yeni oturum <strong>%s</strong> olu&scedil;turuldu.";
 #endif
 
 const char *Txt_Created_new_set_of_questions_X =	// Warning: it is very important to include %s in the following sentences
@@ -51867,7 +51867,7 @@ const char *Txt_The_rubric_has_been_modified =
 #elif L==5	// fr
 	"La rubrique a &eacute;t&eacute; modifi&eacute;e.";
 #elif L==6	// gn
-	"La r&uacute;brica ha sido modificada.";	// Okoteve traducción
+	"O&ntilde;emoambue pe r&uacute;brica.";
 #elif L==7	// it
 	"La rubrica &egrave; stata modificata.";
 #elif L==8	// pl
@@ -51934,6 +51934,29 @@ const char *Txt_The_search_text_must_be_longer =
 	"The search text must be longer.";		// Çeviri lazim!
 #endif
 
+const char *Txt_The_session_has_been_modified =
+#if   L==1	// ca
+	"La sessi&oacute; ha estat modificada.";
+#elif L==2	// de
+	"Die Sitzung wurde ge&auml;ndert.";
+#elif L==3	// en
+	"The session has been modified.";
+#elif L==4	// es
+	"La sesi&oacute;n ha sido modificada.";
+#elif L==5	// fr
+	"La session a &eacute;t&eacute; modifi&eacute;e.";
+#elif L==6	// gn
+	"O&ntilde;emoambue pe sesi&oacute;n.";
+#elif L==7	// it
+	"La sessione &egrave; stata modificata.";
+#elif L==8	// pl
+	"Sesja zosta&lstrok;a zmieniona.";
+#elif L==9	// pt
+	"A sess&atilde;o foi modificada.";
+#elif L==10	// tr
+	"Oturum de&gbreve;i&scedil;tirildi.";
+#endif
+
 const char *Txt_The_session_has_expired =
 #if   L==1	// ca
 	"La sessi&oacute; ha expirat.";
@@ -51954,7 +51977,7 @@ const char *Txt_The_session_has_expired =
 #elif L==9	// pt
 	"A sess&atilde;o expirou.";
 #elif L==10	// tr
-	"The session has expired.";		// Çeviri lazim!
+	"Oturumun s&uuml;resi doldu.";		// Çeviri lazim!
 #endif
 /*
 const char *Txt_The_set_of_questions_has_been_modified =

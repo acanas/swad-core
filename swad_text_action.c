@@ -12438,48 +12438,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewExaSes] =
 #if   L==1	// ca
-	"Create new exam session"		// Necessita traducció
+	"Crear sessi&oacute; d'examen"
 #elif L==2	// de
-	"Create new exam session"		// Need Übersetzung
+	"Pr&uuml;fungssitzung erstellen"
 #elif L==3	// en
-	"Create new exam session"
+	"Create exam session"
 #elif L==4	// es
-	"Crear nueva sesi&oacute;n de examen"
+	"Crear sesi&oacute;n de examen"
 #elif L==5	// fr
-	"Create new exam session"		// Besoin de traduction
+	"Cr&eacute;er session d'examen"
 #elif L==6	// gn
-	"Crear nueva sesi&oacute;n de examen"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i sesi&oacute;n de examen"
 #elif L==7	// it
-	"Create new exam session"		// Bisogno di traduzione
+	"Crea sessione d'esame"
 #elif L==8	// pl
-	"Create new exam session"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz sesj&eogon; egzaminacyjn&aogon;"
 #elif L==9	// pt
-	"Create new exam session"		// Precisa de tradução
+	"Criar sess&atilde;o de exame"
 #elif L==10	// tr
-	"Create new exam session"		// Çeviri lazim!
+	"S&inodot;nav oturumu olu&scedil;tur"
 #endif
 	,
 	[ActChgExaSes] =
 #if   L==1	// ca
-	"Change exam session"			// Necessita traducció
+	"Canviar sessi&oacute; d'examen"
 #elif L==2	// de
-	"Change exam session"			// Need Übersetzung
+	"Pr&uuml;fungssitzung &auml;ndern"
 #elif L==3	// en
 	"Change exam session"
 #elif L==4	// es
 	"Cambiar sesi&oacute;n de examen"
 #elif L==5	// fr
-	"Change exam session"			// Besoin de traduction
+	"Modifier session d'examen"
 #elif L==6	// gn
-	"Cambiar sesi&oacute;n de examen"	// Okoteve traducción
+	"Omoambue sesi&oacute;n de examen"
 #elif L==7	// it
-	"Change exam session"			// Bisogno di traduzione
+	"Cambia sessione d'esame"
 #elif L==8	// pl
-	"Change exam session"			// Potrzebujesz tlumaczenie
+	"Zmieni&cacute; sesj&eogon; egzaminacyjn&aogon;"
 #elif L==9	// pt
-	"Change exam session"			// Precisa de tradução
+	"Alterar sess&atilde;o de exame"
 #elif L==10	// tr
-	"Change exam session"			// Çeviri lazim!
+	"S&inodot;nav oturumu de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActReqRemExaSes] =

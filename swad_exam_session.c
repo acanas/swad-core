@@ -959,10 +959,9 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
   {
-   extern const char *Hlp_ASSESSMENT_Exams_sessions;
-   extern const char *Txt_Session;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Title;
-   extern const char *Txt_Create_session;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -970,56 +969,62 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
    bool ItsANewSession = Session->SesCod <= 0;
+   Act_Action_t NextAction = ItsANewSession ? ActNewExaSes :
+				              ActChgExaSes;
 
    /***** Begin section for a new exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
-      /***** Begin form *****/
-      Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
-				      ActChgExaSes);	// Existing session
-	 ParCod_PutPar (ParCod_Exa,Session->ExaCod);
-	 if (!ItsANewSession)	// Existing session
-	    ParCod_PutPar (ParCod_Ses,Session->SesCod);
+      /***** Begin fieldset *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Actions[NextAction]);
 
-	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_Session :
-						  Session->Title,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
+	 /***** Begin form *****/
+	 Frm_BeginForm (NextAction);
+	    ParCod_PutPar (ParCod_Exa,Session->ExaCod);
+	    if (!ItsANewSession)	// Existing session
+	       ParCod_PutPar (ParCod_Ses,Session->SesCod);
 
-	    /***** Session title *****/
-	    HTM_TR_Begin (NULL);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
+	       /***** Session title *****/
+	       HTM_TR_Begin (NULL);
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+		  /* Label */
+		  Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	    HTM_TR_End ();
+		  /* Data */
+		  HTM_TD_Begin ("class=\"LT\"");
+		     HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
+				     " required=\"required\"",
+				     The_GetSuffix ());
+		  HTM_TD_End ();
 
-	    /***** Start and end dates *****/
-	    Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
-						     Dat_FORM_SECONDS_OFF,
-						     SetHMS);
+	       HTM_TR_End ();
 
-	    /***** Groups *****/
-	    ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
+	       /***** Start and end dates *****/
+	       Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
+							Dat_FORM_SECONDS_OFF,
+							SetHMS);
 
-	 /***** End table, send button and end box *****/
-	 if (ItsANewSession)
-	    Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
-	 else
-	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+	       /***** Groups *****/
+	       ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
-      /***** End form *****/
-      Frm_EndForm ();
+	    /***** End table and send button *****/
+	    HTM_TABLE_End ();
+	    if (ItsANewSession)
+	       Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+	    else
+	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+	 /***** End form *****/
+	 Frm_EndForm ();
+
+      /***** End fieldset *****/
+      HTM_FIELDSET_End ();
 
    /***** End section for a new exam session *****/
    HTM_SECTION_End ();
@@ -1139,8 +1144,8 @@ void ExaSes_ReqCreatOrEditSes (void)
 
 void ExaSes_ReceiveFormSession (void)
   {
-   extern const char *Txt_Created_new_event_X;
-   extern const char *Txt_The_event_has_been_modified;
+   extern const char *Txt_Created_new_session_X;
+   extern const char *Txt_The_session_has_been_modified;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
    bool ItsANewSession;
@@ -1203,10 +1208,10 @@ void ExaSes_ReceiveFormSession (void)
 
    /***** Write success message *****/
    if (ItsANewSession)
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_event_X,
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_session_X,
 		     Session.Title);
    else
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_session_has_been_modified);
 
    /***** Get exam data again to update it after changes in session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
