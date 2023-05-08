@@ -1994,25 +1994,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewBan] =
 #if   L==1	// ca
-	"Request creation of a banner"		// Necessita traducció
+	"Crear banner"
 #elif L==2	// de
-	"Request creation of a banner"		// Need Übersetzung
+	"Werbebanner erstellen"
 #elif L==3	// en
-	"Request creation of a banner"
+	"Create banner"
 #elif L==4	// es
-	"Solicitar creaci&ocute;n de un banner"
+	"Crear banner"
 #elif L==5	// fr
-	"Request creation of a banner"		// Besoin de traduction
+	"Cr&eacute;er banni&eacute;re"
 #elif L==6	// gn
-	"Solicitar creaci&ocute;n de un banner"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i pancarta"
 #elif L==7	// it
-	"Request creation of a banner"		// Bisogno di traduzione
+	"Crea banner"
 #elif L==8	// pl
-	"Request creation of a banner"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz banner"
 #elif L==9	// pt
-	"Request creation of a banner"		// Precisa de tradução
+	"Criar banner"
 #elif L==10	// tr
-	"Request creation of a banner"		// Çeviri lazim!
+	"Afi&scedil; olu&scedil;tur"
 #endif
 	,
 	[ActRemBan] =

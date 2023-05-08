@@ -633,6 +633,7 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 #define CSS_FILE		"swad22.107.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.107.16:May 07, 2023  Changes in edition of banners. (337915 lines)
 	Version 22.107.15:May 07, 2023  Changes in edition of assignments. (337915 lines)
 	Version 22.107.14:May 07, 2023  Changes in edition of announcements. (337936 lines)
 	Version 22.107.13:May 07, 2023  Changes in edition of exam sessions. (337957 lines)

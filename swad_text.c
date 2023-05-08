@@ -6618,29 +6618,6 @@ const char *Txt_Create_another_type_of_degree =
 	"Create another type of degree";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_banner =
-#if   L==1	// ca
-	"Crear banner";
-#elif L==2	// de
-	"Werbebanner erstellen";
-#elif L==3	// en
-	"Create banner";
-#elif L==4	// es
-	"Crear banner";
-#elif L==5	// fr
-	"Cr&eacute;er banni&eacute;re";
-#elif L==6	// gn
-	"Crear banner";		// Okoteve traducción
-#elif L==7	// it
-	"Crea banner";
-#elif L==8	// pl
-	"Utw&oacute;rz banner";
-#elif L==9	// pt
-	"Criar banner";
-#elif L==10	// tr
-	"Create banner";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_building =
 #if   L==1	// ca
 	"Crear edifici";

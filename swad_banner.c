@@ -789,75 +789,82 @@ void Ban_ContEditAfterChgBan (void)
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
-   extern const char *Txt_Create_banner;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewBan);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewBan]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewBan);
 
-	 /***** Write heading *****/
-	 Ban_PutHeadBanners ();
+   	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Table row for input fields *****/
-	 /* Begin table row */
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Ban_PutHeadBanners ();
 
-	    /* Banner code */
-	    HTM_TD_Begin ("class=\"BM\"");
-	    HTM_TD_End ();
+	    /***** Table row for input fields *****/
+	    /* Begin table row */
+	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"BM\"");
-	    HTM_TD_End ();
+	       /* Banner code */
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    HTM_TD_Empty (1);
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    /* Banner short name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       HTM_TD_Empty (1);
 
-	    /* Banner full name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Banner short name */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /* Banner image */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"12\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Banner full name */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /* Banner WWW */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
-			      " required=\"required\"",
-			      The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Banner image */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"12\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /* End table row */
-	 HTM_TR_End ();
+	       /* Banner WWW */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				 " required=\"required\"",
+				 The_GetSuffix ());
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_banner);
+	    /* End table row */
+	    HTM_TR_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
