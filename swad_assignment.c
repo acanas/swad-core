@@ -1130,7 +1130,7 @@ void Asg_ReqCreatOrEditAsg (void)
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
    extern const char *Txt_Description;
-   extern const char *Txt_Create_assignment;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    struct Asg_Assignments Assignments;
    bool ItsANewAssignment;
@@ -1265,7 +1265,7 @@ void Asg_ReqCreatOrEditAsg (void)
 
       /***** End table, send button and end box *****/
       if (ItsANewAssignment)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_assignment);
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
       else
 	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 

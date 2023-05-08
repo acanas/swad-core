@@ -9218,48 +9218,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewAsg] =
 #if   L==1	// ca
-	"Create assignment"	// Necessita traducció
+	"Crear activitat"
 #elif L==2	// de
-	"Create assignment"	// Need Übersetzung
+	"Aufgabe erstellen"
 #elif L==3	// en
 	"Create assignment"
 #elif L==4	// es
 	"Crear actividad"
 #elif L==5	// fr
-	"Create assignment"	// Besoin de traduction
+	"Cr&eacute;er activit&eacute;"
 #elif L==6	// gn
-	"Crear actividad"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i tembiapo"
 #elif L==7	// it
-	"Create assignment"	// Bisogno di traduzione
+	"Crea attivit&agrave;"
 #elif L==8	// pl
-	"Create assignment"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz zadanie"
 #elif L==9	// pt
-	"Create assignment"	// Precisa de tradução
+	"Criar atividade"
 #elif L==10	// tr
-	"Create assignment"	// Çeviri lazim!
+	"&Ouml;dev olu&scedil;tur"
 #endif
 	,
 	[ActChgAsg] =
 #if   L==1	// ca
-	"Change an assignment"	// Necessita traducció
+	"Canviar activitat"
 #elif L==2	// de
-	"Change an assignment"	// Need Übersetzung
+	"Aufgabe &auml;ndern"
 #elif L==3	// en
-	"Change an assignment"
+	"Change assignment"
 #elif L==4	// es
-	"Cambiar una actividad"
+	"Cambiar actividad"
 #elif L==5	// fr
-	"Change an assignment"	// Besoin de traduction
+	"Changer activit&eacute;"
 #elif L==6	// gn
-	"Cambiar una actividad"	// Okoteve traducción
+	"Omoambue tembiapo"
 #elif L==7	// it
-	"Change an assignment"	// Bisogno di traduzione
+	"Cambiare attivit&agrave;"
 #elif L==8	// pl
-	"Change an assignment"	// Potrzebujesz tlumaczenie
+	"Zmie&nacute; zadanie"
 #elif L==9	// pt
-	"Change an assignment"	// Precisa de tradução
+	"Alterar atividade"
 #elif L==10	// tr
-	"Change an assignment"	// Çeviri lazim!
+	"&Ouml;dev de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActReqRemAsg] =
