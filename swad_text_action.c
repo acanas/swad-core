@@ -3236,25 +3236,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewCtr] =
 #if   L==1	// ca
-	"Create center"	// Necessita traducció
+	"Crear center"
 #elif L==2	// de
-	"Create center"	// Need Übersetzung
+	"Lehrinstitut eingeben"
 #elif L==3	// en
 	"Create center"
 #elif L==4	// es
 	"Crear centro"
 #elif L==5	// fr
-	"Create center"	// Besoin de traduction
+	"Cr&eacute;er center"
 #elif L==6	// gn
-	"Crear centro"	// Okoteve traducción
+	"Crear centro"		// Okoteve traducción
 #elif L==7	// it
-	"Create center"	// Bisogno di traduzione
+	"Crea centro"
 #elif L==8	// pl
-	"Create center"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz centrum"
 #elif L==9	// pt
-	"Create center"	// Precisa de tradução
+	"Criar centro"
 #elif L==10	// tr
-	"Create center"	// Çeviri lazim!
+	"Create center"		// Çeviri lazim!
 #endif
 	,
 	[ActRemCtr] =

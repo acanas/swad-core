@@ -6618,29 +6618,6 @@ const char *Txt_Create_another_type_of_degree =
 	"Create another type of degree";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_center =
-#if   L==1	// ca
-	"Crear center";
-#elif L==2	// de
-	"Lehrinstitut eingeben";
-#elif L==3	// en
-	"Create center";
-#elif L==4	// es
-	"Crear centro";
-#elif L==5	// fr
-	"Cr&eacute;er center";
-#elif L==6	// gn
-	"Crear centro";		// Okoteve traducción
-#elif L==7	// it
-	"Crea centro";
-#elif L==8	// pl
-	"Utw&oacute;rz centrum";
-#elif L==9	// pt
-	"Criar centro";
-#elif L==10	// tr
-	"Create center";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_country =
 #if   L==1	// ca
 	"Crear pa&iacute;s";
