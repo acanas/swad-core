@@ -24766,25 +24766,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewGrpTyp] =
 #if   L==1	// ca
-	"Request creation of a type of group"		// Necessita traducció
+	"Crear tipus de grup"
 #elif L==2	// de
-	"Request creation of a type of group"		// Need Übersetzung
+	"Gruppen-Typ definieren"
 #elif L==3	// en
-	"Request creation of a type of group"
+	"Create type of group"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un tipo de grupo"
+	"Crear tipo de grupo"
 #elif L==5	// fr
-	"Request creation of a type of group"		// Besoin de traduction
+	"Cr&eacute;er type de groupe"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un tipo de grupo"	// Okoteve traducción
+	"Crear tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a type of group"		// Bisogno di traduzione
+	"Crea tipo di gruppo"
 #elif L==8	// pl
-	"Request creation of a type of group"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz typu grupy"
 #elif L==9	// pt
-	"Request creation of a type of group"		// Precisa de tradução
+	"Criar tipo de grupo"
 #elif L==10	// tr
-	"Request creation of a type of group"		// Çeviri lazim!
+	"Create type of group"	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGrpTyp] =
@@ -24927,25 +24927,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewGrp] =
 #if   L==1	// ca
-	"Create group"	// Necessita traducció
+	"Crear grup"
 #elif L==2	// de
-	"Create group"	// Need Übersetzung
+	"Gruppe erstellen"
 #elif L==3	// en
 	"Create group"
 #elif L==4	// es
 	"Crear grupo"
 #elif L==5	// fr
-	"Create group"	// Besoin de traduction
+	"Cr&eacute;er groupe"
 #elif L==6	// gn
-	"Crear grupo"	// Okoteve traducción
+	"Crear grupo"		// Okoteve traducción
 #elif L==7	// it
-	"Create group"	// Bisogno di traduzione
+	"Crea gruppo"
 #elif L==8	// pl
-	"Create group"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz grup&eogon;"
 #elif L==9	// pt
-	"Create group"	// Precisa de tradução
+	"Criar grupo"
 #elif L==10	// tr
-	"Create group"	// Çeviri lazim!
+	"Create group"		// Çeviri lazim!
 #endif
 	,
 	[ActReqRemGrp] =

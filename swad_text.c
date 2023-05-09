@@ -6687,29 +6687,6 @@ const char *Txt_Create_folder =
 	"Create folder";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_group =
-#if   L==1	// ca
-	"Crear grup";
-#elif L==2	// de
-	"Gruppe erstellen";
-#elif L==3	// en
-	"Create group";
-#elif L==4	// es
-	"Crear grupo";
-#elif L==5	// fr
-	"Cr&eacute;er groupe";
-#elif L==6	// gn
-	"Crear grupo";		// Okoteve traducción
-#elif L==7	// it
-	"Crea gruppo";
-#elif L==8	// pl
-	"Utw&oacute;rz grup&eogon;";
-#elif L==9	// pt
-	"Criar grupo";
-#elif L==10	// tr
-	"Create group";		// Çeviri lazim!
-#endif
-
 const char *Txt_Create_item =
 #if   L==1	// ca
 	"Crear &iacute;tem";
@@ -6823,29 +6800,6 @@ const char *Txt_Create_question =
 	"Criar pergunta";
 #elif L==10	// tr
 	"Create question";	// Çeviri lazim!
-#endif
-
-const char *Txt_Create_type_of_group =
-#if   L==1	// ca
-	"Crear tipus de grup";
-#elif L==2	// de
-	"Gruppen-Typ definieren";
-#elif L==3	// en
-	"Create type of group";
-#elif L==4	// es
-	"Crear tipo de grupo";
-#elif L==5	// fr
-	"Cr&eacute;er type de groupe";
-#elif L==6	// gn
-	"Crear tipo de grupo";	// Okoteve traducción
-#elif L==7	// it
-	"Crea tipo di gruppo";
-#elif L==8	// pl
-	"Utw&oacute;rz typu grupy";
-#elif L==9	// pt
-	"Criar tipo de grupo";
-#elif L==10	// tr
-	"Create type of group";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_ZIP_file =

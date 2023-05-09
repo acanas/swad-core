@@ -101,7 +101,6 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (const struct Roo_Rooms *Rooms);
 static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
-static void Grp_PutIconToCreateNewGroup (void);
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
 
@@ -112,7 +111,6 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 static void Grp_ListGroupTypesForEdition (void);
 static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args);
 static void Grp_PutIconToViewGroups (void);
-static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
@@ -335,14 +333,6 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view groups *****/
    Grp_PutIconToViewGroups ();
-
-   /***** Put icon to create a new group *****/
-   Grp_PutIconToCreateNewGroup ();
-  }
-
-static void Grp_PutIconToCreateNewGroup (void)
-  {
-   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1350,21 +1340,12 @@ static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view groups *****/
    Grp_PutIconToViewGroups ();
-
-   /***** Put icon to create a new type of group *****/
-   Grp_PutIconToCreateNewGroupType ();
   }
 
 static void Grp_PutIconToViewGroups (void)
   {
    Ico_PutContextualIconToView (ActReqSelGrp,NULL,
                                 NULL,NULL);
-  }
-
-static void Grp_PutIconToCreateNewGroupType (void)
-  {
-   Ico_PutContextualIconToAdd (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,
-                               NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -2392,6 +2373,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2399,114 +2381,120 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_A_student_can_only_belong_to_one_group;
    extern const char *Txt_The_groups_will_automatically_open;
    extern const char *Txt_The_groups_will_not_automatically_open;
-   extern const char *Txt_Create_type_of_group;
+   extern const char *Txt_Create;
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_TYPE_SECTION_ID);
 
-      /***** Begin form *****/
-      Frm_BeginFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      /***** Begin fieldset *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Actions[ActNewGrpTyp]);
 
-	 /***** Begin box *****/
-	 Box_BoxTableBegin (NULL,Txt_Type_of_group,
-			    NULL,NULL,
-			    NULL,Box_NOT_CLOSABLE,2);
+	 /***** Begin form *****/
+	 Frm_BeginFormAnchor (ActNewGrpTyp,Grp_NEW_GROUP_TYPE_SECTION_ID);
 
-	    /***** Write heading *****/
-	    Grp_WriteHeadingGroupTypes ();
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-	    HTM_TR_Begin (NULL);
+	       /***** Write heading *****/
+	       Grp_WriteHeadingGroupTypes ();
 
-	       /***** Column to remove group type, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	       HTM_TR_Begin (NULL);
 
-	       /***** Name of group type *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
-				  Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"12\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+		  /***** Column to remove group type, disabled here *****/
+		  HTM_TD_Begin ("class=\"BM\"");
+		  HTM_TD_End ();
 
-	       /***** Is it mandatory to register in any groups of this type? *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"MandatoryEnrolment\""
-				    " class=\"INPUT_%s\" style=\"width:150px;\"",
-				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_It_is_optional_to_choose_a_group);
-		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_It_is_mandatory_to_choose_a_group);
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
+		  /***** Name of group type *****/
+		  HTM_TD_Begin ("class=\"LM\"");
+		     HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
+				     Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
+				     "size=\"12\" class=\"INPUT_%s\""
+				     " required=\"required\"",
+				     The_GetSuffix ());
+		  HTM_TD_End ();
 
-	       /***** Is it possible to register in multiple groups of this type? *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"MultipleEnrolment\""
-				    " class=\"INPUT_%s\" style=\"width:150px;\"",
-				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"N",
-				 !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_A_student_can_only_belong_to_one_group);
-		     HTM_OPTION (HTM_Type_STRING,"Y",
-				 Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,		// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_A_student_can_belong_to_several_groups);
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
+		  /***** Is it mandatory to register in any groups of this type? *****/
+		  HTM_TD_Begin ("class=\"CM\"");
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				       "name=\"MandatoryEnrolment\""
+				       " class=\"INPUT_%s\" style=\"width:150px;\"",
+				       The_GetSuffix ());
+			HTM_OPTION (HTM_Type_STRING,"N",
+				    !Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_It_is_optional_to_choose_a_group);
+			HTM_OPTION (HTM_Type_STRING,"Y",
+				    Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_It_is_mandatory_to_choose_a_group);
+		     HTM_SELECT_End ();
+		  HTM_TD_End ();
 
-	       /***** Open time *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_TABLE_BeginPadding (2);
-		     HTM_TR_Begin (NULL);
+		  /***** Is it possible to register in multiple groups of this type? *****/
+		  HTM_TD_Begin ("class=\"CM\"");
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				       "name=\"MultipleEnrolment\""
+				       " class=\"INPUT_%s\" style=\"width:150px;\"",
+				       The_GetSuffix ());
+			HTM_OPTION (HTM_Type_STRING,"N",
+				    !Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_A_student_can_only_belong_to_one_group);
+			HTM_OPTION (HTM_Type_STRING,"Y",
+				    Gbl.Crs.Grps.GrpTyp.MultipleEnrolment,		// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_A_student_can_belong_to_several_groups);
+		     HTM_SELECT_End ();
+		  HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-			   if (Gbl.Crs.Grps.GrpTyp.MustBeOpened)
-			      Ico_PutIconOn ("clock.svg",Ico_BLACK,
-			                     Txt_The_groups_will_automatically_open);
-			   else
-			      Ico_PutIconOff ("clock.svg",Ico_BLACK,
-			                      Txt_The_groups_will_not_automatically_open);
-			HTM_TD_End ();
+		  /***** Open time *****/
+		  HTM_TD_Begin ("class=\"LM\"");
+		     HTM_TABLE_BeginPadding (2);
+			HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"LM\"");
-			   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
-									Dat_STR_TIME,
-									Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
-									CurrentYear,
-									CurrentYear + 1,
-									Dat_FORM_SECONDS_ON,
-									Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
-									HTM_DONT_SUBMIT_ON_CHANGE);
-			HTM_TD_End ();
+			   HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
+			      if (Gbl.Crs.Grps.GrpTyp.MustBeOpened)
+				 Ico_PutIconOn ("clock.svg",Ico_BLACK,
+						Txt_The_groups_will_automatically_open);
+			      else
+				 Ico_PutIconOff ("clock.svg",Ico_BLACK,
+						 Txt_The_groups_will_not_automatically_open);
+			   HTM_TD_End ();
 
-		     HTM_TR_End ();
-		  HTM_TABLE_End ();
-	       HTM_TD_End ();
+			   HTM_TD_Begin ("class=\"LM\"");
+			      Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
+									   Dat_STR_TIME,
+									   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
+									   CurrentYear,
+									   CurrentYear + 1,
+									   Dat_FORM_SECONDS_ON,
+									   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
+									   HTM_DONT_SUBMIT_ON_CHANGE);
+			   HTM_TD_End ();
 
-	       /***** Number of groups of this type *****/
-	       HTM_TD_Begin ("class=\"CM DAT_%s\"",
-	                     The_GetSuffix ());
-		  HTM_Unsigned (0);	// It's a new group type ==> 0 groups
-	       HTM_TD_End ();
+			HTM_TR_End ();
+		     HTM_TABLE_End ();
+		  HTM_TD_End ();
 
-	    HTM_TR_End ();
+		  /***** Number of groups of this type *****/
+		  HTM_TD_Begin ("class=\"CM DAT_%s\"",
+				The_GetSuffix ());
+		     HTM_Unsigned (0);	// It's a new group type ==> 0 groups
+		  HTM_TD_End ();
 
-	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
+	       HTM_TR_End ();
 
-      /***** End form *****/
-      Frm_EndForm ();
+	    /***** End table and send button *****/
+	    HTM_TABLE_End ();
+	    Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+	 /***** End form *****/
+	 Frm_EndForm ();
+
+      /***** End fieldset *****/
+      HTM_FIELDSET_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -2518,12 +2506,13 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
   {
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
-   extern const char *Txt_Create_group;
+   extern const char *Txt_Create;
    unsigned NumGrpTyp;
    const struct GroupType *GrpTypInLst;
    unsigned NumRoo;
@@ -2534,129 +2523,135 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    /***** Begin section *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
 
-      /***** Begin form *****/
-      Frm_BeginFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
+      /***** Begin fieldset *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Actions[ActNewGrp]);
 
-	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,Txt_Group,
-			    NULL,NULL,
-			    NULL,Box_NOT_CLOSABLE,2);
+	 /***** Begin form *****/
+	 Frm_BeginFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
-	    /***** Write heading *****/
-	    Grp_WriteHeadingGroups ();
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-	    HTM_TR_Begin (NULL);
+	       /***** Write heading *****/
+	       Grp_WriteHeadingGroups ();
 
-	       /***** Empty column to remove *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	       HTM_TR_Begin (NULL);
 
-	       /***** Disabled icon to open group *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-		  Ico_PutIconOff ("lock.svg",Ico_RED,Txt_Group_closed);
-	       HTM_TD_End ();
-
-	       /***** Disabled icon for archive zone *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-		  Ico_PutIconOff ("folder.svg",Ico_RED,Txt_File_zones_disabled);
-	       HTM_TD_End ();
-
-	       /***** Group type *****/
-	       /* Begin selector */
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"GrpTypCod\""
-				    " class=\"INPUT_%s\" style=\"width:100px;\"",
-				    The_GetSuffix ());
-
-		     /* Options for group types */
-		     for (NumGrpTyp = 0;
-			  NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-			  NumGrpTyp++)
-		       {
-			GrpTypInLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-			HTM_OPTION (HTM_Type_LONG,&GrpTypInLst->GrpTypCod,
-				    GrpTypInLst->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod,	// Selected?
-				    HTM_OPTION_ENABLED,
-				    "%s",GrpTypInLst->GrpTypName);
-		       }
-
-		  /* End selector */
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
-
-	       /***** Group name *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /***** Room *****/
-	       /* Begin selector */
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"RooCod\""
-				    " class=\"INPUT_%s\" style=\"width:100px;\"",
-				    The_GetSuffix ());
-
-		     /* Option for no assigned room */
-		     HTM_OPTION (HTM_Type_STRING,"-1",
-		                 Gbl.Crs.Grps.RooCod < 0,	// Selected?
-		                 HTM_OPTION_ENABLED,
-				 "%s",Txt_No_assigned_room);
-
-		     /* Option for another room */
-		     HTM_OPTION (HTM_Type_STRING,"0",
-		                 Gbl.Crs.Grps.RooCod == 0,	// Selected?
-		                 HTM_OPTION_ENABLED,
-				 "%s",Txt_Another_room);
-
-		     /* Options for rooms */
-		     for (NumRoo = 0;
-			  NumRoo < Rooms->Num;
-			  NumRoo++)
-		       {
-			RooInLst = &Rooms->Lst[NumRoo];
-			HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
-				    RooInLst->RooCod == Gbl.Crs.Grps.RooCod,	// Selected?
-				    HTM_OPTION_ENABLED,
-				    "%s",RooInLst->ShrtName);
-		       }
-
-		  /* End selector */
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
-
-	       /***** Current number of users in this group *****/
-	       for (Role  = Rol_TCH;
-		    Role >= Rol_STD;
-		    Role--)
-		 {
-		  HTM_TD_Begin ("class=\"CM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Unsigned (0);
+		  /***** Empty column to remove *****/
+		  HTM_TD_Begin ("class=\"BM\"");
 		  HTM_TD_End ();
-		 }
 
-	       /***** Maximum number of students *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
-		  HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"3\" class=\"INPUT_%s\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+		  /***** Disabled icon to open group *****/
+		  HTM_TD_Begin ("class=\"BM\"");
+		     Ico_PutIconOff ("lock.svg",Ico_RED,Txt_Group_closed);
+		  HTM_TD_End ();
 
-	    HTM_TR_End ();
+		  /***** Disabled icon for archive zone *****/
+		  HTM_TD_Begin ("class=\"BM\"");
+		     Ico_PutIconOff ("folder.svg",Ico_RED,Txt_File_zones_disabled);
+		  HTM_TD_End ();
 
-	 /***** End table, send button and end box *****/
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_group);
+		  /***** Group type *****/
+		  /* Begin selector */
+		  HTM_TD_Begin ("class=\"CM\"");
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				       "name=\"GrpTypCod\""
+				       " class=\"INPUT_%s\" style=\"width:100px;\"",
+				       The_GetSuffix ());
 
-      /***** End form *****/
-      Frm_EndForm ();
+			/* Options for group types */
+			for (NumGrpTyp = 0;
+			     NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+			     NumGrpTyp++)
+			  {
+			   GrpTypInLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+			   HTM_OPTION (HTM_Type_LONG,&GrpTypInLst->GrpTypCod,
+				       GrpTypInLst->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod,	// Selected?
+				       HTM_OPTION_ENABLED,
+				       "%s",GrpTypInLst->GrpTypName);
+			  }
+
+		     /* End selector */
+		     HTM_SELECT_End ();
+		  HTM_TD_End ();
+
+		  /***** Group name *****/
+		  HTM_TD_Begin ("class=\"CM\"");
+		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     "size=\"20\" class=\"INPUT_%s\""
+				     " required=\"required\"",
+				     The_GetSuffix ());
+		  HTM_TD_End ();
+
+		  /***** Room *****/
+		  /* Begin selector */
+		  HTM_TD_Begin ("class=\"CM\"");
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				       "name=\"RooCod\""
+				       " class=\"INPUT_%s\" style=\"width:100px;\"",
+				       The_GetSuffix ());
+
+			/* Option for no assigned room */
+			HTM_OPTION (HTM_Type_STRING,"-1",
+				    Gbl.Crs.Grps.RooCod < 0,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_No_assigned_room);
+
+			/* Option for another room */
+			HTM_OPTION (HTM_Type_STRING,"0",
+				    Gbl.Crs.Grps.RooCod == 0,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_Another_room);
+
+			/* Options for rooms */
+			for (NumRoo = 0;
+			     NumRoo < Rooms->Num;
+			     NumRoo++)
+			  {
+			   RooInLst = &Rooms->Lst[NumRoo];
+			   HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
+				       RooInLst->RooCod == Gbl.Crs.Grps.RooCod,	// Selected?
+				       HTM_OPTION_ENABLED,
+				       "%s",RooInLst->ShrtName);
+			  }
+
+		     /* End selector */
+		     HTM_SELECT_End ();
+		  HTM_TD_End ();
+
+		  /***** Current number of users in this group *****/
+		  for (Role  = Rol_TCH;
+		       Role >= Rol_STD;
+		       Role--)
+		    {
+		     HTM_TD_Begin ("class=\"CM DAT_%s\"",
+				   The_GetSuffix ());
+			HTM_Unsigned (0);
+		     HTM_TD_End ();
+		    }
+
+		  /***** Maximum number of students *****/
+		  HTM_TD_Begin ("class=\"CM\"");
+		     Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
+		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     "size=\"3\" class=\"INPUT_%s\"",
+				     The_GetSuffix ());
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	    /***** End table and send button *****/
+	    HTM_TABLE_End ();
+	    Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+	 /***** End form *****/
+	 Frm_EndForm ();
+
+      /***** End fieldset *****/
+      HTM_FIELDSET_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();
