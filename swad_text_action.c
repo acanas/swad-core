@@ -4779,25 +4779,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewRoo] =
 #if   L==1	// ca
-	"Request creation of room"		// Necessita traducció
+	"Crear sala"
 #elif L==2	// de
-	"Request creation of room"		// Need Übersetzung
+	"Raum eingeben"
 #elif L==3	// en
-	"Request creation of room"
+	"Create room"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de sala"
+	"Crear sala"
 #elif L==5	// fr
-	"Request creation of room"		// Besoin de traduction
+	"Cr&eacute;er salle"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de sala"	// Okoteve traducción
+	"Crear sala"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of room"		// Bisogno di traduzione
+	"Crea aula"
 #elif L==8	// pl
-	"Request creation of room"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz klasa"
 #elif L==9	// pt
-	"Request creation of room"		// Precisa de tradução
+	"Criar sala"
 #elif L==10	// tr
-	"Request creation of room"		// Çeviri lazim!
+	"Create room"	// Çeviri lazim!
 #endif
 	,
 	[ActRemRoo] =

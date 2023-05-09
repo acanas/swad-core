@@ -6848,29 +6848,6 @@ const char *Txt_Create_question =
 	"Create question";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_room =
-#if   L==1	// ca
-	"Crear sala";
-#elif L==2	// de
-	"Raum eingeben";
-#elif L==3	// en
-	"Create room";
-#elif L==4	// es
-	"Crear sala";
-#elif L==5	// fr
-	"Cr&eacute;er salle";
-#elif L==6	// gn
-	"Crear sala";	// Okoteve traducción
-#elif L==7	// it
-	"Crea aula";
-#elif L==8	// pl
-	"Utw&oacute;rz klasa";
-#elif L==9	// pt
-	"Criar sala";
-#elif L==10	// tr
-	"Create room";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_type_of_degree =
 #if   L==1	// ca
 	"Crear tipus de titulaci&oacute;";

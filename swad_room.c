@@ -657,7 +657,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_End ();
 
 	    /* Room code */
-	    HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Room->RooCod);
 	       HTM_ARTICLE_End ();
@@ -1210,94 +1210,101 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
-   extern const char *Txt_Create_room;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewRoo);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewRoo]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewRoo);
 
-	 /***** Write heading *****/
-	 Roo_PutHeadRooms ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Roo_PutHeadRooms ();
 
-	    /***** Column to remove room, disabled here *****/
-	    HTM_TD_Begin ("class=\"BM\"");
-	    HTM_TD_End ();
+	    HTM_TR_Begin (NULL);
 
-	    /***** Room code *****/
-	    HTM_TD_Begin ("class=\"CODE\"");
-	    HTM_TD_End ();
+	       /***** Column to remove room, disabled here *****/
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    /***** Building *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
-					HTM_DONT_SUBMIT_ON_CHANGE);
-	    HTM_TD_End ();
+	       /***** Room code *****/
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	    /***** Floor *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
-			       HTM_DONT_SUBMIT_ON_CHANGE,false,
-			       "class=\"INPUT_LONG INPUT_%s\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Building *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
+					   HTM_DONT_SUBMIT_ON_CHANGE);
+	       HTM_TD_End ();
 
-	    /***** Room type *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       Roo_PutSelectorType (Roo_EditingRoom->Type,
-				    HTM_DONT_SUBMIT_ON_CHANGE);
-	    HTM_TD_End ();
+	       /***** Floor *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
+				  HTM_DONT_SUBMIT_ON_CHANGE,false,
+				  "class=\"INPUT_LONG INPUT_%s\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /***** Room short name *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Room type *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Roo_PutSelectorType (Roo_EditingRoom->Type,
+				       HTM_DONT_SUBMIT_ON_CHANGE);
+	       HTM_TD_End ();
 
-	    /***** Room full name *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Room short name *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /***** Seating capacity *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
-	       HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"3\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Room full name *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /***** MAC address *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
-	       HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"8\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Seating capacity *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
+		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"3\" class=\"INPUT_%s\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	       /***** MAC address *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
+		  HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"8\" class=\"INPUT_%s\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_room);
+	    HTM_TR_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
