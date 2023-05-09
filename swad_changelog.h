@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.107.21 (2023-05-09)"
+#define Log_PLATFORM_VERSION	"SWAD 22.107.22 (2023-05-09)"
 #define CSS_FILE		"swad22.107.17.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.107.22:May 09, 2023  Changes in edition of courses. (337817 lines)
 	Version 22.107.21:May 09, 2023  Changes in edition of degrees. (337829 lines)
 	Version 22.107.20:May 09, 2023  Changes in edition of countries. (337842 lines)
 	Version 22.107.19:May 09, 2023  Changes in edition of institutions. (337858 lines)

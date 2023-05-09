@@ -5216,23 +5216,23 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewCrs] =
 #if   L==1	// ca
-	"Create course"		// Necessita traducció
+	"Crear assignatura"
 #elif L==2	// de
-	"Create course"		// Need Übersetzung
+	"Kurs eingeben"
 #elif L==3	// en
 	"Create course"
 #elif L==4	// es
-	"Crear una asignatura"
+	"Crear asignatura"
 #elif L==5	// fr
-	"Create course"		// Besoin de traduction
+	"Cr&eacute;er mati&egrave;re"
 #elif L==6	// gn
-	"Crear una asignatura"	// Okoteve traducción
+	"Crear asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Create course"		// Bisogno di traduzione
+	"Crea corso"
 #elif L==8	// pl
-	"Create course"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz kursu"
 #elif L==9	// pt
-	"Create course"		// Precisa de tradução
+	"Criar disciplina"
 #elif L==10	// tr
 	"Create course"		// Çeviri lazim!
 #endif

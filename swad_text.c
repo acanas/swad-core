@@ -6618,29 +6618,6 @@ const char *Txt_Create_another_type_of_degree =
 	"Create another type of degree";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_course =
-#if   L==1	// ca
-	"Crear assignatura";
-#elif L==2	// de
-	"Kurs eingeben";
-#elif L==3	// en
-	"Create course";
-#elif L==4	// es
-	"Crear asignatura";
-#elif L==5	// fr
-	"Cr&eacute;er mati&egrave;re";
-#elif L==6	// gn
-	"Crear asignatura";	// Okoteve traducción
-#elif L==7	// it
-	"Crea corso";
-#elif L==8	// pl
-	"Utw&oacute;rz kursu";
-#elif L==9	// pt
-	"Criar disciplina";
-#elif L==10	// tr
-	"Create course";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_department =
 #if   L==1	// ca
 	"Crear departament";
