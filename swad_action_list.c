@@ -1585,7 +1585,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    [ActSeeOneNot	] = {1164,-1,TabUnk,ActSeeAllNot	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_GetHighLightedNotCod	,Not_ListFullNotices		,NULL},
    [ActWriNot		] = {  59,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_ShowFormNotice		,NULL},
-   [ActRcvNot		] = {  60,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
+   [ActNewNot		] = {  60,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
    [ActHidNot		] = { 763,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_HideActiveNotice		,Not_ListFullNotices		,NULL},
    [ActUnhNot		] = { 764,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_RevealHiddenNotice		,Not_ListFullNotices		,NULL},
    [ActReqRemNot	] = {1472,-1,TabUnk,ActSeeAllNot	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_ReqRemNotice		,NULL},
@@ -1952,7 +1952,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	-1,			// #57 (obsolete action)
 	-1,			// #58 (obsolete action)
 	ActWriNot,		// #59
-	ActRcvNot,		// #60
+	ActNewNot,		// #60
 	-1,			// #61 (obsolete action)
 	ActRemUsrGbl,		// #62
 	-1,			// #63 (obsolete action)

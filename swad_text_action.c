@@ -3420,25 +3420,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewPlc] =
 #if   L==1	// ca
-	"Request creation of a place"		// Necessita traducció
+	"Crear lloc"
 #elif L==2	// de
-	"Request creation of a place"		// Need Übersetzung
+	"Standort eingeben"
 #elif L==3	// en
-	"Request creation of a place"
+	"Create place"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un lugar"
+	"Crear lugar"
 #elif L==5	// fr
-	"Request creation of a place"		// Besoin de traduction
+	"Cr&eacute;er emplacement"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un lugar"	// Okoteve traducción
+	"Crear lugar"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a place"		// Bisogno di traduzione
+	"Crea localit&grave;"
 #elif L==8	// pl
-	"Request creation of a place"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz miejsce"
 #elif L==9	// pt
-	"Request creation of a place"		// Precisa de tradução
+	"Criar localiza&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Request creation of a place"		// Çeviri lazim!
+	"Create place"	// Çeviri lazim!
 #endif
 	,
 	[ActRemPlc] =
@@ -28904,27 +28904,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Write a new notice"		// Çeviri lazim!
 #endif
 	,
-	[ActRcvNot] =
+	[ActNewNot] =
 #if   L==1	// ca
-	"Create new notice"	// Necessita traducció
+	"Crear av&iacute;s"
 #elif L==2	// de
-	"Create new notice"	// Need Übersetzung
+	"Erstelle Ank&uuml;ndigung"
 #elif L==3	// en
-	"Create new notice"
+	"Create notice"
 #elif L==4	// es
-	"Crear nuevo aviso"
+	"Crear aviso"
 #elif L==5	// fr
-	"Create new notice"	// Besoin de traduction
+	"Cr&eacute;er avis"
 #elif L==6	// gn
-	"Crear nuevo aviso"	// Okoteve traducción
+	"Crear aviso"	// Okoteve traducción
 #elif L==7	// it
-	"Create new notice"	// Bisogno di traduzione
+	"Crea avviso"
 #elif L==8	// pl
-	"Create new notice"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz powiadomienie"
 #elif L==9	// pt
-	"Create new notice"	// Precisa de tradução
+	"Criar aviso"
 #elif L==10	// tr
-	"Create new notice"	// Çeviri lazim!
+	"Create notice"	// Çeviri lazim!
 #endif
 	,
 	[ActHidNot] =

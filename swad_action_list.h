@@ -1485,7 +1485,7 @@
 #define ActRemAnn		(ActUnfSevTch +  11)
 #define ActSeeOneNot		(ActUnfSevTch +  12)
 #define ActWriNot		(ActUnfSevTch +  13)
-#define ActRcvNot		(ActUnfSevTch +  14)
+#define ActNewNot		(ActUnfSevTch +  14)
 #define ActHidNot		(ActUnfSevTch +  15)
 #define ActUnhNot		(ActUnfSevTch +  16)
 #define ActReqRemNot		(ActUnfSevTch +  17)

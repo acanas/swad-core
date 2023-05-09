@@ -6779,29 +6779,6 @@ const char *Txt_Create_link =
 	"Create link";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_notice =
-#if   L==1	// ca
-	"Crear av&iacute;s";
-#elif L==2	// de
-	"Erstelle Ank&uuml;ndigung";
-#elif L==3	// en
-	"Create notice";
-#elif L==4	// es
-	"Crear aviso";
-#elif L==5	// fr
-	"Cr&eacute;er avis";
-#elif L==6	// gn
-	"Crear aviso";		// Okoteve traducción
-#elif L==7	// it
-	"Crea avviso";
-#elif L==8	// pl
-	"Utw&oacute;rz powiadomienie";
-#elif L==9	// pt
-	"Criar aviso";
-#elif L==10	// tr
-	"Create notice";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_BR_notification =
 #if   L==1	// ca
 	"Crear<br />notificaci&oacute;";
@@ -6846,29 +6823,6 @@ const char *Txt_Create_password =
 	"Criar senha";
 #elif L==10	// tr
 	"&Scedil;ifre olu&scedil;tur";
-#endif
-
-const char *Txt_Create_place =
-#if   L==1	// ca
-	"Crear lloc";
-#elif L==2	// de
-	"Standort eingeben";
-#elif L==3	// en
-	"Create place";
-#elif L==4	// es
-	"Crear lugar";
-#elif L==5	// fr
-	"Cr&eacute;er emplacement";
-#elif L==6	// gn
-	"Crear lugar";	// Okoteve traducción
-#elif L==7	// it
-	"Crea localit&grave;";
-#elif L==8	// pl
-	"Utw&oacute;rz miejsce";
-#elif L==9	// pt
-	"Criar localiza&ccedil;&atilde;o";
-#elif L==10	// tr
-	"Create place";	// Çeviri lazim!
 #endif
 
 const char *Txt_Create_plugin =

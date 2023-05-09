@@ -676,7 +676,7 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *Txt_Create_place;
+   extern const char *Txt_Create;
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewPlc);
@@ -725,7 +725,7 @@ static void Plc_PutFormToCreatePlace (void)
 	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_place);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();

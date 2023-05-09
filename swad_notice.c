@@ -103,14 +103,14 @@ void Not_ShowFormNotice (void)
    extern const char *Hlp_COMMUNICATION_Notices;
    extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_Notice;
-   extern const char *Txt_Create_notice;
+   extern const char *Txt_Create;
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
                   Gbl.Hierarchy.Crs.FullName);
 
    /***** Begin form *****/
-   Frm_BeginForm (ActRcvNot);
+   Frm_BeginForm (ActNewNot);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Notice,
@@ -125,7 +125,7 @@ void Not_ShowFormNotice (void)
 	 HTM_TEXTAREA_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_notice);
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
