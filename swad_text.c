@@ -6825,29 +6825,6 @@ const char *Txt_Create_password =
 	"&Scedil;ifre olu&scedil;tur";
 #endif
 
-const char *Txt_Create_plugin =
-#if   L==1	// ca
-	"Crear complement";
-#elif L==2	// de
-	"Plugin erstellen";
-#elif L==3	// en
-	"Create plugin";
-#elif L==4	// es
-	"Crear complemento";
-#elif L==5	// fr
-	"Cr&eacute;er plugin";
-#elif L==6	// gn
-	"Crear complemento";	// Okoteve traducción
-#elif L==7	// it
-	"Crea plugin";
-#elif L==8	// pl
-	"Utw&oacute;rz plugin";
-#elif L==9	// pt
-	"Criar plugin";
-#elif L==10	// tr
-	"Create plugin";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_question =
 #if   L==1	// ca
 	"Crear pregunta";

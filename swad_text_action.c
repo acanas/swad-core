@@ -2362,25 +2362,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewPlg] =
 #if   L==1	// ca
-	"Request creation of a plugin"			// Necessita traducció
+	"Crear complement"
 #elif L==2	// de
-	"Request creation of a plugin"			// Need Übersetzung
+	"Plugin erstellen"
 #elif L==3	// en
-	"Request creation of a plugin"
+	"Create plugin"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un complemento"
+	"Crear complemento"
 #elif L==5	// fr
-	"Request creation of a plugin"			// Besoin de traduction
+	"Cr&eacute;er plugin"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un complemento"	// Okoteve traducción
+	"Crear complemento"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a plugin"			// Bisogno di traduzione
+	"Crea plugin"
 #elif L==8	// pl
-	"Request creation of a plugin"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz plugin"
 #elif L==9	// pt
-	"Request creation of a plugin"			// Precisa de tradução
+	"Criar plugin"
 #elif L==10	// tr
-	"Request creation of a plugin"			// Çeviri lazim!
+	"Create plugin"		// Çeviri lazim!
 #endif
 	,
 	[ActRemPlg] =

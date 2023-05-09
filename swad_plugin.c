@@ -382,7 +382,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Plg->PlgCod);
 	    HTM_TD_End ();
 
@@ -788,97 +788,104 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
-   extern const char *Txt_Name;
-   extern const char *Txt_Description;
-   extern const char *Txt_Logo;
-   extern const char *Txt_Application_key;
-   extern const char *Txt_URL;
-   extern const char *Txt_IP;
-   extern const char *Txt_Create_plugin;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewPlg);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewPlg]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewPlg);
 
-	 /***** Write heading *****/
-	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_Name           ,HTM_HEAD_LEFT);
-	    HTM_TH (Txt_Description    ,HTM_HEAD_LEFT);
-	    HTM_TH (Txt_Logo           ,HTM_HEAD_LEFT);
-	    HTM_TH (Txt_Application_key,HTM_HEAD_LEFT);
-	    HTM_TH (Txt_URL            ,HTM_HEAD_LEFT);
-	    HTM_TH (Txt_IP             ,HTM_HEAD_LEFT);
-	 HTM_TR_End ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Row begin *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Plg_PutHeadPlugins ();
 
-	    /***** Plugin name *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"8\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	    /***** Row begin *****/
+	    HTM_TR_Begin (NULL);
 
-	    /***** Plugin description *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
-			       Plg_EditingPlg->Description,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"16\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Column to remove plugin, disabled here *****/
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    /***** Plugin logo *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"4\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Plugin code */
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	    /***** Plugin application key *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"8\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Plugin logo *****/
+	       // TODO: Change plugin icons to 32x32
+	       HTM_TD_Begin ("style=\"width:45px;\"");
+	       HTM_TD_End ();
 
-	    /***** Plugin URL *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"8\" class=\"INPUT_%s\""
-			      " required=\"required\"",
-			      The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Plugin name *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"8\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /***** Plugin IP address *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"8\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Plugin description *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
+				  Plg_EditingPlg->Description,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"16\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** Row end *****/
-	 HTM_TR_End ();
+	       /***** Plugin logo *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"4\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_plugin);
+	       /***** Plugin application key *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"8\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	       /***** Plugin URL *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
+				 "size=\"8\" class=\"INPUT_%s\""
+				 " required=\"required\"",
+				 The_GetSuffix ());
+	       HTM_TD_End ();
+
+	       /***** Plugin IP address *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"8\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
+
+	    /***** Row end *****/
+	    HTM_TR_End ();
+
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
