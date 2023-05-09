@@ -767,7 +767,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Ctr->CtrCod);
 	    HTM_TD_End ();
 

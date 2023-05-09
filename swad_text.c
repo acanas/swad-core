@@ -6733,29 +6733,6 @@ const char *Txt_Create_group =
 	"Create group";		// Çeviri lazim!
 #endif
 
-const char *Txt_Create_holiday =
-#if   L==1	// ca
-	"Crear festivitat";
-#elif L==2	// de
-	"Feiertag eingeben";
-#elif L==3	// en
-	"Create holiday";
-#elif L==4	// es
-	"Crear festividad";
-#elif L==5	// fr
-	"Cr&eacute;er f&ecirc;te";
-#elif L==6	// gn
-	"Omohe&ntilde;&oacute;i arete";
-#elif L==7	// it
-	"Crea festivit&agrave;";
-#elif L==8	// pl
-	"Utw&oacute;rz wakacje";
-#elif L==9	// pt
-	"Criar f&eacute;ria";
-#elif L==10	// tr
-	"Tatil olu&scedil;tur";
-#endif
-
 const char *Txt_Create_item =
 #if   L==1	// ca
 	"Crear &iacute;tem";

@@ -3698,25 +3698,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewHld] =
 #if   L==1	// ca
-	"Request creation of a holiday"			// Necessita traducció
+	"Crear festivitat"
 #elif L==2	// de
-	"Request creation of a holiday"			// Need Übersetzung
+	"Feiertag eingeben"
 #elif L==3	// en
-	"Request creation of a holiday"
+	"Create holiday"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un festivo"
+	"Crear festividad"
 #elif L==5	// fr
-	"Request creation of a holiday"			// Besoin de traduction
+	"Cr&eacute;er f&ecirc;te"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un festivo"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i arete"
 #elif L==7	// it
-	"Request creation of a holiday"			// Bisogno di traduzione
+	"Crea festivit&agrave;"
 #elif L==8	// pl
-	"Request creation of a holiday"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz wakacje"
 #elif L==9	// pt
-	"Request creation of a holiday"			// Precisa de tradução
+	"Criar f&eacute;ria"
 #elif L==10	// tr
-	"Request creation of a holiday"			// Çeviri lazim!
+	"Tatil olu&scedil;tur"
 #endif
 	,
 	[ActRemHld] =
