@@ -5860,25 +5860,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewPrgItm] =
 #if   L==1	// ca
-	"Create new program item"		// Necessita traducció
+	"Crear &iacute;tem"
 #elif L==2	// de
-	"Create new program item"		// Need Übersetzung
+	"Artikel eingeben"
 #elif L==3	// en
-	"Create new program item"
+	"Create item"
 #elif L==4	// es
-	"Crear nuevo &iacute;tem del programa"
+	"Crear &iacute;tem"
 #elif L==5	// fr
-	"Create new program item"		// Besoin de traduction
+	"Cr&eacute;er article"
 #elif L==6	// gn
-	"Crear nuevo &iacute;tem del programa"	// Okoteve traducción
+	"Crear &iacute;tem"	// Okoteve traducción
 #elif L==7	// it
-	"Create new program item"		// Bisogno di traduzione
+	"Crea articolo"
 #elif L==8	// pl
-	"Create new program item"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz przedmiot"
 #elif L==9	// pt
-	"Create new program item"		// Precisa de tradução
+	"Criar item"
 #elif L==10	// tr
-	"Create new program item"		// Çeviri lazim!
+	"Create item"		// Çeviri lazim!
 #endif
 	,
 	[ActReqRemPrgItm] =

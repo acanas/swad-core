@@ -1932,8 +1932,8 @@ void Prg_ReqCreateItem (void)
 
 static void Prg_ShowFormToCreateItem (long ParentItmCod)
   {
-   extern const char *Hlp_COURSE_Program_new_item;
-   extern const char *Txt_Create_item;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
    struct Prg_Item ParentItem;	// Parent item
    struct Prg_Item Item;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -1955,23 +1955,29 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);
 
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewPrgItm]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin ("100%",NULL,
-			 NULL,NULL,
-			 Hlp_COURSE_Program_new_item,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
+	 ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
 
-	 /***** Show form *****/
-	 Prg_ShowFormItem (&Item,SetHMS,NULL);
+   	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_item);
+	    /***** Show form *****/
+	    Prg_ShowFormItem (&Item,SetHMS,NULL);
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

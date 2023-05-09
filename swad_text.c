@@ -6687,29 +6687,6 @@ const char *Txt_Create_folder =
 	"Create folder";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_item =
-#if   L==1	// ca
-	"Crear &iacute;tem";
-#elif L==2	// de
-	"Artikel eingeben";
-#elif L==3	// en
-	"Create item";
-#elif L==4	// es
-	"Crear &iacute;tem";
-#elif L==5	// fr
-	"Cr&eacute;er article";
-#elif L==6	// gn
-	"Crear &iacute;tem";	// Okoteve traducción
-#elif L==7	// it
-	"Crea articolo";
-#elif L==8	// pl
-	"Utw&oacute;rz przedmiot";
-#elif L==9	// pt
-	"Criar item";
-#elif L==10	// tr
-	"Create item";		// Çeviri lazim!
-#endif
-
 const char *Txt_Create_link =
 #if   L==1	// ca
 	"Crear enlla&ccedil;";
