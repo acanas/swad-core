@@ -1401,104 +1401,111 @@ static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Par_CodeStr[];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Create_country;
+   extern const char *Txt_Create;
    Lan_Language_t Lan;
    char StrCtyCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char StrName[32];
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewCty);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewCty]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewCty);
 
-	 /***** Write heading *****/
-	 Cty_PutHeadCountriesForEdition ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Cty_PutHeadCountriesForEdition ();
 
-	    /***** Column to remove country, disabled here *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_TD_End ();
-
-	    /***** Numerical country code (ISO 3166-1) *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-	       if (Cty_EditingCty->CtyCod > 0)
-		  snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
-	       else
-		  StrCtyCod[0] = '\0';
-	       HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"3\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-
-	    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-	       HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"2\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-
-	    HTM_TD_Empty (3);
-
-	    /***** Number of users *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
-	                  1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	       HTM_Unsigned (0);
-	    HTM_TD_End ();
-
-	    /***** Number of institutions *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
-	                  1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	       HTM_Unsigned (0);
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Country name in several languages *****/
-	 for (Lan  = (Lan_Language_t) 1;
-	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	      Lan++)
-	   {
 	    HTM_TR_Begin (NULL);
 
-	       /* Language */
-	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_STR_LANG_NAME[Lan]);
+	       /***** Column to remove country, disabled here *****/
+	       HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
 	       HTM_TD_End ();
 
-	       /* Name */
-	       HTM_TD_Begin ("class=\"LM\"");
-		  snprintf (StrName,sizeof (StrName),"Name_%s",Lan_STR_LANG_ID[Lan]);
-		  HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"INPUT_%s\""
+	       /***** Numerical country code (ISO 3166-1) *****/
+	       HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
+		  if (Cty_EditingCty->CtyCod > 0)
+		     snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
+		  else
+		     StrCtyCod[0] = '\0';
+		  HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"3\" class=\"INPUT_%s\""
 				  " required=\"required\"",
 				  The_GetSuffix ());
 	       HTM_TD_End ();
 
-	       /* WWW */
-	       HTM_TD_Begin ("class=\"LM\"");
-		  snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
-		  HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
+	       /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
+	       HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
+		  HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"2\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
+
+	       HTM_TD_Empty (3);
+
+	       /***** Number of users *****/
+	       HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
+			     1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
+
+	       /***** Number of institutions *****/
+	       HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
+			     1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
+		  HTM_Unsigned (0);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
-	   }
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_country);
+	    /***** Country name in several languages *****/
+	    for (Lan  = (Lan_Language_t) 1;
+		 Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+		 Lan++)
+	      {
+	       HTM_TR_Begin (NULL);
 
-   /***** End form *****/
-   Frm_EndForm ();
+		  /* Language */
+		  HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
+		     HTM_Txt (Txt_STR_LANG_NAME[Lan]);
+		  HTM_TD_End ();
+
+		  /* Name */
+		  HTM_TD_Begin ("class=\"LM\"");
+		     snprintf (StrName,sizeof (StrName),"Name_%s",Lan_STR_LANG_ID[Lan]);
+		     HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     "size=\"15\" class=\"INPUT_%s\""
+				     " required=\"required\"",
+				     The_GetSuffix ());
+		  HTM_TD_End ();
+
+		  /* WWW */
+		  HTM_TD_Begin ("class=\"LM\"");
+		     snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
+		     HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],HTM_DONT_SUBMIT_ON_CHANGE,
+				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				    " required=\"required\"",
+				    The_GetSuffix ());
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
+
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

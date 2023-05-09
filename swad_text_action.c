@@ -1856,25 +1856,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewCty] =
 #if   L==1	// ca
-	"Request creation of a country"			// Necessita traducció
+	"Crear pa&iacute;s"
 #elif L==2	// de
-	"Request creation of a country"			// Need Übersetzung
+	"Land eingeben"
 #elif L==3	// en
-	"Request creation of a country"
+	"Create country"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un pa&iacute;s"
+	"Crear pa&iacute;s"
 #elif L==5	// fr
-	"Request creation of a country"			// Besoin de traduction
+	"Cr&eacute;er pays"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un pa&iacute;s"	// Okoteve traducción
+	"Crear pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a country"			// Bisogno di traduzione
+	"Crea paese"
 #elif L==8	// pl
-	"Request creation of a country"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz kraju"
 #elif L==9	// pt
-	"Request creation of a country"			// Precisa de tradução
+	"Criar pa&iacute;s"
 #elif L==10	// tr
-	"Request creation of a country"			// Çeviri lazim!
+	"Create country"	// Çeviri lazim!
 #endif
 	,
 	[ActRemCty] =
