@@ -6710,29 +6710,6 @@ const char *Txt_Create_folder =
 	"Create folder";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_game =
-#if   L==1	// ca
-	"Crear joc";
-#elif L==2	// de
-	"Spiel erstellen";
-#elif L==3	// en
-	"Create game";
-#elif L==4	// es
-	"Crear juego";
-#elif L==5	// fr
-	"Cr&eacute;er jeu";
-#elif L==6	// gn
-	"Crear juego";	// Okoteve traducción
-#elif L==7	// it
-	"Crea gioco";
-#elif L==8	// pl
-	"Utw&oacute;rz gra";
-#elif L==9	// pt
-	"Criar jogo";
-#elif L==10	// tr
-	"Create game";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_group =
 #if   L==1	// ca
 	"Crear grup";

@@ -13611,25 +13611,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewGam] =
 #if   L==1	// ca
-	"Create new game"	// Necessita traducció
+	"Crear joc"
 #elif L==2	// de
-	"Create new game"	// Need Übersetzung
+	"Spiel erstellen"
 #elif L==3	// en
-	"Create new game"
+	"Create game"
 #elif L==4	// es
-	"Crear nuevo juego"
+	"Crear juego"
 #elif L==5	// fr
-	"Create new game"	// Besoin de traduction
+	"Cr&eacute;er jeu"
 #elif L==6	// gn
-	"Crear nuevo juego"	// Okoteve traducción
+	"Crear juego"	// Okoteve traducción
 #elif L==7	// it
-	"Create new game"	// Bisogno di traduzione
+	"Crea gioco"
 #elif L==8	// pl
-	"Create new game"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz gra"
 #elif L==9	// pt
-	"Create new game"	// Precisa de tradução
+	"Criar jogo"
 #elif L==10	// tr
-	"Create new game"	// Çeviri lazim!
+	"Create game"	// Çeviri lazim!
 #endif
 	,
 	[ActChgGam] =

@@ -1329,7 +1329,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
-   extern const char *Txt_Create_game;
+   extern const char *Txt_Create;
    static Act_Action_t NextAction[] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
@@ -1343,7 +1343,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    const char *TxtButton[] =
      {
       [Gam_EXISTING_GAME] = Txt_Save_changes,
-      [Gam_NEW_GAME     ] = Txt_Create_game,
+      [Gam_NEW_GAME     ] = Txt_Create,
      };
 
    /***** Begin form *****/
