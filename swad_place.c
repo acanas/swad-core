@@ -471,7 +471,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Plc->PlcCod);
 	    HTM_TD_End ();
 
@@ -676,59 +676,66 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Create;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewPlc);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewPlc]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewPlc);
 
-	 /***** Write heading *****/
-	 Plc_PutHeadPlaces ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Plc_PutHeadPlaces ();
 
-	    /***** Column to remove place, disabled here *****/
-	    HTM_TD_Begin ("class=\"BM\"");
-	    HTM_TD_End ();
+	    HTM_TR_Begin (NULL);
 
-	    /***** Place code *****/
-	    HTM_TD_Begin ("class=\"CODE\"");
-	    HTM_TD_End ();
+	       /***** Column to remove place, disabled here *****/
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    /***** Place short name *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Place code *****/
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	    /***** Place full name *****/
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Place short name *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	    /***** Number of centers *****/
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (0);
-	    HTM_TD_End ();
+	       /***** Place full name *****/
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	       /***** Number of centers *****/
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
+	    HTM_TR_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
