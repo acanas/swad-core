@@ -6618,29 +6618,6 @@ const char *Txt_Create_another_type_of_degree =
 	"Create another type of degree";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_building =
-#if   L==1	// ca
-	"Crear edifici";
-#elif L==2	// de
-	"Geb&auml;ude eingeben";
-#elif L==3	// en
-	"Create building";
-#elif L==4	// es
-	"Crear edificio";
-#elif L==5	// fr
-	"Cr&eacute;er b&acirc;timent";
-#elif L==6	// gn
-	"Crear edificio";	// Okoteve traducción
-#elif L==7	// it
-	"Crea edificio";
-#elif L==8	// pl
-	"Utw&oacute;rz budynek";
-#elif L==9	// pt
-	"Criar edif&iacute;cio";
-#elif L==10	// tr
-	"Create building";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_center =
 #if   L==1	// ca
 	"Crear center";

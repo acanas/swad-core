@@ -4641,25 +4641,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewBld] =
 #if   L==1	// ca
-	"Request creation of a building"	// Necessita traducció
+	"Crear edifici"
 #elif L==2	// de
-	"Request creation of a building"	// Need Übersetzung
+	"Geb&auml;ude eingeben"
 #elif L==3	// en
-	"Request creation of a building"
+	"Create building"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de edificio"
+	"Crear edificio"
 #elif L==5	// fr
-	"Request creation of a building"	// Besoin de traduction
+	"Cr&eacute;er b&acirc;timent"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de edificio"	// Okoteve traducción
+	"Crear edificio"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a building"	// Bisogno di traduzione
+	"Crea edificio"
 #elif L==8	// pl
-	"Request creation of a building"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz budynek"
 #elif L==9	// pt
-	"Request creation of a building"	// Precisa de tradução
+	"Criar edif&iacute;cio"
 #elif L==10	// tr
-	"Request creation of a building"	// Çeviri lazim!
+	"Create building"	// Çeviri lazim!
 #endif
 	,
 	[ActRemBld] =
