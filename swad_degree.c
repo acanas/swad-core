@@ -513,113 +513,124 @@ static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
 
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
-   extern const char *Txt_Create_degree;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
+   Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTypInLst;
 
-   /***** Begin form *****/
+   /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-      Frm_BeginForm (ActNewDeg);
+      NextAction = ActNewDeg;
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
-      Frm_BeginForm (ActReqDeg);
+      NextAction = ActReqDeg;
    else
       Err_NoPermissionExit ();
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,NULL,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[NextAction]);
 
-      /***** Write heading *****/
-      Deg_PutHeadDegreesForEdition ();
+      /***** Begin form *****/
+      Frm_BeginForm (NextAction);
 
-      HTM_TR_Begin (NULL);
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Column to remove degree, disabled here *****/
-	 HTM_TD_Begin ("class=\"BM\"");
-	 HTM_TD_End ();
+	    /***** Write heading *****/
+	    Deg_PutHeadDegreesForEdition ();
 
-	 /***** Degree code *****/
-	 HTM_TD_Begin ("class=\"CODE\"");
-	 HTM_TD_End ();
+	    HTM_TR_Begin (NULL);
 
-	 /***** Degree logo *****/
-	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-	    Lgo_DrawLogo (HieLvl_DEG,-1L,"",20,NULL,true);
-	 HTM_TD_End ();
+	       /***** Column to remove degree, disabled here *****/
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	 /***** Degree short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	       /***** Degree code *****/
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	 /***** Degree full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	       /***** Degree logo *****/
+	       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
+		  Lgo_DrawLogo (HieLvl_DEG,-1L,"",20,NULL,true);
+	       HTM_TD_End ();
 
-	 /***** Degree type *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			      "name=\"OthDegTypCod\""
-			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
-			      The_GetSuffix ());
-	       for (NumDegTyp = 0;
-		    NumDegTyp < DegTypes->Num;
-		    NumDegTyp++)
-		 {
-		  DegTypInLst = &DegTypes->Lst[NumDegTyp];
-		  HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-			      DegTypInLst->DegTypCod == Deg_EditingDeg->DegTypCod,	// Selected?
-			      HTM_OPTION_ENABLED,
-			      "%s",DegTypInLst->DegTypName);
-		 }
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+	       /***** Degree short name *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** Degree WWW *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
-			   " required=\"required\"",
-			   The_GetSuffix ());
-	 HTM_TD_End ();
+	       /***** Degree full name *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** Number of courses in this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	       /***** Degree type *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"OthDegTypCod\""
+				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (NumDegTyp = 0;
+			  NumDegTyp < DegTypes->Num;
+			  NumDegTyp++)
+		       {
+			DegTypInLst = &DegTypes->Lst[NumDegTyp];
+			HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
+				    DegTypInLst->DegTypCod == Deg_EditingDeg->DegTypCod,	// Selected?
+				    HTM_OPTION_ENABLED,
+				    "%s",DegTypInLst->DegTypName);
+		       }
+		  HTM_SELECT_End ();
+	       HTM_TD_End ();
 
-	 /***** Number of users in courses of this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	       /***** Degree WWW *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				 " required=\"required\"",
+				 The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** Degree requester *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-	               The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
-	 HTM_TD_End ();
+	       /***** Number of courses in this degree *****/
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
 
-	 /***** Degree status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	       /***** Number of users in courses of this degree *****/
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	       /***** Degree requester *****/
+	       HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
+			     The_GetSuffix ());
+		  Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	       HTM_TD_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_degree);
+	       /***** Degree status *****/
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	    HTM_TR_End ();
+
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

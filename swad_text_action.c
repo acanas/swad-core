@@ -4457,23 +4457,23 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewDeg] =
 #if   L==1	// ca
-	"Create degree"			// Necessita traducció
+	"Crear titulaci&oacute;"
 #elif L==2	// de
-	"Create degree"			// Need Übersetzung
+	"Studiengang eingeben"
 #elif L==3	// en
 	"Create degree"
 #elif L==4	// es
 	"Crear titulaci&oacute;n"
 #elif L==5	// fr
-	"Create degree"			// Besoin de traduction
+	"Cr&eacute;er &eacute;tude"
 #elif L==6	// gn
 	"Crear titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Create degree"			// Bisogno di traduzione
+	"Crea laurea"
 #elif L==8	// pl
-	"Create degree"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz stopnia"
 #elif L==9	// pt
-	"Create degree"			// Precisa de tradução
+	"Criar grau"
 #elif L==10	// tr
 	"Create degree"			// Çeviri lazim!
 #endif
