@@ -2224,25 +2224,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewLnk] =
 #if   L==1	// ca
-	"Request creation of institutional link"		// Necessita traducció
+	"Crear enlla&ccedil;"
 #elif L==2	// de
-	"Request creation of institutional link"		// Need Übersetzung
+	"Link erstellen"
 #elif L==3	// en
-	"Request creation of institutional link"
+	"Create link"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un enlace institucional"
+	"Crear enlace"
 #elif L==5	// fr
-	"Request creation of institutional link"		// Besoin de traduction
+	"Cr&eacute;er lien"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un enlace institucional"	// Okoteve traducción
+	"Crear enlace"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of institutional link"		// Bisogno di traduzione
+	"Crea link"
 #elif L==8	// pl
-	"Request creation of institutional link"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz link"
 #elif L==9	// pt
-	"Request creation of institutional link"		// Precisa de tradução
+	"Criar liga&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Request creation of institutional link"		// Çeviri lazim!
+	"Create link"	// Çeviri lazim!
 #endif
 	,
 	[ActRemLnk] =

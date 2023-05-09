@@ -6464,6 +6464,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    extern const char *Txt_Create_folder;
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
+   extern const char *Txt_Create;
 
    /***** Begin form *****/
    Frm_BeginForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
@@ -6489,7 +6490,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_folder);
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -6637,6 +6638,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_URL;
    extern const char *Txt_Save_as;
    extern const char *Txt_optional;
+   extern const char *Txt_Create;
    char *Label;
 
    /***** Begin form *****/
@@ -6693,7 +6695,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
       HTM_TABLE_End ();
 
       /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
