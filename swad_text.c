@@ -6618,29 +6618,6 @@ const char *Txt_Create_another_type_of_degree =
 	"Create another type of degree";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_department =
-#if   L==1	// ca
-	"Crear departament";
-#elif L==2	// de
-	"Abteilung eingeben";
-#elif L==3	// en
-	"Create department";
-#elif L==4	// es
-	"Crear departamento";
-#elif L==5	// fr
-	"Cr&eacute;er d&eacute;partement";
-#elif L==6	// gn
-	"Crear departamento";	// Okoteve traducción
-#elif L==7	// it
-	"Crea dipartimento";
-#elif L==8	// pl
-	"Utw&oacute;rz dzia&lstrok;u";
-#elif L==9	// pt
-	"Criar departamento";
-#elif L==10	// tr
-	"Create department";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_email_domain =
 #if   L==1	// ca
 	"Crear domini de correu";

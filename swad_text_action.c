@@ -3535,25 +3535,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewDpt] =
 #if   L==1	// ca
-	"Request creation of a department"		// Necessita traducció
+	"Crear departament"
 #elif L==2	// de
-	"Request creation of a department"		// Need Übersetzung
+	"Abteilung eingeben"
 #elif L==3	// en
-	"Request creation of a department"
+	"Create department"
 #elif L==4	// es
-	"Solicitar creaci&oacute;n de un departamento"
+	"Crear departamento"
 #elif L==5	// fr
-	"Request creation of a department"		// Besoin de traduction
+	"Cr&eacute;er d&eacute;partement"
 #elif L==6	// gn
-	"Solicitar creaci&oacute;n de un departamento"	// Okoteve traducción
+	"Crear departamento"	// Okoteve traducción
 #elif L==7	// it
-	"Request creation of a department"		// Bisogno di traduzione
+	"Crea dipartimento"
 #elif L==8	// pl
-	"Request creation of a department"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz dzia&lstrok;u"
 #elif L==9	// pt
-	"Request creation of a department"		// Precisa de tradução
+	"Criar departamento"
 #elif L==10	// tr
-	"Request creation of a department"		// Çeviri lazim!
+	"Create department"	// Çeviri lazim!
 #endif
 	,
 	[ActRemDpt] =
