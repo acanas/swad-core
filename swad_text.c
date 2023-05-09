@@ -6848,29 +6848,6 @@ const char *Txt_Create_question =
 	"Create question";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_record_field =
-#if   L==1	// ca
-	"Crear camp de fitxa";
-#elif L==2	// de
-	"Datenfeld erstellen";
-#elif L==3	// en
-	"Create record field";
-#elif L==4	// es
-	"Crear campo de ficha";
-#elif L==5	// fr
-	"Cr&eacute;er champ de carte";
-#elif L==6	// gn
-	"Crear campo de ficha";	// Okoteve traducción
-#elif L==7	// it
-	"Crea campo di scheda";
-#elif L==8	// pl
-	"Utw&oacute;rz rekord pola";
-#elif L==9	// pt
-	"Criar campo de cart&atilde;o";
-#elif L==10	// tr
-	"Create record field";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_room =
 #if   L==1	// ca
 	"Crear sala";
@@ -33079,29 +33056,6 @@ const char *Txt_record_cards_per_page =
 	"cart&otilde;es por p&aacute;gina";
 #elif L==10	// tr
 	"record cards per page";	// Çeviri lazim!
-#endif
-
-const char *Txt_Record_field =
-#if   L==1	// ca
-	"Camp de fitxa";
-#elif L==2	// de
-	"Datenfeld";
-#elif L==3	// en
-	"Record field";
-#elif L==4	// es
-	"Campo de ficha";
-#elif L==5	// fr
-	"Champ de carte";
-#elif L==6	// gn
-	"Campo de ficha";		// Okoteve traducción
-#elif L==7	// it
-	"Campo di scheda";
-#elif L==8	// pl
-	"Rekord pola";
-#elif L==9	// pt
-	"Campo de cart&atilde;o";
-#elif L==10	// tr
-	"Kay&inodot;t alan&inodot;";
 #endif
 
 const char *Txt_Record_field_X_removed =	// Warning: it is very important to include %s in the following sentences

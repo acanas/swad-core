@@ -25640,23 +25640,23 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewFie] =
 #if   L==1	// ca
-	"Create record field"	// Necessita traducció
+	"Crear camp de fitxa"
 #elif L==2	// de
-	"Create record field"	// Need Übersetzung
+	"Datenfeld erstellen"
 #elif L==3	// en
 	"Create record field"
 #elif L==4	// es
 	"Crear campo de ficha"
 #elif L==5	// fr
-	"Create record field"	// Besoin de traduction
+	"Cr&eacute;er champ de carte"
 #elif L==6	// gn
 	"Crear campo de ficha"	// Okoteve traducción
 #elif L==7	// it
-	"Create record field"	// Bisogno di traduzione
+	"Crea campo di scheda"
 #elif L==8	// pl
-	"Create record field"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz rekord pola"
 #elif L==9	// pt
-	"Create record field"	// Precisa de tradução
+	"Criar campo de cart&atilde;o"
 #elif L==10	// tr
 	"Create record field"	// Çeviri lazim!
 #endif
