@@ -2753,25 +2753,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewIns] =
 #if   L==1	// ca
-	"Create an institution"		// Necessita traducció
+	"Crear instituci&oacute;"
 #elif L==2	// de
-	"Create an institution"		// Need Übersetzung
+	"Hochschule eingeben"
 #elif L==3	// en
-	"Create an institution"
+	"Create institution"
 #elif L==4	// es
-	"Crear una instituci&oacute;n"
+	"Crear instituci&oacute;n"
 #elif L==5	// fr
-	"Create an institution"		// Besoin de traduction
+	"Cr&eacute;er &eacute;tablissement"
 #elif L==6	// gn
-	"Crear una instituci&oacute;n"	// Okoteve traducción
+	"Crear instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Create an institution"		// Bisogno di traduzione
+	"Crea istituzione"
 #elif L==8	// pl
-	"Create an institution"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz instytucji"
 #elif L==9	// pt
-	"Create an institution"		// Precisa de tradução
+	"Criar institu&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Create an institution"		// Çeviri lazim!
+	"Create institution"		// Çeviri lazim!
 #endif
 	,
 	[ActRemIns] =

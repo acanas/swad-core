@@ -6894,29 +6894,6 @@ const char *Txt_Create_holiday =
 	"Tatil olu&scedil;tur";
 #endif
 
-const char *Txt_Create_institution =
-#if   L==1	// ca
-	"Crear instituci&oacute;";
-#elif L==2	// de
-	"Hochschule eingeben";
-#elif L==3	// en
-	"Create institution";
-#elif L==4	// es
-	"Crear instituci&oacute;n";
-#elif L==5	// fr
-	"Cr&eacute;er &eacute;tablissement";
-#elif L==6	// gn
-	"Crear instituci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Crea istituzione";
-#elif L==8	// pl
-	"Utw&oacute;rz instytucji";
-#elif L==9	// pt
-	"Criar institu&ccedil;&atilde;o";
-#elif L==10	// tr
-	"Create institution";		// Çeviri lazim!
-#endif
-
 const char *Txt_Create_item =
 #if   L==1	// ca
 	"Crear &iacute;tem";
