@@ -6595,29 +6595,6 @@ const char *Txt_Create_account =
 	"Hesab&inodot; olu&scedil;tur";
 #endif
 
-const char *Txt_Create_another_type_of_degree =
-#if   L==1	// ca
-	"Crear un altre tipus de titulaci&oacute;";
-#elif L==2	// de
-	"Erstellen Sie ein anderes Abschlussart";
-#elif L==3	// en
-	"Create another type of degree";
-#elif L==4	// es
-	"Crear otro tipo de titulaci&oacute;n";
-#elif L==5	// fr
-	"Cr&eacute;er un autre type d'&eacute;tude";
-#elif L==6	// gn
-	"Crear otro tipo de titulaci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Crea un altro tipo di laurea";
-#elif L==8	// pl
-	"Utw&oacute;rz inny typu stopnia";
-#elif L==9	// pt
-	"Criar outro tipo de grau";
-#elif L==10	// tr
-	"Create another type of degree";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_email_domain =
 #if   L==1	// ca
 	"Crear domini de correu";
@@ -6846,29 +6823,6 @@ const char *Txt_Create_question =
 	"Criar pergunta";
 #elif L==10	// tr
 	"Create question";	// Çeviri lazim!
-#endif
-
-const char *Txt_Create_type_of_degree =
-#if   L==1	// ca
-	"Crear tipus de titulaci&oacute;";
-#elif L==2	// de
-	"Abschlussart definieren";
-#elif L==3	// en
-	"Create type of degree";
-#elif L==4	// es
-	"Crear tipo de titulaci&oacute;n";
-#elif L==5	// fr
-	"Cr&eacute;er type d'&eacute;tude";
-#elif L==6	// gn
-	"Crear tipo de titulaci&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Crea tipo di laurea";
-#elif L==8	// pl
-	"Utw&oacute;rz typu stopnia";
-#elif L==9	// pt
-	"Criar tipo de grau";
-#elif L==10	// tr
-	"Create type of degree";		// Çeviri lazim!
 #endif
 
 const char *Txt_Create_type_of_group =

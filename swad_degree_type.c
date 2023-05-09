@@ -199,8 +199,6 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
    extern const char *Hlp_ANALYTICS_Figures_types_of_degree;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_No_types_of_degree;
-   extern const char *Txt_Create_another_type_of_degree;
-   extern const char *Txt_Create_type_of_degree;
 
    /***** Begin box *****/
    switch (NextAction)
@@ -235,15 +233,6 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
      }
    else	// No degree types created
       Ale_ShowAlert (Ale_INFO,Txt_No_types_of_degree);
-
-   /***** Button to create degree type  *****/
-   if (DegTyp_CheckIfICanCreateDegreeTypes ())
-     {
-      Frm_BeginForm (ActEdiDegTyp);
-	 Btn_PutConfirmButton (DegTypes->Num ? Txt_Create_another_type_of_degree :
-					       Txt_Create_type_of_degree);
-      Frm_EndForm ();
-     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -423,7 +412,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 	    HTM_TD_End ();
 
 	    /* Degree type code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (DegTypes->Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
@@ -468,52 +457,59 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
-   extern const char *Txt_Create_type_of_degree;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewDegTyp);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewDegTyp]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewDegTyp);
 
-	 /***** Write heading *****/
-	 DegTyp_PutHeadDegreeTypesForEdition ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Begin table row *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    DegTyp_PutHeadDegreeTypesForEdition ();
 
-	    /***** Column to remove degree type, disabled here *****/
-	    HTM_TD_Begin ("class=\"BM\"");
-	    HTM_TD_End ();
+	    /***** Begin table row *****/
+	    HTM_TR_Begin (NULL);
 
-	    /***** Degree type code *****/
-	    HTM_TD_Begin ("class=\"CODE\"");
-	    HTM_TD_End ();
+	       /***** Column to remove degree type, disabled here *****/
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    /***** Degree type name *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"25\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /***** Degree type code *****/
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	    /***** Number of degrees of this degree type ****/
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (0);
-	    HTM_TD_End ();
+	       /***** Degree type name *****/
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"25\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 /***** End table row *****/
-	 HTM_TR_End ();
+	       /***** Number of degrees of this degree type ****/
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
+	    /***** End table row *****/
+	    HTM_TR_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

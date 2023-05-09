@@ -4342,23 +4342,23 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewDegTyp] =
 #if   L==1	// ca
-	"Create type of degree"			// Necessita traducció
+	"Crear tipus de titulaci&oacute;"
 #elif L==2	// de
-	"Create type of degree"			// Need Übersetzung
+	"Abschlussart definieren"
 #elif L==3	// en
 	"Create type of degree"
 #elif L==4	// es
 	"Crear tipo de titulaci&oacute;n"
 #elif L==5	// fr
-	"Create type of degree"			// Besoin de traduction
+	"Cr&eacute;er type d'&eacute;tude"
 #elif L==6	// gn
 	"Crear tipo de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Create type of degree"			// Bisogno di traduzione
+	"Crea tipo di laurea"
 #elif L==8	// pl
-	"Create type of degree"			// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz typu stopnia"
 #elif L==9	// pt
-	"Create type of degree"			// Precisa de tradução
+	"Criar tipo de grau"
 #elif L==10	// tr
 	"Create type of degree"			// Çeviri lazim!
 #endif
