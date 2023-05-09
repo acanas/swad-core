@@ -6687,29 +6687,6 @@ const char *Txt_Create_event =
 	"Create event";	// Çeviri lazim!
 #endif
 
-const char *Txt_Create_exam =
-#if   L==1	// ca
-	"Crear examen";
-#elif L==2	// de
-	"Pr&uuml;fung erstellen";
-#elif L==3	// en
-	"Create exam";
-#elif L==4	// es
-	"Crear examen";
-#elif L==5	// fr
-	"Cr&eacute;er exam";
-#elif L==6	// gn
-	"Crear examen";	// Okoteve traducción
-#elif L==7	// it
-	"Crea esame";
-#elif L==8	// pl
-	"Utw&oacute;rz egzamin";
-#elif L==9	// pt
-	"Criar exame";
-#elif L==10	// tr
-	"Create exam";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_folder =
 #if   L==1	// ca
 	"Crear carpeta";

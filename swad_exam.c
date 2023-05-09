@@ -1327,7 +1327,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
-   extern const char *Txt_Create_exam;
+   extern const char *Txt_Create;
    static Act_Action_t NextAction[] =
      {
       [Exa_EXISTING_EXAM] = ActChgExa,
@@ -1341,7 +1341,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    const char *TxtButton[] =
      {
       [Exa_EXISTING_EXAM] = Txt_Save_changes,
-      [Exa_NEW_EXAM     ] = Txt_Create_exam,
+      [Exa_NEW_EXAM     ] = Txt_Create,
      };
 
    /***** Begin form *****/

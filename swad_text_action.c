@@ -11909,25 +11909,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewExa] =
 #if   L==1	// ca
-	"Create new exam"	// Necessita traducció
+	"Crear examen"
 #elif L==2	// de
-	"Create new exam"	// Need Übersetzung
+	"Pr&uuml;fung erstellen"
 #elif L==3	// en
-	"Create new exam"
+	"Create exam"
 #elif L==4	// es
-	"Crear nuevo examen"
+	"Crear examen"
 #elif L==5	// fr
-	"Create new exam"	// Besoin de traduction
+	"Cr&eacute;er exam"
 #elif L==6	// gn
-	"Crear nuevo examen"	// Okoteve traducción
+	"Crear examen"	// Okoteve traducción
 #elif L==7	// it
-	"Create new exam"	// Bisogno di traduzione
+	"Crea esame"
 #elif L==8	// pl
-	"Create new exam"	// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz egzamin"
 #elif L==9	// pt
-	"Create new exam"	// Precisa de tradução
+	"Criar exame"
 #elif L==10	// tr
-	"Create new exam"	// Çeviri lazim!
+	"Create exam"	// Çeviri lazim!
 #endif
 	,
 	[ActChgExa] =
