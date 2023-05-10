@@ -931,7 +931,7 @@ void Att_ReqCreatOrEditEvent (void)
    extern const char *Txt_Hidden_MALE_PLURAL;
    extern const char *Txt_Visible_MALE_PLURAL;
    extern const char *Txt_Description;
-   extern const char *Txt_Create_event;
+   extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
    struct Att_Events Events;
    bool ItsANewAttEvent;
@@ -1067,7 +1067,7 @@ void Att_ReqCreatOrEditEvent (void)
 
       /***** End table, send button and end box *****/
       if (ItsANewAttEvent)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
       else
 	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 

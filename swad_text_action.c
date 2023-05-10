@@ -1868,7 +1868,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	"Crea paese"
+	"Creare paese"
 #elif L==8	// pl
 	"Utw&oacute;rz kraju"
 #elif L==9	// pt
@@ -2006,7 +2006,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i pancarta"
 #elif L==7	// it
-	"Crea banner"
+	"Creare banner"
 #elif L==8	// pl
 	"Utw&oacute;rz banner"
 #elif L==9	// pt
@@ -2236,7 +2236,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear enlace"	// Okoteve traducción
 #elif L==7	// it
-	"Crea link"
+	"Creare link"
 #elif L==8	// pl
 	"Utw&oacute;rz link"
 #elif L==9	// pt
@@ -2374,7 +2374,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear complemento"	// Okoteve traducción
 #elif L==7	// it
-	"Crea plugin"
+	"Creare plugin"
 #elif L==8	// pl
 	"Utw&oacute;rz plugin"
 #elif L==9	// pt
@@ -2765,7 +2765,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Crea istituzione"
+	"Creare istituzione"
 #elif L==8	// pl
 	"Utw&oacute;rz instytucji"
 #elif L==9	// pt
@@ -3248,7 +3248,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear centro"		// Okoteve traducción
 #elif L==7	// it
-	"Crea centro"
+	"Creare centro"
 #elif L==8	// pl
 	"Utw&oacute;rz centrum"
 #elif L==9	// pt
@@ -3432,7 +3432,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear lugar"	// Okoteve traducción
 #elif L==7	// it
-	"Crea localit&grave;"
+	"Creare localit&grave;"
 #elif L==8	// pl
 	"Utw&oacute;rz miejsce"
 #elif L==9	// pt
@@ -3547,7 +3547,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear departamento"	// Okoteve traducción
 #elif L==7	// it
-	"Crea dipartimento"
+	"Creare dipartimento"
 #elif L==8	// pl
 	"Utw&oacute;rz dzia&lstrok;u"
 #elif L==9	// pt
@@ -3710,7 +3710,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i arete"
 #elif L==7	// it
-	"Crea festivit&agrave;"
+	"Creare festivit&agrave;"
 #elif L==8	// pl
 	"Utw&oacute;rz wakacje"
 #elif L==9	// pt
@@ -4354,7 +4354,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear tipo de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Crea tipo di laurea"
+	"Creare tipo di laurea"
 #elif L==8	// pl
 	"Utw&oacute;rz typu stopnia"
 #elif L==9	// pt
@@ -4469,7 +4469,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Crea laurea"
+	"Creare laurea"
 #elif L==8	// pl
 	"Utw&oacute;rz stopnia"
 #elif L==9	// pt
@@ -4653,7 +4653,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear edificio"	// Okoteve traducción
 #elif L==7	// it
-	"Crea edificio"
+	"Creare edificio"
 #elif L==8	// pl
 	"Utw&oacute;rz budynek"
 #elif L==9	// pt
@@ -4791,7 +4791,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear sala"	// Okoteve traducción
 #elif L==7	// it
-	"Crea aula"
+	"Creare aula"
 #elif L==8	// pl
 	"Utw&oacute;rz klasa"
 #elif L==9	// pt
@@ -5228,7 +5228,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Crea corso"
+	"Creare corso"
 #elif L==8	// pl
 	"Utw&oacute;rz kursu"
 #elif L==9	// pt
@@ -5872,7 +5872,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear &iacute;tem"	// Okoteve traducción
 #elif L==7	// it
-	"Crea articolo"
+	"Creare articolo"
 #elif L==8	// pl
 	"Utw&oacute;rz przedmiot"
 #elif L==9	// pt
@@ -9230,7 +9230,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i tembiapo"
 #elif L==7	// it
-	"Crea attivit&agrave;"
+	"Creare attivit&agrave;"
 #elif L==8	// pl
 	"Utw&oacute;rz zadanie"
 #elif L==9	// pt
@@ -9667,7 +9667,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i proyecto"
 #elif L==7	// it
-	"Crea progetto"
+	"Creare progetto"
 #elif L==8	// pl
 	"Utw&oacute;rz projekt"
 #elif L==9	// pt
@@ -11921,7 +11921,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear examen"	// Okoteve traducción
 #elif L==7	// it
-	"Crea esame"
+	"Creare esame"
 #elif L==8	// pl
 	"Utw&oacute;rz egzamin"
 #elif L==9	// pt
@@ -12082,7 +12082,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Ojapo porandu &ntilde;emohenda"
 #elif L==7	// it
-	"Crea set di domande"
+	"Creare set di domande"
 #elif L==8	// pl
 	"Utw&oacute;rz zestaw pyta&nacute;"
 #elif L==9	// pt
@@ -12450,7 +12450,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i sesi&oacute;n de examen"
 #elif L==7	// it
-	"Crea sessione d'esame"
+	"Creare sessione d'esame"
 #elif L==8	// pl
 	"Utw&oacute;rz sesj&eogon; egzaminacyjn&aogon;"
 #elif L==9	// pt
@@ -13623,7 +13623,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear juego"	// Okoteve traducción
 #elif L==7	// it
-	"Crea gioco"
+	"Creare gioco"
 #elif L==8	// pl
 	"Utw&oacute;rz gra"
 #elif L==9	// pt
@@ -14014,7 +14014,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i  r&uacute;brica"
 #elif L==7	// it
-	"Crea rubrica"
+	"Creare rubrica"
 #elif L==8	// pl
 	"Utw&oacute;rz rubryk&eogon;"
 #elif L==9	// pt
@@ -24778,7 +24778,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Crea tipo di gruppo"
+	"Creare tipo di gruppo"
 #elif L==8	// pl
 	"Utw&oacute;rz typu grupy"
 #elif L==9	// pt
@@ -24939,7 +24939,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear grupo"		// Okoteve traducción
 #elif L==7	// it
-	"Crea gruppo"
+	"Creare gruppo"
 #elif L==8	// pl
 	"Utw&oacute;rz grup&eogon;"
 #elif L==9	// pt
@@ -25652,7 +25652,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear campo de ficha"	// Okoteve traducción
 #elif L==7	// it
-	"Crea campo di scheda"
+	"Creare campo di scheda"
 #elif L==8	// pl
 	"Utw&oacute;rz rekord pola"
 #elif L==9	// pt
@@ -26123,25 +26123,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewAtt] =
 #if   L==1	// ca
-	"Create new attendance event"		// Necessita traducció
+	"Crear esdeveniment d'assist&egrave;ncia"
 #elif L==2	// de
-	"Create new attendance event"		// Need Übersetzung
+	"Pr&auml;senzveranstaltung erstellen"
 #elif L==3	// en
-	"Create new attendance event"
+	"Create attendance event"
 #elif L==4	// es
-	"Crear nuevo evento de asistencia"
+	"Crear evento de asistencia"
 #elif L==5	// fr
-	"Create new attendance event"		// Besoin de traduction
+	"Cr&eacute;er &eacute;v&eacute;nement de pr&eacute;sence"
 #elif L==6	// gn
-	"Crear nuevo evento de asistencia"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i evento de asistencia"
 #elif L==7	// it
-	"Create new attendance event"		// Bisogno di traduzione
+	"Creare evento di partecipazione"
 #elif L==8	// pl
-	"Create new attendance event"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz wydarzenie obecno&sacute;ci"
 #elif L==9	// pt
-	"Create new attendance event"		// Precisa de tradução
+	"Criar evento de participa&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Create new attendance event"		// Çeviri lazim!
+	"Kat&inodot;l&inodot;m etkinli&gbreve;i olu&scedil;tur"
 #endif
 	,
 	[ActChgAtt] =
@@ -28780,7 +28780,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i anuncio"
 #elif L==7	// it
-	"Crea annuncio"
+	"Creare annuncio"
 #elif L==8	// pl
 	"Stw&oacute;rz og&lstrok;oszenia"
 #elif L==9	// pt
@@ -28918,7 +28918,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Crear aviso"	// Okoteve traducción
 #elif L==7	// it
-	"Crea avviso"
+	"Creare avviso"
 #elif L==8	// pl
 	"Utw&oacute;rz powiadomienie"
 #elif L==9	// pt
@@ -32874,7 +32874,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==6	// gn
 	"Omohe&ntilde;&oacute;i encuesta"
 #elif L==7	// it
-	"Crea sondaggio"
+	"Creare sondaggio"
 #elif L==8	// pl
 	"Utw&oacute;rz ankiety"
 #elif L==9	// pt
@@ -33506,25 +33506,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewEvtMyAgd] =
 #if   L==1	// ca
-	"Create new event in my agenda"		// Necessita traducció
+	"Crear esdeveniment a agenda"
 #elif L==2	// de
-	"Create new event in my agenda"		// Need Übersetzung
+	"Kalenderereignis erstellen"
 #elif L==3	// en
-	"Create new event in my agenda"
+	"Create event in agenda"
 #elif L==4	// es
-	"Crear nuevo evento en mi agenda"
+	"Crear evento en agenda"
 #elif L==5	// fr
-	"Create new event in my agenda"		// Besoin de traduction
+	"Cr&eacute;er un &eacute;v&eacute;nement dans l'agenda"
 #elif L==6	// gn
-	"Crear nuevo evento en mi agenda"	// Okoteve traducción
+	"Omohe&ntilde;&oacute;i evento agenda-pe"
 #elif L==7	// it
-	"Create new event in my agenda"		// Bisogno di traduzione
+	"Creare evento in agenda"
 #elif L==8	// pl
-	"Create new event in my agenda"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz wydarzenie w agend&aogon;"
 #elif L==9	// pt
-	"Create new event in my agenda"		// Precisa de tradução
+	"Criar evento na agenda"
 #elif L==10	// tr
-	"Create new event in my agenda"		// Çeviri lazim!
+	"Ajandada etkinlik olu&scedil;tur"
 #endif
 	,
 	[ActChgEvtMyAgd] =

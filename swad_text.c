@@ -6641,29 +6641,6 @@ const char *Txt_Create_email_message =
 	"Create email message";		// Çeviri lazim!
 #endif
 
-const char *Txt_Create_event =
-#if   L==1	// ca
-	"Crear esdeveniment";
-#elif L==2	// de
-	"Ereignis erstellen";
-#elif L==3	// en
-	"Create event";
-#elif L==4	// es
-	"Crear evento";
-#elif L==5	// fr
-	"Cr&eacute;er &eacute;v&eacute;nement";
-#elif L==6	// gn
-	"Crear evento";	// Okoteve traducción
-#elif L==7	// it
-	"Crea evento";
-#elif L==8	// pl
-	"Utw&oacute;rz wydarzenie";
-#elif L==9	// pt
-	"Criar evento";
-#elif L==10	// tr
-	"Create event";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_folder =
 #if   L==1	// ca
 	"Crear carpeta";
