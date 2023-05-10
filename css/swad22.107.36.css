@@ -3067,8 +3067,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 /***************** Text decoration of fieldset and legend ********************/
 fieldset
 	{
-	margin:2px 0 4px 0;
-	padding:2px;
+	margin:2px 0 8px 0;
+	padding:10px;
 	border-style:solid;
 	border-width:1px;
 	border-radius:2px;
@@ -3078,8 +3078,8 @@ fieldset
 .BODY_PURPLE fieldset,
 .BODY_BLUE fieldset,
 .BODY_YELLOW fieldset,
-.BODY_PINK fieldset	{border-color:#8cbcce;}
-.BODY_DARK fieldset	{border-color:#8b9aa0;}
+.BODY_PINK fieldset	{border-color:#808080;}
+.BODY_DARK fieldset	{border-color:#979797;}
 
 legend {font-size:12pt;}
 .BODY_WHITE legend,
@@ -3087,8 +3087,8 @@ legend {font-size:12pt;}
 .BODY_PURPLE legend,
 .BODY_BLUE legend,
 .BODY_YELLOW legend,
-.BODY_PINK legend	{color:#4d88a1;}
-.BODY_DARK legend	{color:#afc4cc;}
+.BODY_PINK legend	{color:#808080;}
+.BODY_DARK legend	{color:#979797;}
 
 /*****************************************************************************/
 .TIT_TBL_WHITE,
