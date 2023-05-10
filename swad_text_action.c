@@ -1580,23 +1580,23 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActNewMai] =
 #if   L==1	// ca
-	"Create email domain"		// Necessita traducció
+	"Crear domini de correu"
 #elif L==2	// de
-	"Create email domain"		// Need Übersetzung
+	"E-Mail-Dom&auml;ne anlegen"
 #elif L==3	// en
 	"Create email domain"
 #elif L==4	// es
 	"Crear dominio de correo"
 #elif L==5	// fr
-	"Create email domain"		// Besoin de traduction
+	"Cr&eacute;er domaine de messagerie"
 #elif L==6	// gn
 	"Crear dominio de correo"	// Okoteve traducción
 #elif L==7	// it
-	"Create email domain"		// Bisogno di traduzione
+	"Crea campo mail"
 #elif L==8	// pl
-	"Create email domain"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz domeny mail"
 #elif L==9	// pt
-	"Create email domain"		// Precisa de tradução
+	"Criar dom&iacute;nio de email"
 #elif L==10	// tr
 	"Create email domain"		// Çeviri lazim!
 #endif

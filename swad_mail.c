@@ -251,12 +251,8 @@ static void Mai_EditMailDomainsInternal (void)
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif (&Mails);
 
-   /***** Put a form to create a new mail *****/
-   Mai_PutFormToCreateMailDomain ();
-
-   /***** Forms to edit current mail domains *****/
-   if (Mails.Num)
-      Mai_ListMailDomainsForEdition (&Mails);
+   /***** Forms to edit mail domains *****/
+   Mai_ListMailDomainsForEdition (&Mails);
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains (&Mails);
@@ -449,66 +445,78 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
    unsigned NumMai;
    struct Mail *Mai;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-                      NULL,NULL,
-                      Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Email_domains_allowed_for_notifications,
+                 NULL,NULL,
+                 Hlp_START_Domains_edit,Box_NOT_CLOSABLE);
 
-      /***** Write heading *****/
-      Mai_PutHeadMailDomains ();
+      /***** Put a form to create a new mail *****/
+      Mai_PutFormToCreateMailDomain ();
 
-      /***** Write all mail domains *****/
-      for (NumMai = 0;
-	   NumMai < Mails->Num;
-	   NumMai++)
+      if (Mails->Num)
 	{
-	 Mai = &Mails->Lst[NumMai];
+         /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Mai_PutHeadMailDomains ();
 
-	    /* Put icon to remove mail */
-	    HTM_TD_Begin ("class=\"BM\"");
-	       Ico_PutContextualIconToRemove (ActRemMai,NULL,
-					      Mai_PutParMaiCod,&Mai->MaiCod);
-	    HTM_TD_End ();
+	    /***** Write all mail domains *****/
+	    for (NumMai = 0;
+		 NumMai < Mails->Num;
+		 NumMai++)
+	      {
+	       Mai = &Mails->Lst[NumMai];
 
-	    /* Mail code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Long (Mai->MaiCod);
-	    HTM_TD_End ();
+	       HTM_TR_Begin (NULL);
 
-	    /* Mail domain */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenMaiSho);
-		  ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
-		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+		  /* Put icon to remove mail domain */
+		  HTM_TD_Begin ("class=\"BM\"");
+		     Ico_PutContextualIconToRemove (ActRemMai,NULL,
+						    Mai_PutParMaiCod,&Mai->MaiCod);
+		  HTM_TD_End ();
 
-	    /* Mail domain info */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenMaiFul);
-		  ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
-		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"40\" class=\"INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+		  /* Mail domain code */
+		  HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
+		     HTM_Long (Mai->MaiCod);
+		  HTM_TD_End ();
 
-	    /* Number of users */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Mai->NumUsrs);
-	    HTM_TD_End ();
+		  /* Mail domain */
+		  HTM_TD_Begin ("class=\"CM\"");
+		     Frm_BeginForm (ActRenMaiSho);
+			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
+			HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
+					HTM_SUBMIT_ON_CHANGE,
+					"size=\"15\" class=\"INPUT_%s\"",
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		  HTM_TD_End ();
 
-	 HTM_TR_End ();
+		  /* Mail domain info */
+		  HTM_TD_Begin ("class=\"CM\"");
+		     Frm_BeginForm (ActRenMaiFul);
+			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
+			HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
+					HTM_SUBMIT_ON_CHANGE,
+					"size=\"40\" class=\"INPUT_%s\"",
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		  HTM_TD_End ();
+
+		  /* Number of users */
+		  HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		     HTM_Unsigned (Mai->NumUsrs);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	   }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 	}
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -671,55 +679,67 @@ void Mai_ContEditAfterChgMai (void)
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
-   extern const char *Hlp_START_Domains_edit;
-   extern const char *Txt_Email_domain;
-   extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
-   extern const char *Txt_Create_email_domain;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   extern const char *Txt_Create;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewMai);
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[ActNewMai]);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Email_domain,
-			 NULL,NULL,
-			 Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewMai);
 
-	 /***** Write heading *****/
-	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],HTM_HEAD_LEFT);
-	    HTM_TH (Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]  ,HTM_HEAD_LEFT);
-	 HTM_TR_End ();
+	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Second row *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Write heading *****/
+	    Mai_PutHeadMailDomains ();
 
-	    /* Mail domain */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"15\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	    /***** Second row *****/
+	    HTM_TR_Begin (NULL);
 
-	    /* Mail domain info */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"40\" class=\"INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Column to remove mail domain, disabled here */
+	       HTM_TD_Begin ("class=\"BM\"");
+	       HTM_TD_End ();
 
-	    HTM_TD_Empty (1);
+	       /* Mail domain code */
+	       HTM_TD_Begin ("class=\"CODE\"");
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	       /* Mail domain */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"15\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_email_domain);
+	       /* Mail domain info */
+	       HTM_TD_Begin ("class=\"CM\"");
+		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"40\" class=\"INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	       /* Number of users */
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (0);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	 /***** End table and send button *****/
+	 HTM_TABLE_End ();
+         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/

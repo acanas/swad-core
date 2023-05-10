@@ -6595,29 +6595,6 @@ const char *Txt_Create_account =
 	"Hesab&inodot; olu&scedil;tur";
 #endif
 
-const char *Txt_Create_email_domain =
-#if   L==1	// ca
-	"Crear domini de correu";
-#elif L==2	// de
-	"E-Mail-Dom&auml;ne anlegen";
-#elif L==3	// en
-	"Create email domain";
-#elif L==4	// es
-	"Crear dominio de correo";
-#elif L==5	// fr
-	"Cr&eacute;er domaine de messagerie";
-#elif L==6	// gn
-	"Crear dominio de correo";	// Okoteve traducción
-#elif L==7	// it
-	"Crea campo mail";
-#elif L==8	// pl
-	"Utw&oacute;rz domeny mail";
-#elif L==9	// pt
-	"Criar dom&iacute;nio de email";
-#elif L==10	// tr
-	"Create email domain";		// Çeviri lazim!
-#endif
-
 const char *Txt_Create_email_message =
 #if   L==1	// ca
 	"Crear missatge de correu";
@@ -11644,29 +11621,6 @@ const char *Txt_Email_addresses =
 	"Endere&ccedil;os de email";
 #elif L==10	// tr
 	"Email addresses";		// Çeviri lazim!
-#endif
-
-const char *Txt_Email_domain =
-#if   L==1	// ca
-	"Domini de correu";
-#elif L==2	// de
-	"E-Mail-Dom&auml;ne";
-#elif L==3	// en
-	"Email domain";
-#elif L==4	// es
-	"Dominio de correo";
-#elif L==5	// fr
-	"Domaine de messagerie";
-#elif L==6	// gn
-	"Dominio correo";
-#elif L==7	// it
-	"Campo mail";
-#elif L==8	// pl
-	"Domeny poczty";
-#elif L==9	// pt
-	"Dom&iacute;nio de email";
-#elif L==10	// tr
-	"E-posta etki alan&inodot;";
 #endif
 
 const char *Txt_Email_domain_X_removed =	// Warning: it is very important to include %s in the following sentences
