@@ -110,12 +110,12 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat);
 
 void Acc_PutLinkToCreateAccount (void)
   {
-   extern const char *Txt_Create_account;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
                                   NULL,NULL,
 				  "at.svg",Ico_BLACK,
-				  Txt_Create_account,NULL);
+				  Txt_Actions[ActCreUsrAcc],NULL);
   }
 
 /*****************************************************************************/
@@ -365,18 +365,19 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
                                                    const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *Txt_Create_account;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
+   extern const char *Txt_Create;
    char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Create_account,
+      Box_BoxTableBegin (NULL,Txt_Actions[ActCreUsrAcc],
 			 NULL,NULL,
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
@@ -428,7 +429,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 	 Pwd_PutFormToGetNewPasswordOnce ();
 
       /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_account);
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -442,7 +443,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Create_account;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Title;
 
    /***** Begin box *****/
@@ -453,7 +454,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);
-	 Btn_PutCreateButton (Txt_Create_account);
+	 Btn_PutCreateButton (Txt_Actions[ActCreUsrAcc]);
       Frm_EndForm ();
 
    /***** End box *****/

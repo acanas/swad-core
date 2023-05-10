@@ -33759,25 +33759,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActCreUsrAcc] =
 #if   L==1	// ca
-	"Create new user account"	// Necessita traducció
+	"Crea compte"
 #elif L==2	// de
-	"Create new user account"	// Need Übersetzung
+	"Benutzerkonto anlegen"
 #elif L==3	// en
-	"Create new user account"
+	"Create account"
 #elif L==4	// es
-	"Crear nueva cuenta"
+	"Crear cuenta"
 #elif L==5	// fr
-	"Create new user account"	// Besoin de traduction
+	"Cr&eacute;er compte"
 #elif L==6	// gn
-	"Crear nueva cuenta"		// Okoteve traducción
+	"Ojapo cuenta"
 #elif L==7	// it
-	"Create new user account"	// Bisogno di traduzione
+	"Creare un account"
 #elif L==8	// pl
-	"Create new user account"	// Potrzebujesz tlumaczenie
+	"Za&lstrok;&oacute;&zdot; konto"
 #elif L==9	// pt
-	"Create new user account"	// Precisa de tradução
+	"Criar conta"
 #elif L==10	// tr
-	"Create new user account"	// Çeviri lazim!
+	"Hesab&inodot; olu&scedil;tur"
 #endif
 	,
 	[ActRemMyID] =

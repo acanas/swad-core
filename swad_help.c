@@ -94,7 +94,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Upload_photo;
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Create_account;
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    static const Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
      {
       [Rol_UNK    ] = ActUnk,
@@ -254,7 +254,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    Err_NotEnoughMemoryExit ();
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 					      ActFrmMyAcc,
-					      Btn_CREATE_BUTTON,Txt_Create_account);
+					      Btn_CREATE_BUTTON,Txt_Actions[ActCreUsrAcc]);
 	 free (Description);
 	}
 

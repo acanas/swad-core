@@ -6572,29 +6572,6 @@ const char *Txt_Create =
 	"Yaratmak";
 #endif
 
-const char *Txt_Create_account =
-#if   L==1	// ca
-	"Crea compte";
-#elif L==2	// de
-	"Benutzerkonto anlegen";
-#elif L==3	// en
-	"Create account";
-#elif L==4	// es
-	"Crear cuenta";
-#elif L==5	// fr
-	"Cr&eacute;er compte";
-#elif L==6	// gn
-	"Crear cuenta";		// Okoteve traducción
-#elif L==7	// it
-	"Registrati";
-#elif L==8	// pl
-	"Za&lstrok;&oacute;&zdot; konto";
-#elif L==9	// pt
-	"Criar conta";
-#elif L==10	// tr
-	"Hesab&inodot; olu&scedil;tur";
-#endif
-
 const char *Txt_Create_email_message =
 #if   L==1	// ca
 	"Crear missatge de correu";
