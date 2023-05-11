@@ -3364,7 +3364,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_;
    extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_;
-   extern const char *Txt_Remove_type_of_group;
+   extern const char *Txt_Remove;
 
    /***** Get data of the group type from database *****/
    Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3376,13 +3376,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    if (NumGrps == 1)
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
 			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
 			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                               Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
 
@@ -3400,7 +3400,7 @@ static void Grp_AskConfirmRemGrp (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_;
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_;
-   extern const char *Txt_Remove_group;
+   extern const char *Txt_Remove;
    struct GroupData GrpDat;
    unsigned NumStds;
 
@@ -3419,19 +3419,19 @@ static void Grp_AskConfirmRemGrp (void)
    if (NumStds == 0)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
 			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_group,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
                               GrpDat.GrpName);
    else if (NumStds == 1)
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
 			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_group,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
                               GrpDat.GrpName);
    else
       Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
 			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_group,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                               GrpDat.GrpName,NumStds);
 

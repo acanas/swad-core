@@ -145,7 +145,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
                                long SelectedRscCod)
   {
    extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_Remove_resource;
+   extern const char *Txt_Remove;
    extern const char *Txt_Resources_of_X;
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
@@ -203,7 +203,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	    /* Alert with button to remove resource */
 	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
 					PrgRsc_PutParRscCod,&SelectedRscCod,
-					Btn_REMOVE_BUTTON,Txt_Remove_resource);
+					Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
 	}

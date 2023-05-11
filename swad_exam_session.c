@@ -788,7 +788,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 void ExaSes_ReqRemSession (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_session_X;
-   extern const char *Txt_Remove_session;
+   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
 
@@ -805,7 +805,7 @@ void ExaSes_ReqRemSession (void)
    Exams.SesCod      = Session.SesCod;
    Ale_ShowAlertAndButton (ActRemExaSes,NULL,NULL,
                            ExaSes_PutParsEdit,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_session,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_session_X,
 	                   Session.Title);
 

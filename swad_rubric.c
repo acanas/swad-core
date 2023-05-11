@@ -683,7 +683,7 @@ void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
 void Rub_AskRemRubric (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_rubric_X;
-   extern const char *Txt_Remove_rubric;
+   extern const char *Txt_Remove;
    struct Rub_Rubrics Rubrics;
 
    /***** Reset rubrics context *****/
@@ -701,7 +701,7 @@ void Rub_AskRemRubric (void)
    /***** Show criterion and button to remove rubric *****/
    Ale_ShowAlertAndButton (ActRemRub,NULL,NULL,
                            Rub_PutPars,&Rubrics,
-			   Btn_REMOVE_BUTTON,Txt_Remove_rubric,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_rubric_X,
                            Rubrics.Rubric.Title);
 

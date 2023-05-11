@@ -5906,25 +5906,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemPrgItm] =
 #if   L==1	// ca
-	"Remove of program item"		// Necessita traducció
+	"Eliminar &iacute;tem del programa"
 #elif L==2	// de
-	"Remove of program item"		// Need Übersetzung
+	"Programmelement entfernen"
 #elif L==3	// en
-	"Remove of program item"
+	"Remove program item"
 #elif L==4	// es
 	"Eliminar &iacute;tem del programa"
 #elif L==5	// fr
-	"Remove of program item"		// Besoin de traduction
+	"Supprimer &eacute;l&eacute;ment de programme"
 #elif L==6	// gn
-	"Eliminar &iacute;tem del programa"	// Okoteve traducción
+	"Ojepe'a pe mba'e programa"
 #elif L==7	// it
-	"Remove of program item"		// Bisogno di traduzione
+	"Rimuovere elemento dal programma"
 #elif L==8	// pl
-	"Remove of program item"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; element programu"
 #elif L==9	// pt
-	"Remove of program item"		// Precisa de tradução
+	"Remover item do programa"
 #elif L==10	// tr
-	"Remove of program item"		// Çeviri lazim!
+	"Program &ouml;&gbreve;esini kald&inodot;r"
 #endif
 	,
 	[ActHidPrgItm] =
@@ -6320,25 +6320,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemPrgRsc] =
 #if   L==1	// ca
-	"Remove resource"	// Necessita traducció
+	"Eliminar recurs"
 #elif L==2	// de
-	"Remove resource"	// Need Übersetzung
+	"Ressource entfernen"
 #elif L==3	// en
 	"Remove resource"
 #elif L==4	// es
 	"Eliminar recurso"
 #elif L==5	// fr
-	"Remove resource"	// Besoin de traduction
+	"Supprimer ressource"
 #elif L==6	// gn
 	"Eliminar recurso"	// Okoteve traducción
 #elif L==7	// it
-	"Remove resource"	// Bisogno di traduzione
+	"Rimuovere risorsa"
 #elif L==8	// pl
-	"Remove resource"	// Potrzebujesz tlumaczenie
+	"Usu&nacute; zas&oacute;b"
 #elif L==9	// pt
-	"Remove resource"	// Precisa de tradução
+	"Remover recurso"
 #elif L==10	// tr
-	"Remove resource"	// Çeviri lazim!
+	"Kayna&gbreve;&inodot; kald&inodot;r"
 #endif
 	,
 	[ActHidPrgRsc] =
@@ -9287,25 +9287,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemAsg] =
 #if   L==1	// ca
-	"Remove assignment"	// Necessita traducció
+	"Eliminar activitat"
 #elif L==2	// de
-	"Remove assignment"	// Need Übersetzung
+	"Aufgabe entfernen"
 #elif L==3	// en
 	"Remove assignment"
 #elif L==4	// es
 	"Eliminar actividad"
 #elif L==5	// fr
-	"Remove assignment"	// Besoin de traduction
+	"Supprimer activit&eacute;"
 #elif L==6	// gn
 	"Eliminar actividad"	// Okoteve traducción
 #elif L==7	// it
-	"Remove assignment"	// Bisogno di traduzione
+	"Rimuovere attivit&agrave;"
 #elif L==8	// pl
-	"Remove assignment"	// Potrzebujesz tlumaczenie
+	"Usu&nacute; przypisanie"
 #elif L==9	// pt
-	"Remove assignment"	// Precisa de tradução
+	"Remover atividade"
 #elif L==10	// tr
-	"Remove assignment"	// Çeviri lazim!
+	"Atamay&inodot; kald&inodot;r"
 #endif
 	,
 	[ActHidAsg] =
@@ -9724,25 +9724,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemPrj] =
 #if   L==1	// ca
-	"Remove project"	// Necessita traducció
+	"Eliminar projecte"
 #elif L==2	// de
-	"Remove project"	// Need Übersetzung
+	"Projekt entfernen"
 #elif L==3	// en
 	"Remove project"
 #elif L==4	// es
 	"Eliminar proyecto"
 #elif L==5	// fr
-	"Remove project"	// Besoin de traduction
+	"Supprimer projet"
 #elif L==6	// gn
 	"Eliminar proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Remove project"	// Bisogno di traduzione
+	"Rimuovere progetto"
 #elif L==8	// pl
-	"Remove project"	// Potrzebujesz tlumaczenie
+	"Usu&nacute; projekt"
 #elif L==9	// pt
-	"Remove project"	// Precisa de tradução
+	"Remover projeto"
 #elif L==10	// tr
-	"Remove project"	// Çeviri lazim!
+	"Projeyi kald&inodot;r"
 #endif
 	,
 	[ActHidPrj] =
@@ -12001,25 +12001,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemExa] =
 #if   L==1	// ca
-	"Remove exam"		// Necessita traducció
+	"Eliminar examen"
 #elif L==2	// de
-	"Remove exam"		// Need Übersetzung
+	"Pr&uuml;fung entfernen"
 #elif L==3	// en
 	"Remove exam"
 #elif L==4	// es
 	"Eliminar examen"
 #elif L==5	// fr
-	"Remove exam"		// Besoin de traduction
+	"Supprimer examen"
 #elif L==6	// gn
 	"Eliminar examen"	// Okoteve traducción
 #elif L==7	// it
-	"Remove exam"		// Bisogno di traduzione
+	"Rimuovere esame"
 #elif L==8	// pl
-	"Remove exam"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; egzamin"
 #elif L==9	// pt
-	"Remove exam"		// Precisa de tradução
+	"Remover exame"
 #elif L==10	// tr
-	"Remove exam"		// Çeviri lazim!
+	"S&inodot;nav&inodot; kald&inodot;r"
 #endif
 	,
 	[ActHidExa] =
@@ -12139,25 +12139,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemExaSet] =
 #if   L==1	// ca
-	"Remove set of questions"		// Necessita traducció
+	"Eliminar conjunt de preguntes"
 #elif L==2	// de
-	"Remove set of questions"		// Need Übersetzung
+	"Satz von Fragen entfernen"
 #elif L==3	// en
 	"Remove set of questions"
 #elif L==4	// es
 	"Eliminar conjunto de preguntas"
 #elif L==5	// fr
-	"Remove set of questions"		// Besoin de traduction
+	"Supprimer ensemble de questions"
 #elif L==6	// gn
 	"Eliminar conjunto de preguntas"	// Okoteve traducción
 #elif L==7	// it
-	"Remove set of questions"		// Bisogno di traduzione
+	"Rimuovere set di domande"
 #elif L==8	// pl
-	"Remove set of questions"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; zestaw pyta&nacute;"
 #elif L==9	// pt
-	"Remove set of questions"		// Precisa de tradução
+	"Remover conjunto de perguntas"
 #elif L==10	// tr
-	"Remove set of questions"		// Çeviri lazim!
+	"Soru grubunu kald&inodot;r"
 #endif
 	,
 	[ActUp_ExaSet] =
@@ -12944,25 +12944,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemMch] =
 #if   L==1	// ca
-	"Confirm removal of match"			// Necessita traducció
+	"Eliminar partida"
 #elif L==2	// de
-	"Confirm removal of match"			// Need Übersetzung
+	"Spiel entfernen"
 #elif L==3	// en
-	"Confirm removal of match"
+	"Remove match"
 #elif L==4	// es
-	"Confirmar eliminaci&oacute;n de partida"
+	"Eliminar partida"
 #elif L==5	// fr
-	"Confirm removal of match"			// Besoin de traduction
+	"Supprimer match"
 #elif L==6	// gn
-	"Confirmar eliminaci&oacute;n de partida"	// Okoteve traducción
+	"Eliminar partida"	// Okoteve traducción
 #elif L==7	// it
-	"Confirm removal of match"			// Bisogno di traduzione
+	"Rimuovere partita"
 #elif L==8	// pl
-	"Confirm removal of match"			// Potrzebujesz tlumaczenie
+	"Usu&nacute; mecz"
 #elif L==9	// pt
-	"Confirm removal of match"			// Precisa de tradução
+	"Remover jogo"
 #elif L==10	// tr
-	"Confirm removal of match"			// Çeviri lazim!
+	"E&scedil;le&scedil;meyi kald&inodot;r"
 #endif
 	,
 	[ActReqNewMch] =
@@ -13703,25 +13703,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemGam] =
 #if   L==1	// ca
-	"Remove game"		// Necessita traducció
+	"Eliminar joc"
 #elif L==2	// de
-	"Remove game"		// Need Übersetzung
+	"Spiel entfernen"
 #elif L==3	// en
 	"Remove game"
 #elif L==4	// es
 	"Eliminar juego"
 #elif L==5	// fr
-	"Remove game"		// Besoin de traduction
+	"Supprimer jeu"
 #elif L==6	// gn
 	"Eliminar juego"	// Okoteve traducción
 #elif L==7	// it
-	"Remove game"		// Bisogno di traduzione
+	"Rimuovere gioco"
 #elif L==8	// pl
-	"Remove game"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; gra"
 #elif L==9	// pt
-	"Remove game"		// Precisa de tradução
+	"Remover jogo"
 #elif L==10	// tr
-	"Remove game"		// Çeviri lazim!
+	"Oyunu kald&inodot;r"
 #endif
 	,
 	[ActHidGam] =
@@ -24835,25 +24835,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemGrpTyp] =
 #if   L==1	// ca
-	"Remove type of group"		// Necessita traducció
+	"Eliminar tipus de grup"
 #elif L==2	// de
-	"Remove type of group"		// Need Übersetzung
+	"Entfernen Art der Gruppe"
 #elif L==3	// en
 	"Remove type of group"
 #elif L==4	// es
 	"Eliminar tipo de grupo"
 #elif L==5	// fr
-	"Remove type of group"		// Besoin de traduction
+	"Supprimer type de groupe"
 #elif L==6	// gn
 	"Eliminar tipo de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove type of group"		// Bisogno di traduzione
+	"Rimuovere tipo di gruppo"
 #elif L==8	// pl
-	"Remove type of group"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; typ grupy"
 #elif L==9	// pt
-	"Remove type of group"		// Precisa de tradução
+	"Remover tipo de grupo"
 #elif L==10	// tr
-	"Remove type of group"		// Çeviri lazim!
+	"Grup t&uuml;r&uuml;n&uuml; kald&inodot;r"
 #endif
 	,
 	[ActRenGrpTyp] =
@@ -24996,25 +24996,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemGrp] =
 #if   L==1	// ca
-	"Remove group"		// Necessita traducció
+	"Eliminar grup"
 #elif L==2	// de
-	"Remove group"		// Need Übersetzung
+	"Gruppe entfernen"
 #elif L==3	// en
 	"Remove group"
 #elif L==4	// es
 	"Eliminar grupo"
 #elif L==5	// fr
-	"Remove group"		// Besoin de traduction
+	"Supprimer groupe"
 #elif L==6	// gn
 	"Eliminar grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove group"		// Bisogno di traduzione
+	"Rimuovere gruppo"
 #elif L==8	// pl
-	"Remove group"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; gruper"
 #elif L==9	// pt
-	"Remove group"		// Precisa de tradução
+	"Remover grupo"
 #elif L==10	// tr
-	"Remove group"		// Çeviri lazim!
+	"Grubu kald&inodot;r"
 #endif
 	,
 	[ActOpeGrp] =
@@ -25709,25 +25709,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFie] =
 #if   L==1	// ca
-	"Remove record field"		// Necessita traducció
+	"Eliminar camp de fitxa"
 #elif L==2	// de
-	"Remove record field"		// Need Übersetzung
+	"Datenfeld entfernen"
 #elif L==3	// en
 	"Remove record field"
 #elif L==4	// es
 	"Eliminar campo de ficha"
 #elif L==5	// fr
-	"Remove record field"		// Besoin de traduction
+	"Supprimer champ de carte"
 #elif L==6	// gn
 	"Eliminar campo de ficha"	// Okoteve traducción
 #elif L==7	// it
-	"Remove record field"		// Bisogno di traduzione
+	"Rimuovere campo di scheda"
 #elif L==8	// pl
-	"Remove record field"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; pola rekordu"
 #elif L==9	// pt
-	"Remove record field"		// Precisa de tradução
+	"Remover campo de cart&atilde;o"
 #elif L==10	// tr
-	"Remove record field"		// Çeviri lazim!
+	"Kay&inodot;t alan&inodot;n&inodot; kald&inodot;r"
 #endif
 	,
 	[ActRenFie] =
@@ -32954,25 +32954,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemSvy] =
 #if   L==1	// ca
-	"Remove survey"		// Necessita traducció
+	"Eliminar enquesta"
 #elif L==2	// de
-	"Remove survey"		// Need Übersetzung
+	"Umfrage entfernen"
 #elif L==3	// en
 	"Remove survey"
 #elif L==4	// es
 	"Eliminar encuesta"
 #elif L==5	// fr
-	"Remove survey"		// Besoin de traduction
+	"Supprimer sondage"
 #elif L==6	// gn
 	"Eliminar encuesta"	// Okoteve traducción
 #elif L==7	// it
-	"Remove survey"		// Bisogno di traduzione
+	"Rimuovere sondaggio"
 #elif L==8	// pl
-	"Remove survey"		// Potrzebujesz tlumaczenie
+	"Usu&nacute; badania"
 #elif L==9	// pt
-	"Remove survey"		// Precisa de tradução
+	"Remover inqu&eacute;rito"
 #elif L==10	// tr
-	"Remove survey"		// Çeviri lazim!
+	"Anketi kald&inodot;r"
 #endif
 	,
 	[ActReqRstSvy] =

@@ -1391,7 +1391,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Svy_AskRemSurvey (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_survey_X;
-   extern const char *Txt_Remove_survey;
+   extern const char *Txt_Remove;
    struct Svy_Surveys Surveys;
 
    /***** Reset surveys *****/
@@ -1413,7 +1413,7 @@ void Svy_AskRemSurvey (void)
    /***** Show question and button to remove survey *****/
    Ale_ShowAlertAndButton (ActRemSvy,NULL,NULL,
                            Svy_PutPars,&Surveys,
-			   Btn_REMOVE_BUTTON,Txt_Remove_survey,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_survey_X,
 			   Surveys.Svy.Title);
 
@@ -3060,7 +3060,7 @@ static void Svy_PutParsRemoveOneQst (void *Surveys)
 void Svy_ReqRemQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove_question;
+   extern const char *Txt_Remove;
    struct Svy_Surveys Surveys;
    struct Svy_Question SvyQst;
 
@@ -3084,7 +3084,7 @@ void Svy_ReqRemQst (void)
    Surveys.QstCod = SvyQst.QstCod;
    Ale_ShowAlertAndButton (ActRemSvyQst,NULL,NULL,
                            Svy_PutParsRemoveOneQst,&Surveys,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 	                   (long) SvyQst.QstInd + 1);
 

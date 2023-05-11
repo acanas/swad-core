@@ -1142,7 +1142,7 @@ static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
 void Agd_AskRemEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
-   extern const char *Txt_Remove_event;
+   extern const char *Txt_Remove;
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
 
@@ -1163,7 +1163,7 @@ void Agd_AskRemEvent (void)
    Agenda.AgdCodToEdit = AgdEvent.AgdCod;
    Ale_ShowAlertAndButton (ActRemEvtMyAgd,NULL,NULL,
                            Agd_PutCurrentParsMyAgenda,&Agenda,
-			   Btn_REMOVE_BUTTON,Txt_Remove_event,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
 	                   AgdEvent.Title);
 

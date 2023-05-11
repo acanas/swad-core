@@ -988,7 +988,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Asg_ReqRemAssignment (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
-   extern const char *Txt_Remove_assignment;
+   extern const char *Txt_Remove;
    struct Asg_Assignments Assignments;
 
    /***** Reset assignments *****/
@@ -1008,7 +1008,7 @@ void Asg_ReqRemAssignment (void)
    /***** Show question and button to remove the assignment *****/
    Ale_ShowAlertAndButton (ActRemAsg,NULL,NULL,
                            Asg_PutPars,&Assignments,
-                           Btn_REMOVE_BUTTON,Txt_Remove_assignment,
+                           Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_assignment_X,
                            Assignments.Asg.Title);
 

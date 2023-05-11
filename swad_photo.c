@@ -419,7 +419,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 void Pho_ReqRemMyPhoto (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
-   extern const char *Txt_Remove_photo;
+   extern const char *Txt_Remove;
    extern const char *Txt_The_photo_no_longer_exists;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -443,7 +443,7 @@ void Pho_ReqRemMyPhoto (void)
       /* End alert */
       Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
                                NULL,NULL,
-                               Btn_REMOVE_BUTTON,Txt_Remove_photo);
+                               Btn_REMOVE_BUTTON,Txt_Remove);
      }
    else
       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
@@ -482,7 +482,7 @@ void Pho_ReqRemUsrPhoto (void)
   {
    extern const char *Txt_Photo;
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
-   extern const char *Txt_Remove_photo;
+   extern const char *Txt_Remove;
    extern const char *Txt_The_photo_no_longer_exists;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -531,7 +531,7 @@ void Pho_ReqRemUsrPhoto (void)
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
 	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
+				     Btn_REMOVE_BUTTON,Txt_Remove);
 	   }
 	 else
 	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);

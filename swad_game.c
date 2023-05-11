@@ -1029,7 +1029,7 @@ void Gam_FreeListGames (struct Gam_Games *Games)
 void Gam_AskRemGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
-   extern const char *Txt_Remove_game;
+   extern const char *Txt_Remove;
    struct Gam_Games Games;
 
    /***** Reset games context *****/
@@ -1050,7 +1050,7 @@ void Gam_AskRemGame (void)
    /***** Show question and button to remove game *****/
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,
                            Gam_PutPars,&Games,
-			   Btn_REMOVE_BUTTON,Txt_Remove_game,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
                            Games.Game.Title);
 
@@ -1927,7 +1927,7 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games)
 void Gam_ReqRemQstFromGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove_question;
+   extern const char *Txt_Remove;
    struct Gam_Games Games;
    unsigned QstInd;
 
@@ -1953,7 +1953,7 @@ void Gam_ReqRemQstFromGame (void)
    Games.QstInd = QstInd;
    Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
 			   Gam_PutParsOneQst,&Games,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			   QstInd);
 

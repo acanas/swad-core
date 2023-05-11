@@ -3017,7 +3017,7 @@ void For_ReqRemThread (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread;
-   extern const char *Txt_Remove_thread;
+   extern const char *Txt_Remove;
    struct For_Forums Forums;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
@@ -3039,14 +3039,14 @@ void For_ReqRemThread (void)
 	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 				 For_FORUM_THREADS_SECTION_ID,NULL,
 				 For_PutParsRemThread,&Forums,
-				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
+				 Btn_REMOVE_BUTTON,Txt_Remove,
 				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
 				 Subject);
       else
 	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
 				 For_FORUM_THREADS_SECTION_ID,NULL,
 				 For_PutParsRemThread,&Forums,
-				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
+				 Btn_REMOVE_BUTTON,Txt_Remove,
 				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();
 

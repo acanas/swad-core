@@ -973,7 +973,7 @@ void Exa_FreeListExams (struct Exa_Exams *Exams)
 void Exa_AskRemExam (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_exam_X;
-   extern const char *Txt_Remove_exam;
+   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
 
    /***** Check if I can edit exams *****/
@@ -993,7 +993,7 @@ void Exa_AskRemExam (void)
    /***** Show question and button to remove exam *****/
    Ale_ShowAlertAndButton (ActRemExa,NULL,NULL,
                            Exa_PutPars,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_exam,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_exam_X,
                            Exams.Exam.Title);
 

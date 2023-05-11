@@ -962,7 +962,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 void Mch_ReqRemMatch (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
-   extern const char *Txt_Remove_match;
+   extern const char *Txt_Remove;
    struct Gam_Games Games;
    struct Mch_Match Match;
 
@@ -977,7 +977,7 @@ void Mch_ReqRemMatch (void)
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,
                            Mch_PutParsEdit,&Games,
-			   Btn_REMOVE_BUTTON,Txt_Remove_match,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
 

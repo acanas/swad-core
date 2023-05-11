@@ -1377,7 +1377,7 @@ inline unsigned Prg_GetLevelFromNumItem (unsigned NumItem)
 void Prg_ReqRemItem (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
-   extern const char *Txt_Remove_item;
+   extern const char *Txt_Remove;
    struct Prg_Item Item;
 
    /***** Get list of program items *****/
@@ -1391,7 +1391,7 @@ void Prg_ReqRemItem (void)
    /***** Show question and button to remove the program item *****/
    Ale_ShowAlertAndButton (ActRemPrgItm,NULL,NULL,
                            Prg_PutParItmCod,&Item.Hierarchy.ItmCod,
-                           Btn_REMOVE_BUTTON,Txt_Remove_item,
+                           Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_item_X,
                            Item.Title);
 

@@ -5115,8 +5115,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 void Brw_AskRemFileFromTree (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
-   extern const char *Txt_Remove_file;
-   extern const char *Txt_Remove_link;
+   extern const char *Txt_Remove;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
    char FileNameToShow[NAME_MAX + 1];
 
@@ -5134,9 +5133,7 @@ void Brw_AskRemFileFromTree (void)
                                              FileNameToShow);
       Ale_ShowAlertAndButton (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
 			      Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
-                              Btn_REMOVE_BUTTON,
-                              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ? Txt_Remove_file :
-        	                                                        Txt_Remove_link,
+                              Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                               FileNameToShow);
      }
@@ -5261,12 +5258,12 @@ void Brw_RemFolderFromTree (void)
 static void Brw_AskConfirmRemoveFolderNotEmpty (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_folder_X;
-   extern const char *Txt_Remove_folder;
+   extern const char *Txt_Remove;
 
    /***** Show question and button to remove not empty folder *****/
    Ale_ShowAlertAndButton (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
 			   Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
-			   Btn_REMOVE_BUTTON,Txt_Remove_folder,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_folder_X,
                            Gbl.FileBrowser.FilFolLnk.Name);
   }

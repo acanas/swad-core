@@ -1234,7 +1234,7 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 void ExaSet_ReqRemSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X;
-   extern const char *Txt_Remove_set_of_questions;
+   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
 
@@ -1253,7 +1253,7 @@ void ExaSet_ReqRemSet (void)
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
 			   ExaSet_PutParsOneSet,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_set_of_questions,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_set_of_questions_X,
 			   Set.Title);
 
@@ -1401,7 +1401,7 @@ void ExaSet_MoveDownSet (void)
 void ExaSet_ReqRemQstFromSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove_question;
+   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
    char *Anchor;
@@ -1423,7 +1423,7 @@ void ExaSet_ReqRemQstFromSet (void)
    /***** Show question and button to remove question *****/
    Ale_ShowAlertAndButton (ActRemExaQst,Anchor,NULL,
 			   ExaSet_PutParsOneQst,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			   Exams.QstCod);
 

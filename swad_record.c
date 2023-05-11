@@ -568,7 +568,7 @@ void Rec_ReqRemField (void)
 void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_;
-   extern const char *Txt_Remove_record_field;
+   extern const char *Txt_Remove;
 
    /***** Get from the database the name of the field *****/
    Rec_GetFieldByCod (Gbl.Crs.Records.Field.FieldCod,
@@ -579,7 +579,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    /***** Show question and button to remove my photo *****/
    Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,
                            Rec_PutParFldCod,&Gbl.Crs.Records.Field.FieldCod,
-			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
 		           Gbl.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.FullName,
 		           NumRecords);

@@ -3470,7 +3470,7 @@ void Prj_FreeListProjects (struct Prj_Projects *Projects)
 void Prj_ReqRemProject (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_project_X;
-   extern const char *Txt_Remove_project;
+   extern const char *Txt_Remove;
    struct Prj_Projects Projects;
 
    /***** Reset projects *****/
@@ -3493,7 +3493,7 @@ void Prj_ReqRemProject (void)
    /***** Show question and button to remove the project *****/
    Ale_ShowAlertAndButton (ActRemPrj,NULL,NULL,
 			   Prj_PutCurrentPars,&Projects,
-			   Btn_REMOVE_BUTTON,Txt_Remove_project,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_project_X,
 			   Projects.Prj.Title);
 

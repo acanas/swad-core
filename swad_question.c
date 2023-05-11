@@ -3185,7 +3185,7 @@ long Qst_GetIntAnsFromStr (char *Str)
 void Qst_ReqRemSelectedQsts (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
-   extern const char *Txt_Remove_questions;
+   extern const char *Txt_Remove;
    struct Qst_Questions Questions;
 
    /***** Create test *****/
@@ -3197,7 +3197,7 @@ void Qst_ReqRemSelectedQsts (void)
       /***** Show question and button to remove question *****/
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
 			      Qst_PutParsEditQst,&Questions,
-			      Btn_REMOVE_BUTTON,Txt_Remove_questions,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
    else
@@ -3274,7 +3274,7 @@ void Qst_PutIconToRemoveOneQst (void *QstCod)
 void Qst_ReqRemOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove_question;
+   extern const char *Txt_Remove;
    bool EditingOnlyThisQst;
    struct Qst_Questions Questions;
 
@@ -3295,18 +3295,28 @@ void Qst_ReqRemOneQst (void)
 	 Err_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
+   /*
    if (EditingOnlyThisQst)
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
 			      Qst_PutParsRemoveOnlyThisQst,&Questions.Question.QstCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Questions.Question.QstCod);
    else
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
 			      Qst_PutParsEditQst,&Questions,
-			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Btn_REMOVE_BUTTON,Txt_Remove,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Questions.Question.QstCod);
+   */
+   Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
+			   EditingOnlyThisQst ? Qst_PutParsRemoveOnlyThisQst :
+						Qst_PutParsEditQst,
+			   EditingOnlyThisQst ? (void *) &Questions.Question.QstCod :
+						(void *) &Questions,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			   Questions.Question.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
