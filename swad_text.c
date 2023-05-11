@@ -6664,52 +6664,6 @@ const char *Txt_Create_BR_notification =
 	"Create<br />notification";		// Çeviri lazim!
 #endif
 
-const char *Txt_Create_password =
-#if   L==1	// ca
-	"Crear contrasenya";
-#elif L==2	// de
-	"Passwort erstellen";
-#elif L==3	// en
-	"Crear password";
-#elif L==4	// es
-	"Cambiar contrase&ntilde;a";
-#elif L==5	// fr
-	"Cr&eacute;er le mot de passe";
-#elif L==6	// gn
-	"Crear contrase&ntilde;a";	// Okoteve traducción
-#elif L==7	// it
-	"Cambiare password";
-#elif L==8	// pl
-	"Utw&oacute;rz has&lstrok;o";
-#elif L==9	// pt
-	"Criar senha";
-#elif L==10	// tr
-	"&Scedil;ifre olu&scedil;tur";
-#endif
-
-const char *Txt_Create_question =
-#if   L==1	// ca
-	"Crear pregunta";
-#elif L==2	// de
-	"Frage erstellen";
-#elif L==3	// en
-	"Create question";
-#elif L==4	// es
-	"Crear pregunta";
-#elif L==5	// fr
-	"Cr&eacute;er question";
-#elif L==6	// gn
-	"Crear pregunta";	// Okoteve traducción
-#elif L==7	// it
-	"Crea domanda";
-#elif L==8	// pl
-	"Utw&oacute;rz pytanie";
-#elif L==9	// pt
-	"Criar pergunta";
-#elif L==10	// tr
-	"Create question";	// Çeviri lazim!
-#endif
-
 const char *Txt_Create_ZIP_file =
 #if   L==1	// ca
 	"Crear arxiu ZIP";

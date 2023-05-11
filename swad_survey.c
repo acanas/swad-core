@@ -2268,17 +2268,17 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_Save_changes;
-   extern const char *Txt_Create_question;
+   extern const char *Txt_Create;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAns;
    unsigned NumAnswers = 0;
    char *Title;
    Svy_AnswerType_t AnsType;
+   bool NewQuestion = (SvyQst->QstCod <= 0);
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
-     {
-      if ((SvyQst->QstCod > 0))	// If parameter QstCod received ==> question already exists in the database
+      if (!NewQuestion)
         {
          /***** Get question data from database *****/
          if (Svy_DB_GetQstDataByCod (&mysql_res,SvyQst->QstCod,Surveys->Svy.SvyCod))
@@ -2308,10 +2308,13 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
         }
-     }
 
    /***** Begin box *****/
-   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
+   if (NewQuestion)
+      Box_BoxBegin (NULL,Txt_Question,
+                    NULL,NULL,
+                    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
+   else
      {
       /* Parameters for contextual icon */
       Surveys->QstCod = SvyQst->QstCod;
@@ -2323,13 +2326,10 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                     NULL,Box_NOT_CLOSABLE);
       free (Title);
      }
-   else
-      Box_BoxBegin (NULL,Txt_Question,
-                    NULL,NULL,
-                    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_BeginForm (ActRcvSvyQst);
+   Frm_BeginForm (NewQuestion ? ActNewSvyQst :
+				ActChgSvyQst);
       ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
       ParCod_PutPar (ParCod_Qst,SvyQst->QstCod);
 
@@ -2421,10 +2421,10 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
       HTM_TABLE_End ();
 
       /***** Send button *****/
-      if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-	 Btn_PutConfirmButton (Txt_Save_changes);
+      if (NewQuestion)	// If the question already has assigned a code
+	 Btn_PutCreateButton (Txt_Create);
       else
-	 Btn_PutCreateButton (Txt_Create_question);
+	 Btn_PutConfirmButton (Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2690,7 +2690,8 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    bool Editing = (Gbl.Action.Act == ActEdiOneSvy    ||
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
-	           Gbl.Action.Act == ActRcvSvyQst);
+	           Gbl.Action.Act == ActNewSvyQst    ||
+	           Gbl.Action.Act == ActChgSvyQst);
    bool PutFormAnswerSurvey = Surveys->Svy.Status.ICanAnswer && !Editing;
 
    /***** Begin box *****/

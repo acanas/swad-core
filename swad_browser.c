@@ -3398,8 +3398,8 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
       else if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
 	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
-	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the
-						   // works of the selected users
+	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the...
+						//... works of the selected users
 	}
    Mnu_ContextMenuEnd ();
 

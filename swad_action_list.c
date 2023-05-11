@@ -705,7 +705,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqImpTstQst	] = {1007,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,QstImp_ShowFormImpQstsFromXML	,NULL},
    [ActImpTstQst	] = {1008,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,QstImp_ImpQstsFromXML		,NULL},
    [ActLstTstQst	] = { 132,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ListQuestionsToEdit	,NULL},
-   [ActRcvTstQst	] = { 126,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Qst_ReceiveQst			,NULL},
+   [ActNewTstQst	] = { 126,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Qst_ReceiveQst			,NULL},
+   [ActChgTstQst	] = {1975,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Qst_ReceiveQst			,NULL},
    [ActReqRemSevTstQst	] = {1835,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ReqRemSelectedQsts		,NULL},
    [ActRemSevTstQst	] = {1836,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_RemoveSelectedQsts		,NULL},
    [ActReqRemOneTstQst	] = {1523,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ReqRemOneQst		,NULL},
@@ -1792,7 +1793,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActUnhSvy		] = { 978,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_UnhideSurvey		,NULL},
    [ActReqLnkSvy	] = {1937,-1,TabUnk,ActSeeAllSvy	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SvyRsc_GetLinkToSurvey		,NULL},
    [ActEdiOneSvyQst	] = { 979,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqEditQuestion		,NULL},
-   [ActRcvSvyQst	] = { 980,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveQst			,NULL},
+   [ActNewSvyQst	] = { 980,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveQst			,NULL},
+   [ActChgSvyQst	] = {1976,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReceiveQst			,NULL},
    [ActReqRemSvyQst	] = {1524,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_ReqRemQst			,NULL},
    [ActRemSvyQst	] = { 981,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RemoveQst			,NULL},
 
@@ -2018,7 +2020,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	-1,			// #123 (obsolete action)
 	-1,			// #124 (obsolete action)
 	-1,			// #125 (obsolete action)
-	ActRcvTstQst,		// #126
+	ActNewTstQst,		// #126
 	ActPrnRecSevTch,	// #127
 	-1,			// #128 (obsolete action)
 	-1,			// #129 (obsolete action)
@@ -2872,7 +2874,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActHidSvy,		// #977
 	ActUnhSvy,		// #978
 	ActEdiOneSvyQst,	// #979
-	ActRcvSvyQst,		// #980
+	ActNewSvyQst,		// #980
 	ActRemSvyQst,		// #981
 	ActSeeOneSvy,		// #982
 	ActAnsSvy,		// #983
@@ -3867,4 +3869,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeRscCli_InRub,	// #1972
 	ActRemRscCli_InRub,	// #1973
 	ActChgPrjSco,		// #1974
+	ActChgTstQst,		// #1975
+	ActChgSvyQst,		// #1976
   };

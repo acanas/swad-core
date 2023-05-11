@@ -1806,7 +1806,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
    extern const char *Txt_Save_changes;
-   extern const char *Txt_Create_question;
+   extern const char *Txt_Create;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTags;
@@ -1823,9 +1823,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    char StrInteger[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char *Title;
    char *FuncOnChange;
+   bool NewQuestion = (Question->QstCod > 0);
 
    /***** Begin box *****/
-   if (Question->QstCod > 0)	// The question already has assigned a code
+   if (NewQuestion)	// The question already has assigned a code
      {
       if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -1839,7 +1840,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
-   Frm_BeginForm (ActRcvTstQst);
+   Frm_BeginForm (NewQuestion ? ActNewTstQst :
+				ActChgTstQst);
       ParCod_PutPar (ParCod_Qst,Question->QstCod);
 
       /***** Begin table *****/
@@ -2212,7 +2214,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       if (Question->QstCod > 0)	// The question already has assigned a code
 	 Btn_PutConfirmButton (Txt_Save_changes);
       else
-	 Btn_PutCreateButton (Txt_Create_question);
+	 Btn_PutCreateButton (Txt_Create);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2737,7 +2739,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParText ("AnsInt",Question->Answer.Options[0].Text,
-			   Cns_MAX_DECIMAL_DIGITS_LONG);
+			 Cns_MAX_DECIMAL_DIGITS_LONG);
 	 break;
       case Qst_ANS_FLOAT:
          if (!Qst_AllocateTextChoiceAnswer (Question,0))
@@ -2745,14 +2747,14 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParText ("AnsFloatMin",Question->Answer.Options[0].Text,
-	                   Qst_MAX_BYTES_FLOAT_ANSWER);
+	                 Qst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Qst_AllocateTextChoiceAnswer (Question,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParText ("AnsFloatMax",Question->Answer.Options[1].Text,
-	                   Qst_MAX_BYTES_FLOAT_ANSWER);
+	                 Qst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Qst_ANS_TRUE_FALSE:
 	 Par_GetParText ("AnsTF",TF,1);

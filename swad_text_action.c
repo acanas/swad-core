@@ -11355,27 +11355,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"List test questions for edition"		// Çeviri lazim!
 #endif
 	,
-	[ActRcvTstQst] =
+	[ActNewTstQst] =
 #if   L==1	// ca
-	"Create/Change test question"		// Necessita traducció
+	"Crear pregunta"
 #elif L==2	// de
-	"Create/Change test question"		// Need Übersetzung
+	"Frage erstellen"
 #elif L==3	// en
-	"Create/Change test question"
+	"Create question"
 #elif L==4	// es
-	"Crear/Cambiar pregunta de test"
+	"Crear pregunta"
 #elif L==5	// fr
-	"Create/Change test question"		// Besoin de traduction
+	"Cr&eacute;er question"
 #elif L==6	// gn
-	"Crear/Cambiar pregunta de test"	// Okoteve traducción
+	"Crear pregunta"	// Okoteve traducción
 #elif L==7	// it
-	"Create/Change test question"		// Bisogno di traduzione
+	"Crea domanda"
 #elif L==8	// pl
-	"Create/Change test question"		// Potrzebujesz tlumaczenie
+	"Utw&oacute;rz pytanie"
 #elif L==9	// pt
-	"Create/Change test question"		// Precisa de tradução
+	"Criar pergunta"
 #elif L==10	// tr
-	"Create/Change test question"		// Çeviri lazim!
+	"Create question"	// Çeviri lazim!
+#endif
+	,
+	[ActChgTstQst] =
+#if   L==1	// ca
+	"Change test question"		// Necessita traducció
+#elif L==2	// de
+	"Change test question"		// Need Übersetzung
+#elif L==3	// en
+	"Change test question"
+#elif L==4	// es
+	"Cambiar pregunta de test"
+#elif L==5	// fr
+	"Change test question"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar pregunta de test"	// Okoteve traducción
+#elif L==7	// it
+	"Change test question"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change test question"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change test question"		// Precisa de tradução
+#elif L==10	// tr
+	"Change test question"		// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSevTstQst] =
@@ -33067,7 +33090,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Edit new survey question"		// Çeviri lazim!
 #endif
 	,
-	[ActRcvSvyQst] =
+	[ActNewSvyQst] =
 #if   L==1	// ca
 	"Create survey question"	// Necessita traducció
 #elif L==2	// de
@@ -33088,6 +33111,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create survey question"	// Precisa de tradução
 #elif L==10	// tr
 	"Create survey question"	// Çeviri lazim!
+#endif
+	,
+	[ActChgSvyQst] =
+#if   L==1	// ca
+	"Change survey question"	// Necessita traducció
+#elif L==2	// de
+	"Change survey question"	// Need Übersetzung
+#elif L==3	// en
+	"Change survey question"
+#elif L==4	// es
+	"Cambiar pregunta de encuesta"
+#elif L==5	// fr
+	"Change survey question"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar pregunta de encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Change survey question"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change survey question"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change survey question"	// Precisa de tradução
+#elif L==10	// tr
+	"Change survey question"	// Çeviri lazim!
 #endif
 	,
 	[ActReqRemSvyQst] =
