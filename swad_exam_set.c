@@ -180,69 +180,51 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewExaSet,NULL,Exa_PutPars,Exams);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewExaSet]);
+      /***** Table heading *****/
+      ExaSet_PutTableHeadingForSets ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewExaSet);
-	 Exa_PutPars (Exams);
+      /***** Begin row *****/
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Empty column for buttons *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Table heading *****/
-	    ExaSet_PutTableHeadingForSets ();
+	 /***** Index *****/
+	 HTM_TD_Begin ("class=\"RM\"");
+	    Lay_WriteIndex (MaxSetInd + 1,"BIG_INDEX");
+	 HTM_TD_End ();
 
-	    /***** Begin row *****/
-	    HTM_TR_Begin (NULL);
+	 /***** Title *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Empty column for buttons *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Current number of questions in set *****/
+	 HTM_TD_Begin ("class=\"RM\"");
+	    HTM_Unsigned (0);	// New set ==> no questions yet
+	 HTM_TD_End ();
 
-	       /***** Index *****/
-	       HTM_TD_Begin ("class=\"RM\"");
-		  Lay_WriteIndex (MaxSetInd + 1,"BIG_INDEX");
-	       HTM_TD_End ();
+	 /***** Number of questions to appear in the exam *****/
+	 HTM_TD_Begin ("class=\"RM\"");
+	    HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
+			    HTM_DONT_SUBMIT_ON_CHANGE,false,
+			    "class=\"INPUT_LONG\" required=\"required\"");
+	 HTM_TD_End ();
 
-	       /***** Title *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\""
-				  " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      /***** End row *****/
+      HTM_TR_End ();
 
-	       /***** Current number of questions in set *****/
-	       HTM_TD_Begin ("class=\"RM\"");
-		  HTM_Unsigned (0);	// New set ==> no questions yet
-	       HTM_TD_End ();
-
-	       /***** Number of questions to appear in the exam *****/
-	       HTM_TD_Begin ("class=\"RM\"");
-		  HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
-				  HTM_DONT_SUBMIT_ON_CHANGE,false,
-				  "class=\"INPUT_LONG\" required=\"required\"");
-	       HTM_TD_End ();
-
-	    /***** End row *****/
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

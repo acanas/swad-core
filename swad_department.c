@@ -810,100 +810,84 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Another_institution;
-   extern const char *Txt_Create;
    unsigned NumIns;
    const struct Ins_Instit *InsInLst;
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewDpt]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL);
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewDpt);
+      /***** Write heading *****/
+      Dpt_PutHeadDepartments ();
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+      HTM_TR_Begin (NULL);
 
-	    /***** Write heading *****/
-	    Dpt_PutHeadDepartments ();
+	 /***** Column to remove department, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Department code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	       /***** Column to remove department, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Institution *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      "name=\"OthInsCod\""
+			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
+			      The_GetSuffix ());
+	       HTM_OPTION (HTM_Type_STRING,"0",
+			   Dpt_EditingDpt->InsCod == 0,	// Selected?
+			   HTM_OPTION_ENABLED,
+			   "%s",Txt_Another_institution);
+	       for (NumIns = 0;
+		    NumIns < Gbl.Hierarchy.Inss.Num;
+		    NumIns++)
+		 {
+		  InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
+		  HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
+			     InsInLst->InsCod == Dpt_EditingDpt->InsCod,	// Selected?
+			     HTM_OPTION_ENABLED,
+			      "%s",InsInLst->ShrtName);
+		 }
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-	       /***** Department code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Department short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Institution *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"OthInsCod\""
-				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Dpt_EditingDpt->InsCod == 0,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_Another_institution);
-		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.Inss.Num;
-			  NumIns++)
-		       {
-			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
-			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
-				   InsInLst->InsCod == Dpt_EditingDpt->InsCod,	// Selected?
-				   HTM_OPTION_ENABLED,
-				    "%s",InsInLst->ShrtName);
-		       }
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
+	 /***** Department full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Department short name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Department WWW *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   " required=\"required\"",
+			   The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Department full name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Number of teachers *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Department WWW *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Number of teachers *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

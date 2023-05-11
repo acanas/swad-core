@@ -1365,8 +1365,6 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
    Act_Action_t NextAction = ActUnk;
 
    /***** Set action depending on role *****/
@@ -1377,96 +1375,82 @@ static void Ins_PutFormToCreateInstitution (void)
    else
       Err_NoPermissionExit ();
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[NextAction]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction);
+      /***** Write heading *****/
+      Ins_PutHeadInstitutionsForEdition ();
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+      HTM_TR_Begin (NULL);
 
-	    /***** Write heading *****/
-	    Ins_PutHeadInstitutionsForEdition ();
+	 /***** Column to remove institution, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Institution code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	       /***** Column to remove institution, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Institution logo *****/
+	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
+	    Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
+	 HTM_TD_End ();
 
-	       /***** Institution code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Institution short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Institution logo *****/
-	       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-		  Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
-	       HTM_TD_End ();
+	 /***** Institution full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Institution short name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Institution WWW *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   " required=\"required\"",
+			   The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Institution full name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Number of users who claim to belong to this institution ****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Institution WWW *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Number of centers *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Number of users who claim to belong to this institution ****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Number of users in courses of this institution ****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Number of centers *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Institution requester *****/
+	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
+		       The_GetSuffix ());
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	 HTM_TD_End ();
 
-	       /***** Number of users in courses of this institution ****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Institution status *****/
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Institution requester *****/
-	       HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-			     The_GetSuffix ());
-		  Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Institution status *****/
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

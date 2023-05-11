@@ -667,69 +667,52 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewLnk,NULL,NULL,NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewLnk]);
+      /***** Write heading *****/
+      Lnk_PutHeadLinks ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewLnk);
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Column to remove link, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Write heading *****/
-	    Lnk_PutHeadLinks ();
+	 /***** Link code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Link short name *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Column to remove link, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Link full name *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Link code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Link WWW *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   " required=\"required\"",
+			   The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Link short name *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Link full name *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /***** Link WWW *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

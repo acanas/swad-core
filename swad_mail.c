@@ -679,67 +679,50 @@ void Mai_ContEditAfterChgMai (void)
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewMai,NULL,NULL,NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewMai]);
+      /***** Write heading *****/
+      Mai_PutHeadMailDomains ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewMai);
+      /***** Second row *****/
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /* Column to remove mail domain, disabled here */
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Write heading *****/
-	    Mai_PutHeadMailDomains ();
+	 /* Mail domain code */
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	    /***** Second row *****/
-	    HTM_TR_Begin (NULL);
+	 /* Mail domain */
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"15\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /* Column to remove mail domain, disabled here */
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /* Mail domain info */
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"40\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /* Mail domain code */
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /* Number of users */
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /* Mail domain */
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /* Mail domain info */
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"40\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /* Number of users */
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

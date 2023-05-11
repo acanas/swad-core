@@ -95,7 +95,9 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 				          struct ExaSes_Session *Session);
 
-static void ExaSes_PutFormSession (const struct ExaSes_Session *Session);
+static void ExaSes_PutFormSession (struct ExaSes_Session *Session);
+static void ExaSes_ParsFormSession (void *Session);
+
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 
 static void ExaSes_CreateSession (struct ExaSes_Session *Session);
@@ -957,77 +959,62 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 /* Put a big button to play exam session (start a new session) as a teacher **/
 /*****************************************************************************/
 
-static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
+static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Title;
-   extern const char *Txt_Create;
-   extern const char *Txt_Save_changes;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   bool ItsANewSession = Session->SesCod <= 0;
-   Act_Action_t NextAction = ItsANewSession ? ActNewExaSes :
-				              ActChgExaSes;
+   bool ItsANewSession = (Session->SesCod <= 0);
 
    /***** Begin section for a new exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
-      /***** Begin fieldset *****/
-      HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Actions[NextAction]);
+      /***** Begin form to create *****/
+      Frm_BeginFormTable (ItsANewSession ? ActNewExaSes :
+				           ActChgExaSes,
+			  ExaSes_NEW_SESSION_SECTION_ID,
+			  ExaSes_ParsFormSession,Session);
 
-	 /***** Begin form *****/
-	 Frm_BeginForm (NextAction);
-	    ParCod_PutPar (ParCod_Exa,Session->ExaCod);
-	    if (!ItsANewSession)	// Existing session
-	       ParCod_PutPar (ParCod_Ses,Session->SesCod);
+	 /***** Session title *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Begin table *****/
-	    HTM_TABLE_BeginWidePadding (2);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	       /***** Session title *****/
-	       HTM_TR_Begin (NULL);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	    HTM_TD_End ();
 
-		  /* Label */
-		  Frm_LabelColumn ("RT","Title",Txt_Title);
+	 HTM_TR_End ();
 
-		  /* Data */
-		  HTM_TD_Begin ("class=\"LT\"");
-		     HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
-				     HTM_DONT_SUBMIT_ON_CHANGE,
-				     "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
-				     " required=\"required\"",
-				     The_GetSuffix ());
-		  HTM_TD_End ();
+	 /***** Start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
+						  Dat_FORM_SECONDS_OFF,
+						  SetHMS);
 
-	       HTM_TR_End ();
+	 /***** Groups *****/
+	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
-	       /***** Start and end dates *****/
-	       Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
-							Dat_FORM_SECONDS_OFF,
-							SetHMS);
-
-	       /***** Groups *****/
-	       ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
-
-	    /***** End table and send button *****/
-	    HTM_TABLE_End ();
-	    if (ItsANewSession)
-	       Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-	    else
-	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
-
-	 /***** End form *****/
-	 Frm_EndForm ();
-
-      /***** End fieldset *****/
-      HTM_FIELDSET_End ();
+      /***** End form to create *****/
+      Frm_EndFormTable (ItsANewSession ? Btn_CREATE_BUTTON :
+					 Btn_CONFIRM_BUTTON);
 
    /***** End section for a new exam session *****/
    HTM_SECTION_End ();
+  }
+
+static void ExaSes_ParsFormSession (void *Session)
+  {
+   ParCod_PutPar (ParCod_Exa,((struct ExaSes_Session *) Session)->ExaCod);
+   ParCod_PutPar (ParCod_Ses,((struct ExaSes_Session *) Session)->SesCod);
   }
 
 /*****************************************************************************/

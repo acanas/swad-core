@@ -1237,9 +1237,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Another_place;
-   extern const char *Txt_Create;
    Act_Action_t NextAction = ActUnk;
    unsigned NumPlc;
    const struct Plc_Place *PlcInLst;
@@ -1252,118 +1250,104 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    else
       Err_NoPermissionExit ();
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[NextAction]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction);
+      /***** Write heading *****/
+      Ctr_PutHeadCentersForEdition ();
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+      HTM_TR_Begin (NULL);
 
-	    /***** Write heading *****/
-	    Ctr_PutHeadCentersForEdition ();
+	 /***** Column to remove center, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Center code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	       /***** Column to remove center, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Center logo *****/
+	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
+	    Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL,true);
+	 HTM_TD_End ();
 
-	       /***** Center code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Place *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
+			      The_GetSuffix ());
+	       HTM_OPTION (HTM_Type_STRING,"0",
+			   Ctr_EditingCtr->PlcCod == 0,	// Selected?
+			   HTM_OPTION_ENABLED,
+			   "%s",Txt_Another_place);
+	       for (NumPlc = 0;
+		    NumPlc < Places->Num;
+		    NumPlc++)
+		 {
+		  PlcInLst = &Places->Lst[NumPlc];
+		  HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
+			      PlcInLst->PlcCod == Ctr_EditingCtr->PlcCod,	// Selected?
+			      HTM_OPTION_ENABLED,
+			      "%s",PlcInLst->ShrtName);
+		 }
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-	       /***** Center logo *****/
-	       HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-		  Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL,true);
-	       HTM_TD_End ();
+	 /***** Center short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Place *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
-				    The_GetSuffix ());
-		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Ctr_EditingCtr->PlcCod == 0,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_Another_place);
-		     for (NumPlc = 0;
-			  NumPlc < Places->Num;
-			  NumPlc++)
-		       {
-			PlcInLst = &Places->Lst[NumPlc];
-			HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				    PlcInLst->PlcCod == Ctr_EditingCtr->PlcCod,	// Selected?
-				    HTM_OPTION_ENABLED,
-				    "%s",PlcInLst->ShrtName);
-		       }
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
+	 /***** Center full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Center short name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Center WWW *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   " required=\"required\"",
+			   The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Center full name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Number of users who claim to belong to this center *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Center WWW *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Number of degrees *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Number of users who claim to belong to this center *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Number of users in courses of this center *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Number of degrees *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Center requester *****/
+	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
+		       The_GetSuffix ());
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	 HTM_TD_End ();
 
-	       /***** Number of users in courses of this center *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Center status *****/
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Center requester *****/
-	       HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
-			     The_GetSuffix ());
-		  Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Center status *****/
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

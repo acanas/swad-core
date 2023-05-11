@@ -5837,48 +5837,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActChgPrgItm] =
 #if   L==1	// ca
-	"Change program item"			// Necessita traducció
+	"Canviar &iacute;tem del programa"
 #elif L==2	// de
-	"Change program item"			// Need Übersetzung
+	"Programmpunkt &auml;ndern"
 #elif L==3	// en
 	"Change program item"
 #elif L==4	// es
 	"Cambiar &iacute;tem del programa"
 #elif L==5	// fr
-	"Change program item"			// Besoin de traduction
+	"Changer &eacute;l&eacute;ment de programme"
 #elif L==6	// gn
-	"Cambiar &iacute;tem del programa"	// Okoteve traducción
+	"Emoambue elemento programa"
 #elif L==7	// it
-	"Change program item"			// Bisogno di traduzione
+	"Cambiare articolo del programma"
 #elif L==8	// pl
-	"Change program item"			// Potrzebujesz tlumaczenie
+	"Zmie&nacute; pozycj&eogon; programu"
 #elif L==9	// pt
-	"Change program item"			// Precisa de tradução
+	"Alterar item do programa"
 #elif L==10	// tr
-	"Change program item"			// Çeviri lazim!
+	"Program &ouml;&gbreve;esini de&gbreve;i&scedil;tir"
 #endif
 	,
 	[ActNewPrgItm] =
 #if   L==1	// ca
-	"Crear &iacute;tem"
+	"Crear &iacute;tem del programa"
 #elif L==2	// de
-	"Artikel eingeben"
+	"Programmpunkt erstellen"
 #elif L==3	// en
-	"Create item"
+	"Create program item"
 #elif L==4	// es
-	"Crear &iacute;tem"
+	"Crear &iacute;tem del programa"
 #elif L==5	// fr
-	"Cr&eacute;er article"
+	"Cr&eacute;er &eacute;l&eacute;ment de programme"
 #elif L==6	// gn
-	"Crear &iacute;tem"	// Okoteve traducción
+	"Ojapo elemento programa"
 #elif L==7	// it
-	"Creare articolo"
+	"Creare articolo del programma"
 #elif L==8	// pl
-	"Utw&oacute;rz przedmiot"
+	"Utw&oacute;rz pozycj&eogon; programu"
 #elif L==9	// pt
-	"Criar item"
+	"Criar item do programa"
 #elif L==10	// tr
-	"Create item"		// Çeviri lazim!
+	"Program &ouml;&gbreve;esi olu&scedil;tur"
 #endif
 	,
 	[ActReqRemPrgItm] =

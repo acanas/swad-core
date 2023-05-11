@@ -788,104 +788,87 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewPlg,NULL,NULL,NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewPlg]);
+      /***** Write heading *****/
+      Plg_PutHeadPlugins ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewPlg);
+      /***** Row begin *****/
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Column to remove plugin, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Write heading *****/
-	    Plg_PutHeadPlugins ();
+	 /***** Plugin code */
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	    /***** Row begin *****/
-	    HTM_TR_Begin (NULL);
+	 /***** Plugin logo *****/
+	 // TODO: Change plugin icons to 32x32
+	 HTM_TD_Begin ("style=\"width:45px;\"");
+	 HTM_TD_End ();
 
-	       /***** Column to remove plugin, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Plugin name *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin code */
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Plugin description *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
+			    Plg_EditingPlg->Description,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"16\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin logo *****/
-	       // TODO: Change plugin icons to 32x32
-	       HTM_TD_Begin ("style=\"width:45px;\"");
-	       HTM_TD_End ();
+	 /***** Plugin logo *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"4\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin name *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"8\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Plugin application key *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin description *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
-				  Plg_EditingPlg->Description,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"16\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Plugin URL *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "size=\"8\" class=\"INPUT_%s\""
+			   " required=\"required\"",
+			   The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin logo *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"4\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Plugin IP address *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Plugin application key *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"8\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      /***** Row end *****/
+      HTM_TR_End ();
 
-	       /***** Plugin URL *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-				 "size=\"8\" class=\"INPUT_%s\""
-				 " required=\"required\"",
-				 The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /***** Plugin IP address *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"8\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    /***** Row end *****/
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

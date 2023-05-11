@@ -1280,9 +1280,7 @@ static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_Create;
    Act_Action_t NextAction = ActUnk;
    unsigned Year;
 
@@ -1296,103 +1294,89 @@ static void Crs_PutFormToCreateCourse (void)
    else
       Err_NoPermissionExit ();
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[NextAction]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
 
-      /***** Begin form *****/
-      Frm_BeginForm (NextAction);
+      /***** Write heading *****/
+      Crs_PutHeadCoursesForEdition ();
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+      HTM_TR_Begin (NULL);
 
-	    /***** Write heading *****/
-	    Crs_PutHeadCoursesForEdition ();
+	 /***** Column to remove course, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Course code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	       /***** Column to remove course, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Institutional code of the course *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+			    Crs_EditingCrs->InstitutionalCrsCod,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_INS_CODE INPUT_%s\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Course code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Year *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      "name=\"OthCrsYear\""
+			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
+			      The_GetSuffix ());
+	       for (Year = 0;
+		    Year <= Deg_MAX_YEARS_PER_DEGREE;
+		    Year++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+			      Year == Crs_EditingCrs->Year,	// Selected?
+			      HTM_OPTION_ENABLED,
+			      "%s",Txt_YEAR_OF_DEGREE[Year]);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-	       /***** Institutional code of the course *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-				  Crs_EditingCrs->InstitutionalCrsCod,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_INS_CODE INPUT_%s\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Course short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Year *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"OthCrsYear\""
-				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				    The_GetSuffix ());
-		     for (Year = 0;
-			  Year <= Deg_MAX_YEARS_PER_DEGREE;
-			  Year++)
-			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    Year == Crs_EditingCrs->Year,	// Selected?
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_YEAR_OF_DEGREE[Year]);
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
+	 /***** Course full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Course short name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Current number of teachers in this course *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Course full name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Current number of students in this course *****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Current number of teachers in this course *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Course requester *****/
+	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
+		       The_GetSuffix ());
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	 HTM_TD_End ();
 
-	       /***** Current number of students in this course *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
+	 /***** Course status *****/
+	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Course requester *****/
-	       HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-			     The_GetSuffix ());
-		  Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Course status *****/
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

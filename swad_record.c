@@ -352,82 +352,66 @@ static void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
-   extern const char *Txt_Create;
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
    char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewFie]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewFie,NULL,NULL,NULL);
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewFie);
+      /***** Write heading *****/
+      Rec_WriteHeadingRecordFields ();
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+      HTM_TR_Begin (NULL);
 
-	    /***** Write heading *****/
-	    Rec_WriteHeadingRecordFields ();
+	 /***** Write disabled icon to remove the field *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	    Ico_PutIconRemovalNotAllowed ();
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Field name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"REC_FIELDNAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Write disabled icon to remove the field *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-		  Ico_PutIconRemovalNotAllowed ();
-	       HTM_TD_End ();
+	 /***** Number of lines in form ******/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    snprintf (StrNumLines,sizeof (StrNumLines),"%u",
+		      Gbl.Crs.Records.Field.NumLines);
+	    HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"2\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Field name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "class=\"REC_FIELDNAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+	 /***** Visibility to students *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      "name=\"Visibility\" class=\"INPUT_%s\"",
+			      The_GetSuffix ());
+	       for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+		    Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
+		    Vis++)
+		 {
+		  VisUnsigned = (unsigned) Vis;
+		  HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
+			      Vis == Gbl.Crs.Records.Field.Visibility,	// Selected?
+			      HTM_OPTION_ENABLED,
+			      "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+		 }
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-	       /***** Number of lines in form ******/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-			    Gbl.Crs.Records.Field.NumLines);
-		  HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"2\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Visibility to students *****/
-	       HTM_TD_Begin ("class=\"CM\"");
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"Visibility\" class=\"INPUT_%s\"",
-				    The_GetSuffix ());
-		     for (Vis  = (Rec_VisibilityRecordFields_t) 0;
-			  Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
-			  Vis++)
-		       {
-			VisUnsigned = (unsigned) Vis;
-			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				    Vis == Gbl.Crs.Records.Field.Visibility,	// Selected?
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
-		       }
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

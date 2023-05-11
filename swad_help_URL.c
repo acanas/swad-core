@@ -1032,29 +1032,6 @@ const char *Hlp_COURSE_Program =
 	"COURSE.Program.en";
 #endif
 
-const char *Hlp_COURSE_Program_edit_item =
-#if   L==1
-	"COURSE.Program.es#editar-item";
-#elif L==2
-	"COURSE.Program.en#edit-item";
-#elif L==3
-	"COURSE.Program.en#edit-item";
-#elif L==4
-	"COURSE.Program.es#editar-item";
-#elif L==5
-	"COURSE.Program.en#edit-item";
-#elif L==6
-	"COURSE.Program.es#editar-item";
-#elif L==7
-	"COURSE.Program.en#edit-item";
-#elif L==8
-	"COURSE.Program.en#edit-item";
-#elif L==9
-	"COURSE.Program.en#edit-item";
-#elif L==10	// tr
-	"COURSE.Program.en#edit-item";
-#endif
-
 const char *Hlp_COURSE_Program_resource_clipboard =
 #if   L==1
 	"COURSE.Program.en#resource-clipboard";

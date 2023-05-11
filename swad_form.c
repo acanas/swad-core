@@ -246,6 +246,54 @@ void Frm_EndForm (void)
   }
 
 /*****************************************************************************/
+/********************** Put a form and a table to create *********************/
+/*****************************************************************************/
+
+void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
+                         void (*FuncPars) (void *Args),void *Args)
+  {
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+
+   /***** Begin fieldset *****/
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Actions[NextAction]);
+
+      /***** Begin form *****/
+      Frm_BeginFormAnchor (NextAction,Anchor);
+         if (FuncPars)
+            FuncPars (Args);
+
+   	 /***** Begin table *****/
+         HTM_TABLE_BeginWidePadding (2);
+  }
+
+void Frm_EndFormTable (Btn_Button_t Button)
+  {
+   extern const char *Txt_Create;
+   extern const char *Txt_Save_changes;
+   extern const char *Txt_Remove;
+   static const char **TxtButton[Btn_NUM_BUTTON_TYPES] =
+     {
+      [Btn_CREATE_BUTTON ] = &Txt_Create,
+      [Btn_CONFIRM_BUTTON] = &Txt_Save_changes,
+      [Btn_REMOVE_BUTTON ] = &Txt_Remove,
+     };
+
+         /***** End table *****/
+	 HTM_TABLE_End ();
+
+	 /***** Send button *****/
+         if (Button != Btn_NO_BUTTON)
+            Btn_PutButton (Button,*TxtButton[Button]);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End fieldset *****/
+   HTM_FIELDSET_End ();
+  }
+
+/*****************************************************************************/
 /***************************** Get unique Id *********************************/
 /*****************************************************************************/
 

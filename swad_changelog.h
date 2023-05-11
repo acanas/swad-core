@@ -629,11 +629,12 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.107.40 (2023-05-10)"
+#define Log_PLATFORM_VERSION	"SWAD 22.108 (2023-05-11)"
 #define CSS_FILE		"swad22.107.36.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 22.107.40:May 10, 2023  Changes in creation of test questions and survey questions. (? lines)
+	Version 22.108:   May 11, 2023  Code refactoring in forms. (337145 lines)
+	Version 22.107.40:May 10, 2023  Changes in creation of test questions and survey questions. (337447 lines)
 	Version 22.107.39:May 10, 2023  Changes in creation of user account. (337435 lines)
 	Version 22.107.38:May 10, 2023  Changes in edition of mail domains. (337455 lines)
 	Version 22.107.37:May 10, 2023  Changes in edition of attendance events and agenda events. (337484 lines)

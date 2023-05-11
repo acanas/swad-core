@@ -457,59 +457,42 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewDegTyp,NULL,NULL,NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewDegTyp]);
+      /***** Write heading *****/
+      DegTyp_PutHeadDegreeTypesForEdition ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewDegTyp);
+      /***** Begin table row *****/
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Column to remove degree type, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Write heading *****/
-	    DegTyp_PutHeadDegreeTypesForEdition ();
+	 /***** Degree type code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	    /***** Begin table row *****/
-	    HTM_TR_Begin (NULL);
+	 /***** Degree type name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"25\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Column to remove degree type, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Number of degrees of this degree type ****/
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-	       /***** Degree type code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+      /***** End table row *****/
+      HTM_TR_End ();
 
-	       /***** Degree type name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"25\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /***** Number of degrees of this degree type ****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (0);
-	       HTM_TD_End ();
-
-	    /***** End table row *****/
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

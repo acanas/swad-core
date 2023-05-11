@@ -10975,52 +10975,6 @@ const char *Txt_Duplicate_USERS =
 	"Duplicates";	// Çeviri lazim!
 #endif
 
-const char *Txt_Edit_assignment =
-#if   L==1	// ca
-	"Editar activitat";
-#elif L==2	// de
-	"Aufgabe bearbeiten";
-#elif L==3	// en
-	"Edit assignment";
-#elif L==4	// es
-	"Editar actividad";
-#elif L==5	// fr
-	"&Eacute;diter activit&eacute;";
-#elif L==6	// gn
-	"Editar actividad";	// Okoteve traducción
-#elif L==7	// it
-	"Editare attivit&agrave;";
-#elif L==8	// pl
-	"Edytuj zadanie";
-#elif L==9	// pt
-	"Editar atividade";
-#elif L==10	// tr
-	"Edit assignment";	// Çeviri lazim!
-#endif
-
-const char *Txt_Edit_item =
-#if   L==1	// ca
-	"Editar &iacute;tem";
-#elif L==2	// de
-	"Artikel bearbeiten";
-#elif L==3	// en
-	"Edit item";
-#elif L==4	// es
-	"Editar &iacute;tem";
-#elif L==5	// fr
-	"&Eacute;diter article";
-#elif L==6	// gn
-	"Editar &iacute;tem";	// Okoteve traducción
-#elif L==7	// it
-	"Editare articolo";
-#elif L==8	// pl
-	"Edycja przedmiot";
-#elif L==9	// pt
-	"Editar item";
-#elif L==10	// tr
-	"Edit item";		// Çeviri lazim!
-#endif
-
 const char *Txt_Edit_plain_text =
 #if   L==1	// ca
 	"Editar text sense format";
@@ -11065,29 +11019,6 @@ const char *Txt_Edit_record_fields =
 	"Editar campos cart&otilde;es";
 #elif L==10	// tr
 	"Edit record fields";		// Çeviri lazim!
-#endif
-
-const char *Txt_Edit_set_of_questions =
-#if   L==1	// ca
-	"Editar conjunt de preguntes";
-#elif L==2	// de
-	"Satz von Fragen bearbeiten";
-#elif L==3	// en
-	"Edit set of questions";
-#elif L==4	// es
-	"Editar conjunto de preguntas";
-#elif L==5	// fr
-	"&Eacute;diter ensemble de questions";
-#elif L==6	// gn
-	"Editar conjunto de preguntas";	// Okoteve traducción
-#elif L==7	// it
-	"Editare set di domande";
-#elif L==8	// pl
-	"Edycja zestaw pyta&nacute;";
-#elif L==9	// pt
-	"Editar conjunto de perguntas";
-#elif L==10	// tr
-	"Edit set of questions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Edit_rich_text =
@@ -33457,6 +33388,29 @@ const char *Txt_Removal_not_allowed =
 	"Remo&ccedil;&atilde;o n&atilde;o permitida";
 #elif L==10	// tr
 	"Removal not allowed";			// Çeviri lazim!
+#endif
+
+const char *Txt_Remove =
+#if   L==1	// ca
+	"Eliminar";
+#elif L==2	// de
+	"Entfernen";
+#elif L==3	// en
+	"Remove";
+#elif L==4	// es
+	"Eliminar";
+#elif L==5	// fr
+	"Supprimer";
+#elif L==6	// gn
+	"Pe'a";
+#elif L==7	// it
+	"Rimuovere";
+#elif L==8	// pl
+	"Usu&nacute;";
+#elif L==9	// pt
+	"Remover";
+#elif L==10	// tr
+	"Elemek";
 #endif
 
 const char *Txt_Remove_all_students =

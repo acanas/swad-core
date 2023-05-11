@@ -670,69 +670,52 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewBld,NULL,NULL,NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewBld]);
+      /***** Write heading *****/
+      Bld_PutHeadBuildings ();
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewBld);
+      HTM_TR_Begin (NULL);
 
-	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+	 /***** Column to remove building, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-	    /***** Write heading *****/
-	    Bld_PutHeadBuildings ();
+	 /***** Building code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-	    HTM_TR_Begin (NULL);
+	 /***** Building short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Column to remove building, disabled here *****/
-	       HTM_TD_Begin ("class=\"BM\"");
-	       HTM_TD_End ();
+	 /***** Building full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Building code *****/
-	       HTM_TD_Begin ("class=\"CODE\"");
-	       HTM_TD_End ();
+	 /***** Building location *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
+			    The_GetSuffix ());
+	 HTM_TD_End ();
 
-	       /***** Building short name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
+      HTM_TR_End ();
 
-	       /***** Building full name *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	       /***** Building location *****/
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
 /*****************************************************************************/

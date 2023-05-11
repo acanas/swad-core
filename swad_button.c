@@ -37,32 +37,26 @@ void Btn_PutButton (Btn_Button_t Button,const char *TxtButton)
   {
    static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
      {
-      [Btn_NO_BUTTON     ] = NULL,
       [Btn_CREATE_BUTTON ] = Btn_PutCreateButton,
       [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButton,
       [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButton,
      };
 
-   if (TxtButton)
-      if (TxtButton[0])
-	 if (Function[Button])
-	    Function[Button] (TxtButton);
+   if (Button != Btn_NO_BUTTON && TxtButton)
+      Function[Button] (TxtButton);
   }
 
 void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
   {
    static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
      {
-      [Btn_NO_BUTTON     ] = NULL,
       [Btn_CREATE_BUTTON ] = Btn_PutCreateButtonInline,
       [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButtonInline,
       [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButtonInline,
      };
 
-   if (TxtButton)
-      if (TxtButton[0])
-	 if (Function[Button])
-	    Function[Button] (TxtButton);
+   if (Button != Btn_NO_BUTTON && TxtButton)
+      Function[Button] (TxtButton);
   }
 
 void Btn_PutCreateButton (const char *TxtButton)

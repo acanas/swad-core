@@ -179,6 +179,7 @@ static unsigned Prg_GetLastChild (int NumItem);
 
 static void Prg_ShowFormToCreateItem (long ParentItmCod);
 static void Prg_ShowFormToChangeItem (long ItmCod);
+static void Prg_ParsFormItem (void *ItmCod);
 static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
@@ -1932,8 +1933,6 @@ void Prg_ReqCreateItem (void)
 
 static void Prg_ShowFormToCreateItem (long ParentItmCod)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Create;
    struct Prg_Item ParentItem;	// Parent item
    struct Prg_Item Item;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -1955,40 +1954,19 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);
 
-   /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Txt_Actions[ActNewPrgItm]);
+   /***** Begin form to create *****/
+   Frm_BeginFormTable (ActNewPrgItm,NULL,
+                       Prg_ParsFormItem,&ParentItem.Hierarchy.ItmCod);
 
-      /***** Begin form *****/
-      Frm_BeginFormAnchor (ActNewPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-	 ParCod_PutPar (ParCod_Itm,ParentItem.Hierarchy.ItmCod);
+      /***** Show form *****/
+      Prg_ShowFormItem (&Item,SetHMS,NULL);
 
-   	 /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
-
-	    /***** Show form *****/
-	    Prg_ShowFormItem (&Item,SetHMS,NULL);
-
-	 /***** End table and send button *****/
-	 HTM_TABLE_End ();
-         Btn_PutButton (Btn_CREATE_BUTTON,Txt_Create);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End fieldset *****/
-   HTM_FIELDSET_End ();
+   /***** End form to create *****/
+   Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
-
-/*****************************************************************************/
-/***************** Put a form to change program item *******************/
-/*****************************************************************************/
 
 static void Prg_ShowFormToChangeItem (long ItmCod)
   {
-   extern const char *Hlp_COURSE_Program_edit_item;
-   extern const char *Txt_Edit_item;
-   extern const char *Txt_Save_changes;
    struct Prg_Item Item;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -2002,25 +1980,20 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Prg_GetItemDataByCod (&Item);
    Prg_DB_GetItemTxt (Item.Hierarchy.ItmCod,Txt);
 
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID);
-      ParCod_PutPar (ParCod_Itm,Item.Hierarchy.ItmCod);
+   /***** Begin form to change *****/
+   Frm_BeginFormTable (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
+                       Prg_ParsFormItem,&Item.Hierarchy.ItmCod);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin ("100%",
-			 Item.Title[0] ? Item.Title :
-					 Txt_Edit_item,
-			 NULL,NULL,
-			 Hlp_COURSE_Program_edit_item,Box_NOT_CLOSABLE,2);
+      /***** Show form *****/
+      Prg_ShowFormItem (&Item,SetHMS,Txt);
 
-	 /***** Show form *****/
-	 Prg_ShowFormItem (&Item,SetHMS,Txt);
+   /***** End form to change *****/
+   Frm_EndFormTable (Btn_CONFIRM_BUTTON);
+  }
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
-
-   /***** End form *****/
-   Frm_EndForm ();
+static void Prg_ParsFormItem (void *ItmCod)
+  {
+   ParCod_PutPar (ParCod_Itm,*(long *) ItmCod);
   }
 
 /*****************************************************************************/
