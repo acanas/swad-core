@@ -1029,7 +1029,6 @@ void Gam_FreeListGames (struct Gam_Games *Games)
 void Gam_AskRemGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
-   extern const char *Txt_Remove;
    struct Gam_Games Games;
 
    /***** Reset games context *****/
@@ -1048,11 +1047,10 @@ void Gam_AskRemGame (void)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
-   Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,
-                           Gam_PutPars,&Games,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
-                           Games.Game.Title);
+   Ale_ShowAlertRemove (ActRemGam,NULL,
+                        Gam_PutPars,&Games,
+			Txt_Do_you_really_want_to_remove_the_game_X,
+                        Games.Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1927,9 +1925,9 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games)
 void Gam_ReqRemQstFromGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove;
    struct Gam_Games Games;
    unsigned QstInd;
+   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -1951,11 +1949,11 @@ void Gam_ReqRemQstFromGame (void)
 
    /***** Show question and button to remove question *****/
    Games.QstInd = QstInd;
-   Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,
-			   Gam_PutParsOneQst,&Games,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   QstInd);
+   sprintf (StrQstInd,"%u",QstInd);
+   Ale_ShowAlertRemove (ActRemGamQst,NULL,
+			Gam_PutParsOneQst,&Games,
+			Txt_Do_you_really_want_to_remove_the_question_X,
+			StrQstInd);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,

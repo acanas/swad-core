@@ -805,7 +805,6 @@ static void Att_FreeListEvents (struct Att_Events *Events)
 void Att_AskRemEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
-   extern const char *Txt_Remove;
    struct Att_Events Events;
 
    /***** Reset attendance events *****/
@@ -823,11 +822,10 @@ void Att_AskRemEvent (void)
    Att_GetEventDataByCodAndCheckCrs (&Events.Event);
 
    /***** Show question and button to remove event *****/
-   Ale_ShowAlertAndButton (ActRemAtt,NULL,NULL,
-                           Att_PutPars,&Events,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_event_X,
-	                   Events.Event.Title);
+   Ale_ShowAlertRemove (ActRemAtt,NULL,
+                        Att_PutPars,&Events,
+			Txt_Do_you_really_want_to_remove_the_event_X,
+	                Events.Event.Title);
 
    /***** Show attendance events again *****/
    Att_SeeEvents ();

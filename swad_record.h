@@ -124,7 +124,6 @@ unsigned Rec_ConvertToNumLinesField (const char *StrNumLines);
 bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName);
 void Rec_CreateRecordField (void);
 void Rec_ReqRemField (void);
-void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords);
 void Rec_RemoveFieldFromDB (void);
 void Rec_RemoveField (void);
 void Rec_RenameField (void);

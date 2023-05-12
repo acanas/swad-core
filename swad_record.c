@@ -103,6 +103,8 @@ static struct
 static void Rec_ListFieldsRecordsForEdition (void);
 static void Rec_WriteHeadingRecordFields (void);
 
+static void Rec_AskConfirmRemFieldWithRecords (void);
+
 static void Rec_PutParFldCod (void *FldCod);
 static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
@@ -549,14 +551,12 @@ void Rec_CreateRecordField (void)
 
 void Rec_ReqRemField (void)
   {
-   unsigned NumRecords;
-
    /***** Get the code of field *****/
    Gbl.Crs.Records.Field.FieldCod = ParCod_GetAndCheckPar (ParCod_Fld);
 
    /***** Check if exists any record with that field filled *****/
-   if ((NumRecords = Rec_DB_CountNumRecordsWithFieldContent (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
-      Rec_AskConfirmRemFieldWithRecords (NumRecords);
+   if (Rec_DB_CountNumRecordsWithFieldContent (Gbl.Crs.Records.Field.FieldCod))	// There are records with that field filled
+      Rec_AskConfirmRemFieldWithRecords ();
    else			// There are no records with that field filled
       Rec_RemoveFieldFromDB ();
   }
@@ -565,10 +565,9 @@ void Rec_ReqRemField (void)
 /******* Request confirmation for the removing of a field with records *******/
 /*****************************************************************************/
 
-void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
+static void Rec_AskConfirmRemFieldWithRecords (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_;
-   extern const char *Txt_Remove;
+   extern const char *Txt_Do_you_really_want_to_remove_the_field_X;
 
    /***** Get from the database the name of the field *****/
    Rec_GetFieldByCod (Gbl.Crs.Records.Field.FieldCod,
@@ -577,12 +576,10 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.Crs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
-   Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,
-                           Rec_PutParFldCod,&Gbl.Crs.Records.Field.FieldCod,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
-		           Gbl.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.FullName,
-		           NumRecords);
+   Ale_ShowAlertRemove (ActRemFie,NULL,
+                        Rec_PutParFldCod,&Gbl.Crs.Records.Field.FieldCod,
+			Txt_Do_you_really_want_to_remove_the_field_X,
+		        Gbl.Crs.Records.Field.Name);
 
    /***** List record fields again *****/
    Rec_ReqEditRecordFields ();

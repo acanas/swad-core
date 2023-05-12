@@ -135,7 +135,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 
-static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
+static void Grp_AskConfirmRemGrpTypWithGrps (void);
 static void Grp_AskConfirmRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
@@ -2801,7 +2801,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
         	  Grp->Room.ShrtName[0] = '\0';
 
                /* Get number of current users in group */
-	       for (Role = Rol_TCH;
+	       for (Role  = Rol_TCH;
 		    Role >= Rol_STD;
 		    Role--)
                   Grp->NumUsrs[Role] = Grp_DB_CountNumUsrsInGrp (Role,Grp->GrpCod);
@@ -3331,14 +3331,12 @@ void Grp_ReceiveFormNewGrp (void)
 
 void Grp_ReqRemGroupType (void)
   {
-   unsigned NumGrps;
-
    /***** Get the code of the group type *****/
    Gbl.Crs.Grps.GrpTyp.GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
 
    /***** Check if this group type has groups *****/
-   if ((NumGrps = Grp_DB_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
-      Grp_AskConfirmRemGrpTypWithGrps (NumGrps);
+   if (Grp_DB_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod))	// Group type has groups ==> Ask for confirmation
+      Grp_AskConfirmRemGrpTypWithGrps ();
    else	// Group type has no groups ==> remove directly
       Grp_RemoveGroupTypeCompletely ();
   }
@@ -3360,11 +3358,9 @@ void Grp_ReqRemGroup (void)
 /********** Ask for confirmation to remove a group type with groups **********/
 /*****************************************************************************/
 
-static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
+static void Grp_AskConfirmRemGrpTypWithGrps (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_;
-   extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_;
-   extern const char *Txt_Remove;
+   extern const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X;
 
    /***** Get data of the group type from database *****/
    Grp_GetGroupTypeDataByCod (&Gbl.Crs.Grps.GrpTyp);
@@ -3373,18 +3369,10 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Grp_ReqEditGroupsInternal0 ();
 
    /***** Show question and button to remove type of group *****/
-   if (NumGrps == 1)
-      Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
-                              Gbl.Crs.Grps.GrpTyp.GrpTypName);
-   else
-      Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
-			      Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
-                              Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
+   Ale_ShowAlertRemove (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
+			Grp_PutParGrpTypCod,&Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+			Txt_Do_you_really_want_to_remove_the_type_of_group_X,
+			Gbl.Crs.Grps.GrpTyp.GrpTypName);
 
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
@@ -3398,42 +3386,21 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
 static void Grp_AskConfirmRemGrp (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_group_X;
-   extern const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_;
-   extern const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_;
-   extern const char *Txt_Remove;
    struct GroupData GrpDat;
-   unsigned NumStds;
 
    /***** Get name of the group from database *****/
    GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetGroupDataByCod (&GrpDat);
-
-   /***** Count number of students in group *****/
-   NumStds = Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod);
 
    /***** Show the form to edit group types again *****/
    Grp_ReqEditGroupsInternal0 ();
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
 
    /***** Show question and button to remove group *****/
-   if (NumStds == 0)
-      Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X,
-                              GrpDat.GrpName);
-   else if (NumStds == 1)
-      Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_1_student_,
-                              GrpDat.GrpName);
-   else
-      Ale_ShowAlertAndButton (ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
-			      Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
-                              GrpDat.GrpName,NumStds);
+   Ale_ShowAlertRemove (ActRemGrp,Grp_GROUPS_SECTION_ID,
+			Grp_PutParGrpCod,&Gbl.Crs.Grps.GrpCod,
+			Txt_Do_you_really_want_to_remove_the_group_X,
+			GrpDat.GrpName);
 
    /***** Show the form to edit groups again *****/
    Grp_ReqEditGroupsInternal2 (Ale_INFO,NULL);

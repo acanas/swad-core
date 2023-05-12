@@ -73,6 +73,9 @@ void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,cons
                                  void (*FuncPars) (void *Args),void *Args,
 				 Btn_Button_t Button,const char *TxtButton);
 void Ale_ShowLastAlertAndButton1 (void);
+void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
+                          void (*FuncPars) (void *Args),void *Args,
+			  const char *Txt,const char *Title);
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                              void (*FuncPars) (void *Args),void *Args,
                              Btn_Button_t Button,const char *TxtButton,

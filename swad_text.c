@@ -9561,29 +9561,6 @@ const char *Txt_Do_you_really_want_to_remove_the_criterion_X =	// Warning: it is
 	"<strong>%s</strong> kriterini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
-#if   L==1	// ca
-	"De veres voleu eliminar tota la discusi&oacute;?";
-#elif L==2	// de
-	"Wollen Sie die gesamten Thread wirklich entfernen?";
-#elif L==3	// en
-	"Do you really want to remove the entire thread?";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar toda la discusi&oacute;n?";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer tout le fil?";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar toda la discusi&oacute;n?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere l'intera discussione?";
-#elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; caly watek?";
-#elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover toda a discuss&atilde;o?";
-#elif L==10	// tr
-	"Do you really want to remove the entire thread?";		// Çeviri lazim!
-#endif
-
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"De veres voleu eliminar tota la discussi&oacute; <strong>%s</strong>?";
@@ -9653,47 +9630,27 @@ const char *Txt_Do_you_really_want_to_remove_the_exam_X =	// Warning: it is very
 	"Do you really want to remove the exam <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_ =	// Warning: it is very important to include two %s and one %u in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_field_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Realment voleu eliminar el camp <strong>%s</strong>"
-	" dels registres de <strong>%s</strong>"
-	" (aquest camp s'omple amb els registres de %u estudiant(s))";
+	"Realment voleu eliminar el camp <strong>%s</strong>?";
 #elif L==2	// de
-	"Wollen Sie das Feld <strong>%s</strong>"
-	" wirklich aus den Datens&auml;tzen von <strong>%s</strong> entfernen"
-	" (dieses Feld ist in den Datens&auml;tzen von %u Studenten ausgef%uuml;llt)";
+	"Wollen Sie das Feld <strong>%s</strong>?";
 #elif L==3	// en
-	"Do you really want to remove the field <strong>%s</strong>"
-	" from the records of <strong>%s</strong>"
-	" (this field is filled in the records of %u student(s))?";
+	"Do you really want to remove the field <strong>%s</strong>?";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
-	" de las fichas de <strong>%s</strong>"
-	" (dicho campo est&aacute; relleno en las fichas de %u estudiante(s))?";
+	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer le champ <strong>%s</strong>"
-	" des fiches de <strong>%s</strong>"
-	" (ce champ est rempli dans les fiches de %u &eacute;tudiant(s))";
+	"Voulez-vous vraiment supprimer le champ <strong>%s</strong>?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>"
-	" de las fichas de <strong>%s</strong>"
-	" (dicho campo est&aacute; relleno en las fichas de %u estudiante(s))?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar el campo <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere il campo <strong>%s</strong>"
-	" dalle schede di <strong>%s</strong>"
-	" (questo campo &egrave; inserito nella scheda di %u studenti)?";
+	"Vuoi realmente rimuovere il campo <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; pole <strong>%s</strong>"
-	" z rekord&oacute;w <strong>%s</strong>"
-	" (to pole jest wype&lstrok;niane w rekordach %u uczni&oacute;w)";
+	"Czy na pewno chcesz usun&aogon;&cacute; pole <strong>%s</strong>?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o campo <strong>%s</strong>"
-	" dos cart&otilde;es de <strong>%s</strong>"
-	" (este campo &eacute; preenchido nos cart&otilde;es de %u estudante(s))?";
+	"Voc&ecirc; realmente quer remover o campo <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to remove the field <strong>%s</strong>"
-	" from the records of <strong>%s</strong>"
-	" (this field is filled in the records of %u student(s))?";			// Çeviri lazim!
+	"Do you really want to remove the field <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
@@ -9968,91 +9925,35 @@ const char *Txt_Do_you_really_want_to_remove_the_game_X =	// Warning: it is very
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar el grup <strong>%s</strong>?";
+	"Realment voleu suprimir el grup <strong>%s</strong>?<br />"
+	"Si ho fa, els usuaris inscrits al grup deixaran de pert&agrave;nyer-hi.";
 #elif L==2	// de
-	"M&ouml;chten Sie die Gruppe <strong>%s</strong> wirklich entfernen?";
+	"M&ouml;chten Sie Gruppe <strong>%s</strong> wirklich entfernen?<br />"
+	"Wenn Sie dies tun, geh&ouml;ren die in der Gruppe registrierten Benutzer nicht mehr dazu.";
 #elif L==3	// en
-	"Do you really want to remove the group <strong>%s</strong>?";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?";
-#elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; grupe <strong>%s</strong>?";
-#elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?";
-#elif L==10	// tr
-	"<strong>%s</strong> grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
-#endif
-
-const char *Txt_Do_you_really_want_to_remove_the_group_X_1_student_ =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"De veres voleu eliminar el grup <strong>%s</strong>?<br />"
-	"Si ho fa, un/a estudiant deixar&agrave; de pert&agrave;nyer a aquest grup.";
-#elif L==2	// de
-	"M&ouml;chten Sie die Gruppe <strong>%s</strong> wirklich entfernen?<br />"
-	"Dadurch wird ein Sch&uuml;ler aus dieser Gruppe entfernt.";
-#elif L==3	// en
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove one student from that group.";
+	"Do you really want to remove group <strong>%s</strong>?<br />"
+	"If you do, users enrolled in the group will no longer belong to it.";
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, un/a estudiante dejar&aacute; de pertenecer a ese grupo.";
+	"Si lo hace, los usuarios inscritos en el grupo dejar&aacute;n de pertenecer a &eacute;l.";
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?<br />"
-	"Cela supprimera un &eacute;tudiant de ce groupe.";
+	"Si vous le faites, les utilisateurs inscrits au groupe n'en feront plus partie.";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, un/a estudiante dejar&aacute; de pertenecer a ese grupo.";	// Okoteve traducción
+	"&iquest;¿A&ntilde;eteh&aacute;pe piko reipe'ase pe grupo <strong>%s</strong>?<br />"
+	"Rejap&oacute;ramo up&eacute;icha, umi puruh&aacute;ra o&ntilde;einskriv&iacute;va pe aty'&iacute;pe ndaha'emo'&atilde;v&eacute;ima ipypegua.";
 #elif L==7	// it
 	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?<br />"
-	"Facendo così rimuoverai uno studente da questo gruppo.";
+	"Se lo fai, gli utenti iscritti al gruppo non ne faranno pi&ugrave; parte.";
 #elif L==8	// pl
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"W ten spos&oacute;b usunie jeden uczen z tej grupy.";
+	"Czy na pewno chcesz usun&aogon;&cacute; grup&eogon; <strong>%s</strong>?<br />"
+	"Je&sacute;li to zrobisz, u&zdot;ytkownicy zarejestrowani w grupie przestan&aogon; do niej nale&zdot;e&cacute;.";
 #elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?<br />"
-	"Ao fazer isso, voc&ecirc; remover&aacute; um estudante desse grupo.";
+	"Voc&ecirc; realmente deseja remover o grupo <strong>%s</strong>?<br />"
+	"Se o fizer, os usu&aacute;rios inscritos no grupo n&atilde;o far&atilde;o mais parte dele.";
 #elif L==10	// tr
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove one student from that group.";			// Çeviri lazim!
-#endif
-
-const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warning: it is very important to include %s and %u in the following sentences
-#if   L==1	// ca
-	"De veres voleu eliminar el grup <strong>%s</strong>?<br />"
-	"Si ho fa, %u estudiants deixaran de pert&agrave;nyer a aquest grup.";
-#elif L==2	// de
-	"M&ouml;chten Sie die Gruppe <strong>%s</strong> wirklich entfernen?<br />"
-	"Dadurch werden %u Sch&uuml;ler aus dieser Gruppe entfernt.";
-#elif L==3	// en
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove %u students from that group.";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, %u estudiantes dejar&aacute;n de pertenecer a ese grupo.";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer le groupe <strong>%s</strong>?<br />"
-	"Cela supprimera les %u &eacute;tudiants de ce groupe.";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar el grupo <strong>%s</strong>?<br />"
-	"Si lo hace, %u estudiantes dejar&aacute;n de pertenecer a ese grupo.";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere il gruppo <strong>%s</strong>?<br />"
-	"Facendo così rimuoverai %u studenti da questo gruppo.";
-#elif L==8	// pl
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"W ten spos&oacute;b usunie %u uczni&oacute;w z tej grupy.";
-#elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o grupo <strong>%s</strong>?<br />"
-	"Ao fazer isso, voc&ecirc; remover&aacute; %u estudantes desse grupo.";
-#elif L==10	// tr
-	"Do you really want to remove the group <strong>%s</strong>?<br />"
-	"Doing so will remove %u students from that group.";			// Çeviri lazim!
+	"<strong>%s</strong> grubunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br />"
+	"Bunu yaparsan&inodot;z, gruba kay&inodot;tl&inodot; kullan&inodot;c&inodot;lar art&inodot;k gruba ait olmaz.";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_item_X =	// Warning: it is very important to include %s in the following sentences
@@ -10147,27 +10048,27 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 	"<strong>%s</strong> projesini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar la pregunta <strong>%ld</strong>?";
+	"De veres voleu eliminar la pregunta <strong>%s</strong>?";
 #elif L==2	// de
-	"Wollen Sie die Frage <strong>%ld</strong> wirklich entfernen?";
+	"Wollen Sie die Frage <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
-	"Do you really want to remove the question <strong>%ld</strong>?";
+	"Do you really want to remove the question <strong>%s</strong>?";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";
+	"&iquest;Realmente desea eliminar la pregunta <strong>%s</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer la question <strong>%ld</strong>?";
+	"Voulez-vous vraiment supprimer la question <strong>%s</strong>?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar la pregunta <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere la domanda <strong>%ld</strong>?";
+	"Vuoi realmente rimuovere la domanda <strong>%s</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usun&aogon;&cacute; pytanie <strong>%ld</strong>?";
+	"Czy na pewno chcesz usun&aogon;&cacute; pytanie <strong>%s</strong>?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover a pergunta <strong>%ld</strong>?";
+	"Voc&ecirc; realmente deseja remover a pergunta <strong>%s</strong>?";
 #elif L==10	// tr
-	"<strong>%ld</strong> sorusunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
+	"<strong>%s</strong> sorusunu ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_resource_X =	// Warning: it is very important to include %s in the following sentences
@@ -10308,70 +10209,37 @@ const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is ve
 	"<strong>%s</strong> anketini ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_ =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Realment voleu eliminar el tipus de grup <strong>%s</strong>?<br />"
-	"Si ho feu, tamb&eacute; s'eliminar&agrave; un grup d'aquest tipus.";
+	"En fer-ho, tamb&eacute; s'eliminaran els grups d'aquest tipus.";
 #elif L==2	// de
 	"M&ouml;chten Sie den Typ der Gruppe <strong>%s</strong> wirklich entfernen?<br />"
-	"Dadurch wird auch eine Gruppe dieses Typs entfernt.";
+	"Dadurch werden auch die Gruppen dieses Typs entfernt.";
 #elif L==3	// en
 	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Doing so will also remove one group of that type.";
+	"Doing so will also remove the groups of that type.";
 #elif L==4	// es
 	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br />"
-	"Si lo hace, eliminar&aacute; tambi&eacute;n un grupo de ese tipo.";
+	"Si lo hace, eliminar&aacute; tambi&eacute;n los grupos de ese tipo.";
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer le type de groupe <strong>%s</strong>?<br />"
-	"Cela supprimera &eacute;galement un groupe de ce type.";
+	"Cela supprimera &eacute;galement les groupes de ce type.";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br />"
-	"Si lo hace, eliminar&aacute; tambi&eacute;n un grupo de ese tipo.";	// Okoteve traducción
+	"&iquest;A&ntilde;eteh&aacute;pe piko reipe'ase pe tipo de grupo <strong>%s</strong>?<br />"
+	"P&eacute;icha jajap&oacute;ramo ojeipe'&aacute;ta avei umi aty upeichagua.";
 #elif L==7	// it
 	"Vuoi realmente rimuovere il tipo di gruppo <strong>%s</strong>?<br />"
-	"Facendo così rimuoverai anche un gruppo di questo tipo.";
+	"Facendo così rimuoverai anche i gruppi di questo tipo.";
 #elif L==8	// pl
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Spowoduje to takze usuniecie jednej grupie tego typu.";
+	"Czy na pewno chcesz usun&aogon;&cacute; typ grupy <strong>%s</strong>?<br />"
+	"Spowoduje to r&oacute;wnie&zdot; usuni&eogon;cie grup tego typu.";
 #elif L==9	// pt
 	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br />"
-	"Isso tamb&eacute;m remover&aacute; um grupo desse tipo.";
+	"Isso tamb&eacute;m remover&aacute; os grupos desse tipo.";
 #elif L==10	// tr
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Doing so will also remove one group of that type.";			// Çeviri lazim!
-#endif
-
-const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_ =	// Warning: it is very important to include %s and %u in the following sentences
-#if   L==1	// ca
-	"Realment voleu eliminar el tipus de grup <strong>%s</strong>?<br />"
-	"En fer-ho, tamb&eacute; s'eliminaran %u grups d'aquest tipus.";
-#elif L==2	// de
-	"M&ouml;chten Sie den Typ der Gruppe <strong>%s</strong> wirklich entfernen?<br />"
-	"Dadurch werden auch %u Gruppen dieses Typs entfernt.";
-#elif L==3	// en
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Doing so will also remove %u groups of that type.";
-#elif L==4	// es
-	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br />"
-	"Si lo hace, eliminar&aacute; tambi&eacute;n %u grupos de ese tipo.";
-#elif L==5	// fr
-	"Voulez-vous vraiment supprimer le type de groupe <strong>%s</strong>?<br />"
-	"Cela supprimera &eacute;galement %u groupes de ce type.";
-#elif L==6	// gn
-	"&iquest;Realmente desea eliminar el tipo de grupo <strong>%s</strong>?<br />"
-	"Si lo hace, eliminar&aacute; tambi&eacute;n %u grupos de ese tipo.";	// Okoteve traducción
-#elif L==7	// it
-	"Vuoi realmente rimuovere il tipo di gruppo <strong>%s</strong>?<br />"
-	"Facendo così rimuoverai anche %u gruppi di questo tipo.";
-#elif L==8	// pl
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Spowoduje to r&oacute;wniez usuniecie grup %u tego typu.";
-#elif L==9	// pt
-	"Voc&ecirc; realmente quer remover o tipo de grupo <strong>%s</strong>?<br />"
-	"Isso tamb&eacute;m remover&aacute; %u grupos desse tipo.";
-#elif L==10	// tr
-	"Do you really want to remove the type of group <strong>%s</strong>?<br />"
-	"Doing so will also remove %u groups of that type.";			// Çeviri lazim!
+	"<strong>%s</strong> grubunun t&uuml;r&uuml;n&uuml; ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?<br />"
+	"Bunu yapmak, o t&uuml;rdeki gruplar&inodot; da kald&inodot;racakt&inodot;r.";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_your_photo =

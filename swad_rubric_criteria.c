@@ -1061,7 +1061,6 @@ void RubCri_ResetCriterion (struct RubCri_Criterion *Criterion)
 void RubCri_ReqRemCriterion (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_criterion_X;
-   extern const char *Txt_Remove;
    struct Rub_Rubrics Rubrics;
 
    /***** Reset rubrics context *****/
@@ -1077,11 +1076,10 @@ void RubCri_ReqRemCriterion (void)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
-   Ale_ShowAlertAndButton (ActRemRubCri,NULL,NULL,
-			   RubCri_PutParsOneCriterion,&Rubrics,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_criterion_X,
-			   Rubrics.Criterion.Title);
+   Ale_ShowAlertRemove (ActRemRubCri,NULL,
+			RubCri_PutParsOneCriterion,&Rubrics,
+			Txt_Do_you_really_want_to_remove_the_criterion_X,
+			Rubrics.Criterion.Title);
 
    /***** Show current rubric and its criteria *****/
    Rub_PutFormsOneRubric (&Rubrics,Rub_EXISTING_RUBRIC);

@@ -1234,7 +1234,6 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
 void ExaSet_ReqRemSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_set_of_questions_X;
-   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
 
@@ -1251,11 +1250,10 @@ void ExaSet_ReqRemSet (void)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
-   Ale_ShowAlertAndButton (ActRemExaSet,NULL,NULL,
-			   ExaSet_PutParsOneSet,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_set_of_questions_X,
-			   Set.Title);
+   Ale_ShowAlertRemove (ActRemExaSet,NULL,
+			ExaSet_PutParsOneSet,&Exams,
+			Txt_Do_you_really_want_to_remove_the_set_of_questions_X,
+			Set.Title);
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
@@ -1401,10 +1399,10 @@ void ExaSet_MoveDownSet (void)
 void ExaSet_ReqRemQstFromSet (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove;
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
    char *Anchor;
+   char StrQstCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1417,17 +1415,13 @@ void ExaSet_ReqRemQstFromSet (void)
    /***** Get question code *****/
    Exams.QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
-   /***** Build anchor string *****/
-   Frm_SetAnchorStr (Set.SetCod,&Anchor);
-
    /***** Show question and button to remove question *****/
-   Ale_ShowAlertAndButton (ActRemExaQst,Anchor,NULL,
-			   ExaSet_PutParsOneQst,&Exams,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   Exams.QstCod);
-
-   /***** Free anchor string *****/
+   Frm_SetAnchorStr (Set.SetCod,&Anchor);
+   sprintf (StrQstCod,"%ld",Exams.QstCod);
+   Ale_ShowAlertRemove (ActRemExaQst,Anchor,
+			ExaSet_PutParsOneQst,&Exams,
+			Txt_Do_you_really_want_to_remove_the_question_X,
+			StrQstCod);
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Show current exam and its sets *****/

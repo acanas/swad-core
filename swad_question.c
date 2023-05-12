@@ -3185,7 +3185,6 @@ long Qst_GetIntAnsFromStr (char *Str)
 void Qst_ReqRemSelectedQsts (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
-   extern const char *Txt_Remove;
    struct Qst_Questions Questions;
 
    /***** Create test *****/
@@ -3195,10 +3194,10 @@ void Qst_ReqRemSelectedQsts (void)
    if (Tst_GetParsTst (&Questions,Tst_EDIT_QUESTIONS))	// Get parameters from the form
      {
       /***** Show question and button to remove question *****/
-      Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			      Qst_PutParsEditQst,&Questions,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
+      Ale_ShowAlertRemove (ActRemSevTstQst,NULL,
+			   Qst_PutParsEditQst,&Questions,
+			   Txt_Do_you_really_want_to_remove_the_selected_questions,
+			   NULL);
      }
    else
       Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
@@ -3274,9 +3273,9 @@ void Qst_PutIconToRemoveOneQst (void *QstCod)
 void Qst_ReqRemOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
-   extern const char *Txt_Remove;
    bool EditingOnlyThisQst;
    struct Qst_Questions Questions;
+   char StrQstCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -3295,28 +3294,14 @@ void Qst_ReqRemOneQst (void)
 	 Err_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   /*
-   if (EditingOnlyThisQst)
-      Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Qst_PutParsRemoveOnlyThisQst,&Questions.Question.QstCod,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			      Questions.Question.QstCod);
-   else
-      Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Qst_PutParsEditQst,&Questions,
-			      Btn_REMOVE_BUTTON,Txt_Remove,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			      Questions.Question.QstCod);
-   */
-   Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			   EditingOnlyThisQst ? Qst_PutParsRemoveOnlyThisQst :
-						Qst_PutParsEditQst,
-			   EditingOnlyThisQst ? (void *) &Questions.Question.QstCod :
-						(void *) &Questions,
-			   Btn_REMOVE_BUTTON,Txt_Remove,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   Questions.Question.QstCod);
+   sprintf (StrQstCod,"%ld",Questions.Question.QstCod);
+   Ale_ShowAlertRemove (ActRemOneTstQst,NULL,
+			EditingOnlyThisQst ? Qst_PutParsRemoveOnlyThisQst :
+					     Qst_PutParsEditQst,
+			EditingOnlyThisQst ? (void *) &Questions.Question.QstCod :
+					     (void *) &Questions,
+			Txt_Do_you_really_want_to_remove_the_question_X,
+			StrQstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)

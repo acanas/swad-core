@@ -319,6 +319,23 @@ void Ale_ShowLastAlertAndButton1 (void)
   }
 
 /*****************************************************************************/
+/************** Show an alert with a button to confirm removal ***************/
+/*****************************************************************************/
+
+void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
+                          void (*FuncPars) (void *Args),void *Args,
+			  const char *Txt,const char *Title)
+  {
+   extern const char *Txt_Remove;
+
+   Ale_ShowAlertAndButton (NextAction,Anchor,NULL,
+                           FuncPars,Args,
+			   Btn_REMOVE_BUTTON,Txt_Remove,
+			   Ale_QUESTION,Txt,
+			   Title);
+  }
+
+/*****************************************************************************/
 /*********************** Show an alert with a button *************************/
 /*****************************************************************************/
 
