@@ -669,6 +669,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
+   extern const char *Txt_Total;
    // Actions to change minimum/maximum criterion values
    static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
@@ -678,6 +679,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    unsigned NumCriterion;
    char *Anchor;
    RubCri_ValueRange_t ValueRange;
+   double SumOfWeights = 0.0;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -696,6 +698,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	 /***** Get criterion data *****/
 	 RubCri_GetCriterionDataFromRow (mysql_res,&Rubrics->Criterion);
+	 SumOfWeights += Rubrics->Criterion.Weight;
 
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Rubrics->Criterion.CriCod,&Anchor);
@@ -731,8 +734,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	       Lay_WriteIndex (Rubrics->Criterion.CriInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
@@ -800,6 +802,23 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 /***** Free anchor string *****/
 	 Frm_FreeAnchorStr (&Anchor);
 	}
+
+      /***** Write total row *****/
+      HTM_TR_Begin (NULL);
+
+	 /***** Label *****/
+	 HTM_TD_Begin ("colspan=\"6\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
+	               The_GetSuffix ());
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 /***** Sum of weights *****/
+	 HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
+	    HTM_Double (SumOfWeights);
+	 HTM_TD_End ();
+
+      /***** End row *****/
+      HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -915,7 +934,7 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		       The_GetSuffix (),
 		       The_GetColorRows ());
-	    HTM_Double (Criterion.Weight);
+	    HTM_Double (Score * Criterion.Weight);
 	 HTM_TD_End ();
 
       /***** End row *****/
@@ -1016,8 +1035,10 @@ static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutCol
       HTM_TH (Txt_Weight   ,HTM_HEAD_RIGHT);
       if (PutColumnsForScore == RubCri_PUT_COLUMNS_FOR_SCORE)
 	{
-	 HTM_TH (Txt_Score    ,HTM_HEAD_RIGHT);
-	 if (asprintf (&Title,"%s&nbsp;&times;&nbsp;%s",Txt_Score,Txt_Weight) < 0)
+	 HTM_TH (Txt_Score,HTM_HEAD_RIGHT);
+
+	 if (asprintf (&Title,"%s&nbsp;&times;&nbsp;%s",
+	               Txt_Score,Txt_Weight) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TH (Title,HTM_HEAD_RIGHT);
 	 free (Title);
