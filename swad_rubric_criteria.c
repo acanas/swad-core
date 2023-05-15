@@ -587,9 +587,11 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
                                                    MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Criteria;
+   extern const char *Txt_Total;
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
    RubCri_ValueRange_t ValueRange;
+   double SumOfWeights = 0.0;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
@@ -608,6 +610,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 
 	 /***** Get criterion data *****/
 	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+	 SumOfWeights += Criterion.Weight;
 
 	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
@@ -653,6 +656,23 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	 /***** End row *****/
 	 HTM_TR_End ();
 	}
+
+      /***** Write total row *****/
+      HTM_TR_Begin (NULL);
+
+	 /***** Label *****/
+	 HTM_TD_Begin ("colspan=\"5\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
+	               The_GetSuffix ());
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 /***** Sum of weights *****/
+	 HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
+	    HTM_Double2Decimals (SumOfWeights);
+	 HTM_TD_End ();
+
+      /***** End row *****/
+      HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -814,7 +834,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 	 /***** Sum of weights *****/
 	 HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_Double (SumOfWeights);
+	    HTM_Double2Decimals (SumOfWeights);
 	 HTM_TD_End ();
 
       /***** End row *****/
@@ -834,11 +854,16 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
                                                    MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Criteria;
+   extern const char *Txt_Total;
    struct RubCri_Criterion Criterion;
    unsigned NumCriterion;
    RubCri_ValueRange_t ValueRange;
    char *Anchor;
-   double Score = 0.0;
+   double Score;
+   double WeightedScore;
+   double SumOfWeights = 0.0;
+   double SumOfScores  = 0.0;
+   double WeightedSum  = 0.0;
 
    /***** Write the heading *****/
    RubCri_PutTableHeadingForCriteria (RubCri_DONT_PUT_COLUMN_FOR_ICONS,
@@ -854,6 +879,13 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 
       /***** Get criterion data *****/
       RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+      SumOfWeights += Criterion.Weight;
+
+      /***** Get score from database *****/
+      Score = Prj_DB_GetScore (Projects->Prj.PrjCod,Criterion.CriCod);
+      WeightedScore = Score * Criterion.Weight;
+      SumOfScores += Score;
+      WeightedSum += WeightedScore;
 
       /***** Build anchor string *****/
       Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
@@ -905,11 +937,6 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		       The_GetSuffix (),
 		       The_GetColorRows ());
-	    /* Get score from database */
-	    Score = Prj_DB_GetScore (Projects->Prj.PrjCod,
-				     Criterion.CriCod);
-
-	    /* Show score */
 	    if (ICanFill)
 	      {
 	       Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
@@ -930,16 +957,43 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	       HTM_Double (Score);
 	 HTM_TD_End ();
 
-	 /***** Criterion score x weight *****/
+	 /***** Weighted score *****/
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		       The_GetSuffix (),
 		       The_GetColorRows ());
-	    HTM_Double (Score * Criterion.Weight);
+	    HTM_Double2Decimals (WeightedScore);
 	 HTM_TD_End ();
 
       /***** End row *****/
       HTM_TR_End ();
      }
+
+   /***** Write total row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Label *****/
+      HTM_TD_Begin ("colspan=\"5\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
+		    The_GetSuffix ());
+	 HTM_Txt (Txt_Total);
+      HTM_TD_End ();
+
+      /***** Sum of weights *****/
+      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_%s\"",The_GetSuffix ());
+	 HTM_Double2Decimals (SumOfWeights);
+      HTM_TD_End ();
+
+      /***** Sum of scores *****/
+      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_%s\"",The_GetSuffix ());
+	 HTM_Double2Decimals (SumOfScores);
+      HTM_TD_End ();
+
+      /***** Weighted sum *****/
+      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
+	 HTM_Double2Decimals (WeightedSum);
+      HTM_TD_End ();
+
+   /***** End row *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1038,7 +1092,7 @@ static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutCol
 	 HTM_TH (Txt_Score,HTM_HEAD_RIGHT);
 
 	 if (asprintf (&Title,"%s&nbsp;&times;&nbsp;%s",
-	               Txt_Score,Txt_Weight) < 0)
+	               Txt_Weight,Txt_Score) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TH (Title,HTM_HEAD_RIGHT);
 	 free (Title);
