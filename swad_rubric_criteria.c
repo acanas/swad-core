@@ -112,6 +112,16 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
                                                    bool ICanFill,
 					           unsigned NumCriteria,
                                                    MYSQL_RES *mysql_res);
+static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
+                               const char *Anchor);
+static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion);
+static void RubCri_WriteLink (const struct RubCri_Criterion *Criterion);
+static void RubCri_WriteMinimumMaximum (const struct RubCri_Criterion *Criterion);
+static void RubCri_WriteWeight (const struct RubCri_Criterion *Criterion);
+static void RubCri_WriteTotalLabel (unsigned ColSpan);
+static void RubCri_WriteTotalValue (double Total);
+static double RubCri_ComputeScore (long PrjCod,
+                                   const struct RubCri_Criterion *Criterion);
 
 static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
                                             struct RubCri_Criterion *Criterion);
@@ -587,10 +597,8 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
                                                    MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Criteria;
-   extern const char *Txt_Total;
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
-   RubCri_ValueRange_t ValueRange;
    double SumOfWeights = 0.0;
 
    /***** Begin table *****/
@@ -605,7 +613,7 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	   NumCriterion < NumCriteria;
 	   NumCriterion++, The_ChangeRowColor ())
 	{
-	 /***** Create criterion of questions *****/
+	 /***** Reset criterion *****/
 	 RubCri_ResetCriterion (&Criterion);
 
 	 /***** Get criterion data *****/
@@ -615,43 +623,13 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
 
-	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	       Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
-	    HTM_TD_End ();
-
-	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       HTM_Txt (Criterion.Title);
-	    HTM_TD_End ();
-
-	    /***** Link to resource *****/
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       Rsc_WriteLinkName (&Criterion.Link,Frm_DONT_PUT_FORM_TO_GO);
-	    HTM_TD_End ();
-
-	    /***** Minimum and maximum values of criterion *****/
-	    for (ValueRange  = (RubCri_ValueRange_t) 0;
-		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-		 ValueRange++)
-	      {
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
-		  HTM_Double (Criterion.Values[ValueRange]);
-	       HTM_TD_End ();
-	      }
-
-	    /***** Criterion weight *****/
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                  The_GetSuffix (),
-	                  The_GetColorRows ());
-	       HTM_Double (Criterion.Weight);
-	    HTM_TD_End ();
+	    /***** Index, title, link, minimum/maximum values
+	           and weight of criterion *****/
+	    RubCri_WriteIndex (&Criterion,NULL);
+	    RubCri_WriteTitle (&Criterion);
+	    RubCri_WriteLink (&Criterion);
+	    RubCri_WriteMinimumMaximum (&Criterion);
+	    RubCri_WriteWeight (&Criterion);
 
 	 /***** End row *****/
 	 HTM_TR_End ();
@@ -659,19 +637,8 @@ static void RubCri_ListOneOrMoreCriteriaForSeeing (unsigned NumCriteria,
 
       /***** Write total row *****/
       HTM_TR_Begin (NULL);
-
-	 /***** Label *****/
-	 HTM_TD_Begin ("colspan=\"5\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 /***** Sum of weights *****/
-	 HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (SumOfWeights);
-	 HTM_TD_End ();
-
-      /***** End row *****/
+	 RubCri_WriteTotalLabel (5);
+	 RubCri_WriteTotalValue (SumOfWeights);
       HTM_TR_End ();
 
    /***** End table *****/
@@ -689,7 +656,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
-   extern const char *Txt_Total;
    // Actions to change minimum/maximum criterion values
    static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
@@ -713,9 +679,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	   NumCriterion < NumCriteria;
 	   NumCriterion++, The_ChangeRowColor ())
 	{
-	 /***** Create criterion of questions *****/
-	 RubCri_ResetCriterion (&Rubrics->Criterion);
-
 	 /***** Get criterion data *****/
 	 RubCri_GetCriterionDataFromRow (mysql_res,&Rubrics->Criterion);
 	 SumOfWeights += Rubrics->Criterion.Weight;
@@ -754,13 +717,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	       Lay_WriteIndex (Rubrics->Criterion.CriInd,"BIG_INDEX");
-	    HTM_TD_End ();
+	    RubCri_WriteIndex (&Rubrics->Criterion,Anchor);
 
 	    /***** Title *****/
 	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	       HTM_ARTICLE_Begin (Anchor);
 		  Frm_BeginFormAnchor (ActChgTitRubCri,Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
@@ -770,7 +730,6 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 				     " required=\"required\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
-	       HTM_ARTICLE_End ();
 	    HTM_TD_End ();
 
 	    /***** Link to resource *****/
@@ -825,19 +784,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
       /***** Write total row *****/
       HTM_TR_Begin (NULL);
-
-	 /***** Label *****/
-	 HTM_TD_Begin ("colspan=\"6\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 /***** Sum of weights *****/
-	 HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (SumOfWeights);
-	 HTM_TD_End ();
-
-      /***** End row *****/
+	 RubCri_WriteTotalLabel (6);
+         RubCri_WriteTotalValue (SumOfWeights);
       HTM_TR_End ();
 
    /***** End table *****/
@@ -854,10 +802,8 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
                                                    MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Criteria;
-   extern const char *Txt_Total;
    struct RubCri_Criterion Criterion;
    unsigned NumCriterion;
-   RubCri_ValueRange_t ValueRange;
    char *Anchor;
    double Score;
    double WeightedScore;
@@ -874,15 +820,12 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	NumCriterion < NumCriteria;
 	NumCriterion++, The_ChangeRowColor ())
      {
-      /***** Create criterion of questions *****/
-      RubCri_ResetCriterion (&Criterion);
-
       /***** Get criterion data *****/
       RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
       SumOfWeights += Criterion.Weight;
 
-      /***** Get score from database *****/
-      Score = Prj_DB_GetScore (Projects->Prj.PrjCod,Criterion.CriCod);
+      /***** Compute score *****/
+      Score = RubCri_ComputeScore (Projects->Prj.PrjCod,&Criterion);
       WeightedScore = Score * Criterion.Weight;
       SumOfScores += Score;
       WeightedSum += WeightedScore;
@@ -893,68 +836,47 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
       /***** Begin row *****/
       HTM_TR_Begin (NULL);
 
-	 /***** Index *****/
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	    Lay_WriteIndex (Criterion.CriInd,"BIG_INDEX");
-	 HTM_TD_End ();
-
-	 /***** Title *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		       The_GetSuffix (),
-		       The_GetColorRows ());
-	    HTM_ARTICLE_Begin (Anchor);
-	       HTM_Txt (Criterion.Title);
-	    HTM_ARTICLE_End ();
-	 HTM_TD_End ();
-
-	 /***** Link to resource *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		       The_GetSuffix (),
-		       The_GetColorRows ());
-	    Rsc_WriteLinkName (&Criterion.Link,Frm_DONT_PUT_FORM_TO_GO);
-	 HTM_TD_End ();
-
-	 /***** Minimum and maximum values of criterion *****/
-	 for (ValueRange  = (RubCri_ValueRange_t) 0;
-	      ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
-	      ValueRange++)
-	   {
-	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-			  The_GetSuffix (),
-			  The_GetColorRows ());
-	       HTM_Double (Criterion.Values[ValueRange]);
-	    HTM_TD_End ();
-	   }
-
-	 /***** Criterion weight *****/
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		       The_GetSuffix (),
-		       The_GetColorRows ());
-	    HTM_Double (Criterion.Weight);
-	 HTM_TD_End ();
+	 /***** Index, title, link, minimum/maximum values
+	        and weight of criterion *****/
+	 RubCri_WriteIndex (&Criterion,Anchor);
+	 RubCri_WriteTitle (&Criterion);
+         RubCri_WriteLink (&Criterion);
+	 RubCri_WriteMinimumMaximum (&Criterion);
+	 RubCri_WriteWeight (&Criterion);
 
 	 /***** Criterion score *****/
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 		       The_GetSuffix (),
 		       The_GetColorRows ());
-	    if (ICanFill)
+	    switch (Criterion.Link.Type)
 	      {
-	       Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
-		  Prj_PutCurrentPars (Projects);
-		  ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
-		  HTM_INPUT_FLOAT ("Score",
-				   Criterion.Values[RubCri_MIN],
-				   Criterion.Values[RubCri_MAX],
-				   RubCri_SCORE_STEP,
-				   Score,
-				   HTM_SUBMIT_ON_CHANGE,false,
-				   " class=\"INPUT_FLOAT INPUT_%s\""
-				   " required=\"required\"",
-				   The_GetSuffix ());
-	       Frm_EndForm ();
+	       case Rsc_NONE:
+		  if (ICanFill)
+		    {
+		     Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
+			Prj_PutCurrentPars (Projects);
+			ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
+			HTM_INPUT_FLOAT ("Score",
+					 Criterion.Values[RubCri_MIN],
+					 Criterion.Values[RubCri_MAX],
+					 RubCri_SCORE_STEP,
+					 Score,
+					 HTM_SUBMIT_ON_CHANGE,false,
+					 " class=\"INPUT_FLOAT INPUT_%s\""
+					 " required=\"required\"",
+					 The_GetSuffix ());
+		     Frm_EndForm ();
+		    }
+		  else
+		     HTM_Double2Decimals (Score);
+		  break;
+	       case Rsc_RUBRIC:
+		  HTM_Double2Decimals (Score);
+		  break;
+	       default:
+		  Err_NoPermission ();
+		  break;
 	      }
-	    else
-	       HTM_Double (Score);
 	 HTM_TD_End ();
 
 	 /***** Weighted score *****/
@@ -970,30 +892,151 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 
    /***** Write total row *****/
    HTM_TR_Begin (NULL);
-
-      /***** Label *****/
-      HTM_TD_Begin ("colspan=\"5\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
-		    The_GetSuffix ());
-	 HTM_Txt (Txt_Total);
-      HTM_TD_End ();
-
-      /***** Sum of weights *****/
-      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_%s\"",The_GetSuffix ());
-	 HTM_Double2Decimals (SumOfWeights);
-      HTM_TD_End ();
-
-      /***** Sum of scores *****/
-      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_%s\"",The_GetSuffix ());
-	 HTM_Double2Decimals (SumOfScores);
-      HTM_TD_End ();
-
-      /***** Weighted sum *****/
-      HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_Double2Decimals (WeightedSum);
-      HTM_TD_End ();
-
-   /***** End row *****/
+      RubCri_WriteTotalLabel (5);
+      RubCri_WriteTotalValue (SumOfWeights);
+      RubCri_WriteTotalValue (SumOfScores);
+      RubCri_WriteTotalValue (WeightedSum);
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/********************* Write table cell with criterion title *****************/
+/*****************************************************************************/
+
+static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
+                               const char *Anchor)
+  {
+   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      if (Anchor)
+         HTM_ARTICLE_Begin (Anchor);
+      Lay_WriteIndex (Criterion->CriInd,"BIG_INDEX");
+      if (Anchor)
+         HTM_ARTICLE_End ();
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/********************* Write table cell with criterion title *****************/
+/*****************************************************************************/
+
+static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion)
+  {
+   HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+      HTM_Txt (Criterion->Title);
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/********************* Write table cell with criterion link ******************/
+/*****************************************************************************/
+
+static void RubCri_WriteLink (const struct RubCri_Criterion *Criterion)
+  {
+   HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+      Rsc_WriteLinkName (&Criterion->Link,Frm_DONT_PUT_FORM_TO_GO);
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/****** Write table cells with minimum and maximum values of criterion *******/
+/*****************************************************************************/
+
+static void RubCri_WriteMinimumMaximum (const struct RubCri_Criterion *Criterion)
+  {
+   RubCri_ValueRange_t ValueRange;
+
+   /***** Minimum and maximum values of criterion *****/
+   for (ValueRange  = (RubCri_ValueRange_t) 0;
+	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
+	ValueRange++)
+     {
+      HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	 HTM_Double (Criterion->Values[ValueRange]);
+      HTM_TD_End ();
+     }
+  }
+
+/*****************************************************************************/
+/************** Write table cell with weight value of criterion **************/
+/*****************************************************************************/
+
+static void RubCri_WriteWeight (const struct RubCri_Criterion *Criterion)
+  {
+   HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+      HTM_Double (Criterion->Weight);
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/******************** Write table cells with total value *********************/
+/*****************************************************************************/
+
+static void RubCri_WriteTotalLabel (unsigned ColSpan)
+  {
+   extern const char *Txt_Total;
+
+   HTM_TD_Begin ("colspan=\"%u\" class=\"RB LINE_TOP DAT_STRONG_%s\"",
+		 ColSpan,The_GetSuffix ());
+      HTM_Txt (Txt_Total);
+   HTM_TD_End ();
+  }
+
+static void RubCri_WriteTotalValue (double Total)
+  {
+   HTM_TD_Begin ("class=\"RB LINE_TOP DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_Double2Decimals (Total);
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/********** Recursive function to compute the score of a criterion ***********/
+/*****************************************************************************/
+
+static double RubCri_ComputeScore (long PrjCod,
+                                   const struct RubCri_Criterion *Criterion)
+  {
+   long RubCod;
+   MYSQL_RES *mysql_res;
+   unsigned NumCriteria;
+   unsigned NumCriterion;
+   struct RubCri_Criterion CriterionChild;
+   double ScoreChild;
+   double Score;
+
+   switch (Criterion->Link.Type)
+     {
+      case Rsc_NONE:
+	 Score = Prj_DB_GetScore (PrjCod,Criterion->CriCod);
+	 break;
+      case Rsc_RUBRIC:
+	 Score = 0.0;
+	 RubCod = Criterion->Link.Cod;
+
+	 /***** Get data of rubric criteria from database *****/
+	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+	 for (NumCriterion = 0;
+	      NumCriterion < NumCriteria;
+	      NumCriterion++)
+	   {
+	    /***** Get criterion data *****/
+	    RubCri_GetCriterionDataFromRow (mysql_res,&CriterionChild);
+
+	    /***** Compute score of this criterion in the child rubric *****/
+	    ScoreChild = RubCri_ComputeScore (PrjCod,&CriterionChild);
+
+	    /***** Update weighted sum *****/
+	    Score += CriterionChild.Weight * ScoreChild;
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	 break;
+      default:
+	 Score = 0.0;
+	 break;
+     }
+
+   return Score;
   }
 
 /*****************************************************************************/

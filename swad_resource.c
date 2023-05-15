@@ -184,7 +184,8 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	 Rsc_WriteRowClipboard (&Link,
-				HTM_SUBMIT_ON_CLICK,
+				CurrentLink ? HTM_SUBMIT_ON_CLICK :
+					      HTM_DONT_SUBMIT_ON_CLICK,
 				false);	// Checked
 	}
       DB_FreeMySQLResult (&mysql_res);
