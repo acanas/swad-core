@@ -1086,6 +1086,29 @@ const char *Txt_Add_questions =
 	"Soru ekle";
 #endif
 
+const char *Txt_add_rubric =
+#if   L==1	// ca
+	"afegir r&uacute;brica";
+#elif L==2	// de
+	"Rubrik hinzuf&uuml;gen";
+#elif L==3	// en
+	"add rubric";
+#elif L==4	// es
+	"a&ntilde;adir r&uacute;brica";
+#elif L==5	// fr
+	"ajouter rubrique";
+#elif L==6	// gn
+	"omo&itilde;ve r&uacute;brica";
+#elif L==7	// it
+	"aggiungi rubrica";
+#elif L==8	// pl
+	"dodaj rubryk&eogon;";
+#elif L==9	// pt
+	"adicionar rubrica";
+#elif L==10	// tr
+	"de&gbreve;erlendirme listesi ekle";
+#endif
+
 const char *Txt_Add_this_ID =
 #if   L==1	// ca
 	"Afegir aquest ID";
@@ -24986,6 +25009,7 @@ const char *Txt_No_results =
 #elif L==10	// tr
 	"No results.";			// Çeviri lazim!
 #endif
+
 const char *Txt_no_rubric =
 #if   L==1	// ca
 	"sense r&uacute;brica";
@@ -31454,7 +31478,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	};
 
-const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS] =
+const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRIC_TYPES] =
 	{
 	[PrjCfg_RUBRIC_TUT] =
 #if   L==1	// ca

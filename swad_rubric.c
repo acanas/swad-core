@@ -451,55 +451,6 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
   }
 
 /*****************************************************************************/
-/************************ Show one rubric in a project ***********************/
-/*****************************************************************************/
-
-void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
-			      struct Rub_Rubric *Rubric,
-			      const char *WhichRubricTxt,
-			      bool ICanFill)
-  {
-   extern const char *Txt_Rubric;
-
-   /***** Begin first row of this rubric *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Rubric title *****/
-      HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 HTM_TxtColonNBSP (WhichRubricTxt);
-	 HTM_Txt (Rubric->Title);
-      HTM_TD_End ();
-
-   /***** End 1st row of this rubric *****/
-   HTM_TR_End ();
-
-   /***** Begin 2nd row of this rubric *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Text of the rubric *****/
-      HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Rubric->Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-	 ALn_InsertLinks (Rubric->Txt,Cns_MAX_BYTES_TEXT,60);		// Insert links
-	 HTM_Txt (Rubric->Txt);
-      HTM_TD_End ();
-
-   /***** End 2nd row of this rubric *****/
-   HTM_TR_End ();
-
-   /***** Change color for rubric criteria *****/
-   The_ChangeRowColor ();
-
-   /***** Write criteria of this rubric *****/
-   RubCri_ListCriteriaInProject (Projects,Rubric->RubCod,ICanFill);
-
-   /***** Change color for next rubric *****/
-   The_ChangeRowColor ();
-  }
-
-/*****************************************************************************/
 /*************** Put icons when viewing or editing one rubric ****************/
 /*****************************************************************************/
 

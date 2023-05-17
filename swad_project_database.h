@@ -69,10 +69,13 @@ void Prj_DB_RemoveCrsPrjs (long CrsCod);
 
 //----------------------------- Configuration ---------------------------------
 
-void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects);
-void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects);
+void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects);
+void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects,
+                           PrjCfg_RubricType_t RubricType,
+                           const struct PrgCfg_ListRubCods *ListRubCods);
 unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res);
-unsigned Prj_DB_GetRubrics (MYSQL_RES **mysql_res);
-PrjCfg_Rubric_t Prj_DB_GetWichRubricFromRubCod (long RubCod);
+unsigned Prj_DB_GetRubricsOfType (MYSQL_RES **mysql_res,
+                                  PrjCfg_RubricType_t RubricType);
+PrjCfg_RubricType_t Prj_DB_GetWichRubricFromRubCod (long RubCod);
 
 #endif

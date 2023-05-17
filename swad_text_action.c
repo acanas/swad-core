@@ -9400,27 +9400,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"T&uuml;m projeleri yap&inodot;land&inodot;r&inodot;n"
 #endif
 	,
-	[ActRcvCfgPrj] =
+	[ActChgRubPrj] =
 #if   L==1	// ca
-	"Canviar configuraci&oacute; de tots els projectes"
+	"Canviar r&uacute;briques associades a projectes"
 #elif L==2	// de
-	"&Auml;ndern Sie die Einstellungen f&uuml;r alle Projekte"
+	"&Auml;ndern Sie die mit Projekten verkn&uuml;pften Rubriken"
 #elif L==3	// en
-	"Change configuration of all projects"
+	"Change rubrics associated to projects"
 #elif L==4	// es
-	"Cambiar configuraci&oacute;n de todos los proyectos"
+	"Cambiar r&uacute;bricas asociadas a proyectos"
 #elif L==5	// fr
-	"Modifier la configuration de tous les projets"
+	"Modifier les rubriques associ&eacute;es aux projets"
 #elif L==6	// gn
-	"Emoambue &ntilde;emboheko opaite tembiapor&atilde;me &gtilde;uar&atilde;"
+	"Omoambue r&uacute;brica ojoaj&uacute;va umi proyecto rehe"
 #elif L==7	// it
-	"Modificare la configurazione di tutti i progetti"
+	"Modificare le rubriche associate ai progetti"
 #elif L==8	// pl
-	"Zmie&nacute; konfiguracj&eogon; wszystkich projekt&oacute;w"
+	"Zmie&nacute; rubryki powi&aogon;zane z projektami"
 #elif L==9	// pt
-	"Alterar a configura&ccedil;&atilde;o de todos os projetos"
+	"Alterar rubricas associadas a projetos"
 #elif L==10	// tr
-	"T&uuml;m projelerin konfig&uuml;rasyonunu de&gbreve;i&scedil;tir"
+	"Projelerle ili&scedil;kili de&gbreve;erlendirme listelerini de&gbreve;i&scedil;tirin"
+#endif
+	,
+	[ActChgNETCanCrePrj] =
+#if   L==1	// ca
+	"Canviar si els professors no editors poden crear projectes"
+#elif L==2	// de
+	"&Auml;ndern Sie, ob Lehrer, die keine Redakteure sind, Projekte erstellen k&ouml;nnen"
+#elif L==3	// en
+	"Change whether non-editor teachers can create projects"
+#elif L==4	// es
+	"Cambiar si los profesores no editores pueden crear proyectos"
+#elif L==5	// fr
+	"Modifier si les enseignants non &eacute;diteurs peuvent cr&eacute;er des projets"
+#elif L==6	// gn
+	"Emoambue ikat&uacute;pa umi mbo'eh&aacute;ra ndaha'&eacute;iva editor omohe&ntilde;&oacute;i proyecto"
+#elif L==7	// it
+	"Modificare se gli insegnanti non editori possono creare progetti"
+#elif L==8	// pl
+	"Zmie&nacute; czy nauczyciele nieedytuj&aogon;cy mog&aogon; tworzy&cacute; projekty"
+#elif L==9	// pt
+	"Alterar se professores n&atilde;o editores podem criar projetos"
+#elif L==10	// tr
+	"D&uuml;zenleyici olmayan &ouml;&gbreve;retmenlerin proje olu&scedil;turup olu&scedil;turamayaca&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tirin"
 #endif
 	,
 	[ActReqUsrPrj] =

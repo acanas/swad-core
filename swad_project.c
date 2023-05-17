@@ -313,8 +313,10 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void);
 
 //------------------------------- Rubrics -------------------------------------
 static void Prj_ShowRubrics (struct Prj_Projects *Projects);
-static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
-static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric);
+static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
+                                   PrjCfg_RubricType_t RubricType);
+static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
+static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
 
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
@@ -4489,9 +4491,7 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
 static void Prj_ShowRubrics (struct Prj_Projects *Projects)
   {
    extern const char *Txt_Assessment;
-   extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRICS];
-   struct Rub_Rubric Rubric;
-   PrjCfg_Rubric_t WhichRubric;
+   PrjCfg_RubricType_t RubricType;
 
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
@@ -4500,25 +4500,12 @@ static void Prj_ShowRubrics (struct Prj_Projects *Projects)
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (5);
 
-	 /***** Rubrics *****/
-	 for (WhichRubric  = (PrjCfg_Rubric_t) 1;
-	      WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-	      WhichRubric++)
-	    if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,WhichRubric))
-	      {
-	       /***** Get rubric data *****/
-	       Rub_RubricConstructor (&Rubric);
-	       Rubric.RubCod = Projects->Config.RubCod[WhichRubric];
-	       Rub_GetRubricDataByCod (&Rubric);
-
-	       /***** Show this rubric ready to fill it *****/
-	       Rub_ShowRubricInProject (Projects,&Rubric,
-					Txt_PROJECT_RUBRIC[WhichRubric],
-					Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,WhichRubric));
-
-	       /***** Free memory used for rubric *****/
-	       Rub_RubricDestructor (&Rubric);
-	      }
+	 /***** Show rubrics of each type ready to fill them *****/
+	 for (RubricType  = (PrjCfg_RubricType_t) 1;
+	      RubricType <= (PrjCfg_RubricType_t) (PrjCfg_NUM_RUBRIC_TYPES - 1);
+	      RubricType++)
+	    if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,RubricType))
+	       Prj_ShowRubricsOfType (Projects,RubricType);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -4528,10 +4515,80 @@ static void Prj_ShowRubrics (struct Prj_Projects *Projects)
   }
 
 /*****************************************************************************/
+/************************ Show one rubric in a project ***********************/
+/*****************************************************************************/
+
+static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
+                                   PrjCfg_RubricType_t RubricType)
+  {
+   extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRIC_TYPES];
+   MYSQL_RES *mysql_res;
+   unsigned NumRubricsThisType;
+   unsigned NumRubThisType;
+   struct Rub_Rubric Rubric;
+   bool ICanFill = Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,RubricType);
+
+   /***** Get project rubrics for current course from database *****/
+   NumRubricsThisType = Prj_DB_GetRubricsOfType (&mysql_res,RubricType);
+
+   /***** Show each rubric *****/
+   for (NumRubThisType = 0;
+	NumRubThisType < NumRubricsThisType;
+	NumRubThisType++)
+     {
+      /***** Get rubric data *****/
+      Rub_RubricConstructor (&Rubric);
+      Rubric.RubCod = DB_GetNextCode (mysql_res);
+      Rub_GetRubricDataByCod (&Rubric);
+
+      /***** Show rubric ready to fill them *****/
+      /* Begin first row of this rubric */
+      HTM_TR_Begin (NULL);
+
+	 /* Rubric title */
+	 HTM_TD_Begin ("colspan=\"8\" class=\"LT ASG_TITLE_%s %s\"",
+		       The_GetSuffix (),The_GetColorRows ());
+	    HTM_TxtColonNBSP (Txt_PROJECT_RUBRIC[RubricType]);
+	    HTM_Txt (Rubric.Title);
+	 HTM_TD_End ();
+
+      /* End 1st row of this rubric */
+      HTM_TR_End ();
+
+      /* Begin 2nd row of this rubric */
+      HTM_TR_Begin (NULL);
+
+	 /* Text of the rubric */
+	 HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s %s\"",
+		       The_GetSuffix (),The_GetColorRows ());
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      Rubric.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+	    ALn_InsertLinks (Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    HTM_Txt (Rubric.Txt);
+	 HTM_TD_End ();
+
+      /* End 2nd row of this rubric */
+      HTM_TR_End ();
+
+      /* Change color for rubric criteria */
+      The_ChangeRowColor ();
+
+      /* Write criteria of this rubric */
+      RubCri_ListCriteriaInProject (Projects,Rubric.RubCod,ICanFill);
+
+      /* Change color for next rubric */
+      The_ChangeRowColor ();
+
+      /***** Free memory used for rubric *****/
+      Rub_RubricDestructor (&Rubric);
+     }
+  }
+
+/*****************************************************************************/
 /************************* Who can view/fill rubrics *************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
+static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -4558,7 +4615,7 @@ static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
    return false;
   }
 
-static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_Rubric_t WhichRubric)
+static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -4594,7 +4651,7 @@ void Prj_ChangeCriterionScore (void)
    long CriCod;
    double Score;
    long RubCod;
-   PrjCfg_Rubric_t WhichRubric;
+   PrjCfg_RubricType_t WhichRubric;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);

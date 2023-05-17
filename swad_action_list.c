@@ -615,7 +615,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqLnkAsg	] = {1943,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,AsgRsc_GetLinkToAssignment	,NULL},
 
    [ActCfgPrj		] = {1803,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ShowFormConfig		,NULL},
-   [ActRcvCfgPrj	] = {1804,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ReceiveConfig		,NULL},
+   [ActChgNETCanCrePrj	] = {1804,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ChangeNETCanCreate	,NULL},
+   [ActChgRubPrj	] = {1977,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,PrjCfg_ChangeRubricsOfType	,NULL},
    [ActReqUsrPrj	] = {1805,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ListUsrsToSelect		,NULL},
    [ActSeeTblAllPrj	] = {1696,-1,TabUnk,ActSeeAllPrj	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableSelectedPrjs	,NULL},
    [ActReqLckAllPrj	] = {1775,-1,TabUnk,ActSeeAllPrj	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockSelectedPrjsEdition	,NULL},
@@ -3698,7 +3699,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgVisResMchUsr,	// #1801
 	ActChgNumColMch,	// #1802
 	ActCfgPrj,		// #1803
-	ActRcvCfgPrj,		// #1804
+	ActChgNETCanCrePrj,	// #1804
 	ActReqUsrPrj,		// #1805
 	ActShoHidComGblTL,	// #1806
 	ActShoHidComUsrTL,	// #1807
@@ -3871,4 +3872,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgPrjSco,		// #1974
 	ActChgTstQst,		// #1975
 	ActChgSvyQst,		// #1976
+	ActChgRubPrj,		// #1977
   };

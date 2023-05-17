@@ -53,10 +53,6 @@ void Rub_SeeOneRubric (void);
 void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics);
 void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
                              bool ShowOnlyThisRubric);
-void Rub_ShowRubricInProject (struct Prj_Projects *Projects,
-			      struct Rub_Rubric *Rubric,
-			      const char *WhichRubricTxt,
-			      bool ICanFill);
 
 void Rub_SetCurrentRubCod (long GamCod);
 void Rub_PutPars (void *Rubrics);

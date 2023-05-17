@@ -45,7 +45,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /***** Enum field in database for type of rubric *****/
-const char *Prj_DB_WhichRubric[PrjCfg_NUM_RUBRICS] =
+const char *Prj_DB_RubricType[PrjCfg_NUM_RUBRIC_TYPES] =
   {
    [PrjCfg_RUBRIC_TUT] = "tut",
    [PrjCfg_RUBRIC_EVL] = "evl",
@@ -980,10 +980,10 @@ void Prj_DB_RemoveCrsPrjs (long CrsCod)
   }
 
 /*****************************************************************************/
-/************ Update configuration of projects for current course ************/
+/********** Update whether non-editing teachers can create projects **********/
 /*****************************************************************************/
 
-void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects)
+void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects)
   {
    DB_QueryREPLACE ("can not save configuration of projects",
 		    "REPLACE INTO prj_config"
@@ -999,21 +999,32 @@ void Prj_DB_UpdateConfig (const struct Prj_Projects *Projects)
 /********* Update rubrics associated to projects for current course **********/
 /*****************************************************************************/
 
-void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects)
+void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects,
+                           PrjCfg_RubricType_t RubricType,
+                           const struct PrgCfg_ListRubCods *ListRubCods)
   {
-   PrjCfg_Rubric_t WhichRubric;
+   unsigned RubCod;
 
-   for (WhichRubric  = (PrjCfg_Rubric_t) 1;
-	WhichRubric <= (PrjCfg_Rubric_t) (PrjCfg_NUM_RUBRICS - 1);
-	WhichRubric++)
+   /***** Delete all rubric codes of this type *****/
+   DB_QueryDELETE ("can not save configuration of projects",
+		   "DELETE FROM prj_rubrics"
+		        " WHERE CrsCod=%ld"
+		          " AND Type='%s'",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Prj_DB_RubricType[RubricType]);
+
+   /***** Insert specified rubric codes of this type *****/
+   for (RubCod  = 0;
+	RubCod <= ListRubCods->NumRubrics;
+	RubCod++)
       DB_QueryREPLACE ("can not save configuration of projects",
 		       "REPLACE INTO prj_rubrics"
 		       " (CrsCod,Type,RubCod)"
 		       " VALUES"
 		       " (%ld,'%s',%ld)",
 		       Gbl.Hierarchy.Crs.CrsCod,
-		       Prj_DB_WhichRubric[WhichRubric],
-		       Projects->Config.RubCod[WhichRubric]);
+		       Prj_DB_RubricType[RubricType],
+		       ListRubCods->RubCods[RubCod]);
   }
 
 /*****************************************************************************/
@@ -1034,22 +1045,27 @@ unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
 /******************* Get project rubrics for current course ******************/
 /*****************************************************************************/
 
-unsigned Prj_DB_GetRubrics (MYSQL_RES **mysql_res)
+unsigned Prj_DB_GetRubricsOfType (MYSQL_RES **mysql_res,
+                                  PrjCfg_RubricType_t RubricType)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get project rubrics",
-		   "SELECT Type,"	// row[0]
-                          "RubCod"	// row[1]
-		    " FROM prj_rubrics"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   "SELECT prj_rubrics.RubCod"	// row[0]
+		    " FROM prj_rubrics,"
+		          "rub_rubrics"
+		   " WHERE prj_rubrics.CrsCod=%ld"
+		     " AND prj_rubrics.Type='%s'"
+		     " AND prj_rubrics.RubCod=rub_rubrics.RubCod"
+		" ORDER BY rub_rubrics.Title",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Prj_DB_RubricType[RubricType]);
   }
 
 /*****************************************************************************/
 /*** Get type of project rubric in the current course given a rubric code ****/
 /*****************************************************************************/
 
-PrjCfg_Rubric_t Prj_DB_GetWichRubricFromRubCod (long RubCod)
+PrjCfg_RubricType_t Prj_DB_GetWichRubricFromRubCod (long RubCod)
   {
    char StrTypeDB[32];
 
