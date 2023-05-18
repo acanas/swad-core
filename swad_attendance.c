@@ -1030,11 +1030,13 @@ void Att_ReqCreatOrEditEvent (void)
 				 " class=\"INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
-			      !Events.Event.CommentTchVisible,	// Selected?
+			      Events.Event.CommentTchVisible ? HTM_OPTION_UNSELECTED :
+							       HTM_OPTION_SELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Hidden_MALE_PLURAL);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      Events.Event.CommentTchVisible,	// Selected?
+			      Events.Event.CommentTchVisible ? HTM_OPTION_SELECTED :
+							       HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Visible_MALE_PLURAL);
 	       HTM_SELECT_End ();

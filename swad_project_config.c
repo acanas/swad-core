@@ -205,7 +205,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 				 Par_CodeStr[ParCod_Rub]);
 		  /* First option to indicate that no rubric is selected */
 		  HTM_OPTION (HTM_Type_STRING,"-1",
-			      false,			// Selected?
+			      HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "[%s]",Txt_no_rubric);
 
@@ -216,7 +216,8 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 		    {
 		     Rub_DB_GetRubricTitle (Rubrics->Lst[NumRubThisCrs],Title,Rub_MAX_BYTES_TITLE);
 		     HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRubThisCrs],
-				 Rubrics->Lst[NumRubThisCrs] == RubCodThisType,	// Selected?
+				 Rubrics->Lst[NumRubThisCrs] == RubCodThisType ? HTM_OPTION_SELECTED :
+										 HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Title);
 		    }
@@ -235,7 +236,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 
 		  /* First option to indicate that no rubric is selected */
 		  HTM_OPTION (HTM_Type_STRING,"-1",
-			      true,			// Selected?
+			      HTM_OPTION_SELECTED,
 			      HTM_OPTION_DISABLED,
 			      "[%s]",Txt_add_rubric);
 
@@ -246,7 +247,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 		    {
 		     Rub_DB_GetRubricTitle (Rubrics->Lst[NumRubThisCrs],Title,Rub_MAX_BYTES_TITLE);
 		     HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRubThisCrs],
-				 false,			// Selected?
+				 HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Title);
 		    }

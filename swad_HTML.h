@@ -54,9 +54,15 @@ typedef enum
 
 typedef enum
   {
-   HTM_OPTION_DISABLED,
+   HTM_OPTION_UNSELECTED,
+   HTM_OPTION_SELECTED,
+  } HTM_OptionSelected_t;
+
+typedef enum
+  {
    HTM_OPTION_ENABLED,
-  } HTM_OptionEnabled_t;
+   HTM_OPTION_DISABLED,
+  } HTM_OptionDisabled_t;
 
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
@@ -198,7 +204,7 @@ void HTM_SELECT_End (void);
 void HTM_OPTGROUP_Begin (const char *Label);
 void HTM_OPTGROUP_End (void);
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
-                 bool Selected,HTM_OptionEnabled_t Disabled,
+                 HTM_OptionSelected_t Selected,HTM_OptionDisabled_t Disabled,
 		 const char *fmt,...);
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,

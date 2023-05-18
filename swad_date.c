@@ -767,7 +767,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Year <= LastYear;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		              false,	// Not selected
+		              HTM_OPTION_UNSELECTED,
 		              HTM_OPTION_ENABLED,
 			      "%u",Year);
 	    HTM_SELECT_End ();
@@ -784,7 +784,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Month <= 12;
 		    Month++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-		              false,	// Not selected
+		              HTM_OPTION_UNSELECTED,
 		              HTM_OPTION_ENABLED,
 			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
@@ -801,7 +801,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Day <= 31;
 		    Day++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-		              false,	// Not selected
+		              HTM_OPTION_UNSELECTED,
 		              HTM_OPTION_ENABLED,
 			      "%u",Day);
 	    HTM_SELECT_End ();
@@ -818,7 +818,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Hour <= 23;
 		    Hour++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		              false,	// Not selected
+		              HTM_OPTION_UNSELECTED,
 		              HTM_OPTION_ENABLED,
 			      "%02u h",Hour);
 	    HTM_SELECT_End ();
@@ -835,7 +835,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		    Minute < 60;
 		    Minute += MinutesIInterval[FormSeconds])
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		              false,	// Not selected
+		              HTM_OPTION_UNSELECTED,
 		              HTM_OPTION_ENABLED,
 			      "%02u &prime;",Minute);
 	    HTM_SELECT_End ();
@@ -854,7 +854,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		       Second <= 59;
 		       Second++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Second,
-				 false,	// Not selected
+				 HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%02u &Prime;",Second);
 	       HTM_SELECT_End ();
@@ -1021,14 +1021,15 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 			      Disabled ? " disabled=\"disabled\"" :
 				         "");
 	       HTM_OPTION (HTM_Type_STRING,"0",
-		           false,	// Not selected
+		           HTM_OPTION_UNSELECTED,
 		           HTM_OPTION_ENABLED,
 			   "-");
 	       for (Year  = FirstYear;
 		    Year <= LastYear;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      Year == DateSelected->Year,	// Selected?
+			      Year == DateSelected->Year ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%u",Year);
 	    HTM_SELECT_End ();
@@ -1044,14 +1045,15 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 			      Disabled ? " disabled=\"disabled\"" :
 				         "");
 	       HTM_OPTION (HTM_Type_STRING,"0",
-		           false,	// Not selected
+		           HTM_OPTION_UNSELECTED,
 		           HTM_OPTION_ENABLED,
 			   "-");
 	       for (Month  =  1;
 		    Month <= 12;
 		    Month++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-			      Month == DateSelected->Month,	// Selected?
+			      Month == DateSelected->Month ? HTM_OPTION_SELECTED :
+							     HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_MONTHS_SMALL[Month - 1]);
 	    HTM_SELECT_End ();
@@ -1069,7 +1071,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 			      Disabled ? " disabled=\"disabled\"" :
 				         "");
 		  HTM_OPTION (HTM_Type_STRING,"0",
-			      false,	// Not selected
+			      HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "-");
 		  NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
@@ -1079,7 +1081,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		       Day <= NumDaysSelectedMonth;
 		       Day++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-				 Day == DateSelected->Day,	// Selected?
+				 Day == DateSelected->Day ? HTM_OPTION_SELECTED :
+							    HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%u",Day);
 	    HTM_SELECT_End ();

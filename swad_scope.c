@@ -55,12 +55,30 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    HieLvl_Level_t Scope;
    unsigned ScopeUnsigned;
    bool WriteScope;
+   static const char **TxtScope[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_SYS] = &Txt_System,
+      [HieLvl_CTY] = &Txt_Country,
+      [HieLvl_INS] = &Txt_Institution,
+      [HieLvl_CTR] = &Txt_Center,
+      [HieLvl_DEG] = &Txt_Degree,
+      [HieLvl_CRS] = &Txt_Course,
+     };
+   const char *TxtName[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Crs.ShrtName,
+     };
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
 
-      for (Scope  = (HieLvl_Level_t) 0;
+      for (Scope  = (HieLvl_Level_t) 1;
 	   Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
 	   Scope++)
 	 if ((Gbl.Scope.Allowed & (1 << Scope)))
@@ -93,7 +111,6 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		     WriteScope = true;
 		  break;
 	       default:
-		  Err_WrongScopeExit ();
 		  break;
 	      }
 
@@ -101,60 +118,12 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 	      {
 	       /***** Write allowed option *****/
 	       ScopeUnsigned = (unsigned) Scope;
-	       switch (Scope)
-		 {
-		  case HieLvl_SYS:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_System,
-				 Cfg_PLATFORM_SHORT_NAME);
-		     break;
-		  case HieLvl_CTY:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_Country,
-				 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-		     break;
-		  case HieLvl_INS:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_Institution,
-				 Gbl.Hierarchy.Ins.ShrtName);
-		     break;
-		  case HieLvl_CTR:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_Center,
-				 Gbl.Hierarchy.Ctr.ShrtName);
-		     break;
-		  case HieLvl_DEG:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_Degree,
-				 Gbl.Hierarchy.Deg.ShrtName);
-		     break;
-		  case HieLvl_CRS:
-		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-				 Gbl.Scope.Current == Scope,	// Selected?
-				 HTM_OPTION_ENABLED,
-				 "%s: %s",
-				 Txt_Course,
-				 Gbl.Hierarchy.Crs.ShrtName);
-		     break;
-		  default:
-		     Err_WrongScopeExit ();
-		     break;
-		 }
+	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+			   Scope == Gbl.Scope.Current ? HTM_OPTION_SELECTED :
+							HTM_OPTION_UNSELECTED,
+			   HTM_OPTION_ENABLED,
+			   "%s: %s",
+			   *TxtScope[Scope],TxtName[Scope]);
 	      }
 	   }
 

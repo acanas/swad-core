@@ -1036,7 +1036,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    Year == CallsForExams->CallForExam.Year,	// Selected
+				    Year == CallsForExams->CallForExam.Year ? HTM_OPTION_SELECTED :
+									      HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
@@ -1121,14 +1122,16 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				    " class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 CallsForExams->CallForExam.StartTime.Hour == 0,	// Selected?
+				 CallsForExams->CallForExam.StartTime.Hour == 0 ? HTM_OPTION_SELECTED :
+										  HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "-");
 		     for (Hour  = 7;
 			  Hour <= 22;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    Hour == CallsForExams->CallForExam.StartTime.Hour,	// Selected?
+				    Hour == CallsForExams->CallForExam.StartTime.Hour ? HTM_OPTION_SELECTED :
+											HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
@@ -1140,7 +1143,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    Minute == CallsForExams->CallForExam.StartTime.Minute,	// Selected?
+				    Minute == CallsForExams->CallForExam.StartTime.Minute ? HTM_OPTION_SELECTED :
+											    HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
@@ -1174,7 +1178,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Hour <= 8;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    Hour == CallsForExams->CallForExam.Duration.Hour,	// Selected?
+				    Hour == CallsForExams->CallForExam.Duration.Hour ? HTM_OPTION_SELECTED :
+										       HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
@@ -1187,7 +1192,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    Minute == CallsForExams->CallForExam.Duration.Minute,	// Selected?
+				    Minute == CallsForExams->CallForExam.Duration.Minute ? HTM_OPTION_SELECTED :
+											   HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();

@@ -6227,7 +6227,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 	      Cols <= Usr_CLASS_PHOTO_COLS_MAX;
 	      Cols++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
-			Cols == Gbl.Usrs.ClassPhoto.Cols,	// Selected?
+			Cols == Gbl.Usrs.ClassPhoto.Cols ? HTM_OPTION_SELECTED :
+	                				   HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%u",Cols);
 

@@ -1833,7 +1833,8 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	{
 	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
-		     ReviewStatus == Projects->Prj.Review.Status,	// Selected?
+		     ReviewStatus == Projects->Prj.Review.Status ? HTM_OPTION_SELECTED :
+								   HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
@@ -3813,11 +3814,13 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 				       "name=\"Assigned\" class=\"INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"Y",
-				    Projects->Prj.Assigned == Prj_ASSIGNED,	// Selected?
+				    Projects->Prj.Assigned == Prj_ASSIGNED ? HTM_OPTION_SELECTED :
+									     HTM_OPTION_SELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_Yes);
 			HTM_OPTION (HTM_Type_STRING,"N",
-				    Projects->Prj.Assigned == Prj_NONASSIG,	// Selected?
+				    Projects->Prj.Assigned == Prj_NONASSIG ? HTM_OPTION_SELECTED :
+									     HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_No);
 		     HTM_SELECT_End ();
@@ -3859,7 +3862,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			  {
 			   ProposalUnsigned = (unsigned) Proposal;
 			   HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-				       Projects->Prj.Proposal == Proposal,	// Selected?
+				       Projects->Prj.Proposal == Proposal ? HTM_OPTION_SELECTED :
+									    HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       "%s",Txt_PROJECT_STATUS[Proposal]);
 			  }

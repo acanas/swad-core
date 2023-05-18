@@ -771,13 +771,15 @@ static void Roo_PutSelectorBuilding (long BldCod,
 
       /***** Option for no assigned building *****/
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  BldCod < 0,	// Selected?
+		  BldCod < 0 ? HTM_OPTION_SELECTED :
+			       HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_ENABLED,
 		  "%s",Txt_No_assigned_building);
 
       /***** Option for another room *****/
       HTM_OPTION (HTM_Type_STRING,"0",
-		  BldCod == 0,	// Selected?
+		  BldCod == 0 ? HTM_OPTION_SELECTED :
+			        HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_ENABLED,
 		  "%s",Txt_Another_building);
 
@@ -788,7 +790,8 @@ static void Roo_PutSelectorBuilding (long BldCod,
 	{
 	 BldInLst = &Buildings->Lst[NumBld];
 	 HTM_OPTION (HTM_Type_LONG,&BldInLst->BldCod,
-		     BldCod == BldInLst->BldCod,	// Selected?
+		     BldCod == BldInLst->BldCod ? HTM_OPTION_SELECTED :
+						  HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
 		     "%s",BldInLst->ShrtName);
 	}
@@ -817,7 +820,8 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 	   Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
 	   Type++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Type,
-		     Type == RoomType,	// Selected?
+		     Type == RoomType ? HTM_OPTION_SELECTED :
+					HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
 		     "%s",Txt_ROOM_TYPES[Type]);
 

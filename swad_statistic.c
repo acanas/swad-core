@@ -370,7 +370,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				   {
 				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-						ClicksGroupedBy == Stats->ClicksGroupedBy,	// Selected?
+						ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_OPTION_SELECTED :
+											    HTM_OPTION_UNSELECTED,
 						HTM_OPTION_ENABLED,
 						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 				   }
@@ -407,7 +408,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				      i < NUM_OPTIONS_ROWS_PER_PAGE;
 				      i++)
 				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-						RowsPerPage[i] == Stats->RowsPerPage,	// Selected?
+						RowsPerPage[i] == Stats->RowsPerPage ? HTM_OPTION_SELECTED :
+										       HTM_OPTION_UNSELECTED,
 						HTM_OPTION_ENABLED,
 						"%u",RowsPerPage[i]);
 			      HTM_SELECT_End ();
@@ -519,7 +521,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		    {
 		     RoleStatUnsigned = (unsigned) RoleStat;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-				 RoleStat == Stats->Role,	// Selected?
+				 RoleStat == Stats->Role ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_ROLE_STATS[RoleStat]);
 		    }
@@ -580,7 +583,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		       {
 			ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 			HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-				    ClicksGroupedBy == Stats->ClicksGroupedBy,	// Selected?
+				    ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_OPTION_SELECTED :
+										HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 		       }
@@ -661,7 +665,8 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 	{
 	 StatCountTypeUnsigned = (unsigned) StatCountType;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
-		     StatCountType == Stats->CountType,	// Selected?
+		     StatCountType == Stats->CountType ? HTM_OPTION_SELECTED :
+							 HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
 		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
 	}
@@ -693,7 +698,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			   " class=\"STAT_SEL INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                Stats->NumAction == 0,	// Selected?
+	                Stats->NumAction == 0 ? HTM_OPTION_SELECTED :
+	                			HTM_OPTION_UNSELECTED,
 	                HTM_OPTION_ENABLED,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
@@ -703,7 +709,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	       Tab = Act_GetTab (Act_GetSuperAction (Action));
 	       ActionUnsigned = (unsigned) Action;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			   Action == Stats->NumAction,	// Selected?
+			   Action == Stats->NumAction ? HTM_OPTION_SELECTED :
+	                				HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%u: %s &gt; %s",
 			   (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
@@ -1620,7 +1627,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 		    {
 		     ColorTypeUnsigned = (unsigned) ColorType;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
-				 ColorType == SelectedColorType,	// Selected?
+				 ColorType == SelectedColorType ? HTM_OPTION_SELECTED :
+	                					  HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_STAT_COLOR_TYPES[ColorType]);
 		    }

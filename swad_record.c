@@ -332,7 +332,8 @@ static void Rec_ListFieldsRecordsForEdition (void)
 		       {
 			VisUnsigned = (unsigned) Vis;
 			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				    Vis == FldInLst->Visibility,	// Selected?
+				    Vis == FldInLst->Visibility ? HTM_OPTION_SELECTED :
+								  HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		       }
@@ -403,7 +404,8 @@ void Rec_ShowFormCreateRecordField (void)
 		 {
 		  VisUnsigned = (unsigned) Vis;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-			      Vis == Gbl.Crs.Records.Field.Visibility,	// Selected?
+			      Vis == Gbl.Crs.Records.Field.Visibility ? HTM_OPTION_SELECTED :
+									HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		 }
@@ -1408,7 +1410,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 	      i <= Rec_MAX_RECORDS_PER_PAGE;
 	      i++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			i == Gbl.Usrs.Listing.RecsPerPag,	// Selected?
+			i == Gbl.Usrs.Listing.RecsPerPag ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%u",i);
       HTM_SELECT_End ();
@@ -2791,7 +2794,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       {
 			RoleUnsigned = (unsigned) Role;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				    Role == DefaultRoleInForm,	// Selected?
+				    Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
+								HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
@@ -2858,7 +2862,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			   case Rol_NET:
 			      RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			                  true,	// Selected
+			                  HTM_OPTION_SELECTED,
 			                  HTM_OPTION_DISABLED,
 					  "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
 			      break;
@@ -2873,7 +2877,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     Role == DefaultRoleInForm,	// Selected?
+					     Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
+									 HTM_OPTION_UNSELECTED,
 					     HTM_OPTION_ENABLED,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 				}
@@ -2898,7 +2903,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				       The_GetSuffix ());
 			RoleUnsigned = (unsigned) DefaultRoleInForm;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			            true,	// Selected
+			            HTM_OPTION_SELECTED,
 			            HTM_OPTION_DISABLED,
 				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
 		     HTM_SELECT_End ();
@@ -2941,7 +2946,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     Role == DefaultRoleInForm,	// Selected?
+					     Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
+								         HTM_OPTION_UNSELECTED,
 					     HTM_OPTION_ENABLED,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 				}
@@ -2961,7 +2967,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				             The_GetSuffix ());
 			      RoleUnsigned = (unsigned) Rol_GST;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					  true,		// Selected
+					  HTM_OPTION_SELECTED,
 					  HTM_OPTION_ENABLED,
 					  "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 			   HTM_SELECT_End ();
@@ -3177,11 +3183,12 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 			   " required=\"required\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"",
-	                false,			// Not selected
+	                HTM_OPTION_UNSELECTED,
 	                HTM_OPTION_ENABLED,
 			"%s",Txt_Country);
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                UsrDat->CtyCod == 0,	// Selected?
+	                UsrDat->CtyCod == 0 ? HTM_OPTION_SELECTED :
+	                		      HTM_OPTION_UNSELECTED,
 	                HTM_OPTION_ENABLED,
 			"%s",Txt_Another_country);
 	    for (NumCty = 0;
@@ -3190,7 +3197,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 	      {
 	       CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-			   CtyInLst->CtyCod == UsrDat->CtyCod,	// Selected?
+			   CtyInLst->CtyCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
+							        HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",CtyInLst->Name[Gbl.Prefs.Language]);
 	      }
@@ -3810,7 +3818,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,	// Selected?
+				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_OPTION_SELECTED :
+								     HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_DISABLED,
 				 NULL);
 		     for (NumCty = 0;
@@ -3819,7 +3828,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-				    CtyInLst->CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,	// Selected?
+				    CtyInLst->CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
+										       HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",CtyInLst->Name[Gbl.Prefs.Language]);
 		       }
@@ -3854,11 +3864,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 Gbl.Usrs.Me.UsrDat.InsCod < 0,		// Selected?
+				 Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_OPTION_SELECTED :
+							         HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_DISABLED,
 				 NULL);
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Gbl.Usrs.Me.UsrDat.InsCod == 0,	// Selected?
+				 Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_OPTION_SELECTED :
+							          HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
@@ -3867,7 +3879,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
-				    InsInLst->InsCod == Gbl.Usrs.Me.UsrDat.InsCod,	// Selected?
+				    InsInLst->InsCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
+										    HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",InsInLst->FullName);
 		       }
@@ -3903,11 +3916,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,	// Selected?
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ? HTM_OPTION_SELECTED :
+									HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_DISABLED,
 				    NULL);
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,	// Selected?
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0 ? HTM_OPTION_SELECTED :
+									 HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    Txt_Another_center);
 			for (NumCtr = 0;
@@ -3916,7 +3931,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  {
 			   CtrInLst = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&CtrInLst->CtrCod,
-				       CtrInLst->CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,	// Selected?
+				       CtrInLst->CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
+											   HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       CtrInLst->FullName);
 			  }

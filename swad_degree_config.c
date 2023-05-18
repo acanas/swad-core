@@ -238,7 +238,8 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		    {
 		     CtrInLst = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
 		     HTM_OPTION (HTM_Type_LONG,&CtrInLst->CtrCod,
-				 CtrInLst->CtrCod == Gbl.Hierarchy.Ctr.CtrCod,	// Selected?
+				 CtrInLst->CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? HTM_OPTION_SELECTED :
+										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtrInLst->ShrtName);
 		    }

@@ -1802,7 +1802,8 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 		 {
 		  TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-			      TypeOfAvg == DegPhotos->TypeOfAverage,	// Selected?
+			      TypeOfAvg == DegPhotos->TypeOfAverage ? HTM_OPTION_SELECTED :
+								      HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
 		 }
@@ -1868,7 +1869,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 		 {
 		  PhoSiUnsigned = (unsigned) PhoSi;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-			      PhoSi == DegPhotos->HowComputePhotoSize,	// Selected?
+			      PhoSi == DegPhotos->HowComputePhotoSize ? HTM_OPTION_SELECTED :
+								        HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
 		 }
@@ -1933,7 +1935,8 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 		 {
 		  OrderUnsigned = (unsigned) Order;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-			      Order == DegPhotos->HowOrderDegrees,	// Selected?
+			      Order == DegPhotos->HowOrderDegrees ? HTM_OPTION_SELECTED :
+								    HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
 		 }
@@ -1998,8 +2001,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    struct Deg_Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
-   bool Selected;
-   bool Disabled;
+   HTM_OptionSelected_t Selected;
+   HTM_OptionDisabled_t Disabled;
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -2043,8 +2046,9 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		     Dat_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
 				    EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
-		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
-		  if (Selected)
+		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod) ? HTM_OPTION_SELECTED :
+								       HTM_OPTION_UNSELECTED;
+		  if (Selected == HTM_OPTION_SELECTED)
 		     Disabled = HTM_OPTION_ENABLED;
 		  else
 		     // Too recently computed ?

@@ -243,7 +243,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		    {
 		     DegInLst = &Gbl.Hierarchy.Degs.Lst[NumDeg];
 		     HTM_OPTION (HTM_Type_LONG,&DegInLst->DegCod,
-				 DegInLst->DegCod == Gbl.Hierarchy.Deg.DegCod,	// Selected?
+				 DegInLst->DegCod == Gbl.Hierarchy.Deg.DegCod ? HTM_OPTION_SELECTED :
+										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",DegInLst->ShrtName);
 		    }
@@ -331,7 +332,8 @@ static void CrsCfg_Year (bool PutForm)
 		       Year <= Deg_MAX_YEARS_PER_DEGREE;
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				 Year == Gbl.Hierarchy.Crs.Year,	// Selected?
+				 Year == Gbl.Hierarchy.Crs.Year ? HTM_OPTION_SELECTED :
+								  HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_YEAR_OF_DEGREE[Year]);
 	       HTM_SELECT_End ();

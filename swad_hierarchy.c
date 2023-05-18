@@ -837,13 +837,13 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_PENDING);
 	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
-	                   true,	// Selected
+	                   HTM_OPTION_SELECTED,
 	                   HTM_OPTION_ENABLED,
 			   "%s",Txt[Hie_STATUS_PENDING]);
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_ACTIVE);
 	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
-	                   false,	// Not selected
+	                   HTM_OPTION_UNSELECTED,
 	                   HTM_OPTION_ENABLED,
 			   "%s",Txt[Hie_STATUS_ACTIVE]);
 

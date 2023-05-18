@@ -1884,7 +1884,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 					     The_GetSuffix ());
 			   free (FuncOnChange);
 			      HTM_OPTION (HTM_Type_STRING,"",
-			                  false,	// Not selected
+			                  HTM_OPTION_UNSELECTED,
 			                  HTM_OPTION_ENABLED,
 			                  "&nbsp;");
 			      mysql_data_seek (mysql_res,0);
@@ -1902,23 +1902,23 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				 IsThisTag = false;
 				 if (!strcasecmp (Question->Tags.Txt[IndTag],row[1]))
 				   {
-				    HTM_Txt (" selected=\"selected\"");
 				    IsThisTag = true;
 				    TagFound = true;
 				   }
 				 HTM_OPTION (HTM_Type_STRING,row[1],
-					     IsThisTag,		// Selected?
+					     IsThisTag ? HTM_OPTION_SELECTED :
+							 HTM_OPTION_UNSELECTED,
 					     HTM_OPTION_ENABLED,
 					     "%s",row[1]);
 				}
 			      /* If it's a new tag received from the form */
 			      if (!TagFound && Question->Tags.Txt[IndTag][0])
 				 HTM_OPTION (HTM_Type_STRING,Question->Tags.Txt[IndTag],
-					     true,	// Selected
+					     HTM_OPTION_SELECTED,
 					     HTM_OPTION_ENABLED,
 					     "%s",Question->Tags.Txt[IndTag]);
 			      HTM_OPTION (HTM_Type_STRING,"",
-					  false,	// Selected
+					  HTM_OPTION_UNSELECTED,
 					  HTM_OPTION_ENABLED,
 					  "[%s]",Txt_new_tag);
 			   HTM_SELECT_End ();

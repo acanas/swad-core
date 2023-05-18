@@ -1526,7 +1526,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 		((Timetable->View == Tmt_CRS_EDIT) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
 		((Timetable->View == Tmt_TUT_EDIT) && (CT == Tmt_TUTORING)))
 	       HTM_OPTION (HTM_Type_STRING,Tmt_DB_ClassType[CT],
-			   CT == ClassType,	// Selected?
+			   CT == ClassType ? HTM_OPTION_SELECTED :
+	                		     HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
       HTM_SELECT_End ();
@@ -1574,7 +1575,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			     Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 		  Err_NotEnoughMemoryExit ();
 	       HTM_OPTION (HTM_Type_STRING,TTDur,
-			   Dur == DurationNumIntervals,	// Selected?
+			   Dur == DurationNumIntervals ? HTM_OPTION_SELECTED :
+	                				 HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",TTDur);
 	       free (TTDur);
@@ -1601,7 +1603,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			      CellStr,Par_CodeStr[ParCod_Grp],
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",
-	                   GrpCod <= 0,	// Selected?
+	                   GrpCod <= 0 ? HTM_OPTION_SELECTED :
+	                		 HTM_OPTION_UNSELECTED,
 	                   HTM_OPTION_ENABLED,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
@@ -1626,7 +1629,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			   Err_NotEnoughMemoryExit ();
 		       }
 		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
-				 GrpCod == Grp->GrpCod,	// Selected?
+				 GrpCod == Grp->GrpCod ? HTM_OPTION_SELECTED :
+	                				 HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s %s%s",
 				 GrpTyp->GrpTypName,Grp->GrpName,Room);

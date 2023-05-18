@@ -1736,7 +1736,7 @@ void HTM_OPTGROUP_End (void)
   }
 
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
-                 bool Selected,HTM_OptionEnabled_t Disabled,
+                 HTM_OptionSelected_t Selected,HTM_OptionDisabled_t Disabled,
 		 const char *fmt,...)
   {
    va_list ap;
@@ -1757,7 +1757,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
 	 break;
      }
    HTM_Txt ("\"");
-   if (Selected)
+   if (Selected == HTM_OPTION_SELECTED)
       HTM_Txt (" selected=\"selected\"");
    if (Disabled == HTM_OPTION_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
