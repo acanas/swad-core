@@ -419,6 +419,17 @@ void Err_WrongMatchExit (void)
   }
 
 /*****************************************************************************/
+/************** Write error message when a rubric is recursive ***************/
+/*****************************************************************************/
+
+void Err_RecursiveRubric (void)
+  {
+   extern const char *Txt_Recursive_rubric;
+
+   Ale_ShowAlert (Ale_ERROR,Txt_Recursive_rubric);
+  }
+
+/*****************************************************************************/
 /************** Write error message and exit when wrong ribric ***************/
 /*****************************************************************************/
 

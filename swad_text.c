@@ -32920,6 +32920,29 @@ const char *Txt_Recipients =
 	"Recipients";		// Çeviri lazim!
 #endif
 
+const char *Txt_Recursive_rubric =
+#if   L==1	// ca
+	"R&uacute;brica recursiva";
+#elif L==2	// de
+	"Rekursive Rubrik";
+#elif L==3	// en
+	"Recursive rubric";
+#elif L==4	// es
+	"R&uacute;brica recursiva";
+#elif L==5	// fr
+	"Rubrique r&eacute;cursive";
+#elif L==6	// gn
+	"R&uacute;brica recursiva";
+#elif L==7	// it
+	"Rubrica ricorsiva";
+#elif L==8	// pl
+	"Rubryka rekurencyjna";
+#elif L==9	// pt
+	"Rubrica recursiva";
+#elif L==10	// tr
+	"&Ouml;zyinelemeli de&gbreve;erlendirme listesi";
+#endif
+
 const char *Txt_Register =
 #if   L==1	// ca
 	"Inscriure";

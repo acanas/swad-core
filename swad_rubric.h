@@ -37,6 +37,12 @@
 
 #define RubCri_AFTER_LAST_CRITERION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database
 
+struct Node
+  {
+   long RubCod;
+   struct Node *Prev;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -71,6 +77,8 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 			    Rub_ExistingNewRubric_t ExistingNewRubric);
 
 void Rub_ReceiveFormRubric (void);
+
+bool Rub_CheckRubricsTree (long RubCod,struct Node *TOS);
 
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (void);

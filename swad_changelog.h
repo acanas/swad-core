@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.112 (2023-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 22.113 (2023-05-19)"
 #define CSS_FILE		"swad22.107.36.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.113:   May 19, 2023  Check if a rubric is recursive. (336936 lines)
 	Version 22.112:   May 18, 2023  Code refactoring in options of selectors. (336794 lines)
 	Version 22.111:   May 17, 2023  A project can have more than one rubric in each category. (336691 lines)
 	Version 22.110.3: May 15, 2023  Changes in rubrics. (336550 lines)

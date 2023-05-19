@@ -78,6 +78,7 @@ void Err_WrongAnswerTypeExit (void);
 void Err_WrongExamSessionExit (void);
 void Err_WrongGameExit (void);
 void Err_WrongMatchExit (void);
+void Err_RecursiveRubric (void);
 void Err_WrongRubricExit (void);
 void Err_WrongCriterionExit (void);
 void Err_WrongCriterionIndexExit (void);

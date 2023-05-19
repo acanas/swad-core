@@ -120,11 +120,9 @@ static void RubCri_WriteMinimumMaximum (const struct RubCri_Criterion *Criterion
 static void RubCri_WriteWeight (const struct RubCri_Criterion *Criterion);
 static void RubCri_WriteTotalLabel (unsigned ColSpan);
 static void RubCri_WriteTotalValue (double Total);
+
 static double RubCri_ComputeScore (long PrjCod,
                                    const struct RubCri_Criterion *Criterion);
-
-static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
-                                            struct RubCri_Criterion *Criterion);
 
 static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons,
                                                RubCri_PutColumnsForScore_t PutColumnsForScore);
@@ -995,7 +993,6 @@ static void RubCri_WriteTotalValue (double Total)
 static double RubCri_ComputeScore (long PrjCod,
                                    const struct RubCri_Criterion *Criterion)
   {
-   long RubCod;
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
    unsigned NumCriterion;
@@ -1010,10 +1007,9 @@ static double RubCri_ComputeScore (long PrjCod,
 	 break;
       case Rsc_RUBRIC:
 	 Score = 0.0;
-	 RubCod = Criterion->Link.Cod;
 
 	 /***** Get data of rubric criteria from database *****/
-	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,Criterion->Link.Cod);
 	 for (NumCriterion = 0;
 	      NumCriterion < NumCriteria;
 	      NumCriterion++)
@@ -1056,8 +1052,8 @@ double RubCri_GetParScore (void)
 /************************** Get rubric criteria data *************************/
 /*****************************************************************************/
 
-static void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
-                                            struct RubCri_Criterion *Criterion)
+void RubCri_GetCriterionDataFromRow (MYSQL_RES *mysql_res,
+                                     struct RubCri_Criterion *Criterion)
   {
    MYSQL_ROW row;
    RubCri_ValueRange_t ValueRange;

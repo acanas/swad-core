@@ -356,6 +356,11 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
       Rub_ShowRubricMainData (Rubrics,
 		              true);	// Show only this rubric
 
+      /***** Check if rubric tree is correct *****/
+      if (!Rub_CheckRubricsTree (Rubrics->Rubric.RubCod,
+                                 NULL))	// The stack has not yet been created
+	 Err_RecursiveRubric ();
+
       /***** Write criteria of this rubric *****/
       RubCri_ListCriteriaForSeeing (Rubrics);
 
@@ -794,6 +799,11 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
       /***** Put form to create/edit a rubric *****/
       Rub_PutFormEditionRubric (Rubrics,ExistingNewRubric);
 
+      /***** Check if rubric tree is correct *****/
+      if (!Rub_CheckRubricsTree (Rubrics->Rubric.RubCod,
+                                 NULL))	// The stack has not yet been created
+	 Err_RecursiveRubric ();
+
       /***** Show list of criteria inside box *****/
       if (ExistingNewRubric == Rub_EXISTING_RUBRIC)
 	 RubCri_ListCriteriaForEdition (Rubrics);
@@ -1011,6 +1021,103 @@ static void Rub_UpdateRubric (struct Rub_Rubric *Rubric)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_rubric_has_been_modified);
+  }
+
+/*****************************************************************************/
+/********** Recursive function to compute the score of a criterion ***********/
+/*****************************************************************************/
+// Return true if tree is ok, or false if infinite recursion
+/*                 Tree                                 Stack
+                  _______                               ______
+                 | Rub 1 |      TOS (Top Of Stack)____\|___5__|
+                 |_______|                            /|_Prev_|
+                    /|\                              _____/
+                   / | \                            /   ______
+                  /  |  \                           \_\|___4__|
+                 /   |   \                            /|_Prev_|
+                / ___|___ \                          _____/
+               / | Rub 2 | \                        /   ______
+     Handwritten |_______| Handwritten              \_\|___2__|
+                    /|\                               /|_Prev_|
+                   / | \                             _____/
+                  /  |  \                           /   ______
+                 /   |   \                          \_\|___1__|
+                /    |    \                           /|_NULL_|
+        _______/     |     \_______
+       | Rub 3 |     |     | Rub 4 |
+       |_______|Handwritten|_______|
+            /                 /|\
+           /                 / | \
+          /                 /  |  \
+         /                 /   |   \
+        /                 / ___|___ \
+       /                 / | Rub 5 | \
+Handwritten    Handwritten |_______| Handwritten
+                              /|\
+                             / | \
+                            /  |  \
+                           /   |   \
+                          /    |    \
+                         /     |     \
+              Handwritten Handwritten Handwritten
+*/
+
+bool Rub_CheckRubricsTree (long RubCod,struct Node *TOS)
+  {
+   struct Node *Node;
+   bool TreeOk;
+   MYSQL_RES *mysql_res;
+   unsigned NumCriteria;
+   unsigned NumCriterion;
+   struct RubCri_Criterion Criterion;
+
+   /***** Check that rubric is not yet in the stack *****/
+   for (Node = TOS, TreeOk = true;
+        Node && TreeOk;
+        Node = Node->Prev)
+      if (Node->RubCod == RubCod)
+	 TreeOk = false;
+
+   if (TreeOk)
+     {
+      /***** Push rubric code in stack *****/
+      /* Save current top of stack */
+      Node = TOS;
+
+      /* Create top of stack node */
+      if ((TOS = malloc (sizeof (struct Node))) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      TOS->RubCod = RubCod;
+      TOS->Prev = Node;
+
+	 /* For each criteria in this rubric... */
+	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+	 for (NumCriterion = 0;
+	      NumCriterion < NumCriteria && TreeOk;
+	      NumCriterion++)
+	   {
+	    /* Get criterion data */
+	    RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+
+	    switch (Criterion.Link.Type)
+	      {
+	       case Rsc_RUBRIC:
+		  if (!Rub_CheckRubricsTree (Criterion.Link.Cod,TOS))
+		     TreeOk = false;
+		  break;
+	       default:
+		  break;
+	      }
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+
+      /***** Pop rubric code from stack *****/
+      free (TOS);
+     }
+
+   return TreeOk;
   }
 
 /*****************************************************************************/
