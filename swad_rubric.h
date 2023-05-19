@@ -78,7 +78,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 
 void Rub_ReceiveFormRubric (void);
 
-bool Rub_CheckRubricsTree (long RubCod,struct Node *TOS);
+bool Rub_CheckIfRecursiveTree (long RubCod,struct Node **TOS);
 
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (void);

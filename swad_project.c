@@ -4577,19 +4577,8 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
       /* Change color for rubric criteria */
       The_ChangeRowColor ();
 
-      /* Check if rubric tree is correct */
-      if (Rub_CheckRubricsTree (Rubric.RubCod,
-                                NULL))	// The stack has not yet been created
-	 /* Write criteria of this rubric */
-	 RubCri_ListCriteriaInProject (Projects,Rubric.RubCod,ICanFill);
-      else
-	{
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"8\" class=\"CT %s\"",The_GetColorRows ());
-	       Err_RecursiveRubric ();
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-	}
+      /* Write criteria of this rubric */
+      RubCri_ListCriteriaInProject (Projects,Rubric.RubCod,ICanFill);
 
       /* Change color for next rubric */
       The_ChangeRowColor ();
