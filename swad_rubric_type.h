@@ -88,4 +88,11 @@ typedef enum
    Rub_NEW_RUBRIC,
   } Rub_ExistingNewRubric_t;
 
+/* Stack node to check is a rubric is recursive */
+struct Rub_Node
+  {
+   long RubCod;
+   struct Rub_Node *Prev;
+  };
+
 #endif

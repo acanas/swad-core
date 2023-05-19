@@ -4676,7 +4676,7 @@ void Prj_ChangeCriterionScore (void)
 
    /***** Update review *****/
    if (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric))
-      Prj_DB_UpdateScore (Prj.PrjCod,CriCod,Score);
+      Rub_DB_UpdateScore (Rsc_PROJECT,Prj.PrjCod,-1L,CriCod,Score);
    else
       Err_NoPermission ();
 

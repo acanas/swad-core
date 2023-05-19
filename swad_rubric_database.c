@@ -825,3 +825,44 @@ void Rub_DB_RemoveCrsRubricCriteria (long CrsCod)
 		     " AND rub_rubrics.RubCod=rub_criteria.RubCod",
                    CrsCod);
   }
+
+/*****************************************************************************/
+/** Update score of a criterion given an assignment/project code and a user **/
+/*****************************************************************************/
+
+void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
+                         double Score)
+  {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryREPLACE ("can not save score",
+		    "REPLACE INTO rub_scores"
+                    " (Type,Cod,UsrCod,CriCod,EvlCod,Score)"
+                    " VALUES"
+                    " ('%s',%ld,%ld,%ld,%ld,%.15lg)",
+                    Rsc_ResourceTypesDB[Type],Cod,UsrCod,CriCod,
+                    Gbl.Usrs.Me.UsrDat.UsrCod,Score);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/**** Get score of a criterion given an assignment/project code and a user ***/
+/*****************************************************************************/
+
+double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod)
+  {
+   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+
+   return DB_QuerySELECTDouble ("can not get score",
+				"SELECT Score"
+				 " FROM rub_scores"
+				" WHERE Type='%s'"
+				  " AND Cod=%ld"
+                                  " AND UsrCod=%ld"
+				  " AND CriCod=%ld",
+				Rsc_ResourceTypesDB[Type],
+				Cod,
+				UsrCod,
+				CriCod);
+  }

@@ -629,10 +629,19 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.114 (2023-05-19)"
+#define Log_PLATFORM_VERSION	"SWAD 22.115 (2023-05-19)"
 #define CSS_FILE		"swad22.107.36.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.115:   May 19, 2023  Generalization of rubric scores. (337010 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS rub_scores (Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',Cod INT NOT NULL,UsrCod INT NOT NULL DEFAULT -1,CriCod INT NOT NULL,EvlCod INT NOT NULL DEFAULT -1,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(Type,Cod,UsrCod,CriCod));
+					If you want to use MyISAM:
+ALTER TABLE rub_scores ENGINE=MyISAM;
+					2 changes necessary in database:
+INSERT INTO rub_scores SELECT 'prj',PrjCod,-1,CriCod,-1,Score FROM prj_scores ORDER BY PrjCod,CriCod;
+DROP TABLE prj_scores;
+
 	Version 22.114:   May 19, 2023  Check if a rubric is recursive. (336984 lines)
 	Version 22.113:   May 19, 2023  Check if a rubric is recursive. (336936 lines)
 	Version 22.112:   May 18, 2023  Code refactoring in options of selectors. (336794 lines)

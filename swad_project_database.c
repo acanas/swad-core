@@ -227,22 +227,6 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj)
   }
 
 /*****************************************************************************/
-/**************** Update score of a criterion in a project *******************/
-/*****************************************************************************/
-
-void Prj_DB_UpdateScore (long PrjCod,long CriCod,double Score)
-  {
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   DB_QueryREPLACE ("can not save score",
-		    "REPLACE INTO prj_scores"
-	            " (PrjCod,CriCod,Score)"
-                    " VALUES"
-                    " (%ld,%ld,%.15lg)",
-		    PrjCod,CriCod,Score);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /******************************** Get projects *******************************/
 /*****************************************************************************/
 
@@ -700,21 +684,6 @@ long Prj_DB_GetCrsOfPrj (long PrjCod)
   }
 
 /*****************************************************************************/
-/********************* Get criteria in a given rubric ************************/
-/*****************************************************************************/
-
-double Prj_DB_GetScore (long PrjCod,long CriCod)
-  {
-   return DB_QuerySELECTDouble ("can not get score",
-				"SELECT Score"
-				 " FROM prj_scores"
-				" WHERE PrjCod=%ld"
-				  " AND CriCod=%ld",
-				PrjCod,
-				CriCod);
-  }
-
-/*****************************************************************************/
 /******************** Get number of courses with projects ********************/
 /*****************************************************************************/
 // Returns the number of courses with projects
@@ -999,8 +968,7 @@ void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects)
 /********* Update rubrics associated to projects for current course **********/
 /*****************************************************************************/
 
-void Prj_DB_UpdateRubrics (const struct Prj_Projects *Projects,
-                           PrjCfg_RubricType_t RubricType,
+void Prj_DB_UpdateRubrics (PrjCfg_RubricType_t RubricType,
                            const struct PrgCfg_ListRubCods *ListRubCods)
   {
    unsigned RubCod;

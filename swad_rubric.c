@@ -78,6 +78,8 @@ static bool Rub_CheckRubricFieldsReceivedFromForm (const struct Rub_Rubric *Rubr
 static void Rub_CreateRubric (struct Rub_Rubric *Rubric);
 static void Rub_UpdateRubric (struct Rub_Rubric *Rubric);
 
+static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS);
+
 /*****************************************************************************/
 /*************************** Reset rubrics context ***************************/
 /*****************************************************************************/
@@ -345,7 +347,7 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics;
    extern const char *Txt_Rubric;
-   struct Node *TOS = NULL;
+   struct Rub_Node *TOS = NULL;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
@@ -788,7 +790,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
       [Rub_EXISTING_RUBRIC] = &Hlp_ASSESSMENT_Rubrics_edit_rubric,
       [Rub_NEW_RUBRIC     ] = &Hlp_ASSESSMENT_Rubrics_new_rubric,
      };
-   struct Node *TOS = NULL;
+   struct Rub_Node *TOS = NULL;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,
@@ -1061,7 +1063,7 @@ Handwritten    Handwritten |_______| Handwritten
                          /     |     \
               Handwritten Handwritten Handwritten
 */
-bool Rub_CheckIfRecursiveTree (long RubCod,struct Node **TOS)
+static bool Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Node **TOS)
   {
    bool RecursiveTree;
    MYSQL_RES *mysql_res;
@@ -1077,25 +1079,25 @@ bool Rub_CheckIfRecursiveTree (long RubCod,struct Node **TOS)
       /***** Push rubric code in stack *****/
       Rub_PushRubCod (TOS,RubCod);
 
-	 /* For each criteria in this rubric... */
-	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
-	 for (NumCriterion = 0;
-	      NumCriterion < NumCriteria;
-	      NumCriterion++)
-	   {
-	    /* Get criterion data */
-	    RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+      /***** For each criteria in this rubric... *****/
+      NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+      for (NumCriterion = 0;
+	   NumCriterion < NumCriteria;
+	   NumCriterion++)
+	{
+	 /* Get criterion data */
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
 
-	    if (Criterion.Link.Type == Rsc_RUBRIC)
-	       if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS))
-		 {
-		  RecursiveTree = true;
-		  break;
-		 }
-	   }
+	 if (Criterion.Link.Type == Rsc_RUBRIC)
+	    if (Rub_CheckIfRecursiveTree (Criterion.Link.Cod,TOS))
+	      {
+	       RecursiveTree = true;
+	       break;
+	      }
+	}
 
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
       /***** Pop rubric code from stack *****/
       Rub_PopRubCod (TOS);

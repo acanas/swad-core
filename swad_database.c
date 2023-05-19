@@ -2659,24 +2659,6 @@ mysql> DESCRIBE prj_rubrics;
 			"RubCod INT NOT NULL,"
 		   "UNIQUE INDEX(CrsCod,Type,RubCod))");
 
-   /***** Table prj_scores *****/
-/*
-mysql> DESCRIBE prj_scores;
-+--------+--------+------+-----+---------+-------+
-| Field  | Type   | Null | Key | Default | Extra |
-+--------+--------+------+-----+---------+-------+
-| PrjCod | int    | NO   | PRI | NULL    |       |
-| CriCod | int    | NO   | PRI | NULL    |       |
-| Score  | double | NO   |     | 0       |       |
-+--------+--------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_scores ("
-			"PrjCod INT NOT NULL,"
-			"CriCod INT NOT NULL,"
-			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(PrjCod,CriCod))");
-
    /***** Table prj_users *****/
 /*
 mysql> DESCRIBE prj_users;
@@ -2865,6 +2847,30 @@ mysql> DESCRIBE rub_rubrics;
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(RubCod),"
 		   "INDEX(CrsCod))");
+
+   /***** Table rub_scores *****/
+/*
+mysql> DESCRIBE rub_scores;
++--------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field  | Type                                                                          | Null | Key | Default | Extra |
++--------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+| Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
+| Cod    | int                                                                           | NO   | PRI | NULL    |       |
+| UsrCod | int                                                                           | NO   | PRI | -1      |       |
+| CriCod | int                                                                           | NO   | PRI | NULL    |       |
+| EvlCod | int                                                                           | NO   |     | -1      |       |
+| Score  | double                                                                        | NO   |     | 0       |       |
++--------+-------------------------------------------------------------------------------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_scores ("
+			"Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',"
+			"Cod INT NOT NULL,"
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"CriCod INT NOT NULL,"
+			"EvlCod INT NOT NULL DEFAULT -1,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(Type,Cod,UsrCod,CriCod))");
 
    /***** Table ses_params *****/
 /*

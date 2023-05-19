@@ -1245,14 +1245,6 @@ CREATE TABLE IF NOT EXISTS prj_rubrics (
 	RubCod INT NOT NULL,
 	UNIQUE INDEX(CrsCod,Type,RubCod));
 --
--- Table prj_scores: stores the rubric criteria scores for each project
---
-CREATE TABLE IF NOT EXISTS prj_scores (
-	PrjCod INT NOT NULL,
-	CriCod INT NOT NULL,
-	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
-	UNIQUE INDEX(PrjCod,CriCod));
---
 -- Table prj_users: stores the users inside projects
 --
 CREATE TABLE IF NOT EXISTS prj_users (
@@ -1331,6 +1323,17 @@ CREATE TABLE IF NOT EXISTS rub_rubrics (
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(RubCod),
 	INDEX(CrsCod));
+--
+-- Table rub_scores: stores the rubric criteria scores for each project
+--
+CREATE TABLE IF NOT EXISTS rub_scores (
+	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Cod INT NOT NULL,
+	UsrCod INT NOT NULL DEFAULT -1,
+	CriCod INT NOT NULL,
+	EvlCod INT NOT NULL DEFAULT -1,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(Type,Cod,UsrCod,CriCod));
 --
 -- Table ses_params: stores some hidden parameters passed from a page to another using database instead of forms
 --

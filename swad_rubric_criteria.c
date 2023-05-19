@@ -109,7 +109,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 					            unsigned NumCriteria,
                                                     MYSQL_RES *mysql_res);
 static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
-                                                   struct Node **TOS,
+                                                   struct Rub_Node **TOS,
                                                    bool ICanFill,
 					           unsigned NumCriteria,
                                                    MYSQL_RES *mysql_res);
@@ -122,7 +122,8 @@ static void RubCri_WriteWeight (const struct RubCri_Criterion *Criterion);
 static void RubCri_WriteTotalLabel (unsigned ColSpan);
 static void RubCri_WriteTotalValue (double Total);
 
-static bool RubCri_ComputeRubricScore (long PrjCod,struct Node **TOS,long RubCod,
+static bool RubCri_ComputeRubricScore (Rsc_Type_t Type,long Cod,long UsrCod,
+                                       struct Rub_Node **TOS,long RubCod,
                                        double *RubricScore);
 
 static void RubCri_PutTableHeadingForCriteria (RubCri_PutColumnForIcons_t PutColumnForIcons,
@@ -575,7 +576,7 @@ void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
   {
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
-   struct Node *TOS;
+   struct Rub_Node *TOS;
 
    /***** Get data of rubric criteria from database *****/
    NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
@@ -806,7 +807,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 /*****************************************************************************/
 
 static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects,
-                                                   struct Node **TOS,
+                                                   struct Rub_Node **TOS,
                                                    bool ICanFill,
 					           unsigned NumCriteria,
                                                    MYSQL_RES *mysql_res)
@@ -854,7 +855,7 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 	    switch (Criterion.Link.Type)
 	      {
 	       case Rsc_NONE:
-	          CriterionScore = Prj_DB_GetScore (Projects->Prj.PrjCod,Criterion.CriCod);
+	          CriterionScore = Rub_DB_GetScore (Rsc_PROJECT,Projects->Prj.PrjCod,-1L,Criterion.CriCod);
 		  if (ICanFill)
 		    {
 		     Frm_BeginFormAnchor (ActChgPrjSco,Anchor);
@@ -875,8 +876,8 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 		     HTM_Double2Decimals (CriterionScore);
 		  break;
 	       case Rsc_RUBRIC:
-		  if (RubCri_ComputeRubricScore (Projects->Prj.PrjCod,TOS,
-		                                 Criterion.Link.Cod,
+		  if (RubCri_ComputeRubricScore (Rsc_PROJECT,Projects->Prj.PrjCod,-1L,
+		                                 TOS,Criterion.Link.Cod,
 		                                 &CriterionScore))
 	             Err_RecursiveRubric ();
 		  else
@@ -1008,7 +1009,8 @@ static void RubCri_WriteTotalValue (double Total)
 /*****************************************************************************/
 // Return true if rubric tree is recursive
 
-static bool RubCri_ComputeRubricScore (long PrjCod,struct Node **TOS,long RubCod,
+static bool RubCri_ComputeRubricScore (Rsc_Type_t Type,long Cod,long UsrCod,
+                                       struct Rub_Node **TOS,long RubCod,
                                        double *RubricScore)
   {
    bool RecursiveTree;
@@ -1029,37 +1031,38 @@ static bool RubCri_ComputeRubricScore (long PrjCod,struct Node **TOS,long RubCod
       /***** Push rubric code in stack *****/
       Rub_PushRubCod (TOS,RubCod);
 
-	 /***** Get data of rubric criteria from database *****/
-	 NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
-	 for (NumCriterion = 0;
-	      NumCriterion < NumCriteria;
-	      NumCriterion++)
+      /***** Get data of rubric criteria from database *****/
+      NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+      for (NumCriterion = 0;
+	   NumCriterion < NumCriteria;
+	   NumCriterion++)
+	{
+	 /***** Get criterion data *****/
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+
+	 /***** Get/compute criterion score *****/
+	 CriterionScore = 0.0;
+	 switch (Criterion.Link.Type)
 	   {
-	    /***** Get criterion data *****/
-	    RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
-
-	    /* Get/compute criterion score */
-	    CriterionScore = 0.0;
-   	    switch (Criterion.Link.Type)
-	      {
-   	       case Rsc_NONE:
-   		  CriterionScore = Prj_DB_GetScore (PrjCod,Criterion.CriCod);
-   		  break;
-	       case Rsc_RUBRIC:
-		  if (RubCri_ComputeRubricScore (PrjCod,TOS,Criterion.Link.Cod,
-		                                 &CriterionScore))
-		     RecursiveTree = true;
-		  break;
-	       default:
-		  break;
-	      }
-
-	    /***** Compute score of this criterion in the child rubric *****/
-	    *RubricScore += Criterion.Weight * CriterionScore;	// Update weighted sum
+	    case Rsc_NONE:
+	       CriterionScore = Rub_DB_GetScore (Rsc_PROJECT,Cod,UsrCod,Criterion.CriCod);
+	       break;
+	    case Rsc_RUBRIC:
+	       if (RubCri_ComputeRubricScore (Type,Cod,UsrCod,
+					      TOS,Criterion.Link.Cod,
+					      &CriterionScore))
+		  RecursiveTree = true;
+	       break;
+	    default:
+	       break;
 	   }
 
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
+	 /***** Compute score of this criterion in the child rubric *****/
+	 *RubricScore += Criterion.Weight * CriterionScore;	// Update weighted sum
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
       /***** Pop rubric code from stack *****/
       Rub_PopRubCod (TOS);
@@ -1072,23 +1075,23 @@ static bool RubCri_ComputeRubricScore (long PrjCod,struct Node **TOS,long RubCod
 /********************** Push/pop rubric code in stack ************************/
 /*****************************************************************************/
 
-void Rub_PushRubCod (struct Node **TOS,long RubCod)
+void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod)
   {
-   struct Node *Node;
+   struct Rub_Node *Node;
 
    /***** Save current top of stack *****/
    Node = *TOS;
 
    /***** Create top of stack node *****/
-   if ((*TOS = malloc (sizeof (struct Node))) == NULL)
+   if ((*TOS = malloc (sizeof (struct Rub_Node))) == NULL)
       Err_NotEnoughMemoryExit ();
    (*TOS)->RubCod = RubCod;
    (*TOS)->Prev = Node;		// Link to previous top of stack
   }
 
-void Rub_PopRubCod (struct Node **TOS)
+void Rub_PopRubCod (struct Rub_Node **TOS)
   {
-   struct Node *Node;
+   struct Rub_Node *Node;
 
    if (*TOS)
      {
@@ -1108,7 +1111,7 @@ void Rub_PopRubCod (struct Node **TOS)
 /*****************************************************************************/
 // Return true if found
 
-bool Rub_FindRubCodInStack (const struct Node *TOS,long RubCod)
+bool Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
   {
    while (TOS)
      {

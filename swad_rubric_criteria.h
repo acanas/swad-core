@@ -47,9 +47,9 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics);
 void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
 				   bool ICanFill);
 
-void Rub_PushRubCod (struct Node **TOS,long RubCod);
-void Rub_PopRubCod (struct Node **TOS);
-bool Rub_FindRubCodInStack (const struct Node *TOS,long RubCod);
+void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod);
+void Rub_PopRubCod (struct Rub_Node **TOS);
+bool Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod);
 
 double RubCri_GetParScore (void);
 

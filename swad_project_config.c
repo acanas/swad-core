@@ -349,7 +349,6 @@ void PrjCfg_ChangeNETCanCreate (void)
 void PrjCfg_ChangeRubricsOfType (void)
   {
    extern const char *Txt_The_configuration_of_the_projects_has_been_updated;
-   struct Prj_Projects Projects;
    struct Rub_Rubrics Rubrics;
    PrjCfg_RubricType_t RubricType;
    struct PrgCfg_ListRubCods ListRubCods;
@@ -361,9 +360,6 @@ void PrjCfg_ChangeRubricsOfType (void)
    /***** Get list of rubrics *****/
    Rub_GetListRubrics (&Rubrics);
 
-   /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
-
    /***** Get parameter with the type of rubric *****/
    Par_GetParText ("RubricType",StrType,sizeof (StrType) - 1);
    RubricType = PrjCfg_GetRubricFromString (StrType);
@@ -372,7 +368,7 @@ void PrjCfg_ChangeRubricsOfType (void)
    PrjCfg_GetListRubCods (&Rubrics,&ListRubCods);
 
    /***** Update database *****/
-   Prj_DB_UpdateRubrics (&Projects,RubricType,&ListRubCods);
+   Prj_DB_UpdateRubrics (RubricType,&ListRubCods);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
