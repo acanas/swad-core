@@ -15244,7 +15244,7 @@ const char *Txt_Grade =
 #elif L==9	// pt
 	"Nota";
 #elif L==10	// tr
-	"Grade";	// Çeviri lazim!
+	"Vas&inodot;f";
 #endif
 
 const char *Txt_Group =
@@ -56950,7 +56950,30 @@ const char *Txt_valid_score =
 #elif L==10	// tr
 	"valid score";				// Çeviri lazim!
 #endif
-
+/*
+const char *Txt_Value =	// Score, quantity
+#if   L==1	// ca
+	"Valor";
+#elif L==2	// de
+	"Wert";
+#elif L==3	// en
+	"Value";
+#elif L==4	// es
+	"Valor";
+#elif L==5	// fr
+	"Valeur";
+#elif L==6	// gn
+	"Hepykue";
+#elif L==7	// it
+	"Valore";
+#elif L==8	// pl
+	"Warto&sacute;&cacute;";
+#elif L==9	// pt
+	"Valor";
+#elif L==10	// tr
+	"De&gbreve;er";
+#endif
+*/
 const char *Txt_View_all_recipients =
 #if   L==1	// ca
 	"Veure tots els destinataris";

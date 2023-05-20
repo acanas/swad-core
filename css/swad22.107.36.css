@@ -650,12 +650,12 @@ a:hover						/* Default ==> underlined */
     	}
 	}
 .NOTIF_WHITE	{color:#707070; font-size:12pt; white-space:nowrap;}
-.NOTIF_GREY	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
+.NOTIF_GREY		{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
 .NOTIF_PURPLE	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
-.NOTIF_BLUE	{color:white;   font-size:12pt; white-space:nowrap;}
+.NOTIF_BLUE		{color:white;   font-size:12pt; white-space:nowrap;}
 .NOTIF_YELLOW	{color:#b3b0b3; font-size:12pt; white-space:nowrap;}
-.NOTIF_PINK	{color:white;   font-size:12pt; white-space:nowrap;}
-.NOTIF_DARK	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
+.NOTIF_PINK		{color:white;   font-size:12pt; white-space:nowrap;}
+.NOTIF_DARK		{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
 
 /* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
 .NOTIF_ICO_WHITE	{filter: invert(45%) sepia(0%) saturate(14%) hue-rotate(159deg) brightness(96%) contrast(89%);}			/* #707070 */
