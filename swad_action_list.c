@@ -599,7 +599,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqTst		] = { 103, 4,TabAss,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ReqTest			,"check"		},
    [ActSeeAllExa	] = {1848, 5,TabAss,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_SeeAllExams		,"file-signature"	},
    [ActSeeAllGam	] = {1649, 6,TabAss,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeAllGames		,"gamepad"		},
-   [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeAllRubrics		,"tasks"		},
+   [ActSeeAllRub	] = {1951, 7,TabAss,ActSeeAllRub	,0x200,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rub_SeeAllRubrics		,"tasks"		},
 
    // Actions not in menu:
    [ActFrmNewAsg	] = { 812,-1,TabUnk,ActSeeAllAsg	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ReqCreatOrEditAsg		,NULL},

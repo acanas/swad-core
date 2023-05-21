@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.116 (2023-05-20)"
+#define Log_PLATFORM_VERSION	"SWAD 22.116.1 (2023-05-21)"
 #define CSS_FILE		"swad22.107.36.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.116.1: May 21, 2023  Rubrics only availables for superusers. (337098 lines)
 	Version 22.116:   May 20, 2023  Changes in rubric scores. (337093 lines)
 	Version 22.115:   May 19, 2023  Generalization of rubric scores. (337010 lines)
 					1 change necessary in database:

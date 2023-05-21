@@ -121,10 +121,13 @@ void PrjCfg_ShowFormConfig (void)
       Frm_EndForm ();
 
       /***** Rubrics *****/
-      HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Rubrics);
-	 PrjCfg_ShowFormsRubrics ();
-      HTM_FIELDSET_End ();
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove this rectriction when rubrics are finished
+	{
+	 HTM_FIELDSET_Begin (NULL);
+	    HTM_LEGEND (Txt_Rubrics);
+	    PrjCfg_ShowFormsRubrics ();
+	 HTM_FIELDSET_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();

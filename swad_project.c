@@ -1366,7 +1366,8 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
 	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
 
       /***** Show project rubrics *****/
-      Prj_ShowRubrics (Projects);
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove this rectriction when rubrics are finished
+         Prj_ShowRubrics (Projects);
 
    /***** End box *****/
    Box_BoxEnd ();
