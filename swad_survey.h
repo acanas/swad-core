@@ -60,6 +60,7 @@ struct Svy_Survey
       bool IHaveAnswered;	// I have already answered this survey
       bool ICanAnswer;
       bool ICanViewResults;
+      bool ICanViewComments;
       bool ICanEdit;
      } Status;
   };
@@ -82,6 +83,19 @@ typedef enum
    Svy_ANS_MULTIPLE_CHOICE = 1,
   } Svy_AnswerType_t;
 #define Svy_ANSWER_TYPE_DEFAULT Svy_ANS_UNIQUE_CHOICE
+
+#define Svy_MAX_ANSWERS_PER_QUESTION	10
+struct Svy_Question	// Must be initialized to 0 before using it
+  {
+   long QstCod;
+   unsigned QstInd;
+   Svy_AnswerType_t AnswerType;
+   struct
+     {
+      char *Text;
+     } AnsChoice[Svy_MAX_ANSWERS_PER_QUESTION];
+   bool CommentsAllowed;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

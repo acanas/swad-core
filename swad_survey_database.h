@@ -73,11 +73,11 @@ void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod);
 void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod);
 
 //--------------------------- Surveys questions -------------------------------
-long Svy_DB_CreateQuestion (long SvyCod,unsigned QstInd,
-                            Svy_AnswerType_t AnswerType,
+long Svy_DB_CreateQuestion (long SvyCod,
+                            const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1]);
-void Svy_DB_UpdateQuestion (long SvyCod,long QstCod,
-                            Svy_AnswerType_t AnswerType,
+void Svy_DB_UpdateQuestion (long SvyCod,
+                            const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1]);
 void Svy_DB_ChangeIndexesQsts (long SvyCod,unsigned QstInd);
 

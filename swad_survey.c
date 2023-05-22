@@ -70,21 +70,6 @@ extern struct Globals Gbl;
 
 #define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(Svy_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 
-#define Svy_MAX_ANSWERS_PER_QUESTION	10
-
-struct Svy_Question	// Must be initialized to 0 before using it
-  {
-   long QstCod;
-   unsigned QstInd;
-   Svy_AnswerType_t AnswerType;
-   struct
-     {
-      char *Text;
-     } AnsChoice[Svy_MAX_ANSWERS_PER_QUESTION];
-   bool AllAnsTypes;
-   char ListAnsTypes[Svy_MAX_BYTES_LIST_ANSWER_TYPES + 1];
-  };
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -136,6 +121,9 @@ static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
                                     bool PutFormAnswerSurvey);
+static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
+                                     struct Svy_Question *SvyQst,
+                                     bool PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 static void Svy_PutIconToRemoveOneQst (void *Surveys);
@@ -1229,33 +1217,36 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Svy->Status.ICanViewResults = ( Svy->Scope == HieLvl_CRS ||
+            Svy->Status.ICanViewResults  =  ( Svy->Scope == HieLvl_CRS ||
+        	                             Svy->Scope == HieLvl_DEG ||
+        	                             Svy->Scope == HieLvl_CTR ||
+        	                             Svy->Scope == HieLvl_INS ||
+        	                             Svy->Scope == HieLvl_CTY ||
+        	                             Svy->Scope == HieLvl_SYS) &&
+        	                           ( Svy->NumQsts != 0) &&
+                                            !Svy->Status.Hidden &&
+                                             Svy->Status.Open &&
+                                             Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+                                             Svy->Status.IBelongToScope &&
+                                             Svy->Status.IHaveAnswered;
+            Svy->Status.ICanViewComments = false;
+            Svy->Status.ICanEdit         = false;
+            break;
+         case Rol_NET:
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->Scope == HieLvl_CRS ||
         	                            Svy->Scope == HieLvl_DEG ||
         	                            Svy->Scope == HieLvl_CTR ||
         	                            Svy->Scope == HieLvl_INS ||
         	                            Svy->Scope == HieLvl_CTY ||
         	                            Svy->Scope == HieLvl_SYS) &&
-        	                          ( Svy->NumQsts != 0) &&
-                                           !Svy->Status.Hidden &&
-                                            Svy->Status.Open &&
-                                            Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                            Svy->Status.IBelongToScope &&
-                                            Svy->Status.IHaveAnswered;
-            Svy->Status.ICanEdit         = false;
-            break;
-         case Rol_NET:
-            Svy->Status.ICanViewResults = (Svy->Scope == HieLvl_CRS ||
-        	                           Svy->Scope == HieLvl_DEG ||
-        	                           Svy->Scope == HieLvl_CTR ||
-        	                           Svy->Scope == HieLvl_INS ||
-        	                           Svy->Scope == HieLvl_CTY ||
-        	                           Svy->Scope == HieLvl_SYS) &&
-        	                           Svy->NumQsts != 0 &&
-                                          !Svy->Status.ICanAnswer;
+        	                            Svy->NumQsts != 0 &&
+                                           !Svy->Status.ICanAnswer;
             Svy->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
-            Svy->Status.ICanViewResults = (Svy->Scope == HieLvl_CRS ||
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->Scope == HieLvl_CRS ||
         	                           Svy->Scope == HieLvl_DEG ||
         	                           Svy->Scope == HieLvl_CTR ||
         	                           Svy->Scope == HieLvl_INS ||
@@ -1266,42 +1257,47 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
             Svy->Status.ICanEdit        =  Svy->Scope == HieLvl_CRS; // && Svy->Status.IBelongToScope
             break;
          case Rol_DEG_ADM:
-            Svy->Status.ICanViewResults = (Svy->Scope == HieLvl_DEG ||
-        	                           Svy->Scope == HieLvl_CTR ||
-        	                           Svy->Scope == HieLvl_INS ||
-        	                           Svy->Scope == HieLvl_CTY ||
-        	                           Svy->Scope == HieLvl_SYS) &&
-        	                          (Svy->NumQsts != 0) &&
-                                          !Svy->Status.ICanAnswer;
-            Svy->Status.ICanEdit        =  Svy->Scope == HieLvl_DEG &&
-                                           Svy->Status.IBelongToScope;
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->Scope == HieLvl_DEG ||
+        	                            Svy->Scope == HieLvl_CTR ||
+        	                            Svy->Scope == HieLvl_INS ||
+        	                            Svy->Scope == HieLvl_CTY ||
+        	                            Svy->Scope == HieLvl_SYS) &&
+        	                           (Svy->NumQsts != 0) &&
+                                           !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit         =  Svy->Scope == HieLvl_DEG &&
+                                            Svy->Status.IBelongToScope;
             break;
          case Rol_CTR_ADM:
-            Svy->Status.ICanViewResults = (Svy->Scope == HieLvl_CTR ||
-        	                           Svy->Scope == HieLvl_INS ||
-        	                           Svy->Scope == HieLvl_CTY ||
-        	                           Svy->Scope == HieLvl_SYS) &&
-        	                          (Svy->NumQsts != 0) &&
-                                          !Svy->Status.ICanAnswer;
-            Svy->Status.ICanEdit        =  Svy->Scope == HieLvl_CTR &&
-                                           Svy->Status.IBelongToScope;
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->Scope == HieLvl_CTR ||
+        	                            Svy->Scope == HieLvl_INS ||
+        	                            Svy->Scope == HieLvl_CTY ||
+        	                            Svy->Scope == HieLvl_SYS) &&
+        	                           (Svy->NumQsts != 0) &&
+                                           !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit         =  Svy->Scope == HieLvl_CTR &&
+                                            Svy->Status.IBelongToScope;
             break;
          case Rol_INS_ADM:
-            Svy->Status.ICanViewResults = (Svy->Scope == HieLvl_INS ||
-        	                           Svy->Scope == HieLvl_CTY ||
-        	                           Svy->Scope == HieLvl_SYS) &&
-        	                          (Svy->NumQsts != 0) &&
-                                          !Svy->Status.ICanAnswer;
-            Svy->Status.ICanEdit        =  Svy->Scope == HieLvl_INS &&
-                                           Svy->Status.IBelongToScope;
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->Scope == HieLvl_INS ||
+        	                            Svy->Scope == HieLvl_CTY ||
+        	                            Svy->Scope == HieLvl_SYS) &&
+        	                           (Svy->NumQsts != 0) &&
+                                           !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit         =  Svy->Scope == HieLvl_INS &&
+                                            Svy->Status.IBelongToScope;
             break;
          case Rol_SYS_ADM:
-            Svy->Status.ICanViewResults = (Svy->NumQsts != 0);
-            Svy->Status.ICanEdit        = true;
+            Svy->Status.ICanViewResults  =
+            Svy->Status.ICanViewComments = (Svy->NumQsts != 0);
+            Svy->Status.ICanEdit         = true;
             break;
          default:
-            Svy->Status.ICanViewResults = false;
-            Svy->Status.ICanEdit        = false;
+            Svy->Status.ICanViewResults  = false;
+            Svy->Status.ICanViewComments = false;
+            Svy->Status.ICanEdit         = false;
             break;
         }
      }
@@ -1324,6 +1320,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->Status.IHaveAnswered                   = false;
       Svy->Status.ICanAnswer                      = false;
       Svy->Status.ICanViewResults                 = false;
+      Svy->Status.ICanViewComments                = false;
       Svy->Status.ICanEdit                        = false;
      }
 
@@ -1666,6 +1663,7 @@ void Svy_ReqCreatOrEditSvy (void)
       Surveys.Svy.Status.IHaveAnswered = false;
       Surveys.Svy.Status.ICanAnswer = false;
       Surveys.Svy.Status.ICanViewResults = false;
+      Surveys.Svy.Status.ICanViewComments = false;
      }
    else
      {
@@ -2265,6 +2263,9 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    extern const char *Txt_Wording;
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
+   extern const char *Txt_Options;
+   extern const char *Txt_Comments;
+   extern const char *Txt_Comments_allowed;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
    MYSQL_RES *mysql_res;
@@ -2380,10 +2381,13 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	 /***** Answers *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Empty (1);
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Options);
+	    HTM_TD_End ();
 
-	    /* Unique or multiple choice answers */
 	    HTM_TD_Begin ("class=\"LT\"");
+
+	       /* Unique or multiple choice answers */
 	       HTM_TABLE_BeginPadding (2);
 		  for (NumAns = 0;
 		       NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
@@ -2411,6 +2415,26 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		     HTM_TR_End ();
 		    }
 	       HTM_TABLE_End ();
+
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Comments allowed? *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Comments);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_CHECKBOX ("Comment",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s",
+				      SvyQst->CommentsAllowed ? " checked=\"checked\"" :
+							        "");
+		  HTM_Txt (Txt_Comments_allowed);
+	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2449,6 +2473,7 @@ static void Svy_InitQst (struct Svy_Question *SvyQst)
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
       SvyQst->AnsChoice[NumAns].Text = NULL;
+   SvyQst->CommentsAllowed = false;
   }
 
 /*****************************************************************************/
@@ -2504,14 +2529,12 @@ void Svy_ReceiveQst (void)
   {
    extern const char *Txt_You_must_type_the_question_stem;
    extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
-   extern const char *Txt_You_must_type_at_least_the_first_two_answers;
    extern const char *Txt_The_survey_has_been_modified;
    struct Svy_Surveys Surveys;
    struct Svy_Question SvyQst;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    unsigned NumAns;
    char AnsStr[8 + 10 + 1];
-   unsigned NumLastAns;
    bool ThereIsEndOfAnswers;
    bool Error = false;
 
@@ -2550,40 +2573,25 @@ void Svy_ReceiveQst (void)
       Par_GetParHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
      }
 
-   /***** Make sure that stem and answer are not empty *****/
+   /* Get if comments are allowed */
+   SvyQst.CommentsAllowed = Par_GetParBool ("Comment");
+
+   /***** Make sure that stem is not empty *****/
    if (Stem[0])
      {
-      if (SvyQst.AnsChoice[0].Text[0])	// If the first answer has been filled
-        {
-         for (NumAns = 0, NumLastAns = 0, ThereIsEndOfAnswers = false;
-              !Error && NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
-              NumAns++)
-            if (SvyQst.AnsChoice[NumAns].Text[0])
-              {
-               if (ThereIsEndOfAnswers)
-                 {
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
-                  Error = true;
-                 }
-               else
-                  NumLastAns = NumAns;
-              }
-            else
-               ThereIsEndOfAnswers = true;
-         if (!Error)
-           {
-            if (NumLastAns < 1)
-              {
-               Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-               Error = true;
-              }
-           }
-        }
-      else	// If first answer is empty
-        {
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-         Error = true;
-        }
+      for (NumAns = 0, ThereIsEndOfAnswers = false;
+	   !Error && NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
+	   NumAns++)
+	 if (SvyQst.AnsChoice[NumAns].Text[0])
+	   {
+	    if (ThereIsEndOfAnswers)
+	      {
+	       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+	       Error = true;
+	      }
+	   }
+	 else
+	    ThereIsEndOfAnswers = true;
      }
    else
      {
@@ -2599,12 +2607,11 @@ void Svy_ReceiveQst (void)
       if (SvyQst.QstCod < 0)	// It's a new question
         {
          SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (Surveys.Svy.SvyCod);
-         SvyQst.QstCod = Svy_DB_CreateQuestion (Surveys.Svy.SvyCod,SvyQst.QstInd,
-				                SvyQst.AnswerType,Stem);
+         SvyQst.QstCod = Svy_DB_CreateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
         }
       else			// It's an existing question
          /* Update question */
-         Svy_DB_UpdateQuestion (Surveys.Svy.SvyCod,SvyQst.QstCod,SvyQst.AnswerType,Stem);
+         Svy_DB_UpdateQuestion (Surveys.Svy.SvyCod,&SvyQst,Stem);
 
       /* Insert, update or delete answers in the answers table */
       for (NumAns = 0;
@@ -2774,6 +2781,9 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	                     The_GetColorRows ());
 		  Svy_WriteQstStem (Stem);
 		  Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,PutFormAnswerSurvey);
+		  if (SvyQst.CommentsAllowed)
+		     Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,PutFormAnswerSurvey);
+
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -2823,8 +2833,11 @@ static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
    /***** Get the answer type (row[2]) *****/
    SvyQst->AnswerType = Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
 
-   /***** Get the stem of the question from the database (row[3]) *****/
-   Str_Copy (Stem,row[3],Cns_MAX_BYTES_TEXT);
+   /***** Get whether the comments are allowed (row[3]) *****/
+   SvyQst->CommentsAllowed = (row[3][0] == 'Y');
+
+   /***** Get the stem of the question from the database (row[4]) *****/
+   Str_Copy (Stem,row[4],Cns_MAX_BYTES_TEXT);
   }
 
 /*****************************************************************************/
@@ -2901,82 +2914,111 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
       /* Write one row for each answer */
       HTM_TABLE_BeginPadding (5);
 
-      for (NumAns = 0;
-	   NumAns < NumAnswers;
-	   NumAns++)
-	{
-	 row = mysql_fetch_row (mysql_res);
+	 for (NumAns = 0;
+	      NumAns < NumAnswers;
+	      NumAns++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
 
-	 /* Get number of users who have marked this answer (row[1]) */
-	 if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
-	    Err_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
+	    /* Get number of users who have marked this answer (row[1]) */
+	    if (sscanf (row[1],"%u",&NumUsrsThisAnswer) != 1)
+	       Err_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
-	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
-	 if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-	    /* Abort on error */
-	    Ale_ShowAlertsAndExit ();
+	    /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
+	    if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
+	       /* Abort on error */
+	       Ale_ShowAlertsAndExit ();
 
-	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
+	    Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
 
-	 /* Selectors and label with the letter of the answer */
-	 HTM_TR_Begin (NULL);
+	    /* Selectors and label with the letter of the answer */
+	    HTM_TR_Begin (NULL);
 
-	    if (PutFormAnswerSurvey)
-	      {
-	       /* Write selector to choice this answer */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  snprintf (StrAns,sizeof (StrAns),"Ans%010u",
-			    (unsigned) SvyQst->QstCod);
-		  if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-		     HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
-				      "id=\"Ans%010u_%010u\" value=\"%u\""
-				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-				      (unsigned) SvyQst->QstCod,NumAns,NumAns,
-				      NumAns,
-				      (unsigned) SvyQst->QstCod,NumAnswers);
-		  else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
-		     HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
-					 "id=\"Ans%010u_%010u\" value=\"%u\"",
-					 (unsigned) SvyQst->QstCod,NumAns,NumAns,
-					 NumAns);
+	       if (PutFormAnswerSurvey)
+		 {
+		  /* Write selector to choice this answer */
+		  HTM_TD_Begin ("class=\"LT\"");
+		     snprintf (StrAns,sizeof (StrAns),"Ans%010u",
+			       (unsigned) SvyQst->QstCod);
+		     switch (SvyQst->AnswerType)
+		       {
+			case Svy_ANS_UNIQUE_CHOICE:
+			   HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
+					    "id=\"Ans%010u_%u\" value=\"%u\""
+					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+					    (unsigned) SvyQst->QstCod,NumAns,NumAns,
+					    (unsigned) SvyQst->QstCod,NumAnswers);
+			   break;
+			case Svy_ANS_MULTIPLE_CHOICE:
+			   HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
+					       "id=\"Ans%010u_%u\" value=\"%u\"",
+					       (unsigned) SvyQst->QstCod,NumAns,NumAns);
+			   break;
+			default:
+			   break;
+		       }
+		  HTM_TD_End ();
+		 }
+
+	       /* Write the number of option */
+	       HTM_TD_Begin ("class=\"SVY_OPT LT\"");
+		  HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"DAT_%s\"",
+				   (unsigned) SvyQst->QstCod,NumAns,
+				   The_GetSuffix ());
+		     HTM_TxtF ("%u)",NumAns + 1);
+		  HTM_LABEL_End ();
 	       HTM_TD_End ();
-	      }
 
-	    /* Write the number of option */
-	    HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT_%s\"",
-				(unsigned) SvyQst->QstCod,NumAns,
-				The_GetSuffix ());
-		  HTM_TxtF ("%u)",NumAns + 1);
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
+	       /* Write the text of the answer */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"DAT_%s\"",
+				   (unsigned) SvyQst->QstCod,NumAns,
+				   The_GetSuffix ());
+		     HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
+		  HTM_LABEL_End ();
+	       HTM_TD_End ();
 
-	    /* Write the text of the answer */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT_%s\"",
-				(unsigned) SvyQst->QstCod,NumAns,
-				The_GetSuffix ());
-		  HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
+	       /* Show stats of this answer */
+	       if (Svy->Status.ICanViewResults)
+		  Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
 
-	    /* Show stats of this answer */
-	    if (Svy->Status.ICanViewResults)
-	       Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
+	    HTM_TR_End ();
 
-	 HTM_TR_End ();
-
-	 /* Free memory allocated for the answer */
-	 Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
-	}
+	    /* Free memory allocated for the answer */
+	    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
+	   }
 
       HTM_TABLE_End ();
      }
+   else
+      HTM_BR ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Get and write the answers of a survey question ***************/
+/*****************************************************************************/
+
+static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
+                                     struct Svy_Question *SvyQst,
+                                     bool PutFormAnswerSurvey)
+  {
+   if (PutFormAnswerSurvey)
+     {
+      HTM_TEXTAREA_Begin ("name=\"Comments\""
+			  " cols=\"60\" rows=\"4\""
+			  " class=\"INPUT_%s\"",
+			  The_GetSuffix ());
+      HTM_TEXTAREA_End ();
+     }
+   else if (Svy->Status.ICanViewComments)
+     {
+      HTM_Txt ("Comentarios...");	// TODO
+     }
   }
 
 /*****************************************************************************/

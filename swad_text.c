@@ -5429,7 +5429,30 @@ const char *Txt_Comments =
 #elif L==9	// pt
 	"Coment&aacute;rios";
 #elif L==10	// tr
-	"Comments";	// Çeviri lazim!
+	"Yorumlar";
+#endif
+
+const char *Txt_Comments_allowed =
+#if   L==1	// ca
+	"Comentaris permesos";
+#elif L==2	// de
+	"Kommentare erlaubt";
+#elif L==3	// en
+	"Comments allowed";
+#elif L==4	// es
+	"Comentarios permitidos";
+#elif L==5	// fr
+	"Commentaires autoris&eacute;s";
+#elif L==6	// gn
+	"Ojeheja umi comentario";
+#elif L==7	// it
+	"Commenti consentiti";
+#elif L==8	// pl
+	"Komentarze dozwolone";
+#elif L==9	// pt
+	"Coment&aacute;rios permitidos";
+#elif L==10	// tr
+	"Yorumlara izin verilir";
 #endif
 
 const char *Txt_Configure_projects =
@@ -28513,6 +28536,29 @@ const char *Txt_optional =
 	"opcional";
 #elif L==10	// tr
 	"optional";	// Çeviri lazim!
+#endif
+
+const char *Txt_Options =
+#if   L==1	// ca
+	"Opcions";
+#elif L==2	// de
+	"Optionen";
+#elif L==3	// en
+	"Options";
+#elif L==4	// es
+	"Opciones";
+#elif L==5	// fr
+	"Choix";
+#elif L==6	// gn
+	"Opciones";
+#elif L==7	// it
+	"Opzioni";
+#elif L==8	// pl
+	"Opcje";
+#elif L==9	// pt
+	"Op&ccedil;&otilde;es";
+#elif L==10	// tr
+	"Se&ccedil;enekler";
 #endif
 
 const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X =	// Warning: it is very important to include %s in the following sentences

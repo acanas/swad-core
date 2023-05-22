@@ -1428,6 +1428,7 @@ CREATE TABLE IF NOT EXISTS svy_questions (
 	SvyCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
 	AnsType ENUM('unique_choice','multiple_choice') NOT NULL,
+	CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Stem TEXT NOT NULL,
 	UNIQUE INDEX(QstCod),
 	INDEX(SvyCod));

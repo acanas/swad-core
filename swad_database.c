@@ -3058,22 +3058,24 @@ mysql> DESCRIBE svy_groups;
    /***** Table svy_questions *****/
 /*
 mysql> DESCRIBE svy_questions;
-+---------+-----------------------------------------+------+-----+---------+----------------+
-| Field   | Type                                    | Null | Key | Default | Extra          |
-+---------+-----------------------------------------+------+-----+---------+----------------+
-| QstCod  | int(11)                                 | NO   | PRI | NULL    | auto_increment |
-| SvyCod  | int(11)                                 | NO   | MUL | NULL    |                |
-| QstInd  | int(11)                                 | NO   |     | 0       |                |
-| AnsType | enum('unique_choice','multiple_choice') | NO   |     | NULL    |                |
-| Stem    | text                                    | NO   |     | NULL    |                |
-+---------+-----------------------------------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++-----------------+-----------------------------------------+------+-----+---------+----------------+
+| Field           | Type                                    | Null | Key | Default | Extra          |
++-----------------+-----------------------------------------+------+-----+---------+----------------+
+| QstCod          | int                                     | NO   | PRI | NULL    | auto_increment |
+| SvyCod          | int                                     | NO   | MUL | NULL    |                |
+| QstInd          | int                                     | NO   |     | 0       |                |
+| AnsType         | enum('unique_choice','multiple_choice') | NO   |     | NULL    |                |
+| CommentsAllowed | enum('N','Y')                           | NO   |     | N       |                |
+| Stem            | text                                    | NO   |     | NULL    |                |
++-----------------+-----------------------------------------+------+-----+---------+----------------+
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_questions ("
 			"QstCod INT NOT NULL AUTO_INCREMENT,"
 			"SvyCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
+			"CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N'"
 			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod),"
 		   "INDEX(SvyCod))");

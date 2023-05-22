@@ -836,19 +836,21 @@ void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod)
 /*************************** Create a new question ***************************/
 /*****************************************************************************/
 
-long Svy_DB_CreateQuestion (long SvyCod,unsigned QstInd,
-                            Svy_AnswerType_t AnswerType,
+long Svy_DB_CreateQuestion (long SvyCod,
+                            const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
    return
    DB_QueryINSERTandReturnCode ("can not create question",
 				"INSERT INTO svy_questions"
-				" (SvyCod,QstInd,AnsType,Stem)"
+				" (SvyCod,QstInd,AnsType,CommentsAllowed,Stem)"
 				" VALUES"
-				" (%ld,%u,'%s','%s')",
+				" (%ld,%u,'%s','%c','%s')",
 				SvyCod,
-				QstInd,
-				Svy_DB_StrAnswerTypes[AnswerType],
+				SvyQst->QstInd,
+				Svy_DB_StrAnswerTypes[SvyQst->AnswerType],
+				SvyQst->CommentsAllowed ? 'Y' :
+					                  'N',
 				Stem);
   }
 
@@ -856,19 +858,22 @@ long Svy_DB_CreateQuestion (long SvyCod,unsigned QstInd,
 /************************ Create an existing question ************************/
 /*****************************************************************************/
 
-void Svy_DB_UpdateQuestion (long SvyCod,long QstCod,
-                            Svy_AnswerType_t AnswerType,
+void Svy_DB_UpdateQuestion (long SvyCod,
+                            const struct Svy_Question *SvyQst,
                             const char Stem[Cns_MAX_BYTES_TEXT + 1])
   {
    DB_QueryUPDATE ("can not update question",
 		   "UPDATE svy_questions"
 		     " SET Stem='%s',"
-			  "AnsType='%s'"
+			  "AnsType='%s',"
+                          "CommentsAllowed='%c'"
 		   " WHERE QstCod=%ld"
 		     " AND SvyCod=%ld",	// Extra check
 		   Stem,
-		   Svy_DB_StrAnswerTypes[AnswerType],
-		   QstCod,
+		   Svy_DB_StrAnswerTypes[SvyQst->AnswerType],
+		   SvyQst->CommentsAllowed ? 'Y' :
+					     'N',
+		   SvyQst->QstCod,
 		   SvyCod);
   }
 
@@ -924,10 +929,11 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of questions of a survey",
-		   "SELECT QstCod,"	// row[0]
-		          "QstInd,"	// row[1]
-		          "AnsType,"	// row[2]
-		          "Stem"	// row[3]
+		   "SELECT QstCod,"		// row[0]
+		          "QstInd,"		// row[1]
+		          "AnsType,"		// row[2]
+                          "CommentsAllowed,"	// row[3]
+		          "Stem"		// row[4]
 		   " FROM svy_questions"
 		   " WHERE SvyCod=%ld"
 		   " ORDER BY QstInd",
@@ -942,10 +948,11 @@ unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get a question",
-		   "SELECT QstCod,"	// row[0]
-		          "QstInd,"	// row[1]
-		          "AnsType,"	// row[2]
-		          "Stem"	// row[3]
+		   "SELECT QstCod,"		// row[0]
+		          "QstInd,"		// row[1]
+		          "AnsType,"		// row[2]
+                          "CommentsAllowed,"	// row[3]
+		          "Stem"		// row[4]
 		    " FROM svy_questions"
 		   " WHERE QstCod=%ld"
 		     " AND SvyCod=%ld",	// Extra check
@@ -1110,10 +1117,7 @@ bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
 
 unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
   {
-   unsigned NumAnswers;
-
-   /***** Get answers of a question from database *****/
-   NumAnswers = (unsigned)
+   return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get answers of a question",
 		   "SELECT AnsInd,"	// row[0]
 			  "NumUsrs,"	// row[1]
@@ -1122,10 +1126,6 @@ unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		   " ORDER BY AnsInd",
 		   QstCod);
-   if (!NumAnswers)
-      Err_WrongAnswerExit ();
-
-   return NumAnswers;
   }
 
 /*****************************************************************************/
