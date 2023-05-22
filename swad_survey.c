@@ -1536,9 +1536,11 @@ void Svy_ResetSurvey (void)
    /***** Reset all answers in this survey *****/
    Svy_DB_ResetAnswersSvy (Surveys.Svy.SvyCod);
 
+   /***** Remove all comments in this survey *****/
+   Svy_DB_RemoveCommentsSvy (Surveys.Svy.SvyCod);
+
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_reset,
-                  Surveys.Svy.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_reset,Surveys.Svy.Title);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
@@ -3009,6 +3011,7 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      struct Svy_Question *SvyQst,
                                      bool PutFormAnswerSurvey)
   {
+   extern const char *Txt_Comments;
    unsigned NumComments;
    unsigned NumCom;
    MYSQL_RES *mysql_res;
@@ -3018,9 +3021,11 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
      {
       HTM_TEXTAREA_Begin ("name=\"Com%010u\""
 			  " cols=\"60\" rows=\"4\""
-			  " class=\"INPUT_%s\"",
+			  " class=\"INPUT_%s\""
+			  " placeholder=\"%s&hellip;\"",
 			  (unsigned) SvyQst->QstCod,
-			  The_GetSuffix ());
+			  The_GetSuffix (),
+			  Txt_Comments);
       HTM_TEXTAREA_End ();
      }
    else if (Svy->Status.ICanViewComments)
