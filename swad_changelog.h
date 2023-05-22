@@ -629,10 +629,16 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.117 (2023-05-22)"
+#define Log_PLATFORM_VERSION	"SWAD 22.118 (2023-05-22)"
 #define CSS_FILE		"swad22.107.36.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.118:   May 22, 2023  Survey comments are stored in database. (337285 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS svy_comments (ComCod INT NOT NULL AUTO_INCREMENT,QstCod INT NOT NULL,Comments TEXT NOT NULL,UNIQUE INDEX(ComCod),INDEX(QstCod,ComCod));
+					If you want to use MyISAM:
+ALTER TABLE svy_comments ENGINE=MyISAM;
+
 	Version 22.117:   May 22, 2023  Teachers can allow comments in a survey question. (337196 lines)
 					1 change necessary in database:
 ALTER TABLE svy_questions ADD COLUMN CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER AnsType;

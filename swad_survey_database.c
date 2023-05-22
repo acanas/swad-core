@@ -1207,6 +1207,37 @@ void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod)
 		   Cod);
   }
 
+
+/*****************************************************************************/
+/************** Create new comments for a given survey question **************/
+/*****************************************************************************/
+
+void Svy_DB_CreateComments (long QstCod,const char *Comments)
+  {
+   DB_QueryINSERT ("can not create comments",
+		   "INSERT INTO svy_comments"
+		   " (QstCod,Comments)"
+		   " VALUES"
+		   " (%ld,'%s')",
+                   QstCod,
+                   Comments);
+  }
+
+/*****************************************************************************/
+/************* Get comments to a survey question from database ***************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get comments of a question",
+		   "SELECT Comments"	// row[0]
+		    " FROM svy_comments"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY ComCod",
+		   QstCod);
+  }
+
 /*****************************************************************************/
 /***************** Register that I have answered this survey *****************/
 /*****************************************************************************/

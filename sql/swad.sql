@@ -1413,6 +1413,15 @@ CREATE TABLE IF NOT EXISTS svy_answers (
 	NumUsrs INT NOT NULL DEFAULT 0,
 	Answer TEXT NOT NULL,
 	UNIQUE INDEX(QstCod,AnsInd));
+	--
+-- Table svy_comments: stores the comments to the surveys
+--
+CREATE TABLE IF NOT EXISTS svy_comments ("
+	ComCod INT NOT NULL AUTO_INCREMENT,
+	QstCod INT NOT NULL,
+	Comments TEXT NOT NULL,
+	UNIQUE INDEX(ComCod),
+	INDEX(QstCod,ComCod));
 --
 -- Table svy_groups: stores the groups associated to each survey
 --

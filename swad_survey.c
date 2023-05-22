@@ -3007,17 +3007,47 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      struct Svy_Question *SvyQst,
                                      bool PutFormAnswerSurvey)
   {
+   unsigned NumComments;
+   unsigned NumCom;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
    if (PutFormAnswerSurvey)
      {
-      HTM_TEXTAREA_Begin ("name=\"Comments\""
+      HTM_TEXTAREA_Begin ("name=\"Com%010u\""
 			  " cols=\"60\" rows=\"4\""
 			  " class=\"INPUT_%s\"",
+			  (unsigned) SvyQst->QstCod,
 			  The_GetSuffix ());
       HTM_TEXTAREA_End ();
      }
    else if (Svy->Status.ICanViewComments)
      {
-      HTM_Txt ("Comentarios...");	// TODO
+      /***** Get comments of this question *****/
+      NumComments = Svy_DB_GetCommentsQst (&mysql_res,SvyQst->QstCod);
+
+      /***** Write the answers *****/
+      if (NumComments)
+	{
+	 HTM_OL_Begin ();
+
+	    /* Write one row for each user who has commented */
+	    for (NumCom = 0;
+		 NumCom < NumComments;
+		 NumCom++)
+	      {
+	       row = mysql_fetch_row (mysql_res);
+
+	       HTM_LI_Begin (NULL);
+		  HTM_Txt (row[0]);
+	       HTM_LI_End ();
+	      }
+
+	 HTM_OL_End ();
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
   }
 
@@ -3223,6 +3253,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
    const char *Ptr;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned AnsInd;
+   char Comments[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get questions of this survey from database *****/
    if ((NumQsts = Svy_DB_GetSurveyQstsCodes (&mysql_res,SvyCod)))
@@ -3239,7 +3270,6 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 
          /* Get possible parameter with the user's answer */
          snprintf (ParName,sizeof (ParName),"Ans%010u",(unsigned) QstCod);
-         // Lay_ShowAlert (Lay_INFO,ParName);
          Par_GetParMultiToText (ParName,StrAnswersIndexes,
                                 Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
          Ptr = StrAnswersIndexes;
@@ -3251,10 +3281,15 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
                // 		   ==> store it in database
                Svy_DB_IncreaseAnswer (QstCod,AnsInd);
            }
+
+         /* Get possible parameter with the user's comment */
+         snprintf (ParName,sizeof (ParName),"Com%010u",(unsigned) QstCod);
+         Par_GetParAndChangeFormat (ParName,Comments,Cns_MAX_BYTES_TEXT,
+                                    Str_TO_RIGOROUS_HTML,true);
+         if (Comments[0])
+            Svy_DB_CreateComments (QstCod,Comments);
         }
      }
-   else		// This survey has no questions
-      Err_ShowErrorAndExit ("Error: this survey has no questions.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

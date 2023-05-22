@@ -3039,6 +3039,25 @@ mysql> DESCRIBE svy_answers;
 			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod,AnsInd))");
 
+   /***** Table svy_comments *****/
+/*
+mysql> DESCRIBE svy_comments;
++----------+------+------+-----+---------+----------------+
+| Field    | Type | Null | Key | Default | Extra          |
++----------+------+------+-----+---------+----------------+
+| ComCod   | int  | NO   | PRI | NULL    | auto_increment |
+| QstCod   | int  | NO   | MUL | NULL    |                |
+| Comments | text | NO   |     | NULL    |                |
++----------+------+------+-----+---------+----------------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_comments ("
+			"ComCod INT NOT NULL AUTO_INCREMENT,"
+			"QstCod INT NOT NULL,"
+			"Comments TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(ComCod),"
+		   "INDEX(QstCod,ComCod)");
+
    /***** Table svy_groups *****/
 /*
 mysql> DESCRIBE svy_groups;
