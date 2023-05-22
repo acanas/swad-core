@@ -1444,8 +1444,9 @@ void Svy_RemoveSurvey (void)
    /***** Remove all users in this survey *****/
    Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (Surveys.Svy.SvyCod);
 
-   /***** Remove all answers in this survey *****/
+   /***** Remove all answers and comments in this survey *****/
    Svy_DB_RemoveAnswersSvy (Surveys.Svy.SvyCod);
+   Svy_DB_RemoveCommentsSvy (Surveys.Svy.SvyCod);
 
    /***** Remove all questions in this survey *****/
    Svy_DB_RemoveQstsSvy (Surveys.Svy.SvyCod);
@@ -2200,8 +2201,9 @@ void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod)
    /***** Remove all users in surveys *****/
    Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (Scope,Cod);
 
-   /***** Remove all answers in surveys *****/
+   /***** Remove all answers and comments in surveys *****/
    Svy_DB_RemoveAnswersSvysIn (Scope,Cod);
+   Svy_DB_RemoveCommentsSvysIn (Scope,Cod);
 
    /***** Remove all questions in surveys *****/
    Svy_DB_RemoveQstsSvysIn (Scope,Cod);
@@ -3189,8 +3191,9 @@ void Svy_RemoveQst (void)
    SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Remove the question from all tables *****/
-   /* Remove answers from this test question */
+   /* Remove answers and comments from this survey question */
    Svy_DB_RemoveAnswersQst (SvyQst.QstCod);
+   Svy_DB_RemoveCommentsQst (SvyQst.QstCod);
 
    /* Remove the question itself */
    Svy_DB_RemoveQst (SvyQst.QstCod);

@@ -1207,7 +1207,6 @@ void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod)
 		   Cod);
   }
 
-
 /*****************************************************************************/
 /************** Create new comments for a given survey question **************/
 /*****************************************************************************/
@@ -1224,7 +1223,7 @@ void Svy_DB_CreateComments (long QstCod,const char *Comments)
   }
 
 /*****************************************************************************/
-/************* Get comments to a survey question from database ***************/
+/************* Get comments of a survey question from database ***************/
 /*****************************************************************************/
 
 unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod)
@@ -1236,6 +1235,54 @@ unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		   " ORDER BY ComCod",
 		   QstCod);
+  }
+
+/*****************************************************************************/
+/********************* Remove comments of a survey question ******************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveCommentsQst (long QstCod)
+  {
+   DB_QueryDELETE ("can not remove the comments of a question",
+		   "DELETE FROM svy_comments"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/*********************** Remove all comments in a survey *********************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveCommentsSvy (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove comments of a survey",
+		   "DELETE FROM svy_comments"
+		   " USING svy_questions,"
+		          "svy_comments"
+                   " WHERE svy_questions.SvyCod=%ld"
+                   " AND svy_questions.QstCod=svy_comments.QstCod",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/********* Remove comments to all surveys of a place on the hierarchy ********/
+/********* (country, institution, center, degree or course)           ********/
+/*****************************************************************************/
+
+void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove comments of surveys"
+		   " in a place on the hierarchy",
+		   "DELETE FROM svy_comments"
+	           " USING svy_surveys,"
+	                  "svy_questions,"
+	                  "svy_comments"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+                     " AND svy_questions.QstCod=svy_comments.QstCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }
 
 /*****************************************************************************/

@@ -111,6 +111,10 @@ void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod);
 void Svy_DB_CreateComments (long QstCod,const char *Comments);
 unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod);
 
+void Svy_DB_RemoveCommentsQst (long QstCod);
+void Svy_DB_RemoveCommentsSvy (long SvyCod);
+void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Scope,long Cod);
+
 //--------------------- Users who have answered surveys -----------------------
 void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
 
