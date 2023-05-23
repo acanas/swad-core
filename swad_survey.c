@@ -3030,31 +3030,43 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
      }
    else if (Svy->Status.ICanViewComments)
      {
-      /***** Get comments of this question *****/
-      NumComments = Svy_DB_GetCommentsQst (&mysql_res,SvyQst->QstCod);
+      HTM_DL_Begin ();
 
-      /***** Write the answers *****/
-      if (NumComments)
-	{
-	 HTM_OL_Begin ();
+	 HTM_DT_Begin ();
+	    HTM_TxtColon (Txt_Comments);
+	 HTM_DT_End ();
 
-	    /* Write one row for each user who has commented */
-	    for (NumCom = 0;
-		 NumCom < NumComments;
-		 NumCom++)
+	 HTM_DD_Begin ();
+
+	    /***** Get comments of this question *****/
+	    NumComments = Svy_DB_GetCommentsQst (&mysql_res,SvyQst->QstCod);
+
+	    /***** Write the answers *****/
+	    if (NumComments)
 	      {
-	       row = mysql_fetch_row (mysql_res);
+	       HTM_OL_Begin ();
 
-	       HTM_LI_Begin (NULL);
-		  HTM_Txt (row[0]);
-	       HTM_LI_End ();
+		  /* Write one row for each user who has commented */
+		  for (NumCom = 0;
+		       NumCom < NumComments;
+		       NumCom++)
+		    {
+		     row = mysql_fetch_row (mysql_res);
+
+		     HTM_LI_Begin (NULL);
+			HTM_Txt (row[0]);
+		     HTM_LI_End ();
+		    }
+
+	       HTM_OL_End ();
 	      }
 
-	 HTM_OL_End ();
-	}
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 HTM_DD_End ();
+
+      HTM_DL_End ();
      }
   }
 
