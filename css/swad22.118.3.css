@@ -1252,14 +1252,20 @@ a:hover						/* Default ==> underlined */
 .MENU_TXT_DARK		{color:#d0d0d0;}
 
 /***************************** Users connected *******************************/
+#courseconnected
+	{
+	box-sizing:border-box;
+	width:136px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
 .CON
 	{
 	box-sizing:border-box;
 	width:100%;
 	padding:5px;
 	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
 	}
 
 .CON_WHITE,
@@ -1351,6 +1357,8 @@ a:hover						/* Default ==> underlined */
 /*************************** Most frequent actions ***************************/
 #MFU_actions
 	{
+	box-sizing:border-box;
+	width:148px;
 	padding:5px;
 	font-size:11pt;
 	}
@@ -1358,7 +1366,7 @@ a:hover						/* Default ==> underlined */
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:100%;
+	width:136px;
 	margin:0;
 	padding:0;
 	list-style-type:none;

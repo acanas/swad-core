@@ -27,6 +27,7 @@
 
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdlib.h>		// For free, malloc
 
 #include "swad_action_list.h"
 #include "swad_autolink.h"

@@ -259,8 +259,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
    /***** Begin fieldset *****/
-   HTM_FIELDSET_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
-                       The_GetSuffix ());
+   HTM_FIELDSET_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",The_GetSuffix ());
       HTM_LEGEND (Txt_Frequent_ACTIONS);
 
       /***** List of frequently used actions *****/
@@ -284,7 +283,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
 		     HTM_BUTTON_Submit_Begin (TabMenuStr,"class=\"BT_LINK\"");
-		        MFU_PutIconAndText (Action,MenuStr);
+			MFU_PutIconAndText (Action,MenuStr);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_LI_End ();
