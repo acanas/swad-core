@@ -567,7 +567,7 @@ void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
   {
    MYSQL_RES *mysql_res;
    unsigned NumCriteria;
-   struct Rub_Node *TOS;
+   struct Rub_Node *TOS = NULL;
 
    /***** Get data of rubric criteria from database *****/
    NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);

@@ -1326,9 +1326,6 @@ void Prj_ShowOneProject (void)
    Prj_ShowBoxWithOneProject (&Projects);
    Prj_FreeMemProject (&Projects.Prj);
 
-   /***** Put legal notice *****/
-   Brw_PutLegalNotice ();
-
    /***** Show projects again *****/
    Prj_ShowProjects (&Projects);
   }
@@ -4506,6 +4503,7 @@ static void Prj_ShowRubrics (struct Prj_Projects *Projects)
       HTM_TABLE_BeginWideMarginPadding (5);
 
 	 /***** Show rubrics of each type ready to fill them *****/
+
 	 for (RubricType  = (PrjCfg_RubricType_t) 1;
 	      RubricType <= (PrjCfg_RubricType_t) (PrjCfg_NUM_RUBRIC_TYPES - 1);
 	      RubricType++)
@@ -4587,6 +4585,9 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
       /***** Free memory used for rubric *****/
       Rub_RubricDestructor (&Rubric);
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

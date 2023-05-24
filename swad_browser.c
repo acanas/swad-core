@@ -2738,6 +2738,9 @@ void Brw_ShowFileBrowserProject (long PrjCod)
 	 Brw_ShowFileBrowser ();
 	}
 
+      /***** Put legal notice *****/
+      Brw_PutLegalNotice ();
+
    /***** End fieldset *****/
    HTM_FIELDSET_End ();
   }
