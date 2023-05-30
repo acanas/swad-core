@@ -9519,7 +9519,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (InsShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
-		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
+		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT");
 		     HTM_TxtF ("&nbsp;%s",InsShortName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -9536,7 +9536,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (CtrShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
-		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
+		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT");
 		     HTM_TxtF ("&nbsp;%s",CtrShortName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -9553,7 +9553,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (DegShortName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
-		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
+		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT");
 		     HTM_TxtF ("&nbsp;%s",DegShortName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();

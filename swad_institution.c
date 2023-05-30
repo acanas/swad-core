@@ -216,8 +216,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
 	 ParCod_PutPar (ParCod_Ins,Ins->InsCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
-   Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
-		 Size,NULL,true);
+   Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,Size,NULL);
    if (PutLink)
      {
 	 HTM_BUTTON_End ();
@@ -242,7 +241,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
-	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo);
 	 HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
       /***** End link *****/
@@ -950,7 +949,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Institution logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	       Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+	       Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL);
 	    HTM_TD_End ();
 
 	    /* Institution short name */
@@ -1395,7 +1394,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-	    Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
+	    Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL);
 	 HTM_TD_End ();
 
 	 /***** Institution short name *****/
@@ -2269,7 +2268,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
 			      Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,
-					    40,NULL,true);
+					    40,NULL);
 			      HTM_NBSP ();
 			     }
 			   HTM_Txt (Ins.FullName);

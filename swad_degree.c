@@ -203,7 +203,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
       Str_FreeGoToTitle ();
 
 	 /***** Degree logo and name *****/
-	 Lgo_DrawLogo (HieLvl_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
+	 Lgo_DrawLogo (HieLvl_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo);
 	 HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
       /***** End link *****/
@@ -367,7 +367,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",DegInLst->FullName);
-	       Lgo_DrawLogo (HieLvl_DEG,DegInLst->DegCod,DegInLst->ShrtName,20,NULL,true);
+	       Lgo_DrawLogo (HieLvl_DEG,DegInLst->DegCod,DegInLst->ShrtName,20,NULL);
 	    HTM_TD_End ();
 
 	    /* Degree short name */
@@ -546,7 +546,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-	    Lgo_DrawLogo (HieLvl_DEG,-1L,"",20,NULL,true);
+	    Lgo_DrawLogo (HieLvl_DEG,-1L,"",20,NULL);
 	 HTM_TD_End ();
 
 	 /***** Degree short name *****/

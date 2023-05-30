@@ -28,7 +28,7 @@
 /*****************************************************************************/
 
 void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Class,bool PutIconIfNotExists);
+                   unsigned Size,const char *Class);
 void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope);
 void Lgo_RequestLogo (HieLvl_Level_t Scope);
 void Lgo_ReceiveLogo (HieLvl_Level_t Scope);

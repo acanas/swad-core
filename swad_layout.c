@@ -1491,7 +1491,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie.Ins.WWW);
-	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,40,NULL,true);
+	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
@@ -1542,7 +1542,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie.Deg.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
+	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }

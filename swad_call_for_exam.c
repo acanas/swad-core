@@ -954,7 +954,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Ins.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)

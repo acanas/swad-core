@@ -260,7 +260,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
-			  20,"LM",true);
+			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
 	    if (!PrintView)

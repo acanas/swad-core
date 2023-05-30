@@ -63,7 +63,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /*****************************************************************************/
 
 void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Class,bool PutIconIfNotExists)
+                   unsigned Size,const char *Class)
   {
    static const char *HieIcon[HieLvl_NUM_LEVELS] =
      {
@@ -139,46 +139,43 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	       Cod = InsCod;
 	   }
 
-	 if (LogoFound || PutIconIfNotExists)
+	 /***** Draw logo *****/
+	 ClassNotEmpty = false;
+	 if (Class)
+	    if (Class[0])
+	       ClassNotEmpty = true;
+
+	 if (LogoFound)
 	   {
-	    /***** Draw logo *****/
-	    ClassNotEmpty = false;
-	    if (Class)
-	       if (Class[0])
-		  ClassNotEmpty = true;
+	    if (asprintf (&URL,"%s/%s/%02u/%u/logo",
+			  Cfg_URL_SWAD_PUBLIC,Folder,
+			  (unsigned) (Cod % 100),
+			  (unsigned) Cod) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
+	       Err_NotEnoughMemoryExit ();
 
-	    if (LogoFound)
-	      {
-	       if (asprintf (&URL,"%s/%s/%02u/%u/logo",
-			     Cfg_URL_SWAD_PUBLIC,Folder,
-			     (unsigned) (Cod % 100),
-			     (unsigned) Cod) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
-		  Err_NotEnoughMemoryExit ();
-
-	       HTM_IMG (URL,Icon,AltText,
-			"class=\"ICO%ux%u"
-			        "%s%s\"",
-			Size,Size,
-			ClassNotEmpty ? " " :
-					"",
-			ClassNotEmpty ? Class :
-					"");
-	       free (Icon);
-	       free (URL);
-	      }
-	    else
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Scope],AltText,
-			"class=\"ICO%ux%u ICO_%s_%s"
-			        "%s%s\"",
-			Size,Size,
-			Ico_GetPreffix (Ico_BLACK),The_GetSuffix (),
-			ClassNotEmpty ? " " :
-					"",
-			ClassNotEmpty ? Class :
-					"");
+	    HTM_IMG (URL,Icon,AltText,
+		     "class=\"ICO%ux%u"
+			     "%s%s\"",
+		     Size,Size,
+		     ClassNotEmpty ? " " :
+				     "",
+		     ClassNotEmpty ? Class :
+				     "");
+	    free (Icon);
+	    free (URL);
 	   }
+	 else
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Scope],AltText,
+		     "class=\"ICO%ux%u ICO_%s_%s"
+			     "%s%s\"",
+		     Size,Size,
+		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix (),
+		     ClassNotEmpty ? " " :
+				     "",
+		     ClassNotEmpty ? Class :
+				     "");
 	}
      }
   }

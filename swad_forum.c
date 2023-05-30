@@ -1766,15 +1766,15 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 		  break;
 	       case For_FORUM_INSTIT_USRS:
 	       case For_FORUM_INSTIT_TCHS:
-		  Lgo_DrawLogo (HieLvl_INS,Forum->HieCod,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_INS,Forum->HieCod,ForumName,16,NULL);
 		  break;
 	       case For_FORUM_CENTER_USRS:
 	       case For_FORUM_CENTER_TCHS:
-		  Lgo_DrawLogo (HieLvl_CTR,Forum->HieCod,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_CTR,Forum->HieCod,ForumName,16,NULL);
 		  break;
 	       case For_FORUM_DEGREE_USRS:
 	       case For_FORUM_DEGREE_TCHS:
-		  Lgo_DrawLogo (HieLvl_DEG,Forum->HieCod,ForumName,16,NULL,true);
+		  Lgo_DrawLogo (HieLvl_DEG,Forum->HieCod,ForumName,16,NULL);
 		  break;
 	       case For_FORUM_COURSE_USRS:
 	       case For_FORUM_COURSE_TCHS:

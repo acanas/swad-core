@@ -265,7 +265,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
-			  20,"LM",true);
+			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Deg.FullName);
 	    if (!PrintView)

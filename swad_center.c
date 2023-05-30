@@ -200,7 +200,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
       Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/
-	 Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+	 Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo);
 	 HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
       /***** End link *****/
@@ -775,7 +775,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Center logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-	       Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
+	       Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL);
 	    HTM_TD_End ();
 
 	    /* Place */
@@ -1272,7 +1272,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-	    Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL,true);
+	    Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL);
 	 HTM_TD_End ();
 
 	 /***** Place *****/

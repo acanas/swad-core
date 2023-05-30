@@ -598,7 +598,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	      }
 
 	    Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
-			  20,"LM",true);
+			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Ins.FullName);
 

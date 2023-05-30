@@ -187,7 +187,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
 		      Txt_Degree,Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL);
 	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
 	    /* Get my courses in this degree from database */

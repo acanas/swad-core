@@ -508,8 +508,7 @@ static void Hie_DrawLogo (const char *ShrtText)
       default:
 	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
 		       *LogoCode[Gbl.Hierarchy.Level],
-		       ShrtText,40,"TOP_LOGO",
-		       false);	// Don't put icon if not exists
+		       ShrtText,40,"TOP_LOGO");
 	 break;
      }
   }

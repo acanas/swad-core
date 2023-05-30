@@ -258,7 +258,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
-			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL,true);
+			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL);
 			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -292,7 +292,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
-			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL,true);
+			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL);
 			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -326,7 +326,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
-			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL,true);
+			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL);
 			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -2419,7 +2419,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT");
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
